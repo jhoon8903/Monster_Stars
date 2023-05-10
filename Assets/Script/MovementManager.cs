@@ -19,9 +19,10 @@ public class MovementManager : MonoBehaviour
         {
             Vector3 MousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             RaycastHit2D hit;
-            //int layerMask = LayerMask.GetMask("Character");
+            int layerMask = LayerMask.GetMask("Character");
             Debug.Log(MousePos);
-            if (Physics2D.Raycast(MousePos,Mathf.Infinity))
+            hit = Physics2D.Raycast(MousePos, transform.forward, 10f, layerMask);
+            if (hit.collider != null) 
             {
                 Debug.Log("Click");
                 if (hit.collider.gameObject.CompareTag("Character") && countManager.CanMove())
