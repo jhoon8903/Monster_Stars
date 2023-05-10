@@ -140,5 +140,15 @@ public class GridManager : MonoBehaviour
         }
         return null;
     }
+    public void RemoveCharacterAtPosition(Vector2 position)
+    {
+        GameObject character = GetCharacterAtPosition(position);
+        if (character != null)
+        {
+            character.transform.SetParent(null);
+            character.SetActive(false);
+        }
+    }
+
 
 }

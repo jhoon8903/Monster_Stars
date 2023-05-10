@@ -1,61 +1,57 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MergeManager : MonoBehaviour
 {
-    public GridManager gridManager;
-    public CharacterPool characterPool;
+    [SerializeField] private GridManager gridManager;
+    [SerializeField] private float mergeDelay = 0.5f;
 
     public bool CheckForMatches(GameObject character)
     {
-        int matchCountHorizontal = CountMatches(character, Vector2.right) + CountMatches(character, Vector2.left) + 1;
-        int matchCountVertical = CountMatches(character, Vector2.up) + CountMatches(character, Vector2.down) + 1;
+        int horizontalMatches = CountMatches(character, Vector2.right) + CountMatches(character, Vector2.left) + 1;
+        int verticalMatches = CountMatches(character, Vector2.up) + CountMatches(character, Vector2.down) + 1;
 
-        if (matchCountHorizontal >= 3 || matchCountVertical >= 3)
+        if (horizontalMatches >= 3 || verticalMatches >= 3)
         {
             Debug.Log("Merging detected");
-
-            List<GameObject> matchedCharacters = new List<GameObject> { character };
-
-            if (matchCountHorizontal >= 3)
+            if (horizontalMatches >= 3)
             {
                 Debug.Log("Merging horizontally");
-                CollectMatchedCharacters(matchedCharacters, character.transform.position, character.tag, Vector2.right);
-                CollectMatchedCharacters(matchedCharacters, character.transform.position, character.tag, Vector2.left);
+                StartCoroutine(MergeCharacters(character, Vector2.right, horizontalMatches - 1));
+                StartCoroutine(MergeCharacters(character, Vector2.left, horizontalMatches - 1));
             }
-            if (matchCountVertical >= 3)
+
+            if (verticalMatches >= 3)
             {
                 Debug.Log("Merging vertically");
-                CollectMatchedCharacters(matchedCharacters, character.transform.position, character.tag, Vector2.up);
-                CollectMatchedCharacters(matchedCharacters, character.transform.position, character.tag, Vector2.down);
+                StartCoroutine(MergeCharacters(character, Vector2.up, verticalMatches - 1));
+                StartCoroutine(MergeCharacters(character, Vector2.down, verticalMatches - 1));
             }
-            MergeMatchedCharacters(character, matchedCharacters); // Remove the 'direction2' parameter
+
             return true;
         }
+
         return false;
     }
-
 
     private int CountMatches(GameObject character, Vector2 direction)
     {
         int matchCount = 0;
         Vector2 currentPosition = character.transform.position;
         string characterPrefabName = character.transform.parent.name.Replace("(Clone)", "").Trim();
-        Debug.Log($"characterPrefabName is {characterPrefabName}");
+
         while (true)
         {
             currentPosition += direction;
             GameObject otherCharacter = gridManager.GetCharacterAtPosition(currentPosition);
-            Debug.Log($"otherCharacter is {otherCharacter}");
+
             if (otherCharacter != null)
             {
                 string otherCharacterPrefabName = otherCharacter.transform.name.Replace("(Clone)", "").Trim();
-                Debug.Log($"otherCharacterPrefabName is {otherCharacterPrefabName}");
-                // Add a condition to check if the character should be considered for matching
                 if (otherCharacterPrefabName == characterPrefabName && ShouldConsiderForMatching(otherCharacter))
                 {
                     matchCount++;
-                    Debug.Log("Match found at: " + currentPosition);
                 }
                 else
                 {
@@ -73,60 +69,33 @@ public class MergeManager : MonoBehaviour
 
     private bool ShouldConsiderForMatching(GameObject character)
     {
-        // Add your custom condition here to decide if the character should be considered for matching.
-        // For example, you can check the character's tag, layer, or any other property.
-
-        // If the character should not be matched, return false.
-        // Otherwise, return true.
-
-        // Example: return character.tag != "NonMatchable";
+        // Add your condition here to determine if the character should be considered for matching
         return true;
     }
 
-
-
-
-
-
-    private void MergeMatchedCharacters(GameObject character, List<GameObject> matchedCharacters)
+    private IEnumerator MergeCharacters(GameObject character, Vector2 direction, int count)
     {
         Vector2 currentPosition = character.transform.position;
-        string characterTag = character.tag;
-        int currentLevel = int.Parse(character.name.Substring(character.name.Length - 1));
+        string characterPrefabName = character.transform.parent.name.Replace("(Clone)", "").Trim();
 
-        if (matchedCharacters.Count >= 3)
+        for (int i = 0; i < count; i++)
         {
-            Debug.Log("Performing merge");
-
-            foreach (GameObject matchedCharacter in matchedCharacters)
-            {
-                gridManager.RemoveCharacterFromGrid(matchedCharacter.transform.position);
-                Destroy(matchedCharacter);
-            }
-
-            int newLevel = Mathf.Min(currentLevel + 1, characterPool.GetMaxLevel(characterTag));
-            GameObject newCharacter = characterPool.GetCharacterPrefab(characterTag, newLevel);
-            newCharacter.name = $"{characterTag} Level {newLevel}";
-            newCharacter.tag = characterTag;
-            newCharacter.transform.position = currentPosition;
-
-            gridManager.AddCharacterToGrid(currentPosition, newCharacter);
-            gridManager.FillEmptyGridPositions(); // Call this function after adding the new character
-        }
-    }
-
-
-
-    private void CollectMatchedCharacters(List<GameObject> matchedCharacters, Vector2 startPosition, string characterTag, Vector2 direction)
-    {
-        Vector2 currentPosition = startPosition + direction;
-        GameObject currentCharacter = gridManager.GetCharacterAtPosition(currentPosition);
-        while (currentCharacter != null && currentCharacter.tag == characterTag)
-        {
-            matchedCharacters.Add(currentCharacter);
             currentPosition += direction;
-            currentCharacter = gridManager.GetCharacterAtPosition(currentPosition);
+            GameObject otherCharacter = gridManager.GetCharacterAtPosition(currentPosition);
+
+            if (otherCharacter != null)
+            {
+                string otherCharacterPrefabName = otherCharacter.transform.name.Replace("(Clone)", "").Trim();
+                if (otherCharacterPrefabName == characterPrefabName && ShouldConsiderForMatching(otherCharacter))
+                {
+                    // Perform the merge
+                    gridManager.RemoveCharacterAtPosition(currentPosition);
+                    Destroy(otherCharacter);
+                }
+            }
         }
+
+        yield return new WaitForSeconds(mergeDelay);
     }
 
 }
