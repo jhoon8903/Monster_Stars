@@ -133,8 +133,9 @@ GameObject:
   m_Component:
   - component: {fileID: 149521959}
   - component: {fileID: 149521958}
-  - component: {fileID: 149521960}
   - component: {fileID: 149521962}
+  - component: {fileID: 149521963}
+  - component: {fileID: 149521964}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -172,21 +173,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &149521960
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 149521957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9f7afa144f82b44b69c416811f5966a0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveDuration: 0.3
-  countManager: {fileID: 149521962}
-  hoverScaleFactor: 1.2
 --- !u!114 &149521962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -201,6 +187,38 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveCountText: {fileID: 679308669}
   diagonalMovementEnabled: 0
+--- !u!114 &149521963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149521957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0d5f69b97e0f41c9ad647d204b29ec1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveDuration: 0.3
+  countManager: {fileID: 149521962}
+  hoverScaleFactor: 1.5
+  minSwipeDistance: 1
+  mergeManager: {fileID: 149521964}
+  gridManager: {fileID: 789176763}
+--- !u!114 &149521964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149521957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ace7d4c61bbe4f38ad8c5042dfc2239, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridManager: {fileID: 789176763}
+  characterPool: {fileID: 358760203}
 --- !u!114 &358760203 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2751555446260821501, guid: 9f5ec5df296e8427db49c971e018f5d7, type: 3}

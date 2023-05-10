@@ -42,6 +42,25 @@ public class GridManager : MonoBehaviour
         return Instantiate(rowPrefab, position, Quaternion.identity, transform);
     }
 
+    public void FillEmptyGridPositions()
+    {
+        foreach (Transform rowTransform in transform)
+        {
+            foreach (Transform gridTransform in rowTransform)
+            {
+                if (gridTransform.childCount == 0)
+                {
+                    GameObject characterPrefab = characterManager.GetRandomCharacterPrefab();
+                    Vector3 newPosition = new Vector3(gridTransform.position.x, gridTransform.position.y, -0.5f);
+                    GameObject characterInstance = characterPool.GetPooledObject(characterPrefab);
+                    characterInstance.transform.position = newPosition;
+                    characterInstance.transform.SetParent(characterPool.transform, true); // Change this line
+                    characterInstance.SetActive(true);
+                }
+            }
+        }
+    }
+
 
     private void SpawnCharactersInRow(Transform rowTransform)
     {
@@ -52,7 +71,7 @@ public class GridManager : MonoBehaviour
             Vector3 newPosition = new Vector3(gridTransform.position.x, gridTransform.position.y, -0.5f);
             GameObject characterInstance = characterPool.GetPooledObject(characterPrefab);
             characterInstance.transform.position = newPosition;
-            characterInstance.transform.SetParent(gridTransform, true);
+            characterInstance.transform.SetParent(characterPool.transform, true); // Change this line
             characterInstance.SetActive(true);
 
             // Disable all child objects except for the one named "level0"
@@ -67,6 +86,59 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public bool IsPositionInsideGrid(Vector2 position)
+    {
+        return position.x >=  -3  && position.y < gridHeight;
+    }
 
+    public GameObject GetCharacterAtPosition(Vector2 position)
+    {
+        foreach (Transform characterTransform in characterPool.transform)
+        {
+            if (Mathf.Approximately(characterTransform.position.x, position.x) && Mathf.Approximately(characterTransform.position.y, position.y))
+            {
+                return characterTransform.gameObject;
+            }
+        }
+        return null;
+    }
+
+
+    public void RemoveCharacterFromGrid(Vector2 position)
+    {
+        Transform gridTransform = GetGridTransformAtPosition(position);
+        if (gridTransform != null && gridTransform.childCount > 0)
+        {
+            GameObject character = gridTransform.GetChild(0).gameObject;
+            character.transform.SetParent(null);
+            character.SetActive(false);
+        }
+    }
+
+    public void AddCharacterToGrid(Vector2 position, GameObject character)
+    {
+        Transform gridTransform = GetGridTransformAtPosition(position);
+        if (gridTransform != null)
+        {
+            character.transform.SetParent(gridTransform);
+            character.transform.position = new Vector3(gridTransform.position.x, gridTransform.position.y, -0.5f);
+            character.SetActive(true);
+        }
+    }
+
+    private Transform GetGridTransformAtPosition(Vector2 position)
+    {
+        foreach (Transform rowTransform in transform)
+        {
+            foreach (Transform gridTransform in rowTransform)
+            {
+                if (Mathf.Approximately(gridTransform.position.x, position.x) && Mathf.Approximately(gridTransform.position.y, position.y))
+                {
+                    return gridTransform;
+                }
+            }
+        }
+        return null;
+    }
 
 }

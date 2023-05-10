@@ -39,4 +39,35 @@ public class CharacterPool : MonoBehaviour
 
         return AddObjectToPool(prefab);
     }
+
+    public int GetMaxLevel(string characterTag)
+    {
+        int maxLevel = 0;
+        foreach (GameObject obj in pooledObjects)
+        {
+            if (obj.tag == characterTag)
+            {
+                int level = int.Parse(obj.name.Substring(obj.name.Length - 1));
+                maxLevel = Mathf.Max(maxLevel, level);
+            }
+        }
+        return maxLevel;
+    }
+
+    public GameObject GetCharacterPrefab(string characterTag, int level)
+    {
+        foreach (GameObject obj in pooledObjects)
+        {
+            if (obj.tag == characterTag)
+            {
+                int objLevel = int.Parse(obj.name.Substring(obj.name.Length - 1));
+                if (objLevel == level)
+                {
+                    return obj;
+                }
+            }
+        }
+        return null;
+    }
+
 }
