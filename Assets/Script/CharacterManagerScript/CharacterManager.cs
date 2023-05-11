@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class CharacterManager : MonoBehaviour
 {
-    [SerializeField]
-    protected List<CharacterBase> characterGroup;
+    public List<CharacterBase> characterGroup;
 
     public GameObject GetRandomCharacterPrefab()
     {

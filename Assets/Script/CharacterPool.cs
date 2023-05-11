@@ -39,4 +39,10 @@ public class CharacterPool : MonoBehaviour
         }
         return null;
     }
+
+    public List<GameObject> GetPooledCharacters()
+    {
+        return pooledCharacters;
+    }
+
 }

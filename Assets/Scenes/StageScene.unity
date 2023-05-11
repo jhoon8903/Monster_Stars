@@ -219,6 +219,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterManager: {fileID: 149521963}
   gridManager: {fileID: 8808150501734532426}
+  characterPool: {fileID: 1097818334}
 --- !u!1 &679308667
 GameObject:
   m_ObjectHideFlags: 0
@@ -774,15 +775,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poolItems:
   - characterPrefab: {fileID: 3213881889478370183, guid: 438d7922ea8534dd6a3cfa7664f14cb7, type: 3}
-    _count: 0
+    _count: 12
   - characterPrefab: {fileID: 3295162923718182863, guid: 282ca571fdd1a418f8655667bc8cf479, type: 3}
-    _count: 0
+    _count: 12
   - characterPrefab: {fileID: 4830802314425314191, guid: e5eae943fb66c47e5961725f82c5a2ff, type: 3}
-    _count: 0
+    _count: 12
   - characterPrefab: {fileID: 5578948795948836533, guid: 39b5bda868b7a4323b5c6d9fa2e36252, type: 3}
-    _count: 0
+    _count: 12
   - characterPrefab: {fileID: 7229477341921847284, guid: d30ec24dbb65c4123938646dbb2c82d1, type: 3}
-    _count: 0
+    _count: 12
 --- !u!4 &1097818335
 Transform:
   m_ObjectHideFlags: 0
@@ -1042,7 +1043,9 @@ MonoBehaviour:
   _gridWidth: 6
   grid1Sprite: {fileID: 5878419415431634990, guid: 9cb9c040a9abd43d0b20b1828f4cbc7e, type: 3}
   grid2Sprite: {fileID: 2861231161325905373, guid: 366ac8b27ec804d8aa934708a02a4c3b, type: 3}
-  maxRows: 9
+  _maxRows: 9
+  spawnManager: {fileID: 149521964}
+  characterManager: {fileID: 149521963}
 --- !u!4 &8808150501734532427
 Transform:
   m_ObjectHideFlags: 0
