@@ -153,13 +153,9 @@ public class MovementManager : MonoBehaviour
         character2.transform.position = initialPos1;
 
         // Swap is complete, check for merges
-        bool merge1 = mergeManager.CheckForMatches(character1);
-        bool merge2 = mergeManager.CheckForMatches(character2);
-
-        //if (merge1 || merge2)
-        //{
-        //    countManager.IncreaseMoveCount(); // 이동 횟수를 회복합니다. (선택 사항)
-        //}
-
+        Vector2 pos1 = character1.transform.position;
+        Vector2 pos2 = character2.transform.position;
+        yield return mergeManager.MergeCharactersAtPosition(pos1, pos2);
     }
+
 }

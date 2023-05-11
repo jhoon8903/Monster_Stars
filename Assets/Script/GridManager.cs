@@ -7,8 +7,7 @@ public class GridManager : MonoBehaviour
     public int gridHeight = 6;
     public GameObject row1Prefab;
     public GameObject row2Prefab;
-    public CharacterManager characterManager;
-    public CharacterPool characterPool;
+    public RespawnManager respawnManager;
 
     private int currentRow = 1;
 
@@ -23,7 +22,7 @@ public class GridManager : MonoBehaviour
         yield return new WaitForSeconds(1.0f);
         foreach (Transform rowTransform in transform)
         {
-            SpawnCharactersInRow(rowTransform);
+            respawnManager.SpawnCharactersInRow(rowTransform);
         }
     }
 
@@ -31,7 +30,7 @@ public class GridManager : MonoBehaviour
     {
         gridHeight++;
         GameObject newRow = GenerateRow(new Vector3(0, -gridHeight + 1, 0));
-        SpawnCharactersInRow(newRow.transform);
+        respawnManager.SpawnCharactersInRow(newRow.transform);
         currentRow = (currentRow == 1) ? 2 : 1;
     }
 
@@ -42,49 +41,6 @@ public class GridManager : MonoBehaviour
         return Instantiate(rowPrefab, position, Quaternion.identity, transform);
     }
 
-    public void FillEmptyGridPositions()
-    {
-        foreach (Transform rowTransform in transform)
-        {
-            foreach (Transform gridTransform in rowTransform)
-            {
-                if (gridTransform.childCount == 0)
-                {
-                    GameObject characterPrefab = characterManager.GetRandomCharacterPrefab();
-                    Vector3 newPosition = new Vector3(gridTransform.position.x, gridTransform.position.y, -0.5f);
-                    GameObject characterInstance = characterPool.GetPooledObject(characterPrefab);
-                    characterInstance.transform.position = newPosition;
-                    characterInstance.transform.SetParent(characterPool.transform, true); // Change this line
-                    characterInstance.SetActive(true);
-                }
-            }
-        }
-    }
-
-
-    private void SpawnCharactersInRow(Transform rowTransform)
-    {
-        for (int i = 0; i < rowTransform.childCount; i++)
-        {
-            Transform gridTransform = rowTransform.GetChild(i);
-            GameObject characterPrefab = characterManager.GetRandomCharacterPrefab();
-            Vector3 newPosition = new Vector3(gridTransform.position.x, gridTransform.position.y, -0.5f);
-            GameObject characterInstance = characterPool.GetPooledObject(characterPrefab);
-            characterInstance.transform.position = newPosition;
-            characterInstance.transform.SetParent(characterPool.transform, true); // Change this line
-            characterInstance.SetActive(true);
-
-            // Disable all child objects except for the one named "level0"
-            for (int j = 0; j < characterInstance.transform.childCount; j++)
-            {
-                Transform child = characterInstance.transform.GetChild(j);
-                if (child.name != "level0")
-                {
-                    child.gameObject.SetActive(false);
-                }
-            }
-        }
-    }
 
     public bool IsPositionInsideGrid(Vector2 position)
     {
@@ -93,7 +49,7 @@ public class GridManager : MonoBehaviour
 
     public GameObject GetCharacterAtPosition(Vector2 position)
     {
-        foreach (Transform characterTransform in characterPool.transform)
+        foreach (Transform characterTransform in respawnManager.characterPool.transform)
         {
             if (Mathf.Approximately(characterTransform.position.x, position.x) && Mathf.Approximately(characterTransform.position.y, position.y))
             {
@@ -140,6 +96,7 @@ public class GridManager : MonoBehaviour
         }
         return null;
     }
+
     public void RemoveCharacterAtPosition(Vector2 position)
     {
         GameObject character = GetCharacterAtPosition(position);
@@ -150,5 +107,70 @@ public class GridManager : MonoBehaviour
         }
     }
 
+    public List<GameObject> FindMatchedCharacters(Vector2 position, int minMatchCount)
+    {
+        List<GameObject> matchedCharacters = new List<GameObject>();
+
+        GameObject character = GetCharacterAtPosition(position);
+        if (character != null)
+        {
+            string characterPrefabName = character.transform.parent.name.Replace("(Clone)", "").Trim();
+
+            // Check horizontal matches
+            List<GameObject> horizontalMatches = new List<GameObject>();
+            horizontalMatches.Add(character);
+            horizontalMatches.AddRange(FindMatchesInDirection(position, characterPrefabName, Vector2.right));
+            horizontalMatches.AddRange(FindMatchesInDirection(position, characterPrefabName, Vector2.left));
+
+            if (horizontalMatches.Count >= minMatchCount)
+            {
+                matchedCharacters.AddRange(horizontalMatches);
+            }
+
+            // Check vertical matches
+            List<GameObject> verticalMatches = new List<GameObject>();
+            verticalMatches.Add(character);
+            verticalMatches.AddRange(FindMatchesInDirection(position, characterPrefabName, Vector2.up));
+            verticalMatches.AddRange(FindMatchesInDirection(position, characterPrefabName, Vector2.down));
+
+            if (verticalMatches.Count >= minMatchCount)
+            {
+                matchedCharacters.AddRange(verticalMatches);
+            }
+        }
+
+        return matchedCharacters;
+    }
+
+    private List<GameObject> FindMatchesInDirection(Vector2 startPosition, string characterPrefabName, Vector2 direction)
+    {
+        List<GameObject> matches = new List<GameObject>();
+
+        Vector2 currentPosition = startPosition;
+        while (true)
+        {
+            currentPosition += direction;
+            GameObject otherCharacter = GetCharacterAtPosition(currentPosition);
+
+            if (otherCharacter != null)
+            {
+                string otherCharacterPrefabName = otherCharacter.transform.parent.name.Replace("(Clone)", "").Trim();
+                if (otherCharacterPrefabName == characterPrefabName)
+                {
+                    matches.Add(otherCharacter);
+                }
+                else
+                {
+                    break;
+                }
+            }
+            else
+            {
+                break;
+            }
+        }
+
+        return matches;
+    }
 
 }

@@ -5,97 +5,44 @@ using UnityEngine;
 public class MergeManager : MonoBehaviour
 {
     [SerializeField] private GridManager gridManager;
-    [SerializeField] private float mergeDelay = 0.5f;
+    private RespawnManager respawnManager;
+    //[SerializeField] private float mergeDelay = 0.5f;
 
-    public bool CheckForMatches(GameObject character)
+    public IEnumerator MergeCharactersAtPosition(Vector2 position1, Vector2 position2)
     {
-        int horizontalMatches = CountMatches(character, Vector2.right) + CountMatches(character, Vector2.left) + 1;
-        int verticalMatches = CountMatches(character, Vector2.up) + CountMatches(character, Vector2.down) + 1;
+        GameObject firstCharacter = gridManager.GetCharacterAtPosition(position1);
+        GameObject secondCharacter = gridManager.GetCharacterAtPosition(position2);
 
-        if (horizontalMatches >= 3 || verticalMatches >= 3)
+        // Swap the characters and check for matches
+        gridManager.RemoveCharacterFromGrid(position1);
+        gridManager.RemoveCharacterFromGrid(position2);
+        gridManager.AddCharacterToGrid(position1, secondCharacter);
+        gridManager.AddCharacterToGrid(position2, firstCharacter);
+
+        List<GameObject> matchedCharacters1 = gridManager.FindMatchedCharacters(position1, 3);
+        List<GameObject> matchedCharacters2 = gridManager.FindMatchedCharacters(position2, 3);
+
+        if (matchedCharacters1.Count > 0 || matchedCharacters2.Count > 0)
         {
-            Debug.Log("Merging detected");
-            if (horizontalMatches >= 3)
+            foreach (GameObject matchedCharacter in matchedCharacters1)
             {
-                Debug.Log("Merging horizontally");
-                StartCoroutine(MergeCharacters(character, Vector2.right, horizontalMatches - 1));
-                StartCoroutine(MergeCharacters(character, Vector2.left, horizontalMatches - 1));
+                gridManager.RemoveCharacterFromGrid(matchedCharacter.transform.position);
             }
-
-            if (verticalMatches >= 3)
+            foreach (GameObject matchedCharacter in matchedCharacters2)
             {
-                Debug.Log("Merging vertically");
-                StartCoroutine(MergeCharacters(character, Vector2.up, verticalMatches - 1));
-                StartCoroutine(MergeCharacters(character, Vector2.down, verticalMatches - 1));
-            }
-
-            return true;
-        }
-
-        return false;
-    }
-
-    private int CountMatches(GameObject character, Vector2 direction)
-    {
-        int matchCount = 0;
-        Vector2 currentPosition = character.transform.position;
-        string characterPrefabName = character.transform.parent.name.Replace("(Clone)", "").Trim();
-
-        while (true)
-        {
-            currentPosition += direction;
-            GameObject otherCharacter = gridManager.GetCharacterAtPosition(currentPosition);
-
-            if (otherCharacter != null)
-            {
-                string otherCharacterPrefabName = otherCharacter.transform.name.Replace("(Clone)", "").Trim();
-                if (otherCharacterPrefabName == characterPrefabName && ShouldConsiderForMatching(otherCharacter))
-                {
-                    matchCount++;
-                }
-                else
-                {
-                    break;
-                }
-            }
-            else
-            {
-                break;
+                gridManager.RemoveCharacterFromGrid(matchedCharacter.transform.position);
             }
         }
-
-        return matchCount;
-    }
-
-    private bool ShouldConsiderForMatching(GameObject character)
-    {
-        // Add your condition here to determine if the character should be considered for matching
-        return true;
-    }
-
-    private IEnumerator MergeCharacters(GameObject character, Vector2 direction, int count)
-    {
-        Vector2 currentPosition = character.transform.position;
-        string characterPrefabName = character.transform.parent.name.Replace("(Clone)", "").Trim();
-
-        for (int i = 0; i < count; i++)
+        else
         {
-            currentPosition += direction;
-            GameObject otherCharacter = gridManager.GetCharacterAtPosition(currentPosition);
-
-            if (otherCharacter != null)
-            {
-                string otherCharacterPrefabName = otherCharacter.transform.name.Replace("(Clone)", "").Trim();
-                if (otherCharacterPrefabName == characterPrefabName && ShouldConsiderForMatching(otherCharacter))
-                {
-                    // Perform the merge
-                    gridManager.RemoveCharacterAtPosition(currentPosition);
-                    Destroy(otherCharacter);
-                }
-            }
+            // Swap back if no match found
+            gridManager.RemoveCharacterFromGrid(position1);
+            gridManager.RemoveCharacterFromGrid(position2);
+            gridManager.AddCharacterToGrid(position1, firstCharacter);
+            gridManager.AddCharacterToGrid(position2, secondCharacter);
         }
 
-        yield return new WaitForSeconds(mergeDelay);
+        yield return new WaitForSeconds(0.5f);
+        respawnManager.FillEmptyGridPositions();
     }
-
 }
