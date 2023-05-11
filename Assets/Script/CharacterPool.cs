@@ -4,7 +4,7 @@ using UnityEngine;
 public class CharacterPool : MonoBehaviour
 {
     public List<GameObject> characterPrefabs;
-    public int initialPoolSize = 10;
+    public int initialPoolSize = 0;
     private List<GameObject> pooledObjects;
 
     void Awake()
