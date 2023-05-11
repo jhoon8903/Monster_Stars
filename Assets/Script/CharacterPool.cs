@@ -3,71 +3,40 @@ using UnityEngine;
 
 public class CharacterPool : MonoBehaviour
 {
-    public List<GameObject> characterPrefabs;
-    public int initialPoolSize = 0;
-    private List<GameObject> pooledObjects;
+    [System.Serializable]
+    public class CharacterPoolItem
+    {
+        public GameObject characterPrefab;
+        public int _count;
+    }
+
+    public List<CharacterPoolItem> poolItems;
+    private List<GameObject> pooledCharacters;
 
     void Awake()
     {
-        pooledObjects = new List<GameObject>();
-        for (int i = 0; i < characterPrefabs.Count; i++)
+        pooledCharacters = new List<GameObject>();
+        foreach (CharacterPoolItem item in poolItems)
         {
-            for (int j = 0; j < initialPoolSize; j++)
+            for (int i = 0; i < item._count; i++)
             {
-                AddObjectToPool(characterPrefabs[i]);
+                GameObject obj = Instantiate(item.characterPrefab);
+                obj.SetActive(false);
+                pooledCharacters.Add(obj);
+                obj.transform.SetParent(transform);
             }
         }
     }
 
-    private GameObject AddObjectToPool(GameObject prefab)
+    public GameObject GetPooledCharacter()
     {
-        GameObject obj = Instantiate(prefab);
-        obj.SetActive(false);
-        pooledObjects.Add(obj);
-        return obj;
-    }
-
-    public GameObject GetPooledObject(GameObject prefab)
-    {
-        foreach (GameObject obj in pooledObjects)
+        foreach (GameObject character in pooledCharacters)
         {
-            if (!obj.activeInHierarchy && obj.name.StartsWith(prefab.name))
+            if (!character.activeInHierarchy)
             {
-                return obj;
-            }
-        }
-
-        return AddObjectToPool(prefab);
-    }
-
-    public int GetMaxLevel(string characterTag)
-    {
-        int maxLevel = 0;
-        foreach (GameObject obj in pooledObjects)
-        {
-            if (obj.tag == characterTag)
-            {
-                int level = int.Parse(obj.name.Substring(obj.name.Length - 1));
-                maxLevel = Mathf.Max(maxLevel, level);
-            }
-        }
-        return maxLevel;
-    }
-
-    public GameObject GetCharacterPrefab(string characterTag, int level)
-    {
-        foreach (GameObject obj in pooledObjects)
-        {
-            if (obj.tag == characterTag)
-            {
-                int objLevel = int.Parse(obj.name.Substring(obj.name.Length - 1));
-                if (objLevel == level)
-                {
-                    return obj;
-                }
+                return character;
             }
         }
         return null;
     }
-
 }
