@@ -1,176 +1,90 @@
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class GridManager : MonoBehaviour
 {
-    public int gridHeight = 6;
-    public GameObject row1Prefab;
-    public GameObject row2Prefab;
-    public RespawnManager respawnManager;
+    public int _gridHeight = 6;
+    public int _gridWidth = 6;
+    public GameObject grid1Sprite;
+    public GameObject grid2Sprite;
+    public CharacterPool characterPool;
+    private int currentRowType = 1;
+    [SerializeField] private int _maxRows = 9;
+    [SerializeField] private SpawnManager spawnManager;
+    [SerializeField] private CharacterManager characterManager;
 
-    private int currentRow = 1;
 
-    public IEnumerator GenerateInitialGrid()
+    private void Start()
     {
-        for (int y = 0; y < gridHeight; y++)
+        GenerateInitialGrid();
+        spawnManager.SpawnCharacters();
+    }
+
+    public void GenerateInitialGrid()
+    {
+        for (int y = 0; y < _gridHeight; y++)
         {
-            GameObject newRow = GenerateRow(new Vector3(0, 1 - y, 0));
-            currentRow = (currentRow == 1) ? 2 : 1;
-        }
-
-        yield return new WaitForSeconds(1.0f);
-        foreach (Transform rowTransform in transform)
-        {
-            respawnManager.SpawnCharactersInRow(rowTransform);
-        }
-    }
-
-    public void AddRow() // row생성 호출 시 추가 row 생성
-    {
-        gridHeight++;
-        GameObject newRow = GenerateRow(new Vector3(0, -gridHeight + 1, 0));
-        respawnManager.SpawnCharactersInRow(newRow.transform);
-        currentRow = (currentRow == 1) ? 2 : 1;
-    }
-
-
-    private GameObject GenerateRow(Vector3 position)
-    {
-        GameObject rowPrefab = (currentRow == 1) ? row1Prefab : row2Prefab;
-        return Instantiate(rowPrefab, position, Quaternion.identity, transform);
-    }
-
-
-    public bool IsPositionInsideGrid(Vector2 position)
-    {
-        return position.x >=  -3  && position.y < gridHeight;
-    }
-
-    public GameObject GetCharacterAtPosition(Vector2 position)
-    {
-        foreach (Transform characterTransform in respawnManager.characterPool.transform)
-        {
-            if (Mathf.Approximately(characterTransform.position.x, position.x) && Mathf.Approximately(characterTransform.position.y, position.y))
+            for (int x = 0; x < _gridWidth; x++)
             {
-                return characterTransform.gameObject;
-            }
-        }
-        return null;
-    }
-
-
-    public void RemoveCharacterFromGrid(Vector2 position)
-    {
-        Transform gridTransform = GetGridTransformAtPosition(position);
-        if (gridTransform != null && gridTransform.childCount > 0)
-        {
-            GameObject character = gridTransform.GetChild(0).gameObject;
-            character.transform.SetParent(null);
-            character.SetActive(false);
-        }
-    }
-
-    public void AddCharacterToGrid(Vector2 position, GameObject character)
-    {
-        Transform gridTransform = GetGridTransformAtPosition(position);
-        if (gridTransform != null)
-        {
-            character.transform.SetParent(gridTransform);
-            character.transform.position = new Vector3(gridTransform.position.x, gridTransform.position.y, -0.5f);
-            character.SetActive(true);
-        }
-    }
-
-    private Transform GetGridTransformAtPosition(Vector2 position)
-    {
-        foreach (Transform rowTransform in transform)
-        {
-            foreach (Transform gridTransform in rowTransform)
-            {
-                if (Mathf.Approximately(gridTransform.position.x, position.x) && Mathf.Approximately(gridTransform.position.y, position.y))
+                GameObject spritePrefab = (x + y) % 2 == 0 ? grid1Sprite : grid2Sprite;
+                GameObject cell = Instantiate(spritePrefab, new Vector3(x, y, 0), Quaternion.identity, transform);
+                if (!spawnManager.IsCharacterAtPosition(new Vector3(x, y, 0)))
                 {
-                    return gridTransform;
+                    int randomCharacterIndex = Random.Range(0, characterManager.characterGroup.Count);
+                    spawnManager.SpawnCharacterAtPosition(randomCharacterIndex, x, y);
                 }
             }
         }
-        return null;
     }
 
-    public void RemoveCharacterAtPosition(Vector2 position)
+
+    public void AddRow()
     {
-        GameObject character = GetCharacterAtPosition(position);
-        if (character != null)
+        if (_gridHeight < _maxRows)
         {
-            character.transform.SetParent(null);
-            character.SetActive(false);
-        }
-    }
+            _gridHeight++;
 
-    public List<GameObject> FindMatchedCharacters(Vector2 position, int minMatchCount)
-    {
-        List<GameObject> matchedCharacters = new List<GameObject>();
-
-        GameObject character = GetCharacterAtPosition(position);
-        if (character != null)
-        {
-            string characterPrefabName = character.transform.parent.name.Replace("(Clone)", "").Trim();
-
-            // Check horizontal matches
-            List<GameObject> horizontalMatches = new List<GameObject>();
-            horizontalMatches.Add(character);
-            horizontalMatches.AddRange(FindMatchesInDirection(position, characterPrefabName, Vector2.right));
-            horizontalMatches.AddRange(FindMatchesInDirection(position, characterPrefabName, Vector2.left));
-
-            if (horizontalMatches.Count >= minMatchCount)
+            // Move existing characters up
+            foreach (GameObject character in spawnManager.GetPooledCharacters())
             {
-                matchedCharacters.AddRange(horizontalMatches);
-            }
-
-            // Check vertical matches
-            List<GameObject> verticalMatches = new List<GameObject>();
-            verticalMatches.Add(character);
-            verticalMatches.AddRange(FindMatchesInDirection(position, characterPrefabName, Vector2.up));
-            verticalMatches.AddRange(FindMatchesInDirection(position, characterPrefabName, Vector2.down));
-
-            if (verticalMatches.Count >= minMatchCount)
-            {
-                matchedCharacters.AddRange(verticalMatches);
-            }
-        }
-
-        return matchedCharacters;
-    }
-
-    private List<GameObject> FindMatchesInDirection(Vector2 startPosition, string characterPrefabName, Vector2 direction)
-    {
-        List<GameObject> matches = new List<GameObject>();
-
-        Vector2 currentPosition = startPosition;
-        while (true)
-        {
-            currentPosition += direction;
-            GameObject otherCharacter = GetCharacterAtPosition(currentPosition);
-
-            if (otherCharacter != null)
-            {
-                string otherCharacterPrefabName = otherCharacter.transform.parent.name.Replace("(Clone)", "").Trim();
-                if (otherCharacterPrefabName == characterPrefabName)
+                if (character.activeInHierarchy)
                 {
-                    matches.Add(otherCharacter);
-                }
-                else
-                {
-                    break;
+                    Vector3 newPosition = character.transform.position;
+                    newPosition.y += 1;
+                    character.transform.position = newPosition;
                 }
             }
-            else
+
+            // Move the entire grid down
+            foreach (Transform child in transform)
             {
-                break;
+                Vector3 newPosition = child.position;
+                newPosition.y += 1;
+                child.position = newPosition;
+            }
+
+            // Create new row and spawn characters
+            for (int x = 0; x < _gridWidth; x++)
+            {
+                GameObject spritePrefab = (x + currentRowType) % 2 == 0 ? grid1Sprite : grid2Sprite;
+                GameObject cell = Instantiate(spritePrefab, new Vector3(x, 0, 0), Quaternion.identity, transform);
+            }
+
+            currentRowType = currentRowType == 1 ? 2 : 1;
+
+            List<GameObject> inactiveCharacters = characterPool.GetPooledCharacters().Where(character => !character.activeInHierarchy).ToList();
+            for (int x = 0; x < _gridWidth; x++)
+            {
+                if (!spawnManager.IsCharacterAtPosition(new Vector3(x, 0, 0)))
+                {
+                    int randomCharacterIndex = Random.Range(0, inactiveCharacters.Count);
+                    GameObject character = inactiveCharacters[randomCharacterIndex];
+                    character.transform.position = new Vector3(x, 0, 0);
+                    character.SetActive(true);
+                    inactiveCharacters.RemoveAt(randomCharacterIndex);
+                }
             }
         }
-
-        return matches;
     }
-
 }

@@ -7,7 +7,6 @@ public class CountManager : MonoBehaviour
 {
     private int moveCount;
     public TextMeshProUGUI moveCountText;
-    public bool diagonalMovementEnabled = false;
 
     public void Initialize(int initialMoveCount)
     {
@@ -27,11 +26,6 @@ public class CountManager : MonoBehaviour
             moveCount--;
             UpdateMoveCountText();
         }
-    }
-
-    public void EnableDiagonalMovement()
-    {
-        diagonalMovementEnabled = true;
     }
 
     private void UpdateMoveCountText()
