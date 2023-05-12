@@ -3,25 +3,20 @@ using UnityEngine;
 
 public class CharacterPool : MonoBehaviour
 {
-    [System.Serializable]
-    public class CharacterPoolItem
-    {
-        public GameObject characterPrefab;
-        public int _count;
-    }
-
-    public List<CharacterPoolItem> poolItems;
+    [SerializeField]
+    private CharacterManager characterManager;
+    [SerializeField]
+    private int _poolSize;
     private List<GameObject> pooledCharacters;
-    private int currentPrefabIndex = 0;
 
     void Awake()
     {
         pooledCharacters = new List<GameObject>();
-        foreach (CharacterPoolItem item in poolItems)
+        foreach (CharacterBase character in characterManager.characterList)
         {
-            for (int i = 0; i < item._count; i++)
+            for (int i = 0; i < _poolSize; i++)
             {
-                GameObject obj = Instantiate(item.characterPrefab);
+                GameObject obj = Instantiate(character.gameObject);
                 obj.SetActive(false);
                 pooledCharacters.Add(obj);
                 obj.transform.SetParent(transform);
@@ -29,20 +24,38 @@ public class CharacterPool : MonoBehaviour
         }
     }
 
+    public GameObject GetRandomCharacterPrefab()
+    {
+        if (characterManager.characterList.Count > 0)
+        {
+            int randomIndex = Random.Range(0, characterManager.characterList.Count);
+            return characterManager.characterList[randomIndex].gameObject;
+        }
+        return null;
+    }
+
     public GameObject GetPooledCharacter()
     {
+        List<GameObject> inactiveCharacters = new List<GameObject>();
+
         for (int i = 0; i < pooledCharacters.Count; i++)
         {
             if (!pooledCharacters[i].activeInHierarchy)
             {
-                return pooledCharacters[i];
+                inactiveCharacters.Add(pooledCharacters[i]);
             }
         }
 
-        // If no inactive characters are found, create a new one.
-        return CreateNewCharacter();
+        if (inactiveCharacters.Count == 0)
+        {
+            return CreateNewCharacter();
+        }
+        else
+        {
+            int randomIndex = Random.Range(0, inactiveCharacters.Count);
+            return inactiveCharacters[randomIndex];
+        }
     }
-
 
     public List<GameObject> GetPooledCharacters()
     {
@@ -51,12 +64,10 @@ public class CharacterPool : MonoBehaviour
 
     public GameObject CreateNewCharacter()
     {
-        GameObject newCharacter = Instantiate(poolItems[currentPrefabIndex].characterPrefab);
+        GameObject newCharacter = Instantiate(GetRandomCharacterPrefab());
         newCharacter.SetActive(false);
         pooledCharacters.Add(newCharacter);
         newCharacter.transform.SetParent(transform);
-        currentPrefabIndex = (currentPrefabIndex + 1) % poolItems.Count;
         return newCharacter;
     }
-
 }

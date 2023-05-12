@@ -1,35 +1,33 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
 public class CountManager : MonoBehaviour
 {
-    private int moveCount;
-    public TextMeshProUGUI moveCountText;
+    private int _moveCount;
+    public TextMeshProUGUI _moveCountText;
 
     public void Initialize(int initialMoveCount)
     {
-        moveCount = initialMoveCount;
+        _moveCount = initialMoveCount;
         UpdateMoveCountText();
     }
 
     public bool CanMove()
     {
-        return moveCount > 0;
+        return _moveCount > 0;
     }
 
     public void DecreaseMoveCount()
     {
-        if (moveCount > 0)
+        if (_moveCount > 0)
         {
-            moveCount--;
+            _moveCount--;
             UpdateMoveCountText();
         }
     }
 
     private void UpdateMoveCountText()
     {
-        moveCountText.text = $"Count: {moveCount}";
+        _moveCountText.text = $"Count: {_moveCount}";
     }
 }
