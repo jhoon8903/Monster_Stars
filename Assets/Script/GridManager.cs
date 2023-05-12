@@ -9,7 +9,7 @@ public class GridManager : MonoBehaviour
     public GameObject grid1Sprite;
     public GameObject grid2Sprite;
     public CharacterPool characterPool;
-    private int currentRowType = 1;
+    private int _currentRowType = 1;
     [SerializeField] private int _maxRows = 9;
     [SerializeField] private SpawnManager spawnManager;
     [SerializeField] private CharacterManager characterManager;
@@ -31,8 +31,8 @@ public class GridManager : MonoBehaviour
                 GameObject cell = Instantiate(spritePrefab, new Vector3(x, y, 0), Quaternion.identity, transform);
                 if (!spawnManager.IsCharacterAtPosition(new Vector3(x, y, 0)))
                 {
-                    int randomCharacterIndex = Random.Range(0, characterManager.characterGroup.Count);
-                    spawnManager.SpawnCharacterAtPosition(randomCharacterIndex, x, y);
+                    //int randomCharacterIndex = Random.Range(0, characterManager.characterGroup.Count);
+                    spawnManager.SpawnCharacterAtPosition(x, y);
                 }
             }
         }
@@ -67,11 +67,11 @@ public class GridManager : MonoBehaviour
             // Create new row and spawn characters
             for (int x = 0; x < _gridWidth; x++)
             {
-                GameObject spritePrefab = (x + currentRowType) % 2 == 0 ? grid1Sprite : grid2Sprite;
+                GameObject spritePrefab = (x + _currentRowType) % 2 == 0 ? grid1Sprite : grid2Sprite;
                 GameObject cell = Instantiate(spritePrefab, new Vector3(x, 0, 0), Quaternion.identity, transform);
             }
 
-            currentRowType = currentRowType == 1 ? 2 : 1;
+            _currentRowType = _currentRowType == 1 ? 2 : 1;
 
             List<GameObject> inactiveCharacters = characterPool.GetPooledCharacters().Where(character => !character.activeInHierarchy).ToList();
             for (int x = 0; x < _gridWidth; x++)
@@ -87,4 +87,32 @@ public class GridManager : MonoBehaviour
             }
         }
     }
+
+    /// 머지 기능관련 스크립트 
+    public GameObject GetCharacterAtPosition(Vector3 position)
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.position == position)
+            {
+                return child.gameObject;
+            }
+        }
+        return null;
+    }
+
+    public void UpdateCharacterPosition(Vector3 oldPosition, GameObject newCharacter)
+    {
+        foreach (Transform child in transform)
+        {
+            if (child.position == oldPosition)
+            {
+                Destroy(child.gameObject);
+                newCharacter.transform.SetParent(transform);
+                newCharacter.transform.position = oldPosition;
+                break;
+            }
+        }
+    }
+
 }

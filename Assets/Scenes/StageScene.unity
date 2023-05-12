@@ -136,6 +136,7 @@ GameObject:
   - component: {fileID: 149521962}
   - component: {fileID: 149521963}
   - component: {fileID: 149521964}
+  - component: {fileID: 149521965}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -186,7 +187,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efbe2bcfadc2c4db98ffaea9f9e7b363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveCountText: {fileID: 679308669}
+  _moveCountText: {fileID: 679308669}
 --- !u!114 &149521963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -199,17 +200,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 174e5bb825a1e45ef8b861bf9c2fd4a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterGroup:
-  - gameObject: {fileID: 3295162923718182863, guid: 282ca571fdd1a418f8655667bc8cf479, type: 3}
-    prefabIndex: 8
-  - gameObject: {fileID: 3213881889478370183, guid: 438d7922ea8534dd6a3cfa7664f14cb7, type: 3}
-    prefabIndex: 8
-  - gameObject: {fileID: 4830802314425314191, guid: e5eae943fb66c47e5961725f82c5a2ff, type: 3}
-    prefabIndex: 8
-  - gameObject: {fileID: 5578948795948836533, guid: 39b5bda868b7a4323b5c6d9fa2e36252, type: 3}
-    prefabIndex: 8
-  - gameObject: {fileID: 7229477341921847284, guid: d30ec24dbb65c4123938646dbb2c82d1, type: 3}
-    prefabIndex: 8
+  characterList:
+  - {fileID: 4858146025929052495, guid: 282ca571fdd1a418f8655667bc8cf479, type: 3}
+  - {fileID: 607469974182215912, guid: e5eae943fb66c47e5961725f82c5a2ff, type: 3}
+  - {fileID: 2361742863523291227, guid: 438d7922ea8534dd6a3cfa7664f14cb7, type: 3}
+  - {fileID: 562606366381536192, guid: 39b5bda868b7a4323b5c6d9fa2e36252, type: 3}
+  - {fileID: 7229477341921847287, guid: d30ec24dbb65c4123938646dbb2c82d1, type: 3}
 --- !u!114 &149521964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,9 +218,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 889340564b66840f09e609730ac4d3a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterManager: {fileID: 149521963}
   gridManager: {fileID: 8808150501734532426}
   characterPool: {fileID: 1097818334}
+--- !u!114 &149521965
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149521957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97d6d168b19d945be9566087678d60c5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gridManager: {fileID: 8808150501734532426}
+  spawnManager: {fileID: 149521964}
+  countManager: {fileID: 149521962}
+  characterLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &679308667
 GameObject:
   m_ObjectHideFlags: 0
@@ -759,7 +772,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1097818335}
   - component: {fileID: 1097818334}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CharacterPool
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -778,17 +791,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64baefdadcc6b4e94a9984659fd5936f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  poolItems:
-  - characterPrefab: {fileID: 3213881889478370183, guid: 438d7922ea8534dd6a3cfa7664f14cb7, type: 3}
-    _count: 8
-  - characterPrefab: {fileID: 3295162923718182863, guid: 282ca571fdd1a418f8655667bc8cf479, type: 3}
-    _count: 7
-  - characterPrefab: {fileID: 4830802314425314191, guid: e5eae943fb66c47e5961725f82c5a2ff, type: 3}
-    _count: 7
-  - characterPrefab: {fileID: 5578948795948836533, guid: 39b5bda868b7a4323b5c6d9fa2e36252, type: 3}
-    _count: 7
-  - characterPrefab: {fileID: 7229477341921847284, guid: d30ec24dbb65c4123938646dbb2c82d1, type: 3}
-    _count: 7
+  characterManager: {fileID: 149521963}
+  _poolSize: 15
 --- !u!4 &1097818335
 Transform:
   m_ObjectHideFlags: 0
@@ -1025,7 +1029,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8808150501734532427}
   - component: {fileID: 8808150501734532426}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: GridManager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1049,7 +1053,7 @@ MonoBehaviour:
   grid1Sprite: {fileID: 5878419415431634990, guid: 9cb9c040a9abd43d0b20b1828f4cbc7e, type: 3}
   grid2Sprite: {fileID: 2861231161325905373, guid: 366ac8b27ec804d8aa934708a02a4c3b, type: 3}
   characterPool: {fileID: 1097818334}
-  _maxRows: 9
+  _maxRows: 10
   spawnManager: {fileID: 149521964}
   characterManager: {fileID: 149521963}
 --- !u!4 &8808150501734532427

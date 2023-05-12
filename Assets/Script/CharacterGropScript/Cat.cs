@@ -23,7 +23,7 @@ public class Cat : CharacterBase
 
     private SpriteRenderer _spriteRenderer;
 
-    private void Start()
+    private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         Level1();
@@ -34,7 +34,7 @@ public class Cat : CharacterBase
         _characterName = "cat1";
         _damage = 0;
         _atkSpeed = 0;
-        _Range = 0;
+        _range = 0;
         _spearForce = 0;
         _splashRange = 0f;
         _spriteRenderer.sprite = level1Sprite;
@@ -46,7 +46,7 @@ public class Cat : CharacterBase
         _characterName = "cat2";
         _damage = 1;
         _atkSpeed = 0.1f;
-        _Range = 0.1f;
+        _range = 0.1f;
         _spearForce = 0;
         _splashRange = 0f;
         _spriteRenderer.sprite = level2Sprite;
@@ -57,7 +57,7 @@ public class Cat : CharacterBase
         _characterName = "cat3";
         _damage = 3;
         _atkSpeed = 0.3f;
-        _Range = 0.2f;
+        _range = 0.2f;
         _spearForce = 0;
         _splashRange = 0f;
         _spriteRenderer.sprite = level3Sprite;
@@ -68,7 +68,7 @@ public class Cat : CharacterBase
         _characterName = "cat4";
         _damage = 9;
         _atkSpeed = 0.9f;
-        _Range = 0.3f;
+        _range = 0.3f;
         _spearForce = 0;
         _splashRange = 0f;
         _spriteRenderer.sprite = level4Sprite;
@@ -79,7 +79,7 @@ public class Cat : CharacterBase
         _characterName = "cat5";
         _damage = 27;
         _atkSpeed = 2.7f;
-        _Range = 0.4f;
+        _range = 0.4f;
         _spearForce = 0;
         _splashRange = 0f;
         _spriteRenderer.sprite = level5Sprite;
