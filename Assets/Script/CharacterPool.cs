@@ -12,6 +12,7 @@ public class CharacterPool : MonoBehaviour
 
     public List<CharacterPoolItem> poolItems;
     private List<GameObject> pooledCharacters;
+    private int currentPrefabIndex = 0;
 
     void Awake()
     {
@@ -30,19 +31,32 @@ public class CharacterPool : MonoBehaviour
 
     public GameObject GetPooledCharacter()
     {
-        foreach (GameObject character in pooledCharacters)
+        for (int i = 0; i < pooledCharacters.Count; i++)
         {
-            if (!character.activeInHierarchy)
+            if (!pooledCharacters[i].activeInHierarchy)
             {
-                return character;
+                return pooledCharacters[i];
             }
         }
-        return null;
+
+        // If no inactive characters are found, create a new one.
+        return CreateNewCharacter();
     }
+
 
     public List<GameObject> GetPooledCharacters()
     {
         return pooledCharacters;
+    }
+
+    public GameObject CreateNewCharacter()
+    {
+        GameObject newCharacter = Instantiate(poolItems[currentPrefabIndex].characterPrefab);
+        newCharacter.SetActive(false);
+        pooledCharacters.Add(newCharacter);
+        newCharacter.transform.SetParent(transform);
+        currentPrefabIndex = (currentPrefabIndex + 1) % poolItems.Count;
+        return newCharacter;
     }
 
 }

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
@@ -10,8 +9,6 @@ public class SpawnManager : MonoBehaviour
     private GridManager gridManager;
     [SerializeField]
     private CharacterPool characterPool;
-
-    private int[] objectCounts = new int[5];
 
     public void SpawnCharacters()
     {
@@ -25,32 +22,41 @@ public class SpawnManager : MonoBehaviour
             }
         }
 
-        int[] targetCounts = { 7, 7, 7, 7, 8 };
+        int totalGridPositions = gridManager._gridWidth * gridManager._gridHeight;
+        int charactersPerGroup = totalGridPositions / characterManager.characterGroup.Count;
+        int extraCharacters = totalGridPositions % characterManager.characterGroup.Count;
 
-        int[] currentCounts = new int[5];
-
-        while (availablePositions.Count > 0 && currentCounts.Sum() < 36)
+        for (int i = 0; i < characterManager.characterGroup.Count; i++)
         {
-            int randomCharacterIndex = Random.Range(0, characterManager.characterGroup.Count);
-            if (currentCounts[randomCharacterIndex] < targetCounts[randomCharacterIndex])
+            int charactersToSpawn = charactersPerGroup + (i < extraCharacters ? 1 : 0);
+            for (int j = 0; j < charactersToSpawn; j++)
             {
+                if (availablePositions.Count == 0)
+                {
+                    Debug.LogWarning("Not enough available positions on the grid.");
+                    return;
+                }
+
                 int randomPositionIndex = Random.Range(0, availablePositions.Count);
                 Vector2Int randomPosition = availablePositions[randomPositionIndex];
                 availablePositions.RemoveAt(randomPositionIndex);
+                int characterPrefabIndex = characterManager.characterGroup[i].prefabIndex;
 
-                SpawnCharacterAtPosition(randomCharacterIndex, randomPosition.x, randomPosition.y);
-                currentCounts[randomCharacterIndex]++;
+
+                SpawnCharacterAtPosition(characterPrefabIndex, randomPosition.x, randomPosition.y);
             }
         }
     }
 
-    public void SpawnCharacterAtPosition(int characterIndex, int x, int y)
+
+    public void SpawnCharacterAtPosition(int characterPrefabIndex, int x, int y)
     {
         Vector3 spawnPosition = new Vector3(x, y, 0);
         if (!IsCharacterAtPosition(spawnPosition))
         {
-            GameObject characterPrefab = characterManager.characterGroup[characterIndex].gameObject;
+            GameObject characterPrefab = characterManager.characterGroup[characterPrefabIndex].gameObject;
             GameObject pooledCharacter = characterPool.GetPooledCharacter();
+
             if (pooledCharacter != null)
             {
                 pooledCharacter.GetComponent<CharacterBase>().Setup(characterPrefab.GetComponent<CharacterBase>());
@@ -78,22 +84,5 @@ public class SpawnManager : MonoBehaviour
         }
         return false;
     }
-
-
-    public void DeactivateCharactersOutsideGrid(int gridWidth, int gridHeight)
-    {
-        foreach (GameObject character in characterPool.GetPooledCharacters())
-        {
-            if (character.activeInHierarchy)
-            {
-                Vector3 position = character.transform.position;
-                if (position.x < 0 || position.x >= gridWidth || position.y < 0 || position.y >= gridHeight)
-                {
-                    character.SetActive(false);
-                }
-            }
-        }
-    }
-
 
 }
