@@ -158,7 +158,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridManager: {fileID: 8808150501734532426}
   countManager: {fileID: 149521962}
-  moveCount: 30
+  _moveCount: 500
   spawnManager: {fileID: 149521964}
 --- !u!4 &149521959
 Transform:
@@ -232,10 +232,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d6d168b19d945be9566087678d60c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridManager: {fileID: 8808150501734532426}
   spawnManager: {fileID: 149521964}
   countManager: {fileID: 149521962}
-  characterLayer:
+  characterPool: {fileID: 1097818334}
+  _characterLayer:
     serializedVersion: 2
     m_Bits: 64
 --- !u!1 &679308667
@@ -793,6 +793,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterManager: {fileID: 149521963}
   _poolSize: 15
+  spawnManager: {fileID: 149521964}
 --- !u!4 &1097818335
 Transform:
   m_ObjectHideFlags: 0

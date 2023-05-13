@@ -14,7 +14,7 @@ public class SpawnManager : MonoBehaviour
 
         for (int x = 0; x < gridManager._gridWidth; x++)
         {
-            for (int y = 0; y < gridManager._gridHeight; y++)
+            for (int y = 0; y < gridManager._gridWidth; y++)
             {
                 availablePositions.Add(new Vector2Int(x, y));
             }
@@ -41,7 +41,7 @@ public class SpawnManager : MonoBehaviour
 
     public void SpawnCharacterAtPosition(int x, int y)
     {
-        Vector3 spawnPosition = new Vector3(x, y, -0.5f);
+        Vector3 spawnPosition = new Vector3(x, y, 0);
         if (!IsCharacterAtPosition(spawnPosition))
         {
             GameObject pooledCharacter = characterPool.GetPooledCharacter();
@@ -50,15 +50,35 @@ public class SpawnManager : MonoBehaviour
             {
                 pooledCharacter.transform.position = spawnPosition;
                 pooledCharacter.SetActive(true);
+                gridManager.IncrementActiveGridCount();
             }
         }
     }
 
-    public List<GameObject> GetPooledCharacters()
+    public void RespawnCharacters()
     {
-        return characterPool.GetPooledCharacters();
-    }
+        int activeCharacterCount = characterPool.GetActiveCharacterCount();
+        int activeGridCount = gridManager.GetActiveGridCount();
+        if (activeCharacterCount < activeGridCount)
+        {
+            int _gridGap = activeGridCount - activeCharacterCount;
 
+            for (int i = 0; i < _gridGap; i++)
+            {
+
+                GameObject characterToRespawn = characterPool.GetRandomInactiveCharacter();
+                GameObject gridToFill = gridManager.GetEmptyGrid();
+                Debug.Log($"gridToFill: {gridToFill}");
+
+                if (characterToRespawn != null && gridToFill != null)
+                {
+                    characterToRespawn.transform.position = gridToFill.transform.position;
+                    characterToRespawn.SetActive(true);
+                    gridToFill.SetActive(true);
+                }
+            }
+        }
+    }
     public bool IsCharacterAtPosition(Vector3 position)
     {
         foreach (GameObject character in characterPool.GetPooledCharacters())
@@ -70,4 +90,20 @@ public class SpawnManager : MonoBehaviour
         }
         return false;
     }
+    public GameObject GetCharacterAtPosition(Vector3 position)
+    {
+        foreach (GameObject character in characterPool.GetPooledCharacters())
+        {
+            if (character.activeInHierarchy && character.transform.position == position)
+            {
+                return character;
+            }
+        }
+        return null;
+    }
+    public List<GameObject> GetPooledCharacters()
+    {
+        return characterPool.GetPooledCharacters();
+    }
 }
+

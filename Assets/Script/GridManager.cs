@@ -10,6 +10,7 @@ public class GridManager : MonoBehaviour
     public GameObject grid2Sprite;
     public CharacterPool characterPool;
     private int _currentRowType = 1;
+    private int _activeGridCount = 0;
     [SerializeField] private int _maxRows = 9;
     [SerializeField] private SpawnManager spawnManager;
     [SerializeField] private CharacterManager characterManager;
@@ -87,32 +88,62 @@ public class GridManager : MonoBehaviour
             }
         }
     }
-
-    /// 머지 기능관련 스크립트 
-    public GameObject GetCharacterAtPosition(Vector3 position)
+    public int GetActiveGridCount()
     {
+        int count = 0;
         foreach (Transform child in transform)
         {
-            if (child.position == position)
+            if (child.gameObject.activeSelf)
             {
-                return child.gameObject;
+                count++;
             }
         }
+        return count;
+    }
+
+    public int GetTotalGridPositions()
+    {
+        return _gridWidth * _gridHeight;
+    }
+
+    public GameObject GetEmptyGrid()
+    {
+        Debug.Log("GetEmptyGrid");
+        List<GameObject> emptyGrids = new List<GameObject>();
+
+        foreach (Transform child in transform)
+        {
+            if (!child.gameObject.activeSelf)
+            {
+                emptyGrids.Add(child.gameObject);
+            }
+        }
+
+        if (emptyGrids.Count > 0)
+        {
+            int randomIndex = Random.Range(0, emptyGrids.Count);
+            GameObject selectedGrid = emptyGrids[randomIndex];
+
+            // Move all game objects above this grid up by 1 in y direction
+            foreach (GameObject character in spawnManager.GetPooledCharacters())
+            {
+                if (character.activeInHierarchy && character.transform.position.y > selectedGrid.transform.position.y)
+                {
+                    Vector3 newPosition = character.transform.position;
+                    newPosition.y += 1;
+                    character.transform.position = newPosition;
+                }
+            }
+
+            return selectedGrid;
+        }
+
         return null;
     }
 
-    public void UpdateCharacterPosition(Vector3 oldPosition, GameObject newCharacter)
+    public void IncrementActiveGridCount()
     {
-        foreach (Transform child in transform)
-        {
-            if (child.position == oldPosition)
-            {
-                Destroy(child.gameObject);
-                newCharacter.transform.SetParent(transform);
-                newCharacter.transform.position = oldPosition;
-                break;
-            }
-        }
+        _activeGridCount++;
     }
 
 }
