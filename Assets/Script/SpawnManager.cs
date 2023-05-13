@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SpawnManager : MonoBehaviour
@@ -7,6 +8,11 @@ public class SpawnManager : MonoBehaviour
     private GridManager gridManager;
     [SerializeField]
     private CharacterPool characterPool;
+
+    public List<GameObject> GetPooledCharacters()
+    {
+        return characterPool.GetPooledCharacters();
+    }
 
     public void SpawnCharacters()
     {
@@ -25,12 +31,6 @@ public class SpawnManager : MonoBehaviour
 
         for (int i = 0; i < charactersToSpawn; i++)
         {
-            if (availablePositions.Count == 0)
-            {
-                Debug.LogWarning("Not enough available positions on the grid.");
-                return;
-            }
-
             int randomPositionIndex = Random.Range(0, availablePositions.Count);
             Vector2Int randomPosition = availablePositions[randomPositionIndex];
             availablePositions.RemoveAt(randomPositionIndex);
@@ -41,7 +41,8 @@ public class SpawnManager : MonoBehaviour
 
     public void SpawnCharacterAtPosition(int x, int y)
     {
-        Vector3 spawnPosition = new Vector3(x, y, 0);
+        Vector2 spawnPosition = new Vector2(x, y);
+
         if (!IsCharacterAtPosition(spawnPosition))
         {
             GameObject pooledCharacter = characterPool.GetPooledCharacter();
@@ -55,30 +56,6 @@ public class SpawnManager : MonoBehaviour
         }
     }
 
-    public void RespawnCharacters()
-    {
-        int activeCharacterCount = characterPool.GetActiveCharacterCount();
-        int activeGridCount = gridManager.GetActiveGridCount();
-        if (activeCharacterCount < activeGridCount)
-        {
-            int _gridGap = activeGridCount - activeCharacterCount;
-
-            for (int i = 0; i < _gridGap; i++)
-            {
-
-                GameObject characterToRespawn = characterPool.GetRandomInactiveCharacter();
-                GameObject gridToFill = gridManager.GetEmptyGrid();
-                Debug.Log($"gridToFill: {gridToFill}");
-
-                if (characterToRespawn != null && gridToFill != null)
-                {
-                    characterToRespawn.transform.position = gridToFill.transform.position;
-                    characterToRespawn.SetActive(true);
-                    gridToFill.SetActive(true);
-                }
-            }
-        }
-    }
     public bool IsCharacterAtPosition(Vector3 position)
     {
         foreach (GameObject character in characterPool.GetPooledCharacters())
@@ -90,6 +67,7 @@ public class SpawnManager : MonoBehaviour
         }
         return false;
     }
+
     public GameObject GetCharacterAtPosition(Vector3 position)
     {
         foreach (GameObject character in characterPool.GetPooledCharacters())
@@ -101,9 +79,33 @@ public class SpawnManager : MonoBehaviour
         }
         return null;
     }
-    public List<GameObject> GetPooledCharacters()
+
+    public void MoveCharactersEmptyGrid(Vector2 emptyGridPosition)
     {
-        return characterPool.GetPooledCharacters();
+        foreach (GameObject character in characterPool.GetPooledCharacters())
+        {
+            if (character.transform.position.x == emptyGridPosition.x && character.transform.position.y < emptyGridPosition.y)
+            {
+                Vector2 newPosition = character.transform.position;
+                newPosition.y += 1;
+                character.transform.position = newPosition;
+            }
+        }
+        RespawnCharacter();
+    }
+
+    public void RespawnCharacter()
+    {
+        List<GameObject> inactiveCharacters = characterPool.GetPooledCharacters().Where(character => !character.activeInHierarchy).ToList();
+        List<int> freeXPositions = gridManager.GetFreeXPositions();
+        for (int x = 0; x < freeXPositions.Count; x++)
+        {
+            int randomCharacterIndex = Random.Range(0, inactiveCharacters.Count);
+            GameObject character = inactiveCharacters[randomCharacterIndex];
+            character.transform.position = new Vector3(freeXPositions[x], 0, 0);
+            character.SetActive(true);
+            inactiveCharacters.RemoveAt(randomCharacterIndex);
+        }
+
     }
 }
-

@@ -108,7 +108,6 @@ public class GridManager : MonoBehaviour
 
     public GameObject GetEmptyGrid()
     {
-        Debug.Log("GetEmptyGrid");
         List<GameObject> emptyGrids = new List<GameObject>();
 
         foreach (Transform child in transform)
@@ -124,7 +123,6 @@ public class GridManager : MonoBehaviour
             int randomIndex = Random.Range(0, emptyGrids.Count);
             GameObject selectedGrid = emptyGrids[randomIndex];
 
-            // Move all game objects above this grid up by 1 in y direction
             foreach (GameObject character in spawnManager.GetPooledCharacters())
             {
                 if (character.activeInHierarchy && character.transform.position.y > selectedGrid.transform.position.y)
@@ -144,6 +142,19 @@ public class GridManager : MonoBehaviour
     public void IncrementActiveGridCount()
     {
         _activeGridCount++;
+    }
+
+    public List<int> GetFreeXPositions()
+    {
+        List<int> freeXPositions = new List<int>();
+        for (int x = 0; x < _gridWidth; x++)
+        {
+            if (!spawnManager.IsCharacterAtPosition(new Vector3(x, 0, 0)))
+            {
+                freeXPositions.Add(x);
+            }
+        }
+        return freeXPositions;
     }
 
 }

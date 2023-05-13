@@ -792,7 +792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterManager: {fileID: 149521963}
-  _poolSize: 15
+  _poolSize: 12
   spawnManager: {fileID: 149521964}
 --- !u!4 &1097818335
 Transform:
