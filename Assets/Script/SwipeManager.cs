@@ -104,7 +104,6 @@ public class SwipeManager : MonoBehaviour
         else
         {
             StartCoroutine(NullSwap(startX, startY, endX, endY));
-            spawnManager.RespawnCharacters();
 
         }
 
@@ -140,6 +139,7 @@ public class SwipeManager : MonoBehaviour
         Vector2 startPosition = _startObject.transform.position;
         Vector2 endPosition = new Vector3(endX, endY, 0f);
         _startObject.transform.position = endPosition;
+        countManager.DecreaseMoveCount();
         _returnObject = _startObject;
         _startObject.transform.localScale = _initialScale;
         
