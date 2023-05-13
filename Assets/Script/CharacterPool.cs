@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class CharacterPool : MonoBehaviour
@@ -7,6 +8,8 @@ public class CharacterPool : MonoBehaviour
     private CharacterManager characterManager;
     [SerializeField]
     private int _poolSize;
+    [SerializeField]
+    private SpawnManager spawnManager;
     private List<GameObject> pooledCharacters;
 
     void Awake()
@@ -70,4 +73,29 @@ public class CharacterPool : MonoBehaviour
         newCharacter.transform.SetParent(transform);
         return newCharacter;
     }
+
+    public void ReturnToPool(GameObject obj)
+    {
+        obj.SetActive(false);
+        spawnManager.RespawnCharacters();
+    }
+
+    public int GetActiveCharacterCount()
+    {
+        return pooledCharacters.Count(character => character.activeInHierarchy);
+    }
+
+    public GameObject GetRandomInactiveCharacter()
+    {
+        List<GameObject> inactiveCharacters = pooledCharacters.Where(character => !character.activeInHierarchy).ToList();
+
+        if (inactiveCharacters.Count > 0)
+        {
+            int randomIndex = Random.Range(0, inactiveCharacters.Count);
+            return inactiveCharacters[randomIndex];
+        }
+
+        return null;
+    }
+
 }
