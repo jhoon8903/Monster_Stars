@@ -77,7 +77,6 @@ public class CharacterPool : MonoBehaviour
     public void ReturnToPool(GameObject obj)
     {
         obj.SetActive(false);
-        spawnManager.RespawnCharacters();
     }
 
     public int GetActiveCharacterCount()

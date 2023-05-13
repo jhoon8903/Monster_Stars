@@ -9,9 +9,9 @@ public class SwipeManager : MonoBehaviour
     private GameObject _returnObject;
     private Vector2 _initialScale;
     private Vector2 _hoveredScale = new Vector2(1.3f, 1.3f);
-    private Vector2 _firstTouchPosition; 
-    private float _minSwipeLength = 0.2f; 
-
+    private Vector2 _firstTouchPosition;
+    private Vector2 _emptyGridPosition;
+    private float _minSwipeLength = 0.2f;
     [SerializeField] private SpawnManager spawnManager;
     [SerializeField] private CountManager countManager;
     [SerializeField] private CharacterPool characterPool;
@@ -142,10 +142,12 @@ public class SwipeManager : MonoBehaviour
         countManager.DecreaseMoveCount();
         _returnObject = _startObject;
         _startObject.transform.localScale = _initialScale;
+        _emptyGridPosition = new Vector2(startX, startY);
         
         yield return new WaitForSeconds(0.1f);
 
         characterPool.ReturnToPool(_returnObject);
+        spawnManager.MoveCharactersEmptyGrid(_emptyGridPosition);
     }
 
 }
