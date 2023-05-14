@@ -1,160 +1,131 @@
 using System.Collections.Generic;
 using System.Linq;
+using Script.CharacterManagerScript;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class GridManager : MonoBehaviour
+namespace Script
 {
-    public int _gridHeight = 6;
-    public int _gridWidth = 6;
-    public GameObject grid1Sprite;
-    public GameObject grid2Sprite;
-    public CharacterPool characterPool;
-    private int _currentRowType = 1;
-    private int _activeGridCount = 0;
-    [SerializeField] private int _maxRows = 9;
-    [SerializeField] private SpawnManager spawnManager;
-    [SerializeField] private CharacterManager characterManager;
-
-
-    private void Start()
+    public sealed class GridManager : MonoBehaviour
     {
-        GenerateInitialGrid();
-        spawnManager.SpawnCharacters();
-    }
+        [FormerlySerializedAs("_gridHeight")] public int gridHeight = 6;
+        [FormerlySerializedAs("_gridWidth")] public int gridWidth = 6;
+        public GameObject grid1Sprite;
+        public GameObject grid2Sprite;
+        public CharacterPool characterPool;
+        private int _currentRowType = 1;
+        [FormerlySerializedAs("_maxRows")] [SerializeField] private int maxRows = 9;
+        [SerializeField] private SpawnManager spawnManager;
+        [SerializeField] private CharacterManager characterManager;
 
-    public void GenerateInitialGrid()
-    {
-        for (int y = 0; y < _gridHeight; y++)
+        private void Start()
         {
-            for (int x = 0; x < _gridWidth; x++)
+            GenerateInitialGrid();  // 초기 Grid 생성
+            spawnManager.SpawnCharacters(); // CharacterObject 생성
+        }
+
+        //  기본 Grid 생성 메소드
+        private void GenerateInitialGrid()
+        {
+            for (var y = 0; y < gridHeight; y++)
             {
-                GameObject spritePrefab = (x + y) % 2 == 0 ? grid1Sprite : grid2Sprite;
-                GameObject cell = Instantiate(spritePrefab, new Vector3(x, y, 0), Quaternion.identity, transform);
-                if (!spawnManager.IsCharacterAtPosition(new Vector3(x, y, 0)))
+                for (var x = 0; x < gridWidth; x++)
                 {
-                    //int randomCharacterIndex = Random.Range(0, characterManager.characterGroup.Count);
-                    spawnManager.SpawnCharacterAtPosition(x, y);
+                    var spritePrefab = (x + y) % 2 == 0 ? grid1Sprite : grid2Sprite;
+                    var cell = Instantiate(spritePrefab, new Vector3(x, y, 0), Quaternion.identity, transform);
+                    if (!spawnManager.IsCharacterAtPosition(new Vector3(x, y, 0)))
+                    {
+                        //int randomCharacterIndex = Random.Range(0, characterManager.characterGroup.Count);
+                        spawnManager.SpawnCharacterAtPosition(x, y);
+                    }
                 }
             }
         }
-    }
 
-
-    public void AddRow()
-    {
-        if (_gridHeight < _maxRows)
+        //  AddRow() 버튼 클릭 혹은 Method 호출 시 Grid Row 생성
+        public void AddRow()
         {
-            _gridHeight++;
+            if (gridHeight >= maxRows) return;
+            gridHeight++;
 
             // Move existing characters up
-            foreach (GameObject character in spawnManager.GetPooledCharacters())
+            foreach (var character in spawnManager.GetPooledCharacters())
             {
-                if (character.activeInHierarchy)
-                {
-                    Vector3 newPosition = character.transform.position;
-                    newPosition.y += 1;
-                    character.transform.position = newPosition;
-                }
+                if (!character.activeInHierarchy) continue;
+                var newPosition = character.transform.position;
+                newPosition.y += 1;
+                character.transform.position = newPosition;
             }
 
             // Move the entire grid down
             foreach (Transform child in transform)
             {
-                Vector3 newPosition = child.position;
+                var newPosition = child.position;
                 newPosition.y += 1;
                 child.position = newPosition;
             }
 
             // Create new row and spawn characters
-            for (int x = 0; x < _gridWidth; x++)
+            for (var x = 0; x < gridWidth; x++)
             {
-                GameObject spritePrefab = (x + _currentRowType) % 2 == 0 ? grid1Sprite : grid2Sprite;
-                GameObject cell = Instantiate(spritePrefab, new Vector3(x, 0, 0), Quaternion.identity, transform);
+                var spritePrefab = (x + _currentRowType) % 2 == 0 ? grid1Sprite : grid2Sprite;
+                var cell = Instantiate(spritePrefab, new Vector3(x, 0, 0), Quaternion.identity, transform);
             }
 
             _currentRowType = _currentRowType == 1 ? 2 : 1;
 
-            List<GameObject> inactiveCharacters = characterPool.GetPooledCharacters().Where(character => !character.activeInHierarchy).ToList();
-            for (int x = 0; x < _gridWidth; x++)
+            var inactiveCharacters = characterPool.GetPooledCharacters().Where(character => !character.activeInHierarchy).ToList();
+            for (var x = 0; x < gridWidth; x++)
             {
-                if (!spawnManager.IsCharacterAtPosition(new Vector3(x, 0, 0)))
-                {
-                    int randomCharacterIndex = Random.Range(0, inactiveCharacters.Count);
-                    GameObject character = inactiveCharacters[randomCharacterIndex];
-                    character.transform.position = new Vector3(x, 0, 0);
-                    character.SetActive(true);
-                    inactiveCharacters.RemoveAt(randomCharacterIndex);
-                }
+                if (spawnManager.IsCharacterAtPosition(new Vector3(x, 0, 0))) continue;
+                var randomCharacterIndex = Random.Range(0, inactiveCharacters.Count);
+                var character = inactiveCharacters[randomCharacterIndex];
+                character.transform.position = new Vector3(x, 0, 0);
+                character.SetActive(true);
+                inactiveCharacters.RemoveAt(randomCharacterIndex);
             }
         }
-    }
-    public int GetActiveGridCount()
-    {
-        int count = 0;
-        foreach (Transform child in transform)
+        
+        //  비어있는 Grid를 반환
+        public GameObject GetEmptyGrid()
         {
-            if (child.gameObject.activeSelf)
+            var emptyGrids = (from Transform child in transform where !child.gameObject.activeSelf select child.gameObject).ToList();
+
+            if (emptyGrids.Count <= 0) return null;
+            var randomIndex = Random.Range(0, emptyGrids.Count);
+            var selectedGrid = emptyGrids[randomIndex];
+
+            foreach (var character in spawnManager.GetPooledCharacters())
             {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public int GetTotalGridPositions()
-    {
-        return _gridWidth * _gridHeight;
-    }
-
-    public GameObject GetEmptyGrid()
-    {
-        List<GameObject> emptyGrids = new List<GameObject>();
-
-        foreach (Transform child in transform)
-        {
-            if (!child.gameObject.activeSelf)
-            {
-                emptyGrids.Add(child.gameObject);
-            }
-        }
-
-        if (emptyGrids.Count > 0)
-        {
-            int randomIndex = Random.Range(0, emptyGrids.Count);
-            GameObject selectedGrid = emptyGrids[randomIndex];
-
-            foreach (GameObject character in spawnManager.GetPooledCharacters())
-            {
-                if (character.activeInHierarchy && character.transform.position.y > selectedGrid.transform.position.y)
-                {
-                    Vector3 newPosition = character.transform.position;
-                    newPosition.y += 1;
-                    character.transform.position = newPosition;
-                }
+                if (!character.activeInHierarchy ||
+                    !(character.transform.position.y > selectedGrid.transform.position.y)) continue;
+                var newPosition = character.transform.position;
+                newPosition.y += 1;
+                character.transform.position = newPosition;
             }
 
             return selectedGrid;
+
         }
 
-        return null;
-    }
-
-    public void IncrementActiveGridCount()
-    {
-        _activeGridCount++;
-    }
-
-    public List<int> GetFreeXPositions()
-    {
-        List<int> freeXPositions = new List<int>();
-        for (int x = 0; x < _gridWidth; x++)
+        // 활성화 된 Grid 수를 증가
+        public void IncrementActiveGridCount()
         {
-            if (!spawnManager.IsCharacterAtPosition(new Vector3(x, 0, 0)))
-            {
-                freeXPositions.Add(x);
-            }
         }
-        return freeXPositions;
-    }
 
+        // 비어있는 Grid의 X 좌표를 반환
+        public List<int> GetFreeXPositions()
+        {
+            var freeXPositions = new List<int>();
+            for (var x = 0; x < gridWidth; x++)
+            {
+                if (!spawnManager.IsCharacterAtPosition(new Vector3(x, 0, 0)))
+                {
+                    freeXPositions.Add(x);
+                }
+            }
+            return freeXPositions;
+        }
+
+    }
 }

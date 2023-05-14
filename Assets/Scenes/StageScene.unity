@@ -792,7 +792,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterManager: {fileID: 149521963}
-  _poolSize: 12
+  _poolSize: 20
   spawnManager: {fileID: 149521964}
 --- !u!4 &1097818335
 Transform:
@@ -1054,7 +1054,7 @@ MonoBehaviour:
   grid1Sprite: {fileID: 5878419415431634990, guid: 9cb9c040a9abd43d0b20b1828f4cbc7e, type: 3}
   grid2Sprite: {fileID: 2861231161325905373, guid: 366ac8b27ec804d8aa934708a02a4c3b, type: 3}
   characterPool: {fileID: 1097818334}
-  _maxRows: 10
+  _maxRows: 9
   spawnManager: {fileID: 149521964}
   characterManager: {fileID: 149521963}
 --- !u!4 &8808150501734532427

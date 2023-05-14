@@ -1,7 +1,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CharacterManager : MonoBehaviour
+namespace Script.CharacterManagerScript
 {
-    public List<CharacterBase> characterList;
+    public class CharacterManager : MonoBehaviour
+    {
+        public List<CharacterBase> characterList = new List<CharacterBase>();
+
+        public List<CharacterBase> GetCharacterList()
+        {
+            return characterList;
+        }
+
+    }
 }

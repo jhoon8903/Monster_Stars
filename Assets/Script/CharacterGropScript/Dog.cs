@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+using Script.CharacterManagerScript;
 using UnityEngine;
 using static AtkElementProperty;
-using static SpecialAtkProperty;
+using static Script.CharacterManagerScript.SpecialAtkProperty;
 
 public class Dog : CharacterBase
 {
@@ -28,6 +27,7 @@ public class Dog : CharacterBase
         _spriteRenderer = GetComponent<SpriteRenderer>();
         Level1();
     }
+
 
     public void Level1()
     {

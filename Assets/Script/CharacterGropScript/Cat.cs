@@ -1,8 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
+using Script.CharacterManagerScript;
 using UnityEngine;
 using static AtkElementProperty;
-using static SpecialAtkProperty;
+using static Script.CharacterManagerScript.SpecialAtkProperty;
 
 public class Cat : CharacterBase
 {
