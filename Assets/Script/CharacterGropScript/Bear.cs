@@ -1,6 +1,7 @@
+using Script.CharacterManagerScript;
 using UnityEngine;
 using static AtkElementProperty;
-using static SpecialAtkProperty;
+using static Script.CharacterManagerScript.SpecialAtkProperty;
 
 public class Bear : CharacterBase
 {
@@ -26,6 +27,8 @@ public class Bear : CharacterBase
         _spriteRenderer = GetComponent<SpriteRenderer>();
         Level1();
     }
+
+
     public void Level1()
     {
         _characterName = "bear1";

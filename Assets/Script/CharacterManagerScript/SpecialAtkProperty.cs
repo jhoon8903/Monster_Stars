@@ -1,8 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class SpecialAtkProperty : MonoBehaviour
+namespace Script.CharacterManagerScript
 {
-    public enum SpecialElment { Slow, Posion, Burn, Bleed, Stern, Strike }
+    public class SpecialAtkProperty : MonoBehaviour
+    {
+        public enum SpecialElment { Slow, Posion, Burn, Bleed, Stern, Strike }
+    }
 }

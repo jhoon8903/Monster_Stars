@@ -1,33 +1,39 @@
-using UnityEngine;
 using TMPro;
+using UnityEngine;
+using UnityEngine.Serialization;
 
-public class CountManager : MonoBehaviour
+namespace Script
 {
-    private int _moveCount;
-    public TextMeshProUGUI _moveCountText;
-
-    public void Initialize(int initialMoveCount)
+    public class CountManager : MonoBehaviour
     {
-        _moveCount = initialMoveCount;
-        UpdateMoveCountText();
-    }
+        private int _moveCount;
+        [FormerlySerializedAs("_moveCountText")] public TextMeshProUGUI moveCountText;
 
-    public bool CanMove()
-    {
-        return _moveCount > 0;
-    }
-
-    public void DecreaseMoveCount()
-    {
-        if (_moveCount > 0)
+        // 카운트 초기화
+        public void Initialize(int initialMoveCount)
         {
+            _moveCount = initialMoveCount;
+            UpdateMoveCountText();
+        }
+
+        // 이동 가능한 횟수 확인
+        public bool CanMove()
+        {
+            return _moveCount > 0;
+        }
+
+        // 이동시 이동 Count -1
+        public void DecreaseMoveCount()
+        {
+            if (_moveCount <= 0) return;
             _moveCount--;
             UpdateMoveCountText();
         }
-    }
 
-    private void UpdateMoveCountText()
-    {
-        _moveCountText.text = $"Count: {_moveCount}";
+        // Count UI Panel Text Update
+        private void UpdateMoveCountText()
+        {
+            moveCountText.text = $"Count: {_moveCount}";
+        }
     }
 }

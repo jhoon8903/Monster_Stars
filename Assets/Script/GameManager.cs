@@ -1,18 +1,19 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-public class GameManager : MonoBehaviour
+namespace Script
 {
-    public GridManager gridManager;
-    public CountManager countManager;
-    public int _moveCount;
-    public SpawnManager spawnManager;
-
-    private void Start()
+    public class GameManager : MonoBehaviour
     {
-        countManager.Initialize(_moveCount);
-        spawnManager.SpawnCharacters();
-        //StartCoroutine(gridManager.GenerateInitialGrid());
+        public GridManager gridManager;
+        public CountManager countManager;
+        [FormerlySerializedAs("_moveCount")] public int moveCount;
+        public SpawnManager spawnManager;
+
+        private void Start()
+        {
+            countManager.Initialize(moveCount);
+            spawnManager.SpawnCharacters();
+        }
     }
 }
