@@ -137,6 +137,7 @@ GameObject:
   - component: {fileID: 149521963}
   - component: {fileID: 149521964}
   - component: {fileID: 149521965}
+  - component: {fileID: 149521966}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -158,7 +159,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridManager: {fileID: 8808150501734532426}
   countManager: {fileID: 149521962}
-  _moveCount: 500
+  moveCount: 500
   spawnManager: {fileID: 149521964}
 --- !u!4 &149521959
 Transform:
@@ -187,7 +188,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efbe2bcfadc2c4db98ffaea9f9e7b363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveCountText: {fileID: 679308669}
+  moveCountText: {fileID: 679308669}
 --- !u!114 &149521963
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -232,12 +233,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d6d168b19d945be9566087678d60c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnManager: {fileID: 149521964}
-  countManager: {fileID: 149521962}
-  characterPool: {fileID: 1097818334}
-  _characterLayer:
+  _minSwipeLength: 0.2
+  _spawnManager: {fileID: 149521964}
+  _countManager: {fileID: 149521962}
+  characterLayer:
     serializedVersion: 2
     m_Bits: 64
+  _matchManager: {fileID: 149521966}
+--- !u!114 &149521966
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 149521957}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c25b8e9bfddd44f41a718109ac5ffb9d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spawnManager: {fileID: 149521964}
 --- !u!1 &679308667
 GameObject:
   m_ObjectHideFlags: 0
@@ -792,7 +807,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterManager: {fileID: 149521963}
-  _poolSize: 20
+  poolSize: 20
   spawnManager: {fileID: 149521964}
 --- !u!4 &1097818335
 Transform:
@@ -1049,12 +1064,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 850508bdcec054e4ebe7dad37ee625d7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _gridHeight: 6
-  _gridWidth: 6
+  gridHeight: 6
+  gridWidth: 6
   grid1Sprite: {fileID: 5878419415431634990, guid: 9cb9c040a9abd43d0b20b1828f4cbc7e, type: 3}
   grid2Sprite: {fileID: 2861231161325905373, guid: 366ac8b27ec804d8aa934708a02a4c3b, type: 3}
   characterPool: {fileID: 1097818334}
-  _maxRows: 9
+  maxRows: 9
   spawnManager: {fileID: 149521964}
   characterManager: {fileID: 149521963}
 --- !u!4 &8808150501734532427

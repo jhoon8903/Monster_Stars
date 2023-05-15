@@ -64,16 +64,14 @@ namespace Script
                 newPosition.y += 1;
                 child.position = newPosition;
             }
-
+            
             // Create new row and spawn characters
             for (var x = 0; x < gridWidth; x++)
             {
                 var spritePrefab = (x + _currentRowType) % 2 == 0 ? grid1Sprite : grid2Sprite;
                 var cell = Instantiate(spritePrefab, new Vector3(x, 0, 0), Quaternion.identity, transform);
             }
-
             _currentRowType = _currentRowType == 1 ? 2 : 1;
-
             var inactiveCharacters = characterPool.GetPooledCharacters().Where(character => !character.activeInHierarchy).ToList();
             for (var x = 0; x < gridWidth; x++)
             {
@@ -90,11 +88,9 @@ namespace Script
         public GameObject GetEmptyGrid()
         {
             var emptyGrids = (from Transform child in transform where !child.gameObject.activeSelf select child.gameObject).ToList();
-
             if (emptyGrids.Count <= 0) return null;
             var randomIndex = Random.Range(0, emptyGrids.Count);
             var selectedGrid = emptyGrids[randomIndex];
-
             foreach (var character in spawnManager.GetPooledCharacters())
             {
                 if (!character.activeInHierarchy ||
@@ -103,14 +99,7 @@ namespace Script
                 newPosition.y += 1;
                 character.transform.position = newPosition;
             }
-
             return selectedGrid;
-
-        }
-
-        // 활성화 된 Grid 수를 증가
-        public void IncrementActiveGridCount()
-        {
         }
 
         // 비어있는 Grid의 X 좌표를 반환
@@ -126,6 +115,5 @@ namespace Script
             }
             return freeXPositions;
         }
-
     }
 }
