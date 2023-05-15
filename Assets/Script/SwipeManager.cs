@@ -1,5 +1,6 @@
 using System.Collections;
 using Script.CharacterManagerScript;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -12,19 +13,13 @@ namespace Script
         private Vector2 _initialScale; // 터치된 객체의 초기 크기를 저장합니다.
         private Vector2 _firstTouchPosition; // 첫 터치의 위치를 저장합니다.
         private Vector2 _emptyGridPosition; // 빈 그리드의 위치를 저장합니다.
-        private readonly float _minSwipeLength = 0.2f; // 스와이프로 인식되는 최소 길이입니다.
-        [SerializeField] private SpawnManager spawnManager; // 스폰매니저를 참조합니다.
-        [SerializeField] private CountManager countManager; // 카운트매니저를 참조합니다.
-        [SerializeField] private CharacterPool characterPool; // 캐릭터풀을 참조합니다.
+        [SerializeField] private float _minSwipeLength = 0.2f; // 스와이프로 인식되는 최소 길이입니다.
+        [FormerlySerializedAs("spawnManager")] [SerializeField] private SpawnManager _spawnManager; // 스폰매니저를 참조합니다.
+        [FormerlySerializedAs("countManager")] [SerializeField] private CountManager _countManager; // 카운트매니저를 참조합니다.
         [FormerlySerializedAs("_characterLayer")] [SerializeField]
         private LayerMask characterLayer; // 캐릭터 레이어를 저장합니다.
+        [SerializeField] private MatchManager _matchManager;
 
-        // 초기 이동 횟수를 설정합니다.
-        public void Initialize(int initialMoveCount)
-        {
-            countManager.Initialize(initialMoveCount); 
-        }
-    
         // 터치를 처리하고, 스와이프를 감지하며, 해당 스와이프에 따라 캐릭터를 이동시킵니다.
         private void Update()   
         {
@@ -64,15 +59,15 @@ namespace Script
 
                 var swipe = point2D - _firstTouchPosition;
                 if (!(swipe.sqrMagnitude > _minSwipeLength * _minSwipeLength)) return;
-                HandleSwipe(swipe);
                 _firstTouchPosition = point2D;
+                HandleSwipe(swipe);
             }
         }
     
         // CountManager의 Count를 참조하여 이동가능횟수를 확인
         private bool CanMove()  
         {
-            return countManager.CanMove();
+            return _countManager.CanMove();
         }
     
         // 사용자 편의를 위해 스와이프 각도를 보정하여 스와이프 각도에 따라 처리합니다.
@@ -105,12 +100,15 @@ namespace Script
                     endY -= 1;
                     break;
             }
-
-            var endObject = spawnManager.GetCharacterAtPosition(new Vector3(endX, endY, 0f));
+            var endObject = _spawnManager.GetCharacterAtPosition(new Vector3(endX, endY, 0f));
 
             if (endObject != null)
             {
                 HandleSwap(startX, startY, endX, endY, endObject);
+                var endPosition = new Vector3(endX, endY, 0f);
+                var _swipeCharacterPositon = endPosition;
+                var _characterObjectName = endObject;
+                _matchManager.IsMatched(_swipeCharacterPositon);
             }
             else
             {
@@ -123,16 +121,12 @@ namespace Script
         private void HandleSwap(int startX, int startY, int endX, int endY, GameObject endObject)
         {
             if (_startObject == null) return;
-
-            Vector2 startPosition = _startObject.transform.position;
-            Vector2 endPosition = new Vector3(endX, endY, 0f);
-
-            _startObject.transform.position = endPosition;
+            var startPosition = _startObject.transform.position;
+            var endPosition = new Vector3(endX, endY, 0f);
             endObject.transform.position = startPosition;
-   
-
+            _startObject.transform.position = endPosition;
             _startObject.transform.localScale = _initialScale;
-            countManager.DecreaseMoveCount();
+            _countManager.DecreaseMoveCount();
         }
 
         //  터치가 끝나면 초기화 합니다. (터치시 호버 작동 터치 완료 후 호버 초기화)
@@ -149,15 +143,16 @@ namespace Script
             Vector2 startPosition = _startObject.transform.position;
             Vector2 endPosition = new Vector3(endX, endY, 0f);
             _startObject.transform.position = endPosition;
-            countManager.DecreaseMoveCount();
+            _countManager.DecreaseMoveCount();
             _returnObject = _startObject;
             _startObject.transform.localScale = _initialScale;
             _emptyGridPosition = new Vector2(startX, startY);
+            // Debug.Log(_emptyGridPosition);
         
             yield return new WaitForSeconds(0.1f);
 
             CharacterPool.ReturnToPool(_returnObject);
-            spawnManager.MoveCharactersEmptyGrid(_emptyGridPosition);
+            _spawnManager.MoveCharactersEmptyGrid(_emptyGridPosition);
         }
 
     }

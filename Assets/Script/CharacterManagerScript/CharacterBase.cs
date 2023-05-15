@@ -4,7 +4,6 @@ namespace Script.CharacterManagerScript
 {
     public class CharacterBase : MonoBehaviour
     {
-        public string CharacterName => _characterName;
         public int Level { get; private set; } = 1;
         protected string _characterName;
         protected int _damage;
@@ -27,6 +26,28 @@ namespace Script.CharacterManagerScript
             _specialAtkProperty = characterToCopy._specialAtkProperty;
         }
 
+        public void LevelUp()
+        {
+            Debug.Log("Character Level UP ! ! ");
+            // switch (_characterName)
+            // {
+            //     case "bear1":
+            //         Level2();
+            //         break;
+            //     case "bear2":
+            //         Level3();
+            //         break;
+            //     case "bear3":
+            //         Level4();
+            //         break;
+            //     case "bear4":
+            //         Level5();
+            //         break;
+            //     default:
+            //         Debug.Log("Character is already at maximum level.");
+            //         break;
+            // }
+        }
     }
 }
 

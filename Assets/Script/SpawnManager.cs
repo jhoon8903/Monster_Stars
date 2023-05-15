@@ -11,7 +11,7 @@ namespace Script
         private GridManager gridManager;
         [SerializeField]
         private CharacterPool characterPool;
-
+        
         // CharacterPool에서 사용 가능한 Pool 객체를 반환
         public List<GameObject> GetPooledCharacters()
         {
@@ -36,9 +36,7 @@ namespace Script
                 var randomPosition = availablePositions[randomPositionIndex];
                 availablePositions.RemoveAt(randomPositionIndex);
                 SpawnCharacterAtPosition(randomPosition.x, randomPosition.y);
-
             }
-
         }
 
         // 특정 Grid 좌표에 케릭터를 생성하는 메소드
@@ -52,7 +50,6 @@ namespace Script
             if (pooledCharacter == null) return;
             pooledCharacter.transform.position = spawnPosition;
             pooledCharacter.SetActive(true);
-            gridManager.IncrementActiveGridCount();
         }
 
         // 특정 위치에 Character가 존재하는지 확인하는 메소드
