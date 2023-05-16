@@ -161,6 +161,7 @@ MonoBehaviour:
   countManager: {fileID: 149521962}
   moveCount: 500
   spawnManager: {fileID: 149521964}
+  matchManager: {fileID: 149521966}
 --- !u!4 &149521959
 Transform:
   m_ObjectHideFlags: 0
@@ -221,6 +222,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gridManager: {fileID: 8808150501734532426}
   characterPool: {fileID: 1097818334}
+  matchManager: {fileID: 149521966}
 --- !u!114 &149521965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -234,12 +236,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _minSwipeLength: 0.2
-  _spawnManager: {fileID: 149521964}
-  _countManager: {fileID: 149521962}
+  spawnManager: {fileID: 149521964}
+  countManager: {fileID: 149521962}
   characterLayer:
     serializedVersion: 2
     m_Bits: 64
-  _matchManager: {fileID: 149521966}
+  matchManager: {fileID: 149521966}
+  gridManager: {fileID: 8808150501734532426}
 --- !u!114 &149521966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -252,7 +255,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c25b8e9bfddd44f41a718109ac5ffb9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spawnManager: {fileID: 149521964}
+  spawnManager: {fileID: 149521964}
 --- !u!1 &679308667
 GameObject:
   m_ObjectHideFlags: 0

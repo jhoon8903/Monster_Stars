@@ -10,9 +10,10 @@ namespace Script
     {
         [FormerlySerializedAs("_spawnManager")] [SerializeField]
         private SpawnManager spawnManager;
-
-        public void IsMatched(Vector3 swipeCharacterPosition)
+        
+        public bool IsMatched(Vector3 swipeCharacterPosition)
         {
+            var matchFound = false;
             var nearCharacter = spawnManager.GetCharacterAtPosition(swipeCharacterPosition);
             var directions = new Vector3Int[]
             {
@@ -34,7 +35,6 @@ namespace Script
                 {
                     var checkPos = swipeCharacterPosition - direction * i;
                     var checkCharacter = spawnManager.GetCharacterAtPosition(checkPos);
-
                     if (checkCharacter == null || checkCharacter.name != nearCharacter.name)
                     {
                         break;
@@ -74,24 +74,27 @@ namespace Script
                 switch (totalMatchCount)
                 {
                     case 2 when leftMatchCount == 1 && rightMatchCount == 1:
-                        Handle3MatchCenter(leftMatchedObjects, rightMatchedObjects, nearCharacter);
+                        Handle3MatchCenter(leftMatchedObjects, rightMatchedObjects, nearCharacter); // pass rightMatchedObjects instead of rightMatchCount
+                        matchFound = true; // set matchFound to true when a match is found
                         break;
                     case 2 when (leftMatchCount == 2 && rightMatchCount == 0) || (leftMatchCount == 0 && rightMatchCount == 2):
                         Handle3MatchSide(allMatchedObjects, nearCharacter);
+                        matchFound = true; // set matchFound to true when a match is found
                         break;
                     case 3:
                         Handle4Match(allMatchedObjects, nearCharacter);
+                        matchFound = true; // set matchFound to true when a match is found
                         break;
                     case 4:
                         Handle5Match(allMatchedObjects);
+                        matchFound = true; // set matchFound to true when a match is found
                         break;
                 }
             }
+            return matchFound;
         }
-
-        // Handle3MatchCenter
-        private void Handle3MatchCenter(List<GameObject> leftMatchedObjects, List<GameObject> rightMatchedObjects,
-            GameObject nearCharacter)
+        
+        private void Handle3MatchCenter(List<GameObject> leftMatchedObjects, List<GameObject> rightMatchedObjects, GameObject nearCharacter)
         {
             foreach (var matchedObject in leftMatchedObjects)
             {
@@ -128,7 +131,6 @@ namespace Script
                 spawnManager.MoveCharactersEmptyGrid(matchedObjects[i].transform.position);
             }
         }
-
         
         private void Handle5Match(IReadOnlyList<GameObject> matchedObjects)
         {

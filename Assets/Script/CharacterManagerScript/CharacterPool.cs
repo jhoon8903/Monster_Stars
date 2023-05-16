@@ -14,7 +14,7 @@ namespace Script.CharacterManagerScript
         [SerializeField]
         private SpawnManager spawnManager;
         private List<GameObject> _pooledCharacters;
-
+        
         // 풀 초기 설정 활성화
         public void Awake()
         {
@@ -24,6 +24,7 @@ namespace Script.CharacterManagerScript
                 for (var i = 0; i < poolSize; i++)
                 {
                     var obj = Instantiate(character.gameObject, transform, true);
+                    
                     obj.SetActive(false);
                     _pooledCharacters.Add(obj);
                 }
