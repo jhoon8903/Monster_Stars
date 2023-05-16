@@ -94,53 +94,72 @@ namespace Script
             return matchFound;
         }
         
-        private void Handle3MatchCenter(List<GameObject> leftMatchedObjects, List<GameObject> rightMatchedObjects, GameObject nearCharacter)
-        {
-            foreach (var matchedObject in leftMatchedObjects)
-            {
-                CharacterPool.ReturnToPool(matchedObject);
-                spawnManager.MoveCharactersEmptyGrid(matchedObject.transform.position);
-            }
+private void Handle3MatchCenter(List<GameObject> leftMatchedObjects, List<GameObject> rightMatchedObjects, GameObject nearCharacter)
+{
+    foreach (var matchedObject in leftMatchedObjects)
+    {
+        CharacterPool.ReturnToPool(matchedObject);
+        spawnManager.MoveCharactersEmptyGrid(matchedObject.transform.position);
+    }
 
-            foreach (var matchedObject in rightMatchedObjects)
-            {
-                CharacterPool.ReturnToPool(matchedObject);
-                spawnManager.MoveCharactersEmptyGrid(matchedObject.transform.position);
-            }
+    foreach (var matchedObject in rightMatchedObjects)
+    {
+        CharacterPool.ReturnToPool(matchedObject);
+        spawnManager.MoveCharactersEmptyGrid(matchedObject.transform.position);
+    }
+
+    // Level up the remaining character
+    nearCharacter.GetComponent<CharacterBase>().LevelUp();
+}
+
+private void Handle3MatchSide(IEnumerable<GameObject> matchedObjects, GameObject nearCharacter)
+{
+    foreach (var matchedObject in matchedObjects)
+    {
+        if (matchedObject == nearCharacter) continue;
+        CharacterPool.ReturnToPool(matchedObject);
+        spawnManager.MoveCharactersEmptyGrid(matchedObject.transform.position);
+    }
+
+    // Level up the remaining character
+    nearCharacter.GetComponent<CharacterBase>().LevelUp();
+}
+
+private void Handle4Match(IReadOnlyList<GameObject> matchedObjects, GameObject nearCharacter)
+{
+    // Return all but the two center objects from the match
+    for (var i = 0; i < matchedObjects.Count; i++)
+    {
+        if (matchedObjects[i] == nearCharacter || i == matchedObjects.Count / 2 || i == matchedObjects.Count / 2 - 1)
+            continue;
+
+        CharacterPool.ReturnToPool(matchedObjects[i]);
+        spawnManager.MoveCharactersEmptyGrid(matchedObjects[i].transform.position);
+    }
+
+    // Level up the remaining character
+    nearCharacter.GetComponent<CharacterBase>().LevelUp();
+}
+
+private void Handle5Match(IReadOnlyList<GameObject> matchedObjects)
+{
+    GameObject remainingCharacter = null;
+    for (var i = 0; i < matchedObjects.Count; i++)
+    {
+        if (i == matchedObjects.Count / 2 || i == matchedObjects.Count / 2 - 1 ||
+            i == matchedObjects.Count / 2 + 1)
+        {
+            remainingCharacter = matchedObjects[i];
+            continue;
         }
 
-        private void Handle3MatchSide(IEnumerable<GameObject> matchedObjects, Object nearCharacter)
-        {
-            foreach (var t in matchedObjects)
-            {
-                if (t == nearCharacter) continue;
-                CharacterPool.ReturnToPool(t);
-                spawnManager.MoveCharactersEmptyGrid(t.transform.position);
-            }
-        }
+        CharacterPool.ReturnToPool(matchedObjects[i]);
+        spawnManager.MoveCharactersEmptyGrid(matchedObjects[i].transform.position);
+    }
 
-        private void Handle4Match(IReadOnlyList<GameObject> matchedObjects, Object nearCharacter)
-        {
-            // Return all but the two center objects from the match
-            for (var i = 0; i < matchedObjects.Count; i++)
-            {
-                if (matchedObjects[i] == nearCharacter || i == matchedObjects.Count / 2 || i == matchedObjects.Count / 2 - 1)
-                    continue;
+    // Level up the remaining character
+    remainingCharacter?.GetComponent<CharacterBase>().LevelUp();
+}
 
-                CharacterPool.ReturnToPool(matchedObjects[i]);
-                spawnManager.MoveCharactersEmptyGrid(matchedObjects[i].transform.position);
-            }
-        }
-        
-        private void Handle5Match(IReadOnlyList<GameObject> matchedObjects)
-        {
-            for (var i = 0; i < matchedObjects.Count; i++)
-            {
-                if (i == matchedObjects.Count / 2 || i == matchedObjects.Count / 2 - 1 ||
-                    i == matchedObjects.Count / 2 + 1) continue;
-                CharacterPool.ReturnToPool(matchedObjects[i]);
-                spawnManager.MoveCharactersEmptyGrid(matchedObjects[i].transform.position);
-            }
-        }
     }
 }
