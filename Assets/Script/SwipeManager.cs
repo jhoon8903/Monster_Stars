@@ -13,12 +13,14 @@ namespace Script
         private Vector2 _initialScale; // 터치된 객체의 초기 크기를 저장합니다.
         private Vector2 _firstTouchPosition; // 첫 터치의 위치를 저장합니다.
         private Vector2 _emptyGridPosition; // 빈 그리드의 위치를 저장합니다.
+        public float duration;
         [SerializeField] private float _minSwipeLength = 0.2f; // 스와이프로 인식되는 최소 길이입니다.
-        [FormerlySerializedAs("spawnManager")] [SerializeField] private SpawnManager _spawnManager; // 스폰매니저를 참조합니다.
-        [FormerlySerializedAs("countManager")] [SerializeField] private CountManager _countManager; // 카운트매니저를 참조합니다.
-        [FormerlySerializedAs("_characterLayer")] [SerializeField]
-        private LayerMask characterLayer; // 캐릭터 레이어를 저장합니다.
-        [SerializeField] private MatchManager _matchManager;
+        [SerializeField] private SpawnManager spawnManager; // 스폰매니저를 참조합니다.
+        [SerializeField] private CountManager countManager; // 카운트매니저를 참조합니다.
+        [SerializeField] private LayerMask characterLayer; // 캐릭터 레이어를 저장합니다.
+        [SerializeField] private MatchManager matchManager;
+        [SerializeField] private GridManager gridManager;
+        
 
         // 터치를 처리하고, 스와이프를 감지하며, 해당 스와이프에 따라 캐릭터를 이동시킵니다.
         private void Update()   
@@ -67,7 +69,7 @@ namespace Script
         // CountManager의 Count를 참조하여 이동가능횟수를 확인
         private bool CanMove()  
         {
-            return _countManager.CanMove();
+            return countManager.CanMove();
         }
     
         // 사용자 편의를 위해 스와이프 각도를 보정하여 스와이프 각도에 따라 처리합니다.
@@ -100,15 +102,13 @@ namespace Script
                     endY -= 1;
                     break;
             }
-            var endObject = _spawnManager.GetCharacterAtPosition(new Vector3(endX, endY, 0f));
+            var endObject = spawnManager.GetCharacterAtPosition(new Vector3(endX, endY, 0f));
 
             if (endObject != null)
             {
                 HandleSwap(startX, startY, endX, endY, endObject);
-                var endPosition = new Vector3(endX, endY, 0f);
-                var _swipeCharacterPositon = endPosition;
-                var _characterObjectName = endObject;
-                _matchManager.IsMatched(_swipeCharacterPositon);
+
+
             }
             else
             {
@@ -116,19 +116,33 @@ namespace Script
             }
             _startObject = null;
         }
-    
-        // 스와이프 된 두 케릭터 오브젝트의 위치를 바꿉니다.
-        private void HandleSwap(int startX, int startY, int endX, int endY, GameObject endObject)
-        {
-            if (_startObject == null) return;
-            var startPosition = _startObject.transform.position;
-            var endPosition = new Vector3(endX, endY, 0f);
-            endObject.transform.position = startPosition;
-            _startObject.transform.position = endPosition;
-            _startObject.transform.localScale = _initialScale;
-            _countManager.DecreaseMoveCount();
-        }
 
+        private IEnumerator AutoMatchAfterSwap()
+        {
+            while (true)
+            {
+                yield return new WaitForEndOfFrame();
+        
+                var isMatched = false;
+
+                // Iterate over all cells in the grid
+                for (var x = 0; x < gridManager.gridWidth; x++)
+                {
+                    for (var y = 0; y < gridManager.gridHeight; y++)
+                    {
+                        // If a match is found, set isMatched to true
+                        if (matchManager.IsMatched(new Vector3(x, y, 0f)))
+                        {
+                            isMatched = true;
+                        }
+                    }
+                }
+
+                // If no match is found in the entire grid, break the loop
+                if (!isMatched) break;
+            }
+        }
+        
         //  터치가 끝나면 초기화 합니다. (터치시 호버 작동 터치 완료 후 호버 초기화)
         private void HandleTouchEnd()
         {
@@ -143,7 +157,7 @@ namespace Script
             Vector2 startPosition = _startObject.transform.position;
             Vector2 endPosition = new Vector3(endX, endY, 0f);
             _startObject.transform.position = endPosition;
-            _countManager.DecreaseMoveCount();
+            countManager.DecreaseMoveCount();
             _returnObject = _startObject;
             _startObject.transform.localScale = _initialScale;
             _emptyGridPosition = new Vector2(startX, startY);
@@ -152,7 +166,40 @@ namespace Script
             yield return new WaitForSeconds(0.1f);
 
             CharacterPool.ReturnToPool(_returnObject);
-            _spawnManager.MoveCharactersEmptyGrid(_emptyGridPosition);
+            spawnManager.MoveCharactersEmptyGrid(_emptyGridPosition);
+        }
+        
+        private void HandleSwap(int startX, int startY, int endX, int endY, GameObject endObject)
+        {
+            if (_startObject == null) return;
+            var startPosition = new Vector3(startX, startY, 0);
+            var endPosition = new Vector3(endX, endY, 0f);
+            StartCoroutine(SwapAndMatch(_startObject, endObject, endPosition, startPosition));
+            _startObject.transform.localScale = _initialScale;
+            countManager.DecreaseMoveCount();
+        }
+
+        private IEnumerator SwapAndMatch(GameObject startObject, GameObject endObject, Vector3 endPosition, Vector3 startPosition)
+        {
+            yield return MoveOverTime(startObject, endPosition);
+            yield return MoveOverTime(endObject, startPosition);
+            matchManager.IsMatched(endPosition);
+            StartCoroutine(AutoMatchAfterSwap());
+        }
+        
+        private IEnumerator MoveOverTime(GameObject objectToMove, Vector3 destination)
+        {
+            duration = 0.2f;
+            float elapsedTime = 0;
+            var startingPos = objectToMove.transform.position;
+            while (elapsedTime < duration)
+            {
+                objectToMove.transform.position = Vector3.Lerp(startingPos, destination, (elapsedTime / duration));
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+            objectToMove.transform.position = destination;
+            yield return new WaitUntil(() => objectToMove.transform.position == destination);
         }
 
     }
