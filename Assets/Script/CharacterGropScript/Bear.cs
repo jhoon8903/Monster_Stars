@@ -28,8 +28,30 @@ public class Bear : CharacterBase
         Level1();
     }
 
+    protected internal override void LevelUp()
+    {
+        base.LevelUp();  // increment the level
+        switch (Level)
+        {
+            case 2:
+                Level2();
+                break;
+            case 3:
+                Level3();
+                break;
+            case 4:
+                Level4();
+                break;
+            case 5:
+                Level5();
+                break;
+            default:
+                Debug.Log("Bear is already at maximum level.");
+                break;
+        }
+    }
 
-    public void Level1()
+    private void Level1()
     {
         _characterName = "bear1";
         _damage = 0;
@@ -41,7 +63,7 @@ public class Bear : CharacterBase
 
     }
 
-    public void Level2()
+    private void Level2()
     {
         _characterName = "bear2";
         _damage = 1;
@@ -52,7 +74,7 @@ public class Bear : CharacterBase
         _spriteRenderer.sprite = level2Sprite;
     }
 
-    public void Level3()
+    private void Level3()
     {
         _characterName = "bear3";
         _damage = 3;
@@ -63,7 +85,7 @@ public class Bear : CharacterBase
         _spriteRenderer.sprite = level3Sprite;
     }
 
-    public void Level4()
+    private void Level4()
     {
         _characterName = "bear4";
         _damage = 9;
@@ -74,7 +96,7 @@ public class Bear : CharacterBase
         _spriteRenderer.sprite = level4Sprite;
     }
 
-    public void Level5()
+    private void Level5()
     {
         _characterName = "bear5";
         _damage = 27;
