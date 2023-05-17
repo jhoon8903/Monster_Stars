@@ -9,7 +9,7 @@ public sealed class MatchManager : MonoBehaviour
 
     public bool IsMatched(GameObject swapCharacter, Vector3 swipeCharacterPosition)
     {
-        var centerCharacterName = swapCharacter.GetComponent<CharacterBase>().name;
+        var swapCharacterName = swapCharacter.GetComponent<CharacterBase>()._characterName;
         var directions = new[]
         {
             (Vector3Int.left, Vector3Int.right, "Horizontal"), // Horizontal
@@ -34,7 +34,7 @@ public sealed class MatchManager : MonoBehaviour
                 {
                     var nextCharacter = _spawnManager.GetCharacterAtPosition(nextPosition);
                     if (nextCharacter == null ||
-                        nextCharacter.GetComponent<CharacterBase>().name != centerCharacterName)
+                        nextCharacter.GetComponent<CharacterBase>()._characterName != swapCharacterName)
                         break;
                     
                     matchedObjects.Add(nextCharacter);
@@ -65,17 +65,32 @@ public sealed class MatchManager : MonoBehaviour
             switch (horizontalMatchCount)
             {
                 case 1:
-                    Debug.Log($"swipeCharacterPosition: {swipeCharacterPosition}");
-                    Debug.Log($"matchedCharacters Index \n[0]:{matchedCharacters[0].transform.position} \n[1]:{matchedCharacters[1].transform.position} \n[2]:{matchedCharacters[2].transform.position} \n[3]:{matchedCharacters[3].transform.position} ");
-                    // if (swipeCharacterPosition == matchedCharacters[0].transform.position)
-                    // {
-                    //     matchedCharacters[0].GetComponent<CharacterBase>().LevelUp();
-                    // }
-                    Debug.LogWarning($"Match count of 3 found vertical directions");
+                    CharacterPool.ReturnToPool(matchedCharacters[2]);
+                    CharacterPool.ReturnToPool(matchedCharacters[3]);
+                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
                     isMatchFound = true;
                     return isMatchFound;
                 case 3:
-                    Debug.LogWarning($"Match count of 3 found horizontal directions");
+                    if (swipeCharacterPosition.x == matchedCharacters[1].transform.position.x)
+                    {
+                        CharacterPool.ReturnToPool(matchedCharacters[2]);
+                        CharacterPool.ReturnToPool(matchedCharacters[3]);
+                        matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                    }
+
+                    if (swipeCharacterPosition.x == matchedCharacters[2].transform.position.x)
+                    {
+                        CharacterPool.ReturnToPool(matchedCharacters[1]);
+                        CharacterPool.ReturnToPool(matchedCharacters[3]);
+                        matchedCharacters[2].GetComponent<CharacterBase>().LevelUp();
+                    }
+                    
+                    if (swipeCharacterPosition.x == matchedCharacters[3].transform.position.x)
+                    {
+                        CharacterPool.ReturnToPool(matchedCharacters[1]);
+                        CharacterPool.ReturnToPool(matchedCharacters[2]);
+                        matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                    }
                     isMatchFound = true;
                     return isMatchFound;
             }
@@ -86,6 +101,26 @@ public sealed class MatchManager : MonoBehaviour
             switch (horizontalMatchCount)
             {
                 case 1:
+                    if (swipeCharacterPosition.y > matchedCharacters[2].transform.position.y && swipeCharacterPosition.y < matchedCharacters[3].transform.position.y)
+                    {
+                        CharacterPool.ReturnToPool(matchedCharacters[2]);
+                        CharacterPool.ReturnToPool(matchedCharacters[4]);
+                        matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                        matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                    }
+
+                    if (swipeCharacterPosition.y > matchedCharacters[3].transform.position.y &&
+                        swipeCharacterPosition.y < matchedCharacters[4].transform.position.y)
+                    {
+                        CharacterPool.ReturnToPool(matchedCharacters[3]);
+                        CharacterPool.ReturnToPool(matchedCharacters[4]);
+                        matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                        matchedCharacters[2].GetComponent<CharacterBase>().LevelUp();
+                    }
+                    Debug.Log($"swipeCharacterPosition: {swipeCharacterPosition}");
+                    Debug.Log($"[2]: {matchedCharacters[2].transform.position} \n" +
+                              $"[3]: {matchedCharacters[3].transform.position} \n" +
+                              $"[4]: {matchedCharacters[4].transform.position} \n");
                     Debug.LogWarning($"Match count of 4 found vertical directions");
                     isMatchFound = true;
                     return isMatchFound;
