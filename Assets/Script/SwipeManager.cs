@@ -1,6 +1,7 @@
 using System.Collections;
 using Script.CharacterManagerScript;
 using UnityEngine;
+using DG.Tweening;
 
 namespace Script
 {
@@ -17,9 +18,7 @@ namespace Script
         [SerializeField] private CountManager countManager; // 카운트매니저를 참조합니다.
         [SerializeField] private LayerMask characterLayer; // 캐릭터 레이어를 저장합니다.
         [SerializeField] private MatchManager matchManager;
-        [SerializeField] private GridManager gridManager;
-        [SerializeField] private CharacterPool _characterPool;
-        
+
 
         // 터치를 처리하고, 스와이프를 감지하며, 해당 스와이프에 따라 캐릭터를 이동시킵니다.
         private void Update()   
@@ -161,17 +160,8 @@ namespace Script
         
         private IEnumerator MoveOverTime(GameObject objectToMove, Vector3 destination)
         {
-            duration = 0.2f;
-            float elapsedTime = 0;
-            var startingPos = objectToMove.transform.position;
-            while (elapsedTime < duration)
-            {
-                objectToMove.transform.position = Vector3.Lerp(startingPos, destination, (elapsedTime / duration));
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-            objectToMove.transform.position = destination;
-            yield return new WaitUntil(() => objectToMove.transform.position == destination);
+            objectToMove.transform.DOMove(destination, 0.2f);
+            yield return null;
         }
     }
 }

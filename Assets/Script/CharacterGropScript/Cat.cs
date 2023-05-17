@@ -28,7 +28,7 @@ public class Cat : CharacterBase
         Level1();
     }
     
-    protected override void LevelUp()
+    protected internal override void LevelUp()
     {
         base.LevelUp();  // increment the level
         switch (Level)

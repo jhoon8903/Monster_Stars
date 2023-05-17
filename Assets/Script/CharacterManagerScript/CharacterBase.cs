@@ -14,7 +14,7 @@ namespace Script.CharacterManagerScript
         private AtkElementProperty _atkElementProperty;
         private SpecialAtkProperty _specialAtkProperty;
 
-        protected virtual void LevelUp()
+        protected internal virtual void LevelUp()
         {
             Debug.Log("Character Level UP ! ! ");
             Level++;
