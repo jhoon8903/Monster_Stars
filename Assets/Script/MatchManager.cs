@@ -101,6 +101,26 @@ public sealed class MatchManager : MonoBehaviour
             switch (horizontalMatchCount)
             {
                 case 1:
+                    if (swipeCharacterPosition.y > matchedCharacters[2].transform.position.y && swipeCharacterPosition.y < matchedCharacters[3].transform.position.y)
+                    {
+                        CharacterPool.ReturnToPool(matchedCharacters[2]);
+                        CharacterPool.ReturnToPool(matchedCharacters[4]);
+                        matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                        matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                    }
+
+                    if (swipeCharacterPosition.y > matchedCharacters[3].transform.position.y &&
+                        swipeCharacterPosition.y < matchedCharacters[4].transform.position.y)
+                    {
+                        CharacterPool.ReturnToPool(matchedCharacters[3]);
+                        CharacterPool.ReturnToPool(matchedCharacters[4]);
+                        matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                        matchedCharacters[2].GetComponent<CharacterBase>().LevelUp();
+                    }
+                    Debug.Log($"swipeCharacterPosition: {swipeCharacterPosition}");
+                    Debug.Log($"[2]: {matchedCharacters[2].transform.position} \n" +
+                              $"[3]: {matchedCharacters[3].transform.position} \n" +
+                              $"[4]: {matchedCharacters[4].transform.position} \n");
                     Debug.LogWarning($"Match count of 4 found vertical directions");
                     isMatchFound = true;
                     return isMatchFound;
