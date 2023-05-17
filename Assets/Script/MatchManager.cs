@@ -41,8 +41,7 @@ public sealed class MatchManager : MonoBehaviour
                     nextPosition += dir;
                 }
             }
-
-            // Separate tracking for horizontal and vertical match counts
+            
             if (dirName == "Horizontal")
                 horizontalMatchCount += matchCount;
             else
@@ -50,90 +49,107 @@ public sealed class MatchManager : MonoBehaviour
 
             switch (matchCount)
             {
+                case 1:
+                case 2:
                 case 3:
                 case 4:
                 case 5:
-                    Debug.LogWarning($"Match count of {matchCount} found in {dirName} direction");
                     break;
-            }
-        }
-
-        if (horizontalMatchCount + verticalMatchCount == 3)
-        {
-            switch (horizontalMatchCount)
-            {
-                case 3 :
-                    Debug.LogWarning($"Match count of 3 found across horizontal directions");
-                    isMatchFound = true;
-                    return isMatchFound;
-                case 0 when verticalMatchCount == 3:
-                    Debug.LogWarning($"Match count of 3 found across vertical directions");
-                    isMatchFound = true;
-                    return isMatchFound;
             }
         }
 
         if (horizontalMatchCount + verticalMatchCount == 4)
         {
-            if (horizontalMatchCount == 3 && verticalMatchCount == 1)
+            switch (horizontalMatchCount)
             {
-                Debug.LogWarning($"Match count of 3 found across horizontal directions");
-                isMatchFound = true;
-                return isMatchFound;
-            }
-            if (horizontalMatchCount == 1 && verticalMatchCount == 3)
-            {
-                Debug.LogWarning($"Match count of 3 found across vertical directions");
-                isMatchFound = true;
-                return isMatchFound;
-            }
-
-            if (horizontalMatchCount == 4)
-            {
-                Debug.LogWarning($"Match count of 4 found across horizontal directions");
-                isMatchFound = true;
-                return isMatchFound;
-            }
-
-            if (horizontalMatchCount < 2 && verticalMatchCount == 4)
-            {
-                Debug.LogWarning($"Match count of 4 found across vertical directions");
-                isMatchFound = true;
-                return isMatchFound;
+                case 1:
+                    Debug.LogWarning($"Match count of 3 found vertical directions");
+                    isMatchFound = true;
+                    return isMatchFound;
+                case 3:
+                    Debug.LogWarning($"Match count of 3 found horizontal directions");
+                    isMatchFound = true;
+                    return isMatchFound;
             }
         }
 
         if (horizontalMatchCount + verticalMatchCount == 5)
         {
-
+            switch (horizontalMatchCount)
+            {
+                case 1:
+                    Debug.LogWarning($"Match count of 4 found vertical directions");
+                    isMatchFound = true;
+                    return isMatchFound;
+                case 2:
+                    Debug.LogWarning($"Match count of 3 found vertical directions");
+                    isMatchFound = true;
+                    return isMatchFound;
+                case 3:
+                    Debug.LogWarning($"Match count of 3 found horizontal directions");
+                    isMatchFound = true;
+                    return isMatchFound;
+                case 4:
+                    Debug.LogWarning($"Match count of 4 found horizontal directions");
+                    isMatchFound = true;
+                    return isMatchFound;
+            }
         }
 
         if (horizontalMatchCount + verticalMatchCount == 6)
         {
-            if (horizontalMatchCount == 3 && verticalMatchCount ==3 )
+            switch (horizontalMatchCount)
             {
-                Debug.LogWarning($"Match count of 5 found across vertical directions");
-                isMatchFound = true;
-                return isMatchFound;
+                case 1:
+                    Debug.LogWarning($"Match count of 5 found vertical directions");
+                    isMatchFound = true;
+                    return isMatchFound;
+                case 2:
+                    Debug.LogWarning($"Match count of 4 found vertical directions");
+                    isMatchFound = true;
+                    return isMatchFound;
+                case 3:
+                    Debug.LogWarning($"Match count of 3 x 3  found cross directions");
+                    isMatchFound = true;
+                    return isMatchFound;
+                case 4:
+                    Debug.LogWarning($"Match count of 4  found horizontal directions");
+                    isMatchFound = true;
+                    return isMatchFound;
+                case 5:
+                    Debug.LogWarning($"Match count of 5  found horizontal directions");
+                    isMatchFound = true;
+                    return isMatchFound;
             }
         }
 
         if (horizontalMatchCount + verticalMatchCount == 7)
         {
-
+            switch (horizontalMatchCount)
+            {
+                case 3:
+                    Debug.LogWarning($"Match count of h3 x v4  found cross directions");
+                    isMatchFound = true;
+                    return isMatchFound;
+                case 4: 
+                    Debug.LogWarning($"Match count of h4 x v3  found cross directions");
+                    isMatchFound = true;
+                    return isMatchFound;
+            }
         }
 
-        if (horizontalMatchCount + verticalMatchCount == 8)
+        if (horizontalMatchCount + verticalMatchCount != 8) return isMatchFound;
+        switch (horizontalMatchCount)
         {
-
+            case 3:
+                Debug.LogWarning($"Match count of h3 x v5  found cross directions");
+                isMatchFound = true;
+                return isMatchFound;
+            case 5:
+                Debug.LogWarning($"Match count of h5 x v3  found cross directions");
+                isMatchFound = true;
+                return isMatchFound;
         }
-
-        if (!isMatchFound)
-        {
-            Debug.LogWarning($"No handler found for match count");
-
-        }
-
         return isMatchFound;
     }
 }
