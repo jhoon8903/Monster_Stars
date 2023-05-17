@@ -1,8 +1,6 @@
 using System.Collections;
 using Script.CharacterManagerScript;
-using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Script
 {
@@ -20,6 +18,7 @@ namespace Script
         [SerializeField] private LayerMask characterLayer; // 캐릭터 레이어를 저장합니다.
         [SerializeField] private MatchManager matchManager;
         [SerializeField] private GridManager gridManager;
+        [SerializeField] private CharacterPool _characterPool;
         
 
         // 터치를 처리하고, 스와이프를 감지하며, 해당 스와이프에 따라 캐릭터를 이동시킵니다.
@@ -116,32 +115,6 @@ namespace Script
             }
             _startObject = null;
         }
-
-        private IEnumerator AutoMatchAfterSwap()
-        {
-            while (true)
-            {
-                yield return new WaitForEndOfFrame();
-        
-                var isMatched = false;
-
-                // Iterate over all cells in the grid
-                for (var x = 0; x < gridManager.gridWidth; x++)
-                {
-                    for (var y = 0; y < gridManager.gridHeight; y++)
-                    {
-                        // If a match is found, set isMatched to true
-                        if (matchManager.IsMatched(new Vector3(x, y, 0f)))
-                        {
-                            isMatched = true;
-                        }
-                    }
-                }
-
-                // If no match is found in the entire grid, break the loop
-                if (!isMatched) break;
-            }
-        }
         
         //  터치가 끝나면 초기화 합니다. (터치시 호버 작동 터치 완료 후 호버 초기화)
         private void HandleTouchEnd()
@@ -149,24 +122,6 @@ namespace Script
             if (_startObject == null) return;
             _startObject.transform.localScale = _initialScale;
             _startObject = null;
-        }
-
-        //  케릭터 오브젝트가 빈 Grid로 스와이프되면 오브젝트를 Pool 반환 하는 기능
-        private IEnumerator NullSwap(int startX, int startY, int endX, int endY)
-        {
-            Vector2 startPosition = _startObject.transform.position;
-            Vector2 endPosition = new Vector3(endX, endY, 0f);
-            _startObject.transform.position = endPosition;
-            countManager.DecreaseMoveCount();
-            _returnObject = _startObject;
-            _startObject.transform.localScale = _initialScale;
-            _emptyGridPosition = new Vector2(startX, startY);
-            // Debug.Log(_emptyGridPosition);
-        
-            yield return new WaitForSeconds(0.1f);
-
-            CharacterPool.ReturnToPool(_returnObject);
-            spawnManager.MoveCharactersEmptyGrid(_emptyGridPosition);
         }
         
         private void HandleSwap(int startX, int startY, int endX, int endY, GameObject endObject)
@@ -179,12 +134,29 @@ namespace Script
             countManager.DecreaseMoveCount();
         }
 
+        //  케릭터 오브젝트가 빈 Grid로 스와이프되면 오브젝트를 Pool 반환 하는 기능
+        private IEnumerator NullSwap(int startX, int startY, int endX, int endY)
+        {
+            Vector2 startPosition = _startObject.transform.position;
+            Vector2 endPosition = new Vector3(endX, endY, 0f);
+            _startObject.transform.position = endPosition;
+            countManager.DecreaseMoveCount();
+            _returnObject = _startObject;
+            _startObject.transform.localScale = _initialScale;
+            _emptyGridPosition = new Vector2(startX, startY);
+
+            yield return new WaitForSeconds(0.1f);
+
+            CharacterPool.ReturnToPool(_returnObject);
+            spawnManager.MoveCharactersEmptyGrid(_emptyGridPosition);
+        }
+        
         private IEnumerator SwapAndMatch(GameObject startObject, GameObject endObject, Vector3 endPosition, Vector3 startPosition)
         {
             yield return MoveOverTime(startObject, endPosition);
             yield return MoveOverTime(endObject, startPosition);
-            matchManager.IsMatched(endPosition);
-            StartCoroutine(AutoMatchAfterSwap());
+            matchManager.IsMatched(startObject,endPosition);
+            matchManager.IsMatched(endObject, startPosition);
         }
         
         private IEnumerator MoveOverTime(GameObject objectToMove, Vector3 destination)
@@ -201,6 +173,5 @@ namespace Script
             objectToMove.transform.position = destination;
             yield return new WaitUntil(() => objectToMove.transform.position == destination);
         }
-
     }
 }

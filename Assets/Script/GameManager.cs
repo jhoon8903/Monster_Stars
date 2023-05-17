@@ -1,5 +1,5 @@
+using System.Collections;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Script
 {
@@ -15,30 +15,36 @@ namespace Script
         {
             countManager.Initialize(moveCount);
             spawnManager.SpawnCharacters();
-            CheckAndHandleMatches();
+            // StartCoroutine(PerformMatchHandling());
         }
-        
-        private void CheckAndHandleMatches()
-        {
-            bool matchFound;
 
-            do
-            {
-                matchFound = false;
-
-                for (var x = 0; x < gridManager.gridWidth; x++)
-                {
-                    for (var y = 0; y < gridManager.gridHeight; y++)
-                    {
-                        var position = new Vector3(x, y, 0);
-
-                        if (!matchManager.IsMatched(position)) continue;
-                        // Handle the match, e.g., remove the matched pieces and spawn new ones
-                        matchManager.IsMatched(position);
-                        matchFound = true;
-                    }
-                }
-            } while (matchFound);
-        }
+        // private IEnumerator PerformMatchHandling()
+        // {
+        //     yield return null; 
+        //
+        //     bool matchFound;
+        //
+        //     do
+        //     {
+        //         matchFound = false;
+        //
+        //         for (var x = 0; x < gridManager.gridWidth; x++)
+        //         {
+        //             for (var y = 0; y < gridManager.gridHeight; y++)
+        //             {
+        //                 var characterPositions = new Vector3(x, y, 0);
+        //                 var characterObject = spawnManager.GetCharacterAtPosition(characterPositions);
+        //                 var position = characterObject.transform.position;
+        //                 var characterObjectPositions = new Vector3(position.x, position.y, 0);
+        //                 if (matchManager.IsMatched(characterObject, characterObjectPositions))
+        //                 {
+        //                     matchFound = true;
+        //                 }
+        //             }
+        //         }
+        //
+        //         yield return null; // Wait for a frame before checking again
+        //     } while (matchFound);
+        // }
     }
 }

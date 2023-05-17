@@ -40,16 +40,18 @@ namespace Script
         }
 
         // 특정 Grid 좌표에 케릭터를 생성하는 메소드
-        public void SpawnCharacterAtPosition(int x, int y)
+        public GameObject SpawnCharacterAtPosition(int x, int y)
         {
             var spawnPosition = new Vector2(x, y);
 
-            if (IsCharacterAtPosition(spawnPosition)) return;
+            if (IsCharacterAtPosition(spawnPosition)) return null;
             var pooledCharacter = characterPool.GetPooledCharacter();
 
-            if (pooledCharacter == null) return;
+            if (pooledCharacter == null) return null;
             pooledCharacter.transform.position = spawnPosition;
             pooledCharacter.SetActive(true);
+
+            return pooledCharacter;
         }
 
         // 특정 위치에 Character가 존재하는지 확인하는 메소드
