@@ -19,6 +19,7 @@ public sealed class MatchManager : MonoBehaviour
         var isMatchFound = false;
         var horizontalMatchCount = 0;
         var verticalMatchCount = 0;
+        var matchedCharacters = new List<GameObject>();
 
         foreach (var (dir1, dir2, dirName) in directions)
         {
@@ -35,7 +36,7 @@ public sealed class MatchManager : MonoBehaviour
                     if (nextCharacter == null ||
                         nextCharacter.GetComponent<CharacterBase>().name != centerCharacterName)
                         break;
-
+                    
                     matchedObjects.Add(nextCharacter);
                     matchCount++;
                     nextPosition += dir;
@@ -46,7 +47,7 @@ public sealed class MatchManager : MonoBehaviour
                 horizontalMatchCount += matchCount;
             else
                 verticalMatchCount += matchCount;
-
+            
             switch (matchCount)
             {
                 case 1:
@@ -56,6 +57,7 @@ public sealed class MatchManager : MonoBehaviour
                 case 5:
                     break;
             }
+            matchedCharacters.AddRange(matchedObjects);
         }
 
         if (horizontalMatchCount + verticalMatchCount == 4)
@@ -63,6 +65,12 @@ public sealed class MatchManager : MonoBehaviour
             switch (horizontalMatchCount)
             {
                 case 1:
+                    Debug.Log($"swipeCharacterPosition: {swipeCharacterPosition}");
+                    Debug.Log($"matchedCharacters Index \n[0]:{matchedCharacters[0].transform.position} \n[1]:{matchedCharacters[1].transform.position} \n[2]:{matchedCharacters[2].transform.position} \n[3]:{matchedCharacters[3].transform.position} ");
+                    // if (swipeCharacterPosition == matchedCharacters[0].transform.position)
+                    // {
+                    //     matchedCharacters[0].GetComponent<CharacterBase>().LevelUp();
+                    // }
                     Debug.LogWarning($"Match count of 3 found vertical directions");
                     isMatchFound = true;
                     return isMatchFound;
