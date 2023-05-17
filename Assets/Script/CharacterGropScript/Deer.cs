@@ -28,7 +28,7 @@ public class Deer: CharacterBase
         Level1();
     }
 
-    protected internal override void LevelUp()
+    protected override void LevelUp()
     {
         base.LevelUp();  // increment the level
         switch (Level)
@@ -65,7 +65,7 @@ public class Deer: CharacterBase
 
     private void Level2()
     {
-        _characterName = "deer2";
+        _characterName ="deer2";
         _damage = 1;
         _atkSpeed = 0.1f;
         _range = 0.1f;

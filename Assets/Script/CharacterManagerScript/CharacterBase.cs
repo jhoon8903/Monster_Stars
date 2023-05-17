@@ -5,7 +5,7 @@ namespace Script.CharacterManagerScript
     public class CharacterBase : MonoBehaviour
     {
         protected int Level { get; private set; } = 1;
-        protected string _characterName;
+        protected internal string _characterName;
         protected int _damage;
         protected float _atkSpeed;
         protected float _range;
@@ -14,7 +14,7 @@ namespace Script.CharacterManagerScript
         private AtkElementProperty _atkElementProperty;
         private SpecialAtkProperty _specialAtkProperty;
 
-        protected internal virtual void LevelUp()
+        protected virtual void LevelUp()
         {
             Debug.Log("Character Level UP ! ! ");
             Level++;

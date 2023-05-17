@@ -30,14 +30,7 @@ namespace Script.CharacterManagerScript
                 }
             }
         }
-
-        //  CharacterManager를 참조하여 List의 Prefab을 Random하게 반환함
-        private GameObject GetRandomCharacterPrefab()
-        {
-            if (characterManager.characterList.Count <= 0) return null;
-            var randomIndex = Random.Range(0, characterManager.characterList.Count);
-            return characterManager.characterList[randomIndex].gameObject;
-        }
+        
 
         // 비활성화 된 CharacterObject를 반환하거나, 생성 
         public GameObject GetPooledCharacter()
