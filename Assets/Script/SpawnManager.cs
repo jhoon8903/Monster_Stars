@@ -98,7 +98,6 @@ namespace Script
                 var randomCharacterIndex = Random.Range((float)0, inactiveCharacters.Count);
                 var character = inactiveCharacters[(int)randomCharacterIndex];
                 character.transform.position = new Vector3(t, 0, 0);
-                Debug.Log("Respawn! : " + character.name);
                 character.SetActive(true);
                 inactiveCharacters.RemoveAt((int)randomCharacterIndex);
             }

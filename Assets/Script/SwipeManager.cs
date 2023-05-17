@@ -153,15 +153,15 @@ namespace Script
         private IEnumerator SwapAndMatch(GameObject startObject, GameObject endObject, Vector3 endPosition, Vector3 startPosition)
         {
             yield return MoveOverTime(startObject, endPosition);
-            yield return MoveOverTime(endObject, startPosition);
             matchManager.IsMatched(startObject,endPosition);
+            yield return MoveOverTime(endObject, startPosition);
             matchManager.IsMatched(endObject, startPosition);
         }
         
         private IEnumerator MoveOverTime(GameObject objectToMove, Vector3 destination)
         {
-            objectToMove.transform.DOMove(destination, 0.2f);
-            yield return null;
+            Tween tween = objectToMove.transform.DOMove(destination, 0.2f);
+            yield return tween.WaitForCompletion();
         }
     }
 }

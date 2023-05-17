@@ -73,8 +73,6 @@ public sealed class MatchManager : MonoBehaviour
                     isMatchFound = true;
                     return isMatchFound;
                 case 3:
-                    Debug.Log($"swipeCharacterPosition.x: {swipeCharacterPosition.x}");
-                    Debug.Log($"matchedCharacters[1].transform.position.x: {matchedCharacters[1].transform.position.x}");
                     if (swipeCharacterPosition.x == matchedCharacters[1].transform.position.x)
                     {
                         CharacterPool.ReturnToPool(matchedCharacters[2]);
@@ -82,7 +80,7 @@ public sealed class MatchManager : MonoBehaviour
                         matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
                     }
                     
-                    Debug.Log($"matchedCharacters[1].transform.position.x: {matchedCharacters[2].transform.position.x}");
+                    // Debug.Log($"matchedCharacters[1].transform.position.x: {matchedCharacters[2].transform.position.x}");
                     if (swipeCharacterPosition.x == matchedCharacters[2].transform.position.x)
                     {
                         CharacterPool.ReturnToPool(matchedCharacters[1]);
@@ -90,7 +88,7 @@ public sealed class MatchManager : MonoBehaviour
                         matchedCharacters[2].GetComponent<CharacterBase>().LevelUp();
                     }
                     
-                    Debug.Log($"matchedCharacters[1].transform.position.x: {matchedCharacters[3].transform.position.x}");
+                    // Debug.Log($"matchedCharacters[1].transform.position.x: {matchedCharacters[3].transform.position.x}");
                     if (swipeCharacterPosition.x == matchedCharacters[3].transform.position.x)
                     {
                         CharacterPool.ReturnToPool(matchedCharacters[1]);
@@ -123,21 +121,24 @@ public sealed class MatchManager : MonoBehaviour
                         matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
                         matchedCharacters[2].GetComponent<CharacterBase>().LevelUp();
                     }
-                    Debug.Log($"swipeCharacterPosition: {swipeCharacterPosition}");
-                    Debug.Log($"[2]: {matchedCharacters[2].transform.position} \n" +
-                              $"[3]: {matchedCharacters[3].transform.position} \n" +
-                              $"[4]: {matchedCharacters[4].transform.position} \n");
-                    Debug.LogWarning($"Match count of 4 found vertical directions");
+
                     isMatchFound = true;
                     return isMatchFound;
+
                 case 2:
+                    // Debug.Log($"swipeCharacterPosition: {swipeCharacterPosition}");
+                    // Debug.Log($"[2]: {matchedCharacters[2].transform.position} \n" +
+                    //           $"[3]: {matchedCharacters[3].transform.position} \n" +
+                    //           $"[4]: {matchedCharacters[4].transform.position} \n");
                     Debug.LogWarning($"Match count of 3 found vertical directions");
                     isMatchFound = true;
                     return isMatchFound;
+                    
                 case 3:
                     Debug.LogWarning($"Match count of 3 found horizontal directions");
                     isMatchFound = true;
                     return isMatchFound;
+                    
                 case 4:
                     Debug.LogWarning($"Match count of 4 found horizontal directions");
                     isMatchFound = true;
@@ -153,22 +154,27 @@ public sealed class MatchManager : MonoBehaviour
                     Debug.LogWarning($"Match count of 5 found vertical directions");
                     isMatchFound = true;
                     return isMatchFound;
+
                 case 2:
                     Debug.LogWarning($"Match count of 4 found vertical directions");
                     isMatchFound = true;
                     return isMatchFound;
+
                 case 3:
                     Debug.LogWarning($"Match count of 3 x 3  found cross directions");
                     isMatchFound = true;
                     return isMatchFound;
+
                 case 4:
                     Debug.LogWarning($"Match count of 4  found horizontal directions");
                     isMatchFound = true;
                     return isMatchFound;
+
                 case 5:
                     Debug.LogWarning($"Match count of 5  found horizontal directions");
                     isMatchFound = true;
                     return isMatchFound;
+
             }
         }
 
@@ -180,24 +186,30 @@ public sealed class MatchManager : MonoBehaviour
                     Debug.LogWarning($"Match count of h3 x v4  found cross directions");
                     isMatchFound = true;
                     return isMatchFound;
+
                 case 4: 
                     Debug.LogWarning($"Match count of h4 x v3  found cross directions");
                     isMatchFound = true;
                     return isMatchFound;
+
             }
         }
 
-        if (horizontalMatchCount + verticalMatchCount != 8) return isMatchFound;
-        switch (horizontalMatchCount)
+        if (horizontalMatchCount + verticalMatchCount == 8)
         {
-            case 3:
+            switch (horizontalMatchCount)
+            {
+                case 3:
                 Debug.LogWarning($"Match count of h3 x v5  found cross directions");
                 isMatchFound = true;
                 return isMatchFound;
-            case 5:
+
+                case 5:
                 Debug.LogWarning($"Match count of h5 x v3  found cross directions");
                 isMatchFound = true;
                 return isMatchFound;
+
+            }  
         }
         return isMatchFound;
     }
