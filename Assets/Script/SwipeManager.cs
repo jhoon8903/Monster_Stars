@@ -158,9 +158,9 @@ namespace Script
             matchManager.IsMatched(endObject, startPosition);
         }
         
-        private IEnumerator MoveOverTime(GameObject objectToMove, Vector3 destination)
+        private static IEnumerator MoveOverTime(GameObject objectToMove, Vector3 destination)
         {
-            objectToMove.transform.DOMove(destination, 0.2f);
+            var tween = objectToMove.transform.DOMove(destination, 0.2f);
             yield return null;
         }
     }
