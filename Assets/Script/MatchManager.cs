@@ -67,17 +67,22 @@ public sealed class MatchManager : MonoBehaviour
                 case 1:
                     CharacterPool.ReturnToPool(matchedCharacters[2]);
                     CharacterPool.ReturnToPool(matchedCharacters[3]);
+                    StartCoroutine(_spawnManager.MoveCharactersEmptyGrid(matchedCharacters[2].transform.position));
+                    StartCoroutine(_spawnManager.MoveCharactersEmptyGrid(matchedCharacters[3].transform.position));
                     matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
                     isMatchFound = true;
                     return isMatchFound;
                 case 3:
+                    Debug.Log($"swipeCharacterPosition.x: {swipeCharacterPosition.x}");
+                    Debug.Log($"matchedCharacters[1].transform.position.x: {matchedCharacters[1].transform.position.x}");
                     if (swipeCharacterPosition.x == matchedCharacters[1].transform.position.x)
                     {
                         CharacterPool.ReturnToPool(matchedCharacters[2]);
                         CharacterPool.ReturnToPool(matchedCharacters[3]);
                         matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
                     }
-
+                    
+                    Debug.Log($"matchedCharacters[1].transform.position.x: {matchedCharacters[2].transform.position.x}");
                     if (swipeCharacterPosition.x == matchedCharacters[2].transform.position.x)
                     {
                         CharacterPool.ReturnToPool(matchedCharacters[1]);
@@ -85,6 +90,7 @@ public sealed class MatchManager : MonoBehaviour
                         matchedCharacters[2].GetComponent<CharacterBase>().LevelUp();
                     }
                     
+                    Debug.Log($"matchedCharacters[1].transform.position.x: {matchedCharacters[3].transform.position.x}");
                     if (swipeCharacterPosition.x == matchedCharacters[3].transform.position.x)
                     {
                         CharacterPool.ReturnToPool(matchedCharacters[1]);
