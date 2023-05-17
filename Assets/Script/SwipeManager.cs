@@ -147,7 +147,7 @@ namespace Script
             yield return new WaitForSeconds(0.1f);
 
             CharacterPool.ReturnToPool(_returnObject);
-            spawnManager.MoveCharactersEmptyGrid(_emptyGridPosition);
+            StartCoroutine(spawnManager.MoveCharactersEmptyGrid(_emptyGridPosition));
         }
         
         private IEnumerator SwapAndMatch(GameObject startObject, GameObject endObject, Vector3 endPosition, Vector3 startPosition)
@@ -158,9 +158,9 @@ namespace Script
             matchManager.IsMatched(endObject, startPosition);
         }
         
-        private static IEnumerator MoveOverTime(GameObject objectToMove, Vector3 destination)
+        private IEnumerator MoveOverTime(GameObject objectToMove, Vector3 destination)
         {
-            var tween = objectToMove.transform.DOMove(destination, 0.2f);
+            objectToMove.transform.DOMove(destination, 0.2f);
             yield return null;
         }
     }

@@ -2,6 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
 using UnityEngine;
+using DG.Tweening;
+using UnityEngine.TextCore.Text;
+using System.Collections;
 
 namespace Script
 {
@@ -68,16 +71,18 @@ namespace Script
         }
 
         // 비어있는 Grid 위에 Character를 이동 시키는 메소드
-        public void MoveCharactersEmptyGrid(Vector2 emptyGridPosition)
+        public IEnumerator MoveCharactersEmptyGrid(Vector2 emptyGridPosition)
         {
+            var tween = transform.DOMove(transform.position, 0);
             foreach (var character in characterPool.GetPooledCharacters())
             {
                 if (character.transform.position.x != emptyGridPosition.x ||
                     !(character.transform.position.y < emptyGridPosition.y)) continue;
                 Vector2 newPosition = character.transform.position;
                 newPosition.y += 1;
-                character.transform.position = newPosition;
+                tween = character.transform.DOMove(newPosition, 0.2f);
             }
+            yield return tween.WaitForCompletion();
             RespawnCharacter();
         }
 
@@ -93,6 +98,7 @@ namespace Script
                 var randomCharacterIndex = Random.Range((float)0, inactiveCharacters.Count);
                 var character = inactiveCharacters[(int)randomCharacterIndex];
                 character.transform.position = new Vector3(t, 0, 0);
+                Debug.Log("Respawn! : " + character.name);
                 character.SetActive(true);
                 inactiveCharacters.RemoveAt((int)randomCharacterIndex);
             }
