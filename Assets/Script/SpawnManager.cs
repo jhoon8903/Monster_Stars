@@ -3,7 +3,6 @@ using System.Linq;
 using Script.CharacterManagerScript;
 using UnityEngine;
 using DG.Tweening;
-using UnityEngine.TextCore.Text;
 using System.Collections;
 
 namespace Script
@@ -73,33 +72,42 @@ namespace Script
         // 비어있는 Grid 위에 Character를 이동 시키는 메소드
         public IEnumerator MoveCharactersEmptyGrid(Vector2 emptyGridPosition)
         {
-            var tween = transform.DOMove(transform.position, 0);
+            Tween lastTween = null;
             foreach (var character in characterPool.GetPooledCharacters())
             {
                 if (character.transform.position.x != emptyGridPosition.x ||
                     !(character.transform.position.y < emptyGridPosition.y)) continue;
                 Vector2 newPosition = character.transform.position;
                 newPosition.y += 1;
-                tween = character.transform.DOMove(newPosition, 0.2f);
+                lastTween = character.transform.DOMove(newPosition, 0.4f);
             }
-            yield return tween.WaitForCompletion();
-            RespawnCharacter();
+            // Wait for the last character to reach its new position before spawning new characters.
+            if (lastTween != null)
+            {
+                yield return lastTween.WaitForCompletion();
+            }
+            yield return StartCoroutine(RespawnCharacter((int)emptyGridPosition.x));
         }
 
-        // Pool에 활성화 되지 않은 CharacterObject를 확인하고 호출하는 메소드
-        private void RespawnCharacter()
+// Now RespawnCharacter is a coroutine that fills a specified column with new characters.
+        private IEnumerator RespawnCharacter(int column)
         {
             var inactiveCharacters = characterPool.GetPooledCharacters().Where(character => !character.activeInHierarchy).ToList();
-            var freeXPositions = gridManager.GetFreeXPositions();
-            var index = 0;
-            for (; index < freeXPositions.Count; index++)
+            var freeYPositions = Enumerable.Range(0, gridManager.gridHeight)
+                .Select(y => new Vector2(column, y))
+                .Where(pos => characterPool.GetPooledCharacters().All(character => new Vector2(character.transform.position.x, character.transform.position.y) != pos))
+
+                .ToList();
+            foreach (var position in freeYPositions)
             {
-                var t = freeXPositions[index];
-                var randomCharacterIndex = Random.Range((float)0, inactiveCharacters.Count);
-                var character = inactiveCharacters[(int)randomCharacterIndex];
-                character.transform.position = new Vector3(t, 0, 0);
+                if (inactiveCharacters.Count == 0) break;
+                var randomCharacterIndex = Random.Range(0, inactiveCharacters.Count);
+                var character = inactiveCharacters[randomCharacterIndex];
+                character.transform.position = position;
                 character.SetActive(true);
-                inactiveCharacters.RemoveAt((int)randomCharacterIndex);
+                inactiveCharacters.RemoveAt(randomCharacterIndex);
+                // Wait for the character to "fall" into position before continuing to the next one.
+                yield return character.transform.DOMove(position, 0.2f).WaitForCompletion();
             }
         }
     }

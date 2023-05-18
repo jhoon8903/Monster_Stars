@@ -1,5 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -31,7 +33,6 @@ namespace Script.CharacterManagerScript
             }
         }
         
-
         // 비활성화 된 CharacterObject를 반환하거나, 생성 
         public GameObject GetPooledCharacter()
         {
@@ -49,11 +50,14 @@ namespace Script.CharacterManagerScript
                 ? _pooledCharacters.Where(t => !t.activeInHierarchy).ToList() 
                 : new List<GameObject>(_pooledCharacters);
         }
-        
+
         // 반환되는 CharacterObject를 Pool에 반환함
-        public static void ReturnToPool(GameObject obj)
+        internal static IEnumerator ReturnToPool(GameObject obj)
         {
             obj.SetActive(false);
+            yield return null;
         }
+        
+
     }
 }
