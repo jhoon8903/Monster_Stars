@@ -1,14 +1,8 @@
 using Script.CharacterManagerScript;
 using UnityEngine;
-using static AtkElementProperty;
-using static Script.CharacterManagerScript.SpecialAtkProperty;
 
-public class Dog : CharacterBase
+public class Unit_A : CharacterBase
 {
-    //AtkElementProperty.AtkElement _atkElement = AtkElementProperty.AtkElement.Physical;
-    //SpecialAtkProperty.SpecialElment _specialElment = SpecialAtkProperty.SpecialElment.Strike;
-    //bool _atkElementBool = false;
-
     [SerializeField]
     private Sprite level1Sprite;
     [SerializeField]
@@ -30,7 +24,7 @@ public class Dog : CharacterBase
 
     protected internal override void LevelUp()
     {
-        base.LevelUp();  // increment the level
+        base.LevelUp();  
         switch (Level)
         {
             case 2:
@@ -46,14 +40,13 @@ public class Dog : CharacterBase
                 Level5();
                 break;
             default:
-                Debug.Log("Bear is already at maximum level.");
-                break;
+                return;
         }
     }
 
     private void Level1()
     {
-        _characterName = "dog1";
+        _characterName = "Unit_A_00";
         _damage = 0;
         _atkSpeed = 0;
         _range = 0;
@@ -65,7 +58,7 @@ public class Dog : CharacterBase
 
     private void Level2()
     {
-        _characterName = "dog2";
+        _characterName = "Unit_A_01";
         _damage = 1;
         _atkSpeed = 0.1f;
         _range = 0.1f;
@@ -76,7 +69,7 @@ public class Dog : CharacterBase
 
     private void Level3()
     {
-        _characterName = "dog3";
+        _characterName = "Unit_A_02";
         _damage = 3;
         _atkSpeed = 0.3f;
         _range = 0.2f;
@@ -87,7 +80,7 @@ public class Dog : CharacterBase
 
     private void Level4()
     {
-        _characterName = "dog4";
+        _characterName = "Unit_A_03";
         _damage = 9;
         _atkSpeed = 0.9f;
         _range = 0.3f;
@@ -98,7 +91,7 @@ public class Dog : CharacterBase
 
     private void Level5()
     {
-        _characterName = "dog5";
+        _characterName = "Unit_A_04";
         _damage = 27;
         _atkSpeed = 2.7f;
         _range = 0.4f;

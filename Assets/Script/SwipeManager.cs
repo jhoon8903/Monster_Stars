@@ -143,10 +143,8 @@ namespace Script
             _returnObject = _startObject;
             _startObject.transform.localScale = _initialScale;
             _emptyGridPosition = new Vector2(startX, startY);
-
             yield return new WaitForSeconds(0.1f);
-
-            CharacterPool.ReturnToPool(_returnObject);
+            StartCoroutine(CharacterPool.ReturnToPool(_returnObject));
             StartCoroutine(spawnManager.MoveCharactersEmptyGrid(_emptyGridPosition));
         }
         
@@ -158,7 +156,7 @@ namespace Script
             matchManager.IsMatched(endObject, startPosition);
         }
         
-        private IEnumerator MoveOverTime(GameObject objectToMove, Vector3 destination)
+        private static IEnumerator MoveOverTime(GameObject objectToMove, Vector3 destination)
         {
             Tween tween = objectToMove.transform.DOMove(destination, 0.2f);
             yield return tween.WaitForCompletion();

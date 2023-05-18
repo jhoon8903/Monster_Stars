@@ -162,7 +162,6 @@ MonoBehaviour:
   moveCount: 100
   spawnManager: {fileID: 149521964}
   matchManager: {fileID: 149521966}
-  _characterPool: {fileID: 1097818334}
 --- !u!4 &149521959
 Transform:
   m_ObjectHideFlags: 0
@@ -204,11 +203,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterList:
-  - {fileID: 4858146025929052495, guid: 282ca571fdd1a418f8655667bc8cf479, type: 3}
-  - {fileID: 607469974182215912, guid: e5eae943fb66c47e5961725f82c5a2ff, type: 3}
-  - {fileID: 2361742863523291227, guid: 438d7922ea8534dd6a3cfa7664f14cb7, type: 3}
-  - {fileID: 562606366381536192, guid: 39b5bda868b7a4323b5c6d9fa2e36252, type: 3}
-  - {fileID: 7229477341921847287, guid: d30ec24dbb65c4123938646dbb2c82d1, type: 3}
+  - {fileID: 5314217969191077850, guid: 282ca571fdd1a418f8655667bc8cf479, type: 3}
+  - {fileID: 5699018149103853973, guid: d30ec24dbb65c4123938646dbb2c82d1, type: 3}
+  - {fileID: 1103063519322186536, guid: 39b5bda868b7a4323b5c6d9fa2e36252, type: 3}
+  - {fileID: 996077009063285667, guid: e5eae943fb66c47e5961725f82c5a2ff, type: 3}
+  - {fileID: 5553006608696507336, guid: 438d7922ea8534dd6a3cfa7664f14cb7, type: 3}
 --- !u!114 &149521964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -243,8 +242,6 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   matchManager: {fileID: 149521966}
-  gridManager: {fileID: 8808150501734532426}
-  _characterPool: {fileID: 1097818334}
 --- !u!114 &149521966
 MonoBehaviour:
   m_ObjectHideFlags: 0
