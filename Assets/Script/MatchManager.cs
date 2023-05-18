@@ -14,7 +14,7 @@ public sealed class MatchManager : MonoBehaviour
         yield return StartCoroutine(_spawnManager.MoveCharactersEmptyGrid(character.transform.position));
     }
 
-    public void IsMatched(GameObject swapCharacter, Vector3 swipeCharacterPosition)
+    public bool IsMatched(GameObject swapCharacter, Vector3 swipeCharacterPosition)
     {
         var swapCharacterName = swapCharacter.GetComponent<CharacterBase>()._characterName;
         var directions = new[]
@@ -54,7 +54,6 @@ public sealed class MatchManager : MonoBehaviour
                 horizontalMatchCount += matchCount;
             else
                 verticalMatchCount += matchCount;
-            
             switch (matchCount)
             {
                 case 1:
@@ -77,32 +76,36 @@ public sealed class MatchManager : MonoBehaviour
                     
                     matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
                     isMatchFound = true;
-                    return;
+                    return isMatchFound;
                 case 3:
                     if (swipeCharacterPosition.x == matchedCharacters[1].transform.position.x)
                     {
                         StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
                         StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[3]));
                         matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                        isMatchFound = true;
+                        return isMatchFound;
                     }
                     
-                    // Debug.Log($"matchedCharacters[1].transform.position.x: {matchedCharacters[2].transform.position.x}");
                     if (swipeCharacterPosition.x == matchedCharacters[2].transform.position.x)
                     {
                         StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[1]));
                         StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[3]));
                         matchedCharacters[2].GetComponent<CharacterBase>().LevelUp();
+                        isMatchFound = true;
+                        return isMatchFound;
                     }
                     
-                    // Debug.Log($"matchedCharacters[1].transform.position.x: {matchedCharacters[3].transform.position.x}");
                     if (swipeCharacterPosition.x == matchedCharacters[3].transform.position.x)
                     {
                         StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[1]));
                         StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
                         matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                        isMatchFound = true;
+                        return isMatchFound;
                     }
-                    isMatchFound = true;
-                    return;
+
+                    return isMatchFound;
             }
         }
 
@@ -117,6 +120,8 @@ public sealed class MatchManager : MonoBehaviour
                         StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[4]));
                         matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
                         matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                        isMatchFound = true;
+                        return isMatchFound;
                     }
 
                     if (swipeCharacterPosition.y > matchedCharacters[3].transform.position.y &&
@@ -126,29 +131,63 @@ public sealed class MatchManager : MonoBehaviour
                         StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[4]));
                         matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
                         matchedCharacters[2].GetComponent<CharacterBase>().LevelUp();
+                        isMatchFound = true;
+                        return isMatchFound;
                     }
 
-                    isMatchFound = true;
-                    return;
+                    return isMatchFound;
 
                 case 2:
-                    // Debug.Log($"swipeCharacterPosition: {swipeCharacterPosition}");
-                    // Debug.Log($"[2]: {matchedCharacters[2].transform.position} \n" +
-                    //           $"[3]: {matchedCharacters[3].transform.position} \n" +
-                    //           $"[4]: {matchedCharacters[4].transform.position} \n");
-                    Debug.LogWarning($"Match count of 3 found vertical directions");
-                    isMatchFound = true;
-                    return;
+                    if (swipeCharacterPosition == matchedCharacters[2].transform.position)
+                    {
+                        StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[3]));
+                        StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[4]));
+                        matchedCharacters[2].GetComponent<CharacterBase>().LevelUp();
+                        isMatchFound = true;
+                        return isMatchFound;
+                    }
+                    return isMatchFound;
 
                 case 3:
-                    Debug.LogWarning($"Match count of 3 found horizontal directions");
-                    isMatchFound = true;
-                    return;
+                    if (swipeCharacterPosition == matchedCharacters[3].transform.position)
+                    {
+                        StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[1]));
+                        StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
+                        matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                        isMatchFound = true;
+                        return isMatchFound;
+                    }
+
+                    return isMatchFound;
 
                 case 4:
-                    Debug.LogWarning($"Match count of 4 found horizontal directions");
-                    isMatchFound = true;
-                    return;
+                    if (swipeCharacterPosition == matchedCharacters[4].transform.position && 
+                        matchedCharacters[1].transform.position.x < swipeCharacterPosition.x && 
+                        matchedCharacters[2].transform.position.x > swipeCharacterPosition.x)
+                    {
+                        Debug.Log("2번 스왑");
+                        StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[1]));
+                        StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[3]));
+                        matchedCharacters[2].GetComponent<CharacterBase>().LevelUp();
+                        matchedCharacters[4].GetComponent<CharacterBase>().LevelUp();
+                        isMatchFound = true;
+                        return isMatchFound;
+                    }
+
+                    if (swipeCharacterPosition == matchedCharacters[4].transform.position &&
+                        matchedCharacters[1].transform.position.x < swipeCharacterPosition.x &&
+                        matchedCharacters[3].transform.position.x > swipeCharacterPosition.x)
+                    {
+                        Debug.Log("3번 스왑");
+                        StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
+                        StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[3]));
+                        matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                        matchedCharacters[4].GetComponent<CharacterBase>().LevelUp();
+                        isMatchFound = true;
+                        return isMatchFound;
+                    }
+
+                    return isMatchFound;
             }
         }
 
@@ -157,29 +196,143 @@ public sealed class MatchManager : MonoBehaviour
             switch (horizontalMatchCount)
             {
                 case 1:
-                    Debug.LogWarning($"Match count of 5 found vertical directions");
+                    if (swipeCharacterPosition != matchedCharacters[1].transform.position) return isMatchFound;
+                    StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[3]));
+                    StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[5]));
+                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUp();
+                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUp();
+                    StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
+                    StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[4]));
+                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
                     isMatchFound = true;
-                    return;
+                    return isMatchFound;
 
                 case 2:
-                    Debug.LogWarning($"Match count of 4 found vertical directions");
-                    isMatchFound = true;
-                    return;
+
+                    if (swipeCharacterPosition.y > matchedCharacters[3].transform.position.y && 
+                        swipeCharacterPosition.y < matchedCharacters[5].transform.position.y)
+                    {
+                        if (swipeCharacterPosition.y > matchedCharacters[4].transform.position.y)
+                        {
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[5]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[4]));
+                            matchedCharacters[2].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                            isMatchFound = true;
+                            return isMatchFound;
+                        }
+
+                        if (swipeCharacterPosition.y < matchedCharacters[4].transform.position.y)
+                        {
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[5]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[3]));
+                            matchedCharacters[2].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[4].GetComponent<CharacterBase>().LevelUp();
+                            isMatchFound = true;
+                            return isMatchFound;
+                        }
+                    }
+
+                    return isMatchFound;
 
                 case 3:
-                    Debug.LogWarning($"Match count of 3 x 3  found cross directions");
-                    isMatchFound = true;
-                    return;
+
+                    // ㄱ Pattern
+                    if (swipeCharacterPosition == matchedCharacters[3].transform.position && 
+                        swipeCharacterPosition.y > matchedCharacters[4].transform.position.y)
+                    {
+                        StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
+                        StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[1]));
+                        StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[5]));
+                        matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                        matchedCharacters[4].GetComponent<CharacterBase>().LevelUp();
+                        isMatchFound = true;
+                        return isMatchFound;
+                    }
+                    
+                    // ㄴ Pattern
+                    if (swipeCharacterPosition == matchedCharacters[3].transform.position &&
+                        swipeCharacterPosition.y < matchedCharacters[4].transform.position.y)
+                    {
+                        StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
+                        StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[1]));
+                        StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[5]));
+                        matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                        matchedCharacters[4].GetComponent<CharacterBase>().LevelUp();
+                        isMatchFound = true;
+                        return isMatchFound;
+                    }
+                    return isMatchFound;
 
                 case 4:
-                    Debug.LogWarning($"Match count of 4  found horizontal directions");
-                    isMatchFound = true;
-                    return;
+
+                    if (swipeCharacterPosition == matchedCharacters[4].transform.position &&
+                        swipeCharacterPosition.x < matchedCharacters[2].transform.position.x &&
+                        swipeCharacterPosition.x > matchedCharacters[1].transform.position.x)
+                    {
+                        if (swipeCharacterPosition.y < matchedCharacters[5].transform.position.y)
+                        {
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[1]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[3]));
+                            matchedCharacters[4].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[2].GetComponent<CharacterBase>().LevelUp();
+                            isMatchFound = true;
+                            return isMatchFound;
+                        }
+
+                        if (swipeCharacterPosition.y > matchedCharacters[5].transform.position.y)
+                        {
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[1]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[3]));
+                            matchedCharacters[4].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[2].GetComponent<CharacterBase>().LevelUp();
+                            isMatchFound = true;
+                            return isMatchFound;
+                        }
+                    }
+
+                    if (swipeCharacterPosition == matchedCharacters[4].transform.position && 
+                        swipeCharacterPosition.x < matchedCharacters[3].transform.position.x &&
+                        swipeCharacterPosition.x > matchedCharacters[1].transform.position.x)
+                    {
+                        if (swipeCharacterPosition.y < matchedCharacters[5].transform.position.y)
+                        {
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[3]));
+                            matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[4].GetComponent<CharacterBase>().LevelUp();
+                            isMatchFound = true;
+                            return isMatchFound;
+                        }
+
+                        if (swipeCharacterPosition.y > matchedCharacters[5].transform.position.y)
+                        {
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[3]));
+                            matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[4].GetComponent<CharacterBase>().LevelUp();
+                            isMatchFound = true;
+                            return isMatchFound;
+                        }
+                    }
+                    return isMatchFound;
 
                 case 5:
-                    Debug.LogWarning($"Match count of 5  found horizontal directions");
-                    isMatchFound = true;
-                    return;
+                    if (swipeCharacterPosition == matchedCharacters[5].transform.position)
+                    {
+                        StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
+                        StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[4]));
+                        matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                        matchedCharacters[5].GetComponent<CharacterBase>().LevelUp();
+                        matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                        StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[1]));
+                        StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[3]));
+                        matchedCharacters[5].GetComponent<CharacterBase>().LevelUp();
+                        isMatchFound = true;
+                        return isMatchFound;
+                    }
+                    return isMatchFound;
             }
         }
 
@@ -188,14 +341,121 @@ public sealed class MatchManager : MonoBehaviour
             switch (horizontalMatchCount)
             {
                 case 3:
-                    Debug.LogWarning($"Match count of h3 x v4  found cross directions");
-                    isMatchFound = true;
-                    return;
+                    if (swipeCharacterPosition == matchedCharacters[3].transform.position &&
+                        matchedCharacters[3].transform.position.y > matchedCharacters[5].transform.position.y)
+                    {
+                        if (matchedCharacters[3].transform.position.x > matchedCharacters[1].transform.position.x)
+                        {
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[6]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[5]));
+                            matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[4].GetComponent<CharacterBase>().LevelUp();
+                            isMatchFound = true;
+                            return isMatchFound;
+                        }
+
+                        if (matchedCharacters[3].transform.position.x < matchedCharacters[1].transform.position.x)
+                        {
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[6]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[5]));
+                            matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[4].GetComponent<CharacterBase>().LevelUp();
+                            isMatchFound = true;
+                            return isMatchFound;
+                        }
+                    }
+
+                    if (swipeCharacterPosition == matchedCharacters[3].transform.position &&
+                        matchedCharacters[3].transform.position.y < matchedCharacters[5].transform.position.y)
+                    {
+                        if (matchedCharacters[3].transform.position.x > matchedCharacters[1].transform.position.x)
+                        {
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[6]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[4]));
+                            matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[5].GetComponent<CharacterBase>().LevelUp();
+                            isMatchFound = true;
+                            return isMatchFound;
+                        }
+
+                        if (matchedCharacters[3].transform.position.x < matchedCharacters[1].transform.position.x)
+                        {
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[6]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[4]));
+                            matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[5].GetComponent<CharacterBase>().LevelUp();
+                            isMatchFound = true;
+                            return isMatchFound;
+                        }
+                    }
+                    return isMatchFound;
 
                 case 4: 
-                    Debug.LogWarning($"Match count of h4 x v3  found cross directions");
-                    isMatchFound = true;
-                    return;
+
+                    if (swipeCharacterPosition == matchedCharacters[4].transform.position &&
+                        matchedCharacters[2].transform.position.x < matchedCharacters[4].transform.position.x)
+                    {
+                        if (matchedCharacters[4].transform.position.y > matchedCharacters[5].transform.position.y)
+                        {
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[3]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[6]));
+                            matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[4].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[5].GetComponent<CharacterBase>().LevelUp();
+                            isMatchFound = true;
+                            return isMatchFound;
+                        }
+
+                        if (matchedCharacters[4].transform.position.y < matchedCharacters[5].transform.position.y)
+                        {
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[3]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[6]));
+                            matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[4].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[5].GetComponent<CharacterBase>().LevelUp();
+                            isMatchFound = true;
+                            return isMatchFound;
+                        }
+                    }
+
+                    if (swipeCharacterPosition == matchedCharacters[4].transform.position &&
+                        matchedCharacters[2].transform.position.x > matchedCharacters[4].transform.position.x)
+                    {
+                        if (matchedCharacters[4].transform.position.y > matchedCharacters[5].transform.position.y)
+                        {
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[1]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[3]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[6]));
+                            matchedCharacters[2].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[4].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[5].GetComponent<CharacterBase>().LevelUp();
+                            isMatchFound = true;
+                            return isMatchFound;
+                        }
+
+                        if (matchedCharacters[4].transform.position.y < matchedCharacters[5].transform.position.y)
+                        {
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[1]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[3]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[6]));
+                            matchedCharacters[2].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[4].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[5].GetComponent<CharacterBase>().LevelUp();
+                            isMatchFound = true;
+                            return isMatchFound;
+                        }
+                    }
+                    return isMatchFound;
             }
         }
 
@@ -204,15 +464,81 @@ public sealed class MatchManager : MonoBehaviour
             switch (horizontalMatchCount)
             {
                 case 3:
-                Debug.LogWarning($"Match count of h3 x v5  found cross directions");
-                isMatchFound = true;
-                return;
+                    if (swipeCharacterPosition == matchedCharacters[3].transform.position)
+                    {
+                        if (matchedCharacters[3].transform.position.x < matchedCharacters[1].transform.position.x)
+                        {
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[7]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[5]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
+                            matchedCharacters[6].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[4].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                            
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[6]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[4]));
+                            matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                            isMatchFound = true;
+                            return isMatchFound;
+                        }
+
+                        if (matchedCharacters[3].transform.position.x > matchedCharacters[1].transform.position.x)
+                        {
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[7]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[5]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
+                            matchedCharacters[6].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[4].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[6]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[4]));
+                            matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                            isMatchFound = true;
+                            return isMatchFound;
+                        }
+                    }
+                    return isMatchFound;
 
                 case 5:
-                Debug.LogWarning($"Match count of h5 x v3  found cross directions");
-                isMatchFound = true;
-                return;
+                    if (swipeCharacterPosition == matchedCharacters[5].transform.position)
+                    {
+                        if (matchedCharacters[5].transform.position.y < matchedCharacters[6].transform.position.y)
+                        {
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[4]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[7]));
+                            matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[5].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[6].GetComponent<CharacterBase>().LevelUp();
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[1]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[3]));
+                            matchedCharacters[5].GetComponent<CharacterBase>().LevelUp();
+                            isMatchFound = true;
+                            return isMatchFound;
+                        }
+
+                        if (matchedCharacters[5].transform.position.y > matchedCharacters[6].transform.position.y)
+                        {
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[2]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[4]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[7]));
+                            matchedCharacters[1].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[5].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[3].GetComponent<CharacterBase>().LevelUp();
+                            matchedCharacters[6].GetComponent<CharacterBase>().LevelUp();
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[1]));
+                            StartCoroutine(ReturnAndMoveCharacter(matchedCharacters[3]));
+                            matchedCharacters[5].GetComponent<CharacterBase>().LevelUp();
+                            isMatchFound = true;
+                            return isMatchFound;
+                        }
+                    }
+                    return isMatchFound;
             }  
         }
+        return isMatchFound;
     }
 }
