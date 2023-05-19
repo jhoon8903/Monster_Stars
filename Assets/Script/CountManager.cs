@@ -7,7 +7,7 @@ namespace Script
     public class CountManager : MonoBehaviour
     {
         private int _moveCount;
-        [FormerlySerializedAs("_moveCountText")] public TextMeshProUGUI moveCountText;
+        public TextMeshProUGUI moveCountText;
 
         // 카운트 초기화
         public void Initialize(int initialMoveCount)
@@ -30,7 +30,12 @@ namespace Script
             UpdateMoveCountText();
         }
 
-        // Count UI Panel Text Update
+        public void IncreaseMoveCount()
+        {
+            _moveCount++;
+            UpdateMoveCountText();
+        }
+        
         private void UpdateMoveCountText()
         {
             moveCountText.text = $"Count: {_moveCount}";

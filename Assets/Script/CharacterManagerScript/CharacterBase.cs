@@ -16,7 +16,6 @@ namespace Script.CharacterManagerScript
 
         protected internal virtual void LevelUp()
         {
-            Debug.Log("Character Level UP ! ! ");
             Level++;
         }
     }

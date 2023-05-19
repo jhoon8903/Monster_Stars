@@ -1,50 +1,51 @@
 using System.Collections;
+using Script.CharacterManagerScript;
 using UnityEngine;
 
 namespace Script
 {
     public class GameManager : MonoBehaviour
     {
-        public GridManager gridManager;
-        public CountManager countManager;
         public int moveCount;
-        public SpawnManager spawnManager;
-        [SerializeField] private MatchManager matchManager;
+        [SerializeField]
+        private GridManager _gridManager;
+        [SerializeField]
+        private CountManager _countManager;
+        [SerializeField]
+        private SpawnManager _spawnManager;
+        [SerializeField]
+        private MatchManager _matchManager;
+        [SerializeField] 
+        private CharacterPool _characterPool;
 
+        private bool spawnFinsh = false;
         private void Start()
         {
-            countManager.Initialize(moveCount);
-            spawnManager.SpawnCharacters();
-            // StartCoroutine(PerformMatchHandling());
+            _countManager.Initialize(moveCount);
+            _gridManager.GenerateInitialGrid();
+            _characterPool.CreateCharacterPool();
+            StartCoroutine(SpawnDoneCheck());
         }
 
-        // private IEnumerator PerformMatchHandling()
-        // {
-        //     yield return null; 
-        //
-        //     bool matchFound;
-        //
-        //     do
-        //     {
-        //         matchFound = false;
-        //
-        //         for (var x = 0; x < gridManager.gridWidth; x++)
-        //         {
-        //             for (var y = 0; y < gridManager.gridHeight; y++)
-        //             {
-        //                 var characterPositions = new Vector3(x, y, 0);
-        //                 var characterObject = spawnManager.GetCharacterAtPosition(characterPositions);
-        //                 var position = characterObject.transform.position;
-        //                 var characterObjectPositions = new Vector3(position.x, position.y, 0);
-        //                 if (matchManager.IsMatched(characterObject, characterObjectPositions))
-        //                 {
-        //                     matchFound = true;
-        //                 }
-        //             }
-        //         }
-        //
-        //         yield return null; // Wait for a frame before checking again
-        //     } while (matchFound);
-        // }
+        private IEnumerator SpawnDoneCheck()
+        {
+            yield return new WaitUntil(() => _spawnManager.SpawnCharacters());
+            StartMatches();
+        }
+        
+
+        private void StartMatches()
+        {
+            var allCharacterPosition = new Vector3();
+            for (var x = 0; x < _gridManager.gridWidth; x++)
+            {
+                for (var y = 0; y < _gridManager.gridHeight; y++)
+                {
+                    var character = _spawnManager.GetCharacterAtPosition(allCharacterPosition);
+                    var characterPosition = character.transform.position;
+                    _matchManager.IsMatched(character, characterPosition);
+                }
+            }
+        }
     }
 }

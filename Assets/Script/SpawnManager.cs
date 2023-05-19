@@ -13,7 +13,8 @@ namespace Script
         private GridManager gridManager;
         [SerializeField]
         private CharacterPool characterPool;
-        
+
+        private bool spawnDone = false;
         // CharacterPool에서 사용 가능한 Pool 객체를 반환
         public List<GameObject> GetPooledCharacters()
         {
@@ -21,7 +22,7 @@ namespace Script
         }
 
         // Grid 전체에 케릭터 Object를 생성하는 메소드
-        public void SpawnCharacters()
+        public bool SpawnCharacters()
         {
             var availablePositions = new List<Vector2Int>();
             for (var x = 0; x < gridManager.gridWidth; x++)
@@ -39,6 +40,8 @@ namespace Script
                 availablePositions.RemoveAt(randomPositionIndex);
                 SpawnCharacterAtPosition(randomPosition.x, randomPosition.y);
             }
+            spawnDone = true;
+            return spawnDone;
         }
 
         // 특정 Grid 좌표에 케릭터를 생성하는 메소드
@@ -89,7 +92,6 @@ namespace Script
             yield return StartCoroutine(RespawnCharacter((int)emptyGridPosition.x));
         }
 
-// Now RespawnCharacter is a coroutine that fills a specified column with new characters.
         private IEnumerator RespawnCharacter(int column)
         {
             var inactiveCharacters = characterPool.GetPooledCharacters().Where(character => !character.activeInHierarchy).ToList();

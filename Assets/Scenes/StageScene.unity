@@ -157,11 +157,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 933c38c980a7c4d77b5f3cf88e658190, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gridManager: {fileID: 8808150501734532426}
-  countManager: {fileID: 149521962}
   moveCount: 100
-  spawnManager: {fileID: 149521964}
-  matchManager: {fileID: 149521966}
+  _gridManager: {fileID: 8808150501734532426}
+  _countManager: {fileID: 149521962}
+  _spawnManager: {fileID: 149521964}
+  _matchManager: {fileID: 149521966}
 --- !u!4 &149521959
 Transform:
   m_ObjectHideFlags: 0
