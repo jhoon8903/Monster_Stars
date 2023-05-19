@@ -18,7 +18,7 @@ namespace Script.CharacterManagerScript
         private List<GameObject> _pooledCharacters;
         
         // 풀 초기 설정 활성화
-        public void Awake()
+        public void CreateCharacterPool()
         {
             _pooledCharacters = new List<GameObject>();
             foreach (var character in characterManager.characterList)
