@@ -16,9 +16,10 @@ namespace Script.CharacterManagerScript
         [SerializeField]
         private SpawnManager spawnManager;
         private List<GameObject> _pooledCharacters;
+        private static bool returnObj = false;
         
         // 풀 초기 설정 활성화
-        public void CreateCharacterPool()
+        public void Awake()
         {
             _pooledCharacters = new List<GameObject>();
             foreach (var character in characterManager.characterList)
@@ -52,10 +53,9 @@ namespace Script.CharacterManagerScript
         }
 
         // 반환되는 CharacterObject를 Pool에 반환함
-        internal static IEnumerator ReturnToPool(GameObject obj)
+        public static void ReturnToPool(GameObject obj)
         {
             obj.SetActive(false);
-            yield return null;
         }
         
 

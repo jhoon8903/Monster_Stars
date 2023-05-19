@@ -15,12 +15,10 @@ namespace Script
         private CharacterPool characterPool;
 
         private bool spawnDone = false;
-        // CharacterPool에서 사용 가능한 Pool 객체를 반환
         public List<GameObject> GetPooledCharacters()
         {
             return characterPool.GetPooledCharacters();
         }
-
         // Grid 전체에 케릭터 Object를 생성하는 메소드
         public bool SpawnCharacters()
         {
@@ -43,73 +41,61 @@ namespace Script
             spawnDone = true;
             return spawnDone;
         }
-
         // 특정 Grid 좌표에 케릭터를 생성하는 메소드
-        public GameObject SpawnCharacterAtPosition(int x, int y)
+        public void SpawnCharacterAtPosition(int x, int y)
         {
             var spawnPosition = new Vector2(x, y);
-
-            if (IsCharacterAtPosition(spawnPosition)) return null;
+            if (IsCharacterAtPosition(spawnPosition)) return;
             var pooledCharacter = characterPool.GetPooledCharacter();
-
-            if (pooledCharacter == null) return null;
+            if (pooledCharacter == null) return;
             pooledCharacter.transform.position = spawnPosition;
             pooledCharacter.SetActive(true);
-
-            return pooledCharacter;
         }
-
         // 특정 위치에 Character가 존재하는지 확인하는 메소드
         public bool IsCharacterAtPosition(Vector3 position)
         {
             return GetCharacterAtPosition(position) != null;
         }
-
         // 특정 위치에 있는 케릭터를 반환하는 메소드
         public GameObject GetCharacterAtPosition(Vector3 position)
         {
             var list = characterPool.GetPooledCharacters();
-            return list.FirstOrDefault(character => character.activeInHierarchy && character.transform.position == position);
+            return list.FirstOrDefault(character => 
+                character.activeInHierarchy && character.transform.position == position);
         }
-
         // 비어있는 Grid 위에 Character를 이동 시키는 메소드
-        public IEnumerator MoveCharactersEmptyGrid(Vector2 emptyGridPosition)
+
+        public static void MoveCharacter(Vector2 emptyGridPosition)
         {
-            Tween lastTween = null;
-            foreach (var character in characterPool.GetPooledCharacters())
-            {
-                if (character.transform.position.x != emptyGridPosition.x ||
-                    !(character.transform.position.y < emptyGridPosition.y)) continue;
-                Vector2 newPosition = character.transform.position;
-                newPosition.y += 1;
-                lastTween = character.transform.DOMove(newPosition, 0.4f);
-            }
-            // Wait for the last character to reach its new position before spawning new characters.
-            if (lastTween != null)
-            {
-                yield return lastTween.WaitForCompletion();
-            }
-            yield return StartCoroutine(RespawnCharacter((int)emptyGridPosition.x));
+            
         }
-
-        private IEnumerator RespawnCharacter(int column)
+        private void RespawnCharacter(int column)
         {
-            var inactiveCharacters = characterPool.GetPooledCharacters().Where(character => !character.activeInHierarchy).ToList();
-            var freeYPositions = Enumerable.Range(0, gridManager.gridHeight)
-                .Select(y => new Vector2(column, y))
-                .Where(pos => characterPool.GetPooledCharacters().All(character => new Vector2(character.transform.position.x, character.transform.position.y) != pos))
-
+            var inactiveCharacters = characterPool.GetPooledCharacters()
+                .Where(character => !character.activeInHierarchy)
                 .ToList();
-            foreach (var position in freeYPositions)
+
+            if (inactiveCharacters.Count <= 0) return;
             {
-                if (inactiveCharacters.Count == 0) break;
+                // Find the highest empty position in the column
+                var maxY = gridManager.gridHeight - 1;
+                for (; maxY >= 0; maxY--)
+                {
+                    var checkPos = new Vector2(column, maxY);
+                    if (characterPool.GetPooledCharacters().All(character 
+                            => new Vector2(character.transform.position.x, character.transform.position.y) != checkPos))
+                    {
+                        break;
+                    }
+                }
+
+                var position = new Vector2(column, maxY);
+                var initialPosition = new Vector2(column, -1);
                 var randomCharacterIndex = Random.Range(0, inactiveCharacters.Count);
                 var character = inactiveCharacters[randomCharacterIndex];
-                character.transform.position = position;
+                character.transform.position = initialPosition;
                 character.SetActive(true);
-                inactiveCharacters.RemoveAt(randomCharacterIndex);
-                // Wait for the character to "fall" into position before continuing to the next one.
-                yield return character.transform.DOMove(position, 0.2f).WaitForCompletion();
+                character.transform.DOMove(position, 0.2f).WaitForCompletion();
             }
         }
     }

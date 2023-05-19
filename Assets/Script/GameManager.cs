@@ -22,8 +22,6 @@ namespace Script
         private void Start()
         {
             _countManager.Initialize(moveCount);
-            _gridManager.GenerateInitialGrid();
-            _characterPool.CreateCharacterPool();
             StartCoroutine(SpawnDoneCheck());
         }
 
@@ -33,7 +31,6 @@ namespace Script
             StartMatches();
         }
         
-
         private void StartMatches()
         {
             var allCharacterPosition = new Vector3();
@@ -42,8 +39,7 @@ namespace Script
                 for (var y = 0; y < _gridManager.gridHeight; y++)
                 {
                     var character = _spawnManager.GetCharacterAtPosition(allCharacterPosition);
-                    var characterPosition = character.transform.position;
-                    _matchManager.IsMatched(character, characterPosition);
+                    _matchManager.IsMatched(character);
                 }
             }
         }

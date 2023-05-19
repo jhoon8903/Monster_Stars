@@ -18,8 +18,14 @@ namespace Script
         [SerializeField] private SpawnManager spawnManager;
         [SerializeField] private CharacterManager characterManager;
         
+        private void Start()
+        {
+            GenerateInitialGrid();  // 초기 Grid 생성
+            spawnManager.SpawnCharacters(); // CharacterObject 생성
+        }
+        
         //  기본 Grid 생성 메소드
-        public void GenerateInitialGrid()
+        private void GenerateInitialGrid()
         {
             for (var y = 0; y < gridHeight; y++)
             {

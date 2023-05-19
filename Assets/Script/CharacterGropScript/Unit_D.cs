@@ -24,7 +24,7 @@ public class Unit_D : CharacterBase
         Level1();
     }
 
-    protected internal override void LevelUp()
+    protected override void LevelUp()
     {
         base.LevelUp();  // increment the level
         switch (Level)

@@ -1,4 +1,3 @@
-using System.Collections;
 using Script.CharacterManagerScript;
 using UnityEngine;
 using DG.Tweening;
@@ -9,10 +8,9 @@ namespace Script
     {
         private GameObject _startObject; // 초기에 터치된 객체를 추적하는 데 사용됩니다.
         private GameObject _returnObject; // 원래 위치로 돌아갈 객체를 추적하는 데 사용됩니다.
-        private Vector2 _initialScale; // 터치된 객체의 초기 크기를 저장합니다.
+        private Vector3 _initialScale; // 터치된 객체의 초기 크기를 저장합니다.
         private Vector2 _firstTouchPosition; // 첫 터치의 위치를 저장합니다.
         private Vector2 _emptyGridPosition; // 빈 그리드의 위치를 저장합니다.
-        public float duration;
         [SerializeField] private float _minSwipeLength = 0.2f; // 스와이프로 인식되는 최소 길이입니다.
         [SerializeField] private SpawnManager spawnManager; // 스폰매니저를 참조합니다.
         [SerializeField] private CountManager countManager; // 카운트매니저를 참조합니다.
@@ -63,13 +61,11 @@ namespace Script
                 HandleSwipe(swipe);
             }
         }
-    
         // CountManager의 Count를 참조하여 이동가능횟수를 확인
         private bool CanMove()  
         {
             return countManager.CanMove();
         }
-    
         // 사용자 편의를 위해 스와이프 각도를 보정하여 스와이프 각도에 따라 처리합니다.
         private void HandleSwipe(Vector2 swipe)
         {
@@ -105,16 +101,13 @@ namespace Script
             if (endObject != null)
             {
                 HandleSwap(startX, startY, endX, endY, endObject);
-
-
             }
             else
             {
-                StartCoroutine(NullSwap(startX, startY, endX, endY));
+                NullSwap(startX, startY, endX, endY);
             }
             _startObject = null;
         }
-        
         //  터치가 끝나면 초기화 합니다. (터치시 호버 작동 터치 완료 후 호버 초기화)
         private void HandleTouchEnd()
         {
@@ -122,44 +115,41 @@ namespace Script
             _startObject.transform.localScale = _initialScale;
             _startObject = null;
         }
-        
         private void HandleSwap(int startX, int startY, int endX, int endY, GameObject endObject)
         {
             if (_startObject == null) return;
             var startPosition = new Vector3(startX, startY, 0);
             var endPosition = new Vector3(endX, endY, 0f);
-            StartCoroutine(SwapAndMatch(_startObject, endObject, endPosition, startPosition));
+            SwapAndMatch(_startObject, endObject, endPosition, startPosition);
             _startObject.transform.localScale = _initialScale;
             countManager.DecreaseMoveCount();
+        }
+        //  케릭터 오브젝트가 빈 Grid로 스와이프되면 오브젝트를 Pool 반환 하는 기능
+        
+        private void NullSwap(int startX, int startY, int endX, int endY)
+        {
+            var _targetObject = spawnManager.GetCharacterAtPosition(new Vector3(startX, startY, 0));
+            var _endPosition = new Vector3Int(endX, endY, 0);
+            countManager.DecreaseMoveCount();
+            var tween = MoveOverTime(_targetObject, _endPosition);
+            _targetObject.transform.localScale = _initialScale;
+            tween.OnComplete(() => CharacterPool.ReturnToPool(_targetObject));
+            _emptyGridPosition = new Vector2(startX, startY);
+            SpawnManager.MoveCharacter(_emptyGridPosition);
+
         }
 
-        //  케릭터 오브젝트가 빈 Grid로 스와이프되면 오브젝트를 Pool 반환 하는 기능
-        private IEnumerator NullSwap(int startX, int startY, int endX, int endY)
+        private void SwapAndMatch(GameObject startObject, GameObject endObject, Vector3 endPosition, Vector3 startPosition)
         {
-            Vector2 startPosition = _startObject.transform.position;
-            Vector2 endPosition = new Vector3(endX, endY, 0f);
-            _startObject.transform.position = endPosition;
-            countManager.DecreaseMoveCount();
-            _returnObject = _startObject;
-            _startObject.transform.localScale = _initialScale;
-            _emptyGridPosition = new Vector2(startX, startY);
-            yield return new WaitForSeconds(0.1f);
-            StartCoroutine(CharacterPool.ReturnToPool(_returnObject));
-            StartCoroutine(spawnManager.MoveCharactersEmptyGrid(_emptyGridPosition));
+            MoveOverTime(startObject, endPosition);
+            matchManager.IsMatched(startObject);
+            MoveOverTime(endObject, startPosition);
+            matchManager.IsMatched(endObject);
         }
-        
-        private IEnumerator SwapAndMatch(GameObject startObject, GameObject endObject, Vector3 endPosition, Vector3 startPosition)
-        {
-            yield return MoveOverTime(startObject, endPosition);
-            matchManager.IsMatched(startObject,endPosition);
-            yield return MoveOverTime(endObject, startPosition);
-            matchManager.IsMatched(endObject, startPosition);
-        }
-        
-        private static IEnumerator MoveOverTime(GameObject objectToMove, Vector3 destination)
+        private static Tween MoveOverTime(GameObject objectToMove, Vector3 destination)
         {
             Tween tween = objectToMove.transform.DOMove(destination, 0.2f);
-            yield return tween.WaitForCompletion();
+            return null;
         }
     }
 }
