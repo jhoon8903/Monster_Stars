@@ -1,51 +1,53 @@
 using System.Collections;
 using Script.CharacterManagerScript;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Script
 {
     public class GameManager : MonoBehaviour
     {
-        public int moveCount;
         [SerializeField]
-        private GridManager _gridManager;
+        private CountManager countManager;
         [SerializeField]
-        private CountManager _countManager;
+        private GridManager gridManager;
         [SerializeField]
-        private SpawnManager _spawnManager;
+        private SpawnManager spawnManager;
         [SerializeField]
-        private MatchManager _matchManager;
+        private MatchManager matchManager;
+        [SerializeField]
+        private SwipeManager swipeManager;
         [SerializeField] 
-        private CharacterPool _characterPool;
-
-        private bool spawnFinsh = false;
+        private CharacterPool characterPool;
+        [SerializeField]
+        private int moveCount;
+        [SerializeField] 
+        private float waitTime = 1.5f;
+        
         private void Start()
         {
-            _countManager.Initialize(moveCount);
-            _gridManager.GenerateInitialGrid();
-            _characterPool.CreateCharacterPool();
-            StartCoroutine(SpawnDoneCheck());
+            countManager.Initialize(moveCount);
+            gridManager.GenerateInitialGrid();
+            spawnManager.SpawnCharacters();
+            StartCoroutine(StartMatchesThenCheck());
+        }
+        private IEnumerator StartMatchesThenCheck()
+        {
+            yield return StartCoroutine(StartMatches());
+            yield return StartCoroutine(matchManager.CheckMatchesAndMoveCharacters());
         }
 
-        private IEnumerator SpawnDoneCheck()
+        private IEnumerator StartMatches()
         {
-            yield return new WaitUntil(() => _spawnManager.SpawnCharacters());
-            StartMatches();
-        }
-        
-
-        private void StartMatches()
-        {
-            var allCharacterPosition = new Vector3();
-            for (var x = 0; x < _gridManager.gridWidth; x++)
+            yield return new WaitForSecondsRealtime(waitTime);
+            foreach (var character in characterPool.UsePoolCharacterList())
             {
-                for (var y = 0; y < _gridManager.gridHeight; y++)
-                {
-                    var character = _spawnManager.GetCharacterAtPosition(allCharacterPosition);
-                    var characterPosition = character.transform.position;
-                    _matchManager.IsMatched(character, characterPosition);
-                }
+                matchManager.IsMatched(character);
             }
+            yield return null;
+            StartCoroutine(spawnManager.PositionUpCharacterObject());
+
         }
+
     }
 }
