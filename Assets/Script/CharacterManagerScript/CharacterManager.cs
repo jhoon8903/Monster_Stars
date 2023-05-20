@@ -5,7 +5,7 @@ namespace Script.CharacterManagerScript
 {
     public class CharacterManager : MonoBehaviour
     {
-        public List<CharacterBase> characterList = new List<CharacterBase>();
+        [SerializeField] internal List<CharacterBase> characterList = new List<CharacterBase>();
 
         public List<CharacterBase> GetCharacterList()
         {

@@ -1,19 +1,21 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using DG.Tweening;
 using Script;
 using Script.CharacterManagerScript;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public sealed class MatchManager : MonoBehaviour
 {
-    [SerializeField] private SpawnManager _spawnManager;
+    [SerializeField] private SpawnManager spawnManager;
+    [SerializeField] private CharacterPool characterPool;
 
-    private static void ReturnAndMoveCharacter(GameObject character)
+    public bool IsMatched(GameObject swapCharacter)
     {
-        CharacterPool.ReturnToPool(character);
-    }
-    public void IsMatched(GameObject swapCharacter)
-    {
+        var matchFound = false;
         var swapCharacterName = swapCharacter.GetComponent<CharacterBase>()._characterName;
         var swapCharacterPosition = swapCharacter.transform.position;
         var directions = new[]
@@ -34,7 +36,7 @@ public sealed class MatchManager : MonoBehaviour
                 var nextPosition = swapCharacterPosition + dir;
                 for (var i = 0; i < 2; i++)
                 {
-                    var nextCharacter = _spawnManager.GetCharacterAtPosition(nextPosition);
+                    var nextCharacter = spawnManager.CharacterObject(nextPosition);
                     if (nextCharacter == null ||
                         nextCharacter.GetComponent<CharacterBase>()._characterName != swapCharacterName)
                         break;
@@ -59,129 +61,111 @@ public sealed class MatchManager : MonoBehaviour
         }
         if (horizontalMatchCount + verticalMatchCount == 4)
         {
-            switch (horizontalMatchCount)
+            matchFound = horizontalMatchCount switch
             {
-                case 1:
-                    Matches3Case1(matchedCharacters);
-                    break;
-
-                case 3:
-                    Matches3Case2(matchedCharacters);
-                    break;
-            }
+                1 => Matches3Case1(matchedCharacters),
+                3 => Matches3Case2(matchedCharacters),
+                _ => matchFound
+            };
         }
+
         if (horizontalMatchCount + verticalMatchCount == 5)
         {
-            switch (horizontalMatchCount)
+            matchFound = horizontalMatchCount switch
             {
-                case 1:
-                    Matches4Case1(matchedCharacters);
-                    break;
-                case 2:
-                    Matches3Case3(matchedCharacters);
-                    break;
-                case 3:
-                    Matches3Case4(matchedCharacters);
-                    break;
-                case 4:
-                    Matches4Case2(matchedCharacters);
-                    break;
-            }
+                1 => Matches4Case1(matchedCharacters),
+                2 => Matches3Case3(matchedCharacters),
+                3 => Matches3Case4(matchedCharacters),
+                4 => Matches4Case2(matchedCharacters),
+                _ => matchFound
+            };
         }
         if (horizontalMatchCount + verticalMatchCount == 6)
         {
-            switch (horizontalMatchCount)
+            matchFound = horizontalMatchCount switch
             {
-                case 1:
-                    Matches5Case1(matchedCharacters);
-                    break;
-                case 2:
-                    Matches4Case3(matchedCharacters);
-                    break;
-                case 3:
-                    Matches3X3Case(matchedCharacters);
-                    break;
-                case 4:
-                    Matches4Case4(matchedCharacters);
-                    break;
-                case 5:
-                    Matches5Case2(matchedCharacters);
-                    break;
-            }
+                1 => Matches5Case1(matchedCharacters),
+                2 => Matches4Case3(matchedCharacters),
+                3 => Matches3X3Case(matchedCharacters),
+                4 => Matches4Case4(matchedCharacters),
+                5 => Matches5Case2(matchedCharacters),
+                _ => matchFound
+            };
         }
         if (horizontalMatchCount + verticalMatchCount == 7)
         {
-            switch (horizontalMatchCount)
+            matchFound = horizontalMatchCount switch
             {
-                case 3:
-                    Matches3X4Case(matchedCharacters);
-                    break;
-                case 4: 
-                    Matches4X3Case(matchedCharacters);
-                   break; 
-            }
+                3 => Matches3X4Case(matchedCharacters),
+                4 => Matches4X3Case(matchedCharacters),
+                _ => matchFound
+            };
         }
         if (horizontalMatchCount + verticalMatchCount == 8)
         {
-            switch (horizontalMatchCount)
+            matchFound = horizontalMatchCount switch
             {
-                case 3:
-                    Matches3X5Case(matchedCharacters);
-                    break;
-                case 5:
-                    Matches5X3Case(matchedCharacters);
-                    break;
-            }  
+                3 => Matches3X5Case(matchedCharacters),
+                5 => Matches5X3Case(matchedCharacters),
+                _ => matchFound
+            };
         }
+
+        return matchFound;
     }
-    private static void Matches3Case1(IReadOnlyList<GameObject> matchedCharacters)
-    {
-       ReturnAndMoveCharacter(matchedCharacters[2]);
-       ReturnAndMoveCharacter(matchedCharacters[3]);
-       matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+
+    private static bool Matches3Case1(IReadOnlyList<GameObject> matchedCharacters)
+    { 
+        ReturnObject(matchedCharacters[2]); 
+        ReturnObject(matchedCharacters[3]);
+        matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+        return true;
     }
-    private static void Matches3Case2(IReadOnlyList<GameObject> matchedCharacters)
+    private static bool Matches3Case2(IReadOnlyList<GameObject> matchedCharacters)
     {
         if (matchedCharacters[0].transform.position.x == matchedCharacters[1].transform.position.x)
-        {
-            ReturnAndMoveCharacter(matchedCharacters[2]);
-            ReturnAndMoveCharacter(matchedCharacters[3]);
+        { 
+            ReturnObject(matchedCharacters[2]); 
+            ReturnObject(matchedCharacters[3]);
             matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
         }
         
         if (matchedCharacters[0].transform.position.x == matchedCharacters[2].transform.position.x)
-        {
-            ReturnAndMoveCharacter(matchedCharacters[1]);
-            ReturnAndMoveCharacter(matchedCharacters[3]);
+        { 
+            ReturnObject(matchedCharacters[1]); 
+            ReturnObject(matchedCharacters[3]);
             matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
         }
-                    
+
         if (matchedCharacters[0].transform.position.x == matchedCharacters[3].transform.position.x)
-        {
-            ReturnAndMoveCharacter(matchedCharacters[1]);
-            ReturnAndMoveCharacter(matchedCharacters[2]);
+        { 
+            ReturnObject(matchedCharacters[1]);
+            ReturnObject(matchedCharacters[2]);
             matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
         }
+        return true;
     }
-    private static void Matches3Case3(IReadOnlyList<GameObject> matchedCharacters)
-    { 
-        ReturnAndMoveCharacter(matchedCharacters[3]); 
-        ReturnAndMoveCharacter(matchedCharacters[4]);
-        matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-    }
-    private static void Matches3Case4(IReadOnlyList<GameObject> matchedCharacters)
+    private static bool Matches3Case3(IReadOnlyList<GameObject> matchedCharacters)
     {
-        ReturnAndMoveCharacter(matchedCharacters[1]);
-        ReturnAndMoveCharacter(matchedCharacters[2]);
-        matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+        ReturnObject(matchedCharacters[3]); 
+        ReturnObject(matchedCharacters[4]);
+        matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+        return true;
     }
-    private static void Matches4Case1(IReadOnlyList<GameObject> matchedCharacters)
+    private static bool Matches3Case4(IReadOnlyList<GameObject> matchedCharacters)
+    {
+        ReturnObject(matchedCharacters[1]);
+        ReturnObject(matchedCharacters[2]);
+        matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+        return true;
+    }
+    private static bool Matches4Case1(IReadOnlyList<GameObject> matchedCharacters)
     {
         if (matchedCharacters[0].transform.position.y > matchedCharacters[2].transform.position.y && 
             matchedCharacters[0].transform.position.y < matchedCharacters[3].transform.position.y)
         {
-            ReturnAndMoveCharacter(matchedCharacters[2]);
-            ReturnAndMoveCharacter(matchedCharacters[4]);
+            ReturnObject(matchedCharacters[2]);
+            ReturnObject(matchedCharacters[4]);
             matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
             matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
         }
@@ -189,162 +173,192 @@ public sealed class MatchManager : MonoBehaviour
         if (matchedCharacters[0].transform.position.y > matchedCharacters[3].transform.position.y &&
             matchedCharacters[0].transform.position.y < matchedCharacters[4].transform.position.y)
         {
-            ReturnAndMoveCharacter(matchedCharacters[3]);
-            ReturnAndMoveCharacter(matchedCharacters[4]);
+            ReturnObject(matchedCharacters[3]);
+            ReturnObject(matchedCharacters[4]);
             matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
             matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
         }
+        return true;
     }
-    private static void Matches4Case2(IReadOnlyList<GameObject> matchedCharacters)
+    private static bool Matches4Case2(IReadOnlyList<GameObject> matchedCharacters)
     {
-
         if (matchedCharacters[2].transform.position.x > matchedCharacters[0].transform.position.x)
         { 
-            ReturnAndMoveCharacter(matchedCharacters[1]); 
-            ReturnAndMoveCharacter(matchedCharacters[3]); 
+            ReturnObject(matchedCharacters[1]); 
+            ReturnObject(matchedCharacters[3]); 
             matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
             matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
         }
         else
         {
-            ReturnAndMoveCharacter(matchedCharacters[2]);
-            ReturnAndMoveCharacter(matchedCharacters[3]);
+            ReturnObject(matchedCharacters[2]);
+            ReturnObject(matchedCharacters[3]);
             matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
             matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
         }
+        return true;
     }
-    private static void Matches4Case3(IReadOnlyList<GameObject> matchedCharacters)
+    private static bool Matches4Case3(IReadOnlyList<GameObject> matchedCharacters)
     {
         if (matchedCharacters[0].transform.position.y > matchedCharacters[4].transform.position.y)
         {
-            ReturnAndMoveCharacter(matchedCharacters[5]);
-            ReturnAndMoveCharacter(matchedCharacters[4]);
+            ReturnObject(matchedCharacters[5]);
+            ReturnObject(matchedCharacters[4]);
             matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
             matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
         }
         else
         {
-            ReturnAndMoveCharacter(matchedCharacters[5]);
-            ReturnAndMoveCharacter(matchedCharacters[3]); 
+            ReturnObject(matchedCharacters[5]);
+            ReturnObject(matchedCharacters[3]); 
             matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]); 
             matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
         }
+        return true;
     }
-    private static void Matches4Case4(IReadOnlyList<GameObject> matchedCharacters)
+    private static bool Matches4Case4(IReadOnlyList<GameObject> matchedCharacters)
     {
         if (matchedCharacters[0].transform.position.x < matchedCharacters[2].transform.position.x &&
             matchedCharacters[0].transform.position.x > matchedCharacters[1].transform.position.x)
         {
-            ReturnAndMoveCharacter(matchedCharacters[1]);
-            ReturnAndMoveCharacter(matchedCharacters[3]);
+            ReturnObject(matchedCharacters[1]);
+            ReturnObject(matchedCharacters[3]);
             matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
             matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
 
         }
         else
         {
-            ReturnAndMoveCharacter(matchedCharacters[2]);
-            ReturnAndMoveCharacter(matchedCharacters[3]);
+            ReturnObject(matchedCharacters[2]);
+            ReturnObject(matchedCharacters[3]);
             matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
             matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
         }
+        return true;
     }
-    private static void Matches5Case1(IReadOnlyList<GameObject> matchedCharacters)
+    private static bool Matches5Case1(IReadOnlyList<GameObject> matchedCharacters)
     {
-        ReturnAndMoveCharacter(matchedCharacters[3]);
-        ReturnAndMoveCharacter(matchedCharacters[5]);
+        ReturnObject(matchedCharacters[3]);
+        ReturnObject(matchedCharacters[5]);
         matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
         matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
         matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-        ReturnAndMoveCharacter(matchedCharacters[2]);
-        ReturnAndMoveCharacter(matchedCharacters[4]);
-        matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);;
+        // ReturnObject(matchedCharacters[2]);
+        // ReturnObject(matchedCharacters[4]);
+        // matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+        return true;
     }
-    private static void Matches5Case2(IReadOnlyList<GameObject> matchedCharacters)
+    private static bool Matches5Case2(IReadOnlyList<GameObject> matchedCharacters)
     {
-        ReturnAndMoveCharacter(matchedCharacters[2]);
-        ReturnAndMoveCharacter(matchedCharacters[4]);
+        ReturnObject(matchedCharacters[2]);
+        ReturnObject(matchedCharacters[4]);
         matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
         matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
         matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-        ReturnAndMoveCharacter(matchedCharacters[1]);
-        ReturnAndMoveCharacter(matchedCharacters[3]);
-        matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+        // ReturnObject(matchedCharacters[1]);
+        // ReturnObject(matchedCharacters[3]);
+        // matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+        return true;
     }
-    private static void Matches3X3Case(IReadOnlyList<GameObject> matchedCharacters)
+    private static bool Matches3X3Case(IReadOnlyList<GameObject> matchedCharacters)
     {
-        ReturnAndMoveCharacter(matchedCharacters[2]);
-        ReturnAndMoveCharacter(matchedCharacters[1]);
-        ReturnAndMoveCharacter(matchedCharacters[5]);
+        ReturnObject(matchedCharacters[2]);
+        ReturnObject(matchedCharacters[1]);
+        ReturnObject(matchedCharacters[5]);
         matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
         matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+        return true;
     }
-    private static void Matches3X4Case(IReadOnlyList<GameObject> matchedCharacters)
+    private static bool Matches3X4Case(IReadOnlyList<GameObject> matchedCharacters)
     {
         if (matchedCharacters[3].transform.position.y > matchedCharacters[5].transform.position.y)
         {
-            ReturnAndMoveCharacter(matchedCharacters[2]);
-            ReturnAndMoveCharacter(matchedCharacters[6]);
-            ReturnAndMoveCharacter(matchedCharacters[5]);
+            ReturnObject(matchedCharacters[2]);
+            ReturnObject(matchedCharacters[6]);
+            ReturnObject(matchedCharacters[5]);
             matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
             matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
             matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
         }
         else
         {
-            ReturnAndMoveCharacter(matchedCharacters[2]);
-            ReturnAndMoveCharacter(matchedCharacters[6]);
-            ReturnAndMoveCharacter(matchedCharacters[4]);
+            ReturnObject(matchedCharacters[2]);
+            ReturnObject(matchedCharacters[6]);
+            ReturnObject(matchedCharacters[4]);
             matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
             matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
             matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
         }
+        return true;
     }
-    private static void Matches4X3Case(IReadOnlyList<GameObject> matchedCharacters)
+    private static bool Matches4X3Case(IReadOnlyList<GameObject> matchedCharacters)
     {
         if (matchedCharacters[2].transform.position.x < matchedCharacters[4].transform.position.x)
         {
-            ReturnAndMoveCharacter(matchedCharacters[2]); 
-            ReturnAndMoveCharacter(matchedCharacters[3]); 
-            ReturnAndMoveCharacter(matchedCharacters[6]); 
+            ReturnObject(matchedCharacters[2]); 
+            ReturnObject(matchedCharacters[3]); 
+            ReturnObject(matchedCharacters[6]); 
             matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
             matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
             matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
         }
         else
         {
-            ReturnAndMoveCharacter(matchedCharacters[1]); 
-            ReturnAndMoveCharacter(matchedCharacters[3]); 
-            ReturnAndMoveCharacter(matchedCharacters[6]); 
+            ReturnObject(matchedCharacters[1]); 
+            ReturnObject(matchedCharacters[3]); 
+            ReturnObject(matchedCharacters[6]); 
             matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
             matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
             matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
         }
+        return true;
     }
-    private static void Matches3X5Case(IReadOnlyList<GameObject> matchedCharacters)
+    private static bool Matches3X5Case(IReadOnlyList<GameObject> matchedCharacters)
     {
-        ReturnAndMoveCharacter(matchedCharacters[7]);
-        ReturnAndMoveCharacter(matchedCharacters[5]); 
-        ReturnAndMoveCharacter(matchedCharacters[2]); 
+        ReturnObject(matchedCharacters[7]);
+        ReturnObject(matchedCharacters[5]); 
+        ReturnObject(matchedCharacters[2]); 
         matchedCharacters[6].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[6]);
         matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
         matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
         matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-        ReturnAndMoveCharacter(matchedCharacters[6]); 
-        ReturnAndMoveCharacter(matchedCharacters[4]); 
+        ReturnObject(matchedCharacters[6]); 
+        ReturnObject(matchedCharacters[4]); 
         matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+        return true;
     }
-    private static void Matches5X3Case(IReadOnlyList<GameObject> matchedCharacters)
+    private static bool Matches5X3Case(IReadOnlyList<GameObject> matchedCharacters)
     {
-        ReturnAndMoveCharacter(matchedCharacters[2]);
-        ReturnAndMoveCharacter(matchedCharacters[4]);
-        ReturnAndMoveCharacter(matchedCharacters[7]);
+        ReturnObject(matchedCharacters[2]);
+        ReturnObject(matchedCharacters[4]);
+        ReturnObject(matchedCharacters[7]);
         matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
         matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
         matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
         matchedCharacters[6].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[6]);
-        ReturnAndMoveCharacter(matchedCharacters[1]);
-        ReturnAndMoveCharacter(matchedCharacters[3]);
+        ReturnObject(matchedCharacters[1]);
+        ReturnObject(matchedCharacters[3]);
         matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+        return true;
     }
+    public IEnumerator CheckMatchesAndMoveCharacters()
+    {
+        bool isMatchFound;
+
+        do
+        {
+            isMatchFound = false;
+            foreach (var character in characterPool.UsePoolCharacterList().Where(IsMatched))
+            {
+                isMatchFound = true;
+                yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
+            }
+        }
+        while (isMatchFound);
+    }
+    private static void ReturnObject(GameObject character)
+    {
+        CharacterPool.ReturnToPool(character);
+    }
+
 }

@@ -1,9 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using DG.Tweening;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Script.CharacterManagerScript
 {
@@ -11,53 +8,65 @@ namespace Script.CharacterManagerScript
     {
         [SerializeField]
         private CharacterManager characterManager;
-        [FormerlySerializedAs("_poolSize")] [SerializeField]
-        private int poolSize;
         [SerializeField]
-        private SpawnManager spawnManager;
-        private List<GameObject> _pooledCharacters;
-        private static bool returnObj = false;
+        private int poolSize;
         
-        // 풀 초기 설정 활성화
+        private SpawnManager _spawnManager;
+        private List<GameObject> _pooledCharacters;
+        
+        /**
+         * Character Pool Create and SetActive(false)
+         * StorageName is _pooledCharacters && Type is List<GameObject> 
+         * Idling Pool wait for Calling.
+         */
         public void Awake()
         {
             _pooledCharacters = new List<GameObject>();
             foreach (var character in characterManager.characterList)
-            {
+            {                                                          
                 for (var i = 0; i < poolSize; i++)
                 {
                     var obj = Instantiate(character.gameObject, transform, true);
-                    
                     obj.SetActive(false);
                     _pooledCharacters.Add(obj);
                 }
             }
         }
-        
-        // 비활성화 된 CharacterObject를 반환하거나, 생성 
-        public GameObject GetPooledCharacter()
+
+        /**
+         * Inactive Character Add Random Index
+         */
+        public GameObject AddRandomIndexPool()
         {
-            var inactiveCharacters = _pooledCharacters.Where(t => !t.activeInHierarchy).ToList();
-    
-            if (inactiveCharacters.Count <= 0) return null;
+            var inactiveCharacters = _pooledCharacters
+                .Where(t => !t.activeSelf)
+                .ToList();
             var randomIndex = Random.Range(0, inactiveCharacters.Count);
             return inactiveCharacters[randomIndex];
         }
-    
-        // Pool에서 모든 케릭터를 반환함
-        public List<GameObject> GetPooledCharacters(bool onlyInactive = false)
+        
+        /**
+         * Return to SetActivate(false) CharacterObject_List 
+         */
+        public List<GameObject> NotUsePoolCharacterList()
         {
-            return onlyInactive 
-                ? _pooledCharacters.Where(t => !t.activeInHierarchy).ToList() 
-                : new List<GameObject>(_pooledCharacters);
+            return _pooledCharacters.Where(t => !t.activeSelf).ToList();
         }
 
-        // 반환되는 CharacterObject를 Pool에 반환함
+        /**
+         * Return to SetActivate(true) CharacterObject_List 
+         */
+        public List<GameObject> UsePoolCharacterList()
+        {
+            return _pooledCharacters.Where(t => t.activeSelf).ToList();
+        }
+
+        /**
+         * Return CharacterObjectPool
+         */
         public static void ReturnToPool(GameObject obj)
         {
             obj.SetActive(false);
         }
-        
-
     }
 }
