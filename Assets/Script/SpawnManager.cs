@@ -12,55 +12,16 @@ namespace Script
         [SerializeField] private CharacterPool characterPool;
         [SerializeField] private GridManager gridManager;
         [SerializeField] private MatchManager matchManager;
-        [SerializeField] private float matchDelayTime = 0.3f;
-
-        /**
-         * CharacterObject is Spawning Character Spawn on Grid
-         * give to Random Position to Character Object
-         */
-        public void SpawnCharacters()
-        {
-            var availablePositions = new List<Vector3Int>();
-
-            for (var x = 0; x < gridManager.gridWidth; x++)
-            {
-                for (var y = 0; y < gridManager.gridHeight; y++)
-                {
-                    availablePositions.Add(new Vector3Int(x, y,0));
-                }
-            }
-            
-            var totalGridPositions = gridManager.gridWidth * gridManager.gridHeight;
-            
-            for (var i = 0; i < totalGridPositions; i++)
-            {
-                var randomPositionIndex = Random.Range(0, availablePositions.Count);
-                var randomPosition = availablePositions[randomPositionIndex];
-                availablePositions.RemoveAt(randomPositionIndex);
-                var position = new Vector3(randomPosition.x, randomPosition.y);
-                ActivateSpawn(position);
-            }
-        }
-        
-        /**
-         * ActivateSpawn is Receive CharacterPool
-         * and Status Change SetActive(true);
-         */
-        private void ActivateSpawn(Vector3 position)
-        {
-            var spawnCharacter = characterPool.AddRandomIndexPool();
-            spawnCharacter.transform.position = position;
-            spawnCharacter.SetActive(true);
-        }
+        [SerializeField] private SwipeManager swipeManager;
 
         /**
          * Using Character Object Find
          */
-        public GameObject CharacterObject(Vector3 SpawnPosition)
+        public GameObject CharacterObject(Vector3 spawnPosition)
         {
             var spawnCharacters = characterPool.UsePoolCharacterList();
             return (from character in spawnCharacters 
-                where character.transform.position == SpawnPosition 
+                where character.transform.position == spawnPosition 
                 select character.gameObject).FirstOrDefault();
         }
 
@@ -68,9 +29,8 @@ namespace Script
          * If Match Or Disappear Object => Refill under Object
          */
         public IEnumerator PositionUpCharacterObject()
-          {
-              
-              var moves = new List<(GameObject, Vector3Int)>();
+        {
+            var moves = new List<(GameObject, Vector3Int)>();
               for (var x = 0; x < gridManager.gridWidth; x++) 
               { 
                   var emptyCellCount = 0; 
@@ -89,17 +49,23 @@ namespace Script
                       }
                   }
               }
+              // PerformMoves를 시작하고 PositionUpCharacterObject 코루틴을 일시 중지하고 PerformMoves가 완료될 때까지 기다립니다.
               yield return StartCoroutine(PerformMoves(moves));
+              // PerformMoves가 완료된 후 PositionUpCharacterObject가 특정 지연을 기다리며 계속됩니다.
+              // SpawnAndMoveNewCharacters를 시작하고 PositionUpCharacterObject 코루틴을 일시 중지하고
+              // SpawnAndMoveNewCharacters가 완료될 때까지 기다립니다.
               yield return StartCoroutine(SpawnAndMoveNewCharacters());
-              yield return new WaitForSeconds(matchDelayTime);
+              // SpawnAndMoveNewCharacters가 완료된 후 PositionUpCharacterObject가 특정 지연을 기다리며 계속됩니다. 
+              // CheckMatchesAndMoveCharacters를 시작하고 PositionUpCharacterObject 코루틴을 일시 중지하고
+              // CheckMatchesAndMoveCharacters가 완료될 때까지 기다립니다.
               yield return StartCoroutine(matchManager.CheckMatchesAndMoveCharacters());
-          }
+        }
 
         /**
          * New Spawn characterObject Move to Grid 
          */
         private IEnumerator SpawnAndMoveNewCharacters() 
-         { 
+         {
              var moves = new List<(GameObject, Vector3Int)>();
              var newCharacters = new List<GameObject>();
              for (var x = 0; x < gridManager.gridWidth; x++)
@@ -129,7 +95,7 @@ namespace Script
             if (notUsePoolCharacterList.Count <= 0) return null;
             var randomIndex = Random.Range(0, notUsePoolCharacterList.Count);
             var newCharacter = notUsePoolCharacterList[randomIndex];
-            newCharacter.transform.position = new Vector3Int(position.x, -yOffset, position.z);
+            newCharacter.transform.position = new Vector3Int(position.x,-yOffset - gridManager.gridHeight, position.z);
             newCharacter.SetActive(true);
             notUsePoolCharacterList.RemoveAt(randomIndex);
             return newCharacter;
@@ -141,7 +107,7 @@ namespace Script
         private IEnumerator NewPerformMoves(IEnumerable<(GameObject, Vector3Int)> moves)
         {
             var coroutines = moves
-                .Select(move => StartCoroutine(SwipeManager.NewCharacterMove(move.Item1, move.Item2)))
+                .Select(move => StartCoroutine(swipeManager.NewCharacterMove(move.Item1, move.Item2)))
                 .ToList();
             foreach (var coroutine in coroutines)
             {
