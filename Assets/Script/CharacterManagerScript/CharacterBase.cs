@@ -1,4 +1,3 @@
-using System.Collections;
 using UnityEngine;
 using DG.Tweening;
 
@@ -21,10 +20,10 @@ namespace Script.CharacterManagerScript
         public void LevelUpScale(GameObject levelUpObject)
         {
             var sequence = DOTween.Sequence();
-            Tween scaleUp = sequence.Append(levelUpObject.transform.DOScale(_levelUpScale, 0.1f));
+            Tween scaleUp = sequence.Append(levelUpObject.transform.DOScale(_levelUpScale, 0.3f));
             scaleUp.WaitForCompletion();
             LevelUp();
-            Tween scaleDown = sequence.Append(levelUpObject.transform.DOScale(_initialScale, 0.1f));
+            Tween scaleDown = sequence.Append(levelUpObject.transform.DOScale(_initialScale, 0.3f));
             scaleDown.WaitForCompletion();
 
         }
@@ -33,7 +32,11 @@ namespace Script.CharacterManagerScript
         {
             Level++;
         }
-        
+
+        protected internal virtual void LevelReset()
+        {
+            
+        }
     }
     
 }

@@ -57,7 +57,5 @@ namespace Script
             _moveCount++;
             UpdateMoveCountText();
         }
-        
-       
     }
 }
