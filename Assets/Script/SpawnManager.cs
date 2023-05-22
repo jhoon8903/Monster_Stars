@@ -12,7 +12,7 @@ namespace Script
         [SerializeField] private CharacterPool characterPool;
         [SerializeField] private GridManager gridManager;
         [SerializeField] private MatchManager matchManager;
-        [SerializeField] private float matchDelayTime = 1.5f;
+        [SerializeField] private float matchDelayTime = 0.3f;
 
         /**
          * CharacterObject is Spawning Character Spawn on Grid
@@ -53,6 +53,9 @@ namespace Script
             spawnCharacter.SetActive(true);
         }
 
+        /**
+         * Using Character Object Find
+         */
         public GameObject CharacterObject(Vector3 SpawnPosition)
         {
             var spawnCharacters = characterPool.UsePoolCharacterList();
@@ -61,36 +64,40 @@ namespace Script
                 select character.gameObject).FirstOrDefault();
         }
 
+        /**
+         * If Match Or Disappear Object => Refill under Object
+         */
         public IEnumerator PositionUpCharacterObject()
-       {
-            var moves = new List<(GameObject, Vector3Int)>();
-    
-            for (var x = 0; x < gridManager.gridWidth; x++)
-            {
-                var emptyCellCount = 0;
+          {
+              
+              var moves = new List<(GameObject, Vector3Int)>();
+              for (var x = 0; x < gridManager.gridWidth; x++) 
+              { 
+                  var emptyCellCount = 0; 
+                  for (var y = gridManager.gridHeight - 1; y >= 0; y--) 
+                  { 
+                      var currentPosition = new Vector3Int(x, y, 0);
+                      var currentObject = CharacterObject(currentPosition);
+                      if (currentObject == null)
+                      {
+                          emptyCellCount++;
+                      }
+                      else if (emptyCellCount > 0)
+                      {
+                          var targetPosition = new Vector3Int(x, y + emptyCellCount, 0);
+                          moves.Add((currentObject, targetPosition));
+                      }
+                  }
+              }
+              yield return StartCoroutine(PerformMoves(moves));
+              yield return StartCoroutine(SpawnAndMoveNewCharacters());
+              yield return new WaitForSeconds(matchDelayTime);
+              yield return StartCoroutine(matchManager.CheckMatchesAndMoveCharacters());
+          }
 
-                for (var y = gridManager.gridHeight - 1; y >= 0; y--)
-                {
-                    var currentPosition = new Vector3Int(x, y, 0);
-                    var currentObject = CharacterObject(currentPosition);
-
-                    if (currentObject == null)
-                    {
-                        emptyCellCount++;
-                    }
-                    else if (emptyCellCount > 0)
-                    {
-                        var targetPosition = new Vector3Int(x, y + emptyCellCount, 0);
-                        moves.Add((currentObject, targetPosition));
-                    }
-                }
-            }
-            yield return StartCoroutine(PerformMoves(moves));
-            yield return StartCoroutine(SpawnAndMoveNewCharacters());
-            yield return new WaitForSeconds(matchDelayTime);
-            yield return StartCoroutine(matchManager.CheckMatchesAndMoveCharacters());
-       }
-
+        /**
+         * New Spawn characterObject Move to Grid 
+         */
         private IEnumerator SpawnAndMoveNewCharacters() 
          { 
              var moves = new List<(GameObject, Vector3Int)>();
@@ -110,9 +117,12 @@ namespace Script
                      moves.Add((newCharacter, currentPosition));
                  }
              }
-             yield return StartCoroutine(PerformMoves(moves));
+             yield return StartCoroutine(NewPerformMoves(moves));
          }
 
+        /**
+         * New character Object Receive Character Pool
+         */
         private GameObject SpawnNewCharacter(Vector3Int position, int yOffset)
         {
             var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
@@ -125,6 +135,23 @@ namespace Script
             return newCharacter;
         }
 
+        /**
+         * Move New Character List<moves> NewPerformMove
+         */
+        private IEnumerator NewPerformMoves(IEnumerable<(GameObject, Vector3Int)> moves)
+        {
+            var coroutines = moves
+                .Select(move => StartCoroutine(SwipeManager.NewCharacterMove(move.Item1, move.Item2)))
+                .ToList();
+            foreach (var coroutine in coroutines)
+            {
+                yield return coroutine;
+            }
+        }
+
+        /**
+         * Move Character List<moves> PerformMove
+         */
         private IEnumerator PerformMoves(IEnumerable<(GameObject, Vector3Int)> moves)
         {
             var coroutines = moves

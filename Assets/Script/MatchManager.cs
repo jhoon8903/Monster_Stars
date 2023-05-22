@@ -1,11 +1,9 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Script;
 using Script.CharacterManagerScript;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public sealed class MatchManager : MonoBehaviour
@@ -59,12 +57,38 @@ public sealed class MatchManager : MonoBehaviour
             }
             matchedCharacters.AddRange(matchedObjects);
         }
-        if (horizontalMatchCount + verticalMatchCount == 4)
+
+        if (horizontalMatchCount + verticalMatchCount == 8)
         {
             matchFound = horizontalMatchCount switch
             {
-                1 => Matches3Case1(matchedCharacters),
-                3 => Matches3Case2(matchedCharacters),
+                3 => Matches3X5Case(matchedCharacters),
+                5 => Matches5X3Case(matchedCharacters),
+                _ => matchFound
+            };
+        }
+
+        if (horizontalMatchCount + verticalMatchCount == 7)
+        {
+            matchFound = horizontalMatchCount switch
+            {
+                2 => Matches2X5Case(matchedCharacters),
+                3 => Matches3X4Case(matchedCharacters),
+                4 => Matches4X3Case(matchedCharacters),
+                5 => Matches5X2Case(matchedCharacters),
+                _ => matchFound
+            };
+        }
+
+        if (horizontalMatchCount + verticalMatchCount == 6)
+        {
+            matchFound = horizontalMatchCount switch
+            {
+                1 => Matches5Case1(matchedCharacters),
+                2 => Matches4Case3(matchedCharacters),
+                3 => Matches3X3Case(matchedCharacters),
+                4 => Matches4Case4(matchedCharacters),
+                5 => Matches5Case2(matchedCharacters),
                 _ => matchFound
             };
         }
@@ -80,42 +104,21 @@ public sealed class MatchManager : MonoBehaviour
                 _ => matchFound
             };
         }
-        if (horizontalMatchCount + verticalMatchCount == 6)
-        {
-            matchFound = horizontalMatchCount switch
-            {
-                1 => Matches5Case1(matchedCharacters),
-                2 => Matches4Case3(matchedCharacters),
-                3 => Matches3X3Case(matchedCharacters),
-                4 => Matches4Case4(matchedCharacters),
-                5 => Matches5Case2(matchedCharacters),
-                _ => matchFound
-            };
-        }
-        if (horizontalMatchCount + verticalMatchCount == 7)
-        {
-            matchFound = horizontalMatchCount switch
-            {
-                3 => Matches3X4Case(matchedCharacters),
-                4 => Matches4X3Case(matchedCharacters),
-                _ => matchFound
-            };
-        }
-        if (horizontalMatchCount + verticalMatchCount == 8)
-        {
-            matchFound = horizontalMatchCount switch
-            {
-                3 => Matches3X5Case(matchedCharacters),
-                5 => Matches5X3Case(matchedCharacters),
-                _ => matchFound
-            };
-        }
 
+        if (horizontalMatchCount + verticalMatchCount == 4)
+        {
+            matchFound = horizontalMatchCount switch
+            {
+                1 => Matches3Case1(matchedCharacters),
+                3 => Matches3Case2(matchedCharacters),
+                _ => matchFound
+            };
+        }
         return matchFound;
     }
 
     private static bool Matches3Case1(IReadOnlyList<GameObject> matchedCharacters)
-    { 
+    {
         ReturnObject(matchedCharacters[2]); 
         ReturnObject(matchedCharacters[3]);
         matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
@@ -123,6 +126,7 @@ public sealed class MatchManager : MonoBehaviour
     }
     private static bool Matches3Case2(IReadOnlyList<GameObject> matchedCharacters)
     {
+
         if (matchedCharacters[0].transform.position.x == matchedCharacters[1].transform.position.x)
         { 
             ReturnObject(matchedCharacters[2]); 
@@ -145,6 +149,7 @@ public sealed class MatchManager : MonoBehaviour
         }
         return true;
     }
+
     private static bool Matches3Case3(IReadOnlyList<GameObject> matchedCharacters)
     {
         ReturnObject(matchedCharacters[3]); 
@@ -243,9 +248,10 @@ public sealed class MatchManager : MonoBehaviour
         matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
         matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
         matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-        // ReturnObject(matchedCharacters[2]);
-        // ReturnObject(matchedCharacters[4]);
-        // matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+        new WaitForSeconds(1.0f);
+        ReturnObject(matchedCharacters[2]);
+        ReturnObject(matchedCharacters[4]);
+        matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
         return true;
     }
     private static bool Matches5Case2(IReadOnlyList<GameObject> matchedCharacters)
@@ -255,9 +261,36 @@ public sealed class MatchManager : MonoBehaviour
         matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
         matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
         matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-        // ReturnObject(matchedCharacters[1]);
-        // ReturnObject(matchedCharacters[3]);
-        // matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+        new WaitForSeconds(1.0f);
+        ReturnObject(matchedCharacters[1]);
+        ReturnObject(matchedCharacters[3]);
+        matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+        return true;
+    }
+    private static bool Matches2X5Case(IReadOnlyList<GameObject> matchedCharacters)
+    {
+        ReturnObject(matchedCharacters[6]);
+        ReturnObject(matchedCharacters[4]);
+        matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+        matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+        matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+        new WaitForSeconds(1.0f);
+        ReturnObject(matchedCharacters[2]);
+        ReturnObject(matchedCharacters[3]);
+        matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+        return true;
+    }
+    private static bool Matches5X2Case(IReadOnlyList<GameObject> matchedCharacters)
+    {
+        ReturnObject(matchedCharacters[2]);
+        ReturnObject(matchedCharacters[4]);
+        matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+        matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+        matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+        new WaitForSeconds(1.0f);
+        ReturnObject(matchedCharacters[1]);
+        ReturnObject(matchedCharacters[3]);
+        matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
         return true;
     }
     private static bool Matches3X3Case(IReadOnlyList<GameObject> matchedCharacters)
@@ -357,7 +390,7 @@ public sealed class MatchManager : MonoBehaviour
         while (isMatchFound);
     }
     private static void ReturnObject(GameObject character)
-    {
+    {   
         CharacterPool.ReturnToPool(character);
     }
 

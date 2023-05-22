@@ -47,6 +47,12 @@ public class Unit_E : CharacterBase
         }
     }
 
+    protected internal override void LevelReset()
+    {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        Level1();
+    }
+
     private void Level1()
     {
         _characterName = "Unit_E_00";

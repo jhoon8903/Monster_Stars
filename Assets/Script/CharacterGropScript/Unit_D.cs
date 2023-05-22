@@ -44,6 +44,12 @@ public class Unit_D : CharacterBase
             default:
                 return;
         }
+    }    
+
+    protected internal override void LevelReset()
+    {
+        _spriteRenderer = GetComponent<SpriteRenderer>();
+        Level1();
     }
 
     private void Level1()

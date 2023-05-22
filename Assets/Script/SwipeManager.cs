@@ -160,6 +160,9 @@ namespace Script
             StartCoroutine(spawnManager.PositionUpCharacterObject());
         }
 
+        /**
+         *
+         */
         private IEnumerator MatchesCheck(GameObject characterObjects, Action onComplete = null)
         {
             matchManager.IsMatched(characterObjects);
@@ -169,7 +172,13 @@ namespace Script
 
         public static IEnumerator OneWayMove(GameObject gameObject, Vector3Int nullPosition)
         {
-            Tween complete = gameObject.transform.DOMove(nullPosition, 0.3f);
+            Tween complete = gameObject.transform.DOMove(nullPosition, 0.4f);
+            yield return complete.WaitForCompletion();
+        }
+
+        public static IEnumerator NewCharacterMove(GameObject gameObject, Vector3Int newPosition)
+        {
+            Tween complete = gameObject.transform.DOMove(newPosition, 0.7f);
             yield return complete.WaitForCompletion();
         }
 

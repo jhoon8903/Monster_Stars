@@ -66,6 +66,8 @@ namespace Script.CharacterManagerScript
          */
         public static void ReturnToPool(GameObject obj)
         {
+            obj.GetComponent<CharacterBase>().LevelReset();
+            obj.transform.localScale = new Vector3(0.6f,0.6f,0.6f);
             obj.SetActive(false);
         }
     }
