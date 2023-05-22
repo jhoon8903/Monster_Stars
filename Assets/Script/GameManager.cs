@@ -1,5 +1,4 @@
 using System.Collections;
-using Script.CharacterManagerScript;
 using UnityEngine;
 
 namespace Script
@@ -13,17 +12,8 @@ namespace Script
         [SerializeField]
         private SpawnManager spawnManager;
         [SerializeField]
-        private MatchManager matchManager;
-        [SerializeField]
-        private SwipeManager swipeManager;
-        [SerializeField] 
-        private CharacterPool characterPool;
-        [SerializeField]
         private int moveCount;
-        [SerializeField] 
-        private float waitTime = 2.0f;
-        private bool isBusy;
-        
+
 
         /**
          * If GameStart calling Method
@@ -34,10 +24,8 @@ namespace Script
          */
         private void Start()
         {
-            if (isBusy) return;
             countManager.Initialize(moveCount);
             gridManager.GenerateInitialGrid();
-            spawnManager.SpawnCharacters();
             StartCoroutine(StartMatchesThenCheck());
         }
 
@@ -46,27 +34,7 @@ namespace Script
          */
         private IEnumerator StartMatchesThenCheck()
         {
-            isBusy = true;
-            yield return StartCoroutine(StartMatches());
-            yield return StartCoroutine(matchManager.CheckMatchesAndMoveCharacters());
-            isBusy = false;
-            yield return null;
+            yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
         }
-
-        /**
-         * All Grid Searching to Matches
-         */
-        private IEnumerator StartMatches()
-        {
-            yield return new WaitForSecondsRealtime(waitTime);
-            foreach (var character in characterPool.UsePoolCharacterList())
-            {
-                matchManager.IsMatched(character);
-            }
-            yield return null;
-            StartCoroutine(spawnManager.PositionUpCharacterObject());
-
-        }
-
     }
 }

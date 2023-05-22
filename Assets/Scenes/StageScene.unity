@@ -33,7 +33,7 @@ RenderSettings:
   m_HaloTexture: {fileID: 0}
   m_SpotCookie: {fileID: 10001, guid: 0000000000000000e000000000000000, type: 0}
   m_DefaultReflectionMode: 0
-  m_DefaultReflectionResolution: 128
+  m_DefaultReflectionResolution: 16
   m_ReflectionBounces: 1
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
@@ -70,7 +70,7 @@ LightmapSettings:
     m_FinalGather: 0
     m_FinalGatherFiltering: 1
     m_FinalGatherRayCount: 256
-    m_ReflectionCompression: 2
+    m_ReflectionCompression: 1
     m_MixedBakeMode: 2
     m_BakeBackend: 1
     m_PVRSampling: 1
@@ -164,7 +164,6 @@ MonoBehaviour:
   swipeManager: {fileID: 149521965}
   characterPool: {fileID: 1097818334}
   moveCount: 100
-  waitTime: 1.5
 --- !u!4 &149521959
 Transform:
   m_ObjectHideFlags: 0
@@ -226,6 +225,7 @@ MonoBehaviour:
   characterPool: {fileID: 1097818334}
   gridManager: {fileID: 8808150501734532426}
   matchManager: {fileID: 149521966}
+  swipeManager: {fileID: 149521965}
   matchDelayTime: 0.7
 --- !u!114 &149521965
 MonoBehaviour:
@@ -260,7 +260,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnManager: {fileID: 149521964}
   characterPool: {fileID: 1097818334}
-  waitTime: 1
 --- !u!1 &679308667
 GameObject:
   m_ObjectHideFlags: 0
