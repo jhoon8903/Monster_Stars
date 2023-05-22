@@ -379,14 +379,13 @@ namespace Script
             do
             {
                 isMatchFound = false;
-            foreach (var character in characterPool.UsePoolCharacterList().Where(IsMatched))
-            {
-                isMatchFound = true;
+                foreach (var character in characterPool.UsePoolCharacterList().Where(IsMatched))
+                {
+                    isMatchFound = true;
+                    yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
+                }
             }
-            yield return null;
-            } while (!isMatchFound);
-            yield return new WaitForSecondsRealtime(1.0f);
-            yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
+            while (isMatchFound);
         }
 
         private static void ReturnObject(GameObject character)

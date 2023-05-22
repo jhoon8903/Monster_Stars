@@ -13,6 +13,8 @@ namespace Script
         [SerializeField] private GridManager gridManager;
         [SerializeField] private MatchManager matchManager;
         [SerializeField] private SwipeManager swipeManager;
+        [SerializeField] private float matchDelayTime = 0.3f;
+
 
         /**
          * Using Character Object Find
@@ -29,8 +31,8 @@ namespace Script
          * If Match Or Disappear Object => Refill under Object
          */
         public IEnumerator PositionUpCharacterObject()
-        {
-            var moves = new List<(GameObject, Vector3Int)>();
+          {
+              var moves = new List<(GameObject, Vector3Int)>();
               for (var x = 0; x < gridManager.gridWidth; x++) 
               { 
                   var emptyCellCount = 0; 
@@ -59,13 +61,13 @@ namespace Script
               // CheckMatchesAndMoveCharacters를 시작하고 PositionUpCharacterObject 코루틴을 일시 중지하고
               // CheckMatchesAndMoveCharacters가 완료될 때까지 기다립니다.
               yield return StartCoroutine(matchManager.CheckMatchesAndMoveCharacters());
-        }
+          }
 
         /**
          * New Spawn characterObject Move to Grid 
          */
         private IEnumerator SpawnAndMoveNewCharacters() 
-         {
+         { 
              var moves = new List<(GameObject, Vector3Int)>();
              var newCharacters = new List<GameObject>();
              for (var x = 0; x < gridManager.gridWidth; x++)
@@ -95,7 +97,7 @@ namespace Script
             if (notUsePoolCharacterList.Count <= 0) return null;
             var randomIndex = Random.Range(0, notUsePoolCharacterList.Count);
             var newCharacter = notUsePoolCharacterList[randomIndex];
-            newCharacter.transform.position = new Vector3Int(position.x,-yOffset - gridManager.gridHeight, position.z);
+            newCharacter.transform.position = new Vector3Int(position.x, -yOffset, position.z);
             newCharacter.SetActive(true);
             notUsePoolCharacterList.RemoveAt(randomIndex);
             return newCharacter;
