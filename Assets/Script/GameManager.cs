@@ -29,12 +29,10 @@ namespace Script
             StartCoroutine(StartMatchesThenCheck());
         }
 
-        /**
-         * Coroutine Matches
-         */
         private IEnumerator StartMatchesThenCheck()
         {
             yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
+            yield return null;
         }
     }
 }
