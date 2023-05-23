@@ -14,14 +14,6 @@ namespace Script
         [SerializeField]
         private int moveCount;
 
-
-        /**
-         * If GameStart calling Method
-         * 1. Count Init
-         * 2. Create Grid
-         * 3. Create CharacterObject
-         * 4. Checking Start Match
-         */
         private void Start()
         {
             countManager.Initialize(moveCount);

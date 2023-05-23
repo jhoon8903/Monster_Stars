@@ -6,7 +6,9 @@ namespace Script
     public class CountManager : MonoBehaviour
     {
         private int _moveCount;
+        private int _comboCount;
         public TextMeshProUGUI moveCountText;
+        public bool IsSwapOccurred { get; set; } = false;
 
         /** 
          * Game MoveCount Initialize
@@ -16,6 +18,7 @@ namespace Script
         public void Initialize(int initialMoveCount)
         {
             _moveCount = initialMoveCount;
+            _comboCount = 0;
             UpdateMoveCountText();
         }
         
@@ -45,6 +48,7 @@ namespace Script
         {
             if (_moveCount <= 0) return;
             _moveCount--;
+            _comboCount = 0;
             UpdateMoveCountText();
         }
 
@@ -52,10 +56,17 @@ namespace Script
          * IncreaseMoveCount()
          * If will Checking 'Combo' and Increase Count
          */
-        public void IncreaseMoveCount()
+        private void IncreaseMoveCount(int _comboCount)
         {
-            _moveCount++;
+            _moveCount += _comboCount;
+            Debug.Log("카운트 업!");
             UpdateMoveCountText();
+        }
+
+        public void IncrementComboCount()
+        {
+            _comboCount++;
+            IncreaseMoveCount(_comboCount);
         }
     }
 }
