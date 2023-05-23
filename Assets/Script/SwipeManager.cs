@@ -94,8 +94,10 @@ namespace Script
         {
             var swipe = point2D - _firstTouchPosition;
             if (!(swipe.sqrMagnitude > minSwipeLength * minSwipeLength)) return;
+            if (!(Mathf.Abs(swipe.x) > 1.0f) && !(Mathf.Abs(swipe.y) > 1.0f)) return;
             _firstTouchPosition = point2D;
-            Swipe (swipe);
+            Swipe(swipe);
+            HandleTouchUp(); // Release mouse input
         }
 
         /**
@@ -140,23 +142,17 @@ namespace Script
                     endX -= 1;
                     break;
                 case >= 225 and < 315:
-                    if (startY <= -1)
-                    {
-                        //_startObject.transform.localScale = new Vector3(0.6f,0.6f,0.6f);
-                        endY = 0;
-                        break;
-                    }
                     endY -=1;
                     break;
             }
-
             var startObject = spawnManager.CharacterObject(new Vector3(startX, startY, 0));
+            Debug.Log($"StartObject: {startObject}");
             var endObject = spawnManager.CharacterObject(new Vector3(endX, endY, 0));
+            Debug.Log($"EndObject: {endObject}");
             if (startObject && endObject != null)
             {
                 StartCoroutine(SwitchAndMatches(startObject,endObject));
             }
-
             if (startObject == null || endObject != null) return;
             StartCoroutine(NullSwap(startObject, endX, endY));
             _startObject = null;
@@ -171,6 +167,7 @@ namespace Script
         {
             if (endY < 0) yield break;
             if (startObject == null) yield break;
+            if (startObject.transform.position.y == 0) yield return null;
             var nullPosition = new Vector3Int(endX, endY, 0);
             Tween moveTween = startObject.transform.DOMove(nullPosition, 0.3f);
             yield return moveTween.WaitForCompletion();
@@ -196,8 +193,8 @@ namespace Script
             var startObjectPosition = startObject.transform.position;
             var endObjectPosition = endObject.transform.position;
 
-            Tween switch1 = startObject.transform.DOMove(endObjectPosition, 0.3f);
-            Tween switch2 = endObject.transform.DOMove(startObjectPosition, 0.3f);
+            Tween switch1 = startObject.transform.DOMove(endObjectPosition, 0.05f);
+            Tween switch2 = endObject.transform.DOMove(startObjectPosition, 0.05f);
             countManager.DecreaseMoveCount();
             yield return switch2.WaitForCompletion();
 
@@ -223,7 +220,6 @@ namespace Script
         private IEnumerator MatchesCheck(GameObject characterObject)
         {
             if (characterObject == null) yield break;
-
             matchManager.IsMatched(characterObject);
             yield return null;
         }
@@ -236,7 +232,7 @@ namespace Script
         {
             if (gameObject == null) yield break;
 
-            Tween complete = gameObject.transform.DOMove(nullPosition, 0.4f);
+            Tween complete = gameObject.transform.DOMove(nullPosition, 0.3f);
             yield return complete.WaitForCompletion();
         }
 
@@ -244,11 +240,11 @@ namespace Script
          * Moves a newly spawned character to a new position.
          * 새로 스폰된 캐릭터를 새로운 위치로 이동합니다.
          */
-        public IEnumerator NewCharacterMove(GameObject gameObject, Vector3Int newPosition)
+        public static IEnumerator NewCharacterMove(GameObject gameObject, Vector3Int newPosition)
         {
             if (gameObject == null) yield break;
 
-            Tween complete = gameObject.transform.DOMove(newPosition, 0.7f);
+            Tween complete = gameObject.transform.DOMove(newPosition, 0.5f);
             yield return complete.WaitForCompletion();
         }
 
