@@ -9,6 +9,7 @@ namespace Script
 {
     public sealed class SwipeManager : MonoBehaviour
     {
+        private bool isBusy = false;
         private GameObject _startObject; // 초기에 터치된 객체를 추적하는 데 사용됩니다.
         private GameObject _returnObject; // 원래 위치로 돌아갈 객체를 추적하는 데 사용됩니다.
         private Vector2 _firstTouchPosition; // 첫 터치의 위치를 저장합니다.
@@ -18,6 +19,7 @@ namespace Script
         [SerializeField] private CountManager countManager; // 카운트매니저를 참조합니다.
         [SerializeField] private LayerMask characterLayer; // 캐릭터 레이어를 저장합니다.
         [SerializeField] private MatchManager matchManager;
+        private int comboCount = 0;
 
         /**
          * Checks whether the character is allowed to move by asking the CountManager
@@ -72,6 +74,7 @@ namespace Script
             _startObject = hit.collider.gameObject;
             ScaleObject(_startObject, new Vector3(0.8f,0.8f,0.8f), 0.2f);
             _firstTouchPosition = point2D;
+            comboCount = 0;
         }
 
         /**
@@ -92,6 +95,7 @@ namespace Script
          */
         private void HandleDrag(Vector2 point2D)
         {
+            if (isBusy) return;
             var swipe = point2D - _firstTouchPosition;
             if (!(swipe.sqrMagnitude > minSwipeLength * minSwipeLength)) return;
             if (!(Mathf.Abs(swipe.x) > 1.0f) && !(Mathf.Abs(swipe.y) > 1.0f)) return;
@@ -146,9 +150,7 @@ namespace Script
                     break;
             }
             var startObject = spawnManager.CharacterObject(new Vector3(startX, startY, 0));
-            Debug.Log($"StartObject: {startObject}");
             var endObject = spawnManager.CharacterObject(new Vector3(endX, endY, 0));
-            Debug.Log($"EndObject: {endObject}");
             if (startObject && endObject != null)
             {
                 StartCoroutine(SwitchAndMatches(startObject,endObject));
@@ -165,6 +167,7 @@ namespace Script
          */
         private IEnumerator NullSwap(GameObject startObject, int endX, int endY)
         {
+            isBusy = true;
             if (endY < 0) yield break;
             if (startObject == null) yield break;
             if (startObject.transform.position.y == 0) yield return null;
@@ -180,6 +183,7 @@ namespace Script
             spriteRenderer.color = color;
             CharacterPool.ReturnToPool(startObject);
             StartCoroutine(spawnManager.PositionUpCharacterObject());
+            isBusy = false;
         }
         
         /**
@@ -188,29 +192,20 @@ namespace Script
          */
         private IEnumerator SwitchAndMatches(GameObject startObject, GameObject endObject)
         {
+            isBusy = true;
             if (startObject == null || endObject == null) yield break;
-
             var startObjectPosition = startObject.transform.position;
             var endObjectPosition = endObject.transform.position;
-
-            Tween switch1 = startObject.transform.DOMove(endObjectPosition, 0.05f);
-            Tween switch2 = endObject.transform.DOMove(startObjectPosition, 0.05f);
-            countManager.DecreaseMoveCount();
+            Tween switch1 = startObject.transform.DOMove(endObjectPosition, 0.1f);
+            Tween switch2 = endObject.transform.DOMove(startObjectPosition, 0.1f);
             yield return switch2.WaitForCompletion();
-
-            var matchChecks = new List<IEnumerator>
-            {
-                MatchesCheck(startObject),
-                MatchesCheck(endObject)
-            };
-
-            foreach (var matchCheck in matchChecks)
-            {
-                yield return StartCoroutine(matchCheck);
-            }
-
-            yield return new WaitUntil(() => matchChecks.All(mc => mc.Current == null));
-            StartCoroutine(spawnManager.PositionUpCharacterObject());
+            countManager.IsSwapOccurred = true;
+            StartCoroutine(MatchesCheck(startObject));
+            yield return StartCoroutine(MatchesCheck(endObject));
+            countManager.IsSwapOccurred = false;
+            countManager.DecreaseMoveCount();
+            yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
+            isBusy = false;
         }
 
         /**

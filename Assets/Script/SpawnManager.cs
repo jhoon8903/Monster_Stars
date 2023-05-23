@@ -12,6 +12,7 @@ namespace Script
         [SerializeField] private CharacterPool characterPool;
         [SerializeField] private GridManager gridManager;
         [SerializeField] private MatchManager matchManager;
+        [SerializeField] private CountManager countManager;
 
         public GameObject CharacterObject(Vector3 spawnPosition)
         {
@@ -35,7 +36,6 @@ namespace Script
                     {
                         emptyCellCount++;
                     }
-
                     if (emptyCellCount <= 0) continue;
                     var targetPosition = new Vector3Int(x, y + emptyCellCount, 0);
                     moves.Add((currentObject, targetPosition));

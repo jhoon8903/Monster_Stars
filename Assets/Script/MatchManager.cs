@@ -10,6 +10,7 @@ namespace Script
     {
         [SerializeField] private SpawnManager spawnManager;
         [SerializeField] private CharacterPool characterPool;
+        [SerializeField] private CountManager countManager;
 
         public bool IsMatched(GameObject swapCharacter)
         {
@@ -116,7 +117,6 @@ namespace Script
             }
             return matchFound;
         }
-
         private static bool Matches3Case1(IReadOnlyList<GameObject> matchedCharacters)
         {
             ReturnObject(matchedCharacters[2]); 
@@ -381,11 +381,17 @@ namespace Script
                 isMatchFound = false;
                 foreach (var character in characterPool.UsePoolCharacterList().Where(IsMatched))
                 {
+                    if(!countManager.IsSwapOccurred)
+                    {
+                        countManager.IncrementComboCount();
+                    }
+                    countManager.IsSwapOccurred = false;
                     yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
                 }
             }
             while (isMatchFound);
-        }                         
+        }
+                        
         private static void ReturnObject(GameObject character)
         {   
             CharacterPool.ReturnToPool(character);

@@ -160,9 +160,6 @@ MonoBehaviour:
   countManager: {fileID: 149521962}
   gridManager: {fileID: 8808150501734532426}
   spawnManager: {fileID: 149521964}
-  matchManager: {fileID: 149521966}
-  swipeManager: {fileID: 149521965}
-  characterPool: {fileID: 1097818334}
   moveCount: 100
 --- !u!4 &149521959
 Transform:
@@ -225,8 +222,7 @@ MonoBehaviour:
   characterPool: {fileID: 1097818334}
   gridManager: {fileID: 8808150501734532426}
   matchManager: {fileID: 149521966}
-  swipeManager: {fileID: 149521965}
-  matchDelayTime: 0.7
+  countManager: {fileID: 149521962}
 --- !u!114 &149521965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -260,6 +256,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnManager: {fileID: 149521964}
   characterPool: {fileID: 1097818334}
+  countManager: {fileID: 149521962}
 --- !u!1 &679308667
 GameObject:
   m_ObjectHideFlags: 0
