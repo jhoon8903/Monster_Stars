@@ -373,7 +373,7 @@ namespace Script
             // matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
             return true;
         }
-        public IEnumerator CheckMatchesAndMoveCharacters()
+        public IEnumerator CheckMatches()
         {
             bool isMatchFound;
             do
@@ -381,13 +381,11 @@ namespace Script
                 isMatchFound = false;
                 foreach (var character in characterPool.UsePoolCharacterList().Where(IsMatched))
                 {
-                    isMatchFound = true;
                     yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
                 }
             }
             while (isMatchFound);
-        }
-
+        }                         
         private static void ReturnObject(GameObject character)
         {   
             CharacterPool.ReturnToPool(character);
