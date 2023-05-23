@@ -9,7 +9,7 @@ namespace Script
 {
     public sealed class SwipeManager : MonoBehaviour
     {
-        private bool isBusy = false;
+        public bool isBusy = false;
         private GameObject _startObject; // 초기에 터치된 객체를 추적하는 데 사용됩니다.
         private GameObject _returnObject; // 원래 위치로 돌아갈 객체를 추적하는 데 사용됩니다.
         private Vector2 _firstTouchPosition; // 첫 터치의 위치를 저장합니다.
@@ -167,8 +167,8 @@ namespace Script
          */
         private IEnumerator NullSwap(GameObject startObject, int endX, int endY)
         {
-            isBusy = true;
             if (endY < 0) yield break;
+            isBusy = true;
             if (startObject == null) yield break;
             if (startObject.transform.position.y == 0) yield return null;
             var nullPosition = new Vector3Int(endX, endY, 0);

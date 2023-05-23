@@ -13,12 +13,15 @@ namespace Script
         private SpawnManager spawnManager;
         [SerializeField]
         private int moveCount;
+        [SerializeField] SwipeManager swipeManager;
 
         private void Start()
         {
+            swipeManager.isBusy = true;
             countManager.Initialize(moveCount);
             gridManager.GenerateInitialGrid();
             StartCoroutine(StartMatchesThenCheck());
+            swipeManager.isBusy = false;
         }
 
         private IEnumerator StartMatchesThenCheck()
