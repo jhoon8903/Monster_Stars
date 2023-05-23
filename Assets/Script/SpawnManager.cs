@@ -9,11 +9,13 @@ namespace Script
 {
     public class SpawnManager : MonoBehaviour
     {
-        [SerializeField] private CharacterPool characterPool;
-        [SerializeField] private GridManager gridManager;
-        [SerializeField] private MatchManager matchManager;
-        [SerializeField] private CountManager countManager;
+        [SerializeField] private CharacterPool characterPool;  // 캐릭터 풀
+        [SerializeField] private GridManager gridManager;  // 그리드 매니저
+        [SerializeField] private SwipeManager swipeManager;  // 스와이프 매니저
+        [SerializeField] private MatchManager matchManager;  // 매치 매니저
 
+
+         // 스폰 위치에 있는 캐릭터 객체를 가져옴
         public GameObject CharacterObject(Vector3 spawnPosition)
         {
             var spawnCharacters = characterPool.UsePoolCharacterList();
@@ -22,6 +24,7 @@ namespace Script
                 select character.gameObject).FirstOrDefault();
         }
 
+        // 캐릭터 객체들을 상승시키는 동작 수행
         public IEnumerator PositionUpCharacterObject()
         {
             var moves = new List<(GameObject, Vector3Int)>();
@@ -46,6 +49,7 @@ namespace Script
             yield return StartCoroutine(matchManager.CheckMatches());
         }
 
+        // 지정된 위치에 새로운 캐릭터를 스폰함
         private GameObject SpawnNewCharacter(Vector3Int position)
         {
             var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
@@ -58,13 +62,16 @@ namespace Script
             return newCharacter;
         }
 
+        // 새로운 캐릭터를 대상 위치로 이동시킴
         private IEnumerator MoveNewCharacter(GameObject newCharacter, Vector3Int targetPosition)
         {
             yield return StartCoroutine(SwipeManager.NewCharacterMove(newCharacter, targetPosition));
         }
 
+        // 새로운 캐릭터를 스폰하고 이동시키는 동작 수행
         private IEnumerator SpawnAndMoveNewCharacters()
         {
+
             var moveCoroutines = new List<Coroutine>();
             var moves = new List<(GameObject, Vector3Int)>();
             for (var x = 0; x < gridManager.gridWidth; x++)
@@ -93,9 +100,11 @@ namespace Script
             }
         }
 
+        // 케릭터가 이동할때 자연스러운 효과를 적용시킴
         private IEnumerator PerformMoves(IEnumerable<(GameObject, Vector3Int)> moves)
         {
-            var coroutines = moves.Select(move => StartCoroutine(SwipeManager.OneWayMove(move.Item1, move.Item2))).ToList();
+
+            var coroutines = moves.Select(move => StartCoroutine(swipeManager.OneWayMove(move.Item1, move.Item2))).ToList();
             foreach (var coroutine in coroutines)
             {
                 yield return coroutine;

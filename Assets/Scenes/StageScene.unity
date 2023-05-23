@@ -161,6 +161,7 @@ MonoBehaviour:
   gridManager: {fileID: 8808150501734532426}
   spawnManager: {fileID: 149521964}
   moveCount: 100
+  swipeManager: {fileID: 149521965}
 --- !u!4 &149521959
 Transform:
   m_ObjectHideFlags: 0
@@ -221,8 +222,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterPool: {fileID: 1097818334}
   gridManager: {fileID: 8808150501734532426}
+  swipeManager: {fileID: 149521965}
   matchManager: {fileID: 149521966}
-  countManager: {fileID: 149521962}
 --- !u!114 &149521965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,6 +236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97d6d168b19d945be9566087678d60c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  isBusy: 0
   minSwipeLength: 0.3
   spawnManager: {fileID: 149521964}
   countManager: {fileID: 149521962}
@@ -242,6 +244,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   matchManager: {fileID: 149521966}
+  gameManager: {fileID: 149521958}
 --- !u!114 &149521966
 MonoBehaviour:
   m_ObjectHideFlags: 0

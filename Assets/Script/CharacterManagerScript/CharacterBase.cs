@@ -33,11 +33,6 @@ namespace Script.CharacterManagerScript
             Level++;
         }
 
-        protected internal virtual void LevelReset()
-        {
-            
-        }
+        protected internal virtual void LevelReset() { }
     }
-    
 }
-
