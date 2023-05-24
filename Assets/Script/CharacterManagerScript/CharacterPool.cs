@@ -30,19 +30,6 @@ namespace Script.CharacterManagerScript
                 }
             }
         }
-
-        /**
-         * Inactive Character Add Random Index
-         */
-        public GameObject AddRandomIndexPool()
-        {
-            var inactiveCharacters = _pooledCharacters
-                .Where(t => !t.activeSelf)
-                .ToList();
-            var randomIndex = Random.Range(0, inactiveCharacters.Count);
-            return inactiveCharacters[randomIndex];
-        }
-        
         /**
          * Return to SetActivate(false) CharacterObject_List 
          */

@@ -1,4 +1,5 @@
 using System.Collections;
+using Script.EnemyManagerScript;
 using UnityEngine;
 
 namespace Script
@@ -11,6 +12,8 @@ namespace Script
         [SerializeField] private int moveCount;
         [SerializeField] private SwipeManager swipeManager;
         [SerializeField] private CameraManager cameraManager;
+        [SerializeField] private BackGroundManager backgroundManager;
+        [SerializeField] private EnemySpawnManager enemySpawnManager;
 
         private void Start()
         {
@@ -30,6 +33,13 @@ namespace Script
         public void Count0Call()
         {
             cameraManager.CameraSizeChange();
+            backgroundManager.ChangeSize();
+            // 중간 대기시간을 주는 방법이 필요
+            StartCoroutine(enemySpawnManager.SpawnEnemies());
+            if (enemySpawnManager.fieldList.Count <= 0)
+            {
+                // 적 리스트.Count = 0 일때 다음 게임 시작 메소드 필요
+            }
         }
     }
 }
