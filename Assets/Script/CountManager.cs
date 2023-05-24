@@ -5,10 +5,13 @@ namespace Script
 {
     public class CountManager : MonoBehaviour
     {
-        private int _moveCount;
+        public int _moveCount;
         private int _comboCount;
-        public TextMeshProUGUI moveCountText;
         public bool IsSwapOccurred { get; set; } = false;
+        public TextMeshProUGUI moveCountText;
+        [SerializeField] private GameManager gameManager;
+
+
 
         /** 
          * Game MoveCount Initialize
@@ -27,7 +30,11 @@ namespace Script
          */
         private void UpdateMoveCountText()
         {
-            moveCountText.text = $"Count: {_moveCount}";
+            moveCountText.text = $"{_moveCount}";
+            if (_moveCount <= 0)
+            {
+                gameManager.Count0Call();
+            }
         }
         
         /**

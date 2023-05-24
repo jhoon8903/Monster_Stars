@@ -10,9 +10,8 @@ namespace Script
         public GameObject grid1Sprite;  // 그리드 스프라이트 1
         public GameObject grid2Sprite;  // 그리드 스프라이트 2
         private int _currentRowType = 1;  // 현재 행의 타입
-        private const int MaxRows = 9;  // 최대 행 개수
+        private const int MaxRows = 8;  // 최대 행 개수
         [SerializeField] private CharacterPool characterPool;  // 캐릭터 풀
-        [SerializeField] private SpawnManager spawnManager;  // 스폰 매니저
 
 
         // 그리드 초기 생성

@@ -6,10 +6,8 @@ namespace Script.CharacterManagerScript
 {
     public sealed class CharacterPool : MonoBehaviour
     {
-        [SerializeField]
-        private CharacterManager characterManager;
-        [SerializeField]
-        private int poolSize;
+        [SerializeField] private CharacterManager characterManager;
+        [SerializeField] private int poolSize;
         
         private SpawnManager _spawnManager;
         private List<GameObject> _pooledCharacters;
