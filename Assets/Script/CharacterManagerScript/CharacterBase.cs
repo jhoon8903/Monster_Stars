@@ -13,10 +13,15 @@ namespace Script.CharacterManagerScript
         protected float _range;
         protected int _spearForce;
         protected float _splashRange;
-        public enum Type {  character, treasure }
+
+        public enum Unit_Property { Holy, Dark, Physics, Water, Venom, Fire, Stone, }
+        protected internal Unit_Property _unitProperty;
+
+        public enum Unit_Effect { Slow, Bleed, Venom, Burn, Stun, Strike, Restraint }
+        protected internal Unit_Effect _unitEffect;
+
+        public enum Type {  Boss, character, treasure }
         protected internal Type _type;
-        private AtkElementProperty _atkElementProperty;
-        private SpecialAtkProperty _specialAtkProperty;
         private readonly Vector3 _initialScale = new Vector3(0.6f, 0.6f, 0.6f);
         private readonly Vector3 _levelUpScale = new Vector3(0.8f, 0.8f, 0.8f);
 

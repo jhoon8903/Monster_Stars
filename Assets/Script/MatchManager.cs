@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using Script.CharacterManagerScript;
 using UnityEngine;
 
@@ -148,6 +149,18 @@ namespace Script
             CharacterPool.ReturnToPool(character);
         }
 
+        private IEnumerator TreasureProcess(GameObject treasureBox)
+        {
+            treasureBox.transform.DOShakeScale(1.0f, 0.5f, 8);
+            yield return new WaitForSeconds(1.5f);
+            treasureManager.PendingTreasure.Enqueue(treasureBox);
+            if (!treasureManager.treasurePanel.activeInHierarchy)
+            {
+                treasureManager.ProcessNextTreasure();
+            }
+            ReturnObject(treasureBox);
+        }
+
         // 강화 기능 OK
         private bool Matches3Case1(IReadOnlyList<GameObject> matchedCharacters)
         {
@@ -156,7 +169,7 @@ namespace Script
                 ReturnObject(matchedCharacters[2]); 
                 ReturnObject(matchedCharacters[3]);
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                treasureManager.TreasureCheck(matchedCharacters[1]);
+                StartCoroutine(TreasureProcess(matchedCharacters[1]));
             }
             else
             {
@@ -415,6 +428,5 @@ namespace Script
             // matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
             return true;
         }
-
     }
 }

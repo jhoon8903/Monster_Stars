@@ -61,7 +61,7 @@ namespace Script
 
         /**
          * IncreaseMoveCount()
-         * If will Checking 'Combo' and Increase Count
+         * If will Checking 'Combo' and PowerUp_Property Count
          */
         private void IncreaseMoveCount(int _comboCount)
         {
