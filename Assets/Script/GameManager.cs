@@ -1,5 +1,7 @@
 using System.Collections;
+using DG.Tweening;
 using Script.EnemyManagerScript;
+using UnityEngine.SceneManagement;
 using UnityEngine;
 
 namespace Script
@@ -14,6 +16,8 @@ namespace Script
         [SerializeField] private CameraManager cameraManager;
         [SerializeField] private BackGroundManager backgroundManager;
         [SerializeField] private EnemySpawnManager enemySpawnManager;
+        [SerializeField] private EnemyPatternManager enemyPatternManager;
+        [SerializeField] private GameObject gamePanel;
 
         private void Start()
         {
@@ -30,16 +34,37 @@ namespace Script
             yield return null;
         }
 
-        public void Count0Call()
+        public IEnumerator Count0Call()
         {
             cameraManager.CameraSizeChange();
             backgroundManager.ChangeSize();
+            yield return StartCoroutine(enemySpawnManager.SpawnEnemies());
             // 중간 대기시간을 주는 방법이 필요
-            StartCoroutine(enemySpawnManager.SpawnEnemies());
-            if (enemySpawnManager.fieldList.Count <= 0)
+            yield return new WaitForSecondsRealtime(1.5f);
+            StartCoroutine(enemyPatternManager.Zone_Move());
+
+            if (enemySpawnManager.FieldList.Count <= 0)
             {
-                // 적 리스트.Count = 0 일때 다음 게임 시작 메소드 필요
+                // 다음 스테이지 진행 및 초기화 호출
             }
+        }
+
+        public void LoseGame()
+        {
+            gamePanel.SetActive(true);
+            Debug.Log("게임종료");
+            // DOTween.KillAll();
+
+        }
+
+        private void NextStage()
+        {
+            Debug.LogWarning("다음 스테이지 진행");
+        }
+
+        public void RetryGame()
+        {
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }
 }

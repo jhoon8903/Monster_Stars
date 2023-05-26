@@ -11,6 +11,7 @@ namespace Script
         [SerializeField] private SpawnManager spawnManager;
         [SerializeField] private CharacterPool characterPool;
         [SerializeField] private CountManager countManager;
+        [SerializeField] public TreasureManager treasureManager;
 
         // 이 메소드는 주어진 캐릭터 객체가 매치되는지 확인하는 기능을 수행합니다. 매치 여부를 반환합니다.
         public bool IsMatched(GameObject swapCharacter)
@@ -147,14 +148,25 @@ namespace Script
             CharacterPool.ReturnToPool(character);
         }
 
-        private static bool Matches3Case1(IReadOnlyList<GameObject> matchedCharacters)
+        // 강화 기능 OK
+        private bool Matches3Case1(IReadOnlyList<GameObject> matchedCharacters)
         {
-            ReturnObject(matchedCharacters[2]); 
-            ReturnObject(matchedCharacters[3]);
-            matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+            if (matchedCharacters[1].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            {
+                ReturnObject(matchedCharacters[2]); 
+                ReturnObject(matchedCharacters[3]);
+                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                treasureManager.TreasureCheck(matchedCharacters[1]);
+            }
+            else
+            {
+                ReturnObject(matchedCharacters[2]); 
+                ReturnObject(matchedCharacters[3]);
+                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+            }
             return true;
         }
-        private static bool Matches3Case2(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Matches3Case2(IReadOnlyList<GameObject> matchedCharacters)
         {
 
             if (matchedCharacters[0].transform.position.x.Equals(matchedCharacters[1].transform.position.x))
@@ -179,21 +191,21 @@ namespace Script
             }
             return true;
         }
-        private static bool Matches3Case3(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Matches3Case3(IReadOnlyList<GameObject> matchedCharacters)
         {
             ReturnObject(matchedCharacters[3]); 
             ReturnObject(matchedCharacters[4]);
             matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
             return true;
         }
-        private static bool Matches3Case4(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Matches3Case4(IReadOnlyList<GameObject> matchedCharacters)
         {
             ReturnObject(matchedCharacters[1]);
             ReturnObject(matchedCharacters[2]);
             matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
             return true;
         }
-        private static bool Matches4Case1(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Matches4Case1(IReadOnlyList<GameObject> matchedCharacters)
         {
             if (matchedCharacters[0].transform.position.y > matchedCharacters[2].transform.position.y && 
                 matchedCharacters[0].transform.position.y < matchedCharacters[3].transform.position.y)
@@ -214,7 +226,7 @@ namespace Script
             }
             return true;
         }
-        private static bool Matches4Case2(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Matches4Case2(IReadOnlyList<GameObject> matchedCharacters)
         {
             if (matchedCharacters[2].transform.position.x > matchedCharacters[0].transform.position.x)
             { 
@@ -232,7 +244,7 @@ namespace Script
             }
             return true;
         }
-        private static bool Matches4Case3(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Matches4Case3(IReadOnlyList<GameObject> matchedCharacters)
         {
             if (matchedCharacters[0].transform.position.y > matchedCharacters[4].transform.position.y)
             {
@@ -250,7 +262,7 @@ namespace Script
             }
             return true;
         }
-        private static bool Matches4Case4(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Matches4Case4(IReadOnlyList<GameObject> matchedCharacters)
         {
             if (matchedCharacters[0].transform.position.x < matchedCharacters[2].transform.position.x &&
                 matchedCharacters[0].transform.position.x > matchedCharacters[1].transform.position.x)
@@ -270,7 +282,7 @@ namespace Script
             }
             return true;
         }
-        private static bool Matches5Case1(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Matches5Case1(IReadOnlyList<GameObject> matchedCharacters)
         {
             ReturnObject(matchedCharacters[3]);
             ReturnObject(matchedCharacters[5]);
@@ -283,7 +295,7 @@ namespace Script
             // matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
             return true;
         }
-        private static bool Matches5Case2(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Matches5Case2(IReadOnlyList<GameObject> matchedCharacters)
         {
             ReturnObject(matchedCharacters[2]);
             ReturnObject(matchedCharacters[4]);
@@ -296,7 +308,7 @@ namespace Script
             // matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
             return true;
         }
-        private static bool Matches2X5Case(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Matches2X5Case(IReadOnlyList<GameObject> matchedCharacters)
         {
             ReturnObject(matchedCharacters[6]);
             ReturnObject(matchedCharacters[4]);
@@ -309,7 +321,7 @@ namespace Script
             // matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
             return true;
         }
-        private static bool Matches5X2Case(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Matches5X2Case(IReadOnlyList<GameObject> matchedCharacters)
         {
             ReturnObject(matchedCharacters[2]);
             ReturnObject(matchedCharacters[4]);
@@ -322,7 +334,7 @@ namespace Script
             // matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
             return true;
         }
-        private static bool Matches3X3Case(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Matches3X3Case(IReadOnlyList<GameObject> matchedCharacters)
         {
             ReturnObject(matchedCharacters[2]);
             ReturnObject(matchedCharacters[1]);
@@ -331,7 +343,7 @@ namespace Script
             matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
             return true;
         }
-        private static bool Matches3X4Case(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Matches3X4Case(IReadOnlyList<GameObject> matchedCharacters)
         {
             if (matchedCharacters[3].transform.position.y > matchedCharacters[5].transform.position.y)
             {
@@ -353,7 +365,7 @@ namespace Script
             }
             return true;
         }
-        private static bool Matches4X3Case(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Matches4X3Case(IReadOnlyList<GameObject> matchedCharacters)
         {
             if (matchedCharacters[2].transform.position.x < matchedCharacters[4].transform.position.x)
             {
@@ -375,7 +387,7 @@ namespace Script
             }
             return true;
         }
-        private static bool Matches3X5Case(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Matches3X5Case(IReadOnlyList<GameObject> matchedCharacters)
         {
             ReturnObject(matchedCharacters[7]);
             ReturnObject(matchedCharacters[5]); 
@@ -389,7 +401,7 @@ namespace Script
             matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
             return true;
         }
-        private static bool Matches5X3Case(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Matches5X3Case(IReadOnlyList<GameObject> matchedCharacters)
         {
             ReturnObject(matchedCharacters[2]);
             ReturnObject(matchedCharacters[4]);

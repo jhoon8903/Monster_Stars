@@ -6,7 +6,8 @@ namespace Script.EnemyManagerScript
     {
         protected string EnemyName;
         protected int HealthPoint;
-        protected float MoveSpeed;
+        protected internal int CrushDamage;
+        protected internal float MoveSpeed;
         public enum EnemyZone { A,B,C,D,E }
         protected internal EnemyZone SpawnZone;
         public enum EnemyTypes { Boss, Normal }

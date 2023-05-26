@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using DG.Tweening;
 
@@ -12,6 +13,8 @@ namespace Script.CharacterManagerScript
         protected float _range;
         protected int _spearForce;
         protected float _splashRange;
+        public enum Type {  character, treasure }
+        protected internal Type _type;
         private AtkElementProperty _atkElementProperty;
         private SpecialAtkProperty _specialAtkProperty;
         private readonly Vector3 _initialScale = new Vector3(0.6f, 0.6f, 0.6f);
@@ -25,7 +28,6 @@ namespace Script.CharacterManagerScript
             LevelUp();
             Tween scaleDown = sequence.Append(levelUpObject.transform.DOScale(_initialScale, 0.3f));
             scaleDown.WaitForCompletion();
-
         }
 
         protected virtual void LevelUp()

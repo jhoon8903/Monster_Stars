@@ -13,8 +13,7 @@ namespace Script.EnemyManagerScript
         [SerializeField] private GameObject enemySpawnZoneC;
         [SerializeField] private GameObject enemySpawnZoneD;
         [SerializeField] private GameObject enemySpawnZoneE;
-        [SerializeField] private float spawnDelay = 2f;
-        public List<GameObject> fieldList = new List<GameObject>();
+        public List<GameObject> FieldList = new List<GameObject>();
 
         private Dictionary<EnemyBase.EnemyZone, Queue<GameObject>> _zoneDictionary;
         private Dictionary<EnemyBase.EnemyZone, GameObject> _spawnZoneDictionary; 
@@ -74,22 +73,25 @@ namespace Script.EnemyManagerScript
 
                     var enemyObject = zone.Value.Dequeue();
                     enemyObject.SetActive(true);
-                    fieldList.Add(enemyObject);
+                    FieldList.Add(enemyObject);
+                    var positionA = enemySpawnZoneA.transform.position;
+                    var positionB = enemySpawnZoneB.transform.position;
+                    var positionC = enemySpawnZoneC.transform.position;
+                    var positionD = enemySpawnZoneD.transform.position;
+                    var positionE = enemySpawnZoneE.transform.position;
                     var spawnPosition = zone.Key switch
                     {
-                        EnemyBase.EnemyZone.A => new Vector3(Random.Range(0f, 5f), enemySpawnZoneA.transform.position.y, 0),
-                        EnemyBase.EnemyZone.B => new Vector3(enemySpawnZoneB.transform.position.x, Random.Range(8f, 9f), 0),
-                        EnemyBase.EnemyZone.C => new Vector3(enemySpawnZoneC.transform.position.x, Random.Range(8f, 9f), 0),
-                        EnemyBase.EnemyZone.D => new Vector3(enemySpawnZoneD.transform.position.x, Random.Range(-0.5f, 0.5f), 0),
-                        EnemyBase.EnemyZone.E => new Vector3(enemySpawnZoneE.transform.position.x, Random.Range(-0.5f, 0.5f), 0),
+                        EnemyBase.EnemyZone.A => new Vector3(Random.Range(0, 6), positionA.y + Random.Range(-0.5f, 0.5f), 0),
+                        EnemyBase.EnemyZone.B => new Vector3(positionB.x, positionB.y, 0),
+                        EnemyBase.EnemyZone.C => new Vector3(positionC.x, positionC.y, 0),
+                        EnemyBase.EnemyZone.D => new Vector3(positionD.x, positionD.y, 0),
+                        EnemyBase.EnemyZone.E => new Vector3(positionE.x, positionE.y, 0),
                         _ => new Vector3()
                     };
                     enemyObject.transform.position = spawnPosition;
                     enemyObject.transform.SetParent(_spawnZoneDictionary[zone.Key].transform);
                 }
-
-                if (spawnInProgress)
-                    yield return new WaitForSeconds(spawnDelay);
+                yield return null;
             }
         }
     }

@@ -53,6 +53,7 @@ public class Unit_A : CharacterBase
     private void Level1()
     {
         _characterName = "Unit_A_00";
+        _type = Type.character;
         _damage = 0;
         _atkSpeed = 0;
         _range = 0;
@@ -65,6 +66,7 @@ public class Unit_A : CharacterBase
     private void Level2()
     {
         _characterName = "Unit_A_01";
+        _type = Type.character;
         _damage = 1;
         _atkSpeed = 0.1f;
         _range = 0.1f;
@@ -76,6 +78,7 @@ public class Unit_A : CharacterBase
     private void Level3()
     {
         _characterName = "Unit_A_02";
+        _type = Type.character;
         _damage = 3;
         _atkSpeed = 0.3f;
         _range = 0.2f;
@@ -87,6 +90,7 @@ public class Unit_A : CharacterBase
     private void Level4()
     {
         _characterName = "Unit_A_03";
+        _type = Type.character;
         _damage = 9;
         _atkSpeed = 0.9f;
         _range = 0.3f;
@@ -98,6 +102,7 @@ public class Unit_A : CharacterBase
     private void Level5()
     {
         _characterName = "Unit_A_04";
+        _type = Type.character;
         _damage = 27;
         _atkSpeed = 2.7f;
         _range = 0.4f;

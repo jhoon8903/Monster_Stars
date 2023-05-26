@@ -33,7 +33,7 @@ namespace Script
             moveCountText.text = $"{_moveCount}";
             if (_moveCount <= 0)
             {
-                gameManager.Count0Call();
+                StartCoroutine(gameManager.Count0Call());
             }
         }
         
