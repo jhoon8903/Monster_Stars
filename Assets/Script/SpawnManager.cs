@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
+using Script.PowerUpScript;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -13,6 +14,7 @@ namespace Script
         [SerializeField] private CharacterPool characterPool;  // 캐릭터 풀
         [SerializeField] private GridManager gridManager;  // 그리드 매니저
         [SerializeField] private MatchManager matchManager;  // 매치 매니저
+        [SerializeField] private TreasureManager treasureManger;
 
 
          // 스폰 위치에 있는 캐릭터 객체를 가져옴
@@ -47,6 +49,7 @@ namespace Script
             yield return StartCoroutine(PerformMoves(moves));
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
             yield return StartCoroutine(matchManager.CheckMatches());
+            yield return Complete();
         }
 
         // 지정된 위치에 새로운 캐릭터를 스폰함
@@ -66,6 +69,7 @@ namespace Script
         private IEnumerator MoveNewCharacter(GameObject newCharacter, Vector3Int targetPosition)
         {
             yield return StartCoroutine(SwipeManager.NewCharacterMove(newCharacter, targetPosition));
+
         }
 
         // 새로운 캐릭터를 스폰하고 이동시키는 동작 수행
@@ -98,7 +102,18 @@ namespace Script
             {
                 yield return coroutine;
             }
+            if (treasureManger.PendingTreasure.Count !=0)
+            {
+                treasureManger.EnqueueAndCheckTreasure(treasureManger.PendingTreasure.Dequeue());
+            }
+            yield return Complete();
         }
+
+        public static bool Complete()
+        {
+            return true;
+        }
+
 
         // 케릭터가 이동할때 자연스러운 효과를 적용시킴
         private IEnumerator PerformMoves(IEnumerable<(GameObject, Vector3Int)> moves)

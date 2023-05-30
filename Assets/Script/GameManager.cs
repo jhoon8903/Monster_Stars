@@ -36,6 +36,7 @@ namespace Script
 
         public IEnumerator Count0Call()
         {
+            yield return new WaitUntil(() => SpawnManager.Complete());
             cameraManager.CameraSizeChange();
             backgroundManager.ChangeSize();
             yield return StartCoroutine(enemySpawnManager.SpawnEnemies());
@@ -51,9 +52,10 @@ namespace Script
 
         public void LoseGame()
         {
+            Time.timeScale = 0;
             gamePanel.SetActive(true);
             Debug.Log("게임종료");
-            // DOTween.KillAll();
+            
 
         }
 
@@ -64,6 +66,7 @@ namespace Script
 
         public void RetryGame()
         {
+            Time.timeScale = 1;
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
     }

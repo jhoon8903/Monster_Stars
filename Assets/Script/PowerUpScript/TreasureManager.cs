@@ -5,6 +5,7 @@ using DG.Tweening;
 using Script.CharacterManagerScript;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -13,97 +14,92 @@ namespace Script.PowerUpScript
 {
     public class TreasureManager : MonoBehaviour
     {
-        [SerializeField] public GameObject treasurePanel;
-        [SerializeField] private TextMeshProUGUI power1Text;
-        [SerializeField] private TextMeshProUGUI power2Text;
-        [SerializeField] private TextMeshProUGUI power3Text;
-        [SerializeField] private Image powerOption1Button;
-        [SerializeField] private Image powerOption2Button;
-        [SerializeField] private Image powerOption3Button;
-        [SerializeField] private TextMeshProUGUI power1Code;
-        [SerializeField] private TextMeshProUGUI power2Code;
-        [SerializeField] private TextMeshProUGUI power3Code;
-        [SerializeField] internal Sprite greenBtn;
-        [SerializeField] internal Sprite blueBtn;
-        [SerializeField] internal Sprite purpleBtn;
-        [SerializeField] private Common common;
-        [SerializeField] private Exp exp;
+        [SerializeField] public GameObject treasurePanel; // 보물 패널
+        [SerializeField] private TextMeshProUGUI power1Text; // 파워1 텍스트
+        [SerializeField] private TextMeshProUGUI power2Text; // 파워2 텍스트
+        [SerializeField] private TextMeshProUGUI power3Text; // 파워3 텍스트
+        [SerializeField] private Image powerOption1Button; // 파워1 버튼 이미지
+        [SerializeField] private Image powerOption2Button; // 파워2 버튼 이미지
+        [SerializeField] private Image powerOption3Button; // 파워3 버튼 이미지
+        [SerializeField] private TextMeshProUGUI power1Code; // 파워1 코드 텍스트
+        [SerializeField] private TextMeshProUGUI power2Code; // 파워2 코드 텍스트
+        [SerializeField] private TextMeshProUGUI power3Code; // 파워3 코드 텍스트
+        [SerializeField] internal Sprite greenBtn; // 녹색 버튼 스프라이트
+        [SerializeField] internal Sprite blueBtn; // 파란색 버튼 스프라이트
+        [SerializeField] internal Sprite purpleBtn; // 보라색 버튼 스프라이트
+        [SerializeField] private Common common; // 공통 데이터
+        [SerializeField] private Exp exp; // 경험치
+        [SerializeField] private SpawnManager spawnManager;
         // [SerializeField] private StagePowerUp stagePowerUp;
-        private readonly Queue<GameObject> _pendingTreasure = new Queue<GameObject>();
-        private GameObject _currentTreasure = null;
+        public readonly Queue<GameObject> PendingTreasure = new Queue<GameObject>(); // 보류 중인 보물 큐
+        private GameObject _currentTreasure = null; // 현재 보물
 
-        public void EnqueueAndCheckTreasure(GameObject treasure)
+
+        public void EnqueueAndCheckTreasure(GameObject treasure) // 보물을 큐에 추가하고 확인
         {
-            var shake = treasure.transform.DOShakeScale(1.0f, 0.5f, 8);
+            var shake = treasure.transform.DOShakeScale(1.0f, 0.5f, 8); // 흔들리는 애니메이션 재생
             shake.OnComplete(() =>
                 {
-                    if (_currentTreasure == null)
-                    {
-                        _currentTreasure = treasure;
-                        StartCoroutine(HandleTreasure(_currentTreasure));
-                    }
-                    else
-                    {
-                        _pendingTreasure.Enqueue(treasure);
-                    }
-                }
-            );
+                    _currentTreasure = treasure;
+                    StartCoroutine(HandleTreasure(_currentTreasure));
+                });
         }
-        private IEnumerator HandleTreasure(GameObject treasure)
+
+        private IEnumerator HandleTreasure(GameObject treasure) // 보물 처리
         {
-            Time.timeScale = 0;
-            treasurePanel.SetActive(true);
-            var treasureChestName = treasure.GetComponent<CharacterBase>()._characterName;
+            Time.timeScale = 0; // 게임 일시 정지
+            treasurePanel.SetActive(true); // 보물 패널 활성화
+            var treasureChestName = treasure.GetComponent<CharacterBase>()._characterName; // 보물 상자 이름
+
             switch (treasureChestName)
             {
                 case "Unit_Treasure00":
                     break;
                 case "Unit_Treasure01":
-                    yield return StartCoroutine(Treasure1Reward());
+                    yield return StartCoroutine(Treasure1Reward()); // 보물1 보상 처리
                     break;
                 case "Unit_Treasure02":
-                    yield return StartCoroutine(Treasure2Reward());
+                    yield return StartCoroutine(Treasure2Reward()); // 보물2 보상 처리
                     break;
                 case "Unit_Treasure03":
-                    yield return StartCoroutine(Treasure3Reward());
+                    yield return StartCoroutine(Treasure3Reward()); // 보물3 보상 처리
                     break;
             }
-            yield return new WaitUntil(() => treasurePanel.activeSelf == false);
+            yield return new WaitUntil(() => treasurePanel.activeSelf == false); // 보물 패널이 비활성화될 때까지 대기
         }
         public void PowerUpSelected()
         {
             treasurePanel.SetActive(false);
-            CharacterPool.ReturnToPool(_currentTreasure);
-            if (_pendingTreasure.Count > 0)
+            Time.timeScale = 1; // 게임 재개
+            CharacterPool.ReturnToPool(_currentTreasure); // 보물을 풀에 반환
+            StartCoroutine(spawnManager.PositionUpCharacterObject());
+            if (PendingTreasure.Count > 0)
             {
-                _currentTreasure = _pendingTreasure.Dequeue(); ;
-                Time.timeScale = 0;
-                StartCoroutine(HandleTreasure(_currentTreasure));
-                treasurePanel.SetActive(true);
+                _currentTreasure = PendingTreasure.Dequeue();
+                EnqueueAndCheckTreasure(_currentTreasure);
             }
             else
             {
-                _currentTreasure = null;
-                Time.timeScale = 1;
-                
+                _currentTreasure = null; // 현재 보물 없음
             }
         }
+
         private IEnumerator Treasure1Reward()
         {
-            var powerUps = CommonSelectPower(70, 25, 5);
-            CommonDisplayPowerUps(powerUps);
+            var powerUps = CommonSelectPower(70, 25, 5); // 공통 보상1 선택
+            CommonDisplayPowerUps(powerUps); // 보상 표시
             yield return null;
         }
         private IEnumerator Treasure2Reward()
         {
-            var powerUps = CommonSelectPower(30, 55, 15);
-            CommonDisplayPowerUps(powerUps);
+            var powerUps = CommonSelectPower(30, 55, 15); // 공통 보상2 선택
+            CommonDisplayPowerUps(powerUps); // 보상 표시
             yield return null;
         }
         private IEnumerator Treasure3Reward()
         {
-            var powerUps = CommonSelectPower(0, 50, 50);
-            CommonDisplayPowerUps(powerUps);
+            var powerUps = CommonSelectPower(0, 50, 50); // 공통 보상3 선택
+            CommonDisplayPowerUps(powerUps); // 보상 표시
             yield return null;
         }
         public static int IncreaseRange(IReadOnlyList<int> rangeValues)

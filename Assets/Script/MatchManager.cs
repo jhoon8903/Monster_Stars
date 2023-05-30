@@ -14,7 +14,7 @@ namespace Script
         [SerializeField] private CharacterPool characterPool;
         [SerializeField] private CountManager countManager;
         [SerializeField] public TreasureManager treasureManager;
-
+        
         // 이 메소드는 주어진 캐릭터 객체가 매치되는지 확인하는 기능을 수행합니다. 매치 여부를 반환합니다.
         public bool IsMatched(GameObject swapCharacter)
         {
@@ -147,7 +147,6 @@ namespace Script
         {   
             CharacterPool.ReturnToPool(character);
         }
-
         // 강화 기능 OK
         private bool Matches3Case1(IReadOnlyList<GameObject> matchedCharacters)
         {
@@ -156,7 +155,8 @@ namespace Script
                 ReturnObject(matchedCharacters[2]); 
                 ReturnObject(matchedCharacters[3]);
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                treasureManager.PendingTreasure.Enqueue(matchedCharacters[1]);
             }
             else
             {
@@ -175,7 +175,8 @@ namespace Script
                     ReturnObject(matchedCharacters[2]);
                     ReturnObject(matchedCharacters[3]);
                     matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                    // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                    treasureManager.PendingTreasure.Enqueue(matchedCharacters[1]);
                 }
                 else
                 {
@@ -193,7 +194,8 @@ namespace Script
                     ReturnObject(matchedCharacters[1]); 
                     ReturnObject(matchedCharacters[3]);
                     matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[2]);
+                    // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[2]);
+                    treasureManager.PendingTreasure.Enqueue(matchedCharacters[2]);
                 }
                 else
                 {
@@ -212,7 +214,8 @@ namespace Script
                     ReturnObject(matchedCharacters[1]);
                     ReturnObject(matchedCharacters[2]);
                     matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[3]);
+                    // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[3]);
+                    treasureManager.PendingTreasure.Enqueue(matchedCharacters[3]);
                 }
                 else
                 {
@@ -230,7 +233,8 @@ namespace Script
                 ReturnObject(matchedCharacters[3]); 
                 ReturnObject(matchedCharacters[4]);
                 matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[2]);
+                // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[2]);
+                treasureManager.PendingTreasure.Enqueue(matchedCharacters[2]);
             }
             else
             {
@@ -247,7 +251,8 @@ namespace Script
                 ReturnObject(matchedCharacters[1]);
                 ReturnObject(matchedCharacters[2]);
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[3]);
+                // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[3]);
+                treasureManager.PendingTreasure.Enqueue(matchedCharacters[3]);
             }
             else
             {
@@ -269,7 +274,8 @@ namespace Script
                     ReturnObject(matchedCharacters[3]);
                     matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
                     matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                    // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                    treasureManager.PendingTreasure.Enqueue(matchedCharacters[1]);
                 }
                 else
                 {
@@ -291,7 +297,8 @@ namespace Script
                     ReturnObject(matchedCharacters[1]);
                     matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
                     matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[2]);
+                    // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[2]);
+                    treasureManager.PendingTreasure.Enqueue(matchedCharacters[2]);
                 }
                 else
                 {
@@ -315,7 +322,8 @@ namespace Script
                     ReturnObject(matchedCharacters[2]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[4]);
+                    // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[4]);
+                    treasureManager.PendingTreasure.Enqueue(matchedCharacters[4]);
                 }
                 else
                 {
@@ -334,7 +342,8 @@ namespace Script
                     ReturnObject(matchedCharacters[1]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[4]);
+                    // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[4]);
+                    treasureManager.PendingTreasure.Enqueue(matchedCharacters[4]);
                 }
                 else
                 {
@@ -357,7 +366,8 @@ namespace Script
                     ReturnObject(matchedCharacters[3]);
                     matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
                     matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[2]);
+                    // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[2]);
+                    treasureManager.PendingTreasure.Enqueue(matchedCharacters[2]);
                 }
                 else
                 {
@@ -376,7 +386,8 @@ namespace Script
                     ReturnObject(matchedCharacters[4]);
                     matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
                     matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[2]);
+                    // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[2]);
+                    treasureManager.PendingTreasure.Enqueue(matchedCharacters[2]);
                 }
                 else
                 {
@@ -400,7 +411,8 @@ namespace Script
                     ReturnObject(matchedCharacters[2]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[4]);
+                    // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[4]);
+                    treasureManager.PendingTreasure.Enqueue(matchedCharacters[4]);
                 }
                 else
                 {
@@ -419,7 +431,8 @@ namespace Script
                     ReturnObject(matchedCharacters[2]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[4]);
+                    // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[4]);
+                    treasureManager.PendingTreasure.Enqueue(matchedCharacters[4]);
                 }
                 else
                 {
@@ -442,7 +455,8 @@ namespace Script
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                treasureManager.PendingTreasure.Enqueue(matchedCharacters[1]);
             }
             else
             {
@@ -465,7 +479,8 @@ namespace Script
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+                // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+                treasureManager.PendingTreasure.Enqueue(matchedCharacters[5]);
             }
             else
             {
@@ -488,7 +503,8 @@ namespace Script
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+                // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+                treasureManager.PendingTreasure.Enqueue(matchedCharacters[5]);
             }
             else
             {
@@ -512,7 +528,8 @@ namespace Script
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+                // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+                treasureManager.PendingTreasure.Enqueue(matchedCharacters[5]);
             }
             else
             {
@@ -532,9 +549,11 @@ namespace Script
                 ReturnObject(matchedCharacters[1]);
                 ReturnObject(matchedCharacters[5]);
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[3]);
+                // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[3]);
+                treasureManager.PendingTreasure.Enqueue(matchedCharacters[3]);
                 matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[4]);
+                // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                treasureManager.PendingTreasure.Enqueue(matchedCharacters[4]);
             }
             else
             {
@@ -557,10 +576,12 @@ namespace Script
                     ReturnObject(matchedCharacters[5]);
                     ReturnObject(matchedCharacters[3]);
                     matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                    // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                    treasureManager.PendingTreasure.Enqueue(matchedCharacters[1]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[4]);
+                    // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[4]);
+                    treasureManager.PendingTreasure.Enqueue(matchedCharacters[4]);
                 }
                 ReturnObject(matchedCharacters[2]);
                 ReturnObject(matchedCharacters[6]);
@@ -578,10 +599,12 @@ namespace Script
                     ReturnObject(matchedCharacters[4]);
                     ReturnObject(matchedCharacters[3]);
                     matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                    // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                    treasureManager.PendingTreasure.Enqueue(matchedCharacters[1]);
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+                    // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+                    treasureManager.PendingTreasure.Enqueue(matchedCharacters[5]);
                 }
                 else
                 {
@@ -606,10 +629,12 @@ namespace Script
                     ReturnObject(matchedCharacters[4]);
                     ReturnObject(matchedCharacters[6]);
                     matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                    // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                    treasureManager.PendingTreasure.Enqueue(matchedCharacters[1]);
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+                    // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+                    treasureManager.PendingTreasure.Enqueue(matchedCharacters[5]);
                 }
                 else
                 {
@@ -625,15 +650,17 @@ namespace Script
             {
                 if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
                 {
-                    ReturnObject(matchedCharacters[1]); 
-                    ReturnObject(matchedCharacters[3]); 
+                    ReturnObject(matchedCharacters[1]);
+                    ReturnObject(matchedCharacters[3]);
                     ReturnObject(matchedCharacters[6]);
                     ReturnObject(matchedCharacters[4]);
                     matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[2]);
+                    // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[2]);
+                    treasureManager.PendingTreasure.Enqueue(matchedCharacters[2]);
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+                    // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+                    treasureManager.PendingTreasure.Enqueue(matchedCharacters[5]);
                 }
                 else
                 {
@@ -657,11 +684,13 @@ namespace Script
                 ReturnObject(matchedCharacters[6]);
                 ReturnObject(matchedCharacters[4]);
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                treasureManager.PendingTreasure.Enqueue(matchedCharacters[1]);
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[3]);
+                // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[3]);
+                treasureManager.PendingTreasure.Enqueue(matchedCharacters[3]);
             }
             else
             {
@@ -685,11 +714,13 @@ namespace Script
                 ReturnObject(matchedCharacters[1]);
                 ReturnObject(matchedCharacters[3]);
                 matchedCharacters[6].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[6]);
-                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[6]);
+                // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[6]);
+                treasureManager.PendingTreasure.Enqueue(matchedCharacters[6]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+                // treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+                treasureManager.PendingTreasure.Enqueue(matchedCharacters[5]);
             }
             else
             {

@@ -36,8 +36,12 @@ namespace Script.UIManager
               hpBar.DOValue(hpPoint, 1.0f); // Change 0.5f to whatever duration you want for the animation
               UpdateHpText();
               enemyPool.ReturnToPool(enemyBase.gameObject);
-              if (hpPoint == 0)
+              if (hpPoint <= 0)
               {
+                  DOTween.KillAll();
+                  hpPoint = 0;
+                  hpBar.value = hpPoint;
+                  UpdateHpText();
                   gameManager.LoseGame();
               }
           }
