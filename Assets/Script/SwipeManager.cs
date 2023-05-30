@@ -76,7 +76,7 @@ namespace Script
             if (isBusy) return;
             var swipe = point2D - _firstTouchPosition;
             if (!(swipe.sqrMagnitude > minSwipeLength * minSwipeLength)) return;
-            if (!(Mathf.Abs(swipe.x) > 1.0f) && !(Mathf.Abs(swipe.y) > 1.0f)) return;
+            if (!(Mathf.Abs(swipe.x) > 0.5f) && !(Mathf.Abs(swipe.y) > 0.5f)) return;
             _firstTouchPosition = point2D;
             Swipe(swipe);
             HandleTouchUp(); // Release mouse input
