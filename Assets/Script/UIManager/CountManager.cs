@@ -1,7 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-namespace Script
+namespace Script.UIManager
 {
     public class CountManager : MonoBehaviour
     {
@@ -63,10 +63,9 @@ namespace Script
          * IncreaseMoveCount()
          * If will Checking 'Combo' and PowerUp_Property Count
          */
-        private void IncreaseMoveCount(int _comboCount)
+        private void IncreaseMoveCount(int comboCount)
         {
-            _moveCount += _comboCount;
-            Debug.Log("카운트 업!");
+            _moveCount += comboCount;
             UpdateMoveCountText();
         }
 

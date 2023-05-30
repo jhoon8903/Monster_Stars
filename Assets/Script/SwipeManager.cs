@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Script.CharacterManagerScript;
 using UnityEngine;
 using DG.Tweening;
+using Script.UIManager;
 
 namespace Script
 {
@@ -18,7 +19,6 @@ namespace Script
         [SerializeField] private CountManager countManager; // 카운트매니저를 참조합니다.
         [SerializeField] private LayerMask characterLayer; // 캐릭터 레이어를 저장합니다.
         [SerializeField] private MatchManager matchManager;
-
 
         // CountManager를 요청하여 캐릭터의 이동 허용 여부를 확인합니다.
         private bool CanMove()  
@@ -181,7 +181,7 @@ namespace Script
         }
 
          //게임 오브젝트를 지정된 위치로 한 방향으로 이동합니다.
-         public IEnumerator OneWayMove(GameObject gameObject, Vector3Int nullPosition)
+         public static IEnumerator OneWayMove(GameObject gameObject, Vector3Int nullPosition)
         {
             if (gameObject == null) yield break;
         

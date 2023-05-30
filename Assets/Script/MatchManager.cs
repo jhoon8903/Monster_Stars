@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using DG.Tweening;
 using Script.CharacterManagerScript;
+using Script.PowerUpScript;
+using Script.UIManager;
 using UnityEngine;
 
 namespace Script
@@ -68,7 +69,7 @@ namespace Script
                 {
                     3 => Matches3X5Case(matchedCharacters),
                     5 => Matches5X3Case(matchedCharacters),
-                    _ => matchFound
+                    _ => false
                 };
             }
 
@@ -126,10 +127,8 @@ namespace Script
         // 매치가 발견되지 않을 때까지 반복합니다.
         public IEnumerator CheckMatches()
         {
-            bool isMatchFound;
             do
             {
-                isMatchFound = false;
                 foreach (var character in characterPool.UsePoolCharacterList().Where(IsMatched))
                 {
                     if(!countManager.IsSwapOccurred)
@@ -140,7 +139,7 @@ namespace Script
                     yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
                 }
             }
-            while (isMatchFound);
+            while (false);
         }
 
         // 이 메소드는 주어진 캐릭터 객체를 풀로 반환하는 기능을 수행합니다.
@@ -149,27 +148,15 @@ namespace Script
             CharacterPool.ReturnToPool(character);
         }
 
-        private IEnumerator TreasureProcess(GameObject treasureBox)
-        {
-            treasureBox.transform.DOShakeScale(1.0f, 0.5f, 8);
-            yield return new WaitForSeconds(1.5f);
-            treasureManager.PendingTreasure.Enqueue(treasureBox);
-            if (!treasureManager.treasurePanel.activeInHierarchy)
-            {
-                treasureManager.ProcessNextTreasure();
-            }
-            ReturnObject(treasureBox);
-        }
-
         // 강화 기능 OK
         private bool Matches3Case1(IReadOnlyList<GameObject> matchedCharacters)
         {
-            if (matchedCharacters[1].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
             {
                 ReturnObject(matchedCharacters[2]); 
                 ReturnObject(matchedCharacters[3]);
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                StartCoroutine(TreasureProcess(matchedCharacters[1]));
+                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
             }
             else
             {
@@ -181,41 +168,93 @@ namespace Script
         }
         private bool Matches3Case2(IReadOnlyList<GameObject> matchedCharacters)
         {
-
             if (matchedCharacters[0].transform.position.x.Equals(matchedCharacters[1].transform.position.x))
-            { 
-                ReturnObject(matchedCharacters[2]); 
-                ReturnObject(matchedCharacters[3]);
-                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+            {
+                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                {
+                    ReturnObject(matchedCharacters[2]);
+                    ReturnObject(matchedCharacters[3]);
+                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                }
+                else
+                {
+                    ReturnObject(matchedCharacters[2]);
+                    ReturnObject(matchedCharacters[3]);
+                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                }
+                return true;
             }
-        
+
             if (matchedCharacters[0].transform.position.x.Equals(matchedCharacters[2].transform.position.x))
-            { 
-                ReturnObject(matchedCharacters[1]); 
-                ReturnObject(matchedCharacters[3]);
-                matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+            {
+                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure) 
+                { 
+                    ReturnObject(matchedCharacters[1]); 
+                    ReturnObject(matchedCharacters[3]);
+                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[2]);
+                }
+                else
+                {
+                    ReturnObject(matchedCharacters[1]);
+                    ReturnObject(matchedCharacters[3]);
+                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+                }
+
+                return true;
             }
 
             if (matchedCharacters[0].transform.position.x.Equals(matchedCharacters[3].transform.position.x))
-            { 
-                ReturnObject(matchedCharacters[1]);
-                ReturnObject(matchedCharacters[2]);
-                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+            {
+                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                {
+                    ReturnObject(matchedCharacters[1]);
+                    ReturnObject(matchedCharacters[2]);
+                    matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[3]);
+                }
+                else
+                {
+                    ReturnObject(matchedCharacters[1]);
+                    ReturnObject(matchedCharacters[2]);
+                    matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+                }
             }
             return true;
         }
         private bool Matches3Case3(IReadOnlyList<GameObject> matchedCharacters)
         {
-            ReturnObject(matchedCharacters[3]); 
-            ReturnObject(matchedCharacters[4]);
-            matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            {
+                ReturnObject(matchedCharacters[3]); 
+                ReturnObject(matchedCharacters[4]);
+                matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[2]);
+            }
+            else
+            {
+                ReturnObject(matchedCharacters[3]); 
+                ReturnObject(matchedCharacters[4]);
+                matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+            }
             return true;
         }
         private bool Matches3Case4(IReadOnlyList<GameObject> matchedCharacters)
         {
-            ReturnObject(matchedCharacters[1]);
-            ReturnObject(matchedCharacters[2]);
-            matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            {
+                ReturnObject(matchedCharacters[1]);
+                ReturnObject(matchedCharacters[2]);
+                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[3]);
+            }
+            else
+            {
+                ReturnObject(matchedCharacters[1]);
+                ReturnObject(matchedCharacters[2]);
+                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+            }
             return true;
         }
         private bool Matches4Case1(IReadOnlyList<GameObject> matchedCharacters)
@@ -223,37 +262,87 @@ namespace Script
             if (matchedCharacters[0].transform.position.y > matchedCharacters[2].transform.position.y && 
                 matchedCharacters[0].transform.position.y < matchedCharacters[3].transform.position.y)
             {
-                ReturnObject(matchedCharacters[2]);
-                ReturnObject(matchedCharacters[4]);
-                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                {
+                    ReturnObject(matchedCharacters[2]);
+                    ReturnObject(matchedCharacters[4]);
+                    ReturnObject(matchedCharacters[3]);
+                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                }
+                else
+                {
+                    ReturnObject(matchedCharacters[2]);
+                    ReturnObject(matchedCharacters[4]);
+                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                    matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+                }
+                return true;
             }
 
             if (matchedCharacters[0].transform.position.y > matchedCharacters[3].transform.position.y &&
                 matchedCharacters[0].transform.position.y < matchedCharacters[4].transform.position.y)
             {
-                ReturnObject(matchedCharacters[3]);
-                ReturnObject(matchedCharacters[4]);
-                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                {
+                    ReturnObject(matchedCharacters[3]);
+                    ReturnObject(matchedCharacters[4]);
+                    ReturnObject(matchedCharacters[1]);
+                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[2]);
+                }
+                else
+                {
+                    ReturnObject(matchedCharacters[3]);
+                    ReturnObject(matchedCharacters[4]);
+                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+                }
+                return true;
             }
             return true;
         }
         private bool Matches4Case2(IReadOnlyList<GameObject> matchedCharacters)
         {
             if (matchedCharacters[2].transform.position.x > matchedCharacters[0].transform.position.x)
-            { 
-                ReturnObject(matchedCharacters[1]); 
-                ReturnObject(matchedCharacters[3]); 
-                matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+            {
+                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                {
+                    ReturnObject(matchedCharacters[1]); 
+                    ReturnObject(matchedCharacters[3]);
+                    ReturnObject(matchedCharacters[2]);
+                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[4]);
+                }
+                else
+                {
+                    ReturnObject(matchedCharacters[1]); 
+                    ReturnObject(matchedCharacters[3]); 
+                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                }
             }
             else
             {
-                ReturnObject(matchedCharacters[2]);
-                ReturnObject(matchedCharacters[3]);
-                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                {
+                    ReturnObject(matchedCharacters[2]);
+                    ReturnObject(matchedCharacters[3]);
+                    ReturnObject(matchedCharacters[1]);
+                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[4]);
+                }
+                else
+                {
+                    ReturnObject(matchedCharacters[2]);
+                    ReturnObject(matchedCharacters[3]);
+                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                }
             }
             return true;
         }
@@ -261,17 +350,41 @@ namespace Script
         {
             if (matchedCharacters[0].transform.position.y > matchedCharacters[4].transform.position.y)
             {
-                ReturnObject(matchedCharacters[5]);
-                ReturnObject(matchedCharacters[4]);
-                matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                {
+                    ReturnObject(matchedCharacters[5]);
+                    ReturnObject(matchedCharacters[4]);
+                    ReturnObject(matchedCharacters[3]);
+                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[2]);
+                }
+                else
+                {
+                    ReturnObject(matchedCharacters[5]);
+                    ReturnObject(matchedCharacters[4]);
+                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+                    matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+                }
             }
             else
             {
-                ReturnObject(matchedCharacters[5]);
-                ReturnObject(matchedCharacters[3]); 
-                matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]); 
-                matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                {
+                    ReturnObject(matchedCharacters[5]);
+                    ReturnObject(matchedCharacters[3]);
+                    ReturnObject(matchedCharacters[4]);
+                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[2]);
+                }
+                else
+                {
+                    ReturnObject(matchedCharacters[5]);
+                    ReturnObject(matchedCharacters[3]); 
+                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]); 
+                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                }
             }
             return true;
         }
@@ -280,86 +393,175 @@ namespace Script
             if (matchedCharacters[0].transform.position.x < matchedCharacters[2].transform.position.x &&
                 matchedCharacters[0].transform.position.x > matchedCharacters[1].transform.position.x)
             {
-                ReturnObject(matchedCharacters[1]);
-                ReturnObject(matchedCharacters[3]);
-                matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-
+                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                {
+                    ReturnObject(matchedCharacters[1]);
+                    ReturnObject(matchedCharacters[3]);
+                    ReturnObject(matchedCharacters[2]);
+                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[4]);
+                }
+                else
+                {
+                    ReturnObject(matchedCharacters[1]);
+                    ReturnObject(matchedCharacters[3]);
+                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+                }
             }
             else
             {
-                ReturnObject(matchedCharacters[2]);
-                ReturnObject(matchedCharacters[3]);
-                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                {
+                    ReturnObject(matchedCharacters[1]);
+                    ReturnObject(matchedCharacters[3]);
+                    ReturnObject(matchedCharacters[2]);
+                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[4]);
+                }
+                else
+                {
+                    ReturnObject(matchedCharacters[2]);
+                    ReturnObject(matchedCharacters[3]);
+                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                }
             }
             return true;
         }
         private bool Matches5Case1(IReadOnlyList<GameObject> matchedCharacters)
         {
-            ReturnObject(matchedCharacters[3]);
-            ReturnObject(matchedCharacters[5]);
-            matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-            matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-            matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-            // new WaitForSeconds(1.0f);
-            // ReturnObject(matchedCharacters[2]);
-            // ReturnObject(matchedCharacters[4]);
-            // matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            {
+                ReturnObject(matchedCharacters[3]);
+                ReturnObject(matchedCharacters[5]);
+                ReturnObject(matchedCharacters[2]);
+                ReturnObject(matchedCharacters[4]);
+                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+            }
+            else
+            {
+                ReturnObject(matchedCharacters[3]);
+                ReturnObject(matchedCharacters[5]);
+                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+                matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+            }
             return true;
         }
         private bool Matches5Case2(IReadOnlyList<GameObject> matchedCharacters)
         {
-            ReturnObject(matchedCharacters[2]);
-            ReturnObject(matchedCharacters[4]);
-            matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-            matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-            matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-            // new WaitForSeconds(1.0f);
-            // ReturnObject(matchedCharacters[1]);
-            // ReturnObject(matchedCharacters[3]);
-            // matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            {
+                ReturnObject(matchedCharacters[3]);
+                ReturnObject(matchedCharacters[1]);
+                ReturnObject(matchedCharacters[2]);
+                ReturnObject(matchedCharacters[4]);
+                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+            }
+            else
+            {
+                ReturnObject(matchedCharacters[2]);
+                ReturnObject(matchedCharacters[4]);
+                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+            }
             return true;
         }
         private bool Matches2X5Case(IReadOnlyList<GameObject> matchedCharacters)
         {
-            ReturnObject(matchedCharacters[6]);
-            ReturnObject(matchedCharacters[4]);
-            matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-            matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-            matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-            // new WaitForSeconds(1.0f);
-            // ReturnObject(matchedCharacters[2]);
-            // ReturnObject(matchedCharacters[3]);
-            // matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            {
+                ReturnObject(matchedCharacters[6]);
+                ReturnObject(matchedCharacters[4]);
+                ReturnObject(matchedCharacters[2]);
+                ReturnObject(matchedCharacters[3]);
+                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+            }
+            else
+            {
+                ReturnObject(matchedCharacters[6]);
+                ReturnObject(matchedCharacters[4]);
+                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+            }
             return true;
         }
         private bool Matches5X2Case(IReadOnlyList<GameObject> matchedCharacters)
         {
-            ReturnObject(matchedCharacters[2]);
-            ReturnObject(matchedCharacters[4]);
-            matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-            matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-            matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-            // new WaitForSeconds(1.0f);
-            // ReturnObject(matchedCharacters[1]);
-            // ReturnObject(matchedCharacters[3]);
-            // matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+
+            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            {
+                ReturnObject(matchedCharacters[1]);
+                ReturnObject(matchedCharacters[2]);
+                ReturnObject(matchedCharacters[3]);
+                ReturnObject(matchedCharacters[4]);
+                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+            }
+            else
+            {
+                ReturnObject(matchedCharacters[2]);
+                ReturnObject(matchedCharacters[4]);
+                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+            }
             return true;
         }
         private bool Matches3X3Case(IReadOnlyList<GameObject> matchedCharacters)
         {
-            ReturnObject(matchedCharacters[2]);
-            ReturnObject(matchedCharacters[1]);
-            ReturnObject(matchedCharacters[5]);
-            matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-            matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            {
+                ReturnObject(matchedCharacters[2]);
+                ReturnObject(matchedCharacters[1]);
+                ReturnObject(matchedCharacters[5]);
+                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[3]);
+                matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[4]);
+            }
+            else
+            {
+                ReturnObject(matchedCharacters[2]);
+                ReturnObject(matchedCharacters[1]);
+                ReturnObject(matchedCharacters[5]);
+                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+                matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]); 
+            }
             return true;
         }
         private bool Matches3X4Case(IReadOnlyList<GameObject> matchedCharacters)
         {
             if (matchedCharacters[3].transform.position.y > matchedCharacters[5].transform.position.y)
             {
+                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                {
+                    ReturnObject(matchedCharacters[2]);
+                    ReturnObject(matchedCharacters[6]);
+                    ReturnObject(matchedCharacters[5]);
+                    ReturnObject(matchedCharacters[3]);
+                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[4]);
+                }
                 ReturnObject(matchedCharacters[2]);
                 ReturnObject(matchedCharacters[6]);
                 ReturnObject(matchedCharacters[5]);
@@ -369,12 +571,27 @@ namespace Script
             }
             else
             {
-                ReturnObject(matchedCharacters[2]);
-                ReturnObject(matchedCharacters[6]);
-                ReturnObject(matchedCharacters[4]);
-                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                {
+                    ReturnObject(matchedCharacters[2]);
+                    ReturnObject(matchedCharacters[6]);
+                    ReturnObject(matchedCharacters[4]);
+                    ReturnObject(matchedCharacters[3]);
+                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+                }
+                else
+                {
+                    ReturnObject(matchedCharacters[2]);
+                    ReturnObject(matchedCharacters[6]);
+                    ReturnObject(matchedCharacters[4]);
+                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                    matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                }
             }
             return true;
         }
@@ -382,50 +599,108 @@ namespace Script
         {
             if (matchedCharacters[2].transform.position.x < matchedCharacters[4].transform.position.x)
             {
-                ReturnObject(matchedCharacters[2]); 
-                ReturnObject(matchedCharacters[3]); 
-                ReturnObject(matchedCharacters[6]); 
-                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                {
+                    ReturnObject(matchedCharacters[2]); 
+                    ReturnObject(matchedCharacters[3]);
+                    ReturnObject(matchedCharacters[4]);
+                    ReturnObject(matchedCharacters[6]);
+                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+                }
+                else
+                {
+                    ReturnObject(matchedCharacters[2]); 
+                    ReturnObject(matchedCharacters[3]); 
+                    ReturnObject(matchedCharacters[6]); 
+                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                }
             }
             else
             {
-                ReturnObject(matchedCharacters[1]); 
-                ReturnObject(matchedCharacters[3]); 
-                ReturnObject(matchedCharacters[6]); 
-                matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                {
+                    ReturnObject(matchedCharacters[1]); 
+                    ReturnObject(matchedCharacters[3]); 
+                    ReturnObject(matchedCharacters[6]);
+                    ReturnObject(matchedCharacters[4]);
+                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[2]);
+                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                    treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+                }
+                else
+                {
+                    ReturnObject(matchedCharacters[1]); 
+                    ReturnObject(matchedCharacters[3]); 
+                    ReturnObject(matchedCharacters[6]); 
+                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                }
             }
             return true;
         }
         private bool Matches3X5Case(IReadOnlyList<GameObject> matchedCharacters)
         {
-            ReturnObject(matchedCharacters[7]);
-            ReturnObject(matchedCharacters[5]); 
-            ReturnObject(matchedCharacters[2]); 
-            matchedCharacters[6].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[6]);
-            matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-            matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-            matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-            ReturnObject(matchedCharacters[6]); 
-            ReturnObject(matchedCharacters[4]); 
-            matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            {
+                ReturnObject(matchedCharacters[7]);
+                ReturnObject(matchedCharacters[5]); 
+                ReturnObject(matchedCharacters[2]); 
+                ReturnObject(matchedCharacters[6]);
+                ReturnObject(matchedCharacters[4]);
+                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[1]);
+                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[3]);
+            }
+            else
+            {
+                ReturnObject(matchedCharacters[7]);
+                ReturnObject(matchedCharacters[5]); 
+                ReturnObject(matchedCharacters[2]); 
+                matchedCharacters[6].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[6]);
+                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+                matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+            }
             return true;
         }
         private bool Matches5X3Case(IReadOnlyList<GameObject> matchedCharacters)
         {
-            ReturnObject(matchedCharacters[2]);
-            ReturnObject(matchedCharacters[4]);
-            ReturnObject(matchedCharacters[7]);
-            matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-            matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-            matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-            matchedCharacters[6].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[6]);
-            // ReturnObject(matchedCharacters[1]);
-            // ReturnObject(matchedCharacters[3]);
-            // matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            {
+                ReturnObject(matchedCharacters[2]);
+                ReturnObject(matchedCharacters[4]);
+                ReturnObject(matchedCharacters[7]);
+                ReturnObject(matchedCharacters[1]);
+                ReturnObject(matchedCharacters[3]);
+                matchedCharacters[6].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[6]);
+                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[6]);
+                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                treasureManager.EnqueueAndCheckTreasure(matchedCharacters[5]);
+            }
+            else
+            {
+                ReturnObject(matchedCharacters[2]);
+                ReturnObject(matchedCharacters[4]);
+                ReturnObject(matchedCharacters[7]);
+                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+                matchedCharacters[6].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[6]);
+            }
             return true;
         }
     }

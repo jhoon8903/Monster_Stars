@@ -1,14 +1,15 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using Script.CharacterManagerScript;
-using Script.PowerUpScript;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 
-namespace Script
+namespace Script.PowerUpScript
 {
     public class TreasureManager : MonoBehaviour
     {
@@ -25,52 +26,91 @@ namespace Script
         [SerializeField] internal Sprite greenBtn;
         [SerializeField] internal Sprite blueBtn;
         [SerializeField] internal Sprite purpleBtn;
-        [SerializeField] private SpawnManager spawnManager;
         [SerializeField] private Common common;
         [SerializeField] private Exp exp;
         // [SerializeField] private StagePowerUp stagePowerUp;
-        public readonly Queue<GameObject> PendingTreasure = new Queue<GameObject>();
+        private readonly Queue<GameObject> _pendingTreasure = new Queue<GameObject>();
+        private GameObject _currentTreasure = null;
 
-        public static int IncreaseRange(IReadOnlyList<int> rangeValues)
+        public void EnqueueAndCheckTreasure(GameObject treasure)
         {
-            var random = new System.Random();
-            var randomIndex = random.Next(rangeValues.Count);
-            return rangeValues[randomIndex];
+            var shake = treasure.transform.DOShakeScale(1.0f, 0.5f, 8);
+            shake.OnComplete(() =>
+                {
+                    if (_currentTreasure == null)
+                    {
+                        _currentTreasure = treasure;
+                        StartCoroutine(HandleTreasure(_currentTreasure));
+                    }
+                    else
+                    {
+                        _pendingTreasure.Enqueue(treasure);
+                    }
+                }
+            );
         }
-        private void TreasureCheck(GameObject matchedCharacters)
+        private IEnumerator HandleTreasure(GameObject treasure)
         {
             Time.timeScale = 0;
-            var treasureChestName = matchedCharacters.GetComponent<CharacterBase>()._characterName;
-
+            treasurePanel.SetActive(true);
+            var treasureChestName = treasure.GetComponent<CharacterBase>()._characterName;
             switch (treasureChestName)
             {
                 case "Unit_Treasure00":
                     break;
                 case "Unit_Treasure01":
-                    Treasure1Reward();
+                    yield return StartCoroutine(Treasure1Reward());
                     break;
                 case "Unit_Treasure02":
-                    Treasure2Reward();
+                    yield return StartCoroutine(Treasure2Reward());
                     break;
                 case "Unit_Treasure03":
-                    Treasure3Reward();
+                    yield return StartCoroutine(Treasure3Reward());
                     break;
             }
+            yield return new WaitUntil(() => treasurePanel.activeSelf == false);
         }
-        private void Treasure1Reward()
+        public void PowerUpSelected()
+        {
+            treasurePanel.SetActive(false);
+            CharacterPool.ReturnToPool(_currentTreasure);
+            if (_pendingTreasure.Count > 0)
+            {
+                _currentTreasure = _pendingTreasure.Dequeue(); ;
+                Time.timeScale = 0;
+                StartCoroutine(HandleTreasure(_currentTreasure));
+                treasurePanel.SetActive(true);
+            }
+            else
+            {
+                _currentTreasure = null;
+                Time.timeScale = 1;
+                
+            }
+        }
+        private IEnumerator Treasure1Reward()
         {
             var powerUps = CommonSelectPower(70, 25, 5);
             CommonDisplayPowerUps(powerUps);
+            yield return null;
         }
-        private void Treasure2Reward()
+        private IEnumerator Treasure2Reward()
         {
             var powerUps = CommonSelectPower(30, 55, 15);
             CommonDisplayPowerUps(powerUps);
+            yield return null;
         }
-        private void Treasure3Reward()
+        private IEnumerator Treasure3Reward()
         {
             var powerUps = CommonSelectPower(0, 50, 50);
             CommonDisplayPowerUps(powerUps);
+            yield return null;
+        }
+        public static int IncreaseRange(IReadOnlyList<int> rangeValues)
+        {
+            var random = new System.Random();
+            var randomIndex = random.Next(rangeValues.Count);
+            return rangeValues[randomIndex];
         }
         private List<CommonData> CommonSelectPower(int greenChance, int blueChance, int purpleChance)
         {
@@ -132,25 +172,5 @@ namespace Script
             powerOption3Button.sprite = powerUps[2].Image;
             power3Code.text = $"{powerUps[2].Code}";
         }
-        public void ProcessNextTreasure()
-        {
-            if (PendingTreasure.Count > 0)
-            {
-                TreasureCheck(PendingTreasure.Dequeue());
-            }
-        }
-        public void PowerUpSelected()
-        { 
-            treasurePanel.SetActive(false); 
-            Time.timeScale = 1;
-            StartCoroutine(spawnManager.PositionUpCharacterObject());
-        }
-
-
-        // From here onwards, the Exp PowerUp section //
-
-
-
-
     }
 }

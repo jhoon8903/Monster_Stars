@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Script.UIManager;
 using UnityEngine;
 
 namespace Script.PowerUpScript
@@ -45,21 +46,17 @@ namespace Script.PowerUpScript
             WaterRestraintKnockBack,
             WaterIncreaseDamage
         }
-
         public Types Type { get; set; }
         public int[] Property { get; set; }
         public int Code { get; set; }
         public Sprite Image { get; private set; }
         public int Count { get; set; }
-
         public enum ExpRepeatTypes
         {
             Repeat,
             NoneRepeat
         }
-
         public ExpRepeatTypes ExpRepeat { get; set; }
-
         protected ExpData(Sprite image, int code, ExpRepeatTypes commonRepeat, int count, Types type, int[] property)
         {
             Image = image;
@@ -78,7 +75,6 @@ namespace Script.PowerUpScript
         {
         }
     }
-
     public class ExpBlueData : ExpData
     {
         public ExpBlueData(Sprite image, int code, ExpRepeatTypes expRepeat, int count, Types type, int[] property)
@@ -86,7 +82,6 @@ namespace Script.PowerUpScript
         {
         }
     }
-
     public class ExpPurpleData : ExpData
     {
         public ExpPurpleData(Sprite image, int code, ExpRepeatTypes expRepeat, int count, Types type, int[] property)
@@ -94,7 +89,6 @@ namespace Script.PowerUpScript
         {
         }
     }
-
     public class Exp : MonoBehaviour
     {
         public List<ExpData> ExpGreenList { get; private set; } = new List<ExpData>();

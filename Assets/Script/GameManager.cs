@@ -1,6 +1,6 @@
 using System.Collections;
-using DG.Tweening;
 using Script.EnemyManagerScript;
+using Script.UIManager;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 

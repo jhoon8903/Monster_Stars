@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,6 @@ namespace Script
     {
         [SerializeField] private CharacterPool characterPool;  // 캐릭터 풀
         [SerializeField] private GridManager gridManager;  // 그리드 매니저
-        [SerializeField] private SwipeManager swipeManager;  // 스와이프 매니저
         [SerializeField] private MatchManager matchManager;  // 매치 매니저
 
 
@@ -71,9 +71,9 @@ namespace Script
         // 새로운 캐릭터를 스폰하고 이동시키는 동작 수행
         private IEnumerator SpawnAndMoveNewCharacters()
         {
-
             var moveCoroutines = new List<Coroutine>();
             var moves = new List<(GameObject, Vector3Int)>();
+            if (moves == null) throw new ArgumentNullException(nameof(moves));
             for (var x = 0; x < gridManager.gridWidth; x++)
             {
                 var emptyCellCount = 0;
@@ -103,8 +103,7 @@ namespace Script
         // 케릭터가 이동할때 자연스러운 효과를 적용시킴
         private IEnumerator PerformMoves(IEnumerable<(GameObject, Vector3Int)> moves)
         {
-
-            var coroutines = moves.Select(move => StartCoroutine(swipeManager.OneWayMove(move.Item1, move.Item2))).ToList();
+            var coroutines = moves.Select(move => StartCoroutine(SwipeManager.OneWayMove(move.Item1, move.Item2))).ToList();
             foreach (var coroutine in coroutines)
             {
                 yield return coroutine;
