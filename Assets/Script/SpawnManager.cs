@@ -16,8 +16,7 @@ namespace Script
         [SerializeField] private MatchManager matchManager;  // 매치 매니저
         [SerializeField] private TreasureManager treasureManger;
 
-
-         // 스폰 위치에 있는 캐릭터 객체를 가져옴
+         // 이 함수는 인수로 주어진 위치에 있는 스폰 캐릭터 목록에서 캐릭터의 GameObject를 반환합니다.
         public GameObject CharacterObject(Vector3 spawnPosition)
         {
             var spawnCharacters = characterPool.UsePoolCharacterList();
@@ -25,8 +24,9 @@ namespace Script
                 where character.transform.position == spawnPosition 
                 select character.gameObject).FirstOrDefault();
         }
-
-        // 캐릭터 객체들을 상승시키는 동작 수행
+        
+        //  캐릭터 오브젝트를 상승시키는 작업을 수행하는 코루틴입니다.
+        // 빈 그리드 공간을 기반으로 캐릭터의 이동을 계산하고, 이러한 이동을 수행하고, 새 캐릭터를 생성하고, 일치하는지 확인한 다음 완료 신호를 보냅니다.
         public IEnumerator PositionUpCharacterObject()
         {
             var moves = new List<(GameObject, Vector3Int)>();
@@ -52,7 +52,8 @@ namespace Script
             yield return Complete();
         }
 
-        // 지정된 위치에 새로운 캐릭터를 스폰함
+        // 이 함수는 지정된 그리드 위치에서 새 캐릭터를 생성합니다.
+        // 사용 가능한(사용되지 않은) 문자 목록에서 임의로 문자를 선택하여 지정된 위치에 배치합니다.
         private GameObject SpawnNewCharacter(Vector3Int position)
         {
             var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
@@ -64,15 +65,16 @@ namespace Script
             notUsePoolCharacterList.RemoveAt(randomIndex);
             return newCharacter;
         }
-
-        // 새로운 캐릭터를 대상 위치로 이동시킴
+        
+        // 이 코루틴은 새로 생성된 캐릭터를 그리드의 대상 위치로 이동하는 역할을 합니다.
         private IEnumerator MoveNewCharacter(GameObject newCharacter, Vector3Int targetPosition)
         {
             yield return StartCoroutine(SwipeManager.NewCharacterMove(newCharacter, targetPosition));
 
         }
-
-        // 새로운 캐릭터를 스폰하고 이동시키는 동작 수행
+        
+        // 이 코루틴은 새 캐릭터의 생성 및 후속 이동을 관리합니다.
+        // 새 캐릭터를 생성해야 하는 위치(빈 그리드 공간)를 결정하고 해당 위치에 새 캐릭터를 생성한 다음 그리드의 올바른 위치로 이동합니다.
         private IEnumerator SpawnAndMoveNewCharacters()
         {
             var moveCoroutines = new List<Coroutine>();
@@ -108,14 +110,14 @@ namespace Script
             }
             yield return Complete();
         }
-
+        
         public static bool Complete()
         {
             return true;
         }
-
-
-        // 케릭터가 이동할때 자연스러운 효과를 적용시킴
+        
+        // 이 코루틴은 캐릭터가 움직일 때 자연스러운 효과를 적용합니다.
+        // 이동 목록의 각 이동에 대해 게임 오브젝트를 그리드의 특정 위치로 이동하는 코루틴을 시작합니다.
         private IEnumerator PerformMoves(IEnumerable<(GameObject, Vector3Int)> moves)
         {
             var coroutines = moves.Select(move => StartCoroutine(SwipeManager.OneWayMove(move.Item1, move.Item2))).ToList();
