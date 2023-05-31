@@ -6,7 +6,7 @@ namespace Script.PowerUpScript
     public class CommonData
     {
         public enum Types 
-        { GroupDamage, GroupAtkSpeed, Step, StepLimit, StepDirection , RandomLevelUp,LevelUp, LevelUpPattern, Exp, CastleRecovery, CastleMaxHp, Board, Slow, NextStage, Gold}
+        { GroupDamage, GroupAtkSpeed, Step, StepLimit, StepDirection , RandomLevelUp, LevelUp, LevelUpPattern, Exp, CastleRecovery, CastleMaxHp, Board, Slow, NextStage, Gold}
         public Types Type { get; private set; }
         public int[] Property { get; private set; }
         public int Code { get; set; }

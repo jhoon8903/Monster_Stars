@@ -13,6 +13,9 @@ namespace Script.EnemyManagerScript
         public enum EnemyTypes { Boss, Normal }
         protected internal EnemyTypes EnemyType;
 
+        public enum RegistryTypes { Physics, Divine, Poison }
+        protected internal RegistryTypes RegistryType;
+
         protected internal virtual void EnemyProperty() { }
     }
 }

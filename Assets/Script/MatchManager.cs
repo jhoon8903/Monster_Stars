@@ -163,6 +163,7 @@ namespace Script
                 ReturnObject(matchedCharacters[2]); 
                 ReturnObject(matchedCharacters[3]);
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+
             }
             return true;
         }
@@ -203,7 +204,6 @@ namespace Script
                     ReturnObject(matchedCharacters[3]);
                     matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
                 }
-
                 return true;
             }
 
@@ -223,6 +223,7 @@ namespace Script
                     ReturnObject(matchedCharacters[2]);
                     matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
                 }
+                return true;
             }
             return true;
         }
