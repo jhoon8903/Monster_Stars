@@ -56,11 +56,10 @@ public class Unit_C : CharacterBase
     {
         _characterName = "Unit_C_00";
         _type = Type.character;
-        _damage = 0;
-        _atkSpeed = 0;
-        _range = 0;
-        _spearForce = 0;
-        _splashRange = 0f;
+        _defaultDamage = 0;
+        _defaultAtkSpeed = 0;
+        _defaultAtkDistance = 0;
+        _defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level1Sprite;
 
     }
@@ -69,11 +68,10 @@ public class Unit_C : CharacterBase
     {
         _characterName = "Unit_C_01";
         _type = Type.character;
-        _damage = 1;
-        _atkSpeed = 0.1f;
-        _range = 0.1f;
-        _spearForce = 0;
-        _splashRange = 0f;
+        _defaultDamage = 1;
+        _defaultAtkSpeed = 0.1f;
+        _defaultAtkDistance = 0.1f;
+        _defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level2Sprite;
     }
 
@@ -81,11 +79,10 @@ public class Unit_C : CharacterBase
     {
         _characterName = "Unit_C_02";
         _type = Type.character;
-        _damage = 3;
-        _atkSpeed = 0.3f;
-        _range = 0.2f;
-        _spearForce = 0;
-        _splashRange = 0f;
+        _defaultDamage = 3;
+        _defaultAtkSpeed = 0.3f;
+        _defaultAtkDistance = 0.2f;
+        _defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level3Sprite;
     }
 
@@ -93,11 +90,10 @@ public class Unit_C : CharacterBase
     {
         _characterName = "Unit_C_03";
         _type = Type.character;
-        _damage = 9;
-        _atkSpeed = 0.9f;
-        _range = 0.3f;
-        _spearForce = 0;
-        _splashRange = 0f;
+        _defaultDamage = 9;
+        _defaultAtkSpeed = 0.9f;
+        _defaultAtkDistance = 0.3f;
+        _defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level4Sprite;
     }
 
@@ -105,11 +101,10 @@ public class Unit_C : CharacterBase
     {
         _characterName = "Unit_C_04";
         _type = Type.character;
-        _damage = 27;
-        _atkSpeed = 2.7f;
-        _range = 0.4f;
-        _spearForce = 0;
-        _splashRange = 0f;
+        _defaultDamage = 27;
+        _defaultAtkSpeed = 2.7f;
+        _defaultAtkDistance = 0.4f;
+        _defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level5Sprite;
     }
 }

@@ -27,8 +27,8 @@ namespace Script.CharacterManagerScript
         public float _increaseAtkSpeed;
         public float _projectileSpeed;
         public float _swingSpeed;
-        public Vector3 _defaultAtkDistance;
-        public Vector3 _increaseAtkDistance;
+        public float _defaultAtkDistance;
+        public float _increaseAtkDistance;
         public Vector3 _defaultAtkRange;
         public Vector3 _increaseAtkRange;
         public int _penetrate;

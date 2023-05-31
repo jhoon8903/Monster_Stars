@@ -59,10 +59,10 @@ public class Unit_A : CharacterBase
     {
         _characterName = "Unit_A_00";
         _type = Type.character;
-        _damage = 0;
-        _atkSpeed = 0;
-        _spearForce = 0;
-        _splashRange = 0f;
+        _defaultDamage = 0;
+        _defaultAtkSpeed = 0;
+        _defaultAtkDistance = 0;
+        _defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level1Sprite;
     }
 
@@ -70,11 +70,10 @@ public class Unit_A : CharacterBase
     {
         _characterName = "Unit_A_01";
         _type = Type.character;
-        _damage = (DefaultDamage * (1 + _increaseDamage)) * (1 - _resistValue);
-        _atkSpeed = 1f;
-        _range = new Vector2(0,12f);
-        _spearForce = 0;
-        _splashRange = 0f;
+        _defaultDamage = (DefaultDamage * (1 + _increaseDamage)) * (1 - _resistValue);
+        _defaultAtkSpeed = 1;
+        _defaultAtkDistance = 12;
+        _defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level2Sprite;
         _unitAtkType = Unit_AtkType.Arrow;
         _arrowSpeed *= _increaseSpeed;
@@ -86,11 +85,10 @@ public class Unit_A : CharacterBase
     {
         _characterName = "Unit_A_02";
         _type = Type.character;
-        _damage *= 1.7f;
-        _atkSpeed = 0.3f;
-        _range = new Vector2(0,12f);
-        _spearForce = 0;
-        _splashRange = 0f;
+        _defaultDamage *= 1.7f;
+        _defaultAtkSpeed = 0.3f;
+        _defaultAtkDistance = 12;
+        _defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level3Sprite;
         _unitAtkType = Unit_AtkType.Arrow;
         _arrowSpeed = 0.33f;
@@ -102,11 +100,10 @@ public class Unit_A : CharacterBase
     {
         _characterName = "Unit_A_03";
         _type = Type.character;
-        _damage *= 2;
-        _atkSpeed = 0.9f;
-        _range = new Vector2(0,12f);
-        _spearForce = 0;
-        _splashRange = 0f;
+        _defaultDamage *= 2;
+        _defaultAtkSpeed = 0.9f;
+        _defaultAtkDistance = 12;
+        _defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level4Sprite;
         _unitAtkType = Unit_AtkType.Arrow;
         _arrowSpeed = 0.33f;
@@ -118,11 +115,10 @@ public class Unit_A : CharacterBase
     {
         _characterName = "Unit_A_04";
         _type = Type.character;
-        _damage *= 2.3f; 
-        _atkSpeed = 2.7f;
-        _range = new Vector2(0,12f);
-        _spearForce = 0;
-        _splashRange = 0f;
+        _defaultDamage *= 2.3f;
+        _defaultAtkSpeed = 2.7f;
+        _defaultAtkDistance = 12;
+        _defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level5Sprite;
         _unitAtkType = Unit_AtkType.Arrow;
         _arrowSpeed = 0.33f;
