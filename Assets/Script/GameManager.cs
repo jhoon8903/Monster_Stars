@@ -1,4 +1,5 @@
 using System.Collections;
+using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.UIManager;
 using UnityEngine.SceneManagement;
@@ -18,6 +19,8 @@ namespace Script
         [SerializeField] private EnemySpawnManager enemySpawnManager;
         [SerializeField] private EnemyPatternManager enemyPatternManager;
         [SerializeField] private GameObject gamePanel;
+        [SerializeField] private AtkManager atkManager;
+        [SerializeField] private float checkInterval = 1.0f;
 
         private void Start()
         {
@@ -36,17 +39,20 @@ namespace Script
 
         public IEnumerator Count0Call()
         {
-            yield return new WaitUntil(() => SpawnManager.Complete());
             cameraManager.CameraSizeChange();
             backgroundManager.ChangeSize();
             yield return StartCoroutine(enemySpawnManager.SpawnEnemies());
             // 중간 대기시간을 주는 방법이 필요
             yield return new WaitForSecondsRealtime(1.5f);
             StartCoroutine(enemyPatternManager.Zone_Move());
-
-            if (enemySpawnManager.FieldList.Count <= 0)
+            while (enemySpawnManager.FieldList.Count > 0)
             {
-                // 다음 스테이지 진행 및 초기화 호출
+                atkManager.CheckForAttack();
+                yield return new WaitForSeconds(checkInterval);
+                if (enemySpawnManager.FieldList.Count == 0)
+                {
+                    LoseGame();
+                }
             }
         }
 

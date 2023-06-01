@@ -48,29 +48,42 @@ public class Unit_Treasure : CharacterBase
 
     private void Level1()
     {
-        _characterName = "Unit_Treasure00";
-        _type = Type.treasure;
+        CharacterName = "Unit_Treasure00";
+        Type = Types.Treasure;
         _spriteRenderer.sprite = level1Sprite;
     }
 
     private void Level2()
     {
-        _characterName = "Unit_Treasure01";
-        _type = Type.treasure;
+        CharacterName = "Unit_Treasure01";
+        Type = Types.Treasure;
         _spriteRenderer.sprite = level2Sprite;
+        UnitGroup = UnitGroups.None;
+        UnitAtkType = UnitAtkTypes.None;
+        UnitProperty = UnitProperties.None;
+        UnitEffect = UnitEffects.None;
+
     }
 
     private void Level3()
     {
-        _characterName = "Unit_Treasure02";
-        _type = Type.treasure;
+        CharacterName = "Unit_Treasure02";
+        Type = Types.Treasure;
         _spriteRenderer.sprite = level3Sprite;
+        UnitGroup = UnitGroups.None;
+        UnitAtkType = UnitAtkTypes.None;
+        UnitProperty = UnitProperties.None;
+        UnitEffect = UnitEffects.None;
     }
 
     private void Level4()
     {
-        _characterName = "Unit_Treasure03";
-        _type = Type.treasure;
+        CharacterName = "Unit_Treasure03";
+        Type = Types.Treasure;
         _spriteRenderer.sprite = level4Sprite;
+        UnitGroup = UnitGroups.None;
+        UnitAtkType = UnitAtkTypes.None;
+        UnitProperty = UnitProperties.None;
+        UnitEffect = UnitEffects.None;
     }
 }

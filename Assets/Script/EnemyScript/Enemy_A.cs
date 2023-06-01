@@ -10,10 +10,10 @@ namespace Script.EnemyScript
             EnemyName = "A";
             HealthPoint = 400;
             CrushDamage = 160;
-            MoveSpeed = 12f;  // 높을 수록 느려짐
+            MoveSpeed = Random.Range(13f, 17f);  // 높을 수록 느려짐
             EnemyType = EnemyTypes.Normal;
             SpawnZone = EnemyZone.A;
-
+            RegistryType = RegistryTypes.Physics;
         }
     }
 }

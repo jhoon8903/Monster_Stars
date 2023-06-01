@@ -2,7 +2,7 @@ using Script.CharacterManagerScript;
 using UnityEngine;
 
 
-public class Unit_F : CharacterBase
+public class Unit_C : CharacterBase
 {
 
 
@@ -24,7 +24,7 @@ public class Unit_F : CharacterBase
         _spriteRenderer = GetComponent<SpriteRenderer>();
         Level1();
     }
-    
+
     protected override void LevelUp()
     {
         base.LevelUp();  // increment the level
@@ -52,60 +52,60 @@ public class Unit_F : CharacterBase
         _spriteRenderer = GetComponent<SpriteRenderer>();
         Level1();
     }
-
     private void Level1()
     {
-        _characterName = "Unit_F_00";
-        _type = Type.character;
-        _defaultDamage = 0;
-        _defaultAtkSpeed = 0;
-        _defaultAtkDistance = 0;
-        _defaultAtkRange = Vector3.zero;
+        CharacterName = "Unit_C_00";
+        Type = Types.Character;
+        defaultDamage = 0;
+        defaultAtkRate = 0;
+        defaultAtkDistance = 0;
+        defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level1Sprite;
 
     }
 
     private void Level2()
     {
-        _characterName = "Unit_F_01";
-        _type = Type.character;
-        _defaultDamage = 1;
-        _defaultAtkSpeed = 0.1f;
-        _defaultAtkDistance = 0.1f;
-        _defaultAtkRange = Vector3.zero;
+        CharacterName = "Unit_C_01";
+        Type = Types.Character;
+        UnitGroup = UnitGroups.C;
+        defaultDamage = 90;
+        defaultAtkRate = 0.1f;
+        defaultAtkDistance = 0.1f;
+        defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level2Sprite;
     }
 
     private void Level3()
     {
-        _characterName = "Unit_F_02";
-        _type = Type.character;
-        _defaultDamage = 3;
-        _defaultAtkSpeed = 0.3f;
-        _defaultAtkDistance = 0.2f;
-        _defaultAtkRange = Vector3.zero;
+        CharacterName = "Unit_C_02";
+        Type = Types.Character;
+        defaultDamage = 3;
+        defaultAtkRate = 0.3f;
+        defaultAtkDistance = 0.2f;
+        defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level3Sprite;
     }
 
     private void Level4()
     {
-        _characterName = "Unit_F_03";
-        _type = Type.character;
-        _defaultDamage = 9;
-        _defaultAtkSpeed = 0.9f;
-        _defaultAtkDistance = 0.3f;
-        _defaultAtkRange = Vector3.zero;
+        CharacterName = "Unit_C_03";
+        Type = Types.Character;
+        defaultDamage = 9;
+        defaultAtkRate = 0.9f;
+        defaultAtkDistance = 0.3f;
+        defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level4Sprite;
     }
 
     private void Level5()
     {
-        _characterName = "Unit_F_04";
-        _type = Type.character;
-        _defaultDamage = 27;
-        _defaultAtkSpeed = 2.7f;
-        _defaultAtkDistance = 0.4f;
-        _defaultAtkRange = Vector3.zero;
+        CharacterName = "Unit_C_04";
+        Type = Types.Character;
+        defaultDamage = 27;
+        defaultAtkRate = 2.7f;
+        defaultAtkDistance = 0.4f;
+        defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level5Sprite;
     }
 }

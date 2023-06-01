@@ -24,7 +24,7 @@ namespace Script.EnemyManagerScript
             }
 
             public void ReturnToPool(GameObject obj)
-            {
+            {    
                   obj.SetActive(false);
             }
       }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 
@@ -6,40 +7,35 @@ namespace Script.CharacterManagerScript
 {
     public class CharacterBase : MonoBehaviour
     {
-        protected int Level { get; private set; } = 1;
-        protected internal string _characterName;
+        protected internal int Level { get; private set; } = 1;
+        protected internal string CharacterName;
 
-        public enum Type {  Boss, character, treasure }
-        protected internal Type _type;
+        public enum Types { Character, Treasure }
+        protected internal Types Type;
 
-        public enum Unit_AtkType { Arrow, GuideArrow, Gas, Circle, Vibrate, Boomerang }
-        protected internal Unit_AtkType _unitAtkType;
+        public enum UnitGroups { A,B,C,D,E,F,None }
+        protected internal UnitGroups UnitGroup = UnitGroups.None;
 
-        public enum Unit_Property { Divine, Darkness, Physics, Water, Poison, Fire }
-        protected internal Unit_Property _unitProperty;
+        public enum UnitAtkTypes {None,  Projectile, GuideProjectile, Gas, Circle, Vibrate, Boomerang }
+        protected internal UnitAtkTypes UnitAtkType = UnitAtkTypes.None;
 
-        public enum Unit_Effect { Slow, Bleed, Poison, Burn, Stun, Strike, Restraint }
-        protected internal Unit_Effect _unitEffect;
+        public enum UnitProperties { Divine, Darkness, Physics, Water, Poison, Fire, None }
+        protected internal UnitProperties UnitProperty = UnitProperties.None;
 
-        public float _defaultDamage;
-        public float _increaseDamage;
-        public float _defaultAtkSpeed;
-        public float _increaseAtkSpeed;
-        public float _projectileSpeed;
-        public float _swingSpeed;
-        public float _defaultAtkDistance;
-        public float _increaseAtkDistance;
-        public Vector3 _defaultAtkRange;
-        public Vector3 _increaseAtkRange;
-        public int _penetrate;
+        public enum UnitEffects { Slow, Bleed, Poison, Burn, Stun, Strike, Restraint, None }
+        protected internal UnitEffects UnitEffect = UnitEffects.None;
 
-
-
-
-
-
-
-
+        public float defaultDamage;
+        public float increaseDamage;
+        public float defaultAtkRate;
+        public float increaseAtkRate;
+        public float projectileSpeed;
+        public float swingSpeed;
+        public float defaultAtkDistance;
+        public float increaseAtkDistance;
+        public Vector3 defaultAtkRange;
+        public Vector3 increaseAtkRange;
+        public int penetrate;
 
         private readonly Vector3 _initialScale = new Vector3(0.6f, 0.6f, 0.6f);
         private readonly Vector3 _levelUpScale = new Vector3(0.8f, 0.8f, 0.8f);
@@ -60,5 +56,11 @@ namespace Script.CharacterManagerScript
         }
 
         protected internal virtual void LevelReset() { }
+
+        public virtual List<GameObject> DetectEnemies()
+        {
+            return new List<GameObject>();
+        }
+
     }
 }

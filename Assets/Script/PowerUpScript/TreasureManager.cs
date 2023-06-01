@@ -56,7 +56,7 @@ namespace Script.PowerUpScript
         {
             Time.timeScale = 0; // 게임 일시 정지
             treasurePanel.SetActive(true); // 보물 패널 활성화
-            var treasureChestName = treasure.GetComponent<CharacterBase>()._characterName; // 보물 상자 이름
+            var treasureChestName = treasure.GetComponent<CharacterBase>().CharacterName; // 보물 상자 이름
 
             switch (treasureChestName)
             {
