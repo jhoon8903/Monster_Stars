@@ -12,7 +12,7 @@ public class Unit_F : CharacterBase
     [SerializeField] private Sprite level4Sprite;
     [SerializeField] private Sprite level5Sprite;
     private SpriteRenderer _spriteRenderer;
-    private const float detectionSize = 1.5f;
+    private const float DetectionSize = 1.5f;
 
     private void Awake()
     {
@@ -51,7 +51,7 @@ public class Unit_F : CharacterBase
     public override List<GameObject> DetectEnemies()
     {
         var detectionCenter = (Vector2)transform.position;
-        var colliders = Physics2D.OverlapCircleAll(detectionCenter, detectionSize);
+        var colliders = Physics2D.OverlapCircleAll(detectionCenter, DetectionSize);
         var detectedEnemies = (from collider in colliders
             where collider.gameObject.CompareTag("Enemy")
             select collider.gameObject).ToList();
@@ -68,7 +68,7 @@ public class Unit_F : CharacterBase
     {
         var detectionCenter = transform.position;
         Gizmos.color = Color.green;
-        Gizmos.DrawWireSphere(detectionCenter, detectionSize);
+        Gizmos.DrawWireSphere(detectionCenter, DetectionSize);
     }
 
     private void Level1()
@@ -92,8 +92,9 @@ public class Unit_F : CharacterBase
         Type = Types.Character;
         UnitGroup = UnitGroups.F;
         defaultDamage = 90;
-        defaultAtkRate = 0.1f;
-        defaultAtkDistance = 0.1f;
+        defaultAtkRate = 1f;
+        defaultAtkDistance = 1.5f;
+        projectileSpeed = 1.3f;
         defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level2Sprite;
         UnitAtkType = UnitAtkTypes.Gas;
@@ -106,9 +107,10 @@ public class Unit_F : CharacterBase
         CharacterName = "Unit_F_02";
         Type = Types.Character;
         UnitGroup = UnitGroups.F;
-        defaultDamage = 3;
-        defaultAtkRate = 0.3f;
-        defaultAtkDistance = 0.2f;
+        defaultDamage *=1.7f;
+        defaultAtkRate = 1f;
+        defaultAtkDistance = 1.5f;
+        projectileSpeed = 1.3f;
         defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level3Sprite;
         UnitAtkType = UnitAtkTypes.Gas;
@@ -121,9 +123,10 @@ public class Unit_F : CharacterBase
         CharacterName = "Unit_F_03";
         Type = Types.Character;
         UnitGroup = UnitGroups.F;
-        defaultDamage = 9;
-        defaultAtkRate = 0.9f;
-        defaultAtkDistance = 0.3f;
+        defaultDamage *= 2.0f;
+        defaultAtkRate = 1f;
+        defaultAtkDistance = 1.5f;
+        projectileSpeed = 1.3f;
         defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level4Sprite;
         UnitAtkType = UnitAtkTypes.Gas;
@@ -136,9 +139,9 @@ public class Unit_F : CharacterBase
         CharacterName = "Unit_F_04";
         Type = Types.Character;
         UnitGroup = UnitGroups.F;
-        defaultDamage = 27;
-        defaultAtkRate = 2.7f;
-        defaultAtkDistance = 0.4f;
+        defaultDamage *=2.3f ;
+        defaultAtkRate = 1f;
+        defaultAtkDistance = 1.5f;
         defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level5Sprite;
         UnitAtkType = UnitAtkTypes.Gas;

@@ -1,4 +1,7 @@
 using System.Collections;
+using DG.Tweening;
+using Script.CharacterManagerScript;
+using Script.EnemyManagerScript;
 using UnityEngine;
 
 namespace Script.WeaponScriptGroup
@@ -8,16 +11,28 @@ namespace Script.WeaponScriptGroup
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
-            // VenomSac는 케릭터 기준 1.5f 의 원형공간이 공격범위인데 이를 어떻게 구현할지는 추가 정보가 필요합니다.
-            // 일단 여기서는 VenomSac가 Enemy 태그를 가진 오브젝트와 충돌하면 WeaponPool에 반환되도록 하였습니다.
+            Damage = CharacterBase.defaultDamage;
+            Speed = CharacterBase.projectileSpeed;
+            FireRate = CharacterBase.defaultAtkRate;
+            var enemyList = CharacterBase.DetectEnemies();
+            var enemyTransform  = new UnityEngine.Vector3();
+            foreach (var enemy in enemyList)
+            {
+                enemyTransform = enemy.transform.position;
+                yield return enemyTransform;
+            }
+            transform.DOMove(enemyTransform,Speed).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(this.gameObject));
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
-            if (collision.gameObject.CompareTag("Enemy"))
+            if (!collision.gameObject.CompareTag("Enemy")) return;
+            var enemy = collision.gameObject.GetComponent<EnemyBase>();
+            if(enemy != null)
             {
-                StopUseWeapon(this.gameObject);
+                enemy.ReceiveDamage(Damage);
             }
+            StopUseWeapon(this.gameObject);
         }
     }
 

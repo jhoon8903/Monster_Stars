@@ -13,7 +13,7 @@ namespace Script.EnemyScript
             MoveSpeed = Random.Range(13f, 17f);  // 높을 수록 느려짐
             EnemyType = EnemyTypes.Normal;
             SpawnZone = EnemyZone.A;
-
+            RegistryType = RegistryTypes.Physics;
         }
     }
 }

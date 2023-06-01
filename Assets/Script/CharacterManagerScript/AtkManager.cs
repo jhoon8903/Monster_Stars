@@ -70,10 +70,15 @@ namespace Script.CharacterManagerScript
             var unit = attackData.Unit;
             var weaponType = attackData.WeaponType;
             var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.transform.position, unit.transform.rotation);
-            var useWeapon = weaponObject.GetComponent<WeaponBase>().UseWeapon();
+    
+            var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
+            weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>()); // InitializeWeapon 호출하여 캐릭터 정보 설정
+            var useWeapon = weaponBase.UseWeapon();
+    
             weaponsPool.SetSprite(weaponType, attackData.Unit.GetComponent<CharacterBase>().Level, weaponObject);
             StartCoroutine(useWeapon);
         }
+
 
         private void ProjectileAttack(GameObject unit, CharacterBase.UnitGroups unitGroup)
         {

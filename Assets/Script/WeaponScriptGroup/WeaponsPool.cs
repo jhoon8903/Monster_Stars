@@ -63,7 +63,7 @@ namespace Script.WeaponScriptGroup
 
         public void SetSprite(WeaponType weaponType, int level, GameObject weaponObject)
         {
-            var spriteRenderer = weaponObject.GetComponent<SpriteRenderer>();
+            var spriteRenderer = weaponObject.GetComponentInChildren<SpriteRenderer>();
             var weapon = weapons.Find(w => w.weaponType == weaponType);
         
             if (level - 2 < weapon.weaponSprite.Count)

@@ -493,6 +493,7 @@ MonoBehaviour:
   enemyPatternManager: {fileID: 329010039}
   gamePanel: {fileID: 267564636}
   atkManager: {fileID: 149521967}
+  checkInterval: 1
 --- !u!4 &149521959
 Transform:
   m_ObjectHideFlags: 0
@@ -4303,7 +4304,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: e105923690c284d77917339833fafdc1, type: 3}
     - {fileID: 21300000, guid: 811be4170ef194535a13a43cdde4ead0, type: 3}
   - weaponType: 2
-    weaponPrefab: {fileID: 1511990859524891099, guid: 913efda9b1a924d8295d81f4a8e0425b, type: 3}
+    weaponPrefab: {fileID: 3655712775022857593, guid: 913efda9b1a924d8295d81f4a8e0425b, type: 3}
     weaponSprite:
     - {fileID: 21300000, guid: 51fba7ea733704a9ca01a6c0e771fa9c, type: 3}
     - {fileID: 21300000, guid: 1b0ee16596d024571a96861c1a7fdb68, type: 3}

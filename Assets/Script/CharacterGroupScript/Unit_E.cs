@@ -20,7 +20,6 @@ public class Unit_E : CharacterBase
         _spriteRenderer = GetComponent<SpriteRenderer>();
         Level1();
     }
-    
     protected override void LevelUp()
     {
         base.LevelUp();  // increment the level
@@ -47,7 +46,6 @@ public class Unit_E : CharacterBase
         _spriteRenderer = GetComponent<SpriteRenderer>();
         Level1();
     }
-
     public override List<GameObject> DetectEnemies()
     {
         var detectionSize = new Vector2(DetectionWidth, DetectionHeight);
@@ -64,7 +62,6 @@ public class Unit_E : CharacterBase
         }
         return detectedEnemies;
     }
-
     public void OnDrawGizmos()
     {
         var detectionSize = new Vector3(DetectionWidth, DetectionHeight, 0);
@@ -72,7 +69,6 @@ public class Unit_E : CharacterBase
         Gizmos.color = Color.blue;
         Gizmos.DrawWireCube(detectionCenter, detectionSize);
     }
-
     private void Level1()
     {
         CharacterName = "Unit_E_00";
@@ -89,8 +85,9 @@ public class Unit_E : CharacterBase
         Type = Types.Character;
         UnitGroup = UnitGroups.E;
         defaultDamage = 75;
-        defaultAtkRate = 0.1f;
-        defaultAtkDistance = 12f;
+        defaultAtkRate = 0.5f;
+        defaultAtkDistance = 9f;
+        projectileSpeed = 1f;
         defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level2Sprite;
         UnitAtkType = UnitAtkTypes.Projectile;
@@ -103,8 +100,9 @@ public class Unit_E : CharacterBase
         Type = Types.Character;
         UnitGroup = UnitGroups.E;
         defaultDamage *= 1.7f;
-        defaultAtkRate = 0.3f;
-        defaultAtkDistance = 12f;
+        defaultAtkRate = 0.5f;
+        defaultAtkDistance = 9f;
+        projectileSpeed = 1f;
         defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level3Sprite;
         UnitAtkType = UnitAtkTypes.Projectile;
@@ -117,8 +115,9 @@ public class Unit_E : CharacterBase
         Type = Types.Character;
         UnitGroup = UnitGroups.E;
         defaultDamage *= 2;
-        defaultAtkRate = 0.9f;
-        defaultAtkDistance = 12f;
+        defaultAtkRate = 0.5f;
+        defaultAtkDistance = 9f;
+        projectileSpeed = 1f;
         defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level4Sprite;
         UnitAtkType = UnitAtkTypes.Projectile;
@@ -130,9 +129,10 @@ public class Unit_E : CharacterBase
         CharacterName = "Unit_E_04";
         Type = Types.Character;
         UnitGroup = UnitGroups.E;
-        defaultDamage = 27;
         defaultDamage *= 2.3f;
-        defaultAtkDistance = 12f;
+        defaultAtkRate = 0.5f;
+        defaultAtkDistance = 9f;
+        projectileSpeed = 1f;
         defaultAtkRange = Vector3.zero;
         _spriteRenderer.sprite = level5Sprite;
         UnitAtkType = UnitAtkTypes.Projectile;

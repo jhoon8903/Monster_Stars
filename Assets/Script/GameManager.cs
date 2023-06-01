@@ -48,13 +48,11 @@ namespace Script
             while (enemySpawnManager.FieldList.Count > 0)
             {
                 atkManager.CheckForAttack();
-                yield return new WaitForSeconds(checkInterval); 
-            }
-
-            if (enemySpawnManager.FieldList.Count == null || enemySpawnManager.FieldList.Count == 0)
-            {
-                // enemySpawnManager.FieldList.Count가 0이 되면 다음 스테이지 진행 및 초기화 호출
-                // 다음 로직을 호출하시면 됩니다.
+                yield return new WaitForSeconds(checkInterval);
+                if (enemySpawnManager.FieldList.Count == 0)
+                {
+                    LoseGame();
+                }
             }
         }
 
