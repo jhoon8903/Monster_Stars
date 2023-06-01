@@ -49,30 +49,10 @@ namespace Script
             yield return StartCoroutine(PerformMoves(moves));
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
             yield return StartCoroutine(matchManager.CheckMatches());
-            yield return Complete();
+            if (treasureManger.PendingTreasure.Count == 0) yield break;
+            treasureManger.EnqueueAndCheckTreasure(treasureManger.PendingTreasure.Dequeue());
         }
 
-        // 이 함수는 지정된 그리드 위치에서 새 캐릭터를 생성합니다.
-        // 사용 가능한(사용되지 않은) 문자 목록에서 임의로 문자를 선택하여 지정된 위치에 배치합니다.
-        private GameObject SpawnNewCharacter(Vector3Int position)
-        {
-            var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
-            if (notUsePoolCharacterList.Count <= 0) return null;
-            var randomIndex = Random.Range(0, notUsePoolCharacterList.Count);
-            var newCharacter = notUsePoolCharacterList[randomIndex];
-            newCharacter.transform.position = position;
-            newCharacter.SetActive(true);
-            notUsePoolCharacterList.RemoveAt(randomIndex);
-            return newCharacter;
-        }
-        
-        // 이 코루틴은 새로 생성된 캐릭터를 그리드의 대상 위치로 이동하는 역할을 합니다.
-        private IEnumerator MoveNewCharacter(GameObject newCharacter, Vector3Int targetPosition)
-        {
-            yield return StartCoroutine(SwipeManager.NewCharacterMove(newCharacter, targetPosition));
-
-        }
-        
         // 이 코루틴은 새 캐릭터의 생성 및 후속 이동을 관리합니다.
         // 새 캐릭터를 생성해야 하는 위치(빈 그리드 공간)를 결정하고 해당 위치에 새 캐릭터를 생성한 다음 그리드의 올바른 위치로 이동합니다.
         private IEnumerator SpawnAndMoveNewCharacters()
@@ -104,18 +84,29 @@ namespace Script
             {
                 yield return coroutine;
             }
-            if (treasureManger.PendingTreasure.Count !=0)
-            {
-                treasureManger.EnqueueAndCheckTreasure(treasureManger.PendingTreasure.Dequeue());
-            }
-            yield return Complete();
         }
-        
-        public static bool Complete()
+
+        // 이 함수는 지정된 그리드 위치에서 새 캐릭터를 생성합니다.
+        // 사용 가능한(사용되지 않은) 문자 목록에서 임의로 문자를 선택하여 지정된 위치에 배치합니다.
+        private GameObject SpawnNewCharacter(Vector3Int position)
         {
-            return true;
+            var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
+            if (notUsePoolCharacterList.Count <= 0) return null;
+            var randomIndex = Random.Range(0, notUsePoolCharacterList.Count);
+            var newCharacter = notUsePoolCharacterList[randomIndex];
+            newCharacter.transform.position = position;
+            newCharacter.SetActive(true);
+            notUsePoolCharacterList.RemoveAt(randomIndex);
+            return newCharacter;
         }
         
+        // 이 코루틴은 새로 생성된 캐릭터를 그리드의 대상 위치로 이동하는 역할을 합니다.
+        private IEnumerator MoveNewCharacter(GameObject newCharacter, Vector3Int targetPosition)
+        {
+            yield return StartCoroutine(SwipeManager.NewCharacterMove(newCharacter, targetPosition));
+
+        }
+
         // 이 코루틴은 캐릭터가 움직일 때 자연스러운 효과를 적용합니다.
         // 이동 목록의 각 이동에 대해 게임 오브젝트를 그리드의 특정 위치로 이동하는 코루틴을 시작합니다.
         private IEnumerator PerformMoves(IEnumerable<(GameObject, Vector3Int)> moves)

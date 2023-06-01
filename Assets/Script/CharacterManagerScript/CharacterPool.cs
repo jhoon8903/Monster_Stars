@@ -14,7 +14,7 @@ namespace Script.CharacterManagerScript
         
         /**
          * Character Pool Create and SetActive(false)
-         * StorageName is _pooledCharacters && Type is List<GameObject> 
+         * StorageName is _pooledCharacters && Types is List<GameObject> 
          * Idling Pool wait for Calling.
          */
         public void Awake()

@@ -5,7 +5,7 @@ namespace Script.EnemyManagerScript
     public class EnemyBase : MonoBehaviour
     {
         protected string EnemyName;
-        protected float HealthPoint;
+        public float HealthPoint;
         protected internal int CrushDamage;
         protected internal float MoveSpeed;
         public enum EnemyZone { A,B,C,D,E }

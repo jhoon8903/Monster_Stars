@@ -19,7 +19,7 @@ namespace Script
         public bool IsMatched(GameObject swapCharacter)
         {
             var matchFound = false;
-            var swapCharacterName = swapCharacter.GetComponent<CharacterBase>()._characterName;
+            var swapCharacterName = swapCharacter.GetComponent<CharacterBase>().CharacterName;
             var swapCharacterPosition = swapCharacter.transform.position;
             var directions = new[]
             {
@@ -41,7 +41,7 @@ namespace Script
                     {
                         var nextCharacter = spawnManager.CharacterObject(nextPosition);
                         if (nextCharacter == null ||
-                            nextCharacter.GetComponent<CharacterBase>()._characterName != swapCharacterName)
+                            nextCharacter.GetComponent<CharacterBase>().CharacterName != swapCharacterName)
                             break;
                         matchedObjects.Add(nextCharacter);
                         matchCount++;
@@ -150,7 +150,7 @@ namespace Script
         // 강화 기능 OK
         private bool Matches3Case1(IReadOnlyList<GameObject> matchedCharacters)
         {
-            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[2]); 
                 ReturnObject(matchedCharacters[3]);
@@ -171,7 +171,7 @@ namespace Script
         {
             if (matchedCharacters[0].transform.position.x.Equals(matchedCharacters[1].transform.position.x))
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
                 {
                     ReturnObject(matchedCharacters[2]);
                     ReturnObject(matchedCharacters[3]);
@@ -190,7 +190,7 @@ namespace Script
 
             if (matchedCharacters[0].transform.position.x.Equals(matchedCharacters[2].transform.position.x))
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure) 
+                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure) 
                 { 
                     ReturnObject(matchedCharacters[1]); 
                     ReturnObject(matchedCharacters[3]);
@@ -209,7 +209,7 @@ namespace Script
 
             if (matchedCharacters[0].transform.position.x.Equals(matchedCharacters[3].transform.position.x))
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
                 {
                     ReturnObject(matchedCharacters[1]);
                     ReturnObject(matchedCharacters[2]);
@@ -229,7 +229,7 @@ namespace Script
         }
         private bool Matches3Case3(IReadOnlyList<GameObject> matchedCharacters)
         {
-            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[3]); 
                 ReturnObject(matchedCharacters[4]);
@@ -247,7 +247,7 @@ namespace Script
         }
         private bool Matches3Case4(IReadOnlyList<GameObject> matchedCharacters)
         {
-            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[1]);
                 ReturnObject(matchedCharacters[2]);
@@ -268,7 +268,7 @@ namespace Script
             if (matchedCharacters[0].transform.position.y > matchedCharacters[2].transform.position.y && 
                 matchedCharacters[0].transform.position.y < matchedCharacters[3].transform.position.y)
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
                 {
                     ReturnObject(matchedCharacters[2]);
                     ReturnObject(matchedCharacters[4]);
@@ -291,7 +291,7 @@ namespace Script
             if (matchedCharacters[0].transform.position.y > matchedCharacters[3].transform.position.y &&
                 matchedCharacters[0].transform.position.y < matchedCharacters[4].transform.position.y)
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
                 {
                     ReturnObject(matchedCharacters[3]);
                     ReturnObject(matchedCharacters[4]);
@@ -316,7 +316,7 @@ namespace Script
         {
             if (matchedCharacters[2].transform.position.x > matchedCharacters[0].transform.position.x)
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
                 {
                     ReturnObject(matchedCharacters[1]); 
                     ReturnObject(matchedCharacters[3]);
@@ -336,7 +336,7 @@ namespace Script
             }
             else
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
                 {
                     ReturnObject(matchedCharacters[2]);
                     ReturnObject(matchedCharacters[3]);
@@ -360,7 +360,7 @@ namespace Script
         {
             if (matchedCharacters[0].transform.position.y > matchedCharacters[4].transform.position.y)
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
                 {
                     ReturnObject(matchedCharacters[5]);
                     ReturnObject(matchedCharacters[4]);
@@ -380,7 +380,7 @@ namespace Script
             }
             else
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
                 {
                     ReturnObject(matchedCharacters[5]);
                     ReturnObject(matchedCharacters[3]);
@@ -405,7 +405,7 @@ namespace Script
             if (matchedCharacters[0].transform.position.x < matchedCharacters[2].transform.position.x &&
                 matchedCharacters[0].transform.position.x > matchedCharacters[1].transform.position.x)
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
                 {
                     ReturnObject(matchedCharacters[1]);
                     ReturnObject(matchedCharacters[3]);
@@ -425,7 +425,7 @@ namespace Script
             }
             else
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
                 {
                     ReturnObject(matchedCharacters[1]);
                     ReturnObject(matchedCharacters[3]);
@@ -447,7 +447,7 @@ namespace Script
         }
         private bool Matches5Case1(IReadOnlyList<GameObject> matchedCharacters)
         {
-            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[3]);
                 ReturnObject(matchedCharacters[5]);
@@ -471,7 +471,7 @@ namespace Script
         }
         private bool Matches5Case2(IReadOnlyList<GameObject> matchedCharacters)
         {
-            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[3]);
                 ReturnObject(matchedCharacters[1]);
@@ -495,7 +495,7 @@ namespace Script
         }
         private bool Matches2X5Case(IReadOnlyList<GameObject> matchedCharacters)
         {
-            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[6]);
                 ReturnObject(matchedCharacters[4]);
@@ -520,7 +520,7 @@ namespace Script
         private bool Matches5X2Case(IReadOnlyList<GameObject> matchedCharacters)
         {
 
-            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[1]);
                 ReturnObject(matchedCharacters[2]);
@@ -544,7 +544,7 @@ namespace Script
         }
         private bool Matches3X3Case(IReadOnlyList<GameObject> matchedCharacters)
         {
-            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[2]);
                 ReturnObject(matchedCharacters[1]);
@@ -570,7 +570,7 @@ namespace Script
         {
             if (matchedCharacters[3].transform.position.y > matchedCharacters[5].transform.position.y)
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
                 {
                     ReturnObject(matchedCharacters[2]);
                     ReturnObject(matchedCharacters[6]);
@@ -593,7 +593,7 @@ namespace Script
             }
             else
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
                 {
                     ReturnObject(matchedCharacters[2]);
                     ReturnObject(matchedCharacters[6]);
@@ -623,7 +623,7 @@ namespace Script
         {
             if (matchedCharacters[2].transform.position.x < matchedCharacters[4].transform.position.x)
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
                 {
                     ReturnObject(matchedCharacters[2]); 
                     ReturnObject(matchedCharacters[3]);
@@ -649,7 +649,7 @@ namespace Script
             }
             else
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
                 {
                     ReturnObject(matchedCharacters[1]);
                     ReturnObject(matchedCharacters[3]);
@@ -677,7 +677,7 @@ namespace Script
         }
         private bool Matches3X5Case(IReadOnlyList<GameObject> matchedCharacters)
         {
-            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[7]);
                 ReturnObject(matchedCharacters[5]); 
@@ -707,7 +707,7 @@ namespace Script
         }
         private bool Matches5X3Case(IReadOnlyList<GameObject> matchedCharacters)
         {
-            if (matchedCharacters[0].GetComponent<CharacterBase>()._type == CharacterBase.Type.treasure)
+            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[2]);
                 ReturnObject(matchedCharacters[4]);
