@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System.Linq;
+using Script.WeaponScriptGroup;
 using UnityEngine;
 
 namespace Script.CharacterManagerScript
@@ -63,7 +63,6 @@ namespace Script.CharacterManagerScript
                     Debug.Log($"unitGroup: {unitGroup} / uniAtkType: {atkUnit}");
                     break;
             }
-
         }
 
         private void Attack(AttackData attackData)
@@ -71,7 +70,9 @@ namespace Script.CharacterManagerScript
             var unit = attackData.Unit;
             var weaponType = attackData.WeaponType;
             var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.transform.position, unit.transform.rotation);
+            var useWeapon = weaponObject.GetComponent<WeaponBase>().UseWeapon();
             weaponsPool.SetSprite(weaponType, attackData.Unit.GetComponent<CharacterBase>().Level, weaponObject);
+            StartCoroutine(useWeapon);
         }
 
         private void ProjectileAttack(GameObject unit, CharacterBase.UnitGroups unitGroup)
@@ -107,12 +108,15 @@ namespace Script.CharacterManagerScript
 
         private void CircleAttack(GameObject unit, CharacterBase.UnitGroups unitGroup)
         {
-            var weaponType = unitGroup switch
+            switch (unitGroup)
             {
-                CharacterBase.UnitGroups.D => WeaponsPool.WeaponType.Sword,
-                _ => WeaponsPool.WeaponType.None
-            };
-            Attack(new AttackData(unit, weaponType));
+                case CharacterBase.UnitGroups.D:
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.Sword));
+                    break;
+                default:
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.None));
+                    break;
+            }
         }
 
         private void VibrateAttack(GameObject unit, CharacterBase.UnitGroups unitGroup)

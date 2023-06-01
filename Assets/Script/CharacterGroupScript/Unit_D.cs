@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Script.CharacterManagerScript;
 using UnityEngine;
 
@@ -9,13 +11,13 @@ public class Unit_D : CharacterBase
     [SerializeField] private Sprite level4Sprite;
     [SerializeField] private Sprite level5Sprite;
     private SpriteRenderer _spriteRenderer;
+    private const float detectionSize = 1.5f;
 
     private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         Level1();
     }
-
     protected override void LevelUp()
     {
         base.LevelUp();  // increment the level
@@ -36,12 +38,34 @@ public class Unit_D : CharacterBase
             default:
                 return;
         }
-    }    
-
+    }
     protected internal override void LevelReset()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         Level1();
+    }
+
+    public override List<GameObject> DetectEnemies()
+    {
+        var detectionCenter = (Vector2)transform.position;
+        var colliders = Physics2D.OverlapCircleAll(detectionCenter, detectionSize);
+        var detectedEnemies = (from collider in colliders
+            where collider.gameObject.CompareTag("Enemy")
+            select collider.gameObject).ToList();
+        foreach (var enemy in detectedEnemies)
+        {
+            Debug.Log($"DetectEnemies_Unit_D: " +
+                      $"Detected enemy {enemy.name} " +
+                      $"at position {enemy.transform.position}");
+        }
+        return detectedEnemies;
+    }
+
+    public void OnDrawGizmos()
+    {
+        var detectionCenter = transform.position;
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(detectionCenter, detectionSize);
     }
 
     private void Level1()

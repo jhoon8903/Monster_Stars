@@ -20,6 +20,7 @@ namespace Script
         [SerializeField] private EnemyPatternManager enemyPatternManager;
         [SerializeField] private GameObject gamePanel;
         [SerializeField] private AtkManager atkManager;
+        [SerializeField] private float checkInterval = 1.0f;
 
         private void Start()
         {
@@ -44,10 +45,16 @@ namespace Script
             // 중간 대기시간을 주는 방법이 필요
             yield return new WaitForSecondsRealtime(1.5f);
             StartCoroutine(enemyPatternManager.Zone_Move());
-            atkManager.CheckForAttack();
-            if (enemySpawnManager.FieldList.Count <= 0)
+            while (enemySpawnManager.FieldList.Count > 0)
             {
-                // 다음 스테이지 진행 및 초기화 호출
+                atkManager.CheckForAttack();
+                yield return new WaitForSeconds(checkInterval); 
+            }
+
+            if (enemySpawnManager.FieldList.Count == null || enemySpawnManager.FieldList.Count == 0)
+            {
+                // enemySpawnManager.FieldList.Count가 0이 되면 다음 스테이지 진행 및 초기화 호출
+                // 다음 로직을 호출하시면 됩니다.
             }
         }
 

@@ -7,17 +7,11 @@ namespace Script.CharacterGroupScript
 {
     public class Unit_A : CharacterBase
     {
-        [SerializeField]
-        private Sprite level1Sprite;
-        [SerializeField]
-        private Sprite level2Sprite;
-        [SerializeField]
-        private Sprite level3Sprite;
-        [SerializeField]
-        private Sprite level4Sprite;
-        [SerializeField]
-        private Sprite level5Sprite;
-
+        [SerializeField] private Sprite level1Sprite;
+        [SerializeField] private Sprite level2Sprite;
+        [SerializeField] private Sprite level3Sprite;
+        [SerializeField] private Sprite level4Sprite;
+        [SerializeField] private Sprite level5Sprite;
         private SpriteRenderer _spriteRenderer;
         private const float DetectionWidth = 1f;
         private const float DetectionHeight = 9f;
@@ -56,27 +50,28 @@ namespace Script.CharacterGroupScript
 
         public override List<GameObject> DetectEnemies()
         {
-            Debug.Log("DetectEnemies");
             var detectionSize = new Vector2(DetectionWidth, DetectionHeight);
             var detectionCenter = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
             var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize, 0f);
-            return (from collider in colliders
-                    where collider.gameObject
-                        .CompareTag("Enemy")
-                    select collider.gameObject)
-                .ToList();
+            var detectedEnemies = (from collider in colliders
+                where collider.gameObject.CompareTag("Enemy")
+                select collider.gameObject).ToList();
+            foreach (var enemy in detectedEnemies)
+            {
+                Debug.Log($"DetectEnemies_Unit_A: " +
+                          $"Detected enemy {enemy.name} " +
+                          $"at position {enemy.transform.position}");
+            }
+            return detectedEnemies;
         }
 
-        public void OnDrawGizmosSelected()
+        public void OnDrawGizmos()
         {
-            Debug.Log("ONDrawGizmos");
             var detectionSize = new Vector3(DetectionWidth, DetectionHeight, 0);
-            var detectionCenter = (Vector3)transform.position * DetectionHeight / 2f;
+            var detectionCenter = transform.position + Vector3.up * DetectionHeight / 2f;
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireCube(detectionCenter, detectionSize);
         }
-
-
 
         private void Level1()
         {

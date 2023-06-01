@@ -12,9 +12,10 @@ GameObject:
   - component: {fileID: 9036301952792892726}
   - component: {fileID: -5277961888572443832}
   - component: {fileID: -9039238202283530835}
+  - component: {fileID: 3542937281581240407}
   m_Layer: 0
   m_Name: IceCrystal
-  m_TagString: Untagged
+  m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -117,7 +118,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -141,3 +142,15 @@ PolygonCollider2D:
       - {x: 0.13871095, y: -0.104687504}
       - {x: 0.13871095, y: 0.015703125}
       - {x: 0.10207032, y: 0.13609375}
+--- !u!114 &3542937281581240407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9036301952792892721}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2db4244af83f470a8727c95106209cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

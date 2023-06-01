@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Script.CharacterManagerScript
+namespace Script.WeaponScriptGroup
 {
     public class WeaponsPool : MonoBehaviour
     {
@@ -21,6 +21,7 @@ namespace Script.CharacterManagerScript
         public List<Weapon> weapons;
         [SerializeField] private int weaponPoolCapacity = 20;
         private Dictionary<WeaponType, Queue<GameObject>> _poolDictionary;
+        private static Vector3 initLocalScale = new Vector3(1f, 1f , 1f);
 
         private void Start()
         {
@@ -73,6 +74,12 @@ namespace Script.CharacterManagerScript
             {
                 Debug.LogWarning("Level " + level + " doesn't exist for weapon " + weaponType);
             }
+        }
+
+        public static void ReturnToPool(GameObject weapon)
+        {
+            weapon.transform.localScale = initLocalScale;
+            weapon.SetActive(false);
         }
     }  
 }

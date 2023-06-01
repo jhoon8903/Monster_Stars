@@ -1,20 +1,18 @@
+using System.Collections.Generic;
+using System.Linq;
 using Script.CharacterManagerScript;
 using UnityEngine;
 
 
 public class Unit_F : CharacterBase
 {
-    [SerializeField]
-    private Sprite level1Sprite;
-    [SerializeField]
-    private Sprite level2Sprite;
-    [SerializeField]
-    private Sprite level3Sprite;
-    [SerializeField]
-    private Sprite level4Sprite;
-    [SerializeField]
-    private Sprite level5Sprite;
+    [SerializeField] private Sprite level1Sprite;
+    [SerializeField] private Sprite level2Sprite;
+    [SerializeField] private Sprite level3Sprite;
+    [SerializeField] private Sprite level4Sprite;
+    [SerializeField] private Sprite level5Sprite;
     private SpriteRenderer _spriteRenderer;
+    private const float detectionSize = 1.5f;
 
     private void Awake()
     {
@@ -48,6 +46,29 @@ public class Unit_F : CharacterBase
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
         Level1();
+    }
+
+    public override List<GameObject> DetectEnemies()
+    {
+        var detectionCenter = (Vector2)transform.position;
+        var colliders = Physics2D.OverlapCircleAll(detectionCenter, detectionSize);
+        var detectedEnemies = (from collider in colliders
+            where collider.gameObject.CompareTag("Enemy")
+            select collider.gameObject).ToList();
+        foreach (var enemy in detectedEnemies)
+        {
+            Debug.Log($"DetectEnemies_Unit_F: " +
+                      $"Detected enemy {enemy.name} " +
+                      $"at position {enemy.transform.position}");
+        }
+        return detectedEnemies;
+    }
+
+    public void OnDrawGizmos()
+    {
+        var detectionCenter = transform.position;
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireSphere(detectionCenter, detectionSize);
     }
 
     private void Level1()
