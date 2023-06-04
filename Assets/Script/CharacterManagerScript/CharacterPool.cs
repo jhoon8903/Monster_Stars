@@ -8,8 +8,6 @@ namespace Script.CharacterManagerScript
     {
         [SerializeField] private CharacterManager characterManager;
         [SerializeField] private int poolSize;
-        
-        private SpawnManager _spawnManager;
         private List<GameObject> _pooledCharacters;
         
         /**
@@ -25,7 +23,7 @@ namespace Script.CharacterManagerScript
                 for (var i = 0; i < poolSize; i++)
                 {
                     var obj = Instantiate(character.gameObject, transform, true);
-                    obj.SetActive(false);
+                    obj.SetActive(false);          
                     _pooledCharacters.Add(obj);
                 }
             }
@@ -51,9 +49,10 @@ namespace Script.CharacterManagerScript
          */
         public static void ReturnToPool(GameObject obj)
         {
-            obj.GetComponent<CharacterBase>().LevelReset();
-            obj.transform.localScale = new Vector3(0.6f,0.6f,0.6f);
-            obj.SetActive(false);
+            if (obj != null)
+            {
+                obj.SetActive(false);
+            }
         }
     }
 }

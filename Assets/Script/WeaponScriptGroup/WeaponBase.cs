@@ -18,14 +18,17 @@ namespace Script.WeaponScriptGroup
 
         public void InitializeWeapon(CharacterBase characterBase)
         {
-            this.CharacterBase = characterBase;
+            CharacterBase = characterBase;
         }
 
         public virtual IEnumerator UseWeapon()
         {
             IsInUse = true;
             StartingPosition = transform.position;
-            yield return new WaitForSecondsRealtime(FireRate);
+            Damage = CharacterBase.defaultDamage;
+            FireRate = CharacterBase.defaultAtkRate;
+            Speed = CharacterBase.projectileSpeed;
+            yield return null;
         }
 
         protected void StopUseWeapon(GameObject weapon)
@@ -33,8 +36,6 @@ namespace Script.WeaponScriptGroup
             IsInUse = false;
             WeaponsPool.ReturnToPool(weapon);
         }
-
     }
-
 }
 

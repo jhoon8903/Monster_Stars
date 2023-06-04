@@ -21,7 +21,7 @@ namespace Script.WeaponScriptGroup
         public List<Weapon> weapons;
         [SerializeField] private int weaponPoolCapacity = 20;
         private Dictionary<WeaponType, Queue<GameObject>> _poolDictionary;
-        private static Vector3 initLocalScale = new Vector3(1f, 1f , 1f);
+        private static readonly Vector3 InitLocalScale = new Vector3(1f, 1f , 1f);
 
         private void Start()
         {
@@ -46,7 +46,6 @@ namespace Script.WeaponScriptGroup
         {
             if (!_poolDictionary.ContainsKey(weaponType))
             {
-                Debug.LogWarning("Pool with tag " + weaponType + " doesn't exist.");
                 return null;
             }
 
@@ -57,7 +56,7 @@ namespace Script.WeaponScriptGroup
             objectToSpawn.transform.rotation = rotation;
 
             _poolDictionary[weaponType].Enqueue(objectToSpawn);
-
+            objectToSpawn.transform.localScale = InitLocalScale;
             return objectToSpawn;
         }
 
@@ -70,15 +69,10 @@ namespace Script.WeaponScriptGroup
             {
                 spriteRenderer.sprite = weapon.weaponSprite[level - 2];
             }
-            else
-            {
-                Debug.LogWarning("Level " + level + " doesn't exist for weapon " + weaponType);
-            }
         }
 
         public static void ReturnToPool(GameObject weapon)
         {
-            weapon.transform.localScale = initLocalScale;
             weapon.SetActive(false);
         }
     }  

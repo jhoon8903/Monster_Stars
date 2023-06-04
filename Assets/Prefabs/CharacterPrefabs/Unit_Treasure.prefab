@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 109876181003132260}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 1.4465098, y: 3.0027506, z: -0.083998576}
-  m_LocalScale: {x: 0.6, y: 0.6, z: 0.6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -46,11 +46,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1b4c2758a8054caeab6a19fc9e60a8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  defaultDamage: 0
+  increaseDamage: 0
+  defaultAtkRate: 0
+  increaseAtkRate: 0
+  projectileSpeed: 0
+  swingSpeed: 0
+  defaultAtkDistance: 0
+  increaseAtkDistance: 0
+  defaultAtkRange: {x: 0, y: 0, z: 0}
+  increaseAtkRange: {x: 0, y: 0, z: 0}
+  penetrate: 0
   level1Sprite: {fileID: 21300000, guid: 9d455ab6f718f4a7ead85727d8505d05, type: 3}
   level2Sprite: {fileID: 21300000, guid: 25e59aa0e44a94222a5bf3b759a9022a, type: 3}
   level3Sprite: {fileID: 21300000, guid: adb5a1d2272c244b1968626e17e014ca, type: 3}
   level4Sprite: {fileID: 21300000, guid: f1377a7bcf3b349d0880fbd5f345b186, type: 3}
-  treasurePanel: {fileID: 4288683218259308054, guid: 3e9823ad295574fe19c904d1fdfeb707, type: 3}
 --- !u!212 &452266822401987332
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -120,7 +130,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1.3636364, y: 1.3636364}
+    oldSize: {x: 1.6666666, y: 1.6666666}
     newSize: {x: 0.84, y: 0.84}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

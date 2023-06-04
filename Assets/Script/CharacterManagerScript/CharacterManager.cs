@@ -11,6 +11,5 @@ namespace Script.CharacterManagerScript
         {
             return characterList;
         }
-
     }
 }

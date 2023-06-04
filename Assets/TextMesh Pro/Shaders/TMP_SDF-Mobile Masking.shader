@@ -19,7 +19,7 @@ Properties {
 	_UnderlayDilate		("Border Dilate", Range(-1,1)) = 0
 	_UnderlaySoftness 	("Border Softness", Range(0,1)) = 0
 
-	_WeightNormal		("Weight Normal", float) = 0
+	_WeightNormal		("Weight Basic", float) = 0
 	_WeightBold			("Weight Bold", float) = .5
 
 	_ShaderFlags		("Flags", float) = 0

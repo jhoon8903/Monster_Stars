@@ -25,12 +25,13 @@ namespace Script.CharacterManagerScript
         {
             var characters = characterPool.UsePoolCharacterList();
             foreach (var characterBase in from character in characters select character
-                         .GetComponent<CharacterBase>() into characterBase where characterBase.Level >= 2 let enemies = characterBase
+                         .GetComponent<CharacterBase>() into characterBase where characterBase.UnitLevel >= 2 let enemies = characterBase
                          .DetectEnemies() where enemies.Count > 0 select characterBase)
             {
                 AtkMotion(characterBase);
             }
         }
+
 
         private void AtkMotion(CharacterBase unit)
         {
@@ -75,7 +76,7 @@ namespace Script.CharacterManagerScript
             weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>()); // InitializeWeapon 호출하여 캐릭터 정보 설정
             var useWeapon = weaponBase.UseWeapon();
     
-            weaponsPool.SetSprite(weaponType, attackData.Unit.GetComponent<CharacterBase>().Level, weaponObject);
+            weaponsPool.SetSprite(weaponType, attackData.Unit.GetComponent<CharacterBase>().UnitLevel, weaponObject);
             StartCoroutine(useWeapon);
         }
 

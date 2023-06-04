@@ -1,6 +1,5 @@
 using System.Collections;
 using DG.Tweening;
-using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using UnityEngine;
 
@@ -12,10 +11,9 @@ namespace Script.WeaponScriptGroup
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
-            Damage = CharacterBase.defaultDamage;
             Speed = CharacterBase.swingSpeed;
-            FireRate = CharacterBase.defaultAtkRate;
             pivotPoint.transform.DORotate(new Vector3(0, 0, 360), Speed, RotateMode.FastBeyond360).OnComplete(() => StopUseWeapon(pivotPoint));
+            yield return new WaitForSecondsRealtime(FireRate);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)

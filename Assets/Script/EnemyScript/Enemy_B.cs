@@ -7,10 +7,12 @@ namespace Script.EnemyScript
         protected internal override void EnemyProperty()
         {
             EnemyName = "B";
-            HealthPoint = 100;
-            MoveSpeed = 1.0f;
-            EnemyType = EnemyTypes.Normal;
-            SpawnZone = EnemyZone.B;
+            HealthPoint = 550;
+            CrushDamage = 200;
+            MoveSpeed = 1.2f;
+            EnemyType = EnemyTypes.Slow;
+            SpawnZone = SpawnZones.A;
+            RegistryType = RegistryTypes.Divine;
         }
     }
 }

@@ -7,13 +7,19 @@ namespace Script.UIManager
     {
 
         public Camera mainCamera;
-        [SerializeField] private float _targetSize = 10f;
+        [SerializeField] private float targetSize = 10f;
         [SerializeField] private float duration = 1.0f;
 
-        public void CameraSizeChange()
+        public void CameraBattleSizeChange()
         {
             mainCamera.transform.DOMove(new Vector3(2.5f, 3.5f, -100f), duration);
-            mainCamera.DOOrthoSize(_targetSize, duration);
+            mainCamera.DOOrthoSize(targetSize, duration);
+        }
+
+        public void CameraPuzzleSizeChange()
+        {
+            mainCamera.transform.DOMove(mainCamera.transform.position, duration);
+            mainCamera.DOOrthoSize(8f, duration);
         }
     }
 }

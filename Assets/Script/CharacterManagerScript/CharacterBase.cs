@@ -10,6 +10,7 @@ namespace Script.CharacterManagerScript
         protected internal int Level { get; private set; } = 1;
         protected internal string CharacterName;
 
+        protected internal int UnitLevel;
         public enum Types { Character, Treasure }
         protected internal Types Type;
 
@@ -37,9 +38,8 @@ namespace Script.CharacterManagerScript
         public Vector3 increaseAtkRange;
         public int penetrate;
 
-        private readonly Vector3 _initialScale = new Vector3(0.6f, 0.6f, 0.6f);
-        private readonly Vector3 _levelUpScale = new Vector3(0.8f, 0.8f, 0.8f);
-
+        private readonly Vector3 _initialScale = Vector3.one;
+        private readonly Vector3 _levelUpScale = new Vector3(1.2f, 1.2f, 0);
         public void LevelUpScale(GameObject levelUpObject)
         {
             var sequence = DOTween.Sequence();
@@ -55,7 +55,15 @@ namespace Script.CharacterManagerScript
             Level++;
         }
 
-        protected internal virtual void LevelReset() { }
+        protected internal virtual void CharacterReset()
+        {
+        }
+
+        protected internal void ResetLevel()
+        {
+            Level = 1;
+        }
+
 
         public virtual List<GameObject> DetectEnemies()
         {

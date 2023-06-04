@@ -2,8 +2,9 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using Script.CharacterManagerScript;
-using Script.PowerUpScript;
+using Script.RewardScript;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -11,12 +12,12 @@ namespace Script
 {
     public class SpawnManager : MonoBehaviour
     {
-        [SerializeField] private CharacterPool characterPool;  // 캐릭터 풀
-        [SerializeField] private GridManager gridManager;  // 그리드 매니저
-        [SerializeField] private MatchManager matchManager;  // 매치 매니저
-        [SerializeField] private TreasureManager treasureManger;
-
-         // 이 함수는 인수로 주어진 위치에 있는 스폰 캐릭터 목록에서 캐릭터의 GameObject를 반환합니다.
+        [SerializeField] private CharacterPool characterPool;  
+        [SerializeField] private GridManager gridManager; 
+        [SerializeField] private MatchManager matchManager;  
+        [SerializeField] private CommonRewardManager rewardManger;
+        [SerializeField] private GameManager gameManager;
+        public bool isWave10Spawning = false;
         public GameObject CharacterObject(Vector3 spawnPosition)
         {
             var spawnCharacters = characterPool.UsePoolCharacterList();
@@ -24,9 +25,6 @@ namespace Script
                 where character.transform.position == spawnPosition 
                 select character.gameObject).FirstOrDefault();
         }
-        
-        //  캐릭터 오브젝트를 상승시키는 작업을 수행하는 코루틴입니다.
-        // 빈 그리드 공간을 기반으로 캐릭터의 이동을 계산하고, 이러한 이동을 수행하고, 새 캐릭터를 생성하고, 일치하는지 확인한 다음 완료 신호를 보냅니다.
         public IEnumerator PositionUpCharacterObject()
         {
             var moves = new List<(GameObject, Vector3Int)>();
@@ -49,12 +47,29 @@ namespace Script
             yield return StartCoroutine(PerformMoves(moves));
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
             yield return StartCoroutine(matchManager.CheckMatches());
-            if (treasureManger.PendingTreasure.Count == 0) yield break;
-            treasureManger.EnqueueAndCheckTreasure(treasureManger.PendingTreasure.Dequeue());
+            if (rewardManger.PendingTreasure.Count == 0) yield break;
+            rewardManger.EnqueueTreasure(rewardManger.PendingTreasure.Dequeue());
         }
+        private static IEnumerator MoveCharacter(GameObject gameObject, Vector3Int targetPosition, float duration = 0.3f)
+        {
+            if (gameObject == null) yield break;
 
-        // 이 코루틴은 새 캐릭터의 생성 및 후속 이동을 관리합니다.
-        // 새 캐릭터를 생성해야 하는 위치(빈 그리드 공간)를 결정하고 해당 위치에 새 캐릭터를 생성한 다음 그리드의 올바른 위치로 이동합니다.
+            var moveTween 
+                = gameObject.transform.DOMove(targetPosition, duration).SetEase(Ease.Linear);
+    
+            yield return moveTween.WaitForCompletion();
+        }
+        private IEnumerator PerformMoves(IEnumerable<(GameObject, Vector3Int)> moves)
+        {
+            var moveCoroutines
+                = moves.Select(move 
+                    => StartCoroutine(MoveCharacter(move.Item1, move.Item2)))
+                    .ToList();
+            foreach (var moveCoroutine in moveCoroutines)
+            {
+                yield return moveCoroutine;
+            }
+        }
         private IEnumerator SpawnAndMoveNewCharacters()
         {
             var moveCoroutines = new List<Coroutine>();
@@ -76,7 +91,7 @@ namespace Script
                     var newCharacter = SpawnNewCharacter(spawnPosition);
                     moves.Add((newCharacter, spawnPosition));
                     if (newCharacter == null) continue;
-                    var coroutine = StartCoroutine(MoveNewCharacter(newCharacter, currentPosition));
+                    var coroutine = StartCoroutine(MoveCharacter(newCharacter, currentPosition));
                     moveCoroutines.Add(coroutine);
                 }
             }
@@ -85,9 +100,6 @@ namespace Script
                 yield return coroutine;
             }
         }
-
-        // 이 함수는 지정된 그리드 위치에서 새 캐릭터를 생성합니다.
-        // 사용 가능한(사용되지 않은) 문자 목록에서 임의로 문자를 선택하여 지정된 위치에 배치합니다.
         private GameObject SpawnNewCharacter(Vector3Int position)
         {
             var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
@@ -95,26 +107,63 @@ namespace Script
             var randomIndex = Random.Range(0, notUsePoolCharacterList.Count);
             var newCharacter = notUsePoolCharacterList[randomIndex];
             newCharacter.transform.position = position;
+            newCharacter.GetComponent<CharacterBase>().CharacterReset();
             newCharacter.SetActive(true);
             notUsePoolCharacterList.RemoveAt(randomIndex);
             return newCharacter;
         }
-        
-        // 이 코루틴은 새로 생성된 캐릭터를 그리드의 대상 위치로 이동하는 역할을 합니다.
-        private IEnumerator MoveNewCharacter(GameObject newCharacter, Vector3Int targetPosition)
+        public IEnumerator Wave10Spawn()
         {
-            yield return StartCoroutine(SwipeManager.NewCharacterMove(newCharacter, targetPosition));
-
-        }
-
-        // 이 코루틴은 캐릭터가 움직일 때 자연스러운 효과를 적용합니다.
-        // 이동 목록의 각 이동에 대해 게임 오브젝트를 그리드의 특정 위치로 이동하는 코루틴을 시작합니다.
-        private IEnumerator PerformMoves(IEnumerable<(GameObject, Vector3Int)> moves)
-        {
-            var coroutines = moves.Select(move => StartCoroutine(SwipeManager.OneWayMove(move.Item1, move.Item2))).ToList();
-            foreach (var coroutine in coroutines)
+            isWave10Spawning = true;
+            
+            var saveCharacterList = characterPool.UsePoolCharacterList();
+            var highLevelCharacters = saveCharacterList
+                .OrderByDescending(character => character.GetComponent<CharacterBase>().UnitLevel)
+                .Take(6)
+                .ToList();
+            yield return StartCoroutine(gameManager.WaitForPanelToClose());
+            foreach (var character in saveCharacterList
+                         .Where(character => !highLevelCharacters.Contains(character)))
             {
-                yield return coroutine;
+                character.GetComponent<CharacterBase>().CharacterReset();
+                character.SetActive(false);
+            }
+
+            var highestY = gridManager.gridHeight - 1;
+            var moves = new List<(GameObject, Vector3Int)>();
+
+            for (var x = 0; x < highLevelCharacters.Count; x++)
+            {
+                var newGridPosition = new Vector3Int(x, highestY, 0);
+                moves.Add((highLevelCharacters[x], newGridPosition));
+            }
+
+            yield return StartCoroutine(PerformMovesSequentially(moves));
+            moves.Clear();
+            for (var y = highestY - 1; y >= 0; y--)
+            {
+                for (var x = 0; x < gridManager.gridWidth; x++)
+                {
+                    var currentPos = new Vector3Int(x, y, 0);
+                    if (CharacterObject(currentPos) != null) continue; // Skip if the cell is not empty
+                    var spawnPosition = new Vector3Int(x, -2, 0); // Spawn position below the grid
+                    var newCharacter = SpawnNewCharacter(spawnPosition);
+                    if (newCharacter != null)
+                    {
+                        moves.Add((newCharacter, currentPos));
+                    }
+                }
+                yield return StartCoroutine(PerformMoves(moves)); // Move all characters to the current row at once
+                moves.Clear();
+            } 
+            yield return StartCoroutine(matchManager.CheckMatches());
+            isWave10Spawning = false;
+        }
+        private IEnumerator PerformMovesSequentially(List<(GameObject, Vector3Int)> moves)
+        {
+            foreach (var (o, targetPosition) in moves)
+            {
+                yield return StartCoroutine(MoveCharacter(o, targetPosition));
             }
         }
     }

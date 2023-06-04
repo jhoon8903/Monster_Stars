@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Script.CharacterManagerScript;
+using Script.UIManager;
 using UnityEngine;
 
 namespace Script.EnemyManagerScript
@@ -8,90 +10,91 @@ namespace Script.EnemyManagerScript
     public class EnemySpawnManager : MonoBehaviour
     {
         [SerializeField] private EnemyPool enemyPool;
-        [SerializeField] private GameObject enemySpawnZoneA;
-        [SerializeField] private GameObject enemySpawnZoneB;
-        [SerializeField] private GameObject enemySpawnZoneC;
-        [SerializeField] private GameObject enemySpawnZoneD;
-        [SerializeField] private GameObject enemySpawnZoneE;
-        public List<GameObject> FieldList = new List<GameObject>();
+        [SerializeField] private Transform spawnZoneA;
+        [SerializeField] private Transform spawnZoneB;
+        [SerializeField] private Transform spawnZoneC;
+        [SerializeField] private Transform spawnZoneD;
+        [SerializeField] private Transform spawnZoneE;
+        [SerializeField] private EnemyManager enemyManager;
+        [SerializeField] private GameManager gameManager;
+        [SerializeField] private CharacterPool characterPool;
+        [SerializeField] private ExpManager expManager;
+        [SerializeField] private GridManager gridManager;
 
-        private Dictionary<EnemyBase.EnemyZone, Queue<GameObject>> _zoneDictionary;
-        private Dictionary<EnemyBase.EnemyZone, GameObject> _spawnZoneDictionary; 
+        private Dictionary<EnemyBase.SpawnZones, Transform> _spawnZones;
+        public List<GameObject> fieldList = new List<GameObject>();
 
-        public void Awake()
+        private void Start()
         {
-            _zoneDictionary = new Dictionary<EnemyBase.EnemyZone, Queue<GameObject>>
+            expManager = GetComponent<ExpManager>();
+            _spawnZones = new Dictionary<EnemyBase.SpawnZones, Transform>()
             {
-                { EnemyBase.EnemyZone.A, new Queue<GameObject>() },
-                { EnemyBase.EnemyZone.B, new Queue<GameObject>() },
-                { EnemyBase.EnemyZone.C, new Queue<GameObject>() },
-                { EnemyBase.EnemyZone.D, new Queue<GameObject>() },
-                { EnemyBase.EnemyZone.E, new Queue<GameObject>() },
+                { EnemyBase.SpawnZones.A, spawnZoneA },
+                { EnemyBase.SpawnZones.B, spawnZoneB },
+                { EnemyBase.SpawnZones.C, spawnZoneC },
+                { EnemyBase.SpawnZones.D, spawnZoneD },
+                { EnemyBase.SpawnZones.E, spawnZoneE },
             };
-
-            _spawnZoneDictionary = new Dictionary<EnemyBase.EnemyZone, GameObject> 
-            {
-                { EnemyBase.EnemyZone.A, enemySpawnZoneA },
-                { EnemyBase.EnemyZone.B, enemySpawnZoneB },
-                { EnemyBase.EnemyZone.C, enemySpawnZoneC },
-                { EnemyBase.EnemyZone.D, enemySpawnZoneD },
-                { EnemyBase.EnemyZone.E, enemySpawnZoneE },
-            };
-
-            foreach (var enemyObject in enemyPool.PooledEnemy)
-            {
-                var spawnZone = enemyObject.GetComponent<EnemyBase>().SpawnZone;
-                if (_zoneDictionary.TryGetValue(spawnZone, out var queue))
-                {
-                    queue.Enqueue(enemyObject);
-                }
-            }
         }
 
-        public IEnumerator SpawnEnemies()
+        public IEnumerator SpawnEnemies(EnemyBase.EnemyTypes enemyType, int count)
         {
-            var spawnCounts = new Dictionary<EnemyBase.EnemyZone, int>
+            for (var i = 0; i < count; i++)
             {
-                { EnemyBase.EnemyZone.A, 0 },
-                { EnemyBase.EnemyZone.B, 0 },
-                { EnemyBase.EnemyZone.C, 0 },
-                { EnemyBase.EnemyZone.D, 0 },
-                { EnemyBase.EnemyZone.E, 0 }
-            };
+                SpawnEnemy(enemyType);
+            }
+            yield return null;
+        }
+        public void SpawnBoss(int wave)
+        {
+            var bossObject = Instantiate(wave == 10 ? enemyManager.stage10BossPrefab : enemyManager.stage20BossPrefab, transform);
+            bossObject.transform.position = gridManager.bossSpawnArea;
+            bossObject.transform.localScale = new Vector3(1.7f, 1.7f, 0);
+            bossObject.SetActive(true);
+            fieldList.Add(bossObject);
+        }
 
-            var spawnInProgress = true;
-
-            while (spawnInProgress)
+        private void SpawnEnemy(EnemyBase.EnemyTypes enemyType)
+        {
+            var enemyToSpawn = enemyPool.GetPooledEnemy(enemyType);
+            if (enemyToSpawn == null)
             {
-                spawnInProgress = false; // reset each loop iteration
+                return;
+            }
+            var enemyZone = enemyToSpawn.GetComponent<EnemyBase>().SpawnZone;
+            var spawnPos = GetRandomPointInBounds(enemyZone);
+            enemyToSpawn.transform.position = spawnPos;
+            enemyToSpawn.SetActive(true);
+            fieldList.Add(enemyToSpawn);
+            var enemyBase = enemyToSpawn.GetComponent<EnemyBase>();
+            enemyBase.OnEnemyKilled += reason => { fieldList.Remove(enemyToSpawn); };
+        }
 
-                foreach (var zone in _zoneDictionary
-                             .Where(zone => zone.Value.Count > 0 && spawnCounts[zone.Key] < 10))
+        private Vector3 GetRandomPointInBounds(EnemyBase.SpawnZones zone)
+        {
+            var spawnPos = _spawnZones[zone].position;
+            if (zone == EnemyBase.SpawnZones.A)
+            {
+                float xPosition;
+                if (gameManager.wave is 1 or 2 or 3)
                 {
-                    spawnInProgress = true; // set flag to continue looping
-                    spawnCounts[zone.Key]++; // increment spawn count for this zone
+                    var characters = characterPool.UsePoolCharacterList();
+                    var xPositions = (from character in characters where character
+                        .GetComponent<CharacterBase>().Level >= 2 select character.transform.position.x)
+                        .ToList();
 
-                    var enemyObject = zone.Value.Dequeue();
-                    enemyObject.SetActive(true);
-                    FieldList.Add(enemyObject);
-                    var positionA = enemySpawnZoneA.transform.position;
-                    var positionB = enemySpawnZoneB.transform.position;
-                    var positionC = enemySpawnZoneC.transform.position;
-                    var positionD = enemySpawnZoneD.transform.position;
-                    var positionE = enemySpawnZoneE.transform.position;
-                    var spawnPosition = zone.Key switch
+                    if (xPositions.Count > 0)
                     {
-                        EnemyBase.EnemyZone.A => new Vector3(Random.Range(0, 6), positionA.y + Random.Range(-0.5f, 0.5f), 0),
-                        EnemyBase.EnemyZone.B => new Vector3(positionB.x, positionB.y, 0),
-                        EnemyBase.EnemyZone.C => new Vector3(positionC.x, positionC.y, 0),
-                        EnemyBase.EnemyZone.D => new Vector3(positionD.x, positionD.y, 0),
-                        EnemyBase.EnemyZone.E => new Vector3(positionE.x, positionE.y, 0),
-                        _ => new Vector3()
-                    };
-                    enemyObject.transform.position = spawnPosition;
-                    enemyObject.transform.SetParent(_spawnZoneDictionary[zone.Key].transform);
+                        xPosition = xPositions[Random.Range(0, xPositions.Count)];
+                        return new Vector3(xPosition, spawnPos.y + Random.Range(-0.5f, 0.5f), 0);
+                    }
                 }
-                yield return null;
+                xPosition = Random.Range(0, 6);
+                return new Vector3(xPosition, spawnPos.y + Random.Range(-0.5f, 0.5f), 0);
+            }
+            else
+            {
+                return spawnPos;
             }
         }
     }

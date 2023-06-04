@@ -18,7 +18,7 @@ uniform float		_BevelWidth;				// v[-1, 1]
 uniform float		_BevelClamp;				// v[ 0, 1]
 uniform float		_BevelRoundness;			// v[ 0, 1]
 
-uniform sampler2D	_BumpMap;					// Normal map
+uniform sampler2D	_BumpMap;					// Basic map
 uniform float		_BumpOutline;				// v[ 0, 1]
 uniform float		_BumpFace;					// v[ 0, 1]
 

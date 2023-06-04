@@ -1,5 +1,4 @@
 using Script.EnemyManagerScript;
-using UnityEngine;
 
 namespace Script.EnemyScript
 {
@@ -10,9 +9,9 @@ namespace Script.EnemyScript
             EnemyName = "A";
             HealthPoint = 400;
             CrushDamage = 160;
-            MoveSpeed = Random.Range(13f, 17f);  // 높을 수록 느려짐
-            EnemyType = EnemyTypes.Normal;
-            SpawnZone = EnemyZone.A;
+            MoveSpeed = 1f;
+            EnemyType = EnemyTypes.Basic;
+            SpawnZone = SpawnZones.A;
             RegistryType = RegistryTypes.Physics;
         }
     }

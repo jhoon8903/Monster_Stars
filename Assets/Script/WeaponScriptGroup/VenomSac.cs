@@ -1,6 +1,5 @@
 using System.Collections;
 using DG.Tweening;
-using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using UnityEngine;
 
@@ -8,9 +7,13 @@ namespace Script.WeaponScriptGroup
 {
     public class VenomSac : WeaponBase
     {
+        // 캐시된 적의 참조를 보관합니다.
+        private EnemyBase _cachedEnemy;
+
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
+
             Damage = CharacterBase.defaultDamage;
             Speed = CharacterBase.projectileSpeed;
             FireRate = CharacterBase.defaultAtkRate;
@@ -21,19 +24,27 @@ namespace Script.WeaponScriptGroup
                 enemyTransform = enemy.transform.position;
                 yield return enemyTransform;
             }
-            transform.DOMove(enemyTransform,Speed).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(this.gameObject));
+            var distance = Vector3.Distance(transform.position, enemyTransform);
+            var adjustedSpeed = Speed * distance;
+            var timeToMove = distance / adjustedSpeed;
+
+            transform.DOMove(enemyTransform, timeToMove)
+                .SetEase(Ease.Linear)
+                .OnComplete(() => StopUseWeapon(this.gameObject));
+
+            yield return new WaitForSecondsRealtime(FireRate);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
-            var enemy = collision.gameObject.GetComponent<EnemyBase>();
-            if(enemy != null)
+
+            // 캐시된 적의 참조를 사용합니다.
+            if(_cachedEnemy != null)
             {
-                enemy.ReceiveDamage(Damage);
+                _cachedEnemy.ReceiveDamage(Damage);
             }
             StopUseWeapon(this.gameObject);
         }
     }
-
 }

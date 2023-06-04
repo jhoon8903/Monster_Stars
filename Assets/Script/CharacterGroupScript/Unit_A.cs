@@ -42,9 +42,9 @@ namespace Script.CharacterGroupScript
                     return;
             }
         }
-        protected internal override void LevelReset()
+        protected internal override void CharacterReset()
         {
-            _spriteRenderer = GetComponent<SpriteRenderer>();
+            ResetLevel();
             Level1();
         }
 
@@ -56,12 +56,6 @@ namespace Script.CharacterGroupScript
             var detectedEnemies = (from collider in colliders
                 where collider.gameObject.CompareTag("Enemy")
                 select collider.gameObject).ToList();
-            foreach (var enemy in detectedEnemies)
-            {
-                Debug.Log($"DetectEnemies_Unit_A: " +
-                          $"Detected enemy {enemy.name} " +
-                          $"at position {enemy.transform.position}");
-            }
             return detectedEnemies;
         }
 
@@ -76,6 +70,7 @@ namespace Script.CharacterGroupScript
         private void Level1()
         {
             CharacterName = "Unit_A_00";
+            UnitLevel = 1;
             Type = Types.Character;
             defaultDamage = 0;
             defaultAtkRate = 0;
@@ -86,6 +81,7 @@ namespace Script.CharacterGroupScript
         private void Level2()
         {
             CharacterName = "Unit_A_01";
+            UnitLevel = 2;
             Type = Types.Character;
             UnitGroup = UnitGroups.A;
             defaultDamage = 125f;
@@ -101,6 +97,7 @@ namespace Script.CharacterGroupScript
         private void Level3()
         {
             CharacterName = "Unit_A_02";
+            UnitLevel = 3;
             Type = Types.Character;
             UnitGroup = UnitGroups.A;
             defaultDamage *= 1.7f;
@@ -116,9 +113,10 @@ namespace Script.CharacterGroupScript
         private void Level4()
         {
             CharacterName = "Unit_A_03";
+            UnitLevel = 4;
             Type = Types.Character;
             UnitGroup = UnitGroups.A;
-            defaultDamage *= 2;
+            defaultDamage *= 2f;
             defaultAtkRate = 0.9f;
             defaultAtkDistance = 12;
             projectileSpeed = 1f;
@@ -131,6 +129,7 @@ namespace Script.CharacterGroupScript
         private void Level5()
         {
             CharacterName = "Unit_A_04";
+            UnitLevel = 5;
             Type = Types.Character;
             UnitGroup = UnitGroups.A;
             defaultDamage *= 2.3f;

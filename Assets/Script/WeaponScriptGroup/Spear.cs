@@ -1,6 +1,5 @@
 using System.Collections;
 using DG.Tweening;
-using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using UnityEngine;
 
@@ -11,11 +10,17 @@ namespace Script.WeaponScriptGroup
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
+
             Damage = CharacterBase.defaultDamage;
             FireRate = CharacterBase.defaultAtkRate;
-            Speed = CharacterBase.projectileSpeed;
             var MaxDistanceY = CharacterBase.defaultAtkDistance;
-            transform.DOMoveY(MaxDistanceY, Speed).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(this.gameObject));
+            var distance = Mathf.Abs(transform.position.y - MaxDistanceY);
+            var adjustedSpeed = Speed * distance;
+            var timeToMove = distance / adjustedSpeed;
+
+            transform.DOMoveY(MaxDistanceY, timeToMove).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(this.gameObject));
+
+            yield return new WaitForSecondsRealtime(FireRate);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -26,7 +31,6 @@ namespace Script.WeaponScriptGroup
             {
                 enemy.ReceiveDamage(Damage);
             }
-
             StopUseWeapon(this.gameObject);
         }
     }

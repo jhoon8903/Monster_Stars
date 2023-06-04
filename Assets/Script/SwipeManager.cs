@@ -1,8 +1,8 @@
 using System.Collections;
-using System.Collections.Generic;
 using Script.CharacterManagerScript;
 using UnityEngine;
 using DG.Tweening;
+using Script.RewardScript;
 using Script.UIManager;
 
 namespace Script
@@ -19,6 +19,8 @@ namespace Script
         [SerializeField] private CountManager countManager; // 카운트매니저를 참조합니다.
         [SerializeField] private LayerMask characterLayer; // 캐릭터 레이어를 저장합니다.
         [SerializeField] private MatchManager matchManager;
+        [SerializeField] private CharacterPool characterPool;
+        [SerializeField] private CommonRewardManager rewardManager;
 
         // CountManager를 요청하여 캐릭터의 이동 허용 여부를 확인합니다.
         private bool CanMove()  
@@ -58,14 +60,14 @@ namespace Script
             var hit = Physics2D.Raycast(point2D, Vector2.zero, Mathf.Infinity, characterLayer);
             if (hit.collider == null) return;
             _startObject = hit.collider.gameObject;
-            ScaleObject(_startObject, new Vector3(0.8f,0.8f,0.8f), 0.2f);
+            ScaleObject(_startObject, new Vector3(1.2f,1.2f,1.2f), 0.2f);
             _firstTouchPosition = point2D;
         }
 
         // 사용자가 손가락을 떼거나 마우스 버튼을 놓을 때 처리합니다. 시작 개체의 크기를 조정하고 다음 스 와이프를 위해 무효화합니다.
         private void HandleTouchUp()
         {
-            ScaleObject(_startObject, new Vector3(0.6f,0.6f,0.6f), 0.2f);
+            ScaleObject(_startObject, Vector3.one, 0.2f);
             _startObject = null;
         }
 
@@ -73,7 +75,7 @@ namespace Script
         // 움직임이 스와이프로 간주될 만큼 길면 스와이프 동작을 시작합니다.
         private void HandleDrag(Vector2 point2D)
         {
-            if (isBusy) return;
+            if (isBusy || rewardManager.openBoxing) return;
             var swipe = point2D - _firstTouchPosition;
             if (!(swipe.sqrMagnitude > minSwipeLength * minSwipeLength)) return;
             if (!(Mathf.Abs(swipe.x) > 0.5f) && !(Mathf.Abs(swipe.y) > 0.5f)) return;
@@ -178,24 +180,6 @@ namespace Script
             if (characterObject == null) yield break;
             matchManager.IsMatched(characterObject);
             yield return null;
-        }
-
-         //게임 오브젝트를 지정된 위치로 한 방향으로 이동합니다.
-         public static IEnumerator OneWayMove(GameObject gameObject, Vector3Int nullPosition)
-        {
-            if (gameObject == null) yield break;
-        
-            Tween complete = gameObject.transform.DOMove(nullPosition, 0.3f);
-            yield return complete.WaitForCompletion();
-        }
-
-        //새로 스폰된 캐릭터를 새로운 위치로 이동합니다.
-        public static IEnumerator NewCharacterMove(GameObject gameObject, Vector3Int newPosition)
-        {
-            if (gameObject == null) yield break;
-
-            Tween complete = gameObject.transform.DOMove(newPosition, 0.5f);
-            yield return complete.WaitForCompletion();
         }
     }
 }
