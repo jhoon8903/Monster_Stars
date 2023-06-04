@@ -685,7 +685,7 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   gridManager: {fileID: 8808150501734532426}
   spawnManager: {fileID: 149521964}
-  moveCount: 20
+  moveCount: 15
   swipeManager: {fileID: 149521965}
   cameraManager: {fileID: 758648960}
   backgroundManager: {fileID: 1011029961}
@@ -700,7 +700,7 @@ MonoBehaviour:
   waveText: {fileID: 651631795}
   castleManager: {fileID: 1177777546}
   commonRewardManager: {fileID: 2120144519}
-  wave: 9
+  wave: 1
 --- !u!4 &149521959
 Transform:
   m_ObjectHideFlags: 0
