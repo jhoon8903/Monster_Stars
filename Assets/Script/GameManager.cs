@@ -150,7 +150,7 @@ namespace Script
         }
         public void GameSpeed()
         {
-            if (countManager._moveCount == 0 && _speedUp)
+            if (countManager.baseMoveCount == 0 && _speedUp)
             {
                 Time.timeScale = _isBattle ? 2 : 1;
             }

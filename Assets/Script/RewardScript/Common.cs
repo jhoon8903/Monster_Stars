@@ -65,7 +65,7 @@ namespace Script.RewardScript
                 CommonGreen(g,2,r,0,CommonData.Types.GroupAtkSpeed,new[]{4}),
                 CommonGreen(g,3,r,0,CommonData.Types.Step,new []{2,3,4}),
                 CommonGreen(g,4,n,1,CommonData.Types.RandomLevelUp, new []{2,3}),
-                CommonGreen(g,4,n,1,CommonData.Types.LevelUp, new []{1}),
+                CommonGreen(g,4,n,1,CommonData.Types.LevelUp, new []{0,1,2,3}),
                 CommonGreen(g,4,r,0,CommonData.Types.LevelUpPattern, new []{1}),
                 CommonGreen(g,7,r,6, CommonData.Types.Exp, new []{5}),
             };

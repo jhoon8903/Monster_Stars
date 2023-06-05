@@ -14,6 +14,7 @@ namespace Script
         private GameObject _returnObject; // 원래 위치로 돌아갈 객체를 추적하는 데 사용됩니다.
         private Vector2 _firstTouchPosition; // 첫 터치의 위치를 저장합니다.
         private Vector2 _emptyGridPosition; // 빈 그리드의 위치를 저장합니다.
+        private bool diagonalMovement = false;
         [SerializeField] private float minSwipeLength = 1.0f; // 스와이프로 인식되는 최소 길이입니다.
         [SerializeField] private SpawnManager spawnManager; // 스폰매니저를 참조합니다.
         [SerializeField] private CountManager countManager; // 카운트매니저를 참조합니다.
@@ -21,6 +22,12 @@ namespace Script
         [SerializeField] private MatchManager matchManager;
         [SerializeField] private CharacterPool characterPool;
         [SerializeField] private CommonRewardManager rewardManager;
+
+        // 대각선 이동
+        public void EnableDiagonalMovement()
+        {
+            diagonalMovement = true;
+        }
 
         // CountManager를 요청하여 캐릭터의 이동 허용 여부를 확인합니다.
         private bool CanMove()  
@@ -107,20 +114,59 @@ namespace Script
             var startY = (int)position.y;
             var endX = startX;
             var endY = startY;
-            switch (swipeAngle)
+
+            // If diagonal movement is enabled, handle 8 directions
+            if (diagonalMovement)
             {
-                case >= 315 or < 45:
-                    endX += 1;
-                    break;
-                case >= 45 and < 135:
-                    endY += 1;
-                    break;
-                case >= 135 and < 225:
-                    endX -= 1;
-                    break;
-                case >= 225 and < 315:
-                    endY -=1;
-                    break;
+                switch (swipeAngle)
+                {
+                    case >= 337.5f or < 22.5f:
+                        endX += 1;
+                        break;
+                    case >= 22.5f and < 67.5f:
+                        endX += 1;
+                        endY += 1;
+                        break;
+                    case >= 67.5f and < 112.5f:
+                        endY += 1;
+                        break;
+                    case >= 112.5f and < 157.5f:
+                        endX -= 1;
+                        endY += 1;
+                        break;
+                    case >= 157.5f and < 202.5f:
+                        endX -= 1;
+                        break;
+                    case >= 202.5f and < 247.5f:
+                        endX -= 1;
+                        endY -= 1;
+                        break;
+                    case >= 247.5f and < 292.5f:
+                        endY -=1;
+                        break;
+                    case >= 292.5f and < 337.5f:
+                        endX += 1;
+                        endY -=1;
+                        break;
+                }
+            }
+            else // else handle 4 directions as usual
+            {
+                switch (swipeAngle)
+                {
+                    case >= 315 or < 45:
+                        endX += 1;
+                        break;
+                    case >= 45 and < 135:
+                        endY += 1;
+                        break;
+                    case >= 135 and < 225:
+                        endX -= 1;
+                        break;
+                    case >= 225 and < 315:
+                        endY -=1;
+                        break;
+                }
             }
             var startObject = spawnManager.CharacterObject(new Vector3(startX, startY, 0));
             var endObject = spawnManager.CharacterObject(new Vector3(endX, endY, 0));

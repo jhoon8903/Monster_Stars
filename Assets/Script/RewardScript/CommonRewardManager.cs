@@ -35,6 +35,7 @@ namespace Script.RewardScript
         [SerializeField] private CountManager countManager;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private GridManager gridManager;
+        [SerializeField] private SwipeManager swipeManager;
         
         public readonly Queue<GameObject> PendingTreasure = new Queue<GameObject>(); // 보류 중인 보물 큐
         private GameObject _currentTreasure = null; // 현재 보물
@@ -49,18 +50,49 @@ namespace Script.RewardScript
                 Debug.Log("Not Setting This Reward");
                 return;
             }
+            var characterManager = FindObjectOfType<CharacterManager>();
             switch (selectedReward.Type)
             {
+                // Row 추가 강화 효과
                 case CommonData.Types.AddRow:
-                    Debug.Log("AddRowSelect");
                     gridManager.AddRow();
                     break;
-
-                // Add more cases for other reward types...
-                // case CommonData.Types.SomeOtherRewardType:
-                //     DoSomethingForThisReward();
-                //     break;
-
+                // 전체 데미지 증가 효과
+                case CommonData.Types.GroupDamage:
+                    characterManager.IncreaseGroupDamage(selectedReward.Property[0]);
+                        break;
+                // 전체 공격 속도 증가 효과
+                case CommonData.Types.GroupAtkSpeed:
+                    characterManager.IncreaseGroupAtkRate(selectedReward.Property[0]);
+                    break;
+                // 카운트 증가
+                case CommonData.Types.Step:
+                    countManager.IncreaseRewardMoveCount(selectedReward.Property[0]);
+                    break;
+                // 영구적 카운트 증가
+                case CommonData.Types.StepLimit:
+                     countManager.PermanentIncreaseMoveCount(selectedReward.Property[0]);
+                     break;
+                // 대각선 이동
+                case CommonData.Types.StepDirection:
+                     swipeManager.EnableDiagonalMovement();
+                     break;
+                // 랜덤 케릭터 레벨업
+                case CommonData.Types.RandomLevelUp:
+                    characterManager.RandomCharacterLevelUp(selectedReward.Property[0]);
+                    break;
+                // 케릭터 그룹 레벨업
+                case CommonData.Types.LevelUp:
+                    characterManager.CharacterGroupLevelUp(selectedReward.Property[0]);
+                    break;
+                case CommonData.Types.LevelUpPattern:
+                case CommonData.Types.Exp:
+                case CommonData.Types.CastleRecovery:
+                case CommonData.Types.CastleMaxHp:
+                case CommonData.Types.Board:
+                case CommonData.Types.Slow:
+                case CommonData.Types.NextStage:
+                case CommonData.Types.Gold:
                 default:
                     Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}");
                     break;
@@ -70,7 +102,7 @@ namespace Script.RewardScript
         private void Selected()
         {
             commonRewardPanel.SetActive(false);
-            if (countManager._moveCount == 0)
+            if (countManager.baseMoveCount == 0)
             {
                 gameManager.GameSpeed();
             }
@@ -100,7 +132,6 @@ namespace Script.RewardScript
             var randomIndex = random.Next(rangeValues.Count);
             return rangeValues[randomIndex];
         }
-
         public void EnqueueTreasure(GameObject treasure)
         {
             openBoxing = true;
@@ -208,7 +239,6 @@ namespace Script.RewardScript
             _selectedCommonReward = selectedReward;
             Selected();
         }
-
         public IEnumerator WaveReward()
         {
             Time.timeScale = 0;

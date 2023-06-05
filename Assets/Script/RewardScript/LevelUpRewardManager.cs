@@ -61,7 +61,7 @@ namespace Script.RewardScript
         private void Selected()
         {
             levelUpRewardPanel.SetActive(false);
-            if (countManager._moveCount == 0)
+            if (countManager.baseMoveCount == 0)
             {
                 gameManager.GameSpeed();
             }

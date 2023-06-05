@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Script.RewardScript;
 
 namespace Script.CharacterManagerScript
 {
@@ -27,16 +28,16 @@ namespace Script.CharacterManagerScript
         protected internal UnitEffects UnitEffect = UnitEffects.None;
 
         public float defaultDamage;
-        public float increaseDamage;
+        // public float increaseDamage;
         public float defaultAtkRate;
-        public float increaseAtkRate;
+        // public float increaseAtkRate;
         public float projectileSpeed;
         public float swingSpeed;
         public float defaultAtkDistance;
-        public float increaseAtkDistance;
+        // public float increaseAtkDistance;
         public Vector3 defaultAtkRange;
-        public Vector3 increaseAtkRange;
-        public int penetrate;
+        // public Vector3 increaseAtkRange;
+        // public int penetrate;
 
         private readonly Vector3 _initialScale = Vector3.one;
         private readonly Vector3 _levelUpScale = new Vector3(1.2f, 1.2f, 0);
@@ -49,25 +50,33 @@ namespace Script.CharacterManagerScript
             Tween scaleDown = sequence.Append(levelUpObject.transform.DOScale(_initialScale, 0.3f));
             scaleDown.WaitForCompletion();
         }
-
         protected virtual void LevelUp()
         {
             Level++;
         }
-
         protected internal virtual void CharacterReset()
         {
         }
-
         protected internal void ResetLevel()
         {
             Level = 1;
         }
-
-
         public virtual List<GameObject> DetectEnemies()
         {
             return new List<GameObject>();
+        }
+        
+        // 전체 데미지 증가 버프
+        public void IncreaseDamage(int increaseAmount)
+        {
+            var percentageIncrease = (float)increaseAmount / 100;
+            defaultDamage *= increaseAmount * percentageIncrease;
+        }
+
+        public void IncreaseAtkRate(int increaseAmount)
+        {
+            var percentageIncrease = (float)increaseAmount / 100;
+            defaultAtkRate *= increaseAmount * percentageIncrease;
         }
 
     }
