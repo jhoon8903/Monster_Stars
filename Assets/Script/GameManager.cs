@@ -34,6 +34,7 @@ namespace Script
         private bool _speedUp = false;
         public int wave = 1;
         private Vector3Int _bossSpawnArea;
+        private bool _isBattle = false;
 
         private readonly WaitForSecondsRealtime _waitOneSecRealtime = new WaitForSecondsRealtime(1f);
         private readonly WaitForSecondsRealtime _waitTwoSecRealtime = new WaitForSecondsRealtime(2f);
@@ -48,9 +49,9 @@ namespace Script
             StartCoroutine(spawnManager.PositionUpCharacterObject()); // 매치 시작 후 확인
             swipeManager.isBusy = false;
         }
-
         public IEnumerator Count0Call()
         {
+            _isBattle = true;
             yield return _waitOneSecRealtime;
             cameraManager.CameraBattleSizeChange();
             backgroundManager.ChangeBattleSize();
@@ -66,6 +67,7 @@ namespace Script
                 if (enemySpawnManager.fieldList.Count != 0) continue;
                 StartCoroutine(ContinueOrLose());
             }
+            _isBattle = false;
         }
         public IEnumerator WaitForPanelToClose()
         {
@@ -111,6 +113,7 @@ namespace Script
         }
         private void NextStage()
         {
+            Time.timeScale = 1;
             _bossSpawnArea = new Vector3Int(Random.Range(2,5), 10, 0);
             var previousWave = wave - 1;
             if (wave % 10 == 0)
@@ -149,7 +152,7 @@ namespace Script
         {
             if (countManager._moveCount == 0 && _speedUp)
             {
-                Time.timeScale = 2;
+                Time.timeScale = _isBattle ? 2 : 1;
             }
             else
             {

@@ -13,6 +13,7 @@ namespace Script.EnemyScript
             EnemyType = EnemyTypes.Basic;
             SpawnZone = SpawnZones.A;
             RegistryType = RegistryTypes.Physics;
+            
         }
     }
 }

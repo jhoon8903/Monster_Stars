@@ -12,6 +12,8 @@ namespace Script.EnemyManagerScript
         public event Action<KillReasons> OnEnemyKilled;
         protected string EnemyName;  // 적 고유 이름
 
+        public int number = 0;
+
         protected internal float HealthPoint; // 적 오브젝트의 체력
         
         protected internal int CrushDamage;   // 충돌시 데미지

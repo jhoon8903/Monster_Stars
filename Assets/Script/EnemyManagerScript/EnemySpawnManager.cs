@@ -56,13 +56,28 @@ namespace Script.EnemyManagerScript
         private void SpawnEnemy(EnemyBase.EnemyTypes enemyType)
         {
             var enemyToSpawn = enemyPool.GetPooledEnemy(enemyType);
+            Debug.Log($"enemyPosition: {enemyToSpawn.transform.position}");
             if (enemyToSpawn == null)
             {
                 return;
             }
+
+            if (enemyToSpawn.GetComponent<EnemyBase>().EnemyType == EnemyBase.EnemyTypes.Fast)
+            {
+                enemyToSpawn.transform.localScale = Vector3.one * 0.8f;
+            }
+            else if (enemyToSpawn.GetComponent<EnemyBase>().EnemyType == EnemyBase.EnemyTypes.Slow)
+            {
+                enemyToSpawn.transform.localScale = Vector3.one * 1.3f;
+            }
+            else
+            {
+                enemyToSpawn.transform.localScale = Vector3.one;
+            }
             var enemyZone = enemyToSpawn.GetComponent<EnemyBase>().SpawnZone;
             var spawnPos = GetRandomPointInBounds(enemyZone);
             enemyToSpawn.transform.position = spawnPos;
+            Debug.Log($"enemyTransformPosition: {enemyToSpawn.transform.position}");
             enemyToSpawn.SetActive(true);
             fieldList.Add(enemyToSpawn);
             var enemyBase = enemyToSpawn.GetComponent<EnemyBase>();
@@ -89,7 +104,7 @@ namespace Script.EnemyManagerScript
                     }
                 }
                 xPosition = Random.Range(0, 6);
-                return new Vector3(xPosition, spawnPos.y + Random.Range(-0.5f, 0.5f), 0);
+                return new Vector3(xPosition, 9.5f , 0);
             }
             else
             {

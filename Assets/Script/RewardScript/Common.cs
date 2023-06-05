@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Script.RewardScript
 {
@@ -47,7 +46,6 @@ namespace Script.RewardScript
         {
         }
     }
-
     public class Common : MonoBehaviour
     {
         public List<CommonData> CommonGreenList { get; private set; } = new List<CommonData>();
