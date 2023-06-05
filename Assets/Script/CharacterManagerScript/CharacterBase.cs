@@ -38,9 +38,20 @@ namespace Script.CharacterManagerScript
         public Vector3 defaultAtkRange;
         // public Vector3 increaseAtkRange;
         // public int penetrate;
+        public bool PermanentLevelUp { get; set; } = false;
 
         private readonly Vector3 _initialScale = Vector3.one;
         private readonly Vector3 _levelUpScale = new Vector3(1.2f, 1.2f, 0);
+
+
+        public void OnEnable()
+        {
+            if (PermanentLevelUp && UnitLevel == 1)
+            {
+                LevelUp();
+            }
+        }
+
         public void LevelUpScale(GameObject levelUpObject)
         {
             var sequence = DOTween.Sequence();

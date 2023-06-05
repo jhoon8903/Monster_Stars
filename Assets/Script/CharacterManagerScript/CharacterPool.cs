@@ -49,10 +49,9 @@ namespace Script.CharacterManagerScript
          */
         public static void ReturnToPool(GameObject obj)
         {
-            if (obj != null)
-            {
-                obj.SetActive(false);
-            }
+            if (obj == null) return;
+            obj.GetComponent<CharacterBase>().CharacterReset();
+            obj.SetActive(false);
         }
     }
 }

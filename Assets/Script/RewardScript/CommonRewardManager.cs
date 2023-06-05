@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Script.CharacterManagerScript;
+using Script.EnemyManagerScript;
 using Script.UIManager;
 using TMPro;
 using UnityEngine;
@@ -36,7 +37,10 @@ namespace Script.RewardScript
         [SerializeField] private GameManager gameManager;
         [SerializeField] private GridManager gridManager;
         [SerializeField] private SwipeManager swipeManager;
-        
+        [SerializeField] private ExpManager expManager;
+        [SerializeField] private CastleManager castleManager;
+        [SerializeField] private MatchManager matchManager;
+        [SerializeField] private EnemyManager enemyManager;
         public readonly Queue<GameObject> PendingTreasure = new Queue<GameObject>(); // 보류 중인 보물 큐
         private GameObject _currentTreasure = null; // 현재 보물
         public bool openBoxing = false;
@@ -45,12 +49,8 @@ namespace Script.RewardScript
 
         private void ProcessCommonReward(CommonData selectedReward)
         {
-            if (selectedReward == null)
-            {
-                Debug.Log("Not Setting This Reward");
-                return;
-            }
             var characterManager = FindObjectOfType<CharacterManager>();
+            
             switch (selectedReward.Type)
             {
                 // Row 추가 강화 효과
@@ -85,14 +85,37 @@ namespace Script.RewardScript
                 case CommonData.Types.LevelUp:
                     characterManager.CharacterGroupLevelUp(selectedReward.Property[0]);
                     break;
+                // 기본 2레벨 케릭터 생성
                 case CommonData.Types.LevelUpPattern:
+                    characterManager.PermanentIncreaseCharacter(selectedReward.Property[0]);
+                    break;
+                // 경험치 5% 증가
                 case CommonData.Types.Exp:
+                     expManager.IncreaseExpBuff(selectedReward.Property[0]);
+                     break;
+                // 성 체력 회복
                 case CommonData.Types.CastleRecovery:
+                    gameManager.RecoveryCastle = true;
+                    break;
+                // 성 최대 체력 증가 & 회복
                 case CommonData.Types.CastleMaxHp:
-                case CommonData.Types.Board:
+                    castleManager.IncreaseMaxHp(selectedReward.Property[0]);
+                    break;
+                //  5 Match Pattern Upgrade
+                case CommonData.Types.Match5Upgrade:
+                    matchManager.match5Upgrade = true;
+                    break;
+                // 적 이동속도 감소 
                 case CommonData.Types.Slow:
-                case CommonData.Types.NextStage:
+                    enemyManager.DecreaseMoveSpeed(selectedReward.Property[0]);
+                    break;
+                // 보드 초기화 시 케릭터 상속되는 케릭터 Count 증가
+                case CommonData.Types.NextStage: 
+                    spawnManager.nextCharacterUpgrade(selectedReward.Property[0]);
+                    break;
                 case CommonData.Types.Gold:
+                    Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}");
+                    break;
                 default:
                     Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}");
                     break;

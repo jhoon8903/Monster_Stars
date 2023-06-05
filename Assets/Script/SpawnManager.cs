@@ -18,6 +18,7 @@ namespace Script
         [SerializeField] private CommonRewardManager rewardManger;
         [SerializeField] private GameManager gameManager;
         public bool isWave10Spawning = false;
+        private int highLevelCharacterCount = 6;
         public GameObject CharacterObject(Vector3 spawnPosition)
         {
             var spawnCharacters = characterPool.UsePoolCharacterList();
@@ -107,7 +108,11 @@ namespace Script
             var randomIndex = Random.Range(0, notUsePoolCharacterList.Count);
             var newCharacter = notUsePoolCharacterList[randomIndex];
             newCharacter.transform.position = position;
-            newCharacter.GetComponent<CharacterBase>().CharacterReset();
+            var characterBase = newCharacter.GetComponent<CharacterBase>();
+            if (characterBase.PermanentLevelUp && characterBase.UnitLevel == 1)
+            {
+                characterBase.LevelUpScale(newCharacter);
+            }
             newCharacter.SetActive(true);
             notUsePoolCharacterList.RemoveAt(randomIndex);
             return newCharacter;
@@ -119,7 +124,7 @@ namespace Script
             var saveCharacterList = characterPool.UsePoolCharacterList();
             var highLevelCharacters = saveCharacterList
                 .OrderByDescending(character => character.GetComponent<CharacterBase>().UnitLevel)
-                .Take(6)
+                .Take(highLevelCharacterCount)
                 .ToList();
             yield return StartCoroutine(gameManager.WaitForPanelToClose());
             foreach (var character in saveCharacterList
@@ -165,6 +170,11 @@ namespace Script
             {
                 yield return StartCoroutine(MoveCharacter(o, targetPosition));
             }
+        }
+
+        public void nextCharacterUpgrade(int moveCharacterCount)
+        {
+            highLevelCharacterCount += moveCharacterCount;
         }
     }
 }

@@ -6,7 +6,7 @@ namespace Script.RewardScript
     public class CommonData
     {
         public enum Types 
-        { GroupDamage, GroupAtkSpeed, Step, StepLimit, StepDirection , RandomLevelUp, LevelUp, LevelUpPattern, Exp, CastleRecovery, CastleMaxHp, Board, Slow, NextStage, Gold, AddRow}
+        { GroupDamage, GroupAtkSpeed, Step, StepLimit, StepDirection , RandomLevelUp, LevelUp, LevelUpPattern, Exp, CastleRecovery, CastleMaxHp, Match5Upgrade, Slow, NextStage, Gold, AddRow}
         public Types Type { get; private set; }
         public int[] Property { get; private set; }
         public int Code { get; set; }
@@ -66,7 +66,7 @@ namespace Script.RewardScript
                 CommonGreen(g,3,r,0,CommonData.Types.Step,new []{2,3,4}),
                 CommonGreen(g,4,n,1,CommonData.Types.RandomLevelUp, new []{2,3}),
                 CommonGreen(g,4,n,1,CommonData.Types.LevelUp, new []{0,1,2,3}),
-                CommonGreen(g,4,r,0,CommonData.Types.LevelUpPattern, new []{1}),
+                CommonGreen(g,4,r,0,CommonData.Types.LevelUpPattern, new []{0,1,2,3}),
                 CommonGreen(g,7,r,6, CommonData.Types.Exp, new []{5}),
             };
 
@@ -78,7 +78,7 @@ namespace Script.RewardScript
                 CommonBlue(b,5,n,1,CommonData.Types.Gold, new []{1}),
                 CommonBlue(b,6,r,5,CommonData.Types.CastleMaxHp, new []{200}),
                 CommonBlue(b,8,n,1,CommonData.Types.CastleRecovery, new []{200}),
-                CommonBlue(b,9,n,1,CommonData.Types.Board, new []{1}),
+                CommonBlue(b,9,n,1,CommonData.Types.Match5Upgrade, new []{1}),
                 CommonBlue(b,11, r,3,CommonData.Types.Slow, new []{15})
             };
 

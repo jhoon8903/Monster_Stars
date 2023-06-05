@@ -7,7 +7,6 @@ using Script.UIManager;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Script
 {
@@ -31,13 +30,15 @@ namespace Script
         [SerializeField] private TextMeshProUGUI waveText;
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
+        private readonly WaitForSecondsRealtime _waitOneSecRealtime = new WaitForSecondsRealtime(1f);
+        private readonly WaitForSecondsRealtime _waitTwoSecRealtime = new WaitForSecondsRealtime(2f);
         private bool _speedUp = false;
         public int wave = 1;
         private Vector3Int _bossSpawnArea;
         private bool _isBattle = false;
+        public bool RecoveryCastle { get; set; } = false;
 
-        private readonly WaitForSecondsRealtime _waitOneSecRealtime = new WaitForSecondsRealtime(1f);
-        private readonly WaitForSecondsRealtime _waitTwoSecRealtime = new WaitForSecondsRealtime(2f);
+
         private void Start()
         {
             swipeManager.isBusy = true;
@@ -120,11 +121,22 @@ namespace Script
             {
                 gridManager.ApplyBossSpawnColor(_bossSpawnArea);
             }
-
             if (previousWave % 10 == 0)
             {
                 gridManager.ResetBossSpawnColor();
             }
+
+            if (RecoveryCastle && !castleManager.Damaged)
+            {
+                castleManager.hpPoint += 200;
+                if (castleManager.hpPoint > castleManager.maxHpPoint)
+                {
+                    castleManager.hpPoint = castleManager.maxHpPoint;
+                }
+            }
+
+            // Update previous HP
+            castleManager.UpdatePreviousHp();
             moveCount = 7;
             countManager.Initialize(moveCount);
             backgroundManager.ChangePuzzleSize();

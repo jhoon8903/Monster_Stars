@@ -18,6 +18,7 @@ namespace Script.UIManager
           public int hpPoint = 1000;
           public int maxHpPoint = 1000;
           public event Action OnEnemyKilled;
+          private int PreviousHpPoint { get; set; }
       
           // Start is called before the first frame update
           private void Start()
@@ -50,27 +51,34 @@ namespace Script.UIManager
                   hpPoint = 0;
                   hpBar.value = hpPoint;
                   UpdateHpText();
-                  gameManager.ContinueOrLose();
+                  StartCoroutine(gameManager.ContinueOrLose());
               }
           }
-      
-      
-          // Method to increase HP and MaxHP
-          public void IncreaseHp(int increaseAmount)
+          
+          public bool Damaged => hpPoint < PreviousHpPoint;
+
+          public void UpdatePreviousHp()
           {
-              hpPoint += increaseAmount;
-              maxHpPoint += increaseAmount;
-              hpBar.maxValue = maxHpPoint;
-              // Animate the change in value
-              hpBar.DOValue(hpPoint, 1.0f); // Change 0.5f to whatever duration you want for the animation
-              UpdateHpText();
+              PreviousHpPoint = hpPoint;
           }
-      
-      
+          
           // Method to update the HP text
           private void UpdateHpText()
           {
               hpText.text = $"{hpPoint} / {maxHpPoint}";
+          }
+
+          public void IncreaseMaxHp(int increaseAmount)
+          {
+              maxHpPoint += increaseAmount;
+              hpPoint += increaseAmount;
+              if (hpPoint > maxHpPoint)
+              {
+                  hpPoint = maxHpPoint;
+              }
+              hpBar.maxValue = maxHpPoint;
+              hpBar.value = hpPoint;
+              UpdateHpText();
           }
       }
 }

@@ -14,7 +14,8 @@ namespace Script
         [SerializeField] private CharacterPool characterPool;
         [SerializeField] private CountManager countManager;
         [SerializeField] public CommonRewardManager commonRewardManager;
-        
+        public bool match5Upgrade { get; set; } = false;
+
         // 이 메소드는 주어진 캐릭터 객체가 매치되는지 확인하는 기능을 수행합니다. 매치 여부를 반환합니다.
         public bool IsMatched(GameObject swapCharacter)
         {
@@ -456,8 +457,8 @@ namespace Script
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                // commonRewardManager.EnqueueTreasure(matchedCharacters[1]);
                 commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[1]);
+  
             }
             else
             {
@@ -466,6 +467,10 @@ namespace Script
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
                 matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
                 matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
+                if (match5Upgrade)
+                { 
+                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                }
             }
             return true;
         }
@@ -490,6 +495,10 @@ namespace Script
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+                if (match5Upgrade)
+                {
+                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                }
             }
             return true;
         }
@@ -514,6 +523,10 @@ namespace Script
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+                if (match5Upgrade)
+                {
+                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                }
             }
             return true;
         }
@@ -539,6 +552,10 @@ namespace Script
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+                if (match5Upgrade)
+                {
+                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                }
             }
             return true;
         }
@@ -702,6 +719,10 @@ namespace Script
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
                 matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                if (match5Upgrade)
+                {
+                    matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
+                }
             }
             return true;
         }
@@ -732,6 +753,10 @@ namespace Script
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
                 matchedCharacters[6].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[6]);
+                if (match5Upgrade)
+                {
+                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
+                }
             }
             return true;
         }

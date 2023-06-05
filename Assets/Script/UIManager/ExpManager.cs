@@ -9,12 +9,13 @@ namespace Script.UIManager
 {
     public class ExpManager : MonoBehaviour
     {
-        [SerializeField] private int expPoint = 0;
+        [SerializeField] private float expPoint = 0;
         [SerializeField] private int levelUpPoint = 5;
         [SerializeField] private Slider expBar;
         [SerializeField] private TextMeshProUGUI expText;
         [SerializeField] private LevelUpRewardManager levelUpRewardManager;
         [SerializeField] private TextMeshProUGUI levelText;
+        [SerializeField] private float additionalExpPercent = 0;
         public int level = 0;
         public static ExpManager Instance { get; private set; }
 
@@ -41,7 +42,8 @@ namespace Script.UIManager
         public void HandleEnemyKilled(EnemyBase.KillReasons reason)
         {
             if (reason == EnemyBase.KillReasons.ByCastle) return;
-            expPoint++;
+            var additionalExp = expPoint * (additionalExpPercent / 100.0f);
+            expPoint += 1 + additionalExp; 
             if (expPoint >= levelUpPoint)
             {
                 level++;
@@ -66,7 +68,12 @@ namespace Script.UIManager
 
         private void UpdateLevelText(int text)
         {
-            this.levelText.text = $"LV {text}";
+            levelText.text = $"LV {text}";
+        }
+
+        public void IncreaseExpBuff(float increaseAmount)
+        {
+            additionalExpPercent += increaseAmount;
         }
     }
 }

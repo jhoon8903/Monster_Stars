@@ -41,5 +41,11 @@ namespace Script.EnemyManagerScript
                 ExpManager.Instance.HandleEnemyKilled(reason);
             }
         }
+
+        public void DecreaseMoveSpeed(int decreaseAmount)
+        {
+            var percentageIncrease = (float)decreaseAmount / 100;
+            MoveSpeed *= decreaseAmount * percentageIncrease;
+        }
     }
 }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Script.CharacterManagerScript
@@ -59,6 +60,20 @@ namespace Script.CharacterManagerScript
                 {
                     characterObj.LevelUpScale(character);
                 }
+            }
+        }
+
+        public void PermanentIncreaseCharacter(int characterListIndex)
+        {
+            var activeCharacterGroup = characterList[characterListIndex];
+            var activeCharacters = characterPool.UsePoolCharacterList();
+            foreach (var character in activeCharacters
+                         .Select(characterObject => characterObject.GetComponent<CharacterBase>())
+                         .Where(character => character.UnitGroup == activeCharacterGroup.UnitGroup &&
+                                             character.Type == CharacterBase.Types.Character &&
+                                             character.UnitLevel == 1))
+            {
+                character.PermanentLevelUp = true;
             }
         }
     }
