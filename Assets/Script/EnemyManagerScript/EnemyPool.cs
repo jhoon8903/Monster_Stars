@@ -34,8 +34,6 @@ namespace Script.EnemyManagerScript
 
         public void ReturnToPool(GameObject obj)
         {
-            obj.transform.position = Vector3.zero;
-            obj.transform.localScale = Vector3.one;
             obj.SetActive(false);
         }
     }

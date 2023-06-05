@@ -49,7 +49,6 @@ namespace Script.EnemyManagerScript
         {
             var bossObject = Instantiate(wave == 10 ? enemyManager.stage10BossPrefab : enemyManager.stage20BossPrefab, transform);
             bossObject.transform.position = gridManager.bossSpawnArea;
-            bossObject.transform.localScale = new Vector3(1.7f, 1.7f, 0);
             bossObject.SetActive(true);
             fieldList.Add(bossObject);
         }

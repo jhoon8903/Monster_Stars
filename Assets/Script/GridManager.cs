@@ -1,4 +1,3 @@
-using System.Collections;
 using Script.CharacterManagerScript;
 using UnityEngine;
 using DG.Tweening;
