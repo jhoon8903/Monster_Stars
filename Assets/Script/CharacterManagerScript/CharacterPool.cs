@@ -6,10 +6,10 @@ namespace Script.CharacterManagerScript
 {
     public sealed class CharacterPool : MonoBehaviour
     {
-        [SerializeField] private CharacterManager characterManager;
-        [SerializeField] private int poolSize;
-        private List<GameObject> _pooledCharacters;
-        
+        [SerializeField] private CharacterManager characterManager; // Reference to the character manager
+        [SerializeField] private int poolSize; // Size of the character pool
+        private List<GameObject> _pooledCharacters; // List of character objects in the pool
+
         /**
          * Character Pool Create and SetActive(false)
          * StorageName is _pooledCharacters && Types is List<GameObject> 
@@ -19,15 +19,16 @@ namespace Script.CharacterManagerScript
         {
             _pooledCharacters = new List<GameObject>();
             foreach (var character in characterManager.characterList)
-            {                                                          
+            {
                 for (var i = 0; i < poolSize; i++)
                 {
                     var obj = Instantiate(character.gameObject, transform, true);
-                    obj.SetActive(false);          
+                    obj.SetActive(false);
                     _pooledCharacters.Add(obj);
                 }
             }
         }
+
         /**
          * Return to SetActivate(false) CharacterObject_List 
          */

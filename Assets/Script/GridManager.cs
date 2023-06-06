@@ -1,7 +1,6 @@
 using Script.CharacterManagerScript;
 using UnityEngine;
 using DG.Tweening;
-using UnityEngine.UIElements;
 
 namespace Script
 {

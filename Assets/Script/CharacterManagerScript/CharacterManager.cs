@@ -6,14 +6,10 @@ namespace Script.CharacterManagerScript
 {
     public class CharacterManager : MonoBehaviour
     {
-        [SerializeField] internal List<CharacterBase> characterList = new List<CharacterBase>();
-        [SerializeField] private CharacterPool characterPool;
+        [SerializeField] internal List<CharacterBase> characterList = new List<CharacterBase>(); // List of character bases
+        [SerializeField] private CharacterPool characterPool; // Reference to the character pool
 
-        public List<CharacterBase> GetCharacterList()
-        {
-            return characterList;
-        }
-
+        // Increase the damage of all characters in the group by a given amount
         public void IncreaseGroupDamage(int increaseAmount)
         {
             foreach (var character in characterList)
@@ -22,6 +18,7 @@ namespace Script.CharacterManagerScript
             }
         }
 
+        // Increase the attack rate of all characters in the group by a given amount
         public void IncreaseGroupAtkRate(int increaseAmount)
         {
             foreach (var character in characterList)
@@ -30,23 +27,32 @@ namespace Script.CharacterManagerScript
             }
         }
 
+        // Level up a random selection of characters a specified number of times
         public void RandomCharacterLevelUp(int characterCount)
         {
             var activeCharacters = characterPool.UsePoolCharacterList();
             if (activeCharacters.Count == 0) return;
             var rnd = new System.Random();
             var levelUpCount = 0;
-            while (levelUpCount < characterCount)
+    
+            var eligibleCharacters = activeCharacters.Where(character => 
+                character.GetComponent<CharacterBase>()?.UnitLevel < 5).ToList();
+            if (eligibleCharacters.Count == 0) return;
+    
+            while (levelUpCount < characterCount && eligibleCharacters.Count > 0)
             {
-                var randomIndex = rnd.Next(activeCharacters.Count);
-                var characterBase = activeCharacters[randomIndex].GetComponent<CharacterBase>();
-                if (characterBase == null) continue;
-                if (characterBase.UnitLevel >= 5) continue;
-                characterBase.LevelUpScale(activeCharacters[randomIndex]);
+                var randomIndex = rnd.Next(eligibleCharacters.Count);
+                var characterBase = eligibleCharacters[randomIndex].GetComponent<CharacterBase>();
+                characterBase.LevelUpScale(eligibleCharacters[randomIndex]);
                 levelUpCount++;
+        
+                eligibleCharacters = eligibleCharacters.Where(character => 
+                    character.GetComponent<CharacterBase>()?.UnitLevel < 5).ToList();
             }
         }
 
+
+        // Level up all characters in a specific group
         public void CharacterGroupLevelUp(int characterListIndex)
         {
             var activeCharacters = characterPool.UsePoolCharacterList();
@@ -63,6 +69,7 @@ namespace Script.CharacterManagerScript
             }
         }
 
+        // Set the permanent level up flag for all characters in a specific group
         public void PermanentIncreaseCharacter(int characterListIndex)
         {
             var activeCharacterGroup = characterList[characterListIndex];

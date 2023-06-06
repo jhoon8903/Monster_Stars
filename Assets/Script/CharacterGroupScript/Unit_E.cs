@@ -7,37 +7,39 @@ namespace Script.CharacterGroupScript
 {
     public class Unit_E : CharacterBase
     {
-        [SerializeField] private Sprite level1Sprite;
-        [SerializeField] private Sprite level2Sprite;
-        [SerializeField] private Sprite level3Sprite;
-        [SerializeField] private Sprite level4Sprite;
-        [SerializeField] private Sprite level5Sprite;
-        private SpriteRenderer _spriteRenderer;
-        private const float DetectionWidth = 1f;
-        private const float DetectionHeight = 9f;
+        [SerializeField] private Sprite level1Sprite; // Sprite for level 1
+        [SerializeField] private Sprite level2Sprite; // Sprite for level 2
+        [SerializeField] private Sprite level3Sprite; // Sprite for level 3
+        [SerializeField] private Sprite level4Sprite; // Sprite for level 4
+        [SerializeField] private Sprite level5Sprite; // Sprite for level 5
+        private SpriteRenderer _spriteRenderer; // Reference to the SpriteRenderer component
+        private const float DetectionWidth = 1f; // Width of the detection box
+        private const float DetectionHeight = 9f; // Height of the detection box
 
         private void Awake()
         {
-            _spriteRenderer = GetComponent<SpriteRenderer>();
-            Level1();
+            _spriteRenderer = GetComponent<SpriteRenderer>(); // Get the reference to the SpriteRenderer component attached to this object
+            Level1(); // Set initial level to level 1
         }
 
         protected override void LevelUp()
         {
-            base.LevelUp(); // increment the level
+            base.LevelUp(); // Increment the level
+
+            // Update the character's properties based on the current level
             switch (Level)
             {
                 case 2:
-                    Level2();
+                    Level2(); // Set properties for level 2
                     break;
                 case 3:
-                    Level3();
+                    Level3(); // Set properties for level 3
                     break;
                 case 4:
-                    Level4();
+                    Level4(); // Set properties for level 4
                     break;
                 case 5:
-                    Level5();
+                    Level5(); // Set properties for level 5
                     break;
                 default:
                     return;
@@ -46,21 +48,23 @@ namespace Script.CharacterGroupScript
 
         protected internal override void CharacterReset()
         {
-            ResetLevel();
-            Level1();
+            ResetLevel(); // Reset the character's level
+            Level1(); // Set level back to 1
         }
 
+        // Detects enemies within a detection box and returns a list of their GameObjects
         public override List<GameObject> DetectEnemies()
         {
             var detectionSize = new Vector2(DetectionWidth, DetectionHeight);
             var detectionCenter = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
             var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize, 0f);
             var detectedEnemies = (from collider in colliders
-                where collider.gameObject.CompareTag("Enemy")
-                select collider.gameObject).ToList();
+                                   where collider.gameObject.CompareTag("Enemy")
+                                   select collider.gameObject).ToList();
             return detectedEnemies;
         }
 
+        // Draws a wire cube in the Scene view to visualize the detection box
         public void OnDrawGizmos()
         {
             var detectionSize = new Vector3(DetectionWidth, DetectionHeight, 0);
@@ -69,6 +73,7 @@ namespace Script.CharacterGroupScript
             Gizmos.DrawWireCube(detectionCenter, detectionSize);
         }
 
+        // Sets the properties for level 1 of the character
         private void Level1()
         {
             CharacterName = "Unit_E_00";
@@ -78,9 +83,9 @@ namespace Script.CharacterGroupScript
             defaultAtkRate = 0;
             defaultAtkDistance = 0;
             _spriteRenderer.sprite = level1Sprite;
-
         }
 
+        // Sets the properties for level 2 of the character
         private void Level2()
         {
             CharacterName = "Unit_E_01";
@@ -98,6 +103,7 @@ namespace Script.CharacterGroupScript
             UnitEffect = UnitEffects.Slow;
         }
 
+        // Sets the properties for level 3 of the character
         private void Level3()
         {
             CharacterName = "Unit_E_02";
@@ -115,6 +121,7 @@ namespace Script.CharacterGroupScript
             UnitEffect = UnitEffects.Slow;
         }
 
+        // Sets the properties for level 4 of the character
         private void Level4()
         {
             CharacterName = "Unit_E_03";
@@ -132,6 +139,7 @@ namespace Script.CharacterGroupScript
             UnitEffect = UnitEffects.Slow;
         }
 
+        // Sets the properties for level 5 of the character
         private void Level5()
         {
             CharacterName = "Unit_E_04";

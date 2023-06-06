@@ -46,6 +46,15 @@ namespace Script.RewardScript
         public bool openBoxing = false;
         private bool _waveRewards = false; 
         private CommonData _selectedCommonReward;
+        private readonly HashSet<int> _characterGroupLevelUpIndexes = new HashSet<int>();
+        private int _expPercentage = 0;
+        private int _addRowCount = 0;
+        private int _slowCount = 0;
+        private int _nextStageMembersSelectCount = 0;
+        private bool _diagonalMovement = false;
+        private bool _5MatchUpgradeOption = false;
+        private bool _permanentIncreaseMovementCount;
+        private bool _recoveryCastle = false;
 
         private void ProcessCommonReward(CommonData selectedReward)
         {
@@ -56,6 +65,7 @@ namespace Script.RewardScript
                 // Row 추가 강화 효과
                 case CommonData.Types.AddRow:
                     gridManager.AddRow();
+                    _addRowCount += 1;
                     break;
                 // 전체 데미지 증가 효과
                 case CommonData.Types.GroupDamage:
@@ -72,17 +82,19 @@ namespace Script.RewardScript
                 // 영구적 카운트 증가
                 case CommonData.Types.StepLimit:
                      countManager.PermanentIncreaseMoveCount(selectedReward.Property[0]);
+                     _permanentIncreaseMovementCount = true;
                      break;
                 // 대각선 이동
                 case CommonData.Types.StepDirection:
                      swipeManager.EnableDiagonalMovement();
+                     _diagonalMovement = true;
                      break;
                 // 랜덤 케릭터 레벨업
                 case CommonData.Types.RandomLevelUp:
                     characterManager.RandomCharacterLevelUp(selectedReward.Property[0]);
                     break;
                 // 케릭터 그룹 레벨업
-                case CommonData.Types.LevelUp:
+                case CommonData.Types.GroupLevelUp:
                     characterManager.CharacterGroupLevelUp(selectedReward.Property[0]);
                     break;
                 // 기본 2레벨 케릭터 생성
@@ -92,10 +104,12 @@ namespace Script.RewardScript
                 // 경험치 5% 증가
                 case CommonData.Types.Exp:
                      expManager.IncreaseExpBuff(selectedReward.Property[0]);
+                     _expPercentage += 5;
                      break;
                 // 성 체력 회복
                 case CommonData.Types.CastleRecovery:
                     gameManager.RecoveryCastle = true;
+                    _recoveryCastle = true;
                     break;
                 // 성 최대 체력 증가 & 회복
                 case CommonData.Types.CastleMaxHp:
@@ -104,14 +118,17 @@ namespace Script.RewardScript
                 //  5 Match Pattern Upgrade
                 case CommonData.Types.Match5Upgrade:
                     matchManager.match5Upgrade = true;
+                    _5MatchUpgradeOption = true;
                     break;
                 // 적 이동속도 감소 
                 case CommonData.Types.Slow:
                     enemyManager.DecreaseMoveSpeed(selectedReward.Property[0]);
+                    _slowCount += 1;
                     break;
                 // 보드 초기화 시 케릭터 상속되는 케릭터 Count 증가
                 case CommonData.Types.NextStage: 
                     spawnManager.nextCharacterUpgrade(selectedReward.Property[0]);
+                    _nextStageMembersSelectCount += 1;
                     break;
                 case CommonData.Types.Gold:
                     Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}");
@@ -173,68 +190,127 @@ namespace Script.RewardScript
             commonRewardPanel.SetActive(true); // 보물 패널 활성화
             var treasureChestName = treasure.GetComponent<CharacterBase>().CharacterName; // 보물 상자 이름
 
-            switch (treasureChestName)
+            switch(treasureChestName)
             {
                 case "Unit_Treasure00":
                     break;
                 case "Unit_Treasure01":
-                    yield return StartCoroutine(CommonChance(70, 25, 5));
+                    yield return StartCoroutine(CommonChance(70, 25, 5, null));
                     break;
                 case "Unit_Treasure02":
-                    yield return StartCoroutine(CommonChance(30, 55, 15));
+                    yield return StartCoroutine(CommonChance(30, 55, 15, "blue"));
                     break;
                 case "Unit_Treasure03":
-                    yield return StartCoroutine(CommonChance(0, 50, 50));
+                    yield return StartCoroutine(CommonChance(0, 50, 50, "purple"));
                     break;
             }
+
             yield return new WaitUntil(() => commonRewardPanel.activeSelf == false); // 보물 패널이 비활성화될 때까지 대기
         }
-        private IEnumerator CommonChance(int greenChance, int blueChance, int purpleChance)
+        private IEnumerator CommonChance(int greenChance, int blueChance, int purpleChance, string forcedColor)
         {
-            var powerUps = CommonPowerList(greenChance, blueChance, purpleChance);
-            CommonDisplay(powerUps);
-            yield return null;
+            if (gameManager.wave == 11)
+            {
+                greenChance = 30;
+                blueChance = 55;
+                purpleChance = 15;
+                var powerUps = CommonPowerList(greenChance, blueChance, purpleChance, "blue");
+                CommonDisplay(powerUps);
+                yield return null;
+            }
+            else
+            {
+                var powerUps = CommonPowerList(greenChance, blueChance, purpleChance, forcedColor);
+                CommonDisplay(powerUps);
+                yield return null;
+            }
         }
-        private List<CommonData> CommonPowerList(int greenChance, int blueChance, int purpleChance)
+        private List<CommonData> CommonPowerList(int greenChance, int blueChance, int purpleChance, string forcedColor)
         {
             var commonPowerUps = new List<CommonData>();
             var selectedCodes = new HashSet<int>();
-
+            
             for (var i = 0; i < 3; i++)
             {
                 if (gameManager.wave == 11 && i == 0 && _waveRewards)
                 {
-                    var desiredPowerUp = new CommonPurpleData(purpleSprite, 13, CommonData.CommonRepeatTypes.NoneRepeat, 1, CommonData.Types.AddRow, new[]{1});
-                    commonPowerUps.Add(desiredPowerUp);
-                    selectedCodes.Add(desiredPowerUp.Code);
+                    var firstDesiredPowerUp = new CommonPurpleData(purpleSprite, 13, CommonData.Types.AddRow, new[] { 1 });
+                    commonPowerUps.Add(firstDesiredPowerUp);
+                    selectedCodes.Add(firstDesiredPowerUp.Code);
+                    
+                    var secondDesiredPowerUp = new CommonBlueData(blueSprite, 11, CommonData.Types.Slow, new[] { 15 }); 
+                    commonPowerUps.Add(secondDesiredPowerUp);
+                    selectedCodes.Add(secondDesiredPowerUp.Code);
                 }
-                else
+                else 
                 {
-                    var total = greenChance + blueChance + purpleChance;
-                    var randomValue = Random.Range(0, total);
                     CommonData selectedPowerUp = null;
-                    if (randomValue < greenChance)
+                    
+                    switch (forcedColor)
                     {
-                        selectedPowerUp = CommonUnique(common.CommonGreenList, selectedCodes);
+                        case "blue" when i == 0:
+                            selectedPowerUp = CommonUnique(common.CommonBlueList, selectedCodes);
+                            break;
+                        case "purple" when i == 0:
+                            selectedPowerUp = CommonUnique(common.CommonPurpleList, selectedCodes);
+                            break;
+                        default:
+                        {
+                            var total = greenChance + blueChance + purpleChance;
+                            var randomValue = Random.Range(0, total);
+                        
+                            if (randomValue < greenChance)
+                            {
+                                selectedPowerUp = CommonUnique(common.CommonGreenList, selectedCodes);
+                            }
+                            else if (randomValue < greenChance + blueChance)
+                            {
+                                selectedPowerUp = CommonUnique(common.CommonBlueList, selectedCodes);
+                            }
+                            else
+                            {
+                                selectedPowerUp = CommonUnique(common.CommonPurpleList, selectedCodes);
+                            }
+
+                            break;
+                        }
                     }
-                    else if (randomValue < greenChance + blueChance)
-                    {
-                        selectedPowerUp = CommonUnique(common.CommonBlueList, selectedCodes);
-                    }
-                    else
-                    {
-                        selectedPowerUp = CommonUnique(common.CommonPurpleList, selectedCodes);
-                    }
+                    
                     if (selectedPowerUp == null) continue;
                     commonPowerUps.Add(selectedPowerUp);
                     selectedCodes.Add(selectedPowerUp.Code);
+                    
+                    if (selectedPowerUp.Type == CommonData.Types.GroupLevelUp)
+                    {
+                        _characterGroupLevelUpIndexes.Add(selectedPowerUp.Property[0]);
+                    }
                 }
             }
             return commonPowerUps;
         }
-        private static CommonData CommonUnique(IEnumerable<CommonData> powerUps, ICollection<int> selectedCodes)
+        private CommonData CommonUnique(IEnumerable<CommonData> powerUps, ICollection<int> selectedCodes)
         {
-            var validOptions = powerUps.Where(p => !selectedCodes.Contains(p.Code)).ToList();
+            // CharacterGroupLevelUp Index Conflict Block
+            // CastleMaxHp Amount is not over 2000
+            // ExpIncrease Amount is not over 30 %
+            // AddRow Only Show to after Boss Stage and Max Show to Count 2
+            // Next Stage Character is use Count just 3  
+            // If _diagonalMovement = true is Not Show to This Option
+            // If 5Match Option is true and Option is not Show
+            // PermanentMove Count is true and Option  is not Show
+            // Recovery Castle is Only Use Count 1
+            var validOptions = powerUps.Where(p => !selectedCodes.Contains(p.Code) &&
+                                                   _characterGroupLevelUpIndexes.Contains(p.Property[0]) &&
+                                                   !(p.Type == CommonData.Types.CastleMaxHp && castleManager.maxHpPoint >= 2000) &&
+                                                   !(p.Type == CommonData.Types.Exp && _expPercentage <= 30) &&
+                                                   !(p.Type == CommonData.Types.AddRow && gameManager.wave % 11 == 0 && _addRowCount <= 2) &&
+                                                   !(p.Type == CommonData.Types.Slow && _slowCount <= 3) &&
+                                                   !(p.Type == CommonData.Types.NextStage && _nextStageMembersSelectCount <=3) &&
+                                                   !(p.Type == CommonData.Types.StepDirection && _diagonalMovement) && 
+                                                   !(p.Type == CommonData.Types.Match5Upgrade && _5MatchUpgradeOption) &&
+                                                   !(p.Type == CommonData.Types.StepLimit && _permanentIncreaseMovementCount) && 
+                                                   !(p.Type == CommonData.Types.CastleRecovery && _recoveryCastle))
+                .ToList();
             if (validOptions.Count == 0)
             {
                 return null;
@@ -267,7 +343,7 @@ namespace Script.RewardScript
             Time.timeScale = 0;
             commonRewardPanel.SetActive(true);
             _waveRewards = true;
-            yield return StartCoroutine(CommonChance(30, 55, 15));
+            yield return StartCoroutine(CommonChance(30, 55, 15, null));
         }
     }
 }
