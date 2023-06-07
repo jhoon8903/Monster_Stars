@@ -294,29 +294,61 @@ namespace Script.RewardScript
             }
             return commonPowerUps;
         }
+        //private CommonData CommonUnique(IEnumerable<CommonData> powerUps, ICollection<int> selectedCodes)
+        //{
+        //    Debug.Log("BE " + powerUps.Count());
+
+
+        //    var validOptions = powerUps.Where(p => 
+        //            !selectedCodes.Contains(p.Code) &&  // 이미 선택된 보상 코드를 다시 선택하지 않음
+        //            !(p.Type == CommonData.Types.CastleMaxHp && castleManager.maxHpPoint >= 2000) &&  // 캐슬의 최대 HP가 2000을 초과하지 않도록 함
+        //            !(p.Type == CommonData.Types.Exp && _expPercentage <= 30) &&  // 경험치 증가량이 30%를 넘지 않도록 함
+        //            !(p.Type == CommonData.Types.AddRow && gameManager.wave % 11 == 0 && _addRowCount <= 2) &&  // 보스 스테이지 이후에만 행 추가 보상을 표시하고, 최대 2회까지만 표시
+        //            !(p.Type == CommonData.Types.Slow && _slowCount <= 3) &&  // 적 이동 속도 감소 효과를 최대 3회까지만 표시
+        //            !(p.Type == CommonData.Types.NextStage && _nextStageMembersSelectCount <= 3) &&  // 다음 스테이지 캐릭터 업그레이드를 최대 3회까지만 사용
+        //            !(p.Type == CommonData.Types.StepDirection && _diagonalMovement) &&  // 대각선 이동이 가능한 경우, 이 옵션은 표시하지 않음
+        //            !(p.Type == CommonData.Types.Match5Upgrade && _5MatchUpgradeOption) &&  // 5개 매칭 업그레이드 옵션이 활성화되어 있으면 이 옵션을 표시하지 않음
+        //            !(p.Type == CommonData.Types.StepLimit && _permanentIncreaseMovementCount) &&  // 영구적인 이동 횟수 증가가 활성화되어 있으면 이 옵션을 표시하지 않음
+        //            !(p.Type == CommonData.Types.CastleRecovery && _recoveryCastle) &&  // 캐슬 복구는 한 번만 사용 가능
+        //            !(p.Type == CommonData.Types.GroupLevelUp && _characterGroupLevelUpIndexes.Contains(p.Property[0]))  // LevelUpPattern이 실행된 그룹에 대한 GroupLevelUp 옵션은 표시하지 않음
+        //    ).ToList();
+
+
+        //    Debug.Log("AF " + validOptions.Count);
+
+        //    if (validOptions.Count == 0)
+        //    {
+        //        return null;
+        //    }
+        //    var randomIndex = Random.Range(0, validOptions.Count);
+        //    return validOptions[randomIndex];
+        //}
+
+        private bool IsValidOption(CommonData powerUp, ICollection<int> selectedCodes)
+        {
+            if (selectedCodes.Contains(powerUp.Code)) return false;
+            if (powerUp.Type == CommonData.Types.CastleMaxHp && castleManager.maxHpPoint >= 2000) return false;
+            if (powerUp.Type == CommonData.Types.Exp && _expPercentage <= 30) return false;
+            if (powerUp.Type == CommonData.Types.AddRow && gameManager.wave % 11 == 0 && _addRowCount <= 2) return false;
+            if (powerUp.Type == CommonData.Types.Slow && _slowCount <= 3) return false;
+            return true;
+        }
+
+        private CommonData SelectRandom(IEnumerable<CommonData> validOptions)
+        {
+            var count = validOptions.Count();
+            if (count == 0) return null;
+            var randomIndex = Random.Range(0, count);
+            return validOptions.ElementAt(randomIndex);
+        }
+
         private CommonData CommonUnique(IEnumerable<CommonData> powerUps, ICollection<int> selectedCodes)
         {
-            var validOptions = powerUps.Where(p => 
-                    !selectedCodes.Contains(p.Code) &&  // 이미 선택된 보상 코드를 다시 선택하지 않음
-                    !(p.Type == CommonData.Types.CastleMaxHp && castleManager.maxHpPoint >= 2000) &&  // 캐슬의 최대 HP가 2000을 초과하지 않도록 함
-                    !(p.Type == CommonData.Types.Exp && _expPercentage <= 30) &&  // 경험치 증가량이 30%를 넘지 않도록 함
-                    !(p.Type == CommonData.Types.AddRow && gameManager.wave % 11 == 0 && _addRowCount <= 2) &&  // 보스 스테이지 이후에만 행 추가 보상을 표시하고, 최대 2회까지만 표시
-                    !(p.Type == CommonData.Types.Slow && _slowCount <= 3) &&  // 적 이동 속도 감소 효과를 최대 3회까지만 표시
-                    !(p.Type == CommonData.Types.NextStage && _nextStageMembersSelectCount <=3) &&  // 다음 스테이지 캐릭터 업그레이드를 최대 3회까지만 사용
-                    !(p.Type == CommonData.Types.StepDirection && _diagonalMovement) &&  // 대각선 이동이 가능한 경우, 이 옵션은 표시하지 않음
-                    !(p.Type == CommonData.Types.Match5Upgrade && _5MatchUpgradeOption) &&  // 5개 매칭 업그레이드 옵션이 활성화되어 있으면 이 옵션을 표시하지 않음
-                    !(p.Type == CommonData.Types.StepLimit && _permanentIncreaseMovementCount) &&  // 영구적인 이동 횟수 증가가 활성화되어 있으면 이 옵션을 표시하지 않음
-                    !(p.Type == CommonData.Types.CastleRecovery && _recoveryCastle) &&  // 캐슬 복구는 한 번만 사용 가능
-                    !(p.Type == CommonData.Types.GroupLevelUp && _characterGroupLevelUpIndexes.Contains(p.Property[0]))  // LevelUpPattern이 실행된 그룹에 대한 GroupLevelUp 옵션은 표시하지 않음
-            ).ToList();
-
-            if (validOptions.Count == 0)
-            {
-                return null;
-            }
-            var randomIndex = Random.Range(0, validOptions.Count);
-            return validOptions[randomIndex];
+            var validOptions = powerUps.Where(p => IsValidOption(p, selectedCodes));
+            return SelectRandom(validOptions);
         }
+
+
         private void CommonDisplay(IReadOnlyList<CommonData> powerUps)
         {
             CommonDisplayText(common1Button,common1Text, common1Code, common1BtnBadge,powerUps[0]);
