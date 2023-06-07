@@ -284,12 +284,6 @@ namespace Script.RewardScript
                     if (selectedPowerUp == null) continue;
                     commonPowerUps.Add(selectedPowerUp);
                     selectedCodes.Add(selectedPowerUp.Code);
-                    
-                    if (selectedPowerUp.Type == CommonData.Types.GroupLevelUp)
-                    {
-                        
-                        Debug.Log($"HashSet: {selectedPowerUp.Property[0]}");
-                    }
                 }
             }
             return commonPowerUps;
