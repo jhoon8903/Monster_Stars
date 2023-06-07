@@ -14,7 +14,7 @@ namespace Script.CharacterManagerScript
         protected internal Types Type; // Type of the character
 
         public enum UnitGroups { A,B,C,D,E,F,None } // Groups of units
-        protected internal UnitGroups UnitGroup = UnitGroups.None; // Group of the unit
+        public UnitGroups UnitGroup; // Group of the unit
 
         public enum UnitAtkTypes {None,  Projectile, GuideProjectile, Gas, Circle, Vibrate, Boomerang } // Attack types of units
         protected internal UnitAtkTypes UnitAtkType = UnitAtkTypes.None; // Attack type of the unit

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -41,6 +42,7 @@ namespace Script.RewardScript
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private MatchManager matchManager;
         [SerializeField] private EnemyManager enemyManager;
+        [SerializeField] private CharacterManager characterManager;
         public readonly Queue<GameObject> PendingTreasure = new Queue<GameObject>(); // 보류 중인 보물 큐
         private GameObject _currentTreasure = null; // 현재 보물
         public bool openBoxing = false;
@@ -58,8 +60,8 @@ namespace Script.RewardScript
 
         private void ProcessCommonReward(CommonData selectedReward)
         {
-            var characterManager = FindObjectOfType<CharacterManager>();
             
+            var characterManager = FindObjectOfType<CharacterManager>();
             switch (selectedReward.Type)
             {
                 // Row 추가 강화 효과
@@ -96,6 +98,7 @@ namespace Script.RewardScript
                 // 케릭터 그룹 레벨업
                 case CommonData.Types.GroupLevelUp:
                     characterManager.CharacterGroupLevelUp(selectedReward.Property[0]);
+                    _characterGroupLevelUpIndexes.Add(selectedReward.Property[0]);
                     break;
                 // 기본 2레벨 케릭터 생성
                 case CommonData.Types.LevelUpPattern:
@@ -256,6 +259,7 @@ namespace Script.RewardScript
                             break;
                         default:
                         {
+
                             var total = greenChance + blueChance + purpleChance;
                             var randomValue = Random.Range(0, total);
                         
@@ -282,7 +286,8 @@ namespace Script.RewardScript
                     
                     if (selectedPowerUp.Type == CommonData.Types.GroupLevelUp)
                     {
-                        _characterGroupLevelUpIndexes.Add(selectedPowerUp.Property[0]);
+                        
+                        Debug.Log($"HashSet: {selectedPowerUp.Property[0]}");
                     }
                 }
             }
@@ -300,17 +305,17 @@ namespace Script.RewardScript
             // PermanentMove Count is true and Option  is not Show
             // Recovery Castle is Only Use Count 1
             var validOptions = powerUps.Where(p => !selectedCodes.Contains(p.Code) &&
-                                                   _characterGroupLevelUpIndexes.Contains(p.Property[0]) &&
-                                                   !(p.Type == CommonData.Types.CastleMaxHp && castleManager.maxHpPoint >= 2000) &&
-                                                   !(p.Type == CommonData.Types.Exp && _expPercentage <= 30) &&
-                                                   !(p.Type == CommonData.Types.AddRow && gameManager.wave % 11 == 0 && _addRowCount <= 2) &&
-                                                   !(p.Type == CommonData.Types.Slow && _slowCount <= 3) &&
-                                                   !(p.Type == CommonData.Types.NextStage && _nextStageMembersSelectCount <=3) &&
-                                                   !(p.Type == CommonData.Types.StepDirection && _diagonalMovement) && 
-                                                   !(p.Type == CommonData.Types.Match5Upgrade && _5MatchUpgradeOption) &&
-                                                   !(p.Type == CommonData.Types.StepLimit && _permanentIncreaseMovementCount) && 
-                                                   !(p.Type == CommonData.Types.CastleRecovery && _recoveryCastle))
-                .ToList();
+                                                   !(p.Type == CommonData.Types.GroupLevelUp && _characterGroupLevelUpIndexes.Contains(p.Property[0]))
+                                                   // !(p.Type == CommonData.Types.CastleMaxHp && castleManager.maxHpPoint >= 2000) &&
+                                                   // !(p.Type == CommonData.Types.Exp && _expPercentage <= 30) &&
+                                                   // !(p.Type == CommonData.Types.AddRow && gameManager.wave % 11 == 0 && _addRowCount <= 2) &&
+                                                   // !(p.Type == CommonData.Types.Slow && _slowCount <= 3) &&
+                                                   // !(p.Type == CommonData.Types.NextStage && _nextStageMembersSelectCount <=3) &&
+                                                   // !(p.Type == CommonData.Types.StepDirection && _diagonalMovement) && 
+                                                   // !(p.Type == CommonData.Types.Match5Upgrade && _5MatchUpgradeOption) &&
+                                                   // !(p.Type == CommonData.Types.StepLimit && _permanentIncreaseMovementCount) && 
+                                                   // !(p.Type == CommonData.Types.CastleRecovery && _recoveryCastle)
+                ).ToList();
             if (validOptions.Count == 0)
             {
                 return null;
@@ -326,7 +331,62 @@ namespace Script.RewardScript
         }
         private void CommonDisplayText(Button commonButton, TMP_Text powerText, TMP_Text powerCode, Image btnBadge ,CommonData powerUp)
         {
-            powerText.text = $"{powerUp.Type} {powerUp.Property[0]}% PowerUp_Property";
+            switch (powerUp.Type)
+            {
+                case CommonData.Types.Exp:
+                    powerText.text = $"{powerUp.Type} {powerUp.Property[0]}% PowerUp_Property";
+
+                    break;
+                case CommonData.Types.Slow:
+                    powerText.text = $"적군의 이동속도가 {powerUp.Property[0]}% 만큼 느려집니다. (최대 45%)";
+                    break;
+                case CommonData.Types.GroupDamage:
+                    powerText.text = $"전체 케릭터그룹의 데미지가 {powerUp.Property[0]}% 상승합니다.";
+                    break;
+                case CommonData.Types.GroupAtkSpeed:
+                    powerText.text = $"전체 케릭터그룹의 공격속도가 {powerUp.Property[0]}% 상승합니다.";
+                    break;
+                case CommonData.Types.Step:
+                    powerText.text = $"이동횟수가 {powerUp.Property[0]}걸음 증가합니다.";
+                    break;
+                case CommonData.Types.StepLimit:
+                    powerText.text = $"Wave마다 이동횟수가 {powerUp.Property[0]} 걸음 추가됩니다.";
+                    break;
+                case CommonData.Types.StepDirection:
+                    powerText.text = $"대각선 이동이 가능해집니다.";
+                    break;
+                case CommonData.Types.RandomLevelUp:
+                    powerText.text = $"퍼즐위에 있는 케릭터 중 {powerUp.Property[0]}개의 케릭터를 1레벨업 합니다.";
+                    break;
+                case CommonData.Types.GroupLevelUp:
+                    var groupLevelUpName = characterManager.UnitGroupsCheck(powerUp.Property[0]);
+                    powerText.text = $"퍼즐위에 있는 {groupLevelUpName}그룹의 0레벨 케릭터가 1레벨업 합니다.";
+                    break;
+                case CommonData.Types.LevelUpPattern:
+                    var groupName = characterManager.UnitGroupsCheck(powerUp.Property[0]);
+                    powerText.text = $"{groupName}그룹의 0레벨 케릭터는 1레벨로 등장합니다.";
+                    break;
+                case CommonData.Types.CastleRecovery:
+                    powerText.text = $"Wave에서 피해를 입지 않는다면 성의 체력이 {powerUp.Property[0]}만큼 회복됩니다.";
+                    break;
+                case CommonData.Types.CastleMaxHp:
+                    powerText.text = $"{powerUp.Type} {powerUp.Property[0]}% PowerUp_Property";
+                    break;
+                case CommonData.Types.Match5Upgrade:
+                    powerText.text = $"{powerUp.Type} {powerUp.Property[0]}% PowerUp_Property";
+                    break;
+                case CommonData.Types.NextStage:
+                    powerText.text = $"{powerUp.Type} {powerUp.Property[0]}% PowerUp_Property";
+                    break;
+                case CommonData.Types.Gold:
+                    powerText.text = $"{powerUp.Type} {powerUp.Property[0]}% PowerUp_Property";
+                    break;
+                case CommonData.Types.AddRow:
+                    powerText.text = $"{powerUp.Type} {powerUp.Property[0]}% PowerUp_Property";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             powerCode.text = $"{powerUp.Code}";
             btnBadge.sprite = powerUp.BtnColor;
             commonButton.image = commonButton.image;

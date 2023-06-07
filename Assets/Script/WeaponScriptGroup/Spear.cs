@@ -18,7 +18,8 @@ namespace Script.WeaponScriptGroup
             var adjustedSpeed = Speed * distance;
             var timeToMove = distance / adjustedSpeed;
 
-            transform.DOMoveY(MaxDistanceY, timeToMove).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(this.gameObject));
+            transform.DOMoveY(MaxDistanceY, timeToMove)
+                .SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(this.gameObject));
 
             yield return new WaitForSecondsRealtime(FireRate);
         }
@@ -31,7 +32,7 @@ namespace Script.WeaponScriptGroup
             {
                 enemy.ReceiveDamage(Damage);
             }
-            StopUseWeapon(this.gameObject);
+            StopUseWeapon(gameObject);
         }
     }
 }

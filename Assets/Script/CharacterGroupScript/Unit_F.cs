@@ -17,6 +17,7 @@ namespace Script.CharacterGroupScript
 
         private void Awake()
         {
+            UnitGroup = UnitGroups.F;
             _spriteRenderer = GetComponent<SpriteRenderer>(); // Get the reference to the SpriteRenderer component attached to this object
             Level1(); // Set initial level to level 1
         }

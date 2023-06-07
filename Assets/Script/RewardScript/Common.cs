@@ -59,7 +59,6 @@ namespace Script.RewardScript
                 CommonGreen(g,3,CommonData.Types.Step,new []{2,3,4}),
                 CommonGreen(g,4,CommonData.Types.RandomLevelUp, new []{2,3}),
                 CommonGreen(g,4,CommonData.Types.GroupLevelUp, new []{0,1,2,3}),
-                CommonGreen(g,4,CommonData.Types.LevelUpPattern, new []{0,1,2,3}),
                 CommonGreen(g,7,CommonData.Types.Exp, new []{5}),
             };
 
@@ -81,9 +80,9 @@ namespace Script.RewardScript
                 CommonPurple(p,2,CommonData.Types.GroupAtkSpeed, new []{19}),
                 CommonPurple(p,3,CommonData.Types.Step, new []{14,15,16,17}),
                 CommonPurple(p,3,CommonData.Types.StepLimit, new []{1} ),
-                CommonPurple(p,4,CommonData.Types.LevelUpPattern, new []{1}),
                 CommonPurple(p,12,CommonData.Types.StepDirection, new []{1}),
                 CommonPurple(p,10,CommonData.Types.NextStage, new []{1,2}),
+                CommonPurple(p,4,CommonData.Types.LevelUpPattern, new []{0,1,2,3}),
                 CommonPurple(p,13,CommonData.Types.AddRow, new []{1})
             };
         }

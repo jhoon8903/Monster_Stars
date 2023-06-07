@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Script.CharacterGroupScript;
 using UnityEngine;
 
 namespace Script.CharacterManagerScript
@@ -55,18 +56,18 @@ namespace Script.CharacterManagerScript
         // Level up all characters in a specific group
         public void CharacterGroupLevelUp(int characterListIndex)
         {
-            var activeCharacters = characterPool.UsePoolCharacterList();
-            var activeCharacterGroup = characterList[characterListIndex];
-            foreach (var character in activeCharacters)
-            {
+           var levelUpGroup = characterList[characterListIndex].UnitGroup;
+           Debug.Log($"UnitGroup: {levelUpGroup}");
+
+           var activeCharacterGroup = characterPool.UsePoolCharacterList();
+
+           foreach (var character in  activeCharacterGroup)
+           {
                 var characterObj = character.GetComponent<CharacterBase>();
-                if (activeCharacterGroup.GetComponent<CharacterBase>().UnitGroup ==
-                    characterObj.UnitGroup && characterObj.UnitLevel == 1
-                    && characterObj.Type == CharacterBase.Types.Character)
-                {
-                    characterObj.LevelUpScale(character);
-                }
-            }
+                if (levelUpGroup != characterObj.UnitGroup ||
+                    characterObj.UnitLevel != 1 || characterObj.Type != CharacterBase.Types.Character) continue;
+                characterObj.LevelUpScale(character);
+           }
         }
 
         // Set the permanent level up flag for all characters in a specific group
@@ -82,6 +83,12 @@ namespace Script.CharacterManagerScript
             {
                 character.PermanentLevelUp = true;
             }
+        }
+
+        public CharacterBase.UnitGroups UnitGroupsCheck(int characterListIndex)
+        {
+            var levelUpGroup = characterList[characterListIndex].UnitGroup;
+            return levelUpGroup;
         }
     }
 }

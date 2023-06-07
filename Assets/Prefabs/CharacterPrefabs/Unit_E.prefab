@@ -46,17 +46,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b67f01b107dc04fe9b43a3ed971aa488, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  UnitGroup: 4
   defaultDamage: 0
-  increaseDamage: 0
   defaultAtkRate: 0
-  increaseAtkRate: 0
   projectileSpeed: 0
   swingSpeed: 0
   defaultAtkDistance: 0
-  increaseAtkDistance: 0
   defaultAtkRange: {x: 0, y: 0, z: 0}
-  increaseAtkRange: {x: 0, y: 0, z: 0}
-  penetrate: 0
   level1Sprite: {fileID: 21300000, guid: 4f5290b12dd0b42e1a638c2bc16f957c, type: 3}
   level2Sprite: {fileID: 21300000, guid: 03a5793a18eb944d6b5445c6f6b89da0, type: 3}
   level3Sprite: {fileID: 21300000, guid: 4ec8b6f6e2b6a4a76a8322dfc163caff, type: 3}
