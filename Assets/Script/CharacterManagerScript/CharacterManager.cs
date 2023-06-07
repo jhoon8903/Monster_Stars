@@ -10,6 +10,7 @@ namespace Script.CharacterManagerScript
         [SerializeField] internal List<CharacterBase> characterList = new List<CharacterBase>(); // List of character bases
         [SerializeField] private CharacterPool characterPool; // Reference to the character pool
 
+
         // Increase the damage of all characters in the group by a given amount
         public void IncreaseGroupDamage(int increaseAmount)
         {
