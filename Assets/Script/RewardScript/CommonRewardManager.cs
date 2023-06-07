@@ -98,11 +98,12 @@ namespace Script.RewardScript
                 // 케릭터 그룹 레벨업
                 case CommonData.Types.GroupLevelUp:
                     characterManager.CharacterGroupLevelUp(selectedReward.Property[0]);
-                    _characterGroupLevelUpIndexes.Add(selectedReward.Property[0]);
+
                     break;
                 // 기본 2레벨 케릭터 생성
                 case CommonData.Types.LevelUpPattern:
                     characterManager.PermanentIncreaseCharacter(selectedReward.Property[0]);
+                    _characterGroupLevelUpIndexes.Add(selectedReward.Property[0]);
                     break;
                 // 경험치 5% 증가
                 case CommonData.Types.Exp:
@@ -295,27 +296,20 @@ namespace Script.RewardScript
         }
         private CommonData CommonUnique(IEnumerable<CommonData> powerUps, ICollection<int> selectedCodes)
         {
-            // CharacterGroupLevelUp Index Conflict Block
-            // CastleMaxHp Amount is not over 2000
-            // ExpIncrease Amount is not over 30 %
-            // AddRow Only Show to after Boss Stage and Max Show to Count 2
-            // Next Stage Character is use Count just 3  
-            // If _diagonalMovement = true is Not Show to This Option
-            // If 5Match Option is true and Option is not Show
-            // PermanentMove Count is true and Option  is not Show
-            // Recovery Castle is Only Use Count 1
-            var validOptions = powerUps.Where(p => !selectedCodes.Contains(p.Code) &&
-                                                   !(p.Type == CommonData.Types.GroupLevelUp && _characterGroupLevelUpIndexes.Contains(p.Property[0]))
-                                                   // !(p.Type == CommonData.Types.CastleMaxHp && castleManager.maxHpPoint >= 2000) &&
-                                                   // !(p.Type == CommonData.Types.Exp && _expPercentage <= 30) &&
-                                                   // !(p.Type == CommonData.Types.AddRow && gameManager.wave % 11 == 0 && _addRowCount <= 2) &&
-                                                   // !(p.Type == CommonData.Types.Slow && _slowCount <= 3) &&
-                                                   // !(p.Type == CommonData.Types.NextStage && _nextStageMembersSelectCount <=3) &&
-                                                   // !(p.Type == CommonData.Types.StepDirection && _diagonalMovement) && 
-                                                   // !(p.Type == CommonData.Types.Match5Upgrade && _5MatchUpgradeOption) &&
-                                                   // !(p.Type == CommonData.Types.StepLimit && _permanentIncreaseMovementCount) && 
-                                                   // !(p.Type == CommonData.Types.CastleRecovery && _recoveryCastle)
-                ).ToList();
+            var validOptions = powerUps.Where(p => 
+                    !selectedCodes.Contains(p.Code) &&  // 이미 선택된 보상 코드를 다시 선택하지 않음
+                    !(p.Type == CommonData.Types.CastleMaxHp && castleManager.maxHpPoint >= 2000) &&  // 캐슬의 최대 HP가 2000을 초과하지 않도록 함
+                    !(p.Type == CommonData.Types.Exp && _expPercentage <= 30) &&  // 경험치 증가량이 30%를 넘지 않도록 함
+                    !(p.Type == CommonData.Types.AddRow && gameManager.wave % 11 == 0 && _addRowCount <= 2) &&  // 보스 스테이지 이후에만 행 추가 보상을 표시하고, 최대 2회까지만 표시
+                    !(p.Type == CommonData.Types.Slow && _slowCount <= 3) &&  // 적 이동 속도 감소 효과를 최대 3회까지만 표시
+                    !(p.Type == CommonData.Types.NextStage && _nextStageMembersSelectCount <=3) &&  // 다음 스테이지 캐릭터 업그레이드를 최대 3회까지만 사용
+                    !(p.Type == CommonData.Types.StepDirection && _diagonalMovement) &&  // 대각선 이동이 가능한 경우, 이 옵션은 표시하지 않음
+                    !(p.Type == CommonData.Types.Match5Upgrade && _5MatchUpgradeOption) &&  // 5개 매칭 업그레이드 옵션이 활성화되어 있으면 이 옵션을 표시하지 않음
+                    !(p.Type == CommonData.Types.StepLimit && _permanentIncreaseMovementCount) &&  // 영구적인 이동 횟수 증가가 활성화되어 있으면 이 옵션을 표시하지 않음
+                    !(p.Type == CommonData.Types.CastleRecovery && _recoveryCastle) &&  // 캐슬 복구는 한 번만 사용 가능
+                    !(p.Type == CommonData.Types.GroupLevelUp && _characterGroupLevelUpIndexes.Contains(p.Property[0]))  // LevelUpPattern이 실행된 그룹에 대한 GroupLevelUp 옵션은 표시하지 않음
+            ).ToList();
+
             if (validOptions.Count == 0)
             {
                 return null;
@@ -334,55 +328,54 @@ namespace Script.RewardScript
             switch (powerUp.Type)
             {
                 case CommonData.Types.Exp:
-                    powerText.text = $"{powerUp.Type} {powerUp.Property[0]}% PowerUp_Property";
-
+                    powerText.text = $"Acquire additional Exp {powerUp.Property[0]}% when killing an enemy.";
                     break;
                 case CommonData.Types.Slow:
-                    powerText.text = $"적군의 이동속도가 {powerUp.Property[0]}% 만큼 느려집니다. (최대 45%)";
+                    powerText.text = $"Enemy movement speed is slowed by {powerUp.Property[0]}%. (up to 45%)";
                     break;
                 case CommonData.Types.GroupDamage:
-                    powerText.text = $"전체 케릭터그룹의 데미지가 {powerUp.Property[0]}% 상승합니다.";
+                    powerText.text = $"Increases the damage of the entire character group by {powerUp.Property[0]}%.";
                     break;
                 case CommonData.Types.GroupAtkSpeed:
-                    powerText.text = $"전체 케릭터그룹의 공격속도가 {powerUp.Property[0]}% 상승합니다.";
+                    powerText.text = $"Increases the attack speed of the entire character group by {powerUp.Property[0]}%.";
                     break;
                 case CommonData.Types.Step:
-                    powerText.text = $"이동횟수가 {powerUp.Property[0]}걸음 증가합니다.";
+                    powerText.text = $"Move count increases by {powerUp.Property[0]} steps.";
                     break;
                 case CommonData.Types.StepLimit:
                     powerText.text = $"Wave마다 이동횟수가 {powerUp.Property[0]} 걸음 추가됩니다.";
                     break;
                 case CommonData.Types.StepDirection:
-                    powerText.text = $"대각선 이동이 가능해집니다.";
+                    powerText.text = $"{powerUp.Property[0]} steps are added to the movement count for each wave.";
                     break;
                 case CommonData.Types.RandomLevelUp:
-                    powerText.text = $"퍼즐위에 있는 케릭터 중 {powerUp.Property[0]}개의 케릭터를 1레벨업 합니다.";
+                    powerText.text = $"Level up {powerUp.Property[0]} characters on the puzzle by 1 level.";
                     break;
                 case CommonData.Types.GroupLevelUp:
                     var groupLevelUpName = characterManager.UnitGroupsCheck(powerUp.Property[0]);
-                    powerText.text = $"퍼즐위에 있는 {groupLevelUpName}그룹의 0레벨 케릭터가 1레벨업 합니다.";
+                    powerText.text = $"Level 0 characters in the {groupLevelUpName} group on the puzzle will level up by 1";
                     break;
                 case CommonData.Types.LevelUpPattern:
                     var groupName = characterManager.UnitGroupsCheck(powerUp.Property[0]);
-                    powerText.text = $"{groupName}그룹의 0레벨 케릭터는 1레벨로 등장합니다.";
+                    powerText.text = $"Level 0 characters in Group_{groupName} appear as level 1.";
                     break;
                 case CommonData.Types.CastleRecovery:
-                    powerText.text = $"Wave에서 피해를 입지 않는다면 성의 체력이 {powerUp.Property[0]}만큼 회복됩니다.";
+                    powerText.text = $"If you take no damage from the wave, the castle's health is restored by {powerUp.Property[0]}.";
                     break;
                 case CommonData.Types.CastleMaxHp:
-                    powerText.text = $"{powerUp.Type} {powerUp.Property[0]}% PowerUp_Property";
+                    powerText.text = $"Increases the max HP and HP of the castle by {powerUp.Property[0]}.";
                     break;
                 case CommonData.Types.Match5Upgrade:
-                    powerText.text = $"{powerUp.Type} {powerUp.Property[0]}% PowerUp_Property";
+                    powerText.text = "When 5 matches are made, the level of the middle character increases by 1 additional level.";
                     break;
                 case CommonData.Types.NextStage:
-                    powerText.text = $"{powerUp.Type} {powerUp.Property[0]}% PowerUp_Property";
+                    powerText.text = $"You can take {powerUp.Property[0]} additional characters when initializing characters.";
                     break;
                 case CommonData.Types.Gold:
-                    powerText.text = $"{powerUp.Type} {powerUp.Property[0]}% PowerUp_Property";
+                    powerText.text = $"At 5 matches, additional gold is obtained as much as {powerUp.Property[0]}.";
                     break;
                 case CommonData.Types.AddRow:
-                    powerText.text = $"{powerUp.Type} {powerUp.Property[0]}% PowerUp_Property";
+                    powerText.text = $"A horizontal {powerUp.Property[0]} line is added.";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
