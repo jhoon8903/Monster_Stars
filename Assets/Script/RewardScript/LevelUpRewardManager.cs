@@ -1,6 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Script.CharacterManagerScript;
+using Script.EnemyManagerScript;
 using Script.UIManager;
 using TMPro;
 using UnityEngine;
@@ -33,29 +36,99 @@ namespace Script.RewardScript
         [SerializeField] private ExpManager expManager;
         [SerializeField] private CountManager countManager;
         [SerializeField] private GameManager gameManager;
-        
+        [SerializeField] private CharacterManager characterManager;
+        [SerializeField] private SwipeManager swipeManager;
+        [SerializeField] private CastleManager castleManager;
+        [SerializeField] private EnemyManager enemyManager;
         private ExpData _selectedExpRewardData;
-
 
         private void ProcessExpReward(ExpData selectedReward)
         {
-            if (selectedReward == null)
-            {
-                Debug.Log("Not Setting This Reward");
-                return;
-            }
+            var findCharacterManager = FindObjectOfType<CharacterManager>();
             switch (selectedReward.Type)
             {
-
-                // Add more cases for other reward types...
-                // case CommonData.Types.SomeOtherRewardType:
-                //     DoSomethingForThisReward();
-                //     break;
-
-                default:
+                case ExpData.Types.GroupDamage: 
+                    findCharacterManager.IncreaseGroupDamage(selectedReward.Property[0]);
+                    break;
+                case ExpData.Types.GroupAtkSpeed:
+                    findCharacterManager.IncreaseGroupAtkRate(selectedReward.Property[0]);
+                    break;
+                case ExpData.Types.StepLimit:
+                    countManager.PermanentIncreaseMoveCount(selectedReward.Property[0]); 
+                    characterManager.permanentIncreaseMovementCount = true;
+                    break;
+                case ExpData.Types.StepDirection:
+                    swipeManager.EnableDiagonalMovement(); 
+                    characterManager.diagonalMovement = true;
+                    break;
+                case ExpData.Types.Exp:
+                    expManager.IncreaseExpBuff(selectedReward.Property[0]); 
+                    characterManager.expPercentage += 5;
+                    break;
+                case ExpData.Types.CastleRecovery:
+                    gameManager.RecoveryCastle = true; 
+                    characterManager.recoveryCastle = true;
+                    break;
+                case ExpData.Types.CastleMaxHp:
+                    castleManager.IncreaseMaxHp(selectedReward.Property[0]);
+                    break;
+                case ExpData.Types.Slow:
+                    enemyManager.DecreaseMoveSpeed(selectedReward.Property[0]); 
+                    characterManager.slowCount += 1;
+                    break;
+                case ExpData.Types.NextStage:
+                    spawnManager.nextCharacterUpgrade(selectedReward.Property[0]); 
+                    characterManager.nextStageMembersSelectCount += 1;
+                    break;
+                case ExpData.Types.Gold:
+                    characterManager.goldGetMore = true; 
                     Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}");
                     break;
+                case ExpData.Types.DivineRestraint:
+                    break;
+                case ExpData.Types.DivinePenetrate:
+                    break;
+                case ExpData.Types.DivineRestraintDamage:
+                    break;
+                case ExpData.Types.DivineAtkRange:
+                    break;
+                case ExpData.Types.DivinePoisonAdditionalDamage:
+                    break;
+                case ExpData.Types.PhysicAdditionalWeapon:
+                    break;
+                case ExpData.Types.PhysicIncreaseWeaponScale:
+                    break;
+                case ExpData.Types.PhysicSlowAdditionalDamage:
+                    break;
+                case ExpData.Types.PhysicAtkSpeed:
+                    break;
+                case ExpData.Types.PhysicIncreaseDamage:
+                    break;
+                case ExpData.Types.PoisonDoubleAtk:
+                    break;
+                case ExpData.Types.PoisonRestraintAdditionalDamage:
+                    break;
+                case ExpData.Types.PoisonIncreaseTime:
+                    break;
+                case ExpData.Types.PoisonInstantKill:
+                    break;
+                case ExpData.Types.PoisonIncreaseAtkRange:
+                    break;
+                case ExpData.Types.WaterStun:
+                    break;
+                case ExpData.Types.WaterIncreaseSlowTime:
+                    break;
+                case ExpData.Types.WaterIncreaseSlowPower:
+                    break;
+                case ExpData.Types.WaterRestraintKnockBack:
+                    break;
+                case ExpData.Types.WaterIncreaseDamage:
+                    break;
+                default: 
+                    Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}"); 
+                    break;
             }
+            selectedReward.ChosenProperty = null;
             _selectedExpRewardData = null;
         }
         private void Selected()
@@ -74,12 +147,6 @@ namespace Script.RewardScript
                 StartCoroutine(spawnManager.PositionUpCharacterObject());
             }
             ProcessExpReward(_selectedExpRewardData);
-        }
-        public static int RandomChanceMethod(IReadOnlyList<int> rangeValues)
-        {
-            var random = new System.Random();
-            var randomIndex = random.Next(rangeValues.Count);
-            return rangeValues[randomIndex];
         }
         public IEnumerator LevelUpReward() // 레벨업 보상 처리
         {
@@ -147,7 +214,83 @@ namespace Script.RewardScript
         }
         private void LevelUpDisplayText(Button expButton, TMP_Text powerText,TMP_Text powerCode, Image btnBadge, ExpData powerUp)
         {
-            powerText.text = $"{powerUp.Type} {powerUp.Property[0]}% PowerUp_Property";
+            var p = powerUp.Property[0];
+            switch (powerUp.Type)
+            {
+                case ExpData.Types.GroupDamage:
+                    powerText.text = $"Increases the damage of the entire character group by {p}%.";
+                    break;
+                case ExpData.Types.GroupAtkSpeed:
+                    powerText.text = $"Increases the attack speed of the entire character group by {p}%.";
+                    break;
+                case ExpData.Types.StepLimit:
+                    powerText.text = $"{p} steps are added to the movement count for each wave.";
+                    break;
+                case ExpData.Types.StepDirection:
+                    powerText.text = $"{p} steps are added to the movement count for each wave."; 
+                    break;
+                case ExpData.Types.Exp:
+                    powerText.text = $"Acquire additional Exp {p}% when killing an enemy. (up to 30%)";
+                    break;
+                case ExpData.Types.CastleRecovery:
+                    powerText.text = $"If you take no damage from the wave, the castle's health is restored by {p}.";
+                    break;
+                case ExpData.Types.CastleMaxHp:
+                    powerText.text = $"Increases the max HP and HP of the castle by {p}."; 
+                    break;
+                case ExpData.Types.Slow:
+                    powerText.text = $"Enemy movement speed is slowed by {p}%. (up to 60%)";
+                    break;
+                case ExpData.Types.NextStage:
+                    powerText.text = $"You can take {p} additional characters when initializing characters.(up to 3 Characters)";
+                    break;
+                case ExpData.Types.Gold:
+                    powerText.text = $"At 5 matches, additional gold is obtained as much as {p}.";
+                    break;
+                case ExpData.Types.DivineRestraint:
+                    powerText.text = $"At 5 matches, additional gold is obtained as much as {p}.";
+                    break;
+                case ExpData.Types.DivinePenetrate:
+                    break;
+                case ExpData.Types.DivineRestraintDamage:
+                    break;
+                case ExpData.Types.DivineAtkRange:
+                    break;
+                case ExpData.Types.DivinePoisonAdditionalDamage:
+                    break;
+                case ExpData.Types.PhysicAdditionalWeapon:
+                    break;
+                case ExpData.Types.PhysicIncreaseWeaponScale:
+                    break;
+                case ExpData.Types.PhysicSlowAdditionalDamage:
+                    break;
+                case ExpData.Types.PhysicAtkSpeed:
+                    break;
+                case ExpData.Types.PhysicIncreaseDamage:
+                    break;
+                case ExpData.Types.PoisonDoubleAtk:
+                    break;
+                case ExpData.Types.PoisonRestraintAdditionalDamage:
+                    break;
+                case ExpData.Types.PoisonIncreaseTime:
+                    break;
+                case ExpData.Types.PoisonInstantKill:
+                    break;
+                case ExpData.Types.PoisonIncreaseAtkRange:
+                    break;
+                case ExpData.Types.WaterStun:
+                    break;
+                case ExpData.Types.WaterIncreaseSlowTime:
+                    break;
+                case ExpData.Types.WaterIncreaseSlowPower:
+                    break;
+                case ExpData.Types.WaterRestraintKnockBack:
+                    break;
+                case ExpData.Types.WaterIncreaseDamage:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
             powerCode.text = $"{powerUp.Code}";
             btnBadge.sprite = powerUp.BtnColor;
             expButton.image = expButton.image;

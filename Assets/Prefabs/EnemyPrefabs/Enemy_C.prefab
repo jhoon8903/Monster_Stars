@@ -482,6 +482,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemySpawnManager: {fileID: 0}
   expManager: {fileID: 0}
+  hpSlider: {fileID: 1168911202546722642}
   number: 0
 --- !u!60 &5091896745566800680
 PolygonCollider2D:

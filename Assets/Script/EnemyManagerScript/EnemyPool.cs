@@ -38,7 +38,6 @@ namespace Script.EnemyManagerScript
         public void ReturnToPool(GameObject obj)
         { 
             obj.transform.localPosition = new Vector3(0, 20, 0);
-            Debug.Log($"obj Return Position: {obj.transform.position} {obj.GetComponent<EnemyBase>().number}");
             obj.SetActive(false);
         }
     }

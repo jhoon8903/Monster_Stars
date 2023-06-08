@@ -1,6 +1,5 @@
 using System.Collections;
 using DG.Tweening;
-using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using UnityEngine;
 
@@ -12,9 +11,6 @@ namespace Script.WeaponScriptGroup
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
-
-            Damage = CharacterBase.defaultDamage;
-            FireRate = CharacterBase.defaultAtkRate;
             var MaxDistanceY = CharacterBase.defaultAtkDistance;
             var distance = Mathf.Abs(transform.position.y - MaxDistanceY);
             var adjustedSpeed = Speed * distance;
@@ -31,7 +27,7 @@ namespace Script.WeaponScriptGroup
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
             if(enemy != null)
             {
-                enemy.ReceiveDamage(Damage);
+                enemy.ReceiveDamage(Damage, unitProperty, unitEffect);
             }
             StopUseWeapon(gameObject);
         }

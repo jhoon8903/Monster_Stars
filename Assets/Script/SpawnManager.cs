@@ -54,9 +54,11 @@ namespace Script
             yield return StartCoroutine(matchManager.CheckMatches());
 
             //isMatched = false;
+
             if (rewardManger.PendingTreasure.Count == 0) yield break;
             rewardManger.EnqueueTreasure(rewardManger.PendingTreasure.Dequeue());
         }
+        
         private static IEnumerator MoveCharacter(GameObject gameObject, Vector3Int targetPosition, float duration = 0.3f)
         {
             if (gameObject == null) yield break;

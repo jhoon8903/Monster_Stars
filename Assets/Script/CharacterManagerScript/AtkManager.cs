@@ -37,7 +37,7 @@ namespace Script.CharacterManagerScript
         {
             var atkUnit = unit.gameObject; // Attacking unit
             var unitAtkType = unit.UnitAtkType; // Attack type of the unit
-            var unitGroup = unit.UnitGroup; // Group of the unit
+            var unitGroup = unit.unitGroup; // Group of the unit
 
             // Choose the attack method based on the unit's attack type
             switch (unitAtkType)
