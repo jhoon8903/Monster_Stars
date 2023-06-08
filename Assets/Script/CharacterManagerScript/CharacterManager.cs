@@ -58,7 +58,6 @@ namespace Script.CharacterManagerScript
         public void CharacterGroupLevelUp(int characterListIndex)
         {
            var levelUpGroup = characterList[characterListIndex].UnitGroup;
-           Debug.Log($"UnitGroup: {levelUpGroup}");
 
            var activeCharacterGroup = characterPool.UsePoolCharacterList();
 

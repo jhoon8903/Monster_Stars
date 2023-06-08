@@ -1,4 +1,5 @@
 using System;
+using DG.Tweening;
 using Script.UIManager;
 using UnityEngine;
 using UnityEngine.UI;
@@ -9,7 +10,7 @@ namespace Script.EnemyManagerScript
     {
         [SerializeField] private EnemySpawnManager enemySpawnManager;
         [SerializeField] private ExpManager expManager;
-        private Slider _enemyHp;
+        private Slider hpSlider;
 
 
         public enum KillReasons
@@ -24,6 +25,7 @@ namespace Script.EnemyManagerScript
         public int number = 0;
 
         protected internal float HealthPoint; // 적 오브젝트의 체력
+        private float _maxHealthPoint;
 
         protected internal int CrushDamage; // 충돌시 데미지
         protected internal float MoveSpeed; // 적 오브젝트의 이동속도, 1f 는 1초에 1Grid를 가는 속도 숫자가 커질수록 느려져야 함
@@ -50,24 +52,20 @@ namespace Script.EnemyManagerScript
 
         public enum SpawnZones
         {
-            A,
-            B,
-            C,
-            D,
-            E
+            A, B, C, D, E
         }
 
         protected internal SpawnZones SpawnZone;
 
-        private void Start()
+        public void HpBarActive()
         {
-            _enemyHp = GetComponentInChildren<Slider>();
-            _enemyHp.value = HealthPoint;
-            if (_enemyHp == null)
-            {
-                Debug.LogError("No Slider component found on the enemy object or its children.");
-            }
+            hpSlider = GetComponentInChildren<Slider>(true);
+            _maxHealthPoint = HealthPoint;
+            hpSlider.maxValue = _maxHealthPoint;
+            hpSlider.value = HealthPoint;
+            UpdateHpSlider();
         }
+
 
         protected internal virtual void EnemyProperty()
         {
@@ -76,7 +74,7 @@ namespace Script.EnemyManagerScript
         public void ReceiveDamage(float damage, KillReasons reason = KillReasons.ByPlayer)
         {
             HealthPoint -= damage;
-            UpdateHp(HealthPoint);
+            UpdateHpSlider();
             if (!(HealthPoint <= 0)) return;
             FindObjectOfType<EnemyPool>().ReturnToPool(gameObject);
             OnEnemyKilled?.Invoke(reason);
@@ -91,10 +89,9 @@ namespace Script.EnemyManagerScript
             var percentageIncrease = (float)decreaseAmount / 100;
             MoveSpeed *= decreaseAmount * percentageIncrease;
         }
-
-        private void UpdateHp(float hpPoint)
+        private void UpdateHpSlider()
         {
-            _enemyHp.value = hpPoint;
+            hpSlider.DOValue(HealthPoint, 1.0f);
         }
     }
 }
