@@ -60,7 +60,7 @@ namespace Script.CharacterGroupScript
             UnitLevel = 2;
             Type = Types.Treasure;
             _spriteRenderer.sprite = level2Sprite;
-            UnitGroup = UnitGroups.None;
+            unitGroup = UnitGroups.None;
             UnitAtkType = UnitAtkTypes.None;
             UnitProperty = UnitProperties.None;
             UnitEffect = UnitEffects.None;
@@ -73,7 +73,7 @@ namespace Script.CharacterGroupScript
             UnitLevel = 3;
             Type = Types.Treasure;
             _spriteRenderer.sprite = level3Sprite;
-            UnitGroup = UnitGroups.None;
+            unitGroup = UnitGroups.None;
             UnitAtkType = UnitAtkTypes.None;
             UnitProperty = UnitProperties.None;
             UnitEffect = UnitEffects.None;
@@ -86,7 +86,7 @@ namespace Script.CharacterGroupScript
             UnitLevel = 4;
             Type = Types.Treasure;
             _spriteRenderer.sprite = level4Sprite;
-            UnitGroup = UnitGroups.None;
+            unitGroup = UnitGroups.None;
             UnitAtkType = UnitAtkTypes.None;
             UnitProperty = UnitProperties.None;
             UnitEffect = UnitEffects.None;

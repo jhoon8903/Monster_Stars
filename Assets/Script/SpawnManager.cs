@@ -64,7 +64,6 @@ namespace Script
                 yield break;
             }
             rewardManger.EnqueueTreasure(rewardManger.PendingTreasure.Dequeue());
-            swipeManager.isBusy = false;
         }
         private static IEnumerator MoveCharacter(GameObject gameObject, Vector3Int targetPosition, float duration = 0.3f)
         {

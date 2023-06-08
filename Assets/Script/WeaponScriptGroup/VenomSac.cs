@@ -14,9 +14,6 @@ namespace Script.WeaponScriptGroup
         {
             yield return base.UseWeapon();
 
-            Damage = CharacterBase.defaultDamage;
-            Speed = CharacterBase.projectileSpeed;
-            FireRate = CharacterBase.defaultAtkRate;
             var enemyList = CharacterBase.DetectEnemies();
             var enemyTransform  = new UnityEngine.Vector3();
             foreach (var enemy in enemyList)
@@ -42,7 +39,7 @@ namespace Script.WeaponScriptGroup
             // 캐시된 적의 참조를 사용합니다.
             if(_cachedEnemy != null)
             {
-                _cachedEnemy.ReceiveDamage(Damage);
+                _cachedEnemy.ReceiveDamage(Damage, unitProperty, unitEffect);
             }
             StopUseWeapon(this.gameObject);
         }

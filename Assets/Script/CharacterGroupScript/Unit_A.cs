@@ -18,7 +18,7 @@ namespace Script.CharacterGroupScript
 
         private void Awake()
         {
-            UnitGroup = UnitGroups.A;
+            unitGroup = UnitGroups.A;
             _spriteRenderer = GetComponent<SpriteRenderer>(); // Get the reference to the SpriteRenderer component attached to this object
             Level1(); // Set initial level to level 1
         }
@@ -84,7 +84,7 @@ namespace Script.CharacterGroupScript
             // Set properties for level 1
             CharacterName = "Unit_A_00";
             UnitLevel = 1;
-            UnitGroup = UnitGroups.A;
+            unitGroup = UnitGroups.A;
             Type = Types.Character;
             defaultDamage = 0;
             defaultAtkRate = 0;
@@ -100,7 +100,7 @@ namespace Script.CharacterGroupScript
             CharacterName = "Unit_A_01";
             UnitLevel = 2;
             Type = Types.Character;
-            UnitGroup = UnitGroups.A;
+            unitGroup = UnitGroups.A;
             defaultDamage = 125f;
             defaultAtkRate = 1;
             defaultAtkDistance = 9f;
@@ -119,7 +119,7 @@ namespace Script.CharacterGroupScript
             CharacterName = "Unit_A_02";
             UnitLevel = 3;
             Type = Types.Character;
-            UnitGroup = UnitGroups.A;
+            unitGroup = UnitGroups.A;
             defaultDamage *= 1.7f;
             defaultAtkRate = 0.3f;
             defaultAtkDistance = 12f;
@@ -138,7 +138,7 @@ namespace Script.CharacterGroupScript
             CharacterName = "Unit_A_03";
             UnitLevel = 4;
             Type = Types.Character;
-            UnitGroup = UnitGroups.A;
+            unitGroup = UnitGroups.A;
             defaultDamage *= 2f;
             defaultAtkRate = 0.9f;
             defaultAtkDistance = 12;
@@ -157,7 +157,7 @@ namespace Script.CharacterGroupScript
             CharacterName = "Unit_A_04";
             UnitLevel = 5;
             Type = Types.Character;
-            UnitGroup = UnitGroups.A;
+            unitGroup = UnitGroups.A;
             defaultDamage *= 2.3f;
             defaultAtkRate = 2.7f;
             defaultAtkDistance = 12;

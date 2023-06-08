@@ -14,7 +14,7 @@ namespace Script.CharacterManagerScript
         protected internal Types Type; // Type of the character
 
         public enum UnitGroups { A,B,C,D,E,F,None } // Groups of units
-        public UnitGroups UnitGroup; // Group of the unit
+        public UnitGroups unitGroup; // Group of the unit
 
         public enum UnitAtkTypes {None,  Projectile, GuideProjectile, Gas, Circle, Vibrate, Boomerang } // Attack types of units
         protected internal UnitAtkTypes UnitAtkType = UnitAtkTypes.None; // Attack type of the unit
@@ -41,7 +41,7 @@ namespace Script.CharacterManagerScript
         {
             if (PermanentLevelUp && UnitLevel == 1)
             {
-                LevelUp();
+                Level = 2;
             }
         }
 

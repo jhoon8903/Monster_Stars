@@ -8,7 +8,7 @@ namespace Script.CharacterManagerScript
     {
         [SerializeField] private CharacterManager characterManager; // Reference to the character manager
         [SerializeField] private int poolSize; // Size of the character pool
-        private List<GameObject> _pooledCharacters; // List of character objects in the pool
+        public List<GameObject> _pooledCharacters; // List of character objects in the pool
 
         /**
          * Character Pool Create and SetActive(false)

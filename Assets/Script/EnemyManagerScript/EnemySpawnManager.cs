@@ -56,7 +56,6 @@ namespace Script.EnemyManagerScript
         private void SpawnEnemy(EnemyBase.EnemyTypes enemyType)
         {
             var enemyToSpawn = enemyPool.GetPooledEnemy(enemyType);
-            Debug.Log($"enemyPosition: {enemyToSpawn.transform.position}");
             if (enemyToSpawn == null)
             {
                 return;
@@ -77,11 +76,12 @@ namespace Script.EnemyManagerScript
             var enemyZone = enemyToSpawn.GetComponent<EnemyBase>().SpawnZone;
             var spawnPos = GetRandomPointInBounds(enemyZone);
             enemyToSpawn.transform.position = spawnPos;
-            Debug.Log($"enemyTransformPosition: {enemyToSpawn.transform.position}");
             enemyToSpawn.SetActive(true);
-            fieldList.Add(enemyToSpawn);
             var enemyBase = enemyToSpawn.GetComponent<EnemyBase>();
+            enemyBase.HpBarActive();
             enemyBase.OnEnemyKilled += reason => { fieldList.Remove(enemyToSpawn); };
+            fieldList.Add(enemyToSpawn);
+
         }
 
         private Vector3 GetRandomPointInBounds(EnemyBase.SpawnZones zone)
