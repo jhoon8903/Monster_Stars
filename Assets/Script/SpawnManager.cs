@@ -30,10 +30,10 @@ namespace Script
         }
         public IEnumerator PositionUpCharacterObject()
         {
-            if (isMatched) yield break;
-            isMatched = true;
+            //if (isMatched) yield break;
+            //isMatched = true;
             var moves = new List<(GameObject, Vector3Int)>();
-            for (var x = 0; x < gridManager.gridWidth; x++) 
+            for (var x = 0; x < gridManager.gridWidth; x++)
             { 
                 var emptyCellCount = 0;
                 for (var y = gridManager.gridHeight - 1; y >= 0; y--) 
@@ -51,11 +51,14 @@ namespace Script
             }
             yield return StartCoroutine(PerformMoves(moves));
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
-            isMatched = false;
             yield return StartCoroutine(matchManager.CheckMatches());
+
+            //isMatched = false;
+
             if (rewardManger.PendingTreasure.Count == 0) yield break;
             rewardManger.EnqueueTreasure(rewardManger.PendingTreasure.Dequeue());
         }
+        
         private static IEnumerator MoveCharacter(GameObject gameObject, Vector3Int targetPosition, float duration = 0.3f)
         {
             if (gameObject == null) yield break;

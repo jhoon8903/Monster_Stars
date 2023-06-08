@@ -123,11 +123,14 @@ namespace Script
             return matchFound;
         }
 
+        bool isMatched = false;
         // 이 메소드는 매치를 확인하는 동안 계속해서 매치가 발견되는지 확인합니다.
         // 매치가 발견되면 콤보 카운트를 증가시키고, 스왑이 발생하지 않았음을 표시한 후 캐릭터를 상승시킵니다.
         // 매치가 발견되지 않을 때까지 반복합니다.
         public IEnumerator CheckMatches()
         {
+            if (isMatched) yield break;
+            isMatched = true;
             do
             {
                 foreach (var character in characterPool.UsePoolCharacterList().Where(IsMatched))
@@ -141,6 +144,7 @@ namespace Script
                 }
             }
             while (false);
+            isMatched = false;
         }
 
         // 이 메소드는 주어진 캐릭터 객체를 풀로 반환하는 기능을 수행합니다.
