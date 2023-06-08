@@ -168,6 +168,7 @@ namespace Script
                         break;
                 }
             }
+
             var startObject = spawnManager.CharacterObject(new Vector3(startX, startY, 0));
             var endObject = spawnManager.CharacterObject(new Vector3(endX, endY, 0));
             if (startObject && endObject != null)
