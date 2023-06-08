@@ -104,6 +104,7 @@ namespace Script
          // 개체가 식별되면 개체의 상태에 따라 SwitchAndMatches 코루틴 또는 NullSwap 코루틴을 시작합니다.
         private void Swipe(Vector2 swipe)
         {
+            if (isBusy) return;
             if (!CanMove()) return;
             if (_startObject == null) return;
 
@@ -183,6 +184,7 @@ namespace Script
         // 스와이프 끝에 빈 공간이 있는 null 스왑 시나리오를 처리합니다. 시작 개체는 빈 위치로 이동한 다음 개체 풀로 반환됩니다.
         private IEnumerator NullSwap(GameObject startObject, int endX, int endY)
         {
+            if (isBusy) yield break;
             if (endY < 0) yield break;
             isBusy = true;
             if (startObject == null) yield break;
@@ -199,12 +201,13 @@ namespace Script
             spriteRenderer.color = color;
             CharacterPool.ReturnToPool(startObject);
             StartCoroutine(spawnManager.PositionUpCharacterObject());
-            isBusy = false;
+            
         }
         
          // 시작 개체와 끝 개체 사이의 전환을 시작합니다. 그런 다음 두 개체와 관련된 일치 항목을 확인합니다.
         private IEnumerator SwitchAndMatches(GameObject startObject, GameObject endObject)
         {
+            if (isBusy) yield break;
             isBusy = true;
             if (startObject == null || endObject == null) yield break;
             var startObjectPosition = startObject.transform.position;
