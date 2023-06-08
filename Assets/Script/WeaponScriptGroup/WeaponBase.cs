@@ -13,6 +13,10 @@ namespace Script.WeaponScriptGroup
         protected float Speed { get; set; }
         protected float Damage { get; set; }
         protected float FireRate { get; set; }
+        protected CharacterBase.UnitProperties unitProperty { get; set; }
+        protected CharacterBase.UnitEffects unitEffect { get; set; }
+
+
         protected Vector3 StartingPosition;
         protected CharacterBase CharacterBase;
 
@@ -22,8 +26,11 @@ namespace Script.WeaponScriptGroup
         }
 
         public virtual IEnumerator UseWeapon()
-        {
+        {   
+
             IsInUse = true;
+            unitProperty = CharacterBase.UnitProperty;
+            unitEffect = CharacterBase.UnitEffect;
             StartingPosition = transform.position;
             Damage = CharacterBase.defaultDamage;
             FireRate = CharacterBase.defaultAtkRate;

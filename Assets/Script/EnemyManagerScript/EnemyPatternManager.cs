@@ -43,8 +43,12 @@ namespace Script.EnemyManagerScript
 
         private static IEnumerator PatternACoroutine(GameObject enemyObject, Vector3 endPosition, float duration)
         {
-            Tweener move = enemyObject.transform.DOMove(endPosition, duration).SetEase(Ease.Linear);
-            yield return null;   
+            var enemyBase = enemyObject.GetComponent<EnemyBase>();
+            if (enemyBase.canMove)
+            {
+                Tweener move = enemyObject.transform.DOMove(endPosition, duration).SetEase(Ease.Linear);
+            }
+            yield return null;
         }
     }
 }

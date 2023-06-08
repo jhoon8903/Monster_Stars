@@ -5,6 +5,8 @@ namespace Script.RewardScript
 {
     public class ExpData
     {
+        private static readonly System.Random Random = new System.Random();
+        public int? ChosenProperty; 
         public enum Types
         {
             // Common Property
@@ -15,7 +17,6 @@ namespace Script.RewardScript
             Exp,
             CastleRecovery,
             CastleMaxHp,
-            Board,
             Slow,
             NextStage,
             Gold,
@@ -45,45 +46,49 @@ namespace Script.RewardScript
             WaterIncreaseDamage
         }
         public Types Type { get; set; }
-        public int[] Property { get; set; }
+        private readonly int[] _property;
+        public int[] Property 
+        { 
+            get
+            {
+                ChosenProperty ??= RandomChanceMethod(_property);
+                return new[] { ChosenProperty.Value };
+            }
+        }
         public int Code { get; set; }
         public Sprite BtnColor { get; private set; }
-        public int Count { get; set; }
-        public enum ExpRepeatTypes
-        {
-            Repeat,
-            NoneRepeat
-        }
-        public ExpRepeatTypes ExpRepeat { get; set; }
-        protected ExpData(Sprite btnColor, int code, ExpRepeatTypes commonRepeat, int count, Types type, int[] property)
+        protected ExpData(Sprite btnColor, int code, Types type, int[] property)
         {
             BtnColor = btnColor;
             Code = code;
-            ExpRepeat = commonRepeat;
-            Count = count;
             Type = type;
-            Property = property;
+            _property = property;
+        }
+        private static int RandomChanceMethod(IReadOnlyList<int> array)
+        {
+            var randomIndex = Random.Next(0, array.Count);
+            return array[randomIndex];
         }
     }
 
     public class ExpGreenData : ExpData
     {
-        public ExpGreenData(Sprite btnColor, int code, ExpRepeatTypes expRepeat, int count, Types type, int[] property)
-            : base(btnColor, code, expRepeat, count, type, property)
+        public ExpGreenData(Sprite btnColor, int code, Types type, int[] property)
+            : base(btnColor, code, type, property)
         {
         }
     }
     public class ExpBlueData : ExpData
     {
-        public ExpBlueData(Sprite btnColor, int code, ExpRepeatTypes expRepeat, int count, Types type, int[] property)
-            : base(btnColor, code, expRepeat, count, type, property)
+        public ExpBlueData(Sprite btnColor, int code, Types type, int[] property)
+            : base(btnColor, code, type, property)
         {
         }
     }
     public class ExpPurpleData : ExpData
     {
-        public ExpPurpleData(Sprite btnColor, int code, ExpRepeatTypes expRepeat, int count, Types type, int[] property)
-            : base(btnColor, code, expRepeat, count, type, property)
+        public ExpPurpleData(Sprite btnColor, int code, Types type, int[] property)
+            : base(btnColor, code, type, property)
         {
         }
     }
@@ -99,76 +104,52 @@ namespace Script.RewardScript
             var g = levelUpRewardManager.greenSprite;
             var b = levelUpRewardManager.blueSprite;
             var p = levelUpRewardManager.purpleSprite;
-            const ExpData.ExpRepeatTypes r = ExpData.ExpRepeatTypes.Repeat;
-            const ExpData.ExpRepeatTypes n = ExpData.ExpRepeatTypes.NoneRepeat;
 
             ExpGreenList = new List<ExpData>
             {
-                ExpGreen(g,1, r,0, ExpData.Types.GroupDamage, new[]{4}),
-                ExpGreen(g,2,r,0,ExpData.Types.GroupAtkSpeed,new[]{4}),
-                ExpGreen(g,7,r,6, ExpData.Types.Exp, new []{5}),
-                ExpGreen(g,100,n,1,ExpData.Types.DivinePoisonAdditionalDamage, new []{50}),
-                ExpGreen(g,200,n,1,ExpData.Types.PhysicAdditionalWeapon, new []{1}),
-                ExpGreen(g,300,n,1,ExpData.Types.PoisonRestraintAdditionalDamage, new []{200}),
-                ExpGreen(g,400,n,1,ExpData.Types.WaterStun,new []{15})
+                new ExpGreenData(g,1, ExpData.Types.GroupDamage, new[]{4}),
+                new ExpGreenData(g,2,ExpData.Types.GroupAtkSpeed,new[]{4}), 
+                new ExpGreenData(g,7, ExpData.Types.Exp, new []{5}),
+                new ExpGreenData(g,100,ExpData.Types.DivinePoisonAdditionalDamage, new []{50}),
+                new ExpGreenData(g,200,ExpData.Types.PhysicAdditionalWeapon, new []{1}),
+                new ExpGreenData(g,300,ExpData.Types.PoisonRestraintAdditionalDamage, new []{200}),
+                new ExpGreenData(g,400,ExpData.Types.WaterStun,new []{15})
             };
 
             ExpBlueList = new List<ExpData>
             {
-                ExpBlue(b,1,r,0,ExpData.Types.GroupDamage, new []{8}),
-                ExpBlue(b,2,r,0,ExpData.Types.GroupAtkSpeed, new []{6,7,8,9,10}),
-                ExpBlue(b,5,n,1,ExpData.Types.Gold, new []{1}),
-                ExpBlue(b,6,r,5,ExpData.Types.CastleMaxHp, new []{200}),
-                ExpBlue(b,8,n,1,ExpData.Types.CastleRecovery, new []{200}),
-                ExpBlue(b,9,n,1,ExpData.Types.Board, new []{1}),
-                ExpBlue(b,11, r,3,ExpData.Types.Slow, new []{1}),
-                ExpBlue(b,100,n,1,ExpData.Types.DivineRestraintDamage, new []{100}),
-                ExpBlue(b,100,n,1,ExpData.Types.DivineAtkRange, new []{1}),
-                ExpBlue(b,200,n,1,ExpData.Types.PhysicSlowAdditionalDamage,new []{100}),
-                ExpBlue(b,300,n,1,ExpData.Types.PoisonDoubleAtk, new []{2}),
-                ExpBlue(b,400,n,1,ExpData.Types.WaterIncreaseSlowTime, new []{1}),
-                ExpBlue(b,400,n,1,ExpData.Types.WaterIncreaseDamage, new []{50})
+                new ExpBlueData(b,1,ExpData.Types.GroupDamage, new []{8}),
+                new ExpBlueData(b,2,ExpData.Types.GroupAtkSpeed, new []{6,7,8,9,10}),
+                new ExpBlueData(b,5,ExpData.Types.Gold, new []{1}),
+                new ExpBlueData(b,6,ExpData.Types.CastleMaxHp, new []{200}),
+                new ExpBlueData(b,8,ExpData.Types.CastleRecovery, new []{200}),
+                new ExpBlueData(b,11, ExpData.Types.Slow, new []{15}),
+                new ExpBlueData(b,100,ExpData.Types.DivineRestraintDamage, new []{100}),
+                new ExpBlueData(b,100,ExpData.Types.DivineAtkRange, new []{1}),
+                new ExpBlueData(b,200,ExpData.Types.PhysicSlowAdditionalDamage,new []{100}),
+                new ExpBlueData(b,300,ExpData.Types.PoisonDoubleAtk, new []{2}),
+                new ExpBlueData(b,400,ExpData.Types.WaterIncreaseSlowTime, new []{1}),
+                new ExpBlueData(b,400,ExpData.Types.WaterIncreaseDamage, new []{50})
             };
 
             ExpPurpleList = new List<ExpData>
             {
-                ExpPurple(p,1,r,0,ExpData.Types.GroupDamage,new []{18}),
-                ExpPurple(p,2,r,0,ExpData.Types.GroupAtkSpeed, new []{19}),
-                ExpPurple(p,3,n,1,ExpData.Types.StepLimit, new []{1} ),
-                ExpPurple(p,12,n,1,ExpData.Types.StepDirection, new []{1}),
-                ExpPurple(p,10,r,3,ExpData.Types.NextStage, new []{1,2}),
-                ExpPurple(p,100,n,1,ExpData.Types.DivineRestraint, new []{1}),
-                ExpPurple(p,100,n,1,ExpData.Types.DivinePenetrate, new []{1}),
-                ExpPurple(p,200,n,1,ExpData.Types.PhysicAtkSpeed, new []{50}),
-                ExpPurple(p,200,n,1,ExpData.Types.PhysicIncreaseDamage, new []{5}),
-                ExpPurple(p,200,n,1,ExpData.Types.PhysicIncreaseWeaponScale, new []{5}),
-                ExpPurple(p,300,n,1,ExpData.Types.PoisonIncreaseTime, new []{2}),
-                ExpPurple(p,300,n,1,ExpData.Types.PoisonInstantKill, new []{15}),
-                ExpPurple(p,300,n,1,ExpData.Types.PoisonIncreaseAtkRange, new []{1}),
-                ExpPurple(p,400,n,1,ExpData.Types.WaterIncreaseSlowPower, new []{50}),
-                ExpPurple(p,400,n,1,ExpData.Types.WaterRestraintKnockBack, new []{1}),
+                new ExpPurpleData(p,1,ExpData.Types.GroupDamage,new []{18}),
+                new ExpPurpleData(p,2,ExpData.Types.GroupAtkSpeed, new []{19}),
+                new ExpPurpleData(p,3,ExpData.Types.StepLimit, new []{1} ),
+                new ExpPurpleData(p,12,ExpData.Types.StepDirection, new []{1}),
+                new ExpPurpleData(p,10,ExpData.Types.NextStage, new []{1,2}),
+                new ExpPurpleData(p,100,ExpData.Types.DivineRestraint, new []{1}),
+                new ExpPurpleData(p,100,ExpData.Types.DivinePenetrate, new []{1}),
+                new ExpPurpleData(p,200,ExpData.Types.PhysicAtkSpeed, new []{50}),
+                new ExpPurpleData(p,200,ExpData.Types.PhysicIncreaseDamage, new []{5}),
+                new ExpPurpleData(p,200,ExpData.Types.PhysicIncreaseWeaponScale, new []{5}),
+                new ExpPurpleData(p,300,ExpData.Types.PoisonIncreaseTime, new []{2}),
+                new ExpPurpleData(p,300,ExpData.Types.PoisonInstantKill, new []{15}),
+                new ExpPurpleData(p,300,ExpData.Types.PoisonIncreaseAtkRange, new []{1}),
+                new ExpPurpleData(p,400,ExpData.Types.WaterIncreaseSlowPower, new []{50}),
+                new ExpPurpleData(p,400,ExpData.Types.WaterRestraintKnockBack, new []{1}),
             };
-        }
-        private ExpGreenData ExpGreen(Sprite btnColor, int code, ExpData.ExpRepeatTypes expRepeatType, int count, ExpData.Types type, IReadOnlyList<int> expProperty)
-        {
-            var randomProperty = LevelUpRewardManager.RandomChanceMethod(expProperty);
-            var powerUp = new ExpGreenData(btnColor, code, expRepeatType, count, type, new int[] { randomProperty });
-            ExpGreenList.Add(powerUp);
-            return powerUp;
-        }
-        private ExpBlueData ExpBlue(Sprite btnColor, int code, ExpData.ExpRepeatTypes expRepeatType, int count, ExpData.Types type, IReadOnlyList<int> expProperty)
-        {
-            var randomProperty = LevelUpRewardManager.RandomChanceMethod(expProperty);
-            var powerUp = new ExpBlueData(btnColor, code, expRepeatType, count, type, new int[] { randomProperty });
-            ExpBlueList.Add(powerUp);
-            return powerUp;
-        }
-        private ExpPurpleData ExpPurple(Sprite btnColor, int code, ExpData.ExpRepeatTypes expRepeatType, int count, ExpData.Types type, IReadOnlyList<int> expProperty)
-        {
-            var randomProperty = LevelUpRewardManager.RandomChanceMethod(expProperty);
-            var powerUp = new ExpPurpleData(btnColor, code, expRepeatType, count, type, new int[] {randomProperty });
-            ExpPurpleList.Add(powerUp);
-            return powerUp;
         }
     }
 }

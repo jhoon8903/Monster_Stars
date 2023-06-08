@@ -735,6 +735,15 @@ MonoBehaviour:
   - {fileID: 5553006608696507336, guid: 438d7922ea8534dd6a3cfa7664f14cb7, type: 3}
   - {fileID: 2939207743086641073, guid: b3c344a1ee72a45e3aef34b9e39575c5, type: 3}
   characterPool: {fileID: 1097818334}
+  expPercentage: 0
+  addRowCount: 0
+  slowCount: 0
+  nextStageMembersSelectCount: 0
+  diagonalMovement: 0
+  _5MatchUpgradeOption: 0
+  permanentIncreaseMovementCount: 0
+  recoveryCastle: 0
+  goldGetMore: 0
 --- !u!114 &149521964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -753,6 +762,7 @@ MonoBehaviour:
   rewardManger: {fileID: 2120144519}
   gameManager: {fileID: 149521958}
   isWave10Spawning: 0
+  isMatched: 0
 --- !u!114 &149521965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1584,6 +1594,7 @@ GameObject:
   - component: {fileID: 329010038}
   - component: {fileID: 329010036}
   - component: {fileID: 329010039}
+  - component: {fileID: 329010040}
   m_Layer: 0
   m_Name: EnemyManager
   m_TagString: Untagged
@@ -1670,6 +1681,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemySpawnManager: {fileID: 329010038}
+--- !u!114 &329010040
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 329010034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 00e0262d9ffcd4d219f10b5f7db48d58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemySpawnManager: {fileID: 329010038}
+  expManager: {fileID: 841622521}
+  number: 0
+  canMove: 1
 --- !u!1 &362582815
 GameObject:
   m_ObjectHideFlags: 0
@@ -4348,6 +4375,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterManager: {fileID: 149521963}
   poolSize: 15
+  _pooledCharacters: []
 --- !u!4 &1097818335
 Transform:
   m_ObjectHideFlags: 0
@@ -7496,6 +7524,10 @@ MonoBehaviour:
   expManager: {fileID: 841622521}
   countManager: {fileID: 841622520}
   gameManager: {fileID: 149521958}
+  characterManager: {fileID: 149521963}
+  swipeManager: {fileID: 149521965}
+  castleManager: {fileID: 1177777546}
+  enemyManager: {fileID: 329010036}
 --- !u!1 &2143130367
 GameObject:
   m_ObjectHideFlags: 0

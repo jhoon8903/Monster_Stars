@@ -4,12 +4,12 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using Script.CharacterManagerScript;
 
 namespace Script.UIManager
 {
       public class CastleManager : MonoBehaviour
       {
-
           [SerializeField] private Slider hpBar;
           [SerializeField] private TextMeshProUGUI hpText;
           [SerializeField] private EnemyPool enemyPool;
@@ -38,7 +38,7 @@ namespace Script.UIManager
               if (!collision.gameObject.CompareTag("Enemy")) return;
               var enemyBase = collision.gameObject.GetComponent<EnemyBase>();
               if (enemyBase == null) return;
-              enemyBase.ReceiveDamage(enemyBase.HealthPoint, EnemyBase.KillReasons.ByCastle); 
+              enemyBase.RegistryDamageFunction(enemyBase.HealthPoint, CharacterBase.UnitProperties.None,EnemyBase.KillReasons.ByCastle); 
               hpPoint -= enemyBase.CrushDamage;
               // Animate the change in value
               hpBar.DOValue(hpPoint, 1.0f); // Change 0.5f to whatever duration you want for the animation
@@ -46,13 +46,11 @@ namespace Script.UIManager
               OnEnemyKilled += () => enemySpawnManager.fieldList.Remove(enemyBase.gameObject);
               enemyPool.ReturnToPool(enemyBase.gameObject);
               OnEnemyKilled?.Invoke();
-              if (hpPoint <= 0)
-              {
-                  hpPoint = 0;
-                  hpBar.value = hpPoint;
-                  UpdateHpText();
-                  StartCoroutine(gameManager.ContinueOrLose());
-              }
+              if (hpPoint > 0) return;
+              hpPoint = 0;
+              hpBar.value = hpPoint;
+              UpdateHpText();
+              StartCoroutine(gameManager.ContinueOrLose());
           }
           
           public bool Damaged => hpPoint < PreviousHpPoint;

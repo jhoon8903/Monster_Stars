@@ -18,7 +18,7 @@ namespace Script.CharacterGroupScript
 
         private void Awake()
         {
-            UnitGroup = UnitGroups.E;
+            unitGroup = UnitGroups.E;
             _spriteRenderer = GetComponent<SpriteRenderer>(); // Get the reference to the SpriteRenderer component attached to this object
             Level1(); // Set initial level to level 1
         }
@@ -80,7 +80,7 @@ namespace Script.CharacterGroupScript
             CharacterName = "Unit_E_00";
             UnitLevel = 1;
             Type = Types.Character;
-            UnitGroup = UnitGroups.E;
+            unitGroup = UnitGroups.E;
             defaultDamage = 0;
             defaultAtkRate = 0;
             defaultAtkDistance = 0;
@@ -93,7 +93,7 @@ namespace Script.CharacterGroupScript
             CharacterName = "Unit_E_01";
             UnitLevel = 2;
             Type = Types.Character;
-            UnitGroup = UnitGroups.E;
+            unitGroup = UnitGroups.E;
             defaultDamage = 75;
             defaultAtkRate = 0.5f;
             defaultAtkDistance = 9f;
@@ -111,7 +111,7 @@ namespace Script.CharacterGroupScript
             CharacterName = "Unit_E_02";
             UnitLevel = 3;
             Type = Types.Character;
-            UnitGroup = UnitGroups.E;
+            unitGroup = UnitGroups.E;
             defaultDamage *= 1.7f;
             defaultAtkRate = 0.5f;
             defaultAtkDistance = 9f;
@@ -129,7 +129,7 @@ namespace Script.CharacterGroupScript
             CharacterName = "Unit_E_03";
             UnitLevel = 4;
             Type = Types.Character;
-            UnitGroup = UnitGroups.E;
+            unitGroup = UnitGroups.E;
             defaultDamage *= 2;
             defaultAtkRate = 0.5f;
             defaultAtkDistance = 9f;
@@ -147,7 +147,7 @@ namespace Script.CharacterGroupScript
             CharacterName = "Unit_E_04";
             UnitLevel = 5;
             Type = Types.Character;
-            UnitGroup = UnitGroups.E;
+            unitGroup = UnitGroups.E;
             defaultDamage *= 2.3f;
             defaultAtkRate = 0.5f;
             defaultAtkDistance = 9f;

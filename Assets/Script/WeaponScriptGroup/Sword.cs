@@ -22,7 +22,7 @@ namespace Script.WeaponScriptGroup
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
             if(enemy != null)
             {
-                enemy.ReceiveDamage(Damage);
+                enemy.ReceiveDamage(Damage, unitProperty, unitEffect);
             }
         }
     }

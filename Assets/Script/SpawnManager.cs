@@ -51,9 +51,8 @@ namespace Script
             }
             yield return StartCoroutine(PerformMoves(moves));
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
-            yield return StartCoroutine(matchManager.CheckMatches());
-
             isMatched = false;
+            yield return StartCoroutine(matchManager.CheckMatches());
             if (rewardManger.PendingTreasure.Count == 0) yield break;
             rewardManger.EnqueueTreasure(rewardManger.PendingTreasure.Dequeue());
         }

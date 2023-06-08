@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterGroupScript;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Script.CharacterManagerScript
 {
@@ -9,6 +10,16 @@ namespace Script.CharacterManagerScript
     {
         [SerializeField] internal List<CharacterBase> characterList = new List<CharacterBase>(); // List of character bases
         [SerializeField] private CharacterPool characterPool; // Reference to the character pool
+        public readonly HashSet<int> CharacterGroupLevelUpIndexes = new HashSet<int>();
+        public int expPercentage = 0;
+        public int addRowCount = 0;
+        public int slowCount = 0;
+        public int nextStageMembersSelectCount = 0;
+        public bool diagonalMovement = false;
+        public bool _5MatchUpgradeOption = false;
+        public bool permanentIncreaseMovementCount;
+        public bool recoveryCastle = false;
+        public bool goldGetMore = false;
 
 
         // Increase the damage of all characters in the group by a given amount
@@ -38,7 +49,7 @@ namespace Script.CharacterManagerScript
             var levelUpCount = 0;
     
             var eligibleCharacters = activeCharacters.Where(character => 
-                character.GetComponent<CharacterBase>()?.UnitLevel < 5).ToList();
+                character.GetComponent<CharacterBase>()?.UnitLevel < 5 && character.GetComponent<CharacterBase>().Type != CharacterBase.Types.Treasure).ToList();
             if (eligibleCharacters.Count == 0) return;
     
             while (levelUpCount < characterCount && eligibleCharacters.Count > 0)
@@ -57,14 +68,13 @@ namespace Script.CharacterManagerScript
         // Level up all characters in a specific group
         public void CharacterGroupLevelUp(int characterListIndex)
         {
-           var levelUpGroup = characterList[characterListIndex].UnitGroup;
-
+           var levelUpGroup = characterList[characterListIndex].unitGroup;
            var activeCharacterGroup = characterPool.UsePoolCharacterList();
 
            foreach (var character in  activeCharacterGroup)
            {
                 var characterObj = character.GetComponent<CharacterBase>();
-                if (levelUpGroup != characterObj.UnitGroup ||
+                if (levelUpGroup != characterObj.unitGroup ||
                     characterObj.UnitLevel != 1 || characterObj.Type != CharacterBase.Types.Character) continue;
                 characterObj.LevelUpScale(character);
            }
@@ -73,13 +83,11 @@ namespace Script.CharacterManagerScript
         // Set the permanent level up flag for all characters in a specific group
         public void PermanentIncreaseCharacter(int characterListIndex)
         {
-            var activeCharacterGroup = characterList[characterListIndex];
-            var activeCharacters = characterPool.UsePoolCharacterList();
-            foreach (var character in activeCharacters
+            var levelUpCharacterGroup = characterList[characterListIndex].unitGroup;
+            var pooledCharacters = characterPool._pooledCharacters;
+            foreach (var character in pooledCharacters
                          .Select(characterObject => characterObject.GetComponent<CharacterBase>())
-                         .Where(character => character.UnitGroup == activeCharacterGroup.UnitGroup &&
-                                             character.Type == CharacterBase.Types.Character &&
-                                             character.UnitLevel == 1))
+                         .Where(character => character.unitGroup == levelUpCharacterGroup && character.UnitLevel == 1))
             {
                 character.PermanentLevelUp = true;
             }
@@ -87,7 +95,7 @@ namespace Script.CharacterManagerScript
 
         public CharacterBase.UnitGroups UnitGroupsCheck(int characterListIndex)
         {
-            var levelUpGroup = characterList[characterListIndex].UnitGroup;
+            var levelUpGroup = characterList[characterListIndex].unitGroup;
             return levelUpGroup;
         }
     }
