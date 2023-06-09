@@ -30,6 +30,8 @@ namespace Script.EnemyManagerScript
         private readonly Dictionary<CharacterBase.UnitEffects, Coroutine> _activeEffects = new Dictionary<CharacterBase.UnitEffects, Coroutine>();
         public bool canMove = true;
 
+
+
         public void Initialize()
         {
             _hpSlider = GetComponentInChildren<Slider>(true);
