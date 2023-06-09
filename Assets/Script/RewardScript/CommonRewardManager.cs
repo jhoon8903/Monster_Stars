@@ -46,9 +46,7 @@ namespace Script.RewardScript
         public readonly Queue<GameObject> PendingTreasure = new Queue<GameObject>(); // 보류 중인 보물 큐
         private GameObject _currentTreasure = null; // 현재 보물
         public bool openBoxing = true;
-        private bool _waveRewards = false; 
-        private CommonData _selectedCommonReward = null;
-
+        private bool _waveRewards = false;
         private List<CommonData> _powerUps = null;
         private string _groupName = null;
 

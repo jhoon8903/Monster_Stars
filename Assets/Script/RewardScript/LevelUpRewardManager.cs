@@ -83,46 +83,46 @@ namespace Script.RewardScript
                     characterManager.goldGetMore = true; 
                     Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}");
                     break;
-                case ExpData.Types.DivineRestraint:
-                    break;
-                case ExpData.Types.DivinePenetrate:
-                    break;
-                case ExpData.Types.DivineRestraintDamage:
-                    break;
-                case ExpData.Types.DivineAtkRange:
-                    break;
-                case ExpData.Types.DivinePoisonAdditionalDamage:
-                    break;
-                case ExpData.Types.PhysicAdditionalWeapon:
-                    break;
-                case ExpData.Types.PhysicIncreaseWeaponScale:
-                    break;
-                case ExpData.Types.PhysicSlowAdditionalDamage:
-                    break;
-                case ExpData.Types.PhysicAtkSpeed:
-                    break;
-                case ExpData.Types.PhysicIncreaseDamage:
-                    break;
-                case ExpData.Types.PoisonDoubleAtk:
-                    break;
-                case ExpData.Types.PoisonRestraintAdditionalDamage:
-                    break;
-                case ExpData.Types.PoisonIncreaseTime:
-                    break;
-                case ExpData.Types.PoisonInstantKill:
-                    break;
-                case ExpData.Types.PoisonIncreaseAtkRange:
-                    break;
-                case ExpData.Types.WaterStun:
-                    break;
-                case ExpData.Types.WaterIncreaseSlowTime:
-                    break;
-                case ExpData.Types.WaterIncreaseSlowPower:
-                    break;
-                case ExpData.Types.WaterRestraintKnockBack:
-                    break;
-                case ExpData.Types.WaterIncreaseDamage:
-                    break;
+                // case ExpData.Types.DivineRestraint:
+                //     break;
+                // case ExpData.Types.DivinePenetrate:
+                //     break;
+                // case ExpData.Types.DivineRestraintDamage:
+                //     break;
+                // case ExpData.Types.DivineAtkRange:
+                //     break;
+                // case ExpData.Types.DivinePoisonAdditionalDamage:
+                //     break;
+                // case ExpData.Types.PhysicAdditionalWeapon:
+                //     break;
+                // case ExpData.Types.PhysicIncreaseWeaponScale:
+                //     break;
+                // case ExpData.Types.PhysicSlowAdditionalDamage:
+                //     break;
+                // case ExpData.Types.PhysicAtkSpeed:
+                //     break;
+                // case ExpData.Types.PhysicIncreaseDamage:
+                //     break;
+                // case ExpData.Types.PoisonDoubleAtk:
+                //     break;
+                // case ExpData.Types.PoisonRestraintAdditionalDamage:
+                //     break;
+                // case ExpData.Types.PoisonIncreaseTime:
+                //     break;
+                // case ExpData.Types.PoisonInstantKill:
+                //     break;
+                // case ExpData.Types.PoisonIncreaseAtkRange:
+                //     break;
+                // case ExpData.Types.WaterStun:
+                //     break;
+                // case ExpData.Types.WaterIncreaseSlowTime:
+                //     break;
+                // case ExpData.Types.WaterIncreaseSlowPower:
+                //     break;
+                // case ExpData.Types.WaterRestraintKnockBack:
+                //     break;
+                // case ExpData.Types.WaterIncreaseDamage:
+                //     break;
                 default: 
                     Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}"); 
                     break;
@@ -228,12 +228,10 @@ namespace Script.RewardScript
                     powerText.text = $"대각선 이동 가능"; 
                     break;
                 case ExpData.Types.Exp:
-                    powerText.text = $"적 처치시 경험치 획득량 {p}% 증가 " +
-                                     $"(최대 30%)";
+                    powerText.text = $"적 처치시 경험치 획득량 {p}% 증가\n(최대 30%)";
                     break;
                 case ExpData.Types.CastleRecovery:
-                    powerText.text = $"웨이브 종료까지 피해를 입지 않으면 " +
-                                     $"캐슬 체력 {p} 매 웨이브 마다 증가";
+                    powerText.text = $"웨이브 종료까지 피해를 입지 않으면\n캐슬 체력 {p} 매 웨이브 마다 증가";
                     break;
                 case ExpData.Types.CastleMaxHp:
                     powerText.text = $"캐슬 최대체력 {p} 증가"; 
@@ -242,8 +240,7 @@ namespace Script.RewardScript
                     powerText.text = $"적 이도속도 {p}% 감소 (최대 60%)";
                     break;
                 case ExpData.Types.NextStage:
-                    powerText.text = $"보스 스테이지 이후 {p} 개의 " +
-                                     $"케릭터 추가 이동 (최대 3개)";
+                    powerText.text = $"보스 스테이지 이후 {p} 개의\n케릭터 추가 이동 (최대 3개)";
                     break;
                 case ExpData.Types.Gold:
                     powerText.text = $"5 매치시 골드 {p} 추가 획득";
@@ -255,8 +252,7 @@ namespace Script.RewardScript
                     powerText.text = $"[A그룹 - 노랑] 투사체가 적을 1회 관통합니다."; 
                     break;
                 case ExpData.Types.DivineRestraintDamage:
-                    powerText.text = $"[A그룹 - 노랑] 속박 데미지 100% 증가 " +
-                                     $"(틱 데미지 10% 증가)"; 
+                    powerText.text = $"[A그룹 - 노랑] 속박 데미지 100% 증가\n(틱 데미지 10% 증가)"; 
                     break;
                 case ExpData.Types.DivineAtkRange:
                     powerText.text = $"[A그룹 - 노랑] 뒤쪽 방향 공격이 가능";
@@ -277,8 +273,7 @@ namespace Script.RewardScript
                     powerText.text = $"[D그룹 - 보라] 공격속도가 50% 증가";
                     break;
                 case ExpData.Types.PhysicIncreaseDamage:
-                    powerText.text = $"[D그룹 - 보라] 적을 죽이면 적 1기당 " +
-                                     $"모든 D그룹의 데미지가 5% 증가 (해당 웨이브만 적용)";
+                    powerText.text = $"[D그룹 - 보라] 적을 죽이면 적 1기당\n모든 D그룹의 데미지가 5% 증가 (해당 웨이브만 적용)";
                     break;
                 case ExpData.Types.PoisonDoubleAtk:
                     powerText.text = $"[F그룹 - 초록] 공격이 더블어택으로 변경";
@@ -317,11 +312,7 @@ namespace Script.RewardScript
             btnBadge.sprite = powerUp.BtnColor;
             expButton.image = expButton.image;
             expButton.onClick.RemoveAllListeners();
-            expButton.onClick.AddListener(() => SelectExpReward(powerUp));
-        }
-        private void SelectExpReward(ExpData selectedReward)
-        { 
-            Selected(selectedReward);
+            expButton.onClick.AddListener(() => Selected(powerUp));
         }
     }
 }

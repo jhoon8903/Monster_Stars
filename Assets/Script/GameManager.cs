@@ -66,8 +66,8 @@ namespace Script
                 StartCoroutine(enemyPatternManager.Zone_Move());
                 yield return _waitOneSecRealtime;
                 if (enemySpawnManager.fieldList.Count != 0) continue;
-                StartCoroutine(ContinueOrLose());
             }
+            StartCoroutine(ContinueOrLose());
             _isBattle = false;
         }
         public IEnumerator WaitForPanelToClose()

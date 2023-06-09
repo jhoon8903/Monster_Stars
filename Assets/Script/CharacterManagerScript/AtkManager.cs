@@ -1,5 +1,6 @@
 using System.Linq;
 using Script.WeaponScriptGroup;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Script.CharacterManagerScript
@@ -54,14 +55,6 @@ namespace Script.CharacterManagerScript
                 case CharacterBase.UnitAtkTypes.Circle:
                     CircleAttack(atkUnit, unitGroup); // Perform circle attack
                     break;
-                case CharacterBase.UnitAtkTypes.Vibrate:
-                    VibrateAttack(atkUnit, unitGroup); // Perform vibrate attack
-                    break;
-                case CharacterBase.UnitAtkTypes.Boomerang:
-                    BoomerangAttack(atkUnit, unitGroup); // Perform boomerang attack
-                    break;
-                case CharacterBase.UnitAtkTypes.None:
-                    break;
                 default:
                     Debug.Log($"unitGroup: {unitGroup} / uniAtkType: {atkUnit}");
                     break;
@@ -79,9 +72,6 @@ namespace Script.CharacterManagerScript
                 case CharacterBase.UnitGroups.E:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.IceCrystal)); // Perform attack with an ice crystal
                     break;
-                default:
-                    Attack(new AttackData(unit, WeaponsPool.WeaponType.None)); // Perform attack with no weapon
-                    break;
             }
         }
 
@@ -94,12 +84,12 @@ namespace Script.CharacterManagerScript
         // Perform gas attack
         private void GasAttack(GameObject unit, CharacterBase.UnitGroups unitGroup)
         {
-            var weaponType = unitGroup switch
+            switch (unitGroup)
             {
-                CharacterBase.UnitGroups.F => WeaponsPool.WeaponType.VenomSac, // Use venom sac as the weapon for group F
-                _ => WeaponsPool.WeaponType.None // Use no weapon for other groups
-            };
-            Attack(new AttackData(unit, weaponType)); // Perform attack with the specified weapon
+                case CharacterBase.UnitGroups.F:
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.VenomSac));
+                    break;
+            }
         }
 
         // Perform circle attack
@@ -110,22 +100,7 @@ namespace Script.CharacterManagerScript
                 case CharacterBase.UnitGroups.D:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.Sword)); // Perform attack with a sword for group D
                     break;
-                default:
-                    Attack(new AttackData(unit, WeaponsPool.WeaponType.None)); // Perform attack with no weapon for other groups
-                    break;
             }
-        }
-
-        // Perform vibrate attack
-        private void VibrateAttack(GameObject unit, CharacterBase.UnitGroups unitGroup)
-        {
-            // Add code for VibrateAttack
-        }
-
-        // Perform boomerang attack
-        private void BoomerangAttack(GameObject unit, CharacterBase.UnitGroups unitGroup)
-        {
-            // Add code for BoomerangAttack
         }
 
         // Perform the attack using the specified attack data
@@ -134,12 +109,8 @@ namespace Script.CharacterManagerScript
             var unit = attackData.Unit; // Attacking unit
             var weaponType = attackData.WeaponType; // Type of weapon used for the attack
             var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.transform.position, unit.transform.rotation); // Get the weapon object from the weapon pool
-            if (weaponObject == null) return;
             var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>(); // Get the weapon base component
-            if (weaponBase) Debug.Log("eapon nuilL!!" + weaponObject.gameObject.name);
-            weaponBase.
-                InitializeWeapon
-                (unit.GetComponent<CharacterBase>()); // Initialize the weapon with the character's information
+            weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>()); // Initialize the weapon with the character's information
             var useWeapon = weaponBase.UseWeapon(); // Perform the weapon's attack logic
     
             weaponsPool.SetSprite(weaponType, attackData.Unit.GetComponent<CharacterBase>().UnitLevel, weaponObject); // Set the weapon's sprite based on the character's level
