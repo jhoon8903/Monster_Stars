@@ -45,8 +45,10 @@ namespace Script.RewardScript
         [SerializeField] private CharacterManager characterManager;
         public readonly Queue<GameObject> PendingTreasure = new Queue<GameObject>(); // 보류 중인 보물 큐
         private GameObject _currentTreasure = null; // 현재 보물
-        public bool openBoxing = false;
-        private bool _waveRewards = false;
+        public bool openBoxing = true;
+        private bool _waveRewards = false; 
+        private CommonData _selectedCommonReward = null;
+
         private List<CommonData> _powerUps = null;
         private string _groupName = null;
 
@@ -55,12 +57,13 @@ namespace Script.RewardScript
         {
             openBoxing = true;
             var shake = treasure.transform.DOShakeScale(1.0f, 0.5f, 8); // 흔들리는 애니메이션 재생
+
             shake.OnComplete(() =>
             {
                 _currentTreasure = treasure;
                 StartCoroutine(OpenBox(_currentTreasure));
             });
-            openBoxing = false;
+            
         }
 
         // 2. 상자마다의 확률 분배
@@ -287,6 +290,7 @@ namespace Script.RewardScript
             }
 
             yield return new WaitUntil(() => commonRewardPanel.activeSelf == false); // 보물 패널이 비활성화될 때까지 대기
+            openBoxing = false;
         }
 
         // 10. 상자 선택

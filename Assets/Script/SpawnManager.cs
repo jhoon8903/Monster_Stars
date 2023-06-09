@@ -17,10 +17,12 @@ namespace Script
         [SerializeField] private MatchManager matchManager;  
         [SerializeField] private CommonRewardManager rewardManger;
         [SerializeField] private GameManager gameManager;
+
         public bool isWave10Spawning = false;
         private int highLevelCharacterCount = 6;
 
         public bool isMatched = false;
+        
         public GameObject CharacterObject(Vector3 spawnPosition)
         {
             var spawnCharacters = characterPool.UsePoolCharacterList();
@@ -32,6 +34,7 @@ namespace Script
         {
             //if (isMatched) yield break;
             //isMatched = true;
+            var swipeManager = GetComponent<SwipeManager>();
             var moves = new List<(GameObject, Vector3Int)>();
             for (var x = 0; x < gridManager.gridWidth; x++)
             { 
@@ -53,12 +56,15 @@ namespace Script
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
             yield return StartCoroutine(matchManager.CheckMatches());
 
-            //isMatched = false;
+            
 
-            if (rewardManger.PendingTreasure.Count == 0) yield break;
+            //isMatched = false;
+            if (rewardManger.PendingTreasure.Count == 0)  {
+                swipeManager.isBusy = false;
+                yield break;
+            }
             rewardManger.EnqueueTreasure(rewardManger.PendingTreasure.Dequeue());
         }
-        
         private static IEnumerator MoveCharacter(GameObject gameObject, Vector3Int targetPosition, float duration = 0.3f)
         {
             if (gameObject == null) yield break;
