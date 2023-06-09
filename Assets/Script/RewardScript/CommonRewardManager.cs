@@ -48,7 +48,9 @@ namespace Script.RewardScript
         public bool openBoxing = true;
         private bool _waveRewards = false; 
         private CommonData _selectedCommonReward = null;
+
         private List<CommonData> _powerUps = null;
+        private string _groupName = null;
 
         // 1. 상자가 매치 되면 상자를 큐에 추가
         public void EnqueueTreasure(GameObject treasure)
@@ -197,63 +199,68 @@ namespace Script.RewardScript
        // 8. 옵션 텍스트
        private void CommonDisplayText(Button commonButton, TMP_Text powerText, TMP_Text powerCode, Image btnBadge ,CommonData powerUp)
        {
-           var p = powerUp.Property[0];
-            switch (powerUp.Type)
+           switch (powerUp.Type)
             {
                 case CommonData.Types.Exp: 
-                    powerText.text = $"Acquire additional Exp {p}% when killing an enemy. (up to 30%)"; 
+                    powerText.text = $"적 처치 경험치{powerUp.Property[0]}% 증가 " +
+                                     $"(최대 30%)"; 
                     break;
                 case CommonData.Types.Slow: 
-                    powerText.text = $"Enemy movement speed is slowed by {p}%. (up to 45%)"; 
+                    powerText.text = $"적 이동속도 감소 {powerUp.Property[0]}% " +
+                                     $"(최대 45%)"; 
                     break;
                 case CommonData.Types.GroupDamage: 
-                    powerText.text = $"Increases the damage of the entire character group by {p}%."; 
+                    powerText.text = $"전체 데미지 {powerUp.Property[0]}% 상승"; 
                     break;
                 case CommonData.Types.GroupAtkSpeed: 
-                    powerText.text = $"Increases the attack speed of the entire character group by {p}%."; 
+                    powerText.text = $"전체 공격속도 {powerUp.Property[0]}% 상승"; 
                     break;
                 case CommonData.Types.Step: 
-                    powerText.text = $"Move count increases by {p} steps."; 
+                    powerText.text = $"이동횟수 {powerUp.Property[0]} 증가"; 
                     break;
                 case CommonData.Types.StepLimit: 
-                    powerText.text = $"{p} steps are added to the movement count for each wave."; 
+                    powerText.text = $"총 이동횟수 {powerUp.Property[0]} 증가"; 
                     break;
                 case CommonData.Types.StepDirection: 
-                    powerText.text = $"{p} steps are added to the movement count for each wave."; 
+                    powerText.text = $"대각선 이동가능"; 
                     break;
                 case CommonData.Types.RandomLevelUp: 
-                    powerText.text = $"Level up {p} characters on the puzzle by 1 level."; 
+                    powerText.text = $"퍼즐상의 랜덤한 {powerUp.Property[0]}개의 케릭터 1 레벨 증가"; 
                     break;
-                case CommonData.Types.GroupLevelUp: 
-                    var groupLevelUpName = characterManager.UnitGroupsCheck(p); 
-                    powerText.text = $"Level 0 characters in the {groupLevelUpName} group on the puzzle will level up by 1"; 
+                case CommonData.Types.GroupLevelUp:
+                    _groupName = characterManager.characterList[powerUp.Property[0]].name;
+                    powerText.text = $" 퍼즐상의 {_groupName} 그룹의 0레벨 케릭터 전체 레벨 1 증가"; 
                     break;
-                case CommonData.Types.LevelUpPattern: 
-                    var groupName = characterManager.UnitGroupsCheck(p); 
-                    powerText.text = $"Level 0 characters in Group_{groupName} appear as level 1."; 
+                case CommonData.Types.LevelUpPattern:
+                    _groupName = characterManager.characterList[powerUp.Property[0]].name;
+                    powerText.text = $"이제부터 {_groupName} 그룹의 0레벨 케릭터는 1레벨로 등장"; 
                     break;
                 case CommonData.Types.CastleRecovery: 
-                    powerText.text = $"If you take no damage from the wave, the castle's health is restored by {p}."; 
+                    powerText.text = $"웨이브가 끝날때 까지 피해가 없다면 " +
+                                     $"캐슬 체력 {powerUp.Property[0]} 회복"; 
                     break;
                 case CommonData.Types.CastleMaxHp: 
-                    powerText.text = $"Increases the max HP and HP of the castle by {p}."; 
+                    powerText.text = $"캐슬의 최대 체력 {powerUp.Property[0]} 증가"; 
                     break;
                 case CommonData.Types.Match5Upgrade: 
-                    powerText.text = "When 5 matches are made, the level of the middle character increases by 1 additional level."; 
+                    powerText.text = "5개 매치시 가운데 케릭터의 " +
+                                     "레벨이 1 더 증가"; 
                     break;
                 case CommonData.Types.NextStage: 
-                    powerText.text = $"You can take {p} additional characters when initializing characters. (up to 3 Characters)"; 
+                    powerText.text = $"보스 스테이지 이후 다음 스테이지에 " +
+                                     $"{powerUp.Property[0]} 개의 케릭터를 추가로 사용 "; 
                     break;
                 case CommonData.Types.Gold: 
-                    powerText.text = $"At 5 matches, additional gold is obtained as much as {p}."; 
+                    powerText.text = $"5개 매치시 Gold가 1 증가"; 
                     break;
                 case CommonData.Types.AddRow: 
-                    powerText.text = $"A horizontal {p} line is added."; 
+                    powerText.text = $"가로줄이 {powerUp.Property[0]} 증가"; 
                     break;
                 default: throw new ArgumentOutOfRangeException();
             }
             powerCode.text = $"{powerUp.Code}";
             btnBadge.sprite = powerUp.BtnColor;
+            _groupName = null;
             commonButton.image = commonButton.image;
             commonButton.onClick.RemoveAllListeners();
             commonButton.onClick.AddListener(() => SelectCommonReward(powerUp));
@@ -289,12 +296,11 @@ namespace Script.RewardScript
         // 10. 상자 선택
         private void SelectCommonReward(CommonData selectedReward)
         {
-            _selectedCommonReward = selectedReward;
-            Selected();
+            Selected(selectedReward);
         }
        
         // 11. 선택 처리
-        private void Selected()
+        private void Selected(CommonData selectedReward)
         {
             commonRewardPanel.SetActive(false);
             if (countManager.baseMoveCount == 0)
@@ -319,35 +325,34 @@ namespace Script.RewardScript
             {
                 _currentTreasure = null; // 현재 보물 없음
             }
-            ProcessCommonReward(_selectedCommonReward);
+            ProcessCommonReward(selectedReward);
         }
 
         // 12. 선택된 버프 적용 
-        private void ProcessCommonReward(CommonData selectedReward)
+        private void ProcessCommonReward(CommonData selectedCommonReward)
         {
             var findCharacterManager = FindObjectOfType<CharacterManager>();
-            switch (selectedReward.Type)
+            switch (selectedCommonReward.Type)
             {
                 case CommonData.Types.AddRow: gridManager.AddRow(); characterManager.addRowCount += 1; break;                                   // Row 추가 강화 효과
-                case CommonData.Types.GroupDamage: findCharacterManager.IncreaseGroupDamage(selectedReward.Property[0]); break;     // 전체 데미지 증가 효과
-                case CommonData.Types.GroupAtkSpeed: findCharacterManager.IncreaseGroupAtkRate(selectedReward.Property[0]); break;  // 전체 공격 속도 증가 효과
-                case CommonData.Types.Step: countManager.IncreaseRewardMoveCount(selectedReward.Property[0]); break;            // 카운트 증가
-                case CommonData.Types.StepLimit: countManager.PermanentIncreaseMoveCount(selectedReward.Property[0]); characterManager.permanentIncreaseMovementCount = true; break; // 영구적 카운트 증가
+                case CommonData.Types.GroupDamage: findCharacterManager.IncreaseGroupDamage(selectedCommonReward.Property[0]); break;     // 전체 데미지 증가 효과
+                case CommonData.Types.GroupAtkSpeed: findCharacterManager.IncreaseGroupAtkRate(selectedCommonReward.Property[0]); break;  // 전체 공격 속도 증가 효과
+                case CommonData.Types.Step: countManager.IncreaseRewardMoveCount(selectedCommonReward.Property[0]); break;            // 카운트 증가
+                case CommonData.Types.StepLimit: countManager.PermanentIncreaseMoveCount(selectedCommonReward.Property[0]); characterManager.permanentIncreaseMovementCount = true; break; // 영구적 카운트 증가
                 case CommonData.Types.StepDirection: swipeManager.EnableDiagonalMovement(); characterManager.diagonalMovement = true; break;    // 대각선 이동
-                case CommonData.Types.RandomLevelUp: findCharacterManager.RandomCharacterLevelUp(selectedReward.Property[0]); break;// 랜덤 케릭터 레벨업
-                case CommonData.Types.GroupLevelUp: findCharacterManager.CharacterGroupLevelUp(selectedReward.Property[0]); break;  // 케릭터 그룹 레벨업
-                case CommonData.Types.LevelUpPattern: findCharacterManager.PermanentIncreaseCharacter(selectedReward.Property[0]); characterManager.CharacterGroupLevelUpIndexes.Add(selectedReward.Property[0]); break; // 기본 2레벨 케릭터 생성
-                case CommonData.Types.Exp: expManager.IncreaseExpBuff(selectedReward.Property[0]); characterManager.expPercentage += 5; break;  // 경험치 5% 증가
+                case CommonData.Types.RandomLevelUp: findCharacterManager.RandomCharacterLevelUp(selectedCommonReward.Property[0]); break;// 랜덤 케릭터 레벨업
+                case CommonData.Types.GroupLevelUp: findCharacterManager.CharacterGroupLevelUp(selectedCommonReward.Property[0]); break;  // 케릭터 그룹 레벨업
+                case CommonData.Types.LevelUpPattern: findCharacterManager.PermanentIncreaseCharacter(selectedCommonReward.Property[0]); characterManager.CharacterGroupLevelUpIndexes.Add(selectedCommonReward.Property[0]); break; // 기본 2레벨 케릭터 생성
+                case CommonData.Types.Exp: expManager.IncreaseExpBuff(selectedCommonReward.Property[0]); characterManager.expPercentage += 5; break;  // 경험치 5% 증가
                 case CommonData.Types.CastleRecovery: gameManager.RecoveryCastle = true; characterManager.recoveryCastle = true; break;         // 성 체력 회복
                 case CommonData.Types.Match5Upgrade: matchManager.match5Upgrade = true; characterManager._5MatchUpgradeOption = true; break;     // 5매치 패턴 업그레이드
-                case CommonData.Types.Slow: enemyManager.DecreaseMoveSpeed(selectedReward.Property[0]); characterManager.slowCount += 1; break; // 적 이동속도 감소 
-                case CommonData.Types.NextStage: spawnManager.nextCharacterUpgrade(selectedReward.Property[0]); characterManager.nextStageMembersSelectCount += 1; break; // 보드 초기화 시 케릭터 상속되는 케릭터 Count 증가
-                case CommonData.Types.Gold: characterManager.goldGetMore = true; Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}"); break;
-                case CommonData.Types.CastleMaxHp: castleManager.IncreaseMaxHp(selectedReward.Property[0]); break;               // 성 최대 체력 증가
-                default: Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}"); break;
+                // case CommonData.Types.Slow: enemyManager.DecreaseMoveSpeed(selectedCommonReward.Property[0]); characterManager.slowCount += 1; break; // 적 이동속도 감소 
+                case CommonData.Types.NextStage: spawnManager.nextCharacterUpgrade(selectedCommonReward.Property[0]); characterManager.nextStageMembersSelectCount += 1; break; // 보드 초기화 시 케릭터 상속되는 케릭터 Count 증가
+                case CommonData.Types.Gold: characterManager.goldGetMore = true; Debug.LogWarning($"Unhandled reward type: {selectedCommonReward.Type}"); break;
+                case CommonData.Types.CastleMaxHp: castleManager.IncreaseMaxHp(selectedCommonReward.Property[0]); break;               // 성 최대 체력 증가
+                default: Debug.LogWarning($"Unhandled reward type: {selectedCommonReward.Type}"); break;
             }
-            selectedReward.ChosenProperty = null;
-            _selectedCommonReward = null;
+            selectedCommonReward._chosenProperty = null;
         }
         
         // # 보스 웨이브 클리어 변도 보상

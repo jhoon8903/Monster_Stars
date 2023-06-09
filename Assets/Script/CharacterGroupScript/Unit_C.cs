@@ -12,8 +12,7 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level5Sprite; // Sprite for level 5
 
         private SpriteRenderer _spriteRenderer; // Reference to the SpriteRenderer component
-
-        private void Awake()
+        public void Awake()
         {
             unitGroup = UnitGroups.C;
             _spriteRenderer = GetComponent<SpriteRenderer>(); // Get the reference to the SpriteRenderer component attached to this object
@@ -46,7 +45,7 @@ namespace Script.CharacterGroupScript
 
         protected internal override void CharacterReset()
         {
-            ResetLevel(); // Reset the character's level
+            // ResetLevel(); // Reset the character's level
             Level1(); // Set level back to 1
         }
 

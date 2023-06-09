@@ -9,6 +9,7 @@ namespace Script.WeaponScriptGroup
     {
         // 캐시된 적의 참조를 보관합니다.
         private EnemyBase _cachedEnemy;
+        private float _lastHitTime;
 
         public override IEnumerator UseWeapon()
         {
@@ -27,7 +28,7 @@ namespace Script.WeaponScriptGroup
 
             transform.DOMove(enemyTransform, timeToMove)
                 .SetEase(Ease.Linear)
-                .OnComplete(() => StopUseWeapon(this.gameObject));
+                .OnComplete(() => StopUseWeapon(gameObject));
 
             yield return new WaitForSecondsRealtime(FireRate);
         }
@@ -42,6 +43,14 @@ namespace Script.WeaponScriptGroup
                 _cachedEnemy.ReceiveDamage(Damage, unitProperty, unitEffect);
             }
             StopUseWeapon(this.gameObject);
+        }
+        private void OnTriggerStay2D(Collider2D collision)
+        {
+            if (!collision.gameObject.CompareTag("Enemy")) return;
+            var enemy = collision.gameObject.GetComponent<EnemyBase>();
+            if (enemy == null || !enemy.gameObject.activeInHierarchy || !(Time.time > _lastHitTime + FireRate)) return;
+            enemy.ReceiveDamage(Damage, unitProperty, unitEffect);
+            _lastHitTime = Time.time;
         }
     }
 }
