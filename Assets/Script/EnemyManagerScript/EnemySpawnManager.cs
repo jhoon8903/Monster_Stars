@@ -77,11 +77,10 @@ namespace Script.EnemyManagerScript
             var spawnPos = GetRandomPointInBounds(enemyZone);
             var enemyBase = enemyToSpawn.GetComponent<EnemyBase>();
             enemyBase.Initialize();
-            enemyToSpawn.transform.position = spawnPos;
-            enemyToSpawn.SetActive(true);
             enemyBase.OnEnemyKilled += reason => { fieldList.Remove(enemyToSpawn); };
             fieldList.Add(enemyToSpawn);
-
+            enemyToSpawn.SetActive(true);
+            enemyToSpawn.transform.position = spawnPos;
         }
 
         private Vector3 GetRandomPointInBounds(EnemyBase.SpawnZones zone)

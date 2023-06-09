@@ -16,7 +16,6 @@ namespace Script.WeaponScriptGroup
             var distance = Mathf.Abs(transform.position.y - MaxDistanceY);
             var adjustedSpeed = Speed * distance;
             var timeToMove = distance / adjustedSpeed;
-
             transform.DOMoveY(transform.position.y + MaxDistanceY, timeToMove).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(this.gameObject));
 
             yield return new WaitForSecondsRealtime(FireRate);
