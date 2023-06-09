@@ -8,6 +8,7 @@ namespace Script.WeaponScriptGroup
     public class IceCrystal : WeaponBase
     {
         private EnemyBase _cachedEnemy;
+        private float _lastHitTime;
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
@@ -16,7 +17,7 @@ namespace Script.WeaponScriptGroup
             var adjustedSpeed = Speed * distance;
             var timeToMove = distance / adjustedSpeed;
 
-            transform.DOMoveY(MaxDistanceY, timeToMove).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(this.gameObject));
+            transform.DOMoveY(transform.position.y + MaxDistanceY, timeToMove).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(this.gameObject));
 
             yield return new WaitForSecondsRealtime(FireRate);
         }
@@ -25,11 +26,21 @@ namespace Script.WeaponScriptGroup
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
-            if(enemy != null)
+            if (enemy != null && enemy.gameObject.activeInHierarchy)
             {
                 enemy.ReceiveDamage(Damage, unitProperty, unitEffect);
             }
             StopUseWeapon(gameObject);
         }
+
+        private void OnTriggerStay2D(Collider2D collision)
+        {
+            if (!collision.gameObject.CompareTag("Enemy")) return;
+            var enemy = collision.gameObject.GetComponent<EnemyBase>();
+            if (enemy == null || !enemy.gameObject.activeInHierarchy || !(Time.time > _lastHitTime + FireRate)) return;
+            enemy.ReceiveDamage(Damage, unitProperty, unitEffect);
+            _lastHitTime = Time.time;
+        }
+
     }
 }

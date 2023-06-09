@@ -40,7 +40,6 @@ namespace Script.RewardScript
         [SerializeField] private SwipeManager swipeManager;
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private EnemyManager enemyManager;
-        private ExpData _selectedExpRewardData;
 
         private void ProcessExpReward(ExpData selectedReward)
         {
@@ -73,7 +72,7 @@ namespace Script.RewardScript
                     castleManager.IncreaseMaxHp(selectedReward.Property[0]);
                     break;
                 case ExpData.Types.Slow:
-                    enemyManager.DecreaseMoveSpeed(selectedReward.Property[0]); 
+                    // enemyManager.DecreaseMoveSpeed(selectedReward.Property[0]); 
                     characterManager.slowCount += 1;
                     break;
                 case ExpData.Types.NextStage:
@@ -129,9 +128,8 @@ namespace Script.RewardScript
                     break;
             }
             selectedReward.ChosenProperty = null;
-            _selectedExpRewardData = null;
         }
-        private void Selected()
+        private void Selected(ExpData selectedReward)
         {
             levelUpRewardPanel.SetActive(false);
             if (countManager.baseMoveCount == 0)
@@ -146,7 +144,7 @@ namespace Script.RewardScript
             {
                 StartCoroutine(spawnManager.PositionUpCharacterObject());
             }
-            ProcessExpReward(_selectedExpRewardData);
+            ProcessExpReward(selectedReward);
         }
         public IEnumerator LevelUpReward() // 레벨업 보상 처리
         {
@@ -218,75 +216,99 @@ namespace Script.RewardScript
             switch (powerUp.Type)
             {
                 case ExpData.Types.GroupDamage:
-                    powerText.text = $"Increases the damage of the entire character group by {p}%.";
+                    powerText.text = $"전체 데미지 {p}% 증가";
                     break;
                 case ExpData.Types.GroupAtkSpeed:
-                    powerText.text = $"Increases the attack speed of the entire character group by {p}%.";
+                    powerText.text = $"전체 공격속도 {p}% 증가";
                     break;
                 case ExpData.Types.StepLimit:
-                    powerText.text = $"{p} steps are added to the movement count for each wave.";
+                    powerText.text = $"최대 이동거리 {p} 증가";
                     break;
                 case ExpData.Types.StepDirection:
-                    powerText.text = $"{p} steps are added to the movement count for each wave."; 
+                    powerText.text = $"대각선 이동 가능"; 
                     break;
                 case ExpData.Types.Exp:
-                    powerText.text = $"Acquire additional Exp {p}% when killing an enemy. (up to 30%)";
+                    powerText.text = $"적 처치시 경험치 획득량 {p}% 증가 " +
+                                     $"(최대 30%)";
                     break;
                 case ExpData.Types.CastleRecovery:
-                    powerText.text = $"If you take no damage from the wave, the castle's health is restored by {p}.";
+                    powerText.text = $"웨이브 종료까지 피해를 입지 않으면 " +
+                                     $"캐슬 체력 {p} 매 웨이브 마다 증가";
                     break;
                 case ExpData.Types.CastleMaxHp:
-                    powerText.text = $"Increases the max HP and HP of the castle by {p}."; 
+                    powerText.text = $"캐슬 최대체력 {p} 증가"; 
                     break;
                 case ExpData.Types.Slow:
-                    powerText.text = $"Enemy movement speed is slowed by {p}%. (up to 60%)";
+                    powerText.text = $"적 이도속도 {p}% 감소 (최대 60%)";
                     break;
                 case ExpData.Types.NextStage:
-                    powerText.text = $"You can take {p} additional characters when initializing characters.(up to 3 Characters)";
+                    powerText.text = $"보스 스테이지 이후 {p} 개의 " +
+                                     $"케릭터 추가 이동 (최대 3개)";
                     break;
                 case ExpData.Types.Gold:
-                    powerText.text = $"At 5 matches, additional gold is obtained as much as {p}.";
+                    powerText.text = $"5 매치시 골드 {p} 추가 획득";
                     break;
                 case ExpData.Types.DivineRestraint:
-                    powerText.text = $"At 5 matches, additional gold is obtained as much as {p}.";
+                    powerText.text = $"[A그룹 - 노랑] 속박 지속시간이 {p} 초 증가";
                     break;
                 case ExpData.Types.DivinePenetrate:
+                    powerText.text = $"[A그룹 - 노랑] 투사체가 적을 1회 관통합니다."; 
                     break;
                 case ExpData.Types.DivineRestraintDamage:
+                    powerText.text = $"[A그룹 - 노랑] 속박 데미지 100% 증가 " +
+                                     $"(틱 데미지 10% 증가)"; 
                     break;
                 case ExpData.Types.DivineAtkRange:
+                    powerText.text = $"[A그룹 - 노랑] 뒤쪽 방향 공격이 가능";
                     break;
                 case ExpData.Types.DivinePoisonAdditionalDamage:
+                    powerText.text = $"[A그룹 - 노랑] 중독상태의 적에게 50% 공격력이 증가";
                     break;
                 case ExpData.Types.PhysicAdditionalWeapon:
+                    powerText.text = $"[D그룹 - 보라] 검 1개 추가";
                     break;
                 case ExpData.Types.PhysicIncreaseWeaponScale:
+                    powerText.text = $"[D그룹 - 보라] 검의 크기가 100% 증가합니다.";
                     break;
                 case ExpData.Types.PhysicSlowAdditionalDamage:
+                    powerText.text = $"[D그룹 - 보라] 둔화된 적에게 데비지 100% 증가";
                     break;
                 case ExpData.Types.PhysicAtkSpeed:
+                    powerText.text = $"[D그룹 - 보라] 공격속도가 50% 증가";
                     break;
                 case ExpData.Types.PhysicIncreaseDamage:
+                    powerText.text = $"[D그룹 - 보라] 적을 죽이면 적 1기당 " +
+                                     $"모든 D그룹의 데미지가 5% 증가 (해당 웨이브만 적용)";
                     break;
                 case ExpData.Types.PoisonDoubleAtk:
+                    powerText.text = $"[F그룹 - 초록] 공격이 더블어택으로 변경";
                     break;
                 case ExpData.Types.PoisonRestraintAdditionalDamage:
+                    powerText.text = $"[F그룹 - 초록] 속박된 적에게 가하는 데미지 200% 증가";
                     break;
                 case ExpData.Types.PoisonIncreaseTime:
+                    powerText.text = $"[F그룹 - 초록] 중독시간이 2초 증가";
                     break;
                 case ExpData.Types.PoisonInstantKill:
+                    powerText.text = $"[F그룹 - 초록] 체력 15% 미만의 적은 15% 확률로 즉사";
                     break;
                 case ExpData.Types.PoisonIncreaseAtkRange:
+                    powerText.text = $"[F그룹 - 초록] 사거리 1칸 증가";
                     break;
                 case ExpData.Types.WaterStun:
+                    powerText.text = $"[E그룹 - 파랑] 명중시 15% 확률로 1초간 적 기절";
                     break;
                 case ExpData.Types.WaterIncreaseSlowTime:
+                    powerText.text = $"[E그룹 - 파랑] 둔화 지속시간 0.5초 증가";
                     break;
                 case ExpData.Types.WaterIncreaseSlowPower:
+                    powerText.text = $"[E그룹 - 파랑] 둔화강도 50% 증가";
                     break;
                 case ExpData.Types.WaterRestraintKnockBack:
+                    powerText.text = $"[E그룹 - 파랑] 속박된 적을 뒤로 1칸 밀쳐냄";
                     break;
                 case ExpData.Types.WaterIncreaseDamage:
+                    powerText.text = $"[E그룹 - 파랑] 공격력 50% 증가";
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -298,9 +320,8 @@ namespace Script.RewardScript
             expButton.onClick.AddListener(() => SelectExpReward(powerUp));
         }
         private void SelectExpReward(ExpData selectedReward)
-        {
-            _selectedExpRewardData = selectedReward;
-            Selected();
+        { 
+            Selected(selectedReward);
         }
     }
 }

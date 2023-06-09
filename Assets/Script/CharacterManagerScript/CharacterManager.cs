@@ -1,8 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using Script.CharacterGroupScript;
+using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Script.CharacterManagerScript
 {
@@ -68,35 +68,30 @@ namespace Script.CharacterManagerScript
         // Level up all characters in a specific group
         public void CharacterGroupLevelUp(int characterListIndex)
         {
-           var levelUpGroup = characterList[characterListIndex].unitGroup;
-           var activeCharacterGroup = characterPool.UsePoolCharacterList();
+            var group = characterList[characterListIndex].unitGroup;
+            var activeCharacterGroup = characterPool.UsePoolCharacterList();
 
-           foreach (var character in  activeCharacterGroup)
-           {
+            foreach (var character in  activeCharacterGroup)
+            {
                 var characterObj = character.GetComponent<CharacterBase>();
-                if (levelUpGroup != characterObj.unitGroup ||
-                    characterObj.UnitLevel != 1 || characterObj.Type != CharacterBase.Types.Character) continue;
-                characterObj.LevelUpScale(character);
-           }
+                if (group == characterObj.unitGroup && characterObj.UnitLevel == 1)
+                {
+                    characterObj.LevelUpScale(character);
+                }
+            }
         }
 
         // Set the permanent level up flag for all characters in a specific group
         public void PermanentIncreaseCharacter(int characterListIndex)
         {
-            var levelUpCharacterGroup = characterList[characterListIndex].unitGroup;
+            var levelUpGroup = characterList[characterListIndex].unitGroup;
             var pooledCharacters = characterPool._pooledCharacters;
             foreach (var character in pooledCharacters
                          .Select(characterObject => characterObject.GetComponent<CharacterBase>())
-                         .Where(character => character.unitGroup == levelUpCharacterGroup && character.UnitLevel == 1))
+                         .Where(character => character.unitGroup == levelUpGroup && character.UnitLevel == 1))
             {
                 character.PermanentLevelUp = true;
             }
-        }
-
-        public CharacterBase.UnitGroups UnitGroupsCheck(int characterListIndex)
-        {
-            var levelUpGroup = characterList[characterListIndex].unitGroup;
-            return levelUpGroup;
         }
     }
 }

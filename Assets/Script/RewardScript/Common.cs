@@ -6,18 +6,17 @@ namespace Script.RewardScript
     public class CommonData
     {
         private static readonly System.Random Random = new System.Random();
-        public int? ChosenProperty;
-        public enum Types { GroupDamage, GroupAtkSpeed, Step, StepLimit, StepDirection , RandomLevelUp, GroupLevelUp, LevelUpPattern, Exp, CastleRecovery, CastleMaxHp, Match5Upgrade, Slow, NextStage, Gold, AddRow}
+        public int? _chosenProperty;
+        public enum Types 
+        { GroupDamage, GroupAtkSpeed, Step, StepLimit, StepDirection , RandomLevelUp, GroupLevelUp, LevelUpPattern, Exp, CastleRecovery, CastleMaxHp, Match5Upgrade, Slow, NextStage, Gold, AddRow}
         public Types Type { get; private set; }
         private readonly int[] _property;
         public int[] Property 
         { 
             get
             {
-                Debug.Log(_property);
-                ChosenProperty ??= RandomChanceMethod(_property);
-                
-                return new[] { ChosenProperty.Value };
+                _chosenProperty ??= RandomChanceMethod(_property);
+                return new[] { _chosenProperty.Value };
             } 
         }
         public int Code { get; set; }

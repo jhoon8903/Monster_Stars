@@ -134,9 +134,12 @@ namespace Script.CharacterManagerScript
             var unit = attackData.Unit; // Attacking unit
             var weaponType = attackData.WeaponType; // Type of weapon used for the attack
             var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.transform.position, unit.transform.rotation); // Get the weapon object from the weapon pool
-    
+            if (weaponObject == null) return;
             var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>(); // Get the weapon base component
-            weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>()); // Initialize the weapon with the character's information
+            if (weaponBase) Debug.Log("eapon nuilL!!" + weaponObject.gameObject.name);
+            weaponBase.
+                InitializeWeapon
+                (unit.GetComponent<CharacterBase>()); // Initialize the weapon with the character's information
             var useWeapon = weaponBase.UseWeapon(); // Perform the weapon's attack logic
     
             weaponsPool.SetSprite(weaponType, attackData.Unit.GetComponent<CharacterBase>().UnitLevel, weaponObject); // Set the weapon's sprite based on the character's level

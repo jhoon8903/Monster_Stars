@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -65,6 +66,7 @@ namespace Script.CharacterManagerScript
         // Reset the character's level
         protected internal virtual void CharacterReset()
         {
+            ResetLevel();
         }
 
         // Reset the level of the character

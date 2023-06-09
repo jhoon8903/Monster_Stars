@@ -15,10 +15,8 @@ namespace Script.CharacterGroupScript
         private SpriteRenderer _spriteRenderer; // Reference to the SpriteRenderer component
         private const float DetectionWidth = 1f; // Width of the detection box
         private const float DetectionHeight = 9f; // Height of the detection box
-
-        private void Awake()
+        public void Awake()
         {
-            unitGroup = UnitGroups.E;
             _spriteRenderer = GetComponent<SpriteRenderer>(); // Get the reference to the SpriteRenderer component attached to this object
             Level1(); // Set initial level to level 1
         }
@@ -56,7 +54,7 @@ namespace Script.CharacterGroupScript
         // Detects enemies within a detection box and returns a list of their GameObjects
         public override List<GameObject> DetectEnemies()
         {
-            var detectionSize = new Vector2(DetectionWidth, DetectionHeight);
+            var detectionSize = new Vector2(DetectionWidth-0.5f, DetectionHeight);
             var detectionCenter = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
             var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize, 0f);
             var detectedEnemies = (from collider in colliders
@@ -68,7 +66,7 @@ namespace Script.CharacterGroupScript
         // Draws a wire cube in the Scene view to visualize the detection box
         public void OnDrawGizmos()
         {
-            var detectionSize = new Vector3(DetectionWidth, DetectionHeight, 0);
+            var detectionSize = new Vector3(DetectionWidth -0.5f, DetectionHeight, 0);
             var detectionCenter = transform.position + Vector3.up * DetectionHeight / 2f;
             Gizmos.color = Color.blue;
             Gizmos.DrawWireCube(detectionCenter, detectionSize);

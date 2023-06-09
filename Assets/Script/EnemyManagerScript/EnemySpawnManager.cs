@@ -67,7 +67,7 @@ namespace Script.EnemyManagerScript
             }
             else if (enemyToSpawn.GetComponent<EnemyBase>().EnemyType == EnemyBase.EnemyTypes.Slow)
             {
-                enemyToSpawn.transform.localScale = Vector3.one * 1.3f;
+                enemyToSpawn.transform.localScale = Vector3.one * 1.5f;
             }
             else
             {
@@ -75,10 +75,10 @@ namespace Script.EnemyManagerScript
             }
             var enemyZone = enemyToSpawn.GetComponent<EnemyBase>().SpawnZone;
             var spawnPos = GetRandomPointInBounds(enemyZone);
+            var enemyBase = enemyToSpawn.GetComponent<EnemyBase>();
+            enemyBase.Initialize();
             enemyToSpawn.transform.position = spawnPos;
             enemyToSpawn.SetActive(true);
-            var enemyBase = enemyToSpawn.GetComponent<EnemyBase>();
-            enemyBase.HpBarActive();
             enemyBase.OnEnemyKilled += reason => { fieldList.Remove(enemyToSpawn); };
             fieldList.Add(enemyToSpawn);
 

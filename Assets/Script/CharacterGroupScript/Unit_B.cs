@@ -12,8 +12,7 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level5Sprite; // Sprite for level 5
 
         private SpriteRenderer _spriteRenderer; // Reference to the SpriteRenderer component
-
-        private void Awake()
+        public void Awake()
         {
             unitGroup = UnitGroups.B;
             _spriteRenderer = GetComponent<SpriteRenderer>(); // Get the reference to the SpriteRenderer component attached to this object

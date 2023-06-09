@@ -19,7 +19,8 @@ namespace Script.EnemyManagerScript
                 _enemyObjects = enemyObject;
                 var enemyBase = _enemyObjects.GetComponent<EnemyBase>();
                 enemyBase.EnemyProperty();
-                var endPosition = new Vector3(_enemyObjects.transform.position.x, -4.0f, 0);
+                var position = _enemyObjects.transform.position;
+                var endPosition = new Vector3(position.x, position.y-12.0f, 0);
                 var duration = enemyBase.MoveSpeed * 10f;
 
                 switch (enemyBase.SpawnZone)
@@ -46,7 +47,7 @@ namespace Script.EnemyManagerScript
             var enemyBase = enemyObject.GetComponent<EnemyBase>();
             if (enemyBase.canMove)
             {
-                Tweener move = enemyObject.transform.DOMove(endPosition, duration).SetEase(Ease.Linear);
+                Tweener move = enemyObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
             }
             yield return null;
         }

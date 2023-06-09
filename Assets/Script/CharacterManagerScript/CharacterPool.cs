@@ -52,6 +52,7 @@ namespace Script.CharacterManagerScript
         {
             if (obj == null) return;
             obj.GetComponent<CharacterBase>().CharacterReset();
+            obj.transform.localScale = Vector3.one;
             obj.SetActive(false);
         }
     }

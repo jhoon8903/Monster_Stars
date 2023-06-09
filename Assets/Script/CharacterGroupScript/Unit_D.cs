@@ -14,8 +14,7 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level5Sprite; // Sprite for level 5
         private SpriteRenderer _spriteRenderer; // Reference to the SpriteRenderer component
         private const float DetectionSize = 1.5f; // Size of the detection circle
-
-        private void Awake()
+        public void Awake()
         {
             unitGroup = UnitGroups.D;
             _spriteRenderer = GetComponent<SpriteRenderer>(); // Get the reference to the SpriteRenderer component attached to this object
