@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
+using Script.PuzzleManagerGroup;
 using Script.UIManager;
 using TMPro;
 using UnityEngine;
@@ -76,7 +77,7 @@ namespace Script.RewardScript
                     characterManager.slowCount += 1;
                     break;
                 case ExpData.Types.NextStage:
-                    spawnManager.nextCharacterUpgrade(selectedReward.Property[0]); 
+                    spawnManager.NextCharacterUpgrade(selectedReward.Property[0]); 
                     characterManager.nextStageMembersSelectCount += 1;
                     break;
                 case ExpData.Types.Gold:
@@ -132,7 +133,7 @@ namespace Script.RewardScript
         private void Selected(ExpData selectedReward)
         {
             levelUpRewardPanel.SetActive(false);
-            if (countManager.baseMoveCount == 0)
+            if (countManager.totalMoveCount == 0)
             {
                 gameManager.GameSpeed();
             }

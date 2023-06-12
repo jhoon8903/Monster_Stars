@@ -8,11 +8,10 @@ namespace Script.EnemyManagerScript
     {
         [SerializeField] private EnemyManager enemyManager;
         private List<GameObject> _pooledEnemy;
+       
         
-
         public void Awake()
         {
-            
             _pooledEnemy = new List<GameObject>();
             foreach (var enemySettings in enemyManager.enemyList)
             {
@@ -29,14 +28,17 @@ namespace Script.EnemyManagerScript
 
         public GameObject GetPooledEnemy(EnemyBase.EnemyTypes enemyType)
         {
-            return _pooledEnemy
-                .FirstOrDefault(t => 
-                    !t.activeInHierarchy && 
-                    t.GetComponent<EnemyBase>().EnemyType == enemyType);
+            return _pooledEnemy.FirstOrDefault(t => !t.activeInHierarchy && t.GetComponent<EnemyBase>().EnemyType == enemyType);
+        }
+
+        public IEnumerable<GameObject> SpawnEnemy()
+        {
+            return _pooledEnemy.Where(enemy => enemy.activeSelf).ToList();
         }
 
         public void ReturnToPool(GameObject obj)
-        { 
+        {
+            obj.transform.position = new Vector3(-4,-4,0);
             obj.transform.localPosition = new Vector3(0, 20, 0);
             obj.SetActive(false);
         }

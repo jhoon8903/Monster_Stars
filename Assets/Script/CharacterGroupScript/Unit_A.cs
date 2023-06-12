@@ -61,9 +61,12 @@ namespace Script.CharacterGroupScript
             var detectionSize = new Vector2(DetectionWidth-0.5f, DetectionHeight);
             var detectionCenter = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
             var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize, 0f);
-            var detectedEnemies = (from collider in colliders
-                                   where collider.gameObject.CompareTag("Enemy")
-                                   select collider.gameObject).ToList();
+            foreach (var enemyObject in colliders)
+            {
+                if (!enemyObject.gameObject.CompareTag("Enemy")) continue;
+                detectedEnemies.Add(enemyObject.gameObject);
+                DetectedEvents(enemyObject.gameObject);
+            }
             return detectedEnemies;
         }
 
@@ -120,8 +123,8 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.A;
             defaultDamage *= 1.7f;
-            defaultAtkRate = 0.3f;
-            defaultAtkDistance = 12f;
+            defaultAtkRate = 1f;
+            defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level3Sprite;
@@ -139,8 +142,8 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.A;
             defaultDamage *= 2f;
-            defaultAtkRate = 0.9f;
-            defaultAtkDistance = 12;
+            defaultAtkRate = 1f;
+            defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level4Sprite;
@@ -158,8 +161,8 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.A;
             defaultDamage *= 2.3f;
-            defaultAtkRate = 2.7f;
-            defaultAtkDistance = 12;
+            defaultAtkRate = 1f;
+            defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level5Sprite;

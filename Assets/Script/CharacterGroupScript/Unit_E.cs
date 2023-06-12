@@ -57,9 +57,12 @@ namespace Script.CharacterGroupScript
             var detectionSize = new Vector2(DetectionWidth-0.5f, DetectionHeight);
             var detectionCenter = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
             var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize, 0f);
-            var detectedEnemies = (from collider in colliders
-                                   where collider.gameObject.CompareTag("Enemy")
-                                   select collider.gameObject).ToList();
+            foreach (var enemyObject in colliders)
+            {
+                if (!enemyObject.gameObject.CompareTag("Enemy")) continue;
+                detectedEnemies.Add(enemyObject.gameObject);
+                DetectedEvents(enemyObject.gameObject);
+            }
             return detectedEnemies;
         }
 
@@ -95,7 +98,7 @@ namespace Script.CharacterGroupScript
             defaultDamage = 75;
             defaultAtkRate = 0.5f;
             defaultAtkDistance = 9f;
-            projectileSpeed = 1f;
+            projectileSpeed = 1.5f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level2Sprite;
             UnitAtkType = UnitAtkTypes.Projectile;
@@ -113,7 +116,7 @@ namespace Script.CharacterGroupScript
             defaultDamage *= 1.7f;
             defaultAtkRate = 0.5f;
             defaultAtkDistance = 9f;
-            projectileSpeed = 1f;
+            projectileSpeed = 1.5f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level3Sprite;
             UnitAtkType = UnitAtkTypes.Projectile;
@@ -131,7 +134,7 @@ namespace Script.CharacterGroupScript
             defaultDamage *= 2;
             defaultAtkRate = 0.5f;
             defaultAtkDistance = 9f;
-            projectileSpeed = 1f;
+            projectileSpeed = 1.5f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level4Sprite;
             UnitAtkType = UnitAtkTypes.Projectile;
@@ -149,7 +152,7 @@ namespace Script.CharacterGroupScript
             defaultDamage *= 2.3f;
             defaultAtkRate = 0.5f;
             defaultAtkDistance = 9f;
-            projectileSpeed = 1f;
+            projectileSpeed = 1.5f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level5Sprite;
             UnitAtkType = UnitAtkTypes.Projectile;

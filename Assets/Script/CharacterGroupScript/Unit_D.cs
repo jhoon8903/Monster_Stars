@@ -56,9 +56,12 @@ namespace Script.CharacterGroupScript
         {
             var detectionCenter = (Vector2)transform.position;
             var colliders = Physics2D.OverlapCircleAll(detectionCenter, DetectionSize);
-            var detectedEnemies = (from collider in colliders
-                                   where collider.gameObject.CompareTag("Enemy")
-                                   select collider.gameObject).ToList();
+            foreach (var enemyObject in colliders)
+            {
+                if (!enemyObject.gameObject.CompareTag("Enemy")) continue;
+                detectedEnemies.Add(enemyObject.gameObject);
+                DetectedEvents(enemyObject.gameObject);
+            }
             return detectedEnemies;
         }
 

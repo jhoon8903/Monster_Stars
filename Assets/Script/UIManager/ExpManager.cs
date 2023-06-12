@@ -41,7 +41,7 @@ namespace Script.UIManager
 
         public void HandleEnemyKilled(EnemyBase.KillReasons reason)
         {
-            if (reason == EnemyBase.KillReasons.ByCastle) return;
+            if (reason != EnemyBase.KillReasons.ByPlayer) return;
             var additionalExp = expPoint * (additionalExpPercent / 100.0f);
             expPoint += 1 + additionalExp; 
             if (expPoint >= levelUpPoint)

@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using Script.CharacterManagerScript;
@@ -12,10 +10,9 @@ namespace Script.EnemyManagerScript
     public class EnemyBase : MonoBehaviour
     {
         private Slider _hpSlider;
-        public enum KillReasons { ByPlayer, ByCastle }
-        public event Action<KillReasons> OnEnemyKilled;
+        public enum KillReasons { ByPlayer }
         public int number = 0;
-        public float HealthPoint; // 적 오브젝트의 체력
+        protected float HealthPoint; // 적 오브젝트의 체력
         private float _maxHealthPoint;
         protected internal int CrushDamage; // 충돌시 데미지
         protected internal float MoveSpeed; // 적 오브젝트의 이동속도, 1f 는 1초에 1Grid를 가는 속도 숫자가 커질수록 느려져야 함
@@ -27,8 +24,8 @@ namespace Script.EnemyManagerScript
         protected internal SpawnZones SpawnZone;
         private static readonly object Lock = new object();
         private float _currentHealth;
-        private readonly Dictionary<CharacterBase.UnitEffects, Coroutine> _activeEffects = new Dictionary<CharacterBase.UnitEffects, Coroutine>();
-        public bool canMove = true;
+        private readonly Dictionary<CharacterBase.UnitEffects, Coroutine> 
+            _activeEffects = new Dictionary<CharacterBase.UnitEffects, Coroutine>();
 
         public void Initialize()
         {
@@ -39,34 +36,25 @@ namespace Script.EnemyManagerScript
             _hpSlider.value = _currentHealth;
             UpdateHpSlider();
         }
-        protected internal virtual void EnemyProperty()
+        protected internal virtual void EnemyProperty() { }
+        public void ReceiveDamage(
+            float damage, CharacterBase.UnitProperties unitProperty, 
+            CharacterBase.UnitEffects unitEffect, 
+            KillReasons reason = KillReasons.ByPlayer)
         {
-        }
-        public void ReceiveDamage(float damage, CharacterBase.UnitProperties unitProperty, CharacterBase.UnitEffects unitEffect)
-        {
-            RegistryDamageFunction(damage, unitProperty);
-        }
-        public void RegistryDamageFunction(float damage,CharacterBase.UnitProperties unitProperty, KillReasons reason = KillReasons.ByPlayer)
-        {
-            if (unitProperty.ToString() == RegistryType.ToString())
-            { 
-                damage *= 0.8f;
-            }
             lock (Lock)
             {
                 _currentHealth -= damage;
                 UpdateHpSlider();
-                if (!(_currentHealth <= 0)) return;
+                if (_currentHealth >= 0) return;
                 FindObjectOfType<EnemyPool>().ReturnToPool(gameObject);
-                OnEnemyKilled?.Invoke(reason);
+                FindObjectOfType<WaveManager>().EnemyDestroyInvoke();
                 if (ExpManager.Instance != null)
                 {
                     ExpManager.Instance.HandleEnemyKilled(reason);
                 }
             }
         }
-
-
         private void UpdateHpSlider()
         {
             _hpSlider.DOValue(_currentHealth, 0.5f);

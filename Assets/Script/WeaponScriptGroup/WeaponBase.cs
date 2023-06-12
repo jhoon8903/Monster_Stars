@@ -7,16 +7,11 @@ namespace Script.WeaponScriptGroup
     public abstract class WeaponBase : MonoBehaviour
     {
         public bool IsInUse { get; protected set; }
-
-        // 무기의 속도, 데미지, 생성 속도 등의 속성값을 저장할 변수들을 선언합니다.
-        // 예를 들어, 아래와 같이 선언할 수 있습니다.
         protected float Speed { get; set; }
         protected float Damage { get; set; }
-        protected float FireRate { get; set; }
-        protected CharacterBase.UnitProperties unitProperty { get; set; }
-        protected CharacterBase.UnitEffects unitEffect { get; set; }
-
-
+        protected float Distance { get; set; }
+        protected CharacterBase.UnitProperties UnitProperty { get; set; }
+        protected CharacterBase.UnitEffects UnitEffect { get; set; }
         protected Vector3 StartingPosition;
         protected CharacterBase CharacterBase;
 
@@ -26,14 +21,13 @@ namespace Script.WeaponScriptGroup
         }
 
         public virtual IEnumerator UseWeapon()
-        {   
-
+        {
             IsInUse = true;
-            unitProperty = CharacterBase.UnitProperty;
-            unitEffect = CharacterBase.UnitEffect;
+            UnitProperty = CharacterBase.UnitProperty;
+            UnitEffect = CharacterBase.UnitEffect;
             StartingPosition = transform.position;
+            Distance = CharacterBase.defaultAtkDistance;
             Damage = CharacterBase.defaultDamage;
-            FireRate = CharacterBase.defaultAtkRate;
             Speed = CharacterBase.projectileSpeed;
             yield return null;
         }
@@ -41,7 +35,7 @@ namespace Script.WeaponScriptGroup
         protected void StopUseWeapon(GameObject weapon)
         {
             IsInUse = false;
-            WeaponsPool.ReturnToPool(weapon);
+            FindObjectOfType<WeaponsPool>().ReturnToPool(weapon);
         }
     }
 }

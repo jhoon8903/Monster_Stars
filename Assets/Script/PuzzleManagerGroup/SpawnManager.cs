@@ -5,10 +5,12 @@ using System.Linq;
 using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
+using Script.UIManager;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using Random = UnityEngine.Random;
 
-namespace Script
+namespace Script.PuzzleManagerGroup
 {
     public class SpawnManager : MonoBehaviour
     {
@@ -17,9 +19,9 @@ namespace Script
         [SerializeField] private MatchManager matchManager;  
         [SerializeField] private CommonRewardManager rewardManger;
         [SerializeField] private GameManager gameManager;
-
+        [SerializeField] private CountManager countManager;
         public bool isWave10Spawning = false;
-        private int highLevelCharacterCount = 6;
+        private int _highLevelCharacterCount = 6;
 
         public bool isMatched = false;
         
@@ -32,8 +34,6 @@ namespace Script
         }
         public IEnumerator PositionUpCharacterObject()
         {
-            //if (isMatched) yield break;
-            //isMatched = true;
             var swipeManager = GetComponent<SwipeManager>();
             var moves = new List<(GameObject, Vector3Int)>();
             for (var x = 0; x < gridManager.gridWidth; x++)
@@ -55,15 +55,18 @@ namespace Script
             yield return StartCoroutine(PerformMoves(moves));
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
             yield return StartCoroutine(matchManager.CheckMatches());
-
-            
-
-            //isMatched = false;
-            if (rewardManger.PendingTreasure.Count == 0)  {
+            if (rewardManger.PendingTreasure.Count == 0)  
+            {
                 swipeManager.isBusy = false;
+            }
+            else
+            {
+                rewardManger.EnqueueTreasure(rewardManger.PendingTreasure.Dequeue());
                 yield break;
             }
-            rewardManger.EnqueueTreasure(rewardManger.PendingTreasure.Dequeue());
+            if (countManager.totalMoveCount != 0) yield break;
+            if (gameManager.isBattle) yield break;
+            yield return gameManager.Count0Call();
         }
         private static IEnumerator MoveCharacter(GameObject gameObject, Vector3Int targetPosition, float duration = 0.3f)
         {
@@ -74,6 +77,7 @@ namespace Script
     
             yield return moveTween.WaitForCompletion();
         }
+
         private IEnumerator PerformMoves(IEnumerable<(GameObject, Vector3Int)> moves)
         {
             var moveCoroutines
@@ -138,7 +142,7 @@ namespace Script
             var saveCharacterList = characterPool.UsePoolCharacterList();
             var highLevelCharacters = saveCharacterList
                 .OrderByDescending(character => character.GetComponent<CharacterBase>().UnitLevel)
-                .Take(highLevelCharacterCount)
+                .Take(_highLevelCharacterCount)
                 .ToList();
             yield return StartCoroutine(gameManager.WaitForPanelToClose());
             foreach (var character in saveCharacterList
@@ -185,10 +189,9 @@ namespace Script
                 yield return StartCoroutine(MoveCharacter(o, targetPosition));
             }
         }
-
-        public void nextCharacterUpgrade(int moveCharacterCount)
+        public void NextCharacterUpgrade(int moveCharacterCount)
         {
-            highLevelCharacterCount += moveCharacterCount;
+            _highLevelCharacterCount += moveCharacterCount;
         }
     }
 }

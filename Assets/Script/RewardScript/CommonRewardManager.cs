@@ -5,6 +5,7 @@ using System.Linq;
 using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
+using Script.PuzzleManagerGroup;
 using Script.UIManager;
 using TMPro;
 using UnityEngine;
@@ -301,7 +302,7 @@ namespace Script.RewardScript
         private void Selected(CommonData selectedReward)
         {
             commonRewardPanel.SetActive(false);
-            if (countManager.baseMoveCount == 0)
+            if (countManager.totalMoveCount == 0)
             {
                 gameManager.GameSpeed();
             }
@@ -345,7 +346,7 @@ namespace Script.RewardScript
                 case CommonData.Types.CastleRecovery: gameManager.RecoveryCastle = true; characterManager.recoveryCastle = true; break;         // 성 체력 회복
                 case CommonData.Types.Match5Upgrade: matchManager.match5Upgrade = true; characterManager._5MatchUpgradeOption = true; break;     // 5매치 패턴 업그레이드
                 // case CommonData.Types.Slow: enemyManager.DecreaseMoveSpeed(selectedCommonReward.Property[0]); characterManager.slowCount += 1; break; // 적 이동속도 감소 
-                case CommonData.Types.NextStage: spawnManager.nextCharacterUpgrade(selectedCommonReward.Property[0]); characterManager.nextStageMembersSelectCount += 1; break; // 보드 초기화 시 케릭터 상속되는 케릭터 Count 증가
+                case CommonData.Types.NextStage: spawnManager.NextCharacterUpgrade(selectedCommonReward.Property[0]); characterManager.nextStageMembersSelectCount += 1; break; // 보드 초기화 시 케릭터 상속되는 케릭터 Count 증가
                 case CommonData.Types.Gold: characterManager.goldGetMore = true; Debug.LogWarning($"Unhandled reward type: {selectedCommonReward.Type}"); break;
                 case CommonData.Types.CastleMaxHp: castleManager.IncreaseMaxHp(selectedCommonReward.Property[0]); break;               // 성 최대 체력 증가
                 default: Debug.LogWarning($"Unhandled reward type: {selectedCommonReward.Type}"); break;

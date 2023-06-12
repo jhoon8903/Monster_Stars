@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
+using Script.PuzzleManagerGroup;
 using Script.RewardScript;
 using Script.UIManager;
 using UnityEngine;

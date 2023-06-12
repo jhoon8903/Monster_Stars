@@ -7,9 +7,9 @@ namespace Script.UIManager
     public class CountManager : MonoBehaviour
     {
         private int _comboCount;
-        public int baseMoveCount;
+        private int _baseMoveCount;
         private int _rewardMoveCount;
-        private int _totalMoveCount;
+        public int totalMoveCount;
         public bool IsSwapOccurred { get; set; } = false;
         public TextMeshProUGUI moveCountText;
         [SerializeField] private GameManager gameManager;
@@ -17,39 +17,35 @@ namespace Script.UIManager
 
         public void Initialize(int initialMoveCount)
         {
-            baseMoveCount = initialMoveCount;
+            _baseMoveCount = initialMoveCount;
             _rewardMoveCount = 0;
-            _totalMoveCount = baseMoveCount;
+            totalMoveCount = _baseMoveCount;
             _comboCount = 0;
             UpdateMoveCountText();
         }
 
         private void UpdateMoveCountText()
         {
-            moveCountText.text = $"{baseMoveCount}";
-            if (baseMoveCount <= 0)
-            {   
-                StartCoroutine(gameManager.Count0Call());
-            }
+            moveCountText.text = $"{totalMoveCount}";
         }
 
         public bool CanMove()
         {
-            return baseMoveCount > 0;
+            return totalMoveCount > 0;
         }
         
-
         public void DecreaseMoveCount()
         {
-            if (baseMoveCount <= 0) return;
-            baseMoveCount--;
-            _comboCount = 0;
+            if (_baseMoveCount <= 0) return;
+            _baseMoveCount--;
+            totalMoveCount = _baseMoveCount;
             UpdateMoveCountText();
         }
 
         private void IncreaseMoveCount(int comboCount)
         {
-            baseMoveCount += comboCount;
+            _baseMoveCount += comboCount;
+            totalMoveCount = _baseMoveCount;
             UpdateMoveCountText();
         }
 
@@ -57,18 +53,20 @@ namespace Script.UIManager
         {
             _comboCount++;
             IncreaseMoveCount(_comboCount);
+            _comboCount = 0;
         }
 
         public void IncreaseRewardMoveCount(int increaseAmount)
         {
-            baseMoveCount += increaseAmount;
+            _baseMoveCount += increaseAmount;
+            totalMoveCount = _baseMoveCount;
             UpdateMoveCountText();
         }
 
         public void PermanentIncreaseMoveCount(int increaseAmount)
         {
             _rewardMoveCount += increaseAmount;
-            _totalMoveCount = baseMoveCount + _rewardMoveCount;
+            totalMoveCount = _baseMoveCount + _rewardMoveCount;
             UpdateMoveCountText();
         }
     }

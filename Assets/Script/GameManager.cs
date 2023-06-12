@@ -2,6 +2,7 @@ using System.Collections;
 using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
+using Script.PuzzleManagerGroup;
 using Script.RewardScript;
 using Script.UIManager;
 using TMPro;
@@ -19,8 +20,6 @@ namespace Script
         [SerializeField] private SwipeManager swipeManager;
         [SerializeField] private CameraManager cameraManager;
         [SerializeField] private BackGroundManager backgroundManager;
-        [SerializeField] private EnemySpawnManager enemySpawnManager;
-        [SerializeField] private EnemyPatternManager enemyPatternManager;
         [SerializeField] private WaveManager waveManager;
         [SerializeField] private GameObject gamePanel;
         [SerializeField] private GameObject commonRewardPanel;
@@ -35,7 +34,7 @@ namespace Script
         private bool _speedUp = false;
         public int wave = 1;
         private Vector3Int _bossSpawnArea;
-        private bool _isBattle = false;
+        public bool isBattle = false;
         public bool RecoveryCastle { get; set; } = false;
 
 
@@ -49,26 +48,17 @@ namespace Script
             GameSpeedSelect();
             StartCoroutine(spawnManager.PositionUpCharacterObject()); // 매치 시작 후 확인
             swipeManager.isBusy = false;
+            DOTween.SetTweensCapacity(50000, 500);
         }
         public IEnumerator Count0Call()
         {
-            _isBattle = true;
+            isBattle = true;
             yield return _waitOneSecRealtime;
             cameraManager.CameraBattleSizeChange();
             backgroundManager.ChangeBattleSize();
             yield return _waitTwoSecRealtime;
-            StartCoroutine(waveManager.StartWave(wave));
-            while (enemySpawnManager.fieldList.Count > 0)
-            {
-                yield return StartCoroutine(WaitForPanelToClose());
-                GameSpeed();
-                atkManager.CheckForAttack();
-                StartCoroutine(enemyPatternManager.Zone_Move());
-                yield return _waitOneSecRealtime;
-                if (enemySpawnManager.fieldList.Count != 0) continue;
-            }
-            StartCoroutine(ContinueOrLose());
-            _isBattle = false;
+            StartCoroutine(waveManager.WaveController(wave));
+            atkManager.CheckForAttack();
         }
         public IEnumerator WaitForPanelToClose()
         {
@@ -76,7 +66,7 @@ namespace Script
             {
                 while (commonRewardPanel.activeSelf)
                 {
-                    yield return null; // Wait until the next frame
+                    yield return null;
                 }
             }
 
@@ -84,12 +74,13 @@ namespace Script
             {
                 while (expRewardPanel.activeSelf)
                 {
-                    yield return null; // Wait until the next frame
+                    yield return null;
                 }
             }
         }
         public IEnumerator ContinueOrLose()
         {
+            isBattle = false;
             DOTween.KillAll(true);
             if (castleManager.hpPoint != 0)
             {
@@ -134,8 +125,6 @@ namespace Script
                     castleManager.hpPoint = castleManager.maxHpPoint;
                 }
             }
-
-            // Update previous HP
             castleManager.UpdatePreviousHp();
             moveCount = 7;
             countManager.Initialize(moveCount);
@@ -153,18 +142,20 @@ namespace Script
             {
                 _speedUp = true;
                 speedUpText.text = "x2";
+                GameSpeed();
             }
             else
             {
                 _speedUp = false;
                 speedUpText.text = "x1";
-            }
+                GameSpeed();
+            } ;
         }
         public void GameSpeed()
         {
-            if (countManager.baseMoveCount == 0 && _speedUp)
+            if (_speedUp)
             {
-                Time.timeScale = _isBattle ? 2 : 1;
+                Time.timeScale = isBattle ? 2 : 1;
             }
             else
             {

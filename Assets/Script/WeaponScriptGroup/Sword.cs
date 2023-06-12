@@ -8,13 +8,11 @@ namespace Script.WeaponScriptGroup
     public class Sword : WeaponBase
     {
         public GameObject pivotPoint;
-        private float _lastHitTime;
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
             Speed = CharacterBase.swingSpeed;
             pivotPoint.transform.DORotate(new Vector3(0, 0, 360), Speed, RotateMode.FastBeyond360).OnComplete(() => StopUseWeapon(pivotPoint));
-            yield return new WaitForSecondsRealtime(FireRate);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -23,19 +21,9 @@ namespace Script.WeaponScriptGroup
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
             if (enemy != null && enemy.gameObject.activeInHierarchy)
             {
-                enemy.ReceiveDamage(Damage, unitProperty, unitEffect);
+                enemy.ReceiveDamage(Damage, UnitProperty, UnitEffect);
             }
             StopUseWeapon(gameObject);
         }
-
-        private void OnTriggerStay2D(Collider2D collision)
-        {
-            if (!collision.gameObject.CompareTag("Enemy")) return;
-            var enemy = collision.gameObject.GetComponent<EnemyBase>();
-            if (enemy == null || !enemy.gameObject.activeInHierarchy || !(Time.time > _lastHitTime + FireRate)) return;
-            enemy.ReceiveDamage(Damage, unitProperty, unitEffect);
-            _lastHitTime = Time.time;
-        }
-
     }
 }

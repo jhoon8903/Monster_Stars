@@ -1,11 +1,11 @@
 using System.Collections;
-using Script.CharacterManagerScript;
-using UnityEngine;
 using DG.Tweening;
+using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
+using UnityEngine;
 
-namespace Script
+namespace Script.PuzzleManagerGroup
 {
     public sealed class SwipeManager : MonoBehaviour
     {
@@ -14,19 +14,18 @@ namespace Script
         private GameObject _returnObject; // 원래 위치로 돌아갈 객체를 추적하는 데 사용됩니다.
         private Vector2 _firstTouchPosition; // 첫 터치의 위치를 저장합니다.
         private Vector2 _emptyGridPosition; // 빈 그리드의 위치를 저장합니다.
-        private bool diagonalMovement = false;
+        private bool _diagonalMovement = false;
         [SerializeField] private float minSwipeLength = 1.0f; // 스와이프로 인식되는 최소 길이입니다.
         [SerializeField] private SpawnManager spawnManager; // 스폰매니저를 참조합니다.
         [SerializeField] private CountManager countManager; // 카운트매니저를 참조합니다.
         [SerializeField] private LayerMask characterLayer; // 캐릭터 레이어를 저장합니다.
         [SerializeField] private MatchManager matchManager;
-        [SerializeField] private CharacterPool characterPool;
         [SerializeField] private CommonRewardManager rewardManager;
 
         // 대각선 이동
         public void EnableDiagonalMovement()
         {
-            diagonalMovement = true;
+            _diagonalMovement = true;
         }
 
         // CountManager를 요청하여 캐릭터의 이동 허용 여부를 확인합니다.
@@ -117,7 +116,7 @@ namespace Script
             var endY = startY;
 
             // If diagonal movement is enabled, handle 8 directions
-            if (diagonalMovement)
+            if (_diagonalMovement)
             {
                 switch (swipeAngle)
                 {
