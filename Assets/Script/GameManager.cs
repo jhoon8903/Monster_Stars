@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
@@ -24,11 +25,11 @@ namespace Script
         [SerializeField] private GameObject gamePanel;
         [SerializeField] private GameObject commonRewardPanel;
         [SerializeField] private GameObject expRewardPanel;
-        [SerializeField] private AtkManager atkManager;
         [SerializeField] private TextMeshProUGUI speedUpText;
         [SerializeField] private TextMeshProUGUI waveText;
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
+        [SerializeField] private AtkManager atkManager;
         private readonly WaitForSecondsRealtime _waitOneSecRealtime = new WaitForSecondsRealtime(1f);
         private readonly WaitForSecondsRealtime _waitTwoSecRealtime = new WaitForSecondsRealtime(2f);
         private bool _speedUp = false;
@@ -36,7 +37,6 @@ namespace Script
         private Vector3Int _bossSpawnArea;
         public bool isBattle = false;
         public bool RecoveryCastle { get; set; } = false;
-
 
         private void Start()
         {
@@ -58,7 +58,7 @@ namespace Script
             backgroundManager.ChangeBattleSize();
             yield return _waitTwoSecRealtime;
             StartCoroutine(waveManager.WaveController(wave));
-            atkManager.CheckForAttack();
+            StartCoroutine(atkManager.CheckForAttack());
         }
         public IEnumerator WaitForPanelToClose()
         {
@@ -81,7 +81,6 @@ namespace Script
         public IEnumerator ContinueOrLose()
         {
             isBattle = false;
-            DOTween.KillAll(true);
             if (castleManager.hpPoint != 0)
             {
                 wave++;

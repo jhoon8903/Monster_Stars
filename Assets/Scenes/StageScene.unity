@@ -689,16 +689,15 @@ MonoBehaviour:
   swipeManager: {fileID: 149521965}
   cameraManager: {fileID: 758648960}
   backgroundManager: {fileID: 1011029961}
-  enemyPatternManager: {fileID: 329010039}
   waveManager: {fileID: 149521968}
   gamePanel: {fileID: 267564636}
   commonRewardPanel: {fileID: 903150599}
   expRewardPanel: {fileID: 1331568212}
-  atkManager: {fileID: 149521967}
   speedUpText: {fileID: 302776536}
   waveText: {fileID: 651631795}
   castleManager: {fileID: 1177777546}
   commonRewardManager: {fileID: 2120144519}
+  atkManager: {fileID: 149521967}
   wave: 1
   isBattle: 0
 --- !u!4 &149521959
@@ -816,7 +815,8 @@ MonoBehaviour:
   characterPool: {fileID: 1097818334}
   weaponsPool: {fileID: 1537456864}
   waveManager: {fileID: 149521968}
-  atkRate: 3
+  attackRate: 1
+  enemyCount: 0
 --- !u!114 &149521968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -830,9 +830,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemySpawnManager: {fileID: 329010038}
-  enemyBase: {fileID: 329010040}
   gameManager: {fileID: 149521958}
-  castleManager: {fileID: 1177777546}
+  atkManager: {fileID: 149521967}
   enemyTotalCount: 0
   set: 0
 --- !u!1 &187153451
@@ -1700,7 +1699,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00e0262d9ffcd4d219f10b5f7db48d58, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  waveManager: {fileID: 149521968}
   number: 0
 --- !u!1 &362582815
 GameObject:
@@ -4380,7 +4378,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterManager: {fileID: 149521963}
   poolSize: 15
-  _pooledCharacters: []
+  pooledCharacters:
+  - {fileID: 5314217969191077851, guid: 282ca571fdd1a418f8655667bc8cf479, type: 3}
+  - {fileID: 996077009063285666, guid: e5eae943fb66c47e5961725f82c5a2ff, type: 3}
+  - {fileID: 5553006608696507343, guid: 438d7922ea8534dd6a3cfa7664f14cb7, type: 3}
+  - {fileID: 4196842440807729695, guid: 10ae02ed26a9b4edc803ef0448003341, type: 3}
+  - {fileID: 109876181003132260, guid: b3c344a1ee72a45e3aef34b9e39575c5, type: 3}
 --- !u!4 &1097818335
 Transform:
   m_ObjectHideFlags: 0

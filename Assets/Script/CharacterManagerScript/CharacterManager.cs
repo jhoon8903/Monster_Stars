@@ -85,7 +85,7 @@ namespace Script.CharacterManagerScript
         public void PermanentIncreaseCharacter(int characterListIndex)
         {
             var levelUpGroup = characterList[characterListIndex].unitGroup;
-            var pooledCharacters = characterPool._pooledCharacters;
+            var pooledCharacters = characterPool.pooledCharacters;
             foreach (var character in pooledCharacters
                          .Select(characterObject => characterObject.GetComponent<CharacterBase>())
                          .Where(character => character.unitGroup == levelUpGroup && character.UnitLevel == 1))

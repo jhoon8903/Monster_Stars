@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Script.EnemyManagerScript;
 
 namespace Script.CharacterManagerScript
 {
@@ -28,10 +30,13 @@ namespace Script.CharacterManagerScript
         public bool PermanentLevelUp { get; set; } = false; // Indicates if the unit has permanent level up
         private readonly Vector3 _initialScale = Vector3.one; // Initial scale of the character
         private readonly Vector3 _levelUpScale = new Vector3(1.2f, 1.2f, 0); // Scale to use when leveling up
-        public delegate void EnemyDetectedEventHandler(GameObject enemy);
-        public event EnemyDetectedEventHandler EnemyDetected;
         public List<GameObject> detectedEnemies = new List<GameObject>();
+        public AtkManager atkManager;
 
+        private void Start()
+        {
+            atkManager = FindObjectOfType<AtkManager>();
+        }
 
         public void OnEnable()
         {
@@ -76,11 +81,6 @@ namespace Script.CharacterManagerScript
             return new List<GameObject>();
         }
 
-        protected void DetectedEvents(GameObject enemyObject)
-        {
-            EnemyDetected?.Invoke(enemyObject);
-        }
-        
         // Increase the default damage of the character by a given amount
         public void IncreaseDamage(int increaseAmount)
         {
@@ -94,5 +94,13 @@ namespace Script.CharacterManagerScript
             var percentageIncrease = (float)increaseAmount / 100;
             defaultAtkRate *= increaseAmount * percentageIncrease;
         }
+
+        protected void OnEnemyKilled(object source, EventArgs args)
+        {
+            var enemyBase = (EnemyBase)source;
+            enemyBase.EnemyKilled -= OnEnemyKilled;
+            detectedEnemies.Remove(enemyBase.gameObject);
+        }
+
     }
 }

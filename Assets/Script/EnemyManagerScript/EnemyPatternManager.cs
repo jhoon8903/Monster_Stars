@@ -15,11 +15,11 @@ namespace Script.EnemyManagerScript
         [SerializeField] private WaveManager waveManager;
         [SerializeField] private GameManager gameManager;
         private GameObject _enemyObjects;
-        
-        public IEnumerator Zone_Move()
+
+        public IEnumerator Zone_Move(IEnumerable<GameObject> spawnList)
         {
-            var enemyObjectList = new List<GameObject>(enemyPool.SpawnEnemy());
-            foreach (var enemyObject in enemyObjectList)
+            var spawnListCopy = new List<GameObject>(spawnList);
+            foreach (var enemyObject in spawnListCopy)
             {
                 _enemyObjects = enemyObject;
                 var enemyBase = _enemyObjects.GetComponent<EnemyBase>();
@@ -66,7 +66,6 @@ namespace Script.EnemyManagerScript
             {
                 enemyObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
                 wave -= 1;
-                
                 yield return null;
             }
         }

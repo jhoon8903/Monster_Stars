@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using DG.Tweening;
 using Script.CharacterManagerScript;
@@ -24,8 +25,11 @@ namespace Script.EnemyManagerScript
         protected internal SpawnZones SpawnZone;
         private static readonly object Lock = new object();
         private float _currentHealth;
-        private readonly Dictionary<CharacterBase.UnitEffects, Coroutine> 
-            _activeEffects = new Dictionary<CharacterBase.UnitEffects, Coroutine>();
+        private readonly Dictionary<CharacterBase.UnitEffects, Coroutine> _activeEffects = new Dictionary<CharacterBase.UnitEffects, Coroutine>();
+        public delegate void EnemyKilledEventHandler(object source, EventArgs args);
+        public event EnemyKilledEventHandler EnemyKilled;
+
+
 
         public void Initialize()
         {
@@ -47,6 +51,7 @@ namespace Script.EnemyManagerScript
                 _currentHealth -= damage;
                 UpdateHpSlider();
                 if (_currentHealth >= 0) return;
+                EnemyKilled?.Invoke(this, EventArgs.Empty);
                 FindObjectOfType<EnemyPool>().ReturnToPool(gameObject);
                 FindObjectOfType<WaveManager>().EnemyDestroyInvoke();
                 if (ExpManager.Instance != null)

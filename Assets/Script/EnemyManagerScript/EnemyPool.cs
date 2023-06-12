@@ -7,12 +7,12 @@ namespace Script.EnemyManagerScript
     public class EnemyPool : MonoBehaviour
     {
         [SerializeField] private EnemyManager enemyManager;
-        private List<GameObject> _pooledEnemy;
+        private List<GameObject> _pooledEnemy = new List<GameObject>();
+        private readonly List<GameObject> _pooledDefaultEnemy = new List<GameObject>();
        
         
         public void Awake()
         {
-            _pooledEnemy = new List<GameObject>();
             foreach (var enemySettings in enemyManager.enemyList)
             {
                 for (var i = 0; i < enemySettings.poolSize; i++)
@@ -21,14 +21,19 @@ namespace Script.EnemyManagerScript
                     obj.GetComponent<EnemyBase>().number = i + 1;
                     obj.GetComponent<EnemyBase>().EnemyProperty();
                     obj.SetActive(false);
-                    _pooledEnemy.Add(obj);
+                    _pooledDefaultEnemy.Add(obj);
                 }
             }
+            _pooledEnemy = _pooledDefaultEnemy.ToList();
         }
 
         public GameObject GetPooledEnemy(EnemyBase.EnemyTypes enemyType)
         {
-            return _pooledEnemy.FirstOrDefault(t => !t.activeInHierarchy && t.GetComponent<EnemyBase>().EnemyType == enemyType);
+            var spawnEnemy = _pooledEnemy
+                .FirstOrDefault(t => !t.activeInHierarchy && t.GetComponent<EnemyBase>().EnemyType == enemyType);
+            _pooledEnemy.Remove(spawnEnemy);
+            if (_pooledEnemy.Count == 0) _pooledEnemy = _pooledDefaultEnemy.ToList();
+            return spawnEnemy;
         }
 
         public IEnumerable<GameObject> SpawnEnemy()

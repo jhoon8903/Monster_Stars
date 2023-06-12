@@ -23,7 +23,6 @@ namespace Script.WeaponScriptGroup
             {
                 enemy.ReceiveDamage(Damage, UnitProperty, UnitEffect);
             }
-            StopUseWeapon(gameObject);
         }
     }
 }

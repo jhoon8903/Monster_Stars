@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
 using Script.CharacterManagerScript;
+using Script.EnemyManagerScript;
 using UnityEngine;
 
 namespace Script.CharacterGroupScript
@@ -57,16 +57,29 @@ namespace Script.CharacterGroupScript
         // Detects enemies within a detection box and returns a list of their GameObjects
         public override List<GameObject> DetectEnemies()
         {
-            // Detect enemies within a detection box
             var detectionSize = new Vector2(DetectionWidth-0.5f, DetectionHeight);
             var detectionCenter = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
             var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize, 0f);
+            var currentlyDetectedEnemies = new List<GameObject>();
             foreach (var enemyObject in colliders)
             {
                 if (!enemyObject.gameObject.CompareTag("Enemy")) continue;
-                detectedEnemies.Add(enemyObject.gameObject);
-                DetectedEvents(enemyObject.gameObject);
+        
+                var enemyBase = enemyObject.GetComponent<EnemyBase>();
+                enemyBase.EnemyKilled += OnEnemyKilled;
+
+                currentlyDetectedEnemies.Add(enemyObject.gameObject);
             }
+            foreach (var detectedEnemy in detectedEnemies)
+            {
+                if (!currentlyDetectedEnemies.Contains(detectedEnemy))
+                {
+                    // Unsubscribe from EnemyKilled event.
+                    var enemyBase = detectedEnemy.GetComponent<EnemyBase>();
+                    enemyBase.EnemyKilled -= OnEnemyKilled;
+                }
+            }
+            detectedEnemies = currentlyDetectedEnemies;
             return detectedEnemies;
         }
 

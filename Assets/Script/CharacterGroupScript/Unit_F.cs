@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
+using Script.EnemyManagerScript;
 using UnityEngine;
 
 namespace Script.CharacterGroupScript
@@ -54,16 +55,32 @@ namespace Script.CharacterGroupScript
         // Detects enemies within a detection circle and returns a list of their GameObjects
         public override List<GameObject> DetectEnemies()
         {
+
             var detectionCenter = (Vector2)transform.position;
             var colliders = Physics2D.OverlapCircleAll(detectionCenter, DetectionSize);
+            var currentlyDetectedEnemies = new List<GameObject>();
             foreach (var enemyObject in colliders)
             {
                 if (!enemyObject.gameObject.CompareTag("Enemy")) continue;
-                detectedEnemies.Add(enemyObject.gameObject);
-                DetectedEvents(enemyObject.gameObject);
+                var enemyBase = enemyObject.GetComponent<EnemyBase>();
+                enemyBase.EnemyKilled += OnEnemyKilled;
+                currentlyDetectedEnemies.Add(enemyObject.gameObject);
             }
+
+            foreach (var detectedEnemy in detectedEnemies)
+            {
+                if (!currentlyDetectedEnemies.Contains(detectedEnemy))
+                {
+                    // Unsubscribe from EnemyKilled event.
+                    var enemyBase = detectedEnemy.GetComponent<EnemyBase>();
+                    enemyBase.EnemyKilled -= OnEnemyKilled;
+                }
+            }
+            detectedEnemies = currentlyDetectedEnemies;
+
             return detectedEnemies;
         }
+
 
         // Draws a wire sphere in the Scene view to visualize the detection circle
         public void OnDrawGizmos()
@@ -98,7 +115,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.F;
             defaultDamage = 90;
-            defaultAtkRate = 1f;
+            defaultAtkRate = 0.5f;
             defaultAtkDistance = 1.5f;
             projectileSpeed = 1.3f;
             defaultAtkRange = Vector3.zero;
@@ -116,7 +133,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.F;
             defaultDamage *= 1.7f;
-            defaultAtkRate = 1f;
+            defaultAtkRate = 0.5f;
             defaultAtkDistance = 1.5f;
             projectileSpeed = 1.3f;
             defaultAtkRange = Vector3.zero;
@@ -134,7 +151,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.F;
             defaultDamage *= 2.0f;
-            defaultAtkRate = 1f;
+            defaultAtkRate = 0.5f;
             defaultAtkDistance = 1.5f;
             projectileSpeed = 1.3f;
             defaultAtkRange = Vector3.zero;
@@ -152,7 +169,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.F;
             defaultDamage *= 2.3f;
-            defaultAtkRate = 1f;
+            defaultAtkRate = 0.5f;
             defaultAtkDistance = 1.5f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level5Sprite;

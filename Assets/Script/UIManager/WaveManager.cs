@@ -2,6 +2,7 @@ using System;
 using Script.EnemyManagerScript;
 using UnityEngine;
 using System.Collections;
+using Script.CharacterManagerScript;
 
 namespace Script.UIManager
 {
@@ -9,6 +10,7 @@ namespace Script.UIManager
     {
         [SerializeField] private EnemySpawnManager enemySpawnManager;
         [SerializeField] private GameManager gameManager;
+        [SerializeField] private AtkManager atkManager;
         public int enemyTotalCount = 0;
         public int set;
         public event Action EnemyDestroy;
@@ -40,7 +42,6 @@ namespace Script.UIManager
 
         public IEnumerator WaveController(int wave)
         {
-            Debug.Log("WaveController");
             var (normalCount, slowCount, fastCount, sets) = GetSpawnCountForWave(wave);
             CountSet(normalCount, slowCount, fastCount, sets);
 

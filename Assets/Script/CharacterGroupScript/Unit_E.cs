@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using System.Linq;
 using Script.CharacterManagerScript;
+using Script.EnemyManagerScript;
 using UnityEngine;
 
 namespace Script.CharacterGroupScript
@@ -57,12 +57,26 @@ namespace Script.CharacterGroupScript
             var detectionSize = new Vector2(DetectionWidth-0.5f, DetectionHeight);
             var detectionCenter = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
             var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize, 0f);
+            var currentlyDetectedEnemies = new List<GameObject>();
             foreach (var enemyObject in colliders)
             {
                 if (!enemyObject.gameObject.CompareTag("Enemy")) continue;
-                detectedEnemies.Add(enemyObject.gameObject);
-                DetectedEvents(enemyObject.gameObject);
+        
+                var enemyBase = enemyObject.GetComponent<EnemyBase>();
+                enemyBase.EnemyKilled += OnEnemyKilled;
+
+                currentlyDetectedEnemies.Add(enemyObject.gameObject);
             }
+            foreach (var detectedEnemy in detectedEnemies)
+            {
+                if (!currentlyDetectedEnemies.Contains(detectedEnemy))
+                {
+                    // Unsubscribe from EnemyKilled event.
+                    var enemyBase = detectedEnemy.GetComponent<EnemyBase>();
+                    enemyBase.EnemyKilled -= OnEnemyKilled;
+                }
+            }
+            detectedEnemies = currentlyDetectedEnemies;
             return detectedEnemies;
         }
 
@@ -96,7 +110,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.E;
             defaultDamage = 75;
-            defaultAtkRate = 0.5f;
+            defaultAtkRate = 1f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1.5f;
             defaultAtkRange = Vector3.zero;
@@ -114,7 +128,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.E;
             defaultDamage *= 1.7f;
-            defaultAtkRate = 0.5f;
+            defaultAtkRate = 1f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1.5f;
             defaultAtkRange = Vector3.zero;
@@ -132,7 +146,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.E;
             defaultDamage *= 2;
-            defaultAtkRate = 0.5f;
+            defaultAtkRate = 1f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1.5f;
             defaultAtkRange = Vector3.zero;
@@ -150,7 +164,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.E;
             defaultDamage *= 2.3f;
-            defaultAtkRate = 0.5f;
+            defaultAtkRate = 1f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1.5f;
             defaultAtkRange = Vector3.zero;

@@ -23,6 +23,7 @@ namespace Script.EnemyManagerScript
         [SerializeField] private WaveManager waveManager;
 
         private Dictionary<EnemyBase.SpawnZones, Transform> _spawnZones;
+        private readonly List<GameObject> _spawnList = new List<GameObject>();
 
         private void Start()
         {
@@ -71,7 +72,8 @@ namespace Script.EnemyManagerScript
             enemyToSpawn.transform.position = spawnPos;
             enemyToSpawn.SetActive(true);
             enemyBase.Initialize();
-            StartCoroutine(enemyPatternManager.Zone_Move());
+            _spawnList.Add(enemyToSpawn);
+            StartCoroutine(enemyPatternManager.Zone_Move(_spawnList));
         }
 
         private Vector3 GetRandomPointInBounds(EnemyBase.SpawnZones zone)

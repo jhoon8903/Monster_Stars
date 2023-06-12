@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
+using Script.EnemyManagerScript;
 using UnityEngine;
 
 namespace Script.CharacterGroupScript
@@ -54,14 +55,29 @@ namespace Script.CharacterGroupScript
         // Detects enemies within a detection circle and returns a list of their GameObjects
         public override List<GameObject> DetectEnemies()
         {
+
             var detectionCenter = (Vector2)transform.position;
             var colliders = Physics2D.OverlapCircleAll(detectionCenter, DetectionSize);
+            var currentlyDetectedEnemies = new List<GameObject>();
             foreach (var enemyObject in colliders)
             {
                 if (!enemyObject.gameObject.CompareTag("Enemy")) continue;
-                detectedEnemies.Add(enemyObject.gameObject);
-                DetectedEvents(enemyObject.gameObject);
+                var enemyBase = enemyObject.GetComponent<EnemyBase>();
+                enemyBase.EnemyKilled += OnEnemyKilled;
+                currentlyDetectedEnemies.Add(enemyObject.gameObject);
             }
+
+            foreach (var detectedEnemy in detectedEnemies)
+            {
+                if (!currentlyDetectedEnemies.Contains(detectedEnemy))
+                {
+                    // Unsubscribe from EnemyKilled event.
+                    var enemyBase = detectedEnemy.GetComponent<EnemyBase>();
+                    enemyBase.EnemyKilled -= OnEnemyKilled;
+                }
+            }
+            detectedEnemies = currentlyDetectedEnemies;
+
             return detectedEnemies;
         }
 
@@ -95,9 +111,9 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.D;
             defaultDamage = 200;
-            defaultAtkRate = 1f;
+            defaultAtkRate = 0.5f;
             defaultAtkDistance = 1f;
-            swingSpeed = 1f;
+            swingSpeed = 2f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level2Sprite;
             UnitAtkType = UnitAtkTypes.Circle;
@@ -113,9 +129,9 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.D;
             defaultDamage *= 1.7f;
-            defaultAtkRate = 1f;
+            defaultAtkRate = 0.5f;
             defaultAtkDistance = 1f;
-            swingSpeed = 1f;
+            swingSpeed = 2f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level3Sprite;
             UnitAtkType = UnitAtkTypes.Circle;
@@ -131,9 +147,9 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.D;
             defaultDamage *= 2.0f;
-            defaultAtkRate = 1f;
+            defaultAtkRate = 0.5f;
             defaultAtkDistance = 1f;
-            swingSpeed = 1f;
+            swingSpeed = 2f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level4Sprite;
             UnitAtkType = UnitAtkTypes.Circle;
@@ -149,9 +165,9 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.D;
             defaultDamage *= 2.3f;
-            defaultAtkRate = 1f;
+            defaultAtkRate = 0.5f;
             defaultAtkDistance = 1f;
-            swingSpeed = 1f;
+            swingSpeed = 2f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level5Sprite;
             UnitAtkType = UnitAtkTypes.Circle;

@@ -10,6 +10,8 @@ namespace Script.WeaponScriptGroup
     {
         private EnemyBase _cachedEnemy;
         private float _lastHitTime;
+        public float attackRange = 5.0f;  // You should set this to an appropriate value
+
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
@@ -18,7 +20,6 @@ namespace Script.WeaponScriptGroup
             foreach (var enemy in enemyList)
             {
                 enemyTransform = enemy.transform.position;
-                yield return enemyTransform;
             }
             var distance = Vector3.Distance(transform.position, enemyTransform);
             var adjustedSpeed = Speed * distance;
@@ -29,11 +30,28 @@ namespace Script.WeaponScriptGroup
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
-            if(_cachedEnemy != null)
+            var enemy = collision.gameObject.GetComponent<EnemyBase>();
+            if (enemy != null && enemy.gameObject.activeInHierarchy)
             {
-                _cachedEnemy.ReceiveDamage(Damage, UnitProperty, UnitEffect);
+                _cachedEnemy = enemy;
+                enemy.ReceiveDamage(Damage, UnitProperty, UnitEffect);
             }
-            StopUseWeapon(this.gameObject);
+            StopUseWeapon(gameObject);
+        }
+
+        private void Update()
+        {
+            if (_cachedEnemy == null || !_cachedEnemy.gameObject.activeInHierarchy)
+            {
+                StopUseWeapon(gameObject);
+                return;
+            }
+
+            var distance = Vector3.Distance(transform.position, _cachedEnemy.transform.position);
+            if (distance > attackRange)
+            {
+                StopUseWeapon(gameObject);
+            }
         }
     }
 }
