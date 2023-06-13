@@ -55,6 +55,7 @@ namespace Script.PuzzleManagerGroup
             yield return StartCoroutine(PerformMoves(moves));
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
             yield return StartCoroutine(matchManager.CheckMatches());
+            
             if (rewardManger.PendingTreasure.Count == 0)  
             {
                 swipeManager.isBusy = false;
@@ -62,12 +63,14 @@ namespace Script.PuzzleManagerGroup
             else
             {
                 rewardManger.EnqueueTreasure(rewardManger.PendingTreasure.Dequeue());
-                yield break;
             }
-            if (countManager.totalMoveCount != 0) yield break;
-            if (gameManager.isBattle) yield break;
-            yield return gameManager.Count0Call();
+
+            if (countManager.totalMoveCount == 0 && !gameManager.isBattle)
+            {
+                yield return gameManager.Count0Call();
+            }
         }
+
         private static IEnumerator MoveCharacter(GameObject gameObject, Vector3Int targetPosition, float duration = 0.3f)
         {
             if (gameObject == null) yield break;

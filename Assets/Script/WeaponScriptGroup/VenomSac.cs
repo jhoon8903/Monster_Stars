@@ -1,6 +1,7 @@
 using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
-using Script.CharacterManagerScript;
+using Script.CharacterGroupScript;
 using Script.EnemyManagerScript;
 using UnityEngine;
 
@@ -8,23 +9,22 @@ namespace Script.WeaponScriptGroup
 {
     public class VenomSac : WeaponBase
     {
-        private EnemyBase _cachedEnemy;
-        private float _lastHitTime;
-        public float attackRange = 5.0f;  // You should set this to an appropriate value
+        private float _distance;
+        private Vector3 _enemyTransform = new Vector3();
+        private List<GameObject> _enemyTransforms = new List<GameObject>();
 
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
-            var enemyList = FindObjectOfType<CharacterBase>().DetectEnemies();
-            var enemyTransform  = new Vector3();
-            foreach (var enemy in enemyList)
+            _enemyTransforms = CharacterBase.GetComponent<Unit_F>().DetectEnemies();
+            foreach (var enemy in _enemyTransforms)
             {
-                enemyTransform = enemy.transform.position;
+                _enemyTransform = enemy.transform.position;
             }
-            var distance = Vector3.Distance(transform.position, enemyTransform);
-            var adjustedSpeed = Speed * distance;
-            var timeToMove = distance / adjustedSpeed;
-            transform.DOMove(enemyTransform, timeToMove).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(gameObject));
+            _distance = Vector3.Distance(transform.position, _enemyTransform);
+            var adjustedSpeed = Speed * _distance;
+            var timeToMove = _distance / adjustedSpeed;
+            transform.DOMove(_enemyTransform, timeToMove).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(gameObject));
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -33,25 +33,12 @@ namespace Script.WeaponScriptGroup
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
             if (enemy != null && enemy.gameObject.activeInHierarchy)
             {
-                _cachedEnemy = enemy;
                 enemy.ReceiveDamage(Damage, UnitProperty, UnitEffect);
+                AtkEffect(enemy);
             }
+
             StopUseWeapon(gameObject);
         }
 
-        private void Update()
-        {
-            if (_cachedEnemy == null || !_cachedEnemy.gameObject.activeInHierarchy)
-            {
-                StopUseWeapon(gameObject);
-                return;
-            }
-
-            var distance = Vector3.Distance(transform.position, _cachedEnemy.transform.position);
-            if (distance > attackRange)
-            {
-                StopUseWeapon(gameObject);
-            }
-        }
     }
 }

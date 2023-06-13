@@ -19,9 +19,11 @@ namespace Script.WeaponScriptGroup
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
+            
             if (enemy != null && enemy.gameObject.activeInHierarchy)
             {
                 enemy.ReceiveDamage(Damage, UnitProperty, UnitEffect);
+                AtkEffect(enemy);
             }
             StopUseWeapon(gameObject);
         }

@@ -32,7 +32,7 @@ namespace Script.CharacterManagerScript
         private readonly Vector3 _levelUpScale = new Vector3(1.2f, 1.2f, 0); // Scale to use when leveling up
         public List<GameObject> detectedEnemies = new List<GameObject>();
         public AtkManager atkManager;
-
+        public GameObject CurrentWeapon { get; set; }
         private void Start()
         {
             atkManager = FindObjectOfType<AtkManager>();

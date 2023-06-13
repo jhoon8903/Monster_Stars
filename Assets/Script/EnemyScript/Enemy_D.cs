@@ -1,4 +1,5 @@
 using Script.EnemyManagerScript;
+using UnityEngine;
 
 namespace Script.EnemyScript
 {
@@ -10,7 +11,7 @@ namespace Script.EnemyScript
             CrushDamage = 160;
             MoveSpeed = 1f;
             EnemyType = EnemyTypes.Basic;
-            SpawnZone = SpawnZones.B;
+            SpawnZone = SpawnZones.A;
             RegistryType = RegistryTypes.Physics;
         }
     }

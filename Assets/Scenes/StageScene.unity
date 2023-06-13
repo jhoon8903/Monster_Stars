@@ -814,9 +814,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterPool: {fileID: 1097818334}
   weaponsPool: {fileID: 1537456864}
-  waveManager: {fileID: 149521968}
   attackRate: 1
-  enemyCount: 0
+  enemyList: []
 --- !u!114 &149521968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1682,8 +1681,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65933e619ef454066b4b1f65dd5bd44f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemySpawnManager: {fileID: 329010038}
-  enemyPool: {fileID: 2016604888}
   castle: {fileID: 1177777540}
   waveManager: {fileID: 149521968}
   gameManager: {fileID: 149521958}

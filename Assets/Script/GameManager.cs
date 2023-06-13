@@ -1,8 +1,6 @@
 using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using Script.CharacterManagerScript;
-using Script.EnemyManagerScript;
 using Script.PuzzleManagerGroup;
 using Script.RewardScript;
 using Script.UIManager;
@@ -104,6 +102,7 @@ namespace Script
         }
         private void NextStage()
         {
+            DOTween.KillAll(true);
             Time.timeScale = 1;
             _bossSpawnArea = new Vector3Int(Random.Range(2,5), 10, 0);
             var previousWave = wave - 1;

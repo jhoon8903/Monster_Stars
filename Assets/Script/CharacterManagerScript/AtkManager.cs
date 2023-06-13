@@ -24,7 +24,7 @@ namespace Script.CharacterManagerScript
         [SerializeField] private WeaponsPool weaponsPool; // Reference to the weapon pool
         public float attackRate = 1;
         public List<GameObject> enemyList = new List<GameObject>();
-        
+
         public IEnumerator CheckForAttack()
         {
             var characters = characterPool.UsePoolCharacterList();
@@ -42,6 +42,11 @@ namespace Script.CharacterManagerScript
 
             while (true)
             {
+                if(Time.timeScale == 0)
+                {
+                    yield return null;
+                    continue;
+                }
                 enemyList = unit.DetectEnemies();
 
                 if (enemyList.Count > 0)
@@ -75,7 +80,7 @@ namespace Script.CharacterManagerScript
             switch (unitGroup)
             {
                 case CharacterBase.UnitGroups.A:
-                  Attack(new AttackData(unit, WeaponsPool.WeaponType.Spear)); // Perform attack with a spear
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.Spear)); // Perform attack with a spear
                     break;
                 case CharacterBase.UnitGroups.E:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.IceCrystal)); // Perform attack with an ice crystal
@@ -96,21 +101,24 @@ namespace Script.CharacterManagerScript
             switch (unitGroup)
             {
                 case CharacterBase.UnitGroups.D:
-                   Attack(new AttackData(unit, WeaponsPool.WeaponType.Sword)); // Perform attack with a sword for group D
+                    if (unit.GetComponent<CharacterBase>().CurrentWeapon == null || unit.GetComponent<CharacterBase>().CurrentWeapon.activeSelf == false)
+                    {
+                        unit.GetComponent<CharacterBase>().CurrentWeapon = Attack(new AttackData(unit, WeaponsPool.WeaponType.Sword)); // Perform attack with a sword for group D
+                    }
                     break;
             }
         }
-        private void Attack(AttackData attackData)
+
+        private GameObject Attack(AttackData attackData)
         {
             var unit = attackData.Unit; // Attacking unit
-            var unitAtkRate = attackData.Unit.GetComponent<CharacterBase>().defaultAtkRate * attackRate;
             var weaponType = attackData.WeaponType; // Type of weapon used for the attack
             var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.transform.position, unit.transform.rotation); // Get the weapon object from the weapon pool
             var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>(); // Get the weapon base component
             weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>()); // Initialize the weapon with the character's information
-            var useWeapon = weaponBase.UseWeapon(); // Perform the weapon's attack logic
+            StartCoroutine(weaponBase.UseWeapon()); // Perform the weapon's attack logic
             weaponsPool.SetSprite(weaponType, attackData.Unit.GetComponent<CharacterBase>().UnitLevel, weaponObject); // Set the weapon's sprite based on the character's level
-            StartCoroutine(useWeapon); // Start the attack coroutine
+            return weaponObject;
         }
     }
 }

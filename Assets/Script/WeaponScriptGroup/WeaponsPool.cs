@@ -52,9 +52,9 @@ namespace Script.WeaponScriptGroup
             var spriteRenderer = weaponObject.GetComponentInChildren<SpriteRenderer>();
             var weapon = weapons.Find(w => w.weaponType == weaponType);
         
-            if (level - 2 < weapon.weaponSprite.Count)
+            if (level - 1 < weapon.weaponSprite.Count)
             {
-                spriteRenderer.sprite = weapon.weaponSprite[level - 2];
+                spriteRenderer.sprite = weapon.weaponSprite[level - 1];
             }
         }
         public void ReturnToPool(GameObject weapon)

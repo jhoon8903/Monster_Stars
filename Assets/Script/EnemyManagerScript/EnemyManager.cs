@@ -17,5 +17,10 @@ namespace Script.EnemyManagerScript
         [Header("Boss Prefabs")]
         [SerializeField] public GameObject stage10BossPrefab;  // Stage 10 Boss Prefab
         [SerializeField] public GameObject stage20BossPrefab;  // Stage 20 Boss Prefab
+
+        public void DecreaseEnemyMoveSpeed(int decreaseAmount)
+        {
+          
+        }
     }
 }

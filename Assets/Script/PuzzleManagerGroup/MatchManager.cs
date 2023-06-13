@@ -141,11 +141,12 @@ namespace Script
                         countManager.IncrementComboCount();
                     }
                     countManager.IsSwapOccurred = false;
-                    yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
                 }
+                yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
             }
             while (false);
             isMatched = false;
+
         }
 
         // 이 메소드는 주어진 캐릭터 객체를 풀로 반환하는 기능을 수행합니다.

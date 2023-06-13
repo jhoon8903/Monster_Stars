@@ -8,6 +8,7 @@ using UnityEngine.UI;
 
 namespace Script.EnemyManagerScript
 {
+
     public class EnemyBase : MonoBehaviour
     {
         private Slider _hpSlider;
@@ -29,7 +30,10 @@ namespace Script.EnemyManagerScript
         public delegate void EnemyKilledEventHandler(object source, EventArgs args);
         public event EnemyKilledEventHandler EnemyKilled;
 
-
+        // 상태이상로직
+        protected internal bool IsRestraint { get; set; } = false;
+        protected internal bool IsSlow { get; set; } = false;
+        protected internal bool IsPoison { get; set; } = false;
 
         public void Initialize()
         {
@@ -64,5 +68,11 @@ namespace Script.EnemyManagerScript
         {
             _hpSlider.DOValue(_currentHealth, 0.5f);
         }
+
+        public void EffectStatus()
+        {
+
+        }
+
     }
 }

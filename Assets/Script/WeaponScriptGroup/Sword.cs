@@ -22,6 +22,7 @@ namespace Script.WeaponScriptGroup
             if (enemy != null && enemy.gameObject.activeInHierarchy)
             {
                 enemy.ReceiveDamage(Damage, UnitProperty, UnitEffect);
+                AtkEffect(enemy);
             }
         }
     }

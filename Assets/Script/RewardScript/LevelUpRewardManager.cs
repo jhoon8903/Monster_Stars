@@ -73,7 +73,6 @@ namespace Script.RewardScript
                     castleManager.IncreaseMaxHp(selectedReward.Property[0]);
                     break;
                 case ExpData.Types.Slow:
-                    // enemyManager.DecreaseMoveSpeed(selectedReward.Property[0]); 
                     characterManager.slowCount += 1;
                     break;
                 case ExpData.Types.NextStage:
@@ -238,7 +237,7 @@ namespace Script.RewardScript
                     powerText.text = $"캐슬 최대체력 {p} 증가"; 
                     break;
                 case ExpData.Types.Slow:
-                    powerText.text = $"적 이도속도 {p}% 감소 (최대 60%)";
+                    powerText.text = $"다음 웨이브 부터는 적 이동속도 {p}% 감소\n( 현재 {15*characterManager.slowCount}% / 최대 60%)";
                     break;
                 case ExpData.Types.NextStage:
                     powerText.text = $"보스 스테이지 이후 {p} 개의\n케릭터 추가 이동 (최대 3개)";

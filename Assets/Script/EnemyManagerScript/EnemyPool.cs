@@ -36,11 +36,6 @@ namespace Script.EnemyManagerScript
             return spawnEnemy;
         }
 
-        public IEnumerable<GameObject> SpawnEnemy()
-        {
-            return _pooledEnemy.Where(enemy => enemy.activeSelf).ToList();
-        }
-
         public void ReturnToPool(GameObject obj)
         {
             obj.transform.position = new Vector3(-4,-4,0);

@@ -77,7 +77,6 @@ namespace Script.CharacterGroupScript
                 }
             }
             detectedEnemies = currentlyDetectedEnemies;
-
             return detectedEnemies;
         }
 
@@ -115,7 +114,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.F;
             defaultDamage = 90;
-            defaultAtkRate = 0.5f;
+            defaultAtkRate = 0.3f;
             defaultAtkDistance = 1.5f;
             projectileSpeed = 1.3f;
             defaultAtkRange = Vector3.zero;
@@ -133,7 +132,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.F;
             defaultDamage *= 1.7f;
-            defaultAtkRate = 0.5f;
+            defaultAtkRate = 0.3f;
             defaultAtkDistance = 1.5f;
             projectileSpeed = 1.3f;
             defaultAtkRange = Vector3.zero;
@@ -151,7 +150,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.F;
             defaultDamage *= 2.0f;
-            defaultAtkRate = 0.5f;
+            defaultAtkRate = 0.3f;
             defaultAtkDistance = 1.5f;
             projectileSpeed = 1.3f;
             defaultAtkRange = Vector3.zero;
@@ -169,7 +168,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.F;
             defaultDamage *= 2.3f;
-            defaultAtkRate = 0.5f;
+            defaultAtkRate = 0.3f;
             defaultAtkDistance = 1.5f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level5Sprite;
