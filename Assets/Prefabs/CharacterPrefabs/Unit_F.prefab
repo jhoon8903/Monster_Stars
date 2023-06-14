@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2487614329077559212}
   m_Layer: 6
   m_Name: Unit_F
-  m_TagString: Untagged
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -46,13 +46,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ecec0e61973a846c3b74fd5c56ae9f65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitGroup: 5
+  unitGroup: 0
   defaultDamage: 0
   defaultAtkRate: 0
   projectileSpeed: 0
   swingSpeed: 0
   defaultAtkDistance: 0
   defaultAtkRange: {x: 0, y: 0, z: 0}
+  detectedEnemies: []
+  atkManager: {fileID: 0}
   level1Sprite: {fileID: 21300000, guid: 2244f1993fdc245f596c42b57ab23081, type: 3}
   level2Sprite: {fileID: 21300000, guid: bac0d12c5b768489db60dc8645a9f46e, type: 3}
   level3Sprite: {fileID: 21300000, guid: da408263cf8bb4a1f8ec0b913971d9d5, type: 3}

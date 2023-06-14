@@ -23,7 +23,6 @@ namespace Script.EnemyManagerScript
         [SerializeField] private WaveManager waveManager;
 
         private Dictionary<EnemyBase.SpawnZones, Transform> _spawnZones;
-        private readonly List<GameObject> _spawnList = new List<GameObject>();
 
         private void Start()
         {
@@ -41,13 +40,15 @@ namespace Script.EnemyManagerScript
         {
             for (var i = 0; i < count; i++)
             {
-                SpawnEnemy(enemyType);
+                StartCoroutine(SpawnEnemy(enemyType));
             }
             yield return null;
         }
+
         public void SpawnBoss(int wave)
         {
-            var bossObject = Instantiate(wave == 10 ? enemyManager.stage10BossPrefab : enemyManager.stage20BossPrefab, transform);
+            var bossObject = Instantiate(wave == 10 ? enemyManager.stage10BossPrefab : enemyManager.stage20BossPrefab,
+                transform);
             bossObject.transform.position = gridManager.bossSpawnArea;
             var enemyBase = bossObject.GetComponent<EnemyBase>();
             bossObject.SetActive(true);
@@ -56,10 +57,9 @@ namespace Script.EnemyManagerScript
             StartCoroutine(enemyPatternManager.Boss_Move(bossObject));
         }
 
-        private void SpawnEnemy(EnemyBase.EnemyTypes enemyType)
+        private IEnumerator SpawnEnemy(EnemyBase.EnemyTypes enemyType)
         {
             var enemyToSpawn = enemyPool.GetPooledEnemy(enemyType);
-            if (enemyToSpawn == null)return;
             enemyToSpawn.transform.localScale = enemyToSpawn.GetComponent<EnemyBase>().EnemyType switch
             {
                 EnemyBase.EnemyTypes.Fast => Vector3.one * 0.6f,
@@ -72,8 +72,7 @@ namespace Script.EnemyManagerScript
             enemyToSpawn.transform.position = spawnPos;
             enemyToSpawn.SetActive(true);
             enemyBase.Initialize();
-            _spawnList.Add(enemyToSpawn);
-            StartCoroutine(enemyPatternManager.Zone_Move(_spawnList));
+            yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyToSpawn));
         }
 
         private Vector3 GetRandomPointInBounds(EnemyBase.SpawnZones zone)
