@@ -83,6 +83,10 @@ namespace Script.EnemyManagerScript
                 {
                     StartCoroutine(SlowEffect(enemyBase, endPosition, duration));
                 }
+                else
+                {
+                    _movementTween.Play();
+                }
                 yield return new WaitForSecondsRealtime(0.2f); // add some delay to prevent infinite loop
                 totalEnemyCount = waveManager.enemyTotalCount;
                 Debug.Log(totalEnemyCount);
@@ -95,7 +99,7 @@ namespace Script.EnemyManagerScript
             var restraintColor = new Color(0.59f, 0.43f, 0f);
             var originColor = new Color(1, 1, 1);
             enemyBase.GetComponent<SpriteRenderer>().DOColor(restraintColor, 0.1f);
-            DOTween.Kill(enemyBase.transform);
+            DOTween.Kill(_movementTween);
             yield return new WaitForSecondsRealtime(1f);
             enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
             enemyBase.IsRestraint = false;
