@@ -46,7 +46,7 @@ namespace Script
             GameSpeedSelect();
             StartCoroutine(spawnManager.PositionUpCharacterObject()); // 매치 시작 후 확인
             swipeManager.isBusy = false;
-            DOTween.SetTweensCapacity(50000, 500);
+            DOTween.SetTweensCapacity(200000, 500);
         }
         public IEnumerator Count0Call()
         {

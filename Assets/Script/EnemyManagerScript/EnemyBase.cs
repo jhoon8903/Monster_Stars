@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.UIManager;
@@ -54,9 +53,8 @@ namespace Script.EnemyManagerScript
                 {
                     if (_poisonEffectCoroutine == null || !(healthPoint <= 0)) return;
                     StopCoroutine(_poisonEffectCoroutine);
-                    gameObject.GetComponent<SpriteRenderer>().DOColor(new Color(1f,1f,1f), 0.2f);
+                    gameObject.GetComponent<SpriteRenderer>().DOColor(new Color(1f, 1f, 1f), 0.2f);
                     _poisonEffectCoroutine = null;
-                    IsPoison = false;
                 }
             }
         }

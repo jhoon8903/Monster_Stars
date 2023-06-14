@@ -54,12 +54,20 @@ namespace Script.WeaponScriptGroup
             var poisonColor = new Color(0.18f, 1f, 0.1f);
 
             if (poisonDotDamage == 0) yield break;
+    
             hitEnemy.GetComponent<SpriteRenderer>().DOColor(poisonColor, 0.2f);
-            for (float time = 0; time < duration; time += 0.5f)
+    
+            var elapsedTime = 0f;
+            while (elapsedTime < duration)
             {
                 hitEnemy.ReceiveDamage(poisonDotDamage, CharacterBase.UnitProperties.Poison);
-                yield return new WaitForSeconds(0.5f);
+                elapsedTime += Time.deltaTime;
+                yield return null;
             }
+    
+            hitEnemy.GetComponent<SpriteRenderer>().DOColor(Color.white, 0.2f); // Reset the color
+            hitEnemy.IsPoison = false; // Set IsPoison to false to stop the poison effect
         }
+
     }
 }

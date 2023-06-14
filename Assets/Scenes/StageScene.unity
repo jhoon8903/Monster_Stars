@@ -698,7 +698,7 @@ MonoBehaviour:
   castleManager: {fileID: 1177777546}
   commonRewardManager: {fileID: 2120144519}
   atkManager: {fileID: 149521967}
-  wave: 1
+  wave: 9
   isBattle: 0
 --- !u!4 &149521959
 Transform:
@@ -1697,6 +1697,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   number: 0
+  healthPoint: 0
   groupSlowCount: 0
 --- !u!1 &362582815
 GameObject:

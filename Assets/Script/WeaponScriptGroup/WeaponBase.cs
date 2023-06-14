@@ -13,7 +13,7 @@ namespace Script.WeaponScriptGroup
         protected float Damage { get; private set; }
         protected float Distance { get; private set; }
         protected CharacterBase.UnitProperties UnitProperty { get; private set; }
-        protected CharacterBase.UnitEffects UnitEffect { get; private set; }
+        private CharacterBase.UnitEffects UnitEffect { get; set; }
         protected Vector3 StartingPosition;
         protected CharacterBase CharacterBase;
         private readonly System.Random _random = new System.Random();
@@ -80,10 +80,6 @@ namespace Script.WeaponScriptGroup
         private static void SlowEffect(EnemyBase enemyStatus)
         {
             enemyStatus.IsSlow = true;
-            // if (_random.Next(100) < 20)
-            // {
-            //     
-            // }
         }
     }
 }

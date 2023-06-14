@@ -48,14 +48,14 @@ namespace Script.EnemyManagerScript
 
         public void SpawnBoss(int wave)
         {
-            var bossObject = Instantiate(wave == 10 ? enemyManager.stage10BossPrefab : enemyManager.stage20BossPrefab,
-                transform);
-            bossObject.transform.position = gridManager.bossSpawnArea;
-            var enemyBase = bossObject.GetComponent<EnemyBase>();
-            bossObject.SetActive(true);
-            enemyBase.Initialize();
             waveManager.set = 1;
-            StartCoroutine(enemyPatternManager.Boss_Move(bossObject));
+            var bossObject = Instantiate(wave == 10 ? enemyManager.stage10BossPrefab : enemyManager.stage20BossPrefab, transform);
+            var enemyBase = bossObject.GetComponent<EnemyBase>();
+            
+            enemyBase.transform.position = gridManager.bossSpawnArea;
+            GameObject o;
+            (o = enemyBase.gameObject).SetActive(true);
+            StartCoroutine(enemyPatternManager.Boss_Move(o));
         }
 
         private IEnumerator SpawnEnemy(EnemyBase.EnemyTypes enemyType)

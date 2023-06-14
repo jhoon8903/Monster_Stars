@@ -354,6 +354,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   number: 0
+  healthPoint: 0
+  groupSlowCount: 0
 --- !u!60 &3071749571650485146
 PolygonCollider2D:
   m_ObjectHideFlags: 0

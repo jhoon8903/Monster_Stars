@@ -67,7 +67,6 @@ namespace Script.PuzzleManagerGroup
         }
         public void ApplyBossSpawnColor(Vector3Int bossArea)
          {
-             Debug.Log("BossStage");
              bossSpawnArea = bossArea;
              var orangeColor = new Color32(255,147, 0, 255); // RGB로 주황색 정의
              var brownColor = new Color32(217, 191, 156, 255); // RGB로 갈색 정의

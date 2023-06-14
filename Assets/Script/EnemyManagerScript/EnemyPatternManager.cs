@@ -58,6 +58,7 @@ namespace Script.EnemyManagerScript
             _enemyObjects = boss;
             var bossObject = _enemyObjects.GetComponent<EnemyBase>();
             bossObject.EnemyProperty();
+            bossObject.Initialize();
             var position = _enemyObjects.transform.position;
             var endPosition = new Vector3(position.x, castle.transform.position.y-5, 0);
             var duration = bossObject.MoveSpeed * 50f;
@@ -86,7 +87,6 @@ namespace Script.EnemyManagerScript
                 totalEnemyCount = waveManager.enemyTotalCount;
             }
         }
-
 
         private IEnumerator RestrainEffect(EnemyBase enemyBase, Vector3 endPosition, float duration)
         {
