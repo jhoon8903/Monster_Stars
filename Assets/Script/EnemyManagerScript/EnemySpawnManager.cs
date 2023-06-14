@@ -62,9 +62,9 @@ namespace Script.EnemyManagerScript
             if (enemyToSpawn == null)return;
             enemyToSpawn.transform.localScale = enemyToSpawn.GetComponent<EnemyBase>().EnemyType switch
             {
-                EnemyBase.EnemyTypes.Fast => Vector3.one * 0.8f,
-                EnemyBase.EnemyTypes.Slow => Vector3.one * 1.5f,
-                _ => Vector3.one
+                EnemyBase.EnemyTypes.Fast => Vector3.one * 0.6f,
+                EnemyBase.EnemyTypes.Slow => Vector3.one * 1f,
+                _ => Vector3.one * 0.8f
             };
             var enemyZone = enemyToSpawn.GetComponent<EnemyBase>().SpawnZone;
             var spawnPos = GetRandomPointInBounds(enemyZone);

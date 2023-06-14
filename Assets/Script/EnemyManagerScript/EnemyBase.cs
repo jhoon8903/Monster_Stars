@@ -1,14 +1,15 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.UIManager;
+using Script.WeaponScriptGroup;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Script.EnemyManagerScript
 {
-
     public class EnemyBase : MonoBehaviour
     {
         private Slider _hpSlider;
@@ -26,14 +27,37 @@ namespace Script.EnemyManagerScript
         protected internal SpawnZones SpawnZone;
         private static readonly object Lock = new object();
         private float _currentHealth;
-        private readonly Dictionary<CharacterBase.UnitEffects, Coroutine> _activeEffects = new Dictionary<CharacterBase.UnitEffects, Coroutine>();
+        private readonly Dictionary<CharacterBase.UnitEffects, Coroutine>
+            _activeEffects = new Dictionary<CharacterBase.UnitEffects, Coroutine>();
         public delegate void EnemyKilledEventHandler(object source, EventArgs args);
         public event EnemyKilledEventHandler EnemyKilled;
 
         // 상태이상로직
-        protected internal bool IsRestraint { get; set; } = false;
-        protected internal bool IsSlow { get; set; } = false;
-        protected internal bool IsPoison { get; set; } = false;
+        public bool IsRestraint { get; set; } = false;
+        public bool IsSlow { get; set; } = false;
+        private Coroutine _poisonEffectCoroutine;
+        private bool _isPoison;
+        public bool IsPoison
+        {
+            get => _isPoison;
+            set
+            {
+                _isPoison = value;
+                if (_isPoison)
+                {
+                    _poisonEffectCoroutine = StartCoroutine(FindObjectOfType<VenomSac>().PoisonEffect(this));
+                }
+                else
+                {
+                    if (_poisonEffectCoroutine != null)
+                    {
+                        StopCoroutine(_poisonEffectCoroutine);
+                    }
+                }
+            }
+        }
+
+
 
         public void Initialize()
         {
@@ -44,10 +68,14 @@ namespace Script.EnemyManagerScript
             _hpSlider.value = _currentHealth;
             UpdateHpSlider();
         }
-        protected internal virtual void EnemyProperty() { }
+
+        protected internal virtual void EnemyProperty()
+        {
+        }
+
         public void ReceiveDamage(
-            float damage, CharacterBase.UnitProperties unitProperty, 
-            CharacterBase.UnitEffects unitEffect, 
+            float damage, CharacterBase.UnitProperties unitProperty,
+            CharacterBase.UnitEffects unitEffect,
             KillReasons reason = KillReasons.ByPlayer)
         {
             lock (Lock)
@@ -64,15 +92,10 @@ namespace Script.EnemyManagerScript
                 }
             }
         }
+
         private void UpdateHpSlider()
         {
             _hpSlider.DOValue(_currentHealth, 0.5f);
         }
-
-        public void EffectStatus()
-        {
-
-        }
-
     }
 }

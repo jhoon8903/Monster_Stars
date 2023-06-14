@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using Script.CharacterGroupScript;
+using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using UnityEngine;
 
@@ -27,6 +28,7 @@ namespace Script.WeaponScriptGroup
             transform.DOMove(_enemyTransform, timeToMove).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(gameObject));
         }
 
+        // VenomSac.cs
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
@@ -34,11 +36,28 @@ namespace Script.WeaponScriptGroup
             if (enemy != null && enemy.gameObject.activeInHierarchy)
             {
                 enemy.ReceiveDamage(Damage, UnitProperty, UnitEffect);
-                AtkEffect(enemy);
+                var hitColliders = Physics2D.OverlapCircleAll(collision.transform.position, 1f);
+                foreach (var hitCollider in hitColliders)
+                {
+                    var hitEnemy = hitCollider.gameObject.GetComponent<EnemyBase>();
+                    if (hitEnemy == null || !hitEnemy.gameObject.activeInHierarchy || hitEnemy == enemy) continue;
+                    hitEnemy.ReceiveDamage(Damage / 2, UnitProperty, UnitEffect);
+                    AtkEffect(hitEnemy);
+                    StartCoroutine(PoisonEffect(hitEnemy)); 
+                }
             }
-
             StopUseWeapon(gameObject);
         }
 
+        public static IEnumerator PoisonEffect(EnemyBase hitEnemy)
+        {
+            const float duration = 2f; // duration of the poison effect
+            for (float time = 0; time < duration; time += 0.5f)
+            {
+                hitEnemy.ReceiveDamage(10, CharacterBase.UnitProperties.Poison, CharacterBase.UnitEffects.Poison);
+                yield return new WaitForSeconds(0.5f);
+            }
+            hitEnemy.IsPoison = false;  // end the poison effect after the duration
+        }
     }
 }

@@ -7,7 +7,6 @@ using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 using Random = UnityEngine.Random;
 
 namespace Script.PuzzleManagerGroup

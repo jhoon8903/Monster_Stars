@@ -15,6 +15,8 @@ namespace Script.EnemyManagerScript
         [SerializeField] private GameManager gameManager;
         private GameObject _enemyObjects;
         private float _duration;
+        private Tween _movementTween;
+        private Tween _defaultTween;
 
         public IEnumerator Zone_Move(IEnumerable<GameObject> spawnList)
         {
@@ -41,7 +43,7 @@ namespace Script.EnemyManagerScript
                 switch (enemyBase.SpawnZone)
                 {
                     case EnemyBase.SpawnZones.A:
-                        PatternACoroutine(_enemyObjects, endPosition, _duration);
+                        StartCoroutine(PatternACoroutine(_enemyObjects, endPosition, _duration));
                         break;
                     case EnemyBase.SpawnZones.B:
                         break;
@@ -70,58 +72,68 @@ namespace Script.EnemyManagerScript
             yield return null;
         }
 
-        private void PatternACoroutine(GameObject enemyObject, Vector3 endPosition, float duration)
+        private IEnumerator PatternACoroutine(GameObject enemyObject, Vector3 endPosition, float duration)
         {
             gameManager.GameSpeed();
             var wave = waveManager.set;
+            var totalEnemyCount = waveManager.enemyTotalCount;
             var enemyBase = enemyObject.GetComponent<EnemyBase>();
 
-            while (wave > 0)
-            {
-                Debug.Log($"속박: {enemyBase.IsRestraint} / 둔화: {enemyBase.IsSlow}");
 
+            while (totalEnemyCount > 0)
+            {
                 if (enemyBase.IsRestraint)
+                {
+                    yield return StartCoroutine(RestrainEffect(enemyBase));
+                }
+                else if (enemyBase.IsSlow) 
                 { 
-                    StartCoroutine(RestrainEffect(enemyBase));
+                    yield return StartCoroutine(SlowEffect(enemyBase, endPosition, duration));
                 }
-                else if (enemyBase.IsSlow)
+                else if (!enemyBase.IsSlow && !enemyBase.IsRestraint)
                 {
-                    StartCoroutine(SlowEffect(enemyBase, endPosition, duration));
+                    if (_movementTween != null && _movementTween.IsPlaying())
+                    {
+                        _movementTween.Kill();
+                    }
+                    yield return _defaultTween= enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
+                    // yield return _movementTween.WaitForCompletion();
+                    _movementTween = _defaultTween;
                 }
-                else
-                {
-                    enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
-                }
-                wave -= 1;
+                totalEnemyCount = waveManager.enemyTotalCount;
+                Debug.Log(totalEnemyCount);
             }
         }
 
-        private static IEnumerator RestrainEffect(EnemyBase enemyBase)
+        private IEnumerator RestrainEffect(EnemyBase enemyBase)
         {
-            Debug.Log("속박");
             var restraintColor = new Color(0.59f, 0.43f, 0f);
             var originColor = new Color(1, 1, 1);
+            enemyBase.GetComponent<SpriteRenderer>().DOColor(restraintColor, 0.1f);
             
-            enemyBase.GetComponent<SpriteRenderer>().DOColor(restraintColor, 0.2f);
             DOTween.Kill(enemyBase.transform);
             yield return new WaitForSecondsRealtime(1f);
-            enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.2f);
+            enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
             enemyBase.IsRestraint = false;
-            Debug.Log("속박해제");
+            // yield return _defaultTween;
         }
 
-        private static IEnumerator SlowEffect(EnemyBase enemyBase, Vector3 endPosition, float duration)
+        private IEnumerator SlowEffect(EnemyBase enemyBase, Vector3 endPosition, float duration)
         {
-            Debug.Log("둔화");
             var slowColor = new Color(0f, 0.74f, 1);
             var originColor = new Color(1, 1, 1);
+            enemyBase.GetComponent<SpriteRenderer>().DOColor(slowColor, 0.1f);
             
-            enemyBase.GetComponent<SpriteRenderer>().DOColor(slowColor, 0.2f);
-            enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration*2.5f).SetEase(Ease.Linear);
-            yield return new WaitForSecondsRealtime(1f);
-            enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.2f);
+            // Check if a tween is already active and kill it
+            if (_movementTween != null && _movementTween.IsPlaying())
+            {
+                _movementTween.Kill();
+            }
+            // Create a new tween and store it in movementTween
+            _movementTween = enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration * 2.5f).SetEase(Ease.Linear);
+            yield return new WaitForSecondsRealtime(2f);
+            enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
             enemyBase.IsSlow = false;
-            Debug.Log("둔화해제");
         }
     }
 }

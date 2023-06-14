@@ -14,7 +14,7 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level4Sprite; // Sprite for level 4
         [SerializeField] private Sprite level5Sprite; // Sprite for level 5
         private SpriteRenderer _spriteRenderer; // Reference to the SpriteRenderer component
-        private const float DetectionSize = 1.5f; // Size of the detection circle
+        private const float DetectionSize = 1.0f; // Size of the detection circle
         public void Awake()
         {
             unitGroup = UnitGroups.F;
@@ -114,9 +114,9 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.F;
             defaultDamage = 90;
-            defaultAtkRate = 0.3f;
-            defaultAtkDistance = 1.5f;
-            projectileSpeed = 1.3f;
+            defaultAtkRate = 0.5f;
+            defaultAtkDistance = 1f;
+            projectileSpeed = 1.5f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level2Sprite;
             UnitAtkType = UnitAtkTypes.Gas;
@@ -132,9 +132,9 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.F;
             defaultDamage *= 1.7f;
-            defaultAtkRate = 0.3f;
-            defaultAtkDistance = 1.5f;
-            projectileSpeed = 1.3f;
+            defaultAtkRate = 0.5f;
+            defaultAtkDistance = 1f;
+            projectileSpeed = 1.5f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level3Sprite;
             UnitAtkType = UnitAtkTypes.Gas;
@@ -150,9 +150,9 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.F;
             defaultDamage *= 2.0f;
-            defaultAtkRate = 0.3f;
-            defaultAtkDistance = 1.5f;
-            projectileSpeed = 1.3f;
+            defaultAtkRate = 0.5f;
+            defaultAtkDistance = 1f;
+            projectileSpeed = 1.5f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level4Sprite;
             UnitAtkType = UnitAtkTypes.Gas;
@@ -168,8 +168,9 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.F;
             defaultDamage *= 2.3f;
-            defaultAtkRate = 0.3f;
-            defaultAtkDistance = 1.5f;
+            defaultAtkRate = 0.5f;
+            defaultAtkDistance = 1f;
+            projectileSpeed = 1.5f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level5Sprite;
             UnitAtkType = UnitAtkTypes.Gas;
