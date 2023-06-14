@@ -50,6 +50,7 @@ namespace Script.RewardScript
         private bool _waveRewards = false;
         private List<CommonData> _powerUps = null;
         private string _groupName = null;
+        private int _bossRewardSelected;
 
         // 1. 상자가 매치 되면 상자를 큐에 추가
         public void EnqueueTreasure(GameObject treasure)
@@ -93,18 +94,46 @@ namespace Script.RewardScript
 
             for (var i = 0; i < 3; i++)
             {
-                if (gameManager.wave == 11 || gameManager.wave == 21 && i == 0 && _waveRewards)
-                {                                             
-                    var firstDesiredPowerUp = new CommonPurpleData(purpleSprite, 13, CommonData.Types.AddRow, new[] { 1 });
-                    commonPowerUps.Add(firstDesiredPowerUp);
-                    selectedCodes.Add(firstDesiredPowerUp.Code);
-                    var secondDesiredPowerUp = new CommonBlueData(blueSprite, 11, CommonData.Types.Slow, new[] { 15 }); 
-                    commonPowerUps.Add(secondDesiredPowerUp);
-                    selectedCodes.Add(secondDesiredPowerUp.Code);
+                if (gameManager.wave is 11 or 21)
+                {
+                    if (_waveRewards && _bossRewardSelected == 0)
+                    {
+                        _bossRewardSelected = 0;
+                        var firstDesiredPowerUp = new CommonPurpleData(purpleSprite, 16, CommonData.Types.AddRow, new[] { 1 });
+                        commonPowerUps.Add(firstDesiredPowerUp); 
+                        selectedCodes.Add(firstDesiredPowerUp.Code);
+                        var secondDesiredPowerUp = new CommonBlueData(blueSprite, 11, CommonData.Types.Slow, new[] { 15 });
+                        commonPowerUps.Add(secondDesiredPowerUp);
+                        selectedCodes.Add(secondDesiredPowerUp.Code);
+                        var thirdDesiredPowerUp = new CommonPurpleData(purpleSprite, 13, CommonData.Types.StepDirection, new int[] { 1 });
+                        selectedCodes.Add(thirdDesiredPowerUp.Code);
+                        commonPowerUps.Add(thirdDesiredPowerUp);
+                        _bossRewardSelected = 1;
+                    }
+                    else
+                    {
+                        CommonData selectedPowerUp = null;
+                        switch (forcedColor)
+                        {
+                            case "blue" when i == 0: selectedPowerUp = CommonUnique(common.CommonBlueList, selectedCodes); break;
+                            case "purple" when i == 0: selectedPowerUp = CommonUnique(common.CommonPurpleList, selectedCodes); break;
+                            default:
+                            {
+                                var total = greenChance + blueChance + purpleChance;
+                                var randomValue = Random.Range(0, total);
+                                if (randomValue < greenChance) { selectedPowerUp = CommonUnique(common.CommonGreenList, selectedCodes); }
+                                else if (randomValue < greenChance + blueChance) { selectedPowerUp = CommonUnique(common.CommonBlueList, selectedCodes); }                                                                           
+                                else { selectedPowerUp = CommonUnique(common.CommonPurpleList, selectedCodes); }
+                                break;
+                            }
+                        }
+                        if (selectedPowerUp == null) continue;
+                        commonPowerUps.Add(selectedPowerUp);
+                        selectedCodes.Add(selectedPowerUp.Code);
+                    }
                 }
                 else
                 {
-                   
                     CommonData selectedPowerUp = null;
                     switch (forcedColor)
                     {
@@ -148,8 +177,7 @@ namespace Script.RewardScript
                         if (characterManager.expPercentage > 30) return false; // Make sure the EXP increment does not exceed 30%
                         break;
                     case CommonData.Types.AddRow:
-                        if (gameManager.wave != 11 || gameManager.wave != 21 && characterManager.addRowCount >= 2) return false; // Show row extra reward only after boss stage, up to 2 times
-                        break;
+                        return gameManager.wave is 11 or 21 && (characterManager.addRowCount < 2 ? true : false); // Show row extra reward only after boss stage, up to 2 times
                     case CommonData.Types.Slow:
                         if (characterManager.slowCount <= 3) return false; // Displays the enemy movement speed reduction effect up to 3 times
                         break;
@@ -157,7 +185,7 @@ namespace Script.RewardScript
                         if (characterManager.nextStageMembersSelectCount <= 3) return false; // Only use up to 3 next stage character upgrades
                         break;
                     case CommonData.Types.StepDirection:
-                        if (characterManager.diagonalMovement) return false; // If diagonal movement is possible, don't show this option
+                        if (characterManager.diagonalMovement || gameManager.wave !=11) return false; // If diagonal movement is possible, don't show this option
                         break;
                     case CommonData.Types.Match5Upgrade:
                         if (characterManager._5MatchUpgradeOption) return false; // Don't show this option if 5 matching upgrade option is enabled
@@ -345,7 +373,7 @@ namespace Script.RewardScript
                 case CommonData.Types.Exp: expManager.IncreaseExpBuff(selectedCommonReward.Property[0]); characterManager.expPercentage += 5; break;  // 경험치 5% 증가
                 case CommonData.Types.CastleRecovery: gameManager.RecoveryCastle = true; characterManager.recoveryCastle = true; break;         // 성 체력 회복
                 case CommonData.Types.Match5Upgrade: matchManager.Match5Upgrade = true; characterManager._5MatchUpgradeOption = true; break;     // 5매치 패턴 업그레이드
-                // case CommonData.Types.Slow: enemyManager.DecreaseMoveSpeed(selectedCommonReward.Property[0]); characterManager.slowCount += 1; break; // 적 이동속도 감소 
+                case CommonData.Types.Slow: FindObjectOfType<EnemyBase>().DecreasedMoveSpeed(); break; // 적 이동속도 감소 
                 case CommonData.Types.NextStage: spawnManager.NextCharacterUpgrade(selectedCommonReward.Property[0]); characterManager.nextStageMembersSelectCount += 1; break; // 보드 초기화 시 케릭터 상속되는 케릭터 Count 증가
                 case CommonData.Types.Gold: characterManager.goldGetMore = true; Debug.LogWarning($"Unhandled reward type: {selectedCommonReward.Type}"); break;
                 case CommonData.Types.CastleMaxHp: castleManager.IncreaseMaxHp(selectedCommonReward.Property[0]); break;               // 성 최대 체력 증가

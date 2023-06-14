@@ -85,11 +85,11 @@ namespace Script.RewardScript
                 new CommonBlueData(b,1,CommonData.Types.GroupDamage, new []{8}),
                 new CommonBlueData(b,2,CommonData.Types.GroupAtkSpeed, new []{6,7,8,9,10}),
                 new CommonBlueData(b,3,CommonData.Types.Step, new []{7,8,9,10}),
-                new CommonBlueData(b,4,CommonData.Types.Gold, new []{1}),
-                new CommonBlueData(b,5,CommonData.Types.CastleMaxHp, new []{200}),
-                new CommonBlueData(b,6,CommonData.Types.CastleRecovery, new []{200}),
-                new CommonBlueData(b,7,CommonData.Types.Match5Upgrade, new []{1}),
-                new CommonBlueData(b,8,CommonData.Types.Slow, new []{15})
+                new CommonBlueData(b,7,CommonData.Types.Gold, new []{1}),
+                new CommonBlueData(b,8,CommonData.Types.CastleMaxHp, new []{200}),
+                new CommonBlueData(b,9,CommonData.Types.CastleRecovery, new []{200}),
+                new CommonBlueData(b,10,CommonData.Types.Match5Upgrade, new []{1}),
+                new CommonBlueData(b,11,CommonData.Types.Slow, new []{15})
             };
 
             CommonPurpleList = new List<CommonData>
@@ -97,11 +97,11 @@ namespace Script.RewardScript
                 new CommonPurpleData(p,1,CommonData.Types.GroupDamage,new []{18}),
                 new CommonPurpleData(p,2,CommonData.Types.GroupAtkSpeed, new []{19}),
                 new CommonPurpleData(p,3,CommonData.Types.Step, new []{14,15,16,17}),
-                new CommonPurpleData(p,4,CommonData.Types.StepLimit, new []{1} ),
-                new CommonPurpleData(p,5,CommonData.Types.StepDirection, new []{1}),
-                new CommonPurpleData(p,6,CommonData.Types.NextStage, new []{1,2}),
-                new CommonPurpleData(p,7,CommonData.Types.LevelUpPattern, new []{0,1,2,3}),
-                new CommonPurpleData(p,8,CommonData.Types.AddRow, new []{1})
+                new CommonPurpleData(p,12,CommonData.Types.StepLimit, new []{1} ),
+                new CommonPurpleData(p,13,CommonData.Types.StepDirection, new []{1}),
+                new CommonPurpleData(p,14,CommonData.Types.NextStage, new []{1,2}),
+                new CommonPurpleData(p,15,CommonData.Types.LevelUpPattern, new []{0,1,2,3}),
+                new CommonPurpleData(p,16,CommonData.Types.AddRow, new []{1})
             };
         }
     }

@@ -5,6 +5,7 @@ using Script.CharacterManagerScript;
 using Script.UIManager;
 using Script.WeaponScriptGroup;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.EnemyManagerScript
@@ -14,7 +15,7 @@ namespace Script.EnemyManagerScript
         private Slider _hpSlider;
         public enum KillReasons { ByPlayer }
         public int number = 0;
-        protected float HealthPoint; // 적 오브젝트의 체력
+        public float healthPoint; // 적 오브젝트의 체력
         private float _maxHealthPoint;
         protected internal int CrushDamage; // 충돌시 데미지
         protected internal float MoveSpeed; // 적 오브젝트의 이동속도, 1f 는 1초에 1Grid를 가는 속도 숫자가 커질수록 느려져야 함
@@ -30,6 +31,7 @@ namespace Script.EnemyManagerScript
         public event EnemyKilledEventHandler EnemyKilled;
 
         // 상태이상로직
+        public int groupSlowCount;
         public bool IsRestraint { get; set; } = false;
         public bool IsSlow { get; set; } = false;
         private Coroutine _poisonEffectCoroutine;
@@ -42,45 +44,44 @@ namespace Script.EnemyManagerScript
                 _isPoison = value;
                 if (_isPoison)
                 {
-                    _poisonEffectCoroutine = StartCoroutine(FindObjectOfType<VenomSac>().PoisonEffect(this));
+                    var venomSac = FindObjectOfType<VenomSac>();
+                    if (venomSac != null && gameObject.activeInHierarchy)
+                    {
+                        _poisonEffectCoroutine = StartCoroutine(venomSac.PoisonEffect(this));
+                    }
                 }
                 else
                 {
-                    if (_poisonEffectCoroutine != null)
-                    {
-                        StopCoroutine(_poisonEffectCoroutine);
-                    }
+                    if (_poisonEffectCoroutine == null || !(healthPoint <= 0)) return;
+                    StopCoroutine(_poisonEffectCoroutine);
+                    gameObject.GetComponent<SpriteRenderer>().DOColor(new Color(1f,1f,1f), 0.2f);
+                    _poisonEffectCoroutine = null;
+                    IsPoison = false;
                 }
             }
         }
 
-
-
         public void Initialize()
         {
             _hpSlider = GetComponentInChildren<Slider>(true);
-            _maxHealthPoint = HealthPoint;
-            _currentHealth = HealthPoint;
+            _maxHealthPoint = healthPoint;
+            _currentHealth = healthPoint;
             _hpSlider.maxValue = _maxHealthPoint;
             _hpSlider.value = _currentHealth;
             UpdateHpSlider();
+            groupSlowCount = 0;
         }
-
         protected internal virtual void EnemyProperty()
         {
         }
-
-        public void ReceiveDamage(
-            float damage, CharacterBase.UnitProperties unitProperty,
-            CharacterBase.UnitEffects unitEffect,
-            KillReasons reason = KillReasons.ByPlayer)
+        public void ReceiveDamage(float damage, CharacterBase.UnitProperties unitProperty,KillReasons reason = KillReasons.ByPlayer)
         {
             lock (Lock)
             {
                 switch (unitProperty)
                 {
                     case CharacterBase.UnitProperties.Physics:
-                        if (this.RegistryType == RegistryTypes.Physics)
+                        if (RegistryType == RegistryTypes.Physics)
                         {
                             damage *= 0.8f;
                         }
@@ -93,10 +94,11 @@ namespace Script.EnemyManagerScript
                         }
                         break;
                     case CharacterBase.UnitProperties.Poison:
-                        if (RegistryType == RegistryTypes.Poison)
+                        var venomSac = FindObjectOfType<VenomSac>();
+                        if (venomSac != null && RegistryType == RegistryTypes.Poison)
                         {
                             damage *= 0.8f;
-                            FindObjectOfType<VenomSac>().poisonDotDamage = 0;
+                            venomSac.poisonDotDamage = 0;
                         }
                         break;
                     default:
@@ -115,10 +117,16 @@ namespace Script.EnemyManagerScript
                 }
             }
         }
-
         private void UpdateHpSlider()
         {
             _hpSlider.DOValue(_currentHealth, 0.5f);
+        }
+
+        public void DecreasedMoveSpeed()
+        {
+            if (groupSlowCount > 4) return;
+            MoveSpeed *= 1.45f;
+            groupSlowCount += 1;
         }
     }
 }

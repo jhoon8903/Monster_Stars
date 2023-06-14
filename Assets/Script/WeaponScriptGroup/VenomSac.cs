@@ -36,15 +36,14 @@ namespace Script.WeaponScriptGroup
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
             if (enemy != null && enemy.gameObject.activeInHierarchy)
             {
-                enemy.ReceiveDamage(Damage, UnitProperty, UnitEffect);
+                enemy.ReceiveDamage(Damage, UnitProperty);
                 var hitColliders = Physics2D.OverlapCircleAll(collision.transform.position, 1f);
                 foreach (var hitCollider in hitColliders)
                 {
                     var hitEnemy = hitCollider.gameObject.GetComponent<EnemyBase>();
                     if (hitEnemy == null || !hitEnemy.gameObject.activeInHierarchy || hitEnemy == enemy) continue;
-                    hitEnemy.ReceiveDamage(Damage / 2, UnitProperty, UnitEffect);
+                    hitEnemy.ReceiveDamage(Damage, UnitProperty);
                     AtkEffect(hitEnemy);
-                    StartCoroutine(PoisonEffect(hitEnemy)); 
                 }
             }
             StopUseWeapon(gameObject);
@@ -54,19 +53,12 @@ namespace Script.WeaponScriptGroup
             const float duration = 2f; // duration of the poison effect
             var poisonColor = new Color(0.18f, 1f, 0.1f);
 
-            if (poisonDotDamage != 0)
+            if (poisonDotDamage == 0) yield break;
+            hitEnemy.GetComponent<SpriteRenderer>().DOColor(poisonColor, 0.2f);
+            for (float time = 0; time < duration; time += 0.5f)
             {
-                hitEnemy.GetComponent<SpriteRenderer>().DOColor(poisonColor, 0.2f);
-                for (float time = 0; time < duration; time += 0.5f)
-                {
-                    hitEnemy.ReceiveDamage(poisonDotDamage, CharacterBase.UnitProperties.Poison, CharacterBase.UnitEffects.Poison);
-                    yield return new WaitForSeconds(0.5f);
-                }
-            }
-            else
-            {
-                hitEnemy.IsPoison = false;  // end the poison effect after the duration
-                hitEnemy.GetComponent<SpriteRenderer>().DOColor(new Color(1f,1f,1f), 0.2f);
+                hitEnemy.ReceiveDamage(poisonDotDamage, CharacterBase.UnitProperties.Poison);
+                yield return new WaitForSeconds(0.5f);
             }
         }
     }

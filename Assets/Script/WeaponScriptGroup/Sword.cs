@@ -21,7 +21,7 @@ namespace Script.WeaponScriptGroup
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
             if (enemy != null && enemy.gameObject.activeInHierarchy)
             {
-                enemy.ReceiveDamage(Damage, UnitProperty, UnitEffect);
+                enemy.ReceiveDamage(Damage, UnitProperty);
                 AtkEffect(enemy);
             }
         }

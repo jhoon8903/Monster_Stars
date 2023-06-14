@@ -22,7 +22,7 @@ namespace Script.WeaponScriptGroup
             
             if (enemy != null && enemy.gameObject.activeInHierarchy)
             {
-                enemy.ReceiveDamage(Damage, UnitProperty, UnitEffect);
+                enemy.ReceiveDamage(Damage, UnitProperty);
                 AtkEffect(enemy);
             }
             StopUseWeapon(gameObject);

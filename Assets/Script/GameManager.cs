@@ -110,10 +110,6 @@ namespace Script
             {
                 gridManager.ApplyBossSpawnColor(_bossSpawnArea);
             }
-            if (previousWave % 10 == 0)
-            {
-                gridManager.ResetBossSpawnColor();
-            }
 
             if (RecoveryCastle && !castleManager.Damaged)
             {

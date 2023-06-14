@@ -17,6 +17,7 @@ namespace Script.WeaponScriptGroup
         protected Vector3 StartingPosition;
         protected CharacterBase CharacterBase;
         private readonly System.Random _random = new System.Random();
+        private EnemyBase _poisonedEnemy;
         
 
         public void InitializeWeapon(CharacterBase characterBase)

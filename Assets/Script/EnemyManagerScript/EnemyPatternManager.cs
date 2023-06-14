@@ -14,7 +14,6 @@ namespace Script.EnemyManagerScript
         [SerializeField] private GameManager gameManager;
         private GameObject _enemyObjects;
         private float _duration;
-        private Tween _movementTween;
 
         public IEnumerator Zone_Move(GameObject enemyObject)
         {
@@ -71,39 +70,34 @@ namespace Script.EnemyManagerScript
             gameManager.GameSpeed();
             var totalEnemyCount = waveManager.enemyTotalCount;
             var enemyBase = enemyObject.GetComponent<EnemyBase>();
-            _movementTween = enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
+            enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
 
             while (totalEnemyCount > 0)
             {
                 if (enemyBase.IsRestraint)
                 {
-                    StartCoroutine(RestrainEffect(enemyBase));
+                   StartCoroutine(RestrainEffect(enemyBase, endPosition, duration));
                 }
                 else if (enemyBase.IsSlow)
                 {
-                    StartCoroutine(SlowEffect(enemyBase, endPosition, duration));
-                }
-                else
-                {
-                    _movementTween.Play();
+                   StartCoroutine(SlowEffect(enemyBase, endPosition, duration));
                 }
                 yield return new WaitForSecondsRealtime(0.2f); // add some delay to prevent infinite loop
                 totalEnemyCount = waveManager.enemyTotalCount;
-                Debug.Log(totalEnemyCount);
             }
         }
 
 
-        private IEnumerator RestrainEffect(EnemyBase enemyBase)
+        private IEnumerator RestrainEffect(EnemyBase enemyBase, Vector3 endPosition, float duration)
         {
             var restraintColor = new Color(0.59f, 0.43f, 0f);
             var originColor = new Color(1, 1, 1);
             enemyBase.GetComponent<SpriteRenderer>().DOColor(restraintColor, 0.1f);
-            DOTween.Kill(_movementTween);
+            DOTween.Kill(enemyBase.transform);
             yield return new WaitForSecondsRealtime(1f);
+            yield return enemyBase.IsRestraint = false;
             enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
-            enemyBase.IsRestraint = false;
-            _movementTween.Play();
+            enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
         }
 
         private IEnumerator SlowEffect(EnemyBase enemyBase, Vector3 endPosition, float duration)
@@ -111,13 +105,11 @@ namespace Script.EnemyManagerScript
             var slowColor = new Color(0f, 0.74f, 1);
             var originColor = new Color(1, 1, 1);
             enemyBase.GetComponent<SpriteRenderer>().DOColor(slowColor, 0.1f);
-            // Create a new tween and store it in movementTween
-            var slowMove = enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration * 1.6f).SetEase(Ease.Linear);
+            enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration * 1.6f).SetEase(Ease.Linear);
             yield return new WaitForSecondsRealtime(2f);
-            DOTween.Kill(slowMove);
+            yield return enemyBase.IsSlow = false;
             enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
-            enemyBase.IsSlow = false;
-            _movementTween.Play();
+            enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
         }
     }
 }
