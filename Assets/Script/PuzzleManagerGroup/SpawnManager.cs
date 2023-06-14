@@ -34,6 +34,7 @@ namespace Script.PuzzleManagerGroup
         public IEnumerator PositionUpCharacterObject()
         {
             var swipeManager = GetComponent<SwipeManager>();
+            swipeManager.isBusy = true;
             var moves = new List<(GameObject, Vector3Int)>();
             for (var x = 0; x < gridManager.gridWidth; x++)
             { 
