@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using Script.CharacterManagerScript;
@@ -27,8 +26,6 @@ namespace Script.EnemyManagerScript
         protected internal SpawnZones SpawnZone;
         private static readonly object Lock = new object();
         private float _currentHealth;
-        private readonly Dictionary<CharacterBase.UnitEffects, Coroutine>
-            _activeEffects = new Dictionary<CharacterBase.UnitEffects, Coroutine>();
         public delegate void EnemyKilledEventHandler(object source, EventArgs args);
         public event EnemyKilledEventHandler EnemyKilled;
 
@@ -80,6 +77,32 @@ namespace Script.EnemyManagerScript
         {
             lock (Lock)
             {
+                switch (unitProperty)
+                {
+                    case CharacterBase.UnitProperties.Physics:
+                        if (this.RegistryType == RegistryTypes.Physics)
+                        {
+                            damage *= 0.8f;
+                        }
+
+                        break;
+                    case CharacterBase.UnitProperties.Divine:
+                        if (RegistryType == RegistryTypes.Divine)
+                        {
+                            damage *= 0.8f;
+                        }
+                        break;
+                    case CharacterBase.UnitProperties.Poison:
+                        if (RegistryType == RegistryTypes.Poison)
+                        {
+                            damage *= 0.8f;
+                            FindObjectOfType<VenomSac>().poisonDotDamage = 0;
+                        }
+                        break;
+                    default:
+                        damage *= 1f;
+                        break;
+                }
                 _currentHealth -= damage;
                 UpdateHpSlider();
                 if (_currentHealth >= 0) return;

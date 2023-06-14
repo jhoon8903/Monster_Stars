@@ -60,12 +60,13 @@ namespace Script.EnemyManagerScript
         private IEnumerator SpawnEnemy(EnemyBase.EnemyTypes enemyType)
         {
             var enemyToSpawn = enemyPool.GetPooledEnemy(enemyType);
-            enemyToSpawn.transform.localScale = enemyToSpawn.GetComponent<EnemyBase>().EnemyType switch
-            {
-                EnemyBase.EnemyTypes.Fast => Vector3.one * 0.6f,
-                EnemyBase.EnemyTypes.Slow => Vector3.one * 1f,
-                _ => Vector3.one * 0.8f
-            };
+            if (enemyToSpawn == null) yield return
+                enemyToSpawn.transform.localScale = enemyToSpawn.GetComponent<EnemyBase>().EnemyType switch
+                {
+                    EnemyBase.EnemyTypes.Fast => Vector3.one * 0.6f,
+                    EnemyBase.EnemyTypes.Slow => Vector3.one * 1f,
+                    _ => Vector3.one * 0.8f
+                };
             var enemyZone = enemyToSpawn.GetComponent<EnemyBase>().SpawnZone;
             var spawnPos = GetRandomPointInBounds(enemyZone);
             var enemyBase = enemyToSpawn.GetComponent<EnemyBase>();

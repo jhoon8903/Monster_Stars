@@ -685,7 +685,7 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   gridManager: {fileID: 8808150501734532426}
   spawnManager: {fileID: 149521964}
-  moveCount: 15
+  moveCount: 13
   swipeManager: {fileID: 149521965}
   cameraManager: {fileID: 758648960}
   backgroundManager: {fileID: 1011029961}
@@ -698,7 +698,7 @@ MonoBehaviour:
   castleManager: {fileID: 1177777546}
   commonRewardManager: {fileID: 2120144519}
   atkManager: {fileID: 149521967}
-  wave: 1
+  wave: 9
   isBattle: 0
 --- !u!4 &149521959
 Transform:
@@ -6449,10 +6449,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
+  m_fontSize: 69.05
   m_fontSizeBase: 100
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
