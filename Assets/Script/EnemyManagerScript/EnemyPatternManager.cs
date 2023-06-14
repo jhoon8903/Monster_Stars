@@ -101,7 +101,6 @@ namespace Script.EnemyManagerScript
                     _movementTween = _defaultTween;
                 }
                 totalEnemyCount = waveManager.enemyTotalCount;
-                Debug.Log(totalEnemyCount);
             }
         }
 
@@ -130,7 +129,7 @@ namespace Script.EnemyManagerScript
                 _movementTween.Kill();
             }
             // Create a new tween and store it in movementTween
-            _movementTween = enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration * 2.5f).SetEase(Ease.Linear);
+            _movementTween = enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration * 1.6f).SetEase(Ease.Linear);
             yield return new WaitForSecondsRealtime(2f);
             enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
             enemyBase.IsSlow = false;

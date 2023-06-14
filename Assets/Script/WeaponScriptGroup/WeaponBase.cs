@@ -59,11 +59,14 @@ namespace Script.WeaponScriptGroup
         }
 
         // 속박속성공격
-        private static void RestraintEffect(EnemyBase enemyStatus)
+        private void RestraintEffect(EnemyBase enemyStatus)
         {
             // 20% 확률로 이동 불가능 효과 적용
-            // if (_random.Next(100) < 100) 
-         enemyStatus.IsRestraint = true;
+            if (_random.Next(100) < 20)
+            {
+                enemyStatus.IsRestraint = true;
+            }
+
         }
 
         // 중독공격

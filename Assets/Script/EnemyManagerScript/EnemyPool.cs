@@ -24,7 +24,7 @@ namespace Script.EnemyManagerScript
                     _pooledDefaultEnemy.Add(obj);
                 }
             }
-            _pooledEnemy = _pooledDefaultEnemy.ToList();
+            _pooledEnemy = _pooledDefaultEnemy;
         }
 
         public GameObject GetPooledEnemy(EnemyBase.EnemyTypes enemyType)
@@ -32,7 +32,7 @@ namespace Script.EnemyManagerScript
             var spawnEnemy = _pooledEnemy
                 .FirstOrDefault(t => !t.activeInHierarchy && t.GetComponent<EnemyBase>().EnemyType == enemyType);
             _pooledEnemy.Remove(spawnEnemy);
-            if (_pooledEnemy.Count == 0) _pooledEnemy = _pooledDefaultEnemy.ToList();
+            if (_pooledEnemy.Count == 0) _pooledEnemy = _pooledDefaultEnemy;
             return spawnEnemy;
         }
 

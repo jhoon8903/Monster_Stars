@@ -48,16 +48,20 @@ namespace Script.WeaponScriptGroup
             }
             StopUseWeapon(gameObject);
         }
-
-        public static IEnumerator PoisonEffect(EnemyBase hitEnemy)
+        public IEnumerator PoisonEffect(EnemyBase hitEnemy)
         {
             const float duration = 2f; // duration of the poison effect
+            var poisonColor = new Color(0.18f, 1f, 0.1f);
+            hitEnemy.GetComponent<SpriteRenderer>().DOColor(poisonColor, 0.2f);
+
             for (float time = 0; time < duration; time += 0.5f)
             {
+
                 hitEnemy.ReceiveDamage(10, CharacterBase.UnitProperties.Poison, CharacterBase.UnitEffects.Poison);
                 yield return new WaitForSeconds(0.5f);
             }
             hitEnemy.IsPoison = false;  // end the poison effect after the duration
+            hitEnemy.GetComponent<SpriteRenderer>().DOColor(new Color(1f,1f,1f), 0.2f);
         }
     }
 }
