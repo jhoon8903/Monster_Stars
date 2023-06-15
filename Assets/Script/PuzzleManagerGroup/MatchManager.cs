@@ -66,6 +66,19 @@ namespace Script
                 matchedCharacters.AddRange(matchedObjects);
             }
 
+            if (horizontalMatchCount + verticalMatchCount >= 4)
+            {
+                foreach (var Tempchar in matchedCharacters)
+                {
+                    var charBase = Tempchar.GetComponent<CharacterBase>();
+
+                    Debug.Log($"{charBase.unitGroup}\t" +
+                        $" x : {Tempchar.transform.position.x}\t" +
+                        $"y : {Tempchar.transform.position.y}\t" +
+                        $"sum : {horizontalMatchCount + verticalMatchCount}");
+                }
+            }
+
             if (horizontalMatchCount + verticalMatchCount == 8)
             {
                 matchFound = horizontalMatchCount switch
@@ -74,6 +87,7 @@ namespace Script
                     5 => Matches5X3Case(matchedCharacters),
                     _ => false
                 };
+                Debug.Log("Match!");
             }
 
             if (horizontalMatchCount + verticalMatchCount == 7)
@@ -86,6 +100,8 @@ namespace Script
                     5 => Matches5X2Case(matchedCharacters),
                     _ => matchFound
                 };
+                Debug.Log("Match!");
+
             }
 
             if (horizontalMatchCount + verticalMatchCount == 6)
@@ -99,6 +115,8 @@ namespace Script
                     5 => Matches5Case2(matchedCharacters),
                     _ => matchFound
                 };
+                Debug.Log("Match!");
+
             }
 
             if (horizontalMatchCount + verticalMatchCount == 5)
@@ -111,6 +129,8 @@ namespace Script
                     4 => Matches4Case2(matchedCharacters),
                     _ => matchFound
                 };
+                Debug.Log("Match!");
+
             }
 
             if (horizontalMatchCount + verticalMatchCount == 4)
@@ -121,6 +141,8 @@ namespace Script
                     3 => Matches3Case2(matchedCharacters),
                     _ => matchFound
                 };
+                Debug.Log("Match!");
+
             }
             return matchFound;
         }

@@ -56,7 +56,7 @@ namespace Script.PuzzleManagerGroup
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
             yield return StartCoroutine(matchManager.CheckMatches());
             
-            if (rewardManger.PendingTreasure.Count == 0)  
+            if (rewardManger.PendingTreasure.Count == 0)
             {
                 swipeManager.isBusy = false;
             }
