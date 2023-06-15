@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
@@ -74,6 +75,12 @@ namespace Script.PuzzleManagerGroup
         private void HandleTouchUp()
         {
             ScaleObject(_startObject, Vector3.one, 0.2f);
+            List<GameObject> allObject = FindObjectOfType<CharacterPool>().UsePoolCharacterList();
+
+            foreach (var character in allObject)
+            {
+                ScaleObject(character, Vector3.one, 0.2f);
+            }
             _startObject = null;
         }
 
