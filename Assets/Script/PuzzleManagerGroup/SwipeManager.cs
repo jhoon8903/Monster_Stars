@@ -226,7 +226,6 @@ namespace Script.PuzzleManagerGroup
             countManager.IsSwapOccurred = false;
             countManager.DecreaseMoveCount();
             yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
-            isBusy = false;
         }
 
          // 이 코루틴은 주어진 오브젝트가 MatchManager를 사용하여 매치의 일부인지 여부를 확인합니다.

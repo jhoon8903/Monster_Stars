@@ -62,7 +62,7 @@ namespace Script.PuzzleManagerGroup
             }
             else
             {
-                rewardManger.EnqueueTreasure(rewardManger.PendingTreasure.Dequeue());
+                rewardManger.EnqueueTreasure();
             }
 
             if (countManager.totalMoveCount == 0 && !gameManager.isBattle)
