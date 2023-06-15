@@ -52,9 +52,14 @@ namespace Script.RewardScript
         private string _groupName = null;
         private int _bossRewardSelected;
 
+        bool isOpenBox = false;
         // 1. 상자가 매치 되면 상자를 큐에 추가
-        public void EnqueueTreasure(GameObject treasure)
+        public void EnqueueTreasure()
         {
+            if (isOpenBox) return;
+
+            isOpenBox = true;
+            var treasure = PendingTreasure.Dequeue();
             openBoxing = true;
             var shake = treasure.transform.DOShakeScale(1.0f, 0.5f, 8); // 흔들리는 애니메이션 재생
 
@@ -63,8 +68,8 @@ namespace Script.RewardScript
                 _currentTreasure = treasure;
                 StartCoroutine(OpenBox(_currentTreasure));
             });
-            
         }
+
 
         // 2. 상자마다의 확률 분배
         private IEnumerator CommonChance(int greenChance, int blueChance, int purpleChance, string forcedColor)
@@ -318,6 +323,13 @@ namespace Script.RewardScript
 
             yield return new WaitUntil(() => commonRewardPanel.activeSelf == false); // 보물 패널이 비활성화될 때까지 대기
             openBoxing = false;
+
+            if (PendingTreasure.Count() > 0)
+            {
+                EnqueueTreasure();
+            }
+
+            isOpenBox = false;
         }
 
         // 10. 상자 선택
@@ -343,11 +355,11 @@ namespace Script.RewardScript
             {
                 StartCoroutine(spawnManager.PositionUpCharacterObject());
             }
-            if (PendingTreasure.Count > 0)
-            {
-                _currentTreasure = PendingTreasure.Dequeue();
-                EnqueueTreasure(_currentTreasure);
-            }
+            //if (PendingTreasure.Count > 0)
+            //{
+            //    _currentTreasure = PendingTreasure.Dequeue();
+            //    EnqueueTreasure();
+            //}
             else
             {
                 _currentTreasure = null; // 현재 보물 없음
