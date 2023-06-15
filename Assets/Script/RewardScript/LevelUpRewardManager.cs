@@ -45,17 +45,17 @@ namespace Script.RewardScript
         [SerializeField] private EnemyPatternManager enemyPatternManager;
         [SerializeField] private WeaponBase weaponBase;
         [SerializeField] private CharacterBase characterBase;
+        [SerializeField] private WeaponsPool weaponsPool;
 
         private void ProcessExpReward(ExpData selectedReward)
         {
-            var findCharacterManager = FindObjectOfType<CharacterManager>();
             switch (selectedReward.Type)
             {
                 case ExpData.Types.GroupDamage: 
-                    findCharacterManager.IncreaseGroupDamage(selectedReward.Property[0]);
+                    characterManager.IncreaseGroupDamage(selectedReward.Property[0]);
                     break;
                 case ExpData.Types.GroupAtkSpeed:
-                    findCharacterManager.IncreaseGroupAtkRate(selectedReward.Property[0]);
+                    characterManager.IncreaseGroupAtkRate(selectedReward.Property[0]);
                     break;
                 case ExpData.Types.StepLimit:
                     countManager.PermanentIncreaseMoveCount(selectedReward.Property[0]); 
@@ -99,16 +99,22 @@ namespace Script.RewardScript
                 case ExpData.Types.DivinePoisonAdditionalDamage:
                     weaponBase.DivinePoisonAdditionalDamage = true;
                     break;
-                // case ExpData.Types.PhysicAdditionalWeapon:
-                //     break;
-                // case ExpData.Types.PhysicIncreaseWeaponScale:
-                //     break;
-                // case ExpData.Types.PhysicSlowAdditionalDamage:
-                //     break;
-                // case ExpData.Types.PhysicAtkSpeed:
-                //     break;
-                // case ExpData.Types.PhysicIncreaseDamage:
-                //     break;
+                case ExpData.Types.PhysicAdditionalWeapon:
+                    weaponsPool.PhysicAdditionalWeapon = true;
+                    break;
+                case ExpData.Types.PhysicIncreaseWeaponScale:
+                    characterBase.PhysicIncreaseWeaponScale = true;
+                    weaponBase.PhysicIncreaseWeaponScale = true;
+                    break;
+                case ExpData.Types.PhysicSlowAdditionalDamage:
+                    weaponBase.PhysicSlowAdditionalDamage = true;
+                    break;
+                case ExpData.Types.PhysicAtkSpeed:
+                    characterBase.PhysicAtkSpeed = true;
+                    break;
+                case ExpData.Types.PhysicIncreaseDamage:
+                    characterBase.PhysicIncreaseDamage = true;
+                    break;
                 // case ExpData.Types.PoisonDoubleAtk:
                 //     break;
                 // case ExpData.Types.PoisonRestraintAdditionalDamage:

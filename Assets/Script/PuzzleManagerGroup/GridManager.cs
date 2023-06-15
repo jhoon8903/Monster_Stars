@@ -1,5 +1,6 @@
 using DG.Tweening;
 using Script.CharacterManagerScript;
+using Script.EnemyManagerScript;
 using UnityEngine;
 
 namespace Script.PuzzleManagerGroup
@@ -36,6 +37,12 @@ namespace Script.PuzzleManagerGroup
 
         public void AddRow()
         {
+            var enemyBase = FindObjectOfType<EnemyBase>();
+            if (enemyBase.EnemyType != EnemyBase.EnemyTypes.Boss)
+            {
+                enemyBase.healthPoint *= 0.4f;
+            }
+
             if (gridHeight >= MaxRows) return; // Do not create additional rows if the maximum number of rows is exceeded
 
             var newGridCells = new GameObject[gridWidth, gridHeight+1];

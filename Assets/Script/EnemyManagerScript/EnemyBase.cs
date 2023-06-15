@@ -1,5 +1,6 @@
 using System;
 using DG.Tweening;
+using Script.CharacterGroupScript;
 using Script.CharacterManagerScript;
 using Script.UIManager;
 using Script.WeaponScriptGroup;
@@ -31,7 +32,6 @@ namespace Script.EnemyManagerScript
         // 상태이상로직
         public int groupSlowCount;
         public bool IsRestraint { get; set; } = false;
-        public GameObject attackChar;
         public bool IsSlow { get; set; } = false;
         private Coroutine _poisonEffectCoroutine;
         private bool _isPoison;
@@ -61,7 +61,13 @@ namespace Script.EnemyManagerScript
 
         public void Initialize()
         {
+            var wave = FindObjectOfType<GameManager>().wave;
             _hpSlider = GetComponentInChildren<Slider>(true);
+
+            if (EnemyType != EnemyTypes.Boss)
+            {
+                healthPoint *= Mathf.Pow(1.3f, wave - 1);
+            }
             _maxHealthPoint = healthPoint;
             _currentHealth = healthPoint;
             _hpSlider.maxValue = _maxHealthPoint;
@@ -105,6 +111,10 @@ namespace Script.EnemyManagerScript
                 _currentHealth -= damage;
                 UpdateHpSlider();
                 if (_currentHealth >= 0) return;
+                if (unitProperty == CharacterBase.UnitProperties.Physics)
+                {
+                    FindObjectOfType<Unit_D>().IncreasedPhysicsDamage();
+                }
                 EnemyKilled?.Invoke(this, EventArgs.Empty);
                 FindObjectOfType<EnemyPool>().ReturnToPool(gameObject);
                 FindObjectOfType<WaveManager>().EnemyDestroyInvoke();

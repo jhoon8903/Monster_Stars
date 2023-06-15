@@ -1,5 +1,6 @@
 using System.Collections;
 using DG.Tweening;
+using Script.CharacterGroupScript;
 using Script.CharacterManagerScript;
 using Script.PuzzleManagerGroup;
 using Script.RewardScript;
@@ -89,6 +90,7 @@ namespace Script
                     yield return StartCoroutine(spawnManager.BossStageSpawnRule());
                 }
                 NextStage();
+                FindObjectOfType<Unit_D>().ResetDamage();
             }
             else
             {

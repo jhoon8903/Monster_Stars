@@ -5945,6 +5945,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbbeeeda3a9dc4b2cbeb8c2573a5891a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weaponsPool: {fileID: 1537456864}
 --- !u!1 &1563434128
 GameObject:
   m_ObjectHideFlags: 0
@@ -7573,6 +7574,7 @@ MonoBehaviour:
   enemyPatternManager: {fileID: 329010039}
   weaponBase: {fileID: 1537456866}
   characterBase: {fileID: 1097818336}
+  weaponsPool: {fileID: 1537456864}
 --- !u!1 &2143130367
 GameObject:
   m_ObjectHideFlags: 0

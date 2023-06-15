@@ -31,13 +31,11 @@ namespace Script.CharacterManagerScript
         private readonly Vector3 _initialScale = Vector3.one; // Initial scale of the character
         private readonly Vector3 _levelUpScale = new Vector3(1.2f, 1.2f, 0); // Scale to use when leveling up
         public List<GameObject> detectedEnemies = new List<GameObject>();
-        public AtkManager atkManager;
         public GameObject CurrentWeapon { get; set; }
         protected internal bool DivineAtkRange { get; set; } = false;
-        private void Start()
-        {
-            atkManager = FindObjectOfType<AtkManager>();
-        }
+        protected internal bool PhysicIncreaseWeaponScale { get; set; } = false;
+        protected internal bool PhysicAtkSpeed { get; set; } = false;
+        protected internal bool PhysicIncreaseDamage { get; set; } = false;
 
         public void OnEnable()
         {
@@ -51,10 +49,14 @@ namespace Script.CharacterManagerScript
         public void LevelUpScale(GameObject levelUpObject)
         {
             var sequence = DOTween.Sequence(); // Create a sequence for animations
-            Tween scaleUp = sequence.Append(levelUpObject.transform.DOScale(_levelUpScale, 0.3f)); // Scale up the object
+            Tween scaleUp = sequence
+                .Append(levelUpObject.transform
+                    .DOScale(_levelUpScale, 0.3f)); // Scale up the object
             scaleUp.WaitForCompletion();
             LevelUp(); // Level up the character
-            Tween scaleDown = sequence.Append(levelUpObject.transform.DOScale(_initialScale, 0.3f)); // Scale down the object
+            Tween scaleDown = sequence
+                .Append(levelUpObject.transform
+                    .DOScale(_initialScale, 0.3f)); // Scale down the object
             scaleDown.WaitForCompletion();
         }
 
@@ -102,6 +104,5 @@ namespace Script.CharacterManagerScript
             enemyBase.EnemyKilled -= OnEnemyKilled;
             detectedEnemies.Remove(enemyBase.gameObject);
         }
-
     }
 }

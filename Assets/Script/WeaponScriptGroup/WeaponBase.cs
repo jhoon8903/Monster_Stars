@@ -7,6 +7,7 @@ namespace Script.WeaponScriptGroup
 {
     public class WeaponBase : MonoBehaviour
     {
+        [SerializeField] private WeaponsPool weaponsPool;
         public bool IsInUse { get; protected set; }
         protected float Speed { get; set; }
         protected float Damage { get; private set; }
@@ -20,7 +21,8 @@ namespace Script.WeaponScriptGroup
         protected internal bool DivinePenetrate { get; set; } = false;
         protected int HitCount;
         protected internal bool DivinePoisonAdditionalDamage { get; set; } = false;
-
+        protected internal bool PhysicIncreaseWeaponScale { get; set; } = false;
+        protected internal bool PhysicSlowAdditionalDamage { get; set; } = false;
 
         public void InitializeWeapon(CharacterBase characterBase)
         {
@@ -42,7 +44,7 @@ namespace Script.WeaponScriptGroup
         protected void StopUseWeapon(GameObject weapon)
         {
             IsInUse = false;
-            FindObjectOfType<WeaponsPool>().ReturnToPool(weapon);
+            WeaponsPool.ReturnToPool(weapon);
         }
 
         protected void AtkEffect(EnemyBase enemyObject)

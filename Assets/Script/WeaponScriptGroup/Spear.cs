@@ -39,7 +39,6 @@ namespace Script.WeaponScriptGroup
             HitCount++;
             if (enemy != null && enemy.gameObject.activeInHierarchy)
             {
-                enemy.GetComponent<EnemyBase>().attackChar = CharacterBase.gameObject;
                 if (enemy.IsPoison && DivinePoisonAdditionalDamage)
                 {
                     enemy.ReceiveDamage(Damage * 1.5f, UnitProperty);

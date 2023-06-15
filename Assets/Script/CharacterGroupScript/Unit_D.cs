@@ -14,10 +14,14 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level4Sprite; // Sprite for level 4
         [SerializeField] private Sprite level5Sprite; // Sprite for level 5
         private SpriteRenderer _spriteRenderer; // Reference to the SpriteRenderer component
-        private const float DetectionSize = 1.5f; // Size of the detection circle
+        private float _detectionSize; // Size of the detection circle
+        private float _currentDamage;
+        private float _increaseDamage;
         public void Awake()
         {
             unitGroup = UnitGroups.D;
+            _increaseDamage = 1;
+            defaultDamage = 200f;
             _spriteRenderer = GetComponent<SpriteRenderer>(); // Get the reference to the SpriteRenderer component attached to this object
             Level1(); // Set initial level to level 1
         }
@@ -57,7 +61,15 @@ namespace Script.CharacterGroupScript
         {
 
             var detectionCenter = (Vector2)transform.position;
-            var colliders = Physics2D.OverlapCircleAll(detectionCenter, DetectionSize);
+            if (PhysicIncreaseWeaponScale)
+            {
+                _detectionSize = 2.5f;
+            }
+            else
+            {
+                _detectionSize = 1.5f;
+            }
+            var colliders = Physics2D.OverlapCircleAll(detectionCenter, _detectionSize);
             var currentlyDetectedEnemies = new List<GameObject>();
             foreach (var enemyObject in colliders)
             {
@@ -86,7 +98,30 @@ namespace Script.CharacterGroupScript
         {
             var detectionCenter = transform.position;
             Gizmos.color = Color.cyan;
-            Gizmos.DrawWireSphere(detectionCenter, DetectionSize);
+            Gizmos.DrawWireSphere(detectionCenter, _detectionSize);
+        }
+
+        public void IncreasedPhysicsDamage()
+        {
+            if (PhysicIncreaseDamage)
+            {
+                var atkUnitList = FindObjectOfType<CharacterPool>().UsePoolCharacterList();
+                foreach (var units in atkUnitList
+                             .Select(unit => unit.GetComponent<CharacterBase>())
+                             .Where(units => units.unitGroup == UnitGroups.D && units.UnitLevel >= 2))
+                {
+                    _increaseDamage = 0.05f;
+                }
+            }
+            else
+            {
+                _increaseDamage = 0f;
+            }
+        }
+
+        public void ResetDamage()
+        {
+            _increaseDamage = 1;
         }
 
         // Sets the properties for level 1 of the character
@@ -96,7 +131,6 @@ namespace Script.CharacterGroupScript
             UnitLevel = 1;
             Type = Types.Character;
             unitGroup = UnitGroups.D;
-            defaultDamage = 0;
             defaultAtkRate = 0;
             defaultAtkDistance = 0;
             defaultAtkRange = Vector3.zero;
@@ -110,10 +144,18 @@ namespace Script.CharacterGroupScript
             UnitLevel = 2;
             Type = Types.Character;
             unitGroup = UnitGroups.D;
-            defaultDamage = 200;
-            defaultAtkRate = 0.5f;
+            defaultDamage += (defaultDamage * _increaseDamage);
+            if (PhysicAtkSpeed)
+            {
+                defaultAtkRate = 0.5f * 1.5f ;
+                swingSpeed = 2f * 1.5f;
+            }
+            else
+            {
+                defaultAtkRate = 0.5f;
+                swingSpeed = 2f;
+            }
             defaultAtkDistance = 1f;
-            swingSpeed = 2f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level2Sprite;
             UnitAtkType = UnitAtkTypes.Circle;
@@ -129,9 +171,17 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.D;
             defaultDamage *= 1.7f;
-            defaultAtkRate = 0.5f;
+            if (PhysicAtkSpeed)
+            {
+                defaultAtkRate = 0.5f * 1.5f ;
+                swingSpeed = 2f * 1.5f;
+            }
+            else
+            {
+                defaultAtkRate = 0.5f;
+                swingSpeed = 2f;
+            }
             defaultAtkDistance = 1f;
-            swingSpeed = 2f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level3Sprite;
             UnitAtkType = UnitAtkTypes.Circle;
@@ -147,9 +197,17 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.D;
             defaultDamage *= 2.0f;
-            defaultAtkRate = 0.5f;
+            if (PhysicAtkSpeed)
+            {
+                defaultAtkRate = 0.5f * 1.5f ;
+                swingSpeed = 2f * 1.5f;
+            }
+            else
+            {
+                defaultAtkRate = 0.5f;
+                swingSpeed = 2f;
+            }
             defaultAtkDistance = 1f;
-            swingSpeed = 2f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level4Sprite;
             UnitAtkType = UnitAtkTypes.Circle;
@@ -165,9 +223,17 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.D;
             defaultDamage *= 2.3f;
-            defaultAtkRate = 0.5f;
+            if (PhysicAtkSpeed)
+            {
+                defaultAtkRate = 0.5f * 1.5f ;
+                swingSpeed = 2f * 1.5f;
+            }
+            else
+            {
+                defaultAtkRate = 0.5f;
+                swingSpeed = 2f;
+            }
             defaultAtkDistance = 1f;
-            swingSpeed = 2f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level5Sprite;
             UnitAtkType = UnitAtkTypes.Circle;
