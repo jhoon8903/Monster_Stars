@@ -12,7 +12,7 @@ namespace Script.WeaponScriptGroup
         {
             yield return base.UseWeapon();
              
-            HitCount = 0;
+            hitCount = 0;
             var duration = Distance / Speed;
             var endPosition = StartingPosition.y + (CharacterBase.DivineAtkRange? -Distance : Distance);
             transform.rotation = Quaternion.Euler(0,0,CharacterBase.DivineAtkRange? 180: 0);
@@ -20,7 +20,7 @@ namespace Script.WeaponScriptGroup
                 .SetEase(Ease.Linear)
                 .OnComplete(() => {
                     // 버프 조건 확인 요망
-                    if (DivinePenetrate && HitCount==2 && UnitProperty == CharacterBase.UnitProperties.Divine)
+                    if (DivinePenetrate && hitCount==2 && UnitProperty == CharacterBase.UnitProperties.Divine)
                     {
                         StopUseWeapon(gameObject);
                     }
@@ -36,7 +36,7 @@ namespace Script.WeaponScriptGroup
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
             // 버프 조건 확인 요망
-            HitCount++;
+            hitCount++;
             if (enemy != null && enemy.gameObject.activeInHierarchy)
             {
                 if (enemy.IsPoison && DivinePoisonAdditionalDamage)
@@ -51,7 +51,7 @@ namespace Script.WeaponScriptGroup
             }
             
             // 버프 조건 확인 요망  
-            if (!DivinePenetrate || UnitProperty != CharacterBase.UnitProperties.Divine || HitCount >=2)
+            if (!DivinePenetrate || UnitProperty != CharacterBase.UnitProperties.Divine || hitCount >=2)
             {
                 StopUseWeapon(gameObject);
             }

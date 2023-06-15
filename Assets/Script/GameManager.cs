@@ -69,12 +69,10 @@ namespace Script
                 }
             }
 
-            if (expRewardPanel.activeSelf)
+            if (!expRewardPanel.activeSelf) yield break;
+            while (expRewardPanel.activeSelf)
             {
-                while (expRewardPanel.activeSelf)
-                {
-                    yield return null;
-                }
+                yield return null;
             }
         }
         public IEnumerator ContinueOrLose()

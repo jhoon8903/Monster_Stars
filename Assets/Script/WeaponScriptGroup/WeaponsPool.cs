@@ -72,18 +72,16 @@ namespace Script.WeaponScriptGroup
         {
             var weapon = weapons.Find(w => w.weaponType == weaponType);
 
-            if (level - 1 < weapon.weaponSprite.Count)
+            if (level - 1 >= weapon.weaponSprite.Count) return;
+            var spriteRenderer = weaponObject.GetComponentInChildren<SpriteRenderer>();
+            // ReSharper disable once Unity.NoNullPropagation
+            var spriteRendererSecond = _secondWeapon?.GetComponentInChildren<SpriteRenderer>();
+
+            spriteRenderer.sprite = weapon.weaponSprite[level - 1];
+
+            if (spriteRendererSecond != null && PhysicAdditionalWeapon)
             {
-                var spriteRenderer = weaponObject.GetComponentInChildren<SpriteRenderer>();
-                // ReSharper disable once Unity.NoNullPropagation
-                var spriteRendererSecond = _secondWeapon?.GetComponentInChildren<SpriteRenderer>();
-
-                spriteRenderer.sprite = weapon.weaponSprite[level - 1];
-
-                if (spriteRendererSecond != null && PhysicAdditionalWeapon)
-                {
-                    spriteRendererSecond.sprite = weapon.weaponSprite[level - 1];
-                }
+                spriteRendererSecond.sprite = weapon.weaponSprite[level - 1];
             }
         }
 

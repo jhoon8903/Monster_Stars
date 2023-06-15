@@ -15,7 +15,7 @@ namespace Script.EnemyManagerScript
         [SerializeField] private GameManager gameManager;
         private GameObject _enemyObjects;
         private float _duration;
-        private readonly System.Random _random = new System.Random();
+        private readonly Random _random = new System.Random();
         public bool IncreaseRestraintTime { get; set; } = false;
         public bool WaterStun { get; set; } = false;
         public bool WaterIncreaseSlowTime { get; set; } = false;
@@ -54,7 +54,8 @@ namespace Script.EnemyManagerScript
                 case EnemyBase.SpawnZones.E:
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    Debug.Log("어디에도 속하지 않음");
+                    break;
             }
             yield return null;
         }
@@ -128,8 +129,6 @@ namespace Script.EnemyManagerScript
                 }
                 else
                 {
-        
-
                     enemyBase.GetComponent<SpriteRenderer>().DOColor(slowColor, 0.1f);
                     enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration * slowDuration).SetEase(Ease.Linear);
                     yield return new WaitForSecondsRealtime(slowTime);

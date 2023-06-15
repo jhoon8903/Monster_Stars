@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,6 +67,8 @@ namespace Script.CharacterManagerScript
                         case CharacterBase.UnitAtkTypes.Circle:
                             CircleAttack(atkUnit, unitGroup); // Perform circle attack
                             break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
                     }
                 }
                 else
@@ -86,6 +89,8 @@ namespace Script.CharacterManagerScript
                 case CharacterBase.UnitGroups.E:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.IceCrystal)); // Perform attack with an ice crystal
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(unitGroup), unitGroup, null);
             }
         }
         private void GasAttack(GameObject unit, CharacterBase.UnitGroups unitGroup)
@@ -102,6 +107,8 @@ namespace Script.CharacterManagerScript
                         Attack(new AttackData(unit, WeaponsPool.WeaponType.VenomSac));
                     }
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(unitGroup), unitGroup, null);
             }
         }
         private void CircleAttack(GameObject unit, CharacterBase.UnitGroups unitGroup)
@@ -114,6 +121,8 @@ namespace Script.CharacterManagerScript
                         unit.GetComponent<CharacterBase>().CurrentWeapon = Attack(new AttackData(unit, WeaponsPool.WeaponType.Sword)); // Perform attack with a sword for group D
                     }
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(unitGroup), unitGroup, null);
             }
         }
 

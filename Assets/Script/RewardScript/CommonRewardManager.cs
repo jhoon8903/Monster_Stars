@@ -207,6 +207,8 @@ namespace Script.RewardScript
                     case CommonData.Types.Gold:
                         if (characterManager.goldGetMore) return false;
                         break;
+                    default:
+                        break;
                 }
                 return true;
             }
@@ -236,7 +238,7 @@ namespace Script.RewardScript
             {
                 case CommonData.Types.Exp: 
                     powerText.text = $"적 처치 경험치{powerUp.Property[0]}% 증가 " +
-                                     $"(최대 30%)"; 
+                                     $"({characterManager.expPercentage}% /30%)"; 
                     break;
                 case CommonData.Types.Slow: 
                     powerText.text = $"적 이동속도 감소 {powerUp.Property[0]}% " +
@@ -289,7 +291,8 @@ namespace Script.RewardScript
                 case CommonData.Types.AddRow: 
                     powerText.text = $"가로줄이 {powerUp.Property[0]} 증가"; 
                     break;
-                default: throw new ArgumentOutOfRangeException();
+                default:
+                    break;
             }
             powerCode.text = $"{powerUp.Code}";
             btnBadge.sprite = powerUp.BtnColor;
@@ -325,7 +328,7 @@ namespace Script.RewardScript
             yield return new WaitUntil(() => commonRewardPanel.activeSelf == false); // 보물 패널이 비활성화될 때까지 대기
             openBoxing = false;
 
-            if (PendingTreasure.Count() > 0)
+            if (PendingTreasure.Count > 0)
             {
                 EnqueueTreasure();
             }

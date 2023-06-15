@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Script.WeaponScriptGroup
 {
@@ -17,15 +19,15 @@ namespace Script.WeaponScriptGroup
         protected CharacterBase CharacterBase;
         protected readonly System.Random Random = new System.Random();
         private EnemyBase _poisonedEnemy;
-        protected internal bool DivinePenetrate { get; set; } = false;
-        protected int HitCount;
-        protected internal bool DivinePoisonAdditionalDamage { get; set; } = false;
-        protected internal bool PhysicIncreaseWeaponScale { get; set; } = false;
-        protected internal bool PhysicSlowAdditionalDamage { get; set; } = false;
-        protected internal bool PoisonRestraintAdditionalDamage { get; set; } = false;
-        protected internal bool PoisonIncreaseTime { get; set; } = false;
-        protected internal bool PoisonInstantKill { get; set; } = false;
-        protected internal bool WaterRestraintKnockBack { get; set; } = false;
+        public bool DivinePenetrate { get; set; } = false;
+        public int hitCount;
+        public bool DivinePoisonAdditionalDamage { get; set; } = false;
+        public bool PhysicIncreaseWeaponScale { get; set; } = false;
+        public bool PhysicSlowAdditionalDamage { get; set; } = false;
+        public bool PoisonRestraintAdditionalDamage { get; set; } = false;
+        public bool PoisonIncreaseTime { get; set; } = false;
+        public bool PoisonInstantKill { get; set; } = false;
+        public bool WaterRestraintKnockBack { get; set; } = false;
 
         public void InitializeWeapon(CharacterBase characterBase)
         {
@@ -63,9 +65,12 @@ namespace Script.WeaponScriptGroup
                 case CharacterBase.UnitEffects.Slow:
                     SlowEffect(enemyObject);
                     break;
+                case CharacterBase.UnitEffects.None:
+                    break;
+                default:
+                    return;
             }
         }
-
         // 속박속성공격
         private void RestraintEffect(EnemyBase enemyStatus)
         {

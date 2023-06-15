@@ -112,7 +112,7 @@ namespace Script.CharacterGroupScript
             defaultDamage = WaterIncreaseDamage ? 75f * 1.5f : 75;
             defaultAtkRate = 1f;
             defaultAtkDistance = 9f;
-            projectileSpeed = 1.5f;
+            projectileSpeed = 0.7f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level2Sprite;
             UnitAtkType = UnitAtkTypes.Projectile;
@@ -130,7 +130,7 @@ namespace Script.CharacterGroupScript
             defaultDamage *= 1.7f;
             defaultAtkRate = 1f;
             defaultAtkDistance = 9f;
-            projectileSpeed = 1.5f;
+            projectileSpeed = 0.7f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level3Sprite;
             UnitAtkType = UnitAtkTypes.Projectile;
@@ -148,7 +148,7 @@ namespace Script.CharacterGroupScript
             defaultDamage *= 2;
             defaultAtkRate = 1f;
             defaultAtkDistance = 9f;
-            projectileSpeed = 1.5f;
+            projectileSpeed = 0.7f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level4Sprite;
             UnitAtkType = UnitAtkTypes.Projectile;
@@ -166,7 +166,7 @@ namespace Script.CharacterGroupScript
             defaultDamage *= 2.3f;
             defaultAtkRate = 1f;
             defaultAtkDistance = 9f;
-            projectileSpeed = 1.5f;
+            projectileSpeed = 0.7f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level5Sprite;
             UnitAtkType = UnitAtkTypes.Projectile;

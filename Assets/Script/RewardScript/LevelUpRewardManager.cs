@@ -99,6 +99,7 @@ namespace Script.RewardScript
                 case ExpData.Types.DivinePoisonAdditionalDamage:
                     weaponBase.DivinePoisonAdditionalDamage = true;
                     break;
+                // 칼 추가 확인 완료
                 case ExpData.Types.PhysicAdditionalWeapon:
                     weaponsPool.PhysicAdditionalWeapon = true;
                     break;
@@ -106,6 +107,7 @@ namespace Script.RewardScript
                     characterBase.PhysicIncreaseWeaponScale = true;
                     weaponBase.PhysicIncreaseWeaponScale = true;
                     break;
+                // 둔화 적 추가 데미지 적용
                 case ExpData.Types.PhysicSlowAdditionalDamage:
                     weaponBase.PhysicSlowAdditionalDamage = true;
                     break;
@@ -154,18 +156,11 @@ namespace Script.RewardScript
         private void Selected(ExpData selectedReward)
         {
             levelUpRewardPanel.SetActive(false);
-            if (countManager.totalMoveCount == 0)
-            {
-                gameManager.GameSpeed();
-            }
-            else
-            {
-                Time.timeScale = 1; // 게임 재개
-            }
-            if (!spawnManager.isWave10Spawning)
-            {
-                StartCoroutine(spawnManager.PositionUpCharacterObject());
-            }
+            gameManager.GameSpeed();
+            // if (!spawnManager.isWave10Spawning)
+            // {
+            //     StartCoroutine(spawnManager.PositionUpCharacterObject());
+            // }
             ProcessExpReward(selectedReward);
         }
         public IEnumerator LevelUpReward() // 레벨업 보상 처리
@@ -221,7 +216,6 @@ namespace Script.RewardScript
             var validOptions = powerUpsData.Where(p => IsValidOption(p, selectedCodes));
             return SelectRandom(validOptions);
         }
-
         private bool IsValidOption (ExpData powerUp, ICollection<int> selectedCodes)
         {
             if (selectedCodes.Contains(powerUp.Code)) return false;
@@ -306,6 +300,8 @@ namespace Script.RewardScript
                 case ExpData.Types.WaterIncreaseDamage:
                     if(characterBase.WaterIncreaseDamage) return false;
                     break;
+                default:
+                    return true;
             }
             return true;
         }
@@ -317,7 +313,6 @@ namespace Script.RewardScript
             var randomIndex = Random.Range(0, count);
             return commonDataList.ElementAt(randomIndex);
         }
-
         private void LevelUpDisplay(IReadOnlyList<ExpData> powerUps)
         {
             LevelUpDisplayText(exp1Button, exp1Text, exp1Code, exp1BtnBadge, powerUps[0]);
@@ -342,7 +337,7 @@ namespace Script.RewardScript
                     powerText.text = $"대각선 이동 가능"; 
                     break;
                 case ExpData.Types.Exp:
-                    powerText.text = $"적 처치시 경험치 획득량 {p}% 증가\n(최대 30%)";
+                    powerText.text = $"적 처치시 경험치 획득량 {p}% 증가\n(현재 {characterManager.expPercentage}% 최대 30%)";
                     break;
                 case ExpData.Types.CastleRecovery:
                     powerText.text = $"웨이브 종료까지 피해를 입지 않으면\n캐슬 체력 {p} 매 웨이브 마다 증가";
@@ -417,7 +412,7 @@ namespace Script.RewardScript
                     powerText.text = $"[E그룹 - 파랑] 공격력 50% 증가";
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException();
+                    break;
             }
             powerCode.text = $"{powerUp.Code}";
             btnBadge.sprite = powerUp.BtnColor;

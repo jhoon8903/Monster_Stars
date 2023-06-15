@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1b4c2758a8054caeab6a19fc9e60a8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitGroup: 0
+  unitGroup: 6
   defaultDamage: 0
   defaultAtkRate: 0
   projectileSpeed: 0
@@ -54,7 +54,6 @@ MonoBehaviour:
   defaultAtkDistance: 0
   defaultAtkRange: {x: 0, y: 0, z: 0}
   detectedEnemies: []
-  atkManager: {fileID: 0}
   level1Sprite: {fileID: 21300000, guid: 9d455ab6f718f4a7ead85727d8505d05, type: 3}
   level2Sprite: {fileID: 21300000, guid: 25e59aa0e44a94222a5bf3b759a9022a, type: 3}
   level3Sprite: {fileID: 21300000, guid: adb5a1d2272c244b1968626e17e014ca, type: 3}

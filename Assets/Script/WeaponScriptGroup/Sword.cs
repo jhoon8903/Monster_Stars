@@ -23,18 +23,16 @@ namespace Script.WeaponScriptGroup
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
-            if (enemy != null && enemy.gameObject.activeInHierarchy)
+            if (enemy == null || !enemy.gameObject.activeInHierarchy) return;
+            if (enemy.IsSlow && PhysicSlowAdditionalDamage)
             {
-                if (enemy.IsSlow && PhysicSlowAdditionalDamage)
-                {
-                    enemy.ReceiveDamage(Damage * 2f, UnitProperty);
-                }
-                else
-                {
-                    enemy.ReceiveDamage(Damage, UnitProperty);
-                }
-                AtkEffect(enemy);
+                enemy.ReceiveDamage(Damage * 2f, UnitProperty);
             }
+            else
+            {
+                enemy.ReceiveDamage(Damage, UnitProperty);
+            }
+            AtkEffect(enemy);
         }
     }
 }
