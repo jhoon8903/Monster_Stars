@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using UnityEngine;
 using DG.Tweening;
-using Script.CharacterGroupScript;
 using Script.CharacterManagerScript;
 using Script.UIManager;
 
@@ -93,31 +92,18 @@ namespace Script.EnemyManagerScript
 
         private IEnumerator RestrainEffect(EnemyBase enemyBase, Vector3 endPosition, float duration)
         {
-            var characterDamage = enemyBase.attackChar.GetComponent<CharacterBase>().defaultDamage;
             var overTime = IncreaseRestraintTime ? 2f : 1f;
-            var restraintDamage = IncreaseRestraintDamage ? characterDamage / 5 : characterDamage / 10;
             var restraintColor = new Color(0.59f, 0.43f, 0f);
             var originColor = new Color(1, 1, 1);
             
             enemyBase.GetComponent<SpriteRenderer>().DOColor(restraintColor, 0.1f);
             DOTween.Kill(enemyBase.transform);
-            StartCoroutine(RestraintDamageOverTime(enemyBase, restraintDamage, overTime));
-            
+
             yield return new WaitForSecondsRealtime(overTime);
             
             yield return enemyBase.IsRestraint = false;
             enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
             enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
-        }
-
-        private static IEnumerator RestraintDamageOverTime(EnemyBase enemyBase, float damage, float overTime)
-        {
-            while (overTime > 0)
-            {
-                enemyBase.ReceiveDamage(damage, CharacterBase.UnitProperties.Divine);
-                yield return new WaitForSecondsRealtime(0.5f);
-                overTime -= 0.5f;
-            }
         }
 
         private IEnumerator SlowEffect(EnemyBase enemyBase, Vector3 endPosition, float duration)

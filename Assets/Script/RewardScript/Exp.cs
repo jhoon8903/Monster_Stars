@@ -124,7 +124,6 @@ namespace Script.RewardScript
                 new ExpBlueData(b,6,ExpData.Types.CastleMaxHp, new []{200}),
                 new ExpBlueData(b,8,ExpData.Types.CastleRecovery, new []{200}),
                 new ExpBlueData(b,11, ExpData.Types.Slow, new []{15}),
-                new ExpBlueData(b,100,ExpData.Types.DivineRestraintDamage, new []{100}),
                 new ExpBlueData(b,100,ExpData.Types.DivineAtkRange, new []{1}),
                 new ExpBlueData(b,200,ExpData.Types.PhysicSlowAdditionalDamage,new []{100}),
                 new ExpBlueData(b,300,ExpData.Types.PoisonDoubleAtk, new []{2}),

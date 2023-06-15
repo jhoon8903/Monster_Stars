@@ -93,9 +93,6 @@ namespace Script.RewardScript
                 case ExpData.Types.DivinePenetrate:
                     weaponBase.DivinePenetrate = true;
                     break;
-                case ExpData.Types.DivineRestraintDamage:
-                    enemyPatternManager.IncreaseRestraintDamage = true;
-                    break;
                 case ExpData.Types.DivineAtkRange:
                     characterBase.DivineAtkRange = true;
                     break;
@@ -259,9 +256,6 @@ namespace Script.RewardScript
                     break;
                 case ExpData.Types.DivinePenetrate:
                     powerText.text = $"[A그룹 - 노랑] 투사체가 적을 1회 관통합니다."; 
-                    break;
-                case ExpData.Types.DivineRestraintDamage:
-                    powerText.text = $"[A그룹 - 노랑] 속박 데미지 100% 증가\n(틱 데미지 10% 증가)"; 
                     break;
                 case ExpData.Types.DivineAtkRange:
                     powerText.text = $"[A그룹 - 노랑] 뒤쪽 방향 공격이 가능";

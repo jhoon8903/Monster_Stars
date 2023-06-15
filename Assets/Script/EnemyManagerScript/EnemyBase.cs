@@ -31,9 +31,7 @@ namespace Script.EnemyManagerScript
         // 상태이상로직
         public int groupSlowCount;
         public bool IsRestraint { get; set; } = false;
-
         public GameObject attackChar;
-
         public bool IsSlow { get; set; } = false;
         private Coroutine _poisonEffectCoroutine;
         private bool _isPoison;
@@ -85,7 +83,6 @@ namespace Script.EnemyManagerScript
                         {
                             damage *= 0.8f;
                         }
-
                         break;
                     case CharacterBase.UnitProperties.Divine:
                         if (RegistryType == RegistryTypes.Divine)
