@@ -52,13 +52,13 @@ namespace Script.RewardScript
         private string _groupName = null;
         private int _bossRewardSelected;
 
-        bool isOpenBox = false;
+        private bool _isOpenBox = false;
         // 1. 상자가 매치 되면 상자를 큐에 추가
         public void EnqueueTreasure()
         {
-            if (isOpenBox) return;
+            if (_isOpenBox) return;
 
-            isOpenBox = true;
+            _isOpenBox = true;
             var treasure = PendingTreasure.Dequeue();
             openBoxing = true;
             var shake = treasure.transform.DOShakeScale(1.0f, 0.5f, 8); // 흔들리는 애니메이션 재생
@@ -187,7 +187,7 @@ namespace Script.RewardScript
                         if (characterManager.slowCount <= 3) return false; // Displays the enemy movement speed reduction effect up to 3 times
                         break;
                     case CommonData.Types.NextStage:
-                        if (characterManager.nextStageMembersSelectCount <= 3) return false; // Only use up to 3 next stage character upgrades
+                        if (characterManager.nextStageMembersSelectCount < 3) return false; // Only use up to 3 next stage character upgrades
                         break;
                     case CommonData.Types.StepDirection:
                         if (characterManager.diagonalMovement || gameManager.wave !=11) return false; // If diagonal movement is possible, don't show this option
@@ -214,13 +214,14 @@ namespace Script.RewardScript
        // 6. 예외처리되고 처리 된 옵션값 리턴
        private static CommonData SelectRandom(IEnumerable<CommonData> validOptions)
        {
-           var count = validOptions.Count();
+           var commonDataList = validOptions.ToList();
+           var count = commonDataList.Count();
            if (count == 0) return null;
            var randomIndex = Random.Range(0, count);
-           return validOptions.ElementAt(randomIndex);
+           return commonDataList.ElementAt(randomIndex);
        }
 
-       // 7. 옵션값 출략
+       // 7. 옵션값 출력
        private void CommonDisplay(IReadOnlyList<CommonData> powerUpsDisplayData)
         {
             CommonDisplayText(common1Button,common1Text, common1Code, common1BtnBadge,powerUpsDisplayData[0]);
@@ -329,7 +330,7 @@ namespace Script.RewardScript
                 EnqueueTreasure();
             }
 
-            isOpenBox = false;
+            _isOpenBox = false;
         }
 
         // 10. 상자 선택

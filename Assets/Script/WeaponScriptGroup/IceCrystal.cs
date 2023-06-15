@@ -19,7 +19,10 @@ namespace Script.WeaponScriptGroup
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
-            
+            if (enemy.IsRestraint && WaterRestraintKnockBack)
+            {
+                enemy.transform.DOMoveY(enemy.transform.position.y + 0.5f, 0.1f);
+            }
             if (enemy != null && enemy.gameObject.activeInHierarchy)
             {
                 enemy.ReceiveDamage(Damage, UnitProperty);

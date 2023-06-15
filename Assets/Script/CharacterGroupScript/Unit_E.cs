@@ -109,7 +109,7 @@ namespace Script.CharacterGroupScript
             UnitLevel = 2;
             Type = Types.Character;
             unitGroup = UnitGroups.E;
-            defaultDamage = 75;
+            defaultDamage = WaterIncreaseDamage ? 75f * 1.5f : 75;
             defaultAtkRate = 1f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1.5f;

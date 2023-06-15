@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.UIManager;
+using Random = System.Random;
 
 namespace Script.EnemyManagerScript
 {
@@ -14,8 +15,11 @@ namespace Script.EnemyManagerScript
         [SerializeField] private GameManager gameManager;
         private GameObject _enemyObjects;
         private float _duration;
+        private readonly System.Random _random = new System.Random();
         public bool IncreaseRestraintTime { get; set; } = false;
-        public bool IncreaseRestraintDamage { get; set; } = false;
+        public bool WaterStun { get; set; } = false;
+        public bool WaterIncreaseSlowTime { get; set; } = false;
+        public bool WaterIncreaseSlowPower { get; set; } = false;
 
         public IEnumerator Zone_Move(GameObject enemyObject)
         {
@@ -108,14 +112,41 @@ namespace Script.EnemyManagerScript
 
         private IEnumerator SlowEffect(EnemyBase enemyBase, Vector3 endPosition, float duration)
         {
+            var slowTime = WaterIncreaseSlowTime ? 2.5f : 2f;
+            var slowDuration = WaterIncreaseSlowPower ? 2.2f : 1.6f;
             var slowColor = new Color(0f, 0.74f, 1);
             var originColor = new Color(1, 1, 1);
-            enemyBase.GetComponent<SpriteRenderer>().DOColor(slowColor, 0.1f);
-            enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration * 1.6f).SetEase(Ease.Linear);
-            yield return new WaitForSecondsRealtime(2f);
-            yield return enemyBase.IsSlow = false;
-            enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
-            enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
+            if (WaterStun)
+            {
+                if (_random.Next(100) < 15)
+                {
+                    enemyBase.GetComponent<SpriteRenderer>().DOColor(new Color(1f, 1f, 1f, 0.3f), 0.1f);
+                    DOTween.Kill(enemyBase.transform);
+                    yield return new WaitForSecondsRealtime(1f);
+                    enemyBase.GetComponent<SpriteRenderer>().DOColor(new Color(1f, 1f, 1f, 1f), 0.1f);
+                    enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
+                }
+                else
+                {
+        
+
+                    enemyBase.GetComponent<SpriteRenderer>().DOColor(slowColor, 0.1f);
+                    enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration * slowDuration).SetEase(Ease.Linear);
+                    yield return new WaitForSecondsRealtime(slowTime);
+                    yield return enemyBase.IsSlow = false;
+                    enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
+                    enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
+                }
+            }
+            else
+            {
+                enemyBase.GetComponent<SpriteRenderer>().DOColor(slowColor, 0.1f);
+                enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration * slowDuration).SetEase(Ease.Linear);
+                yield return new WaitForSecondsRealtime(slowTime);
+                yield return enemyBase.IsSlow = false;
+                enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
+                enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
+            }
         }
     }
 }

@@ -87,7 +87,7 @@ namespace Script.WeaponScriptGroup
             }
         }
 
-        public void ReturnToPool(GameObject weapon)
+        public static void ReturnToPool(GameObject weapon)
         {
             weapon.SetActive(false);
         }

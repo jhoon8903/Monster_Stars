@@ -130,16 +130,21 @@ namespace Script.RewardScript
                 case ExpData.Types.PoisonIncreaseAtkRange:
                     characterBase.PoisonIncreaseAtkRange = true;
                     break;
-                // case ExpData.Types.WaterStun:
-                //     break;
-                // case ExpData.Types.WaterIncreaseSlowTime:
-                //     break;
-                // case ExpData.Types.WaterIncreaseSlowPower:
-                //     break;
-                // case ExpData.Types.WaterRestraintKnockBack:
-                //     break;
-                // case ExpData.Types.WaterIncreaseDamage:
-                //     break;
+                case ExpData.Types.WaterStun:
+                    enemyPatternManager.WaterStun = true;
+                    break;
+                case ExpData.Types.WaterIncreaseSlowTime:
+                    enemyPatternManager.WaterIncreaseSlowTime = true;
+                    break;
+                case ExpData.Types.WaterIncreaseSlowPower:
+                    enemyPatternManager.WaterIncreaseSlowPower = true;
+                    break;
+                case ExpData.Types.WaterRestraintKnockBack:
+                    weaponBase.WaterRestraintKnockBack = true;
+                    break;
+                case ExpData.Types.WaterIncreaseDamage:
+                    characterBase.WaterIncreaseDamage = true;
+                    break;
                 default: 
                     Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}"); 
                     break;
@@ -211,16 +216,108 @@ namespace Script.RewardScript
             }
             return levelUpPowerUps;
         }
-        private static ExpData LevelUpUnique(IEnumerable<ExpData> powerUps, ICollection<int> selectedCodes)
+        private ExpData LevelUpUnique(IEnumerable<ExpData> powerUpsData, ICollection<int> selectedCodes)
         {
-            var validOptions = powerUps.Where(p => !selectedCodes.Contains(p.Code)).ToList();
-            if (validOptions.Count == 0)
-            {
-                return null;
-            }
-            var randomIndex = Random.Range(0, validOptions.Count);
-            return validOptions[randomIndex];
+            var validOptions = powerUpsData.Where(p => IsValidOption(p, selectedCodes));
+            return SelectRandom(validOptions);
         }
+
+        private bool IsValidOption (ExpData powerUp, ICollection<int> selectedCodes)
+        {
+            if (selectedCodes.Contains(powerUp.Code)) return false;
+            switch (powerUp.Type)
+            {
+                case ExpData.Types.Slow:
+                    if(characterManager.slowCount > 3) return false;
+                    break;
+                case ExpData.Types.Exp:
+                    if (characterManager.expPercentage > 30) return false;
+                    break;
+                case ExpData.Types.CastleRecovery:
+                    if (characterManager.recoveryCastle) return false;
+                    break;
+                case ExpData.Types.NextStage:
+                    if (characterManager.nextStageMembersSelectCount < 3) return false;
+                    break;
+                case ExpData.Types.StepDirection:
+                    if (characterManager.diagonalMovement || gameManager.wave !=11) return false;
+                    break;
+                case ExpData.Types.StepLimit:
+                    if (characterManager.permanentIncreaseMovementCount) return false;
+                    break;
+                case ExpData.Types.CastleMaxHp:
+                    if (castleManager.maxHpPoint >= 2000) return false;
+                    break;
+                case ExpData.Types.DivineRestraint:
+                    if (enemyPatternManager.IncreaseRestraintTime) return false;
+                    break;
+                case ExpData.Types.DivinePenetrate:
+                    if (weaponBase.DivinePenetrate) return false;
+                    break;
+                case ExpData.Types.DivineAtkRange:
+                    if(characterBase.DivineAtkRange) return false;
+                    break;
+                case ExpData.Types.DivinePoisonAdditionalDamage:
+                    if(weaponBase.DivinePoisonAdditionalDamage) return false;
+                    break;
+                case ExpData.Types.PhysicAdditionalWeapon:
+                    if(weaponsPool.PhysicAdditionalWeapon) return false;
+                    break;
+                case ExpData.Types.PhysicIncreaseWeaponScale:
+                    if(characterBase.PhysicIncreaseWeaponScale) return false;
+                    if(weaponBase.PhysicIncreaseWeaponScale) return false;
+                    break;
+                case ExpData.Types.PhysicSlowAdditionalDamage:
+                    if(weaponBase.PhysicSlowAdditionalDamage) return false;
+                    break;
+                case ExpData.Types.PhysicAtkSpeed:
+                    if(characterBase.PhysicAtkSpeed) return false;
+                    break;
+                case ExpData.Types.PhysicIncreaseDamage:
+                    if(characterBase.PhysicIncreaseDamage) return false;
+                    break;
+                case ExpData.Types.PoisonDoubleAtk:
+                    if(atkManager.PoisonDoubleAtk) return false;
+                    break;
+                case ExpData.Types.PoisonRestraintAdditionalDamage:
+                    if(weaponBase.PoisonRestraintAdditionalDamage) return false;
+                    break;                                                                    
+                case ExpData.Types.PoisonIncreaseTime:
+                    if(weaponBase.PoisonIncreaseTime) return false;
+                    break;
+                case ExpData.Types.PoisonInstantKill:
+                    if(weaponBase.PoisonInstantKill) return false;
+                    break;
+                case ExpData.Types.PoisonIncreaseAtkRange:
+                    if(characterBase.PoisonIncreaseAtkRange) return false;
+                    break;
+                case ExpData.Types.WaterStun:
+                    if(enemyPatternManager.WaterStun) return false;
+                    break;
+                case ExpData.Types.WaterIncreaseSlowTime:
+                    if(enemyPatternManager.WaterIncreaseSlowTime) return false;
+                    break;
+                case ExpData.Types.WaterIncreaseSlowPower:
+                    if(enemyPatternManager.WaterIncreaseSlowPower) return false;
+                    break;
+                case ExpData.Types.WaterRestraintKnockBack:
+                    if(weaponBase.WaterRestraintKnockBack) return false;
+                    break;
+                case ExpData.Types.WaterIncreaseDamage:
+                    if(characterBase.WaterIncreaseDamage) return false;
+                    break;
+            }
+            return true;
+        }
+        private static ExpData SelectRandom(IEnumerable<ExpData> validOptions)
+        {
+            var commonDataList = validOptions.ToList();
+            var count = commonDataList.Count();
+            if (count == 0) return null;
+            var randomIndex = Random.Range(0, count);
+            return commonDataList.ElementAt(randomIndex);
+        }
+
         private void LevelUpDisplay(IReadOnlyList<ExpData> powerUps)
         {
             LevelUpDisplayText(exp1Button, exp1Text, exp1Code, exp1BtnBadge, powerUps[0]);

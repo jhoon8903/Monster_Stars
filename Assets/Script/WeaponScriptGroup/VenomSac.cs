@@ -40,7 +40,7 @@ namespace Script.WeaponScriptGroup
             {
                 if (Random.Next(100) < 15)
                 {
-                    weaponsPool.ReturnToPool(gameObject);
+                    WeaponsPool.ReturnToPool(gameObject);
                     FindObjectOfType<WaveManager>().EnemyDestroyInvoke();
                     if (ExpManager.Instance != null)
                     {

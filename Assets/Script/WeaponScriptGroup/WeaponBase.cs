@@ -7,7 +7,6 @@ namespace Script.WeaponScriptGroup
 {
     public class WeaponBase : MonoBehaviour
     {
-        [SerializeField] protected internal WeaponsPool weaponsPool;
         public bool IsInUse { get; protected set; }
         protected float Speed { get; set; }
         protected float Damage { get; private set; }
@@ -26,6 +25,7 @@ namespace Script.WeaponScriptGroup
         protected internal bool PoisonRestraintAdditionalDamage { get; set; } = false;
         protected internal bool PoisonIncreaseTime { get; set; } = false;
         protected internal bool PoisonInstantKill { get; set; } = false;
+        protected internal bool WaterRestraintKnockBack { get; set; } = false;
 
         public void InitializeWeapon(CharacterBase characterBase)
         {
@@ -47,7 +47,7 @@ namespace Script.WeaponScriptGroup
         protected void StopUseWeapon(GameObject weapon)
         {
             IsInUse = false;
-            weaponsPool.ReturnToPool(weapon);
+            WeaponsPool.ReturnToPool(weapon);
         }
 
         protected void AtkEffect(EnemyBase enemyObject)
