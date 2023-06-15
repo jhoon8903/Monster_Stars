@@ -86,7 +86,7 @@ namespace Script
                 if (wave == 11)
                 {
                     yield return StartCoroutine(commonRewardManager.WaveReward());
-                    yield return StartCoroutine(spawnManager.Wave10Spawn());
+                    yield return StartCoroutine(spawnManager.BossStageSpawnRule());
                 }
                 NextStage();
             }

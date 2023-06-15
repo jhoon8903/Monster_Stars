@@ -4,7 +4,6 @@ using Script.CharacterManagerScript;
 using Script.UIManager;
 using Script.WeaponScriptGroup;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.EnemyManagerScript
@@ -32,6 +31,9 @@ namespace Script.EnemyManagerScript
         // 상태이상로직
         public int groupSlowCount;
         public bool IsRestraint { get; set; } = false;
+
+        public GameObject attackChar;
+
         public bool IsSlow { get; set; } = false;
         private Coroutine _poisonEffectCoroutine;
         private bool _isPoison;
@@ -72,7 +74,7 @@ namespace Script.EnemyManagerScript
         protected internal virtual void EnemyProperty()
         {
         }
-        public void ReceiveDamage(float damage, CharacterBase.UnitProperties unitProperty,KillReasons reason = KillReasons.ByPlayer)
+        public void ReceiveDamage(float damage, CharacterBase.UnitProperties unitProperty, KillReasons reason = KillReasons.ByPlayer)
         {
             lock (Lock)
             {

@@ -33,6 +33,7 @@ namespace Script.CharacterManagerScript
         public List<GameObject> detectedEnemies = new List<GameObject>();
         public AtkManager atkManager;
         public GameObject CurrentWeapon { get; set; }
+        protected internal bool DivineAtkRange { get; set; } = false;
         private void Start()
         {
             atkManager = FindObjectOfType<AtkManager>();

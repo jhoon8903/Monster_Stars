@@ -58,7 +58,10 @@ namespace Script.CharacterGroupScript
         public override List<GameObject> DetectEnemies()
         {
             var detectionSize = new Vector2(DetectionWidth-0.5f, DetectionHeight);
-            var detectionCenter = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
+            var detectionCenter = 
+                DivineAtkRange ? 
+                    (Vector2)transform.position + Vector2.up * DetectionHeight :
+                    (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
             var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize, 0f);
             var currentlyDetectedEnemies = new List<GameObject>();
             foreach (var enemyObject in colliders)
@@ -72,12 +75,9 @@ namespace Script.CharacterGroupScript
             }
             foreach (var detectedEnemy in detectedEnemies)
             {
-                if (!currentlyDetectedEnemies.Contains(detectedEnemy))
-                {
-                    // Unsubscribe from EnemyKilled event.
-                    var enemyBase = detectedEnemy.GetComponent<EnemyBase>();
-                    enemyBase.EnemyKilled -= OnEnemyKilled;
-                }
+                if (currentlyDetectedEnemies.Contains(detectedEnemy)) continue;
+                var enemyBase = detectedEnemy.GetComponent<EnemyBase>();
+                enemyBase.EnemyKilled -= OnEnemyKilled;
             }
             detectedEnemies = currentlyDetectedEnemies;
             return detectedEnemies;
@@ -87,8 +87,11 @@ namespace Script.CharacterGroupScript
         public void OnDrawGizmos()
         {
             // Draw a wire cube to visualize the detection box in the Scene view
-            var detectionSize = new Vector3(DetectionWidth-0.5f, DetectionHeight, 0);
-            var detectionCenter = transform.position + Vector3.up * DetectionHeight / 2f;
+            var detectionSize = new Vector2(DetectionWidth-0.5f, DetectionHeight);
+            var detectionCenter = 
+                DivineAtkRange ? 
+                    (Vector2)transform.position + Vector2.up * DetectionHeight :
+                    (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireCube(detectionCenter, detectionSize);
         }

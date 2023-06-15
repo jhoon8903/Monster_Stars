@@ -1,12 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using UnityEngine;
 
 namespace Script.WeaponScriptGroup
 {
-    public abstract class WeaponBase : MonoBehaviour
+    public class WeaponBase : MonoBehaviour
     {
         public bool IsInUse { get; protected set; }
         protected float Speed { get; set; }
@@ -18,7 +17,10 @@ namespace Script.WeaponScriptGroup
         protected CharacterBase CharacterBase;
         private readonly System.Random _random = new System.Random();
         private EnemyBase _poisonedEnemy;
-        
+        protected internal bool DivinePenetrate { get; set; } = false;
+        protected int HitCount;
+        protected internal bool DivinePoisonAdditionalDamage { get; set; } = false;
+
 
         public void InitializeWeapon(CharacterBase characterBase)
         {
@@ -62,12 +64,10 @@ namespace Script.WeaponScriptGroup
         // 속박속성공격
         private void RestraintEffect(EnemyBase enemyStatus)
         {
-            // 20% 확률로 이동 불가능 효과 적용
             if (_random.Next(100) < 20)
             {
                 enemyStatus.IsRestraint = true;
             }
-
         }
 
         // 중독공격

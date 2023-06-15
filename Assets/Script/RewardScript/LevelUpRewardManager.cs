@@ -6,6 +6,7 @@ using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.PuzzleManagerGroup;
 using Script.UIManager;
+using Script.WeaponScriptGroup;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -41,6 +42,9 @@ namespace Script.RewardScript
         [SerializeField] private SwipeManager swipeManager;
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private EnemyManager enemyManager;
+        [SerializeField] private EnemyPatternManager enemyPatternManager;
+        [SerializeField] private WeaponBase weaponBase;
+        [SerializeField] private CharacterBase characterBase;
 
         private void ProcessExpReward(ExpData selectedReward)
         {
@@ -83,16 +87,21 @@ namespace Script.RewardScript
                     characterManager.goldGetMore = true; 
                     Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}");
                     break;
-                // case ExpData.Types.DivineRestraint:
-                //     break;
-                // case ExpData.Types.DivinePenetrate:
-                //     break;
-                // case ExpData.Types.DivineRestraintDamage:
-                //     break;
-                // case ExpData.Types.DivineAtkRange:
-                //     break;
-                // case ExpData.Types.DivinePoisonAdditionalDamage:
-                //     break;
+                case ExpData.Types.DivineRestraint:
+                    enemyPatternManager.IncreaseRestraintTime = true;
+                    break;
+                case ExpData.Types.DivinePenetrate:
+                    weaponBase.DivinePenetrate = true;
+                    break;
+                case ExpData.Types.DivineRestraintDamage:
+                    enemyPatternManager.IncreaseRestraintDamage = true;
+                    break;
+                case ExpData.Types.DivineAtkRange:
+                    characterBase.DivineAtkRange = true;
+                    break;
+                case ExpData.Types.DivinePoisonAdditionalDamage:
+                    weaponBase.DivinePoisonAdditionalDamage = true;
+                    break;
                 // case ExpData.Types.PhysicAdditionalWeapon:
                 //     break;
                 // case ExpData.Types.PhysicIncreaseWeaponScale:
