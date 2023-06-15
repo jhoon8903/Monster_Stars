@@ -36,6 +36,8 @@ namespace Script.CharacterManagerScript
         protected internal bool PhysicIncreaseWeaponScale { get; set; } = false;
         protected internal bool PhysicAtkSpeed { get; set; } = false;
         protected internal bool PhysicIncreaseDamage { get; set; } = false;
+        protected internal bool PoisonIncreaseAtkRange { get; set; } = false;
+
 
         public void OnEnable()
         {

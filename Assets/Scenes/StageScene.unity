@@ -698,7 +698,7 @@ MonoBehaviour:
   castleManager: {fileID: 1177777546}
   commonRewardManager: {fileID: 2120144519}
   atkManager: {fileID: 149521967}
-  wave: 1
+  wave: 5
   isBattle: 0
 --- !u!4 &149521959
 Transform:
@@ -4419,7 +4419,6 @@ MonoBehaviour:
   defaultAtkDistance: 0
   defaultAtkRange: {x: 0, y: 0, z: 0}
   detectedEnemies: []
-  atkManager: {fileID: 149521967}
 --- !u!1 &1177777540
 GameObject:
   m_ObjectHideFlags: 0

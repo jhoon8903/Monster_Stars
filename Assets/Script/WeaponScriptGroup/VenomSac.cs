@@ -4,6 +4,7 @@ using DG.Tweening;
 using Script.CharacterGroupScript;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
+using Script.UIManager;
 using UnityEngine;
 
 namespace Script.WeaponScriptGroup
@@ -13,7 +14,7 @@ namespace Script.WeaponScriptGroup
         private float _distance;
         private Vector3 _enemyTransform = new Vector3();
         private List<GameObject> _enemyTransforms = new List<GameObject>();
-        public float poisonDotDamage = 10f;
+        public float poisonDotDamage = 5f;
 
         public override IEnumerator UseWeapon()
         {
@@ -34,15 +35,45 @@ namespace Script.WeaponScriptGroup
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
+
+            if (PoisonInstantKill && enemy.healthPoint < (enemy.maxHealthPoint * 0.15f))
+            {
+                if (Random.Next(100) < 15)
+                {
+                    weaponsPool.ReturnToPool(gameObject);
+                    FindObjectOfType<WaveManager>().EnemyDestroyInvoke();
+                    if (ExpManager.Instance != null)
+                    {
+                        const EnemyBase.KillReasons reason = EnemyBase.KillReasons.ByPlayer;
+                        ExpManager.Instance.HandleEnemyKilled(reason);
+                    }
+                }
+            }
+
             if (enemy != null && enemy.gameObject.activeInHierarchy)
             {
-                enemy.ReceiveDamage(Damage, UnitProperty);
+                if (enemy.IsRestraint && PoisonRestraintAdditionalDamage)
+                {
+                    enemy.ReceiveDamage(Damage * 2f, UnitProperty);
+                }
+                else
+                {
+                    enemy.ReceiveDamage(Damage, UnitProperty);
+                }
+                
                 var hitColliders = Physics2D.OverlapCircleAll(collision.transform.position, 1f);
                 foreach (var hitCollider in hitColliders)
                 {
                     var hitEnemy = hitCollider.gameObject.GetComponent<EnemyBase>();
                     if (hitEnemy == null || !hitEnemy.gameObject.activeInHierarchy || hitEnemy == enemy) continue;
-                    hitEnemy.ReceiveDamage(Damage, UnitProperty);
+                    if (enemy.IsRestraint && PoisonRestraintAdditionalDamage)
+                    {
+                        enemy.ReceiveDamage(Damage * 2f, UnitProperty);
+                    }
+                    else
+                    {
+                        enemy.ReceiveDamage(Damage, UnitProperty);
+                    }
                     AtkEffect(hitEnemy);
                 }
             }
@@ -50,7 +81,13 @@ namespace Script.WeaponScriptGroup
         }
         public IEnumerator PoisonEffect(EnemyBase hitEnemy)
         {
-            const float duration = 2f; // duration of the poison effect
+            if (hitEnemy.RegistryType == EnemyBase.RegistryTypes.Poison) yield break;
+            var venomDuration = 2f;
+            if (PoisonIncreaseTime)
+            {
+               venomDuration = 4f; // duration of the poison effect
+            }
+
             var poisonColor = new Color(0.18f, 1f, 0.1f);
 
             if (poisonDotDamage == 0) yield break;
@@ -58,7 +95,13 @@ namespace Script.WeaponScriptGroup
             hitEnemy.GetComponent<SpriteRenderer>().DOColor(poisonColor, 0.2f);
     
             var elapsedTime = 0f;
-            while (elapsedTime < duration)
+
+            if (hitEnemy.IsRestraint && PoisonRestraintAdditionalDamage)
+            {
+                poisonDotDamage *= 2f;
+            }
+
+            while (elapsedTime < venomDuration)
             {
                 hitEnemy.ReceiveDamage(poisonDotDamage, CharacterBase.UnitProperties.Poison);
                 elapsedTime += Time.deltaTime;
@@ -68,6 +111,5 @@ namespace Script.WeaponScriptGroup
             hitEnemy.GetComponent<SpriteRenderer>().DOColor(Color.white, 0.2f); // Reset the color
             hitEnemy.IsPoison = false; // Set IsPoison to false to stop the poison effect
         }
-
     }
 }

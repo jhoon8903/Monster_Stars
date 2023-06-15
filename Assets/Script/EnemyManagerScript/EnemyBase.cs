@@ -5,6 +5,7 @@ using Script.CharacterManagerScript;
 using Script.UIManager;
 using Script.WeaponScriptGroup;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.EnemyManagerScript
@@ -15,13 +16,13 @@ namespace Script.EnemyManagerScript
         public enum KillReasons { ByPlayer }
         public int number = 0;
         public float healthPoint; // 적 오브젝트의 체력
-        private float _maxHealthPoint;
+        public float maxHealthPoint;
         protected internal int CrushDamage; // 충돌시 데미지
         protected internal float MoveSpeed; // 적 오브젝트의 이동속도, 1f 는 1초에 1Grid를 가는 속도 숫자가 커질수록 느려져야 함
         public enum EnemyTypes { Boss, Basic, Slow, Fast }
         protected internal EnemyTypes EnemyType; // 적 타입 빠른적, 느린적, 보통적, 보스
-        protected enum RegistryTypes { Physics, Divine, Poison, None }
-        protected RegistryTypes RegistryType; // 저항타입, 만약 공격하는 적이 해당 타입과 일치하면 20%의 데미지를 덜 입게 됨
+        public enum RegistryTypes { Physics, Divine, Poison, None }
+        protected internal RegistryTypes RegistryType; // 저항타입, 만약 공격하는 적이 해당 타입과 일치하면 20%의 데미지를 덜 입게 됨
         public enum SpawnZones { A, B, C, D, E }
         protected internal SpawnZones SpawnZone;
         private static readonly object Lock = new object();
@@ -68,9 +69,9 @@ namespace Script.EnemyManagerScript
             {
                 healthPoint *= Mathf.Pow(1.3f, wave - 1);
             }
-            _maxHealthPoint = healthPoint;
+            maxHealthPoint = healthPoint;
             _currentHealth = healthPoint;
-            _hpSlider.maxValue = _maxHealthPoint;
+            _hpSlider.maxValue = maxHealthPoint;
             _hpSlider.value = _currentHealth;
             UpdateHpSlider();
             groupSlowCount = 0;

@@ -24,6 +24,7 @@ namespace Script.CharacterManagerScript
         [SerializeField] private WeaponsPool weaponsPool; // Reference to the weapon pool
         public float attackRate = 1;
         public List<GameObject> enemyList = new List<GameObject>();
+        public bool PoisonDoubleAtk { get; set; } = false;
 
         public IEnumerator CheckForAttack()
         {
@@ -92,7 +93,14 @@ namespace Script.CharacterManagerScript
             switch (unitGroup)
             {
                 case CharacterBase.UnitGroups.F:
-                   Attack(new AttackData(unit, WeaponsPool.WeaponType.VenomSac));
+                    if (PoisonDoubleAtk)
+                    {
+                        StartCoroutine(GasDoubleAtk(unit, 0.3f));
+                    }
+                    else
+                    {
+                        Attack(new AttackData(unit, WeaponsPool.WeaponType.VenomSac));
+                    }
                     break;
             }
         }
@@ -119,6 +127,13 @@ namespace Script.CharacterManagerScript
             StartCoroutine(weaponBase.UseWeapon()); // Perform the weapon's attack logic
             weaponsPool.SetSprite(weaponType, attackData.Unit.GetComponent<CharacterBase>().UnitLevel, weaponObject); // Set the weapon's sprite based on the character's level
             return weaponObject;
+        }
+
+        private IEnumerator GasDoubleAtk(GameObject unit,float atkDuration)
+        {
+            Attack(new AttackData(unit, WeaponsPool.WeaponType.VenomSac));
+            yield return new WaitForSecondsRealtime(atkDuration);
+            Attack(new AttackData(unit, WeaponsPool.WeaponType.VenomSac));
         }
     }
 }

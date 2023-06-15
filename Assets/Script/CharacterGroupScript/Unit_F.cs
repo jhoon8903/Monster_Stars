@@ -13,7 +13,7 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level4Sprite; // Sprite for level 4
         [SerializeField] private Sprite level5Sprite; // Sprite for level 5
         private SpriteRenderer _spriteRenderer; // Reference to the SpriteRenderer component
-        private const float DetectionSize = 1.0f; // Size of the detection circle
+        private float _detectionSize = 1.0f; // Size of the detection circle
         public void Awake()
         {
             unitGroup = UnitGroups.F;
@@ -56,7 +56,11 @@ namespace Script.CharacterGroupScript
         {
 
             var detectionCenter = (Vector2)transform.position;
-            var colliders = Physics2D.OverlapCircleAll(detectionCenter, DetectionSize);
+            if (PoisonIncreaseAtkRange)
+            {
+                _detectionSize = 2.0f;
+            }
+            var colliders = Physics2D.OverlapCircleAll(detectionCenter, _detectionSize);
             var currentlyDetectedEnemies = new List<GameObject>();
             foreach (var enemyObject in colliders)
             {
@@ -85,7 +89,7 @@ namespace Script.CharacterGroupScript
         {
             var detectionCenter = transform.position;
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(detectionCenter, DetectionSize);
+            Gizmos.DrawWireSphere(detectionCenter, _detectionSize);
         }
 
         // Sets the properties for level 1 of the character

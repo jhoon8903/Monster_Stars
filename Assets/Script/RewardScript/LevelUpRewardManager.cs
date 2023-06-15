@@ -46,7 +46,7 @@ namespace Script.RewardScript
         [SerializeField] private WeaponBase weaponBase;
         [SerializeField] private CharacterBase characterBase;
         [SerializeField] private WeaponsPool weaponsPool;
-
+        [SerializeField] private AtkManager atkManager;
         private void ProcessExpReward(ExpData selectedReward)
         {
             switch (selectedReward.Type)
@@ -115,16 +115,21 @@ namespace Script.RewardScript
                 case ExpData.Types.PhysicIncreaseDamage:
                     characterBase.PhysicIncreaseDamage = true;
                     break;
-                // case ExpData.Types.PoisonDoubleAtk:
-                //     break;
-                // case ExpData.Types.PoisonRestraintAdditionalDamage:
-                //     break;
-                // case ExpData.Types.PoisonIncreaseTime:
-                //     break;
-                // case ExpData.Types.PoisonInstantKill:
-                //     break;
-                // case ExpData.Types.PoisonIncreaseAtkRange:
-                //     break;
+                case ExpData.Types.PoisonDoubleAtk:
+                    atkManager.PoisonDoubleAtk = true;
+                    break;
+                case ExpData.Types.PoisonRestraintAdditionalDamage:
+                    weaponBase.PoisonRestraintAdditionalDamage = true;
+                    break;
+                case ExpData.Types.PoisonIncreaseTime:
+                    weaponBase.PoisonIncreaseTime = true;
+                    break;
+                case ExpData.Types.PoisonInstantKill:
+                    weaponBase.PoisonInstantKill = true;
+                    break;
+                case ExpData.Types.PoisonIncreaseAtkRange:
+                    characterBase.PoisonIncreaseAtkRange = true;
+                    break;
                 // case ExpData.Types.WaterStun:
                 //     break;
                 // case ExpData.Types.WaterIncreaseSlowTime:
