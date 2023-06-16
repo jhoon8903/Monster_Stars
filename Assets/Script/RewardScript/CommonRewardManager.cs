@@ -44,6 +44,8 @@ namespace Script.RewardScript
         [SerializeField] private MatchManager matchManager;
         [SerializeField] private EnemyManager enemyManager;
         [SerializeField] private CharacterManager characterManager;
+        [SerializeField] private EnforceManager enforceManager;
+
         public readonly Queue<GameObject> PendingTreasure = new Queue<GameObject>(); // 보류 중인 보물 큐
         private GameObject _currentTreasure = null; // 현재 보물
         public bool openBoxing = true;
@@ -193,7 +195,7 @@ namespace Script.RewardScript
                         if (characterManager.diagonalMovement || gameManager.wave !=11) return false; // If diagonal movement is possible, don't show this option
                         break;
                     case CommonData.Types.Match5Upgrade:
-                        if (characterManager._5MatchUpgradeOption) return false; // Don't show this option if 5 matching upgrade option is enabled
+                        if (enforceManager.match5Upgrade) return false; // Don't show this option if 5 matching upgrade option is enabled
                         break;
                     case CommonData.Types.StepLimit:
                         if (characterManager.permanentIncreaseMovementCount) return false; // don't show this option if permanent move count increment is enabled
@@ -346,7 +348,7 @@ namespace Script.RewardScript
         private void Selected(CommonData selectedReward)
         {
             commonRewardPanel.SetActive(false);
-            if (countManager.totalMoveCount == 0)
+            if (countManager.TotalMoveCount == 0)
             {
                 gameManager.GameSpeed();
             }
@@ -374,26 +376,64 @@ namespace Script.RewardScript
         // 12. 선택된 버프 적용 
         private void ProcessCommonReward(CommonData selectedCommonReward)
         {
-            var findCharacterManager = FindObjectOfType<CharacterManager>();
             switch (selectedCommonReward.Type)
             {
-                case CommonData.Types.AddRow: gridManager.AddRow(); characterManager.addRowCount += 1; break;                                   // Row 추가 강화 효과
-                case CommonData.Types.GroupDamage: findCharacterManager.IncreaseGroupDamage(selectedCommonReward.Property[0]); break;     // 전체 데미지 증가 효과
-                case CommonData.Types.GroupAtkSpeed: findCharacterManager.IncreaseGroupAtkRate(selectedCommonReward.Property[0]); break;  // 전체 공격 속도 증가 효과
-                case CommonData.Types.Step: countManager.IncreaseRewardMoveCount(selectedCommonReward.Property[0]); break;            // 카운트 증가
-                case CommonData.Types.StepLimit: countManager.PermanentIncreaseMoveCount(selectedCommonReward.Property[0]); characterManager.permanentIncreaseMovementCount = true; break; // 영구적 카운트 증가
-                case CommonData.Types.StepDirection: swipeManager.EnableDiagonalMovement(); characterManager.diagonalMovement = true; break;    // 대각선 이동
-                case CommonData.Types.RandomLevelUp: findCharacterManager.RandomCharacterLevelUp(selectedCommonReward.Property[0]); break;// 랜덤 케릭터 레벨업
-                case CommonData.Types.GroupLevelUp: findCharacterManager.CharacterGroupLevelUp(selectedCommonReward.Property[0]); break;  // 케릭터 그룹 레벨업
-                case CommonData.Types.LevelUpPattern: findCharacterManager.PermanentIncreaseCharacter(selectedCommonReward.Property[0]); characterManager.CharacterGroupLevelUpIndexes.Add(selectedCommonReward.Property[0]); break; // 기본 2레벨 케릭터 생성
-                case CommonData.Types.Exp: expManager.IncreaseExpBuff(selectedCommonReward.Property[0]); characterManager.expPercentage += 5; break;  // 경험치 5% 증가
-                case CommonData.Types.CastleRecovery: gameManager.RecoveryCastle = true; characterManager.recoveryCastle = true; break;         // 성 체력 회복
-                case CommonData.Types.Match5Upgrade: matchManager.Match5Upgrade = true; characterManager._5MatchUpgradeOption = true; break;     // 5매치 패턴 업그레이드
-                case CommonData.Types.Slow: FindObjectOfType<EnemyBase>().DecreasedMoveSpeed(); break; // 적 이동속도 감소 
-                case CommonData.Types.NextStage: spawnManager.NextCharacterUpgrade(selectedCommonReward.Property[0]); characterManager.nextStageMembersSelectCount += 1; break; // 보드 초기화 시 케릭터 상속되는 케릭터 Count 증가
-                case CommonData.Types.Gold: characterManager.goldGetMore = true; Debug.LogWarning($"Unhandled reward type: {selectedCommonReward.Type}"); break;
-                case CommonData.Types.CastleMaxHp: castleManager.IncreaseMaxHp(selectedCommonReward.Property[0]); break;               // 성 최대 체력 증가
-                default: Debug.LogWarning($"Unhandled reward type: {selectedCommonReward.Type}"); break;
+                case CommonData.Types.AddRow: 
+                    gridManager.AddRow(); characterManager.addRowCount += 1; 
+                    break; // Row 추가 강화 효과
+                case CommonData.Types.GroupDamage: 
+                    enforceManager.IncreaseGroupDamage(selectedCommonReward.Property[0]); 
+                    break;     // 전체 데미지 증가 효과
+                case CommonData.Types.GroupAtkSpeed: 
+                    enforceManager.IncreaseGroupRate(selectedCommonReward.Property[0]); 
+                    break;  // 전체 공격 속도 증가 효과
+                case CommonData.Types.Step: 
+                    countManager.IncreaseRewardMoveCount(selectedCommonReward.Property[0]); 
+                    break;            // 카운트 증가
+                case CommonData.Types.StepLimit: 
+                    enforceManager.PermanentIncreaseMoveCount(selectedCommonReward.Property[0]); 
+                    enforceManager.permanentIncreaseMovementCount = true;
+                    break; // 영구적 카운트 증가
+                case CommonData.Types.StepDirection: 
+                    swipeManager.EnableDiagonalMovement(); characterManager.diagonalMovement = true; 
+                    break;    // 대각선 이동
+                case CommonData.Types.RandomLevelUp: 
+                    characterManager.RandomCharacterLevelUp(selectedCommonReward.Property[0]); 
+                    break;// 랜덤 케릭터 레벨업
+                case CommonData.Types.GroupLevelUp: 
+                    characterManager.CharacterGroupLevelUp(selectedCommonReward.Property[0]); 
+                    break;  // 케릭터 그룹 레벨업
+                case CommonData.Types.LevelUpPattern: 
+                    characterManager.PermanentIncreaseCharacter(selectedCommonReward.Property[0]); 
+                    characterManager.CharacterGroupLevelUpIndexes.Add(selectedCommonReward.Property[0]); 
+                    break; // 기본 2레벨 케릭터 생성
+                case CommonData.Types.Exp: 
+                    expManager.IncreaseExpBuff(selectedCommonReward.Property[0]); 
+                    characterManager.expPercentage += 5; 
+                    break;  // 경험치 5% 증가
+                case CommonData.Types.CastleRecovery: 
+                    gameManager.RecoveryCastle = true; 
+                    characterManager.recoveryCastle = true; 
+                    break;         // 성 체력 회복
+                case CommonData.Types.Match5Upgrade: 
+                    enforceManager.match5Upgrade = true;
+                    break;     // 5매치 패턴 업그레이드
+                case CommonData.Types.Slow: 
+                    FindObjectOfType<EnemyBase>().DecreasedMoveSpeed(); 
+                    break; // 적 이동속도 감소 
+                case CommonData.Types.NextStage: 
+                    spawnManager.NextCharacterUpgrade(selectedCommonReward.Property[0]); 
+                    characterManager.nextStageMembersSelectCount += 1; 
+                    break; // 보드 초기화 시 케릭터 상속되는 케릭터 Count 증가
+                case CommonData.Types.Gold: 
+                    characterManager.goldGetMore = true; 
+                    Debug.LogWarning($"Unhandled reward type: {selectedCommonReward.Type}"); 
+                    break;
+                case CommonData.Types.CastleMaxHp: 
+                    castleManager.IncreaseMaxHp(selectedCommonReward.Property[0]);
+                    break;               // 성 최대 체력 증가
+                default: Debug.LogWarning($"Unhandled reward type: {selectedCommonReward.Type}"); 
+                    break;
             }
             selectedCommonReward._chosenProperty = null;
         }

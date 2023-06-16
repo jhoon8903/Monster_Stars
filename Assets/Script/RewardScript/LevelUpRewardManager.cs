@@ -47,19 +47,20 @@ namespace Script.RewardScript
         [SerializeField] private CharacterBase characterBase;
         [SerializeField] private WeaponsPool weaponsPool;
         [SerializeField] private AtkManager atkManager;
+        [SerializeField] private EnforceManager enforceManager;
         private void ProcessExpReward(ExpData selectedReward)
         {
             switch (selectedReward.Type)
             {
                 case ExpData.Types.GroupDamage: 
-                    characterManager.IncreaseGroupDamage(selectedReward.Property[0]);
+                    enforceManager.IncreaseGroupDamage(selectedReward.Property[0]);
                     break;
                 case ExpData.Types.GroupAtkSpeed:
-                    characterManager.IncreaseGroupAtkRate(selectedReward.Property[0]);
+                    enforceManager.IncreaseGroupRate(selectedReward.Property[0]);
                     break;
                 case ExpData.Types.StepLimit:
-                    countManager.PermanentIncreaseMoveCount(selectedReward.Property[0]); 
-                    characterManager.permanentIncreaseMovementCount = true;
+                    enforceManager.PermanentIncreaseMoveCount(selectedReward.Property[0]); 
+                    enforceManager.permanentIncreaseMovementCount = true;
                     break;
                 case ExpData.Types.StepDirection:
                     swipeManager.EnableDiagonalMovement(); 

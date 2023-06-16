@@ -2,20 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
-using Script.PuzzleManagerGroup;
 using Script.RewardScript;
 using Script.UIManager;
 using UnityEngine;
 
-namespace Script
+namespace Script.PuzzleManagerGroup
 {
     public sealed class MatchManager : MonoBehaviour
     {
         [SerializeField] private SpawnManager spawnManager;
         [SerializeField] private CharacterPool characterPool;
         [SerializeField] private CountManager countManager;
-        [SerializeField] public CommonRewardManager commonRewardManager;
-        public bool Match5Upgrade { get; set; } = false;
+        [SerializeField] private CommonRewardManager commonRewardManager;
+        [SerializeField] private EnforceManager enforceManager;
         private bool _isMatched = false;
 
         // 이 메소드는 주어진 캐릭터 객체가 매치되는지 확인하는 기능을 수행합니다. 매치 여부를 반환합니다.
@@ -496,7 +495,7 @@ namespace Script
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
                 matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
                 matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                if (Match5Upgrade)
+                if (enforceManager.match5Upgrade)
                 { 
                     matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
                 }
@@ -524,7 +523,7 @@ namespace Script
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                if (Match5Upgrade)
+                if (enforceManager.match5Upgrade)
                 {
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 }
@@ -552,7 +551,7 @@ namespace Script
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                if (Match5Upgrade)
+                if (enforceManager.match5Upgrade)
                 {
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 }
@@ -581,7 +580,7 @@ namespace Script
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                if (Match5Upgrade)
+                if (enforceManager.match5Upgrade)
                 {
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 }
@@ -748,7 +747,7 @@ namespace Script
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
                 matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                if (Match5Upgrade)
+                if (enforceManager.match5Upgrade)
                 {
                     matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
                 }
@@ -782,7 +781,7 @@ namespace Script
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
                 matchedCharacters[6].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[6]);
-                if (Match5Upgrade)
+                if (enforceManager.match5Upgrade)
                 {
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 }

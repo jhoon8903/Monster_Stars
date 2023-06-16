@@ -14,29 +14,9 @@ namespace Script.CharacterManagerScript
         public int slowCount = 0;
         public int nextStageMembersSelectCount = 0;
         public bool diagonalMovement = false;
-        public bool _5MatchUpgradeOption = false;
         public bool permanentIncreaseMovementCount;
         public bool recoveryCastle = false;
         public bool goldGetMore = false;
-
-
-        // Increase the damage of all characters in the group by a given amount
-        public void IncreaseGroupDamage(int increaseAmount)
-        {
-            foreach (var character in characterList)
-            {
-                character.IncreaseDamage(increaseAmount);
-            }
-        }
-
-        // Increase the attack rate of all characters in the group by a given amount
-        public void IncreaseGroupAtkRate(int increaseAmount)
-        {
-            foreach (var character in characterList)
-            {
-                character.IncreaseAtkRate(increaseAmount);
-            }
-        }
 
         // Level up a random selection of characters a specified number of times
         public void RandomCharacterLevelUp(int characterCount)

@@ -71,7 +71,7 @@ namespace Script.PuzzleManagerGroup
             
 
 
-            if (countManager.totalMoveCount == 0 && !gameManager.isBattle)
+            if (countManager.TotalMoveCount == 0 && !gameManager.isBattle)
             {
                 yield return gameManager.Count0Call();
             }

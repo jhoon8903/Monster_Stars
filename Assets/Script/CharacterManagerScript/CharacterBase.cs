@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Script.EnemyManagerScript;
+using Script.RewardScript;
 
 namespace Script.CharacterManagerScript
 {
@@ -38,6 +39,12 @@ namespace Script.CharacterManagerScript
         protected internal bool PhysicIncreaseDamage { get; set; } = false;
         protected internal bool PoisonIncreaseAtkRange { get; set; } = false;
         protected internal bool WaterIncreaseDamage { get; set; } = false;
+        private EnforceManager _enforceManager;
+
+        private void Start()
+        {
+            _enforceManager = FindObjectOfType<EnforceManager>();
+        }
 
         public void OnEnable()
         {
@@ -87,17 +94,17 @@ namespace Script.CharacterManagerScript
         }
 
         // Increase the default damage of the character by a given amount
-        public void IncreaseDamage(int increaseAmount)
+        public void IncreaseDamage()
         {
-            var percentageIncrease = (float)increaseAmount / 100;
-            defaultDamage *= increaseAmount * percentageIncrease;
+            var increaseDamageAmount = _enforceManager.increaseAtkDamage;
+            defaultDamage *= 1.0f + (increaseDamageAmount / 100f);
         }
 
         // Increase the default attack rate of the character by a given amount
-        public void IncreaseAtkRate(int increaseAmount)
+        public void IncreaseAtkRate()
         {
-            var percentageIncrease = (float)increaseAmount / 100;
-            defaultAtkRate *= increaseAmount * percentageIncrease;
+            var increaseRateAmount = _enforceManager.increaseAtkRate;
+            defaultAtkRate *= 1.0f + (increaseRateAmount / 100f);
         }
 
         protected void OnEnemyKilled(object source, EventArgs args)

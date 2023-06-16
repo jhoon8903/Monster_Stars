@@ -1,51 +1,48 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Script.UIManager
 {
     public class CountManager : MonoBehaviour
     {
         private int _comboCount;
-        private int _baseMoveCount;
-        private int _rewardMoveCount;
-        public int totalMoveCount;
+        protected internal int BaseMoveCount;
+        protected internal int RewardMoveCount;
+        protected internal int TotalMoveCount;
         public bool IsSwapOccurred { get; set; } = false;
         public TextMeshProUGUI moveCountText;
-        [SerializeField] private GameManager gameManager;
-
 
         public void Initialize(int initialMoveCount)
         {
-            _baseMoveCount = initialMoveCount;
-            _rewardMoveCount = 0;
-            totalMoveCount = _baseMoveCount;
+            BaseMoveCount = initialMoveCount;
+            RewardMoveCount = 0;
+            TotalMoveCount = BaseMoveCount;
             _comboCount = 0;
             UpdateMoveCountText();
         }
 
-        private void UpdateMoveCountText()
+        protected internal void UpdateMoveCountText()
         {
-            moveCountText.text = $"{totalMoveCount}";
+            moveCountText.text = $"{TotalMoveCount}";
         }
 
         public bool CanMove()
         {
-            return totalMoveCount > 0;
+            return TotalMoveCount > 0;
         }
         
         public void DecreaseMoveCount()
         {
-            if (_baseMoveCount <= 0) return;
-            _baseMoveCount--;
-            totalMoveCount = _baseMoveCount;
+            if (BaseMoveCount <= 0) return;
+            BaseMoveCount--;
+            TotalMoveCount = BaseMoveCount;
             UpdateMoveCountText();
         }
 
         private void IncreaseMoveCount(int comboCount)
         {
-            _baseMoveCount += comboCount;
-            totalMoveCount = _baseMoveCount;
+            BaseMoveCount += comboCount;
+            TotalMoveCount = BaseMoveCount;
             UpdateMoveCountText();
         }
 
@@ -58,15 +55,8 @@ namespace Script.UIManager
 
         public void IncreaseRewardMoveCount(int increaseAmount)
         {
-            _baseMoveCount += increaseAmount;
-            totalMoveCount = _baseMoveCount;
-            UpdateMoveCountText();
-        }
-
-        public void PermanentIncreaseMoveCount(int increaseAmount)
-        {
-            _rewardMoveCount += increaseAmount;
-            totalMoveCount = _baseMoveCount + _rewardMoveCount;
+            BaseMoveCount += increaseAmount;
+            TotalMoveCount = BaseMoveCount;
             UpdateMoveCountText();
         }
     }
