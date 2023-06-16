@@ -64,6 +64,10 @@ namespace Script.PuzzleManagerGroup
         // 선택된 게임 오브젝트를 식별하고 첫 번째 터치 위치를 저장하는 초기 터치 또는 클릭 이벤트를 처리합니다.
         private void HandleTouchDown(Vector2 point2D)
         {
+            if (isBusy)
+            {
+                return;
+            }
             var hit = Physics2D.Raycast(point2D, Vector2.zero, Mathf.Infinity, characterLayer);
             if (hit.collider == null) return;
             _startObject = hit.collider.gameObject;
@@ -213,8 +217,8 @@ namespace Script.PuzzleManagerGroup
             CharacterPool.ReturnToPool(startObject);
             StartCoroutine(spawnManager.PositionUpCharacterObject());
         }
-        
-         // 시작 개체와 끝 개체 사이의 전환을 시작합니다. 그런 다음 두 개체와 관련된 일치 항목을 확인합니다.
+
+        // 시작 개체와 끝 개체 사이의 전환을 시작합니다. 그런 다음 두 개체와 관련된 일치 항목을 확인합니다.
         private IEnumerator SwitchAndMatches(GameObject startObject, GameObject endObject)
         {
             if (isBusy || rewardManager.openBoxing) yield break;
@@ -226,14 +230,15 @@ namespace Script.PuzzleManagerGroup
             Tween switch2 = endObject.transform.DOMove(startObjectPosition, 0.1f);
             yield return switch2.WaitForCompletion();
             countManager.IsSwapOccurred = true;
-            StartCoroutine(MatchesCheck(startObject));
+            yield return StartCoroutine(MatchesCheck(startObject));
             yield return StartCoroutine(MatchesCheck(endObject));
             countManager.IsSwapOccurred = false;
             countManager.DecreaseMoveCount();
+
             yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
         }
 
-         // 이 코루틴은 주어진 오브젝트가 MatchManager를 사용하여 매치의 일부인지 여부를 확인합니다.
+        // 이 코루틴은 주어진 오브젝트가 MatchManager를 사용하여 매치의 일부인지 여부를 확인합니다.
         private IEnumerator MatchesCheck(GameObject characterObject)
         {
             if (characterObject == null) yield break;
