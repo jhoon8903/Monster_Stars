@@ -39,6 +39,7 @@ namespace Script.CharacterManagerScript
         protected internal bool PhysicIncreaseDamage { get; set; } = false;
         protected internal bool PoisonIncreaseAtkRange { get; set; } = false;
         protected internal bool WaterIncreaseDamage { get; set; } = false;
+        protected internal bool isClicked { get; set; } = false;
         private EnforceManager _enforceManager;
 
         private void Start()
