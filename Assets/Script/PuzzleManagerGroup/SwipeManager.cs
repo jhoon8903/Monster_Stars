@@ -68,6 +68,7 @@ namespace Script.PuzzleManagerGroup
             if (hit.collider == null) return;
             _startObject = hit.collider.gameObject;
             ScaleObject(_startObject, new Vector3(1.2f,1.2f,1.2f), 0.2f);
+            _startObject.GetComponent<CharacterBase>().isClicked = true;
             _firstTouchPosition = point2D;
         }
 
@@ -79,7 +80,11 @@ namespace Script.PuzzleManagerGroup
 
             foreach (var character in allObject)
             {
-                ScaleObject(character, Vector3.one, 0.2f);
+                if (character.GetComponent<CharacterBase>().isClicked)
+                {
+                    ScaleObject(character, Vector3.one, 0.2f);
+                    character.GetComponent<CharacterBase>().isClicked = false;
+                }
             }
             _startObject = null;
         }
