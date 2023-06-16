@@ -35,7 +35,6 @@ namespace Script
         public int wave = 1;
         private Vector3Int _bossSpawnArea;
         public bool isBattle = false;
-        public bool RecoveryCastle { get; set; } = false;
 
         private void Start()
         {
@@ -105,21 +104,11 @@ namespace Script
             DOTween.KillAll(true);
             Time.timeScale = 1;
             _bossSpawnArea = new Vector3Int(Random.Range(2,5), 10, 0);
-            var previousWave = wave - 1;
             if (wave % 10 == 0)
             {
                 gridManager.ApplyBossSpawnColor(_bossSpawnArea);
             }
-
-            if (RecoveryCastle && !castleManager.Damaged)
-            {
-                castleManager.hpPoint += 200;
-                if (castleManager.hpPoint > castleManager.maxHpPoint)
-                {
-                    castleManager.hpPoint = castleManager.maxHpPoint;
-                }
-            }
-            castleManager.UpdatePreviousHp();
+            castleManager.RecoveryCastle();
             moveCount = 7;
             countManager.Initialize(moveCount);
             backgroundManager.ChangePuzzleSize();

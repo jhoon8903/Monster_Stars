@@ -36,7 +36,6 @@ namespace Script.RewardScript
         [SerializeField] private Exp exp; // 경험치
         [SerializeField] private SpawnManager spawnManager;
         [SerializeField] private ExpManager expManager;
-        [SerializeField] private CountManager countManager;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private CharacterManager characterManager;
         [SerializeField] private SwipeManager swipeManager;
@@ -59,30 +58,26 @@ namespace Script.RewardScript
                     enforceManager.IncreaseGroupRate(selectedReward.Property[0]);
                     break;
                 case ExpData.Types.StepLimit:
-                    enforceManager.PermanentIncreaseMoveCount(selectedReward.Property[0]); 
-                    enforceManager.permanentIncreaseMovementCount = true;
+                    enforceManager.PermanentIncreaseMoveCount(selectedReward.Property[0]);
                     break;
                 case ExpData.Types.StepDirection:
                     swipeManager.EnableDiagonalMovement(); 
                     characterManager.diagonalMovement = true;
                     break;
                 case ExpData.Types.Exp:
-                    expManager.IncreaseExpBuff(selectedReward.Property[0]); 
-                    characterManager.expPercentage += 5;
+                    enforceManager.IncreaseExpBuff(selectedReward.Property[0]);
                     break;
                 case ExpData.Types.CastleRecovery:
-                    gameManager.RecoveryCastle = true; 
-                    characterManager.recoveryCastle = true;
+                    enforceManager.recoveryCastle = true;
                     break;
                 case ExpData.Types.CastleMaxHp:
-                    castleManager.IncreaseMaxHp(selectedReward.Property[0]);
+                    enforceManager.IncreaseCastleMaxHp();
                     break;
                 case ExpData.Types.Slow:
                     characterManager.slowCount += 1;
                     break;
                 case ExpData.Types.NextStage:
-                    spawnManager.NextCharacterUpgrade(selectedReward.Property[0]); 
-                    characterManager.nextStageMembersSelectCount += 1;
+                    enforceManager.NextCharacterUpgrade(selectedReward.Property[0]);
                     break;
                 case ExpData.Types.Gold:
                     characterManager.goldGetMore = true; 
@@ -226,22 +221,22 @@ namespace Script.RewardScript
                     if(characterManager.slowCount > 3) return false;
                     break;
                 case ExpData.Types.Exp:
-                    if (characterManager.expPercentage > 30) return false;
+                    if (enforceManager.expPercentage > 30) return false;
                     break;
                 case ExpData.Types.CastleRecovery:
-                    if (characterManager.recoveryCastle) return false;
+                    if (enforceManager.recoveryCastle) return false;
                     break;
                 case ExpData.Types.NextStage:
-                    if (characterManager.nextStageMembersSelectCount < 3) return false;
+                    if (enforceManager.SelectedCount > 3) return false;
                     break;
                 case ExpData.Types.StepDirection:
                     if (characterManager.diagonalMovement || gameManager.wave !=11) return false;
                     break;
                 case ExpData.Types.StepLimit:
-                    if (characterManager.permanentIncreaseMovementCount) return false;
+                    if (enforceManager.permanentIncreaseMovementCount > 3) return false;
                     break;
                 case ExpData.Types.CastleMaxHp:
-                    if (castleManager.maxHpPoint >= 2000) return false;
+                    if (enforceManager.castleMaxHp >= 1000) return false;
                     break;
                 case ExpData.Types.DivineRestraint:
                     if (enemyPatternManager.IncreaseRestraintTime) return false;
@@ -338,7 +333,7 @@ namespace Script.RewardScript
                     powerText.text = $"대각선 이동 가능"; 
                     break;
                 case ExpData.Types.Exp:
-                    powerText.text = $"적 처치시 경험치 획득량 {p}% 증가\n(현재 {characterManager.expPercentage}% 최대 30%)";
+                    powerText.text = $"적 처치시 경험치 획득량 {p}% 증가\n(현재 {enforceManager.expPercentage}% 최대 30%)";
                     break;
                 case ExpData.Types.CastleRecovery:
                     powerText.text = $"웨이브 종료까지 피해를 입지 않으면\n캐슬 체력 {p} 매 웨이브 마다 증가";
@@ -350,7 +345,7 @@ namespace Script.RewardScript
                     powerText.text = $"다음 웨이브 부터는 적 이동속도 {p}% 감소\n( 현재 {15*characterManager.slowCount}% / 최대 60%)";
                     break;
                 case ExpData.Types.NextStage:
-                    powerText.text = $"보스 스테이지 이후 {p} 개의\n케릭터 추가 이동 (최대 3개)";
+                    powerText.text = $"보스 스테이지 이후 {p} 개의\n케릭터 추가 이동 (현재 {enforceManager.highLevelCharacterCount})";
                     break;
                 case ExpData.Types.Gold:
                     powerText.text = $"5 매치시 골드 {p} 추가 획득";

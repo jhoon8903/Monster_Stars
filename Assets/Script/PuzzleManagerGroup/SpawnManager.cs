@@ -19,9 +19,8 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private CommonRewardManager rewardManger;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private CountManager countManager;
+        [SerializeField] private EnforceManager enforceManager;
         public bool isWave10Spawning = false;
-        private int _highLevelCharacterCount = 6;
-
         public bool isMatched = false;
         
         public GameObject CharacterObject(Vector3 spawnPosition)
@@ -66,18 +65,10 @@ namespace Script.PuzzleManagerGroup
                 rewardManger.EnqueueTreasure();
             }
 
-
-
-            
-
-
             if (countManager.TotalMoveCount == 0 && !gameManager.isBattle)
             {
                 yield return gameManager.Count0Call();
             }
-
-
-
         }
 
         private static IEnumerator MoveCharacter(GameObject gameObject, Vector3Int targetPosition, float duration = 0.3f)
@@ -154,7 +145,7 @@ namespace Script.PuzzleManagerGroup
             var saveCharacterList = characterPool.UsePoolCharacterList();
             var highLevelCharacters = saveCharacterList
                 .OrderByDescending(character => character.GetComponent<CharacterBase>().UnitLevel)
-                .Take(_highLevelCharacterCount)
+                .Take(enforceManager.highLevelCharacterCount)
                 .ToList();
             yield return StartCoroutine(gameManager.WaitForPanelToClose());
             foreach (var character in saveCharacterList
@@ -210,10 +201,6 @@ namespace Script.PuzzleManagerGroup
             {
                 yield return StartCoroutine(MoveCharacter(o, targetPosition));
             }
-        }
-        public void NextCharacterUpgrade(int moveCharacterCount)
-        {
-            _highLevelCharacterCount += moveCharacterCount;
         }
     }
 }

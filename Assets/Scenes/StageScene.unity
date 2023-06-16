@@ -734,13 +734,9 @@ MonoBehaviour:
   - {fileID: 5553006608696507336, guid: 438d7922ea8534dd6a3cfa7664f14cb7, type: 3}
   - {fileID: 2939207743086641073, guid: b3c344a1ee72a45e3aef34b9e39575c5, type: 3}
   characterPool: {fileID: 1097818334}
-  expPercentage: 0
   addRowCount: 0
   slowCount: 0
-  nextStageMembersSelectCount: 0
   diagonalMovement: 0
-  permanentIncreaseMovementCount: 0
-  recoveryCastle: 0
   goldGetMore: 0
 --- !u!114 &149521964
 MonoBehaviour:
@@ -760,6 +756,7 @@ MonoBehaviour:
   rewardManger: {fileID: 2120144519}
   gameManager: {fileID: 149521958}
   countManager: {fileID: 841622520}
+  enforceManager: {fileID: 0}
   isWave10Spawning: 0
   isMatched: 0
 --- !u!114 &149521965
@@ -3732,7 +3729,7 @@ MonoBehaviour:
   expText: {fileID: 941016687}
   levelUpRewardManager: {fileID: 2120144522}
   levelText: {fileID: 1240016084}
-  additionalExpPercent: 0
+  enforceManager: {fileID: 0}
   level: 0
 --- !u!1 &903150599
 GameObject:
@@ -4561,6 +4558,7 @@ MonoBehaviour:
   enemyPool: {fileID: 2016604888}
   gameManager: {fileID: 149521958}
   waveManager: {fileID: 149521968}
+  enforceManager: {fileID: 0}
   hpPoint: 100000
   maxHpPoint: 10000
 --- !u!1 &1211532197
@@ -6086,10 +6084,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8241d3f1f5c534ecb9999427601faf0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterManager: {fileID: 0}
-  enemyManager: {fileID: 0}
-  characterPool: {fileID: 0}
-  countManager: {fileID: 0}
+  characterManager: {fileID: 149521963}
+  enemyManager: {fileID: 329010036}
+  characterPool: {fileID: 1097818334}
+  countManager: {fileID: 841622520}
+  castleManager: {fileID: 1177777546}
   increaseRestraintTime: 0
   divinePenetrate: 0
   divineAtkRange: 0
@@ -6113,7 +6112,7 @@ MonoBehaviour:
   diagonalMovement: 0
   recoveryCastle: 0
   castleMaxHp: 0
-  nextStageMembersSelectCount: 0
+  highLevelCharacterCount: 6
   expPercentage: 0
   permanentIncreaseMovementCount: 0
   match5Upgrade: 0
@@ -7580,7 +7579,7 @@ MonoBehaviour:
   matchManager: {fileID: 149521966}
   enemyManager: {fileID: 329010036}
   characterManager: {fileID: 149521963}
-  enforceManager: {fileID: 0}
+  enforceManager: {fileID: 1595735486}
   openBoxing: 0
 --- !u!4 &2120144520
 Transform:
@@ -7641,7 +7640,6 @@ MonoBehaviour:
   exp: {fileID: 2120144521}
   spawnManager: {fileID: 149521964}
   expManager: {fileID: 841622521}
-  countManager: {fileID: 841622520}
   gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
   swipeManager: {fileID: 149521965}
@@ -7652,7 +7650,7 @@ MonoBehaviour:
   characterBase: {fileID: 1097818336}
   weaponsPool: {fileID: 1537456864}
   atkManager: {fileID: 149521967}
-  enforceManager: {fileID: 0}
+  enforceManager: {fileID: 1595735486}
 --- !u!1 &2143130367
 GameObject:
   m_ObjectHideFlags: 0

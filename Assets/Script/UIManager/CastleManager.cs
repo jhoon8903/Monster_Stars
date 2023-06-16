@@ -4,16 +4,18 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using Script.RewardScript;
 
 namespace Script.UIManager
 {
       public class CastleManager : MonoBehaviour
       {
-          [SerializeField] private Slider hpBar;
+          [SerializeField] protected internal Slider hpBar;
           [SerializeField] private TextMeshProUGUI hpText;
           [SerializeField] private EnemyPool enemyPool;
           [SerializeField] private GameManager gameManager;
           [SerializeField] private WaveManager waveManager;
+          [SerializeField] private EnforceManager enforceManager;
           public int hpPoint = 1000;
           public int maxHpPoint = 1000;
 
@@ -66,6 +68,19 @@ namespace Script.UIManager
               hpBar.maxValue = maxHpPoint;
               hpBar.value = hpPoint;
               UpdateHpText();
+          }
+
+          public void RecoveryCastle()
+          {
+              if (enforceManager.recoveryCastle && !Damaged)
+              {
+                  hpPoint += 200;
+                  if (hpPoint > maxHpPoint)
+                  {
+                      hpPoint = maxHpPoint;
+                  }
+              }
+              UpdatePreviousHp();
           }
       }
 }

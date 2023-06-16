@@ -12,8 +12,9 @@ namespace Script.RewardScript
         [SerializeField] private EnemyManager enemyManager;
         [SerializeField] private CharacterPool characterPool;
         [SerializeField] private CountManager countManager;
+        [SerializeField] private CastleManager castleManager;
 
-        [Header("신성 속성")]
+        [Header("\n\n신성 속성")]
 
         [Header("속박시간 증가")] public bool increaseRestraintTime = false; 
         [Header("관통 효과")] public bool divinePenetrate = false; 
@@ -51,23 +52,39 @@ namespace Script.RewardScript
         [Header("대각선 이동")] public bool diagonalMovement = false;
         
         [Header("Castle 체력회복 200")] public bool recoveryCastle = false;
-        
-        [Header("Castle 최대체력 증가")] public int castleMaxHp = 0;
-        
-        [Header("보드 초기화 케릭터")] public int nextStageMembersSelectCount = 0;
-        
+
+
+        [Header("Castle 최대체력 증가 (최대 2000)")] public int castleMaxHp = 0;
+        protected internal void IncreaseCastleMaxHp()
+        {
+            castleMaxHp += 200;
+            castleManager.IncreaseMaxHp(castleMaxHp);
+        }
+
+        [Header("보드 초기화 케릭터")] public int highLevelCharacterCount = 6;
+        protected internal int SelectedCount = 0;
+        protected internal void NextCharacterUpgrade(int moveCharacterCount)
+        {
+            highLevelCharacterCount += moveCharacterCount;
+            SelectedCount += 1;
+        }
+
         [Header("경험치 증가량")] public int expPercentage = 0;
+        protected internal void IncreaseExpBuff(int increaseAmount)
+        {
+            expPercentage += increaseAmount;
+        }
        
-        [Header("최대 이동횟수 증가")] public bool permanentIncreaseMovementCount = false;
+        [Header("최대 이동횟수 증가")] public int permanentIncreaseMovementCount = 0;
         protected internal void PermanentIncreaseMoveCount(int increaseStepAmount)
         {
-            countManager.RewardMoveCount += increaseStepAmount;
+            permanentIncreaseMovementCount += increaseStepAmount;
+            countManager.RewardMoveCount += permanentIncreaseMovementCount;
             countManager.TotalMoveCount = countManager.BaseMoveCount + countManager.RewardMoveCount;
             countManager.UpdateMoveCountText();
         }
        
         [Header("5매치 가운데 유닛 추가 레벨증가")] public bool match5Upgrade = false;
-       
         [Header("전체 공격력 증가 (%)")] public int increaseAtkDamage = 0;
         protected internal void IncreaseGroupDamage(int increaseAmount)
         {
