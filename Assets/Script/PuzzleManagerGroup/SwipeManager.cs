@@ -11,6 +11,7 @@ namespace Script.PuzzleManagerGroup
     public sealed class SwipeManager : MonoBehaviour
     {
         public bool isBusy = false;
+        public bool isUp = false;
         private GameObject _startObject; // 초기에 터치된 객체를 추적하는 데 사용됩니다.
         private GameObject _returnObject; // 원래 위치로 돌아갈 객체를 추적하는 데 사용됩니다.
         private Vector2 _firstTouchPosition; // 첫 터치의 위치를 저장합니다.
@@ -91,7 +92,7 @@ namespace Script.PuzzleManagerGroup
         // 움직임이 스와이프로 간주될 만큼 길면 스와이프 동작을 시작합니다.
         private void HandleDrag(Vector2 point2D)
         {
-            if (isBusy || rewardManager.openBoxing) return;
+            if (isBusy || isUp || rewardManager.openBoxing) return;
             var swipe = point2D - _firstTouchPosition;
             if (!(swipe.sqrMagnitude > minSwipeLength * minSwipeLength)) return;
             if (!(Mathf.Abs(swipe.x) > 0.5f) && !(Mathf.Abs(swipe.y) > 0.5f)) return;
@@ -113,7 +114,7 @@ namespace Script.PuzzleManagerGroup
          // 개체가 식별되면 개체의 상태에 따라 SwitchAndMatches 코루틴 또는 NullSwap 코루틴을 시작합니다.
         private void Swipe(Vector2 swipe)
         {
-            if (isBusy || rewardManager.openBoxing) return;
+            if (isBusy || isUp || rewardManager.openBoxing) return;
             if (!CanMove()) return;
             if (_startObject == null) return;
 
@@ -193,7 +194,7 @@ namespace Script.PuzzleManagerGroup
         // 스와이프 끝에 빈 공간이 있는 null 스왑 시나리오를 처리합니다. 시작 개체는 빈 위치로 이동한 다음 개체 풀로 반환됩니다.
         private IEnumerator NullSwap(GameObject startObject, int endX, int endY)
         {
-            if (isBusy || rewardManager.openBoxing) yield break;
+            if (isBusy || isUp || rewardManager.openBoxing) yield break;
             if (endY < 0) yield break;
             isBusy = true;
             if (startObject == null) yield break;
@@ -215,7 +216,7 @@ namespace Script.PuzzleManagerGroup
         // 시작 개체와 끝 개체 사이의 전환을 시작합니다. 그런 다음 두 개체와 관련된 일치 항목을 확인합니다.
         private IEnumerator SwitchAndMatches(GameObject startObject, GameObject endObject)
         {
-            if (isBusy || rewardManager.openBoxing) yield break;
+            if (isBusy || isUp || rewardManager.openBoxing) yield break;
             isBusy = true;
             if (startObject == null || endObject == null) yield break;
             var startObjectPosition = startObject.transform.position;
