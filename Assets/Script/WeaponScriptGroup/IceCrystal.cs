@@ -19,16 +19,29 @@ namespace Script.WeaponScriptGroup
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
-            if (enemy.IsRestraint && WaterRestraintKnockBack)
+            HitEnemy.Add(enemy);
+            foreach (var enemyObject in HitEnemy)
             {
-                enemy.transform.DOMoveY(enemy.transform.position.y + 0.5f, 0.1f);
+                AtkEffect(enemyObject);
+                if (EnforceManager.waterRestraintKnockBack)
+                {
+                    KnockBackEffect(enemyObject);
+                }
+                var damage = DamageCalculator(Damage, enemyObject);
+                enemyObject.ReceiveDamage(damage);
+                StopUseWeapon(gameObject);
             }
-            if (enemy != null && enemy.gameObject.activeInHierarchy)
+            HitEnemy.Clear();
+        }
+        private static bool KnockBackEffect(EnemyBase enemyObject)
+        {
+            var knockBack = false;
+            if (enemyObject.IsRestraint)
             {
-                enemy.ReceiveDamage(Damage, UnitProperty);
-                AtkEffect(enemy);
+                enemyObject.transform.DOMoveY(enemyObject.transform.position.y + 0.5f, 0.2f)
+                    .OnComplete(() => knockBack = true);
             }
-            StopUseWeapon(gameObject);
+            return knockBack;
         }
     }
 }

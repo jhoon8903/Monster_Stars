@@ -12,10 +12,6 @@ namespace Script.WeaponScriptGroup
         {
             yield return base.UseWeapon();
             Speed = CharacterBase.swingSpeed;
-            if (PhysicIncreaseWeaponScale)
-            {
-                pivotPoint.transform.localScale = new Vector3(2f,1.7f,0);
-            }
             pivotPoint.transform.DORotate(new Vector3(0, 0, 360), Speed, RotateMode.FastBeyond360).OnComplete(() => StopUseWeapon(pivotPoint));
         }
 
@@ -23,16 +19,14 @@ namespace Script.WeaponScriptGroup
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
-            if (enemy == null || !enemy.gameObject.activeInHierarchy) return;
-            if (enemy.IsSlow && PhysicSlowAdditionalDamage)
+            HitEnemy.Add(enemy);
+            foreach (var enemyObject in HitEnemy)
             {
-                enemy.ReceiveDamage(Damage * 2f, UnitProperty);
+                AtkEffect(enemy);
+                var damage = DamageCalculator(Damage, enemyObject);
+                enemy.ReceiveDamage(damage);
             }
-            else
-            {
-                enemy.ReceiveDamage(Damage, UnitProperty);
-            }
-            AtkEffect(enemy);
+            HitEnemy.Clear();
         }
     }
 }

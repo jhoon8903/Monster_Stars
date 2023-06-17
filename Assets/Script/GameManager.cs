@@ -87,7 +87,7 @@ namespace Script
                     yield return StartCoroutine(spawnManager.BossStageSpawnRule());
                 }
                 NextStage();
-                FindObjectOfType<Unit_D>().ResetDamage();
+                FindObjectOfType<UnitD>().ResetDamage();
             }
             else
             {

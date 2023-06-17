@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Script.RewardScript;
 using UnityEngine;
 
 namespace Script.WeaponScriptGroup
@@ -17,9 +18,10 @@ namespace Script.WeaponScriptGroup
         [SerializeField] private int weaponPoolCapacity = 20;
         private Dictionary<WeaponType, Queue<GameObject>> _poolDictionary;
         private static readonly Vector3 InitLocalScale = new Vector3(1f, 1f , 1f);
-        public bool PhysicAdditionalWeapon { get; set; } = false;
         private Transform _mainWeapon;
         private Transform _secondWeapon;
+        private Transform _pivotSword;
+        [SerializeField] private EnforceManager enforceManager;
         private void Start()
         {
             _poolDictionary = new Dictionary<WeaponType, Queue<GameObject>>();
@@ -45,26 +47,23 @@ namespace Script.WeaponScriptGroup
             var objectToSpawn = _poolDictionary[weaponType].Dequeue();
             objectToSpawn.transform.position = position;
             objectToSpawn.transform.rotation = rotation;
-
-            // Find the main weapon and the second weapon in the hierarchy
+            if (enforceManager.physicIncreaseWeaponScale)
+            {
+                _pivotSword = objectToSpawn.transform.Find("Sword");
+                _pivotSword.transform.localScale = new Vector3(2f,1.7f,0);
+            }
             _mainWeapon = objectToSpawn.transform.Find("FirstSword"); // Replace with the actual name of your main weapon
             _secondWeapon = objectToSpawn.transform.Find("SecondSword"); // Replace with the actual name of your second weapon
-
             if (_mainWeapon != null)
             {
                 _mainWeapon.gameObject.SetActive(true);
             }
-
-            // Only try to activate the second weapon if the weapon type is Sword
             if (weaponType == WeaponType.Sword && _secondWeapon != null)
             {
-                _secondWeapon.gameObject.SetActive(PhysicAdditionalWeapon);
+                _secondWeapon.gameObject.SetActive(enforceManager.physicAdditionalWeapon);
             }
-
             _poolDictionary[weaponType].Enqueue(objectToSpawn);
-            objectToSpawn.transform.localScale = InitLocalScale;
             objectToSpawn.SetActive(true);
-
             return objectToSpawn;
         }
 
@@ -79,7 +78,7 @@ namespace Script.WeaponScriptGroup
 
             spriteRenderer.sprite = weapon.weaponSprite[level - 1];
 
-            if (spriteRendererSecond != null && PhysicAdditionalWeapon)
+            if (spriteRendererSecond != null && enforceManager.physicAdditionalWeapon)
             {
                 spriteRendererSecond.sprite = weapon.weaponSprite[level - 1];
             }
@@ -87,6 +86,7 @@ namespace Script.WeaponScriptGroup
 
         public static void ReturnToPool(GameObject weapon)
         {
+            weapon.transform.localScale = InitLocalScale;
             weapon.SetActive(false);
         }
     }  

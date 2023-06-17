@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Script.CharacterGroupScript
 {
-    public class Unit_A : CharacterBase
+    public class UnitA : CharacterBase
     {
         [SerializeField] private Sprite level1Sprite; // Sprite for level 1
         [SerializeField] private Sprite level2Sprite; // Sprite for level 2
@@ -21,8 +21,6 @@ namespace Script.CharacterGroupScript
             _spriteRenderer = GetComponent<SpriteRenderer>(); // Get the reference to the SpriteRenderer component attached to this object
             Level1(); // Set initial level to level 1
         }
-
-        // Handles the logic when the character levels up
         protected override void LevelUp()
         {
             base.LevelUp();
@@ -46,20 +44,17 @@ namespace Script.CharacterGroupScript
                     return;
             }
         }
-
-        // Resets the character's state to its initial values
         protected internal override void CharacterReset()
         {
             ResetLevel(); // Reset the character's level
             Level1(); // Set level back to 1
         }
 
-        // Detects enemies within a detection box and returns a list of their GameObjects
         public override List<GameObject> DetectEnemies()
         {
             var detectionSize = new Vector2(DetectionWidth-0.5f, DetectionHeight);
             var detectionCenter = 
-                DivineAtkRange ? 
+                EnforceManager.divineAtkRange ? 
                     (Vector2)transform.position + Vector2.up * DetectionHeight :
                     (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
             var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize, 0f);
@@ -89,17 +84,15 @@ namespace Script.CharacterGroupScript
             // Draw a wire cube to visualize the detection box in the Scene view
             var detectionSize = new Vector2(DetectionWidth-0.5f, DetectionHeight);
             var detectionCenter = 
-                DivineAtkRange ? 
+                EnforceManager.divineAtkRange ? 
                     (Vector2)transform.position + Vector2.up * DetectionHeight :
                     (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
             Gizmos.color = Color.yellow;
             Gizmos.DrawWireCube(detectionCenter, detectionSize);
         }
 
-        // Sets the properties for level 1 of the character
         private void Level1()
         {
-            // Set properties for level 1
             CharacterName = "Unit_A_00";
             UnitLevel = 1;
             unitGroup = UnitGroups.A;
@@ -110,17 +103,14 @@ namespace Script.CharacterGroupScript
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level1Sprite;
         }
-
-        // Sets the properties for level 2 of the character
         private void Level2()
         {
-            // Set properties for level 2
             CharacterName = "Unit_A_01";
             UnitLevel = 2;
             Type = Types.Character;
             unitGroup = UnitGroups.A;
-            defaultDamage = 125f;
-            defaultAtkRate = 1;
+            defaultDamage = 150f;
+            defaultAtkRate = 1f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             defaultAtkRange = Vector3.zero;
@@ -129,11 +119,8 @@ namespace Script.CharacterGroupScript
             UnitProperty = UnitProperties.Divine;
             UnitEffect = UnitEffects.Restraint;
         }
-
-        // Sets the properties for level 3 of the character
         private void Level3()
         {
-            // Set properties for level 3
             CharacterName = "Unit_A_02";
             UnitLevel = 3;
             Type = Types.Character;
@@ -148,11 +135,8 @@ namespace Script.CharacterGroupScript
             UnitProperty = UnitProperties.Divine;
             UnitEffect = UnitEffects.Restraint;
         }
-
-        // Sets the properties for level 4 of the character
         private void Level4()
         {
-            // Set properties for level 4
             CharacterName = "Unit_A_03";
             UnitLevel = 4;
             Type = Types.Character;
@@ -167,11 +151,8 @@ namespace Script.CharacterGroupScript
             UnitProperty = UnitProperties.Divine;
             UnitEffect = UnitEffects.Restraint;
         }
-
-        // Sets the properties for level 5 of the character
         private void Level5()
         {
-            // Set properties for level 5
             CharacterName = "Unit_A_04";
             UnitLevel = 5;
             Type = Types.Character;

@@ -2,10 +2,10 @@ using System;
 using DG.Tweening;
 using Script.CharacterGroupScript;
 using Script.CharacterManagerScript;
+using Script.RewardScript;
 using Script.UIManager;
 using Script.WeaponScriptGroup;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.EnemyManagerScript
@@ -30,8 +30,6 @@ namespace Script.EnemyManagerScript
         public delegate void EnemyKilledEventHandler(object source, EventArgs args);
         public event EnemyKilledEventHandler EnemyKilled;
 
-        // 상태이상로직
-        public int groupSlowCount;
         public bool IsRestraint { get; set; } = false;
         public bool IsSlow { get; set; } = false;
         private Coroutine _poisonEffectCoroutine;
@@ -59,9 +57,12 @@ namespace Script.EnemyManagerScript
                 }
             }
         }
+        private EnforceManager _enforceManager;
+        protected internal int CurrentPoisonStacks { get; set; }
 
         public void Initialize()
         {
+            _enforceManager = FindObjectOfType<EnforceManager>();
             var wave = FindObjectOfType<GameManager>().wave;
             _hpSlider = GetComponentInChildren<Slider>(true);
 
@@ -74,47 +75,20 @@ namespace Script.EnemyManagerScript
             _hpSlider.maxValue = maxHealthPoint;
             _hpSlider.value = _currentHealth;
             UpdateHpSlider();
-            groupSlowCount = 0;
         }
         protected internal virtual void EnemyProperty()
         {
         }
-        public void ReceiveDamage(float damage, CharacterBase.UnitProperties unitProperty, KillReasons reason = KillReasons.ByPlayer)
+        public void ReceiveDamage(float damage,KillReasons reason = KillReasons.ByPlayer)
         {
             lock (Lock)
             {
-                switch (unitProperty)
-                {
-                    case CharacterBase.UnitProperties.Physics:
-                        if (RegistryType == RegistryTypes.Physics)
-                        {
-                            damage *= 0.8f;
-                        }
-                        break;
-                    case CharacterBase.UnitProperties.Divine:
-                        if (RegistryType == RegistryTypes.Divine)
-                        {
-                            damage *= 0.8f;
-                        }
-                        break;
-                    case CharacterBase.UnitProperties.Poison:
-                        var venomSac = FindObjectOfType<VenomSac>();
-                        if (venomSac != null && RegistryType == RegistryTypes.Poison)
-                        {
-                            damage *= 0.8f;
-                            venomSac.poisonDotDamage = 0;
-                        }
-                        break;
-                    default:
-                        damage *= 1f;
-                        break;
-                }
                 _currentHealth -= damage;
                 UpdateHpSlider();
                 if (_currentHealth >= 0) return;
-                if (unitProperty == CharacterBase.UnitProperties.Physics)
+                if (_enforceManager.physicIncreaseDamage)
                 {
-                    FindObjectOfType<Unit_D>().IncreasedPhysicsDamage();
+                    _enforceManager.PhysicIncreaseDamage();
                 }
                 EnemyKilled?.Invoke(this, EventArgs.Empty);
                 FindObjectOfType<EnemyPool>().ReturnToPool(gameObject);
@@ -128,13 +102,6 @@ namespace Script.EnemyManagerScript
         private void UpdateHpSlider()
         {
             _hpSlider.DOValue(_currentHealth, 0.5f);
-        }
-
-        public void DecreasedMoveSpeed()
-        {
-            if (groupSlowCount > 4) return;
-            MoveSpeed *= 1.45f;
-            groupSlowCount += 1;
         }
     }
 }

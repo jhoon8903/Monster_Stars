@@ -1,8 +1,7 @@
-using System;
 using System.Collections;
 using UnityEngine;
 using DG.Tweening;
-using Script.CharacterManagerScript;
+using Script.RewardScript;
 using Script.UIManager;
 using Random = System.Random;
 
@@ -13,13 +12,10 @@ namespace Script.EnemyManagerScript
         [SerializeField] private GameObject castle;
         [SerializeField] private WaveManager waveManager;
         [SerializeField] private GameManager gameManager;
+        [SerializeField] private EnforceManager enforceManager;
         private GameObject _enemyObjects;
         private float _duration;
         private readonly Random _random = new System.Random();
-        public bool IncreaseRestraintTime { get; set; } = false;
-        public bool WaterStun { get; set; } = false;
-        public bool WaterIncreaseSlowTime { get; set; } = false;
-        public bool WaterIncreaseSlowPower { get; set; } = false;
 
         public IEnumerator Zone_Move(GameObject enemyObject)
         {
@@ -28,17 +24,10 @@ namespace Script.EnemyManagerScript
             enemyBase.EnemyProperty();
             var position = _enemyObjects.transform.position;
             var endPosition = new Vector3(position.x, castle.transform.position.y-5, 0);
-            var slowCount = FindObjectOfType<CharacterManager>().slowCount;
-            if (slowCount >=1)
-            {
-                var speedReductionFactor = 1f + slowCount * 0.15f;
-                speedReductionFactor = Mathf.Min(speedReductionFactor, 1.6f);
-                _duration = enemyBase.MoveSpeed * 50f * speedReductionFactor;
-            }
-            else
-            {
-                _duration = enemyBase.MoveSpeed * 50f;
-            }
+            var slowCount = enforceManager.slowCount;
+            var speedReductionFactor = 1f + slowCount * 0.15f;
+            speedReductionFactor = Mathf.Min(speedReductionFactor, 1.6f);
+            _duration = enemyBase.MoveSpeed * 40f * speedReductionFactor;
 
             switch (enemyBase.SpawnZone)
             {
@@ -68,7 +57,7 @@ namespace Script.EnemyManagerScript
             bossObject.Initialize();
             var position = _enemyObjects.transform.position;
             var endPosition = new Vector3(position.x, castle.transform.position.y-5, 0);
-            var duration = bossObject.MoveSpeed * 50f;
+            var duration = bossObject.MoveSpeed * 40f;
             StartCoroutine(PatternACoroutine(_enemyObjects, endPosition, duration));
             yield return null;
         }
@@ -90,6 +79,10 @@ namespace Script.EnemyManagerScript
                 {
                    StartCoroutine(SlowEffect(enemyBase, endPosition, duration));
                 }
+                else
+                {
+                    yield return null;
+                }
                 yield return new WaitForSecondsRealtime(0.2f); // add some delay to prevent infinite loop
                 totalEnemyCount = waveManager.enemyTotalCount;
             }
@@ -97,27 +90,27 @@ namespace Script.EnemyManagerScript
 
         private IEnumerator RestrainEffect(EnemyBase enemyBase, Vector3 endPosition, float duration)
         {
-            var overTime = IncreaseRestraintTime ? 2f : 1f;
-            var restraintColor = new Color(0.59f, 0.43f, 0f);
+            var overTime = enforceManager.IncreaseRestraintTime();
+            var restraintColor = new Color(0.59f, 0.43f, 0f); 
             var originColor = new Color(1, 1, 1);
             
             enemyBase.GetComponent<SpriteRenderer>().DOColor(restraintColor, 0.1f);
             DOTween.Kill(enemyBase.transform);
 
             yield return new WaitForSecondsRealtime(overTime);
-            
+
             yield return enemyBase.IsRestraint = false;
             enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
             enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
-        }
+            }
 
         private IEnumerator SlowEffect(EnemyBase enemyBase, Vector3 endPosition, float duration)
         {
-            var slowTime = WaterIncreaseSlowTime ? 2.5f : 2f;
-            var slowDuration = WaterIncreaseSlowPower ? 2.2f : 1.6f;
+            var slowTime = enforceManager.waterIncreaseSlowTime;
+            var slowPowerDuration = enforceManager.waterIncreaseSlowPower ? 2.2f : 1.6f;
             var slowColor = new Color(0f, 0.74f, 1);
             var originColor = new Color(1, 1, 1);
-            if (WaterStun)
+            if (enforceManager.waterStun)
             {
                 if (_random.Next(100) < 15)
                 {
@@ -130,7 +123,7 @@ namespace Script.EnemyManagerScript
                 else
                 {
                     enemyBase.GetComponent<SpriteRenderer>().DOColor(slowColor, 0.1f);
-                    enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration * slowDuration).SetEase(Ease.Linear);
+                    enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration * slowPowerDuration).SetEase(Ease.Linear);
                     yield return new WaitForSecondsRealtime(slowTime);
                     yield return enemyBase.IsSlow = false;
                     enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
@@ -140,7 +133,7 @@ namespace Script.EnemyManagerScript
             else
             {
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(slowColor, 0.1f);
-                enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration * slowDuration).SetEase(Ease.Linear);
+                enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration * slowPowerDuration).SetEase(Ease.Linear);
                 yield return new WaitForSecondsRealtime(slowTime);
                 yield return enemyBase.IsSlow = false;
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);

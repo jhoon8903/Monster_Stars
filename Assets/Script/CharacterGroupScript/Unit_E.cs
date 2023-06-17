@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Script.CharacterGroupScript
 {
-    public class Unit_E : CharacterBase
+    public class UnitE : CharacterBase
     {
         [SerializeField] private Sprite level1Sprite; // Sprite for level 1
         [SerializeField] private Sprite level2Sprite; // Sprite for level 2
@@ -109,10 +109,10 @@ namespace Script.CharacterGroupScript
             UnitLevel = 2;
             Type = Types.Character;
             unitGroup = UnitGroups.E;
-            defaultDamage = WaterIncreaseDamage ? 75f * 1.5f : 75;
-            defaultAtkRate = 1f;
+            defaultDamage = 100;
+            defaultAtkRate = 0.8f;
             defaultAtkDistance = 9f;
-            projectileSpeed = 0.7f;
+            projectileSpeed = 1f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level2Sprite;
             UnitAtkType = UnitAtkTypes.Projectile;
@@ -128,9 +128,9 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.E;
             defaultDamage *= 1.7f;
-            defaultAtkRate = 1f;
+            defaultAtkRate = 0.8f;
             defaultAtkDistance = 9f;
-            projectileSpeed = 0.7f;
+            projectileSpeed = 1f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level3Sprite;
             UnitAtkType = UnitAtkTypes.Projectile;
@@ -146,9 +146,9 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.E;
             defaultDamage *= 2;
-            defaultAtkRate = 1f;
+            defaultAtkRate = 0.8f;
             defaultAtkDistance = 9f;
-            projectileSpeed = 0.7f;
+            projectileSpeed = 1f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level4Sprite;
             UnitAtkType = UnitAtkTypes.Projectile;
@@ -164,9 +164,9 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.E;
             defaultDamage *= 2.3f;
-            defaultAtkRate = 1f;
+            defaultAtkRate = 0.8f;
             defaultAtkDistance = 9f;
-            projectileSpeed = 0.7f;
+            projectileSpeed = 1f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level5Sprite;
             UnitAtkType = UnitAtkTypes.Projectile;

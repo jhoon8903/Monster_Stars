@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Script.CharacterGroupScript
 {
-    public class Unit_F : CharacterBase
+    public class UnitF : CharacterBase
     {
         [SerializeField] private Sprite level1Sprite; // Sprite for level 1
         [SerializeField] private Sprite level2Sprite; // Sprite for level 2
@@ -56,7 +56,7 @@ namespace Script.CharacterGroupScript
         {
 
             var detectionCenter = (Vector2)transform.position;
-            if (PoisonIncreaseAtkRange)
+            if (EnforceManager.poisonIncreaseAtkRange)
             {
                 _detectionSize = 2.0f;
             }
@@ -116,10 +116,10 @@ namespace Script.CharacterGroupScript
             UnitLevel = 2;
             Type = Types.Character;
             unitGroup = UnitGroups.F;
-            defaultDamage = 90;
-            defaultAtkRate = 0.5f;
+            defaultDamage = 120;
+            defaultAtkRate = 1.2f;
             defaultAtkDistance = 1f;
-            projectileSpeed = 1.5f;
+            projectileSpeed = 2.0f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level2Sprite;
             UnitAtkType = UnitAtkTypes.Gas;
@@ -135,9 +135,9 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.F;
             defaultDamage *= 1.7f;
-            defaultAtkRate = 0.5f;
+            defaultAtkRate = 1.2f;
             defaultAtkDistance = 1f;
-            projectileSpeed = 1.5f;
+            projectileSpeed = 2.0f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level3Sprite;
             UnitAtkType = UnitAtkTypes.Gas;
@@ -153,9 +153,9 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.F;
             defaultDamage *= 2.0f;
-            defaultAtkRate = 0.5f;
+            defaultAtkRate = 1.2f;
             defaultAtkDistance = 1f;
-            projectileSpeed = 1.5f;
+            projectileSpeed = 2.0f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level4Sprite;
             UnitAtkType = UnitAtkTypes.Gas;
@@ -171,9 +171,9 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.F;
             defaultDamage *= 2.3f;
-            defaultAtkRate = 0.5f;
+            defaultAtkRate = 1.2f;
             defaultAtkDistance = 1f;
-            projectileSpeed = 1.5f;
+            projectileSpeed = 2.0f;
             defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level5Sprite;
             UnitAtkType = UnitAtkTypes.Gas;

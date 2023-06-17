@@ -734,9 +734,6 @@ MonoBehaviour:
   - {fileID: 5553006608696507336, guid: 438d7922ea8534dd6a3cfa7664f14cb7, type: 3}
   - {fileID: 2939207743086641073, guid: b3c344a1ee72a45e3aef34b9e39575c5, type: 3}
   characterPool: {fileID: 1097818334}
-  addRowCount: 0
-  slowCount: 0
-  diagonalMovement: 0
   goldGetMore: 0
 --- !u!114 &149521964
 MonoBehaviour:
@@ -756,7 +753,7 @@ MonoBehaviour:
   rewardManger: {fileID: 2120144519}
   gameManager: {fileID: 149521958}
   countManager: {fileID: 841622520}
-  enforceManager: {fileID: 0}
+  enforceManager: {fileID: 1595735486}
   isWave10Spawning: 0
   isMatched: 0
 --- !u!114 &149521965
@@ -780,6 +777,7 @@ MonoBehaviour:
     m_Bits: 64
   matchManager: {fileID: 149521966}
   rewardManager: {fileID: 2120144519}
+  enforceManager: {fileID: 1595735486}
 --- !u!114 &149521966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -796,7 +794,7 @@ MonoBehaviour:
   characterPool: {fileID: 1097818334}
   countManager: {fileID: 841622520}
   commonRewardManager: {fileID: 2120144519}
-  enforceManager: {fileID: 0}
+  enforceManager: {fileID: 1595735486}
 --- !u!114 &149521967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -811,6 +809,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterPool: {fileID: 1097818334}
   weaponsPool: {fileID: 1537456864}
+  enforceManager: {fileID: 1595735486}
   attackRate: 1
   enemyList: []
 --- !u!114 &149521968
@@ -1681,6 +1680,7 @@ MonoBehaviour:
   castle: {fileID: 1177777540}
   waveManager: {fileID: 149521968}
   gameManager: {fileID: 149521958}
+  enforceManager: {fileID: 1595735486}
 --- !u!114 &329010040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1696,7 +1696,6 @@ MonoBehaviour:
   number: 0
   healthPoint: 0
   maxHealthPoint: 0
-  groupSlowCount: 0
 --- !u!1 &362582815
 GameObject:
   m_ObjectHideFlags: 0
@@ -3729,7 +3728,7 @@ MonoBehaviour:
   expText: {fileID: 941016687}
   levelUpRewardManager: {fileID: 2120144522}
   levelText: {fileID: 1240016084}
-  enforceManager: {fileID: 0}
+  enforceManager: {fileID: 1595735486}
   level: 0
 --- !u!1 &903150599
 GameObject:
@@ -5914,6 +5913,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: f604e062448844dffaf8bd2544a41b0d, type: 3}
     - {fileID: 21300000, guid: 1fcd99742122641d0a9bfecf3512d171, type: 3}
   weaponPoolCapacity: 30
+  enforceManager: {fileID: 1595735486}
 --- !u!4 &1537456865
 Transform:
   m_ObjectHideFlags: 0
@@ -5941,7 +5941,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbbeeeda3a9dc4b2cbeb8c2573a5891a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hitCount: 0
+  isInUse: 0
 --- !u!1 &1563434128
 GameObject:
   m_ObjectHideFlags: 0
@@ -6085,29 +6085,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterManager: {fileID: 149521963}
-  enemyManager: {fileID: 329010036}
-  characterPool: {fileID: 1097818334}
   countManager: {fileID: 841622520}
   castleManager: {fileID: 1177777546}
+  gridManager: {fileID: 8808150501734532426}
+  activeRestraint: 0
   increaseRestraintTime: 0
   divinePenetrate: 0
   divineAtkRange: 0
   divinePoisonAdditionalDamage: 0
+  divinePoisonAdditionalDamageCount: 1
   physicAdditionalWeapon: 0
   physicIncreaseWeaponScale: 0
   physicSlowAdditionalDamage: 0
-  physicAtkSpeed: 0
+  increasePhysicAtkSpeed: 1
   physicIncreaseDamage: 0
+  increasePhysicsDamage: 1
   poisonDoubleAtk: 0
   poisonRestraintAdditionalDamage: 0
-  poisonIncreaseTime: 0
   poisonInstantKill: 0
   poisonIncreaseAtkRange: 0
+  activatePoison: 0
+  poisonOverlapping: 1
   waterStun: 0
   waterIncreaseSlowTime: 0
   waterIncreaseSlowPower: 0
   waterRestraintKnockBack: 0
-  waterIncreaseDamage: 0
+  addRowCount: 0
   slowCount: 0
   diagonalMovement: 0
   recoveryCastle: 0
@@ -7572,12 +7575,6 @@ MonoBehaviour:
   spawnManager: {fileID: 149521964}
   countManager: {fileID: 841622520}
   gameManager: {fileID: 149521958}
-  gridManager: {fileID: 8808150501734532426}
-  swipeManager: {fileID: 149521965}
-  expManager: {fileID: 841622521}
-  castleManager: {fileID: 1177777546}
-  matchManager: {fileID: 149521966}
-  enemyManager: {fileID: 329010036}
   characterManager: {fileID: 149521963}
   enforceManager: {fileID: 1595735486}
   openBoxing: 0
@@ -7638,18 +7635,9 @@ MonoBehaviour:
   blueSprite: {fileID: 21300000, guid: 80c21376e7ba044b5b85fe6ce5af6ceb, type: 3}
   purpleSprite: {fileID: 21300000, guid: 16bf61ff488364d4d925a56598d91ebd, type: 3}
   exp: {fileID: 2120144521}
-  spawnManager: {fileID: 149521964}
   expManager: {fileID: 841622521}
   gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
-  swipeManager: {fileID: 149521965}
-  castleManager: {fileID: 1177777546}
-  enemyManager: {fileID: 329010036}
-  enemyPatternManager: {fileID: 329010039}
-  weaponBase: {fileID: 1537456866}
-  characterBase: {fileID: 1097818336}
-  weaponsPool: {fileID: 1537456864}
-  atkManager: {fileID: 149521967}
   enforceManager: {fileID: 1595735486}
 --- !u!1 &2143130367
 GameObject:

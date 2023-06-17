@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,12 +36,6 @@ namespace Script.RewardScript
         [SerializeField] private SpawnManager spawnManager;
         [SerializeField] private CountManager countManager;
         [SerializeField] private GameManager gameManager;
-        [SerializeField] private GridManager gridManager;
-        [SerializeField] private SwipeManager swipeManager;
-        [SerializeField] private ExpManager expManager;
-        [SerializeField] private CastleManager castleManager;
-        [SerializeField] private MatchManager matchManager;
-        [SerializeField] private EnemyManager enemyManager;
         [SerializeField] private CharacterManager characterManager;
         [SerializeField] private EnforceManager enforceManager;
 
@@ -184,15 +177,15 @@ namespace Script.RewardScript
                         if (enforceManager.expPercentage > 30) return false; // Make sure the EXP increment does not exceed 30%
                         break;
                     case CommonData.Types.AddRow:
-                        return gameManager.wave is 11 or 21 && (characterManager.addRowCount < 2 ? true : false); // Show row extra reward only after boss stage, up to 2 times
+                        return gameManager.wave is 11 or 21 && (enforceManager.addRowCount < 2 ? true : false); // Show row extra reward only after boss stage, up to 2 times
                     case CommonData.Types.Slow:
-                        if (characterManager.slowCount <= 3) return false; // Displays the enemy movement speed reduction effect up to 3 times
+                        if (enforceManager.slowCount <= 3) return false; // Displays the enemy movement speed reduction effect up to 3 times
                         break;
                     case CommonData.Types.NextStage:
                         if (enforceManager.SelectedCount > 3) return false; // Only use up to 3 next stage character upgrades
                         break;
                     case CommonData.Types.StepDirection:
-                        if (characterManager.diagonalMovement || gameManager.wave !=11) return false; // If diagonal movement is possible, don't show this option
+                        if (enforceManager.diagonalMovement || gameManager.wave !=11) return false; // If diagonal movement is possible, don't show this option
                         break;
                     case CommonData.Types.Match5Upgrade:
                         if (enforceManager.match5Upgrade) return false; // Don't show this option if 5 matching upgrade option is enabled
@@ -377,8 +370,8 @@ namespace Script.RewardScript
         {
             switch (selectedCommonReward.Type)
             {
-                case CommonData.Types.AddRow: 
-                    gridManager.AddRow(); characterManager.addRowCount += 1; 
+                case CommonData.Types.AddRow:
+                    enforceManager.AddRow();
                     break; // Row 추가 강화 효과
                 case CommonData.Types.GroupDamage: 
                     enforceManager.IncreaseGroupDamage(selectedCommonReward.Property[0]); 
@@ -393,7 +386,7 @@ namespace Script.RewardScript
                     enforceManager.PermanentIncreaseMoveCount(selectedCommonReward.Property[0]);
                     break; // 영구적 카운트 증가
                 case CommonData.Types.StepDirection: 
-                    swipeManager.EnableDiagonalMovement(); characterManager.diagonalMovement = true; 
+                    enforceManager.diagonalMovement = true; 
                     break;    // 대각선 이동
                 case CommonData.Types.RandomLevelUp: 
                     characterManager.RandomCharacterLevelUp(selectedCommonReward.Property[0]); 
@@ -417,8 +410,8 @@ namespace Script.RewardScript
                 case CommonData.Types.Match5Upgrade: 
                     enforceManager.match5Upgrade = true;
                     break;     // 5매치 패턴 업그레이드
-                case CommonData.Types.Slow: 
-                    FindObjectOfType<EnemyBase>().DecreasedMoveSpeed(); 
+                case CommonData.Types.Slow:
+                    enforceManager.slowCount += 1; 
                     break; // 적 이동속도 감소 
                 case CommonData.Types.NextStage: 
                     enforceManager.NextCharacterUpgrade(selectedCommonReward.Property[0]);

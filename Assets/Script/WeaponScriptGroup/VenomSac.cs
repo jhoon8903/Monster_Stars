@@ -2,9 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using Script.CharacterGroupScript;
-using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
-using Script.UIManager;
 using UnityEngine;
 
 namespace Script.WeaponScriptGroup
@@ -19,7 +17,7 @@ namespace Script.WeaponScriptGroup
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
-            _enemyTransforms = CharacterBase.GetComponent<Unit_F>().DetectEnemies();
+            _enemyTransforms = CharacterBase.GetComponent<UnitF>().DetectEnemies();
             foreach (var enemy in _enemyTransforms)
             {
                 _enemyTransform = enemy.transform.position;
@@ -34,82 +32,60 @@ namespace Script.WeaponScriptGroup
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
-            var enemy = collision.gameObject.GetComponent<EnemyBase>();
-
-            if (PoisonInstantKill && enemy.healthPoint < (enemy.maxHealthPoint * 0.15f))
+            var hitColliders = Physics2D.OverlapCircleAll(collision.transform.position, 0.5f);
+            foreach (var enemyObject in hitColliders)
             {
-                if (Random.Next(100) < 15)
+                var enemy = enemyObject.gameObject.GetComponent<EnemyBase>();
+                HitEnemy.Add(enemy);
+                foreach (var targetObject in HitEnemy)
                 {
-                    WeaponsPool.ReturnToPool(gameObject);
-                    FindObjectOfType<WaveManager>().EnemyDestroyInvoke();
-                    if (ExpManager.Instance != null)
+                    if (EnforceManager.poisonInstantKill && 
+                        (targetObject.healthPoint < (targetObject.maxHealthPoint * 0.15f))
+                        && Random.Next(100) >= 15)
                     {
-                        const EnemyBase.KillReasons reason = EnemyBase.KillReasons.ByPlayer;
-                        ExpManager.Instance.HandleEnemyKilled(reason);
-                    }
-                }
-            }
-
-            if (enemy != null && enemy.gameObject.activeInHierarchy)
-            {
-                if (enemy.IsRestraint && PoisonRestraintAdditionalDamage)
-                {
-                    enemy.ReceiveDamage(Damage * 2f, UnitProperty);
-                }
-                else
-                {
-                    enemy.ReceiveDamage(Damage, UnitProperty);
-                }
-                
-                var hitColliders = Physics2D.OverlapCircleAll(collision.transform.position, 1f);
-                foreach (var hitCollider in hitColliders)
-                {
-                    var hitEnemy = hitCollider.gameObject.GetComponent<EnemyBase>();
-                    if (hitEnemy == null || !hitEnemy.gameObject.activeInHierarchy || hitEnemy == enemy) continue;
-                    if (enemy.IsRestraint && PoisonRestraintAdditionalDamage)
-                    {
-                        enemy.ReceiveDamage(Damage * 2f, UnitProperty);
+                        InstantKill(targetObject);
                     }
                     else
                     {
-                        enemy.ReceiveDamage(Damage, UnitProperty);
+                        AtkEffect(targetObject);
+                        var damage = DamageCalculator(Damage, targetObject);
+                        if (targetObject == null || !targetObject.gameObject.activeInHierarchy || targetObject == enemy) continue;
+                        targetObject.ReceiveDamage(damage);
                     }
-                    AtkEffect(hitEnemy);
                 }
+                StopUseWeapon(gameObject);
             }
-            StopUseWeapon(gameObject);
+            HitEnemy.Clear();
         }
+
         public IEnumerator PoisonEffect(EnemyBase hitEnemy)
         {
+            // If the enemy has max stacks of poison, we don't apply the poison again.
+            if (hitEnemy.CurrentPoisonStacks >= EnforceManager.poisonOverlapping) yield break;
+    
             if (hitEnemy.RegistryType == EnemyBase.RegistryTypes.Poison) yield break;
-            var venomDuration = 2f;
-            if (PoisonIncreaseTime)
-            {
-               venomDuration = 4f; // duration of the poison effect
-            }
+            if (!EnforceManager.activatePoison) yield break;
 
+            const float venomDuration = 2f;
             var poisonColor = new Color(0.18f, 1f, 0.1f);
-
+    
             if (poisonDotDamage == 0) yield break;
     
             hitEnemy.GetComponent<SpriteRenderer>().DOColor(poisonColor, 0.2f);
     
+            hitEnemy.CurrentPoisonStacks++; // Increment the poison count
+    
             var elapsedTime = 0f;
-
-            if (hitEnemy.IsRestraint && PoisonRestraintAdditionalDamage)
-            {
-                poisonDotDamage *= 2f;
-            }
 
             while (elapsedTime < venomDuration)
             {
-                hitEnemy.ReceiveDamage(poisonDotDamage, CharacterBase.UnitProperties.Poison);
+                hitEnemy.ReceiveDamage(poisonDotDamage);
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }
     
             hitEnemy.GetComponent<SpriteRenderer>().DOColor(Color.white, 0.2f); // Reset the color
-            hitEnemy.IsPoison = false; // Set IsPoison to false to stop the poison effect
+            hitEnemy.CurrentPoisonStacks--; // Decrement the poison count
         }
     }
 }

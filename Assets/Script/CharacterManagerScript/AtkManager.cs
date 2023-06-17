@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Script.RewardScript;
 using Script.WeaponScriptGroup;
 using UnityEngine;
 
@@ -23,9 +24,9 @@ namespace Script.CharacterManagerScript
     {
         [SerializeField] private CharacterPool characterPool; // Reference to the character pool
         [SerializeField] private WeaponsPool weaponsPool; // Reference to the weapon pool
+        [SerializeField] private EnforceManager enforceManager;
         public float attackRate = 1;
         public List<GameObject> enemyList = new List<GameObject>();
-        public bool PoisonDoubleAtk { get; set; } = false;
 
         public IEnumerator CheckForAttack()
         {
@@ -98,7 +99,7 @@ namespace Script.CharacterManagerScript
             switch (unitGroup)
             {
                 case CharacterBase.UnitGroups.F:
-                    if (PoisonDoubleAtk)
+                    if (enforceManager.poisonDoubleAtk )
                     {
                         StartCoroutine(GasDoubleAtk(unit, 0.3f));
                     }

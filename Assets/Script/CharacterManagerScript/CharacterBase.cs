@@ -33,18 +33,12 @@ namespace Script.CharacterManagerScript
         private readonly Vector3 _levelUpScale = new Vector3(1.2f, 1.2f, 0); // Scale to use when leveling up
         public List<GameObject> detectedEnemies = new List<GameObject>();
         public GameObject CurrentWeapon { get; set; }
-        protected internal bool DivineAtkRange { get; set; } = false;
-        protected internal bool PhysicIncreaseWeaponScale { get; set; } = false;
-        protected internal bool PhysicAtkSpeed { get; set; } = false;
-        protected internal bool PhysicIncreaseDamage { get; set; } = false;
-        protected internal bool PoisonIncreaseAtkRange { get; set; } = false;
-        protected internal bool WaterIncreaseDamage { get; set; } = false;
-        protected internal bool isClicked { get; set; } = false;
-        private EnforceManager _enforceManager;
+        protected internal bool IsClicked { get; set; } = false;
+        protected EnforceManager EnforceManager;
 
         private void Start()
         {
-            _enforceManager = FindObjectOfType<EnforceManager>();
+            EnforceManager = FindObjectOfType<EnforceManager>();
         }
 
         public void OnEnable()
@@ -97,14 +91,14 @@ namespace Script.CharacterManagerScript
         // Increase the default damage of the character by a given amount
         public void IncreaseDamage()
         {
-            var increaseDamageAmount = _enforceManager.increaseAtkDamage;
+            var increaseDamageAmount = EnforceManager.increaseAtkDamage;
             defaultDamage *= 1.0f + (increaseDamageAmount / 100f);
         }
 
         // Increase the default attack rate of the character by a given amount
         public void IncreaseAtkRate()
         {
-            var increaseRateAmount = _enforceManager.increaseAtkRate;
+            var increaseRateAmount = EnforceManager.increaseAtkRate;
             defaultAtkRate *= 1.0f + (increaseRateAmount / 100f);
         }
 

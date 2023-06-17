@@ -46,8 +46,8 @@ namespace Script.UIManager
               UpdateHpText();
               StartCoroutine(gameManager.ContinueOrLose());
           }
-          
-          public void UpdatePreviousHp()
+
+          private void UpdatePreviousHp()
           {
               PreviousHpPoint = hpPoint;
           }

@@ -15,19 +15,13 @@ namespace Script.PuzzleManagerGroup
         private GameObject _returnObject; // 원래 위치로 돌아갈 객체를 추적하는 데 사용됩니다.
         private Vector2 _firstTouchPosition; // 첫 터치의 위치를 저장합니다.
         private Vector2 _emptyGridPosition; // 빈 그리드의 위치를 저장합니다.
-        private bool _diagonalMovement = false;
         [SerializeField] private float minSwipeLength = 1.0f; // 스와이프로 인식되는 최소 길이입니다.
         [SerializeField] private SpawnManager spawnManager; // 스폰매니저를 참조합니다.
         [SerializeField] private CountManager countManager; // 카운트매니저를 참조합니다.
         [SerializeField] private LayerMask characterLayer; // 캐릭터 레이어를 저장합니다.
         [SerializeField] private MatchManager matchManager;
         [SerializeField] private CommonRewardManager rewardManager;
-
-        // 대각선 이동
-        public void EnableDiagonalMovement()
-        {
-            _diagonalMovement = true;
-        }
+        [SerializeField] private EnforceManager enforceManager;
 
         // CountManager를 요청하여 캐릭터의 이동 허용 여부를 확인합니다.
         private bool CanMove()  
@@ -68,7 +62,7 @@ namespace Script.PuzzleManagerGroup
             if (hit.collider == null) return;
             _startObject = hit.collider.gameObject;
             ScaleObject(_startObject, new Vector3(1.2f,1.2f,1.2f), 0.2f);
-            _startObject.GetComponent<CharacterBase>().isClicked = true;
+            _startObject.GetComponent<CharacterBase>().IsClicked = true;
             _firstTouchPosition = point2D;
         }
 
@@ -80,10 +74,10 @@ namespace Script.PuzzleManagerGroup
 
             foreach (var character in allObject)
             {
-                if (character.GetComponent<CharacterBase>().isClicked)
+                if (character.GetComponent<CharacterBase>().IsClicked)
                 {
                     ScaleObject(character, Vector3.one, 0.2f);
-                    character.GetComponent<CharacterBase>().isClicked = false;
+                    character.GetComponent<CharacterBase>().IsClicked = false;
                 }
             }
             _startObject = null;
@@ -128,7 +122,7 @@ namespace Script.PuzzleManagerGroup
             var endY = startY;
 
             // If diagonal movement is enabled, handle 8 directions
-            if (_diagonalMovement)
+            if (enforceManager.diagonalMovement)
             {
                 switch (swipeAngle)
                 {
