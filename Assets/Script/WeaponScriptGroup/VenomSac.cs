@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using Script.CharacterGroupScript;
 using Script.EnemyManagerScript;
+using Script.RewardScript;
 using UnityEngine;
 
 namespace Script.WeaponScriptGroup
@@ -10,7 +11,7 @@ namespace Script.WeaponScriptGroup
     public class VenomSac : WeaponBase
     {
         private float _distance;
-        private Vector3 _enemyTransform = new Vector3();
+        private Vector3 _enemyTransform;
         private List<GameObject> _enemyTransforms = new List<GameObject>();
         public float poisonDotDamage = 5f;
 
@@ -39,7 +40,7 @@ namespace Script.WeaponScriptGroup
                 HitEnemy.Add(enemy);
                 foreach (var targetObject in HitEnemy)
                 {
-                    if (EnforceManager.poisonInstantKill && 
+                    if (EnforceManager.Instance.poisonInstantKill && 
                         (targetObject.healthPoint < (targetObject.maxHealthPoint * 0.15f))
                         && Random.Next(100) >= 15)
                     {
@@ -61,10 +62,10 @@ namespace Script.WeaponScriptGroup
         public IEnumerator PoisonEffect(EnemyBase hitEnemy)
         {
             // If the enemy has max stacks of poison, we don't apply the poison again.
-            if (hitEnemy.CurrentPoisonStacks >= EnforceManager.poisonOverlapping) yield break;
+            if (hitEnemy.CurrentPoisonStacks >= EnforceManager.Instance.poisonOverlapping) yield break;
     
             if (hitEnemy.RegistryType == EnemyBase.RegistryTypes.Poison) yield break;
-            if (!EnforceManager.activatePoison) yield break;
+            if (!EnforceManager.Instance.activatePoison) yield break;
 
             const float venomDuration = 2f;
             var poisonColor = new Color(0.18f, 1f, 0.1f);

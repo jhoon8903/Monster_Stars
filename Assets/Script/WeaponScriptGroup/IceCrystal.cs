@@ -1,6 +1,7 @@
 using System.Collections;
 using DG.Tweening;
 using Script.EnemyManagerScript;
+using Script.RewardScript;
 using UnityEngine;
 
 namespace Script.WeaponScriptGroup
@@ -23,7 +24,7 @@ namespace Script.WeaponScriptGroup
             foreach (var enemyObject in HitEnemy)
             {
                 AtkEffect(enemyObject);
-                if (EnforceManager.waterRestraintKnockBack)
+                if (EnforceManager.Instance.waterRestraintKnockBack)
                 {
                     KnockBackEffect(enemyObject);
                 }

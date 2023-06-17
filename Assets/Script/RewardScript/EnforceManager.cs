@@ -7,11 +7,29 @@ namespace Script.RewardScript
 {
     public class EnforceManager : MonoBehaviour
     {
+
+
         // Script Group
         [SerializeField] private CharacterManager characterManager;
         [SerializeField] private CountManager countManager;
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private GridManager gridManager;
+
+        public static EnforceManager Instance { get; private set; }
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+                DontDestroyOnLoad(gameObject);
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
+
 
         [Header("\n\n신성 속성\n")] 
 
@@ -140,7 +158,7 @@ namespace Script.RewardScript
         }
        
         [Header("5매치 가운데 유닛 추가 레벨증가")] public bool match5Upgrade ;
-        [Header("전체 공격력 증가 (%)")] public int increaseAtkDamage;
+        [Header("전체 공격력 증가 (%)")] public float increaseAtkDamage = 1f;
         protected internal void IncreaseGroupDamage(int increaseAmount)
         {
             increaseAtkDamage += increaseAmount;
@@ -150,8 +168,8 @@ namespace Script.RewardScript
             }
         }
 
-        [Header("전체 공격속도 증가 (%)")] public int increaseAtkRate;
-        protected internal void IncreaseGroupRate(int increaseRateAmount)
+        [Header("전체 공격속도 증가 (%)")] public float increaseAtkRate = 1f;
+        protected internal void IncreaseGroupRate(float increaseRateAmount)
         {
             increaseAtkRate += increaseRateAmount;
             foreach (var character  in characterManager.characterList)

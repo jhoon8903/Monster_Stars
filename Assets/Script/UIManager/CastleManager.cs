@@ -19,11 +19,12 @@ namespace Script.UIManager
           public int hpPoint = 1000;
           public int maxHpPoint = 1000;
 
-          public bool Damaged => hpPoint < PreviousHpPoint;
+          private bool Damaged => hpPoint < PreviousHpPoint;
           private int PreviousHpPoint { get; set; }
           
           private void Start()
           {
+              PreviousHpPoint = hpPoint;
               hpBar.maxValue = maxHpPoint;
               hpBar.value = hpPoint;
               UpdateHpText();
@@ -72,13 +73,17 @@ namespace Script.UIManager
 
           public void RecoveryCastle()
           {
-              if (enforceManager.recoveryCastle && !Damaged)
+              if (!Damaged)
               {
                   hpPoint += 200;
                   if (hpPoint > maxHpPoint)
                   {
                       hpPoint = maxHpPoint;
                   }
+              }
+              else
+              {
+                  return;
               }
               UpdatePreviousHp();
           }

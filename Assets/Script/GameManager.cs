@@ -29,6 +29,7 @@ namespace Script
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private AtkManager atkManager;
+        [SerializeField] private EnforceManager enforceManager;
         private readonly WaitForSecondsRealtime _waitOneSecRealtime = new WaitForSecondsRealtime(1f);
         private readonly WaitForSecondsRealtime _waitTwoSecRealtime = new WaitForSecondsRealtime(2f);
         private bool _speedUp = false;
@@ -108,7 +109,11 @@ namespace Script
             {
                 gridManager.ApplyBossSpawnColor(_bossSpawnArea);
             }
-            castleManager.RecoveryCastle();
+
+            if (enforceManager.recoveryCastle)
+            {
+                castleManager.RecoveryCastle();
+            }
             moveCount = 7;
             countManager.Initialize(moveCount);
             backgroundManager.ChangePuzzleSize();

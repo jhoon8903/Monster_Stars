@@ -728,7 +728,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterList:
-  - {fileID: 5314217969191077850, guid: 282ca571fdd1a418f8655667bc8cf479, type: 3}
+  - {fileID: 1307041946654653737, guid: 282ca571fdd1a418f8655667bc8cf479, type: 3}
   - {fileID: 996077009063285667, guid: e5eae943fb66c47e5961725f82c5a2ff, type: 3}
   - {fileID: 4196842440807729694, guid: 10ae02ed26a9b4edc803ef0448003341, type: 3}
   - {fileID: 5553006608696507336, guid: 438d7922ea8534dd6a3cfa7664f14cb7, type: 3}
@@ -769,6 +769,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBusy: 0
+  isUp: 0
   minSwipeLength: 0.3
   spawnManager: {fileID: 149521964}
   countManager: {fileID: 841622520}
@@ -4351,7 +4352,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1097818335}
   - component: {fileID: 1097818334}
-  - component: {fileID: 1097818336}
   m_Layer: 6
   m_Name: CharacterPool
   m_TagString: Untagged
@@ -4394,26 +4394,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1097818336
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1097818333}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c9ad30a62e65c450a80d0493f59d9446, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  unitGroup: 0
-  defaultDamage: 0
-  defaultAtkRate: 0
-  projectileSpeed: 0
-  swingSpeed: 0
-  defaultAtkDistance: 0
-  defaultAtkRange: {x: 0, y: 0, z: 0}
-  detectedEnemies: []
 --- !u!1 &1177777540
 GameObject:
   m_ObjectHideFlags: 0

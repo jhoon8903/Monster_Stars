@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
+using UnityEngine.Serialization;
 
 namespace Script.CharacterManagerScript
 {
@@ -27,19 +28,14 @@ namespace Script.CharacterManagerScript
         public float projectileSpeed; // Projectile speed of the unit
         public float swingSpeed; // Swing speed of the unit
         public float defaultAtkDistance; // Default attack distance of the unit
-        public Vector3 defaultAtkRange; // Default attack range of the unit
-        public bool PermanentLevelUp { get; set; } = false; // Indicates if the unit has permanent level up
+        public bool PermanentLevelUp { get; set; } // Indicates if the unit has permanent level up
         private readonly Vector3 _initialScale = Vector3.one; // Initial scale of the character
         private readonly Vector3 _levelUpScale = new Vector3(1.2f, 1.2f, 0); // Scale to use when leveling up
         public List<GameObject> detectedEnemies = new List<GameObject>();
         public GameObject CurrentWeapon { get; set; }
-        protected internal bool IsClicked { get; set; } = false;
-        protected EnforceManager EnforceManager;
+        protected internal bool IsClicked { get; set; }
 
-        private void Start()
-        {
-            EnforceManager = FindObjectOfType<EnforceManager>();
-        }
+
 
         public void OnEnable()
         {
@@ -75,7 +71,6 @@ namespace Script.CharacterManagerScript
         {
             ResetLevel();
         }
-
         // Reset the level of the character
         protected internal void ResetLevel()
         {
@@ -91,14 +86,14 @@ namespace Script.CharacterManagerScript
         // Increase the default damage of the character by a given amount
         public void IncreaseDamage()
         {
-            var increaseDamageAmount = EnforceManager.increaseAtkDamage;
+            var increaseDamageAmount = EnforceManager.Instance.increaseAtkDamage;
             defaultDamage *= 1.0f + (increaseDamageAmount / 100f);
         }
 
         // Increase the default attack rate of the character by a given amount
         public void IncreaseAtkRate()
         {
-            var increaseRateAmount = EnforceManager.increaseAtkRate;
+            var increaseRateAmount = EnforceManager.Instance.increaseAtkRate;
             defaultAtkRate *= 1.0f + (increaseRateAmount / 100f);
         }
 

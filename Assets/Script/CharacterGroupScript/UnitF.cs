@@ -1,29 +1,32 @@
 using System.Collections.Generic;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
+using Script.RewardScript;
 using UnityEngine;
 
 namespace Script.CharacterGroupScript
 {
-    public class UnitD : CharacterBase
+    public class UnitF : CharacterBase
     {
         [SerializeField] private Sprite level1Sprite; // Sprite for level 1
         [SerializeField] private Sprite level2Sprite; // Sprite for level 2
         [SerializeField] private Sprite level3Sprite; // Sprite for level 3
         [SerializeField] private Sprite level4Sprite; // Sprite for level 4
         [SerializeField] private Sprite level5Sprite; // Sprite for level 5
-        private SpriteRenderer _spriteRenderer ; 
-        private float _detectionSize; 
-        private float _currentDamage;
+        private SpriteRenderer _spriteRenderer; // Reference to the SpriteRenderer component
+        private float _detectionSize = 1.0f; // Size of the detection circle
         public void Awake()
         {
-            unitGroup = UnitGroups.D;
-            _spriteRenderer = GetComponent<SpriteRenderer>();
-            Level1();
+            unitGroup = UnitGroups.F;
+            _spriteRenderer = GetComponent<SpriteRenderer>(); // Get the reference to the SpriteRenderer component attached to this object
+            Level1(); // Set initial level to level 1
         }
+
         protected override void LevelUp()
         {
-            base.LevelUp();
+            base.LevelUp(); // Increment the level
+
+            // Update the character's properties based on the current level
             switch (Level)
             {
                 case 2:
@@ -42,16 +45,22 @@ namespace Script.CharacterGroupScript
                     return;
             }
         }
+
         protected internal override void CharacterReset()
         {
             ResetLevel(); // Reset the character's level
             Level1(); // Set level back to 1
         }
 
+        // Detects enemies within a detection circle and returns a list of their GameObjects
         public override List<GameObject> DetectEnemies()
         {
+
             var detectionCenter = (Vector2)transform.position;
-            _detectionSize = EnforceManager.physicIncreaseWeaponScale ? 2.5f : 1.5f;
+            if (EnforceManager.Instance.poisonIncreaseAtkRange)
+            {
+                _detectionSize = 2.0f;
+            }
             var colliders = Physics2D.OverlapCircleAll(detectionCenter, _detectionSize);
             var currentlyDetectedEnemies = new List<GameObject>();
             foreach (var enemyObject in colliders)
@@ -66,98 +75,106 @@ namespace Script.CharacterGroupScript
             {
                 if (!currentlyDetectedEnemies.Contains(detectedEnemy))
                 {
+                    // Unsubscribe from EnemyKilled event.
                     var enemyBase = detectedEnemy.GetComponent<EnemyBase>();
                     enemyBase.EnemyKilled -= OnEnemyKilled;
                 }
             }
             detectedEnemies = currentlyDetectedEnemies;
-
             return detectedEnemies;
         }
+
+
+        // Draws a wire sphere in the Scene view to visualize the detection circle
         public void OnDrawGizmos()
         {
             var detectionCenter = transform.position;
-            Gizmos.color = Color.cyan;
+            Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(detectionCenter, _detectionSize);
         }
-        public void ResetDamage()
-        {
-            EnforceManager.increasePhysicsDamage = 1f;
-        }
+
+        // Sets the properties for level 1 of the character
         private void Level1()
         {
-            CharacterName = "Unit_D_00";
+            CharacterName = "Unit_F_00";
             UnitLevel = 1;
             Type = Types.Character;
-            unitGroup = UnitGroups.D;
+            unitGroup = UnitGroups.F;
+            defaultDamage = 0f;
             defaultAtkRate = 0;
             defaultAtkDistance = 0;
-            defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level1Sprite;
+            UnitAtkType = UnitAtkTypes.Gas;
+            UnitProperty = UnitProperties.Poison;
+            UnitEffect = UnitEffects.Poison;
         }
+
+        // Sets the properties for level 2 of the character
         private void Level2()
         {
-            CharacterName = "Unit_D_01";
+            CharacterName = "Unit_F_01";
             UnitLevel = 2;
             Type = Types.Character;
-            unitGroup = UnitGroups.D;
-            defaultDamage += (250f * EnforceManager.increasePhysicsDamage);
-            defaultAtkRate = 1f * EnforceManager.increasePhysicAtkSpeed ;
-            swingSpeed = 2f * EnforceManager.increasePhysicAtkSpeed;
+            unitGroup = UnitGroups.F;
+            defaultDamage = 120;
+            defaultAtkRate = 1.2f;
             defaultAtkDistance = 1f;
-            defaultAtkRange = Vector3.zero;
+            projectileSpeed = 2.0f;
             _spriteRenderer.sprite = level2Sprite;
-            UnitAtkType = UnitAtkTypes.Circle;
-            UnitProperty = UnitProperties.Physics;
-            UnitEffect = UnitEffects.None;
+            UnitAtkType = UnitAtkTypes.Gas;
+            UnitProperty = UnitProperties.Poison;
+            UnitEffect = UnitEffects.Poison;
         }
+
+        // Sets the properties for level 3 of the character
         private void Level3()
         {
-            CharacterName = "Unit_D_02";
+            CharacterName = "Unit_F_02";
             UnitLevel = 3;
             Type = Types.Character;
-            unitGroup = UnitGroups.D;
+            unitGroup = UnitGroups.F;
             defaultDamage *= 1.7f;
-            defaultAtkRate = 1f * EnforceManager.increasePhysicAtkSpeed ;
-            swingSpeed = 2f * EnforceManager.increasePhysicAtkSpeed;
+            defaultAtkRate = 1.2f;
             defaultAtkDistance = 1f;
-            defaultAtkRange = Vector3.zero;
+            projectileSpeed = 2.0f;
             _spriteRenderer.sprite = level3Sprite;
-            UnitAtkType = UnitAtkTypes.Circle;
-            UnitProperty = UnitProperties.Physics;
-            UnitEffect = UnitEffects.None;
+            UnitAtkType = UnitAtkTypes.Gas;
+            UnitProperty = UnitProperties.Poison;
+            UnitEffect = UnitEffects.Poison;
         }
+
+        // Sets the properties for level 4 of the character
         private void Level4()
         {
-            CharacterName = "Unit_D_03";
+            CharacterName = "Unit_F_03";
             UnitLevel = 4;
             Type = Types.Character;
-            unitGroup = UnitGroups.D;
+            unitGroup = UnitGroups.F;
             defaultDamage *= 2.0f;
-            defaultAtkRate = 1f * EnforceManager.increasePhysicAtkSpeed ;
-            swingSpeed = 2f * EnforceManager.increasePhysicAtkSpeed;
+            defaultAtkRate = 1.2f;
             defaultAtkDistance = 1f;
-            defaultAtkRange = Vector3.zero;
+            projectileSpeed = 2.0f;
             _spriteRenderer.sprite = level4Sprite;
-            UnitAtkType = UnitAtkTypes.Circle;
-            UnitProperty = UnitProperties.Physics;
-            UnitEffect = UnitEffects.None;
+            UnitAtkType = UnitAtkTypes.Gas;
+            UnitProperty = UnitProperties.Poison;
+            UnitEffect = UnitEffects.Poison;
         }
+
+        // Sets the properties for level 5 of the character
         private void Level5()
         {
-            CharacterName = "Unit_D_04";
+            CharacterName = "Unit_F_04";
             UnitLevel = 5;
             Type = Types.Character;
-            unitGroup = UnitGroups.D;
+            unitGroup = UnitGroups.F;
             defaultDamage *= 2.3f;
-            defaultAtkRate = 1f * EnforceManager.increasePhysicAtkSpeed ;
-            swingSpeed = 2f * EnforceManager.increasePhysicAtkSpeed;
+            defaultAtkRate = 1.2f;
             defaultAtkDistance = 1f;
-            defaultAtkRange = Vector3.zero;
+            projectileSpeed = 2.0f;
             _spriteRenderer.sprite = level5Sprite;
-            UnitAtkType = UnitAtkTypes.Circle;
-            UnitProperty = UnitProperties.Physics;
-            UnitEffect = UnitEffects.None;
+            UnitAtkType = UnitAtkTypes.Gas;
+            UnitProperty = UnitProperties.Poison;
+            UnitEffect = UnitEffects.Poison;
         }
     }
 }

@@ -1,6 +1,7 @@
 using System.Collections;
 using DG.Tweening;
 using Script.EnemyManagerScript;
+using Script.RewardScript;
 using UnityEngine;
 
 namespace Script.WeaponScriptGroup
@@ -11,8 +12,11 @@ namespace Script.WeaponScriptGroup
         {
             yield return base.UseWeapon();
             var duration = Distance / Speed;
-            var endPosition = StartingPosition.y + (EnforceManager.divineAtkRange? -Distance : Distance);
-            transform.rotation = Quaternion.Euler(0,0,EnforceManager.divineAtkRange? 180: 0);
+            var endPosition = StartingPosition.y 
+                              // + (EnforceManager.Instance.divineAtkRange? -Distance : 
+                                  + Distance;
+                                  // );
+            transform.rotation = Quaternion.Euler(0,0,EnforceManager.Instance.divineAtkRange? 180: 0);
             transform.DOMoveY(endPosition, duration).SetEase(Ease.Linear).OnComplete(() => { StopUseWeapon(gameObject);});
         }
 
@@ -28,7 +32,7 @@ namespace Script.WeaponScriptGroup
                 enemy.ReceiveDamage(damage);
             }
             
-            if (!EnforceManager.divinePenetrate )
+            if (!EnforceManager.Instance.divinePenetrate )
             {
                 StopUseWeapon(gameObject);
             }

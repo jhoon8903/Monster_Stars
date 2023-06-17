@@ -21,13 +21,11 @@ namespace Script.WeaponScriptGroup
         protected readonly System.Random Random = new System.Random();
         private EnemyBase _poisonedEnemy;
         protected readonly List<EnemyBase> HitEnemy = new List<EnemyBase>();
-        protected EnforceManager EnforceManager;
         private WaveManager _waveManager;
 
         public void InitializeWeapon(CharacterBase characterBase)
         {
             CharacterBase = characterBase;
-            EnforceManager = FindObjectOfType<EnforceManager>();
             _waveManager = FindObjectOfType<WaveManager>();
         }
         public virtual IEnumerator UseWeapon()
@@ -48,7 +46,8 @@ namespace Script.WeaponScriptGroup
         }
         protected void AtkEffect(EnemyBase enemyObject)
         {
-            switch (UnitEffect)
+            if (enemyObject == null) return;
+                switch (UnitEffect)
             {
                 case CharacterBase.UnitEffects.Restraint:
                     RestraintAttribution(enemyObject);
@@ -130,7 +129,7 @@ namespace Script.WeaponScriptGroup
         }
         private void IsRestraint(EnemyBase enemyStatus)
         {
-            if (!EnforceManager.activeRestraint) return;
+            if (!EnforceManager.Instance.activeRestraint) return;
             if (Random.Next(100) < 20)
             {
                 enemyStatus.IsRestraint = true;
@@ -151,9 +150,9 @@ namespace Script.WeaponScriptGroup
                 case CharacterBase.UnitProperties.Divine:
                     if (enemyBase.RegistryType != EnemyBase.RegistryTypes.Divine)
                     {
-                        if (EnforceManager.divinePoisonAdditionalDamage && enemyBase.IsPoison)
+                        if (EnforceManager.Instance.divinePoisonAdditionalDamage && enemyBase.IsPoison)
                         {
-                            var increaseDamage = 1f + (0.3f * EnforceManager.divinePoisonAdditionalDamageCount );
+                            var increaseDamage = 1f + (0.3f * EnforceManager.Instance.divinePoisonAdditionalDamageCount );
                             damage *= increaseDamage;
                         }
                         return damage;
@@ -168,14 +167,14 @@ namespace Script.WeaponScriptGroup
                 case CharacterBase.UnitProperties.Physics:
                     if (enemyBase.RegistryType != EnemyBase.RegistryTypes.Physics)
                     {
-                        if (EnforceManager.physicSlowAdditionalDamage && enemyBase.IsSlow)
+                        if (EnforceManager.Instance.physicSlowAdditionalDamage && enemyBase.IsSlow)
                         {
                             damage *= 2.0f;
                         }
 
-                        if (EnforceManager.physicIncreaseDamage)
+                        if (EnforceManager.Instance.physicIncreaseDamage)
                         {
-                            damage += damage * EnforceManager.increasePhysicsDamage;
+                            damage += damage * EnforceManager.Instance.increasePhysicsDamage;
                         }
                         return damage;
                     }
@@ -189,7 +188,7 @@ namespace Script.WeaponScriptGroup
                 case CharacterBase.UnitProperties.Poison:
                     if (enemyBase.RegistryType != EnemyBase.RegistryTypes.Poison)
                     {
-                        if (EnforceManager.poisonRestraintAdditionalDamage && enemyBase.IsRestraint)
+                        if (EnforceManager.Instance.poisonRestraintAdditionalDamage && enemyBase.IsRestraint)
                         {
                             damage *= 2.0f;
                         }
@@ -204,7 +203,7 @@ namespace Script.WeaponScriptGroup
 
                 case CharacterBase.UnitProperties.Water:
 
-                        damage += damage * EnforceManager.IncreaseWaterDamage;
+                        damage += damage * EnforceManager.Instance.IncreaseWaterDamage;
                         return damage;
             }
             return damage;
