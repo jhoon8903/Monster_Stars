@@ -57,6 +57,8 @@ namespace Script.EnemyManagerScript
         private EnforceManager _enforceManager;
         protected internal int CurrentPoisonStacks { get; set; }
 
+
+
         public void Initialize()
         {
             _enforceManager = FindObjectOfType<EnforceManager>();
