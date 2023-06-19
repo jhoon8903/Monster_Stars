@@ -40,9 +40,9 @@ namespace Script.UIManager
             }
         }
 
-        public IEnumerator HandleEnemyKilled(EnemyBase.KillReasons reason)
+        public void HandleEnemyKilled(EnemyBase.KillReasons reason)
         {
-            if (reason != EnemyBase.KillReasons.ByPlayer) yield break;
+            if (reason != EnemyBase.KillReasons.ByPlayer) return;
             var additionalExp = expPoint * (enforceManager.expPercentage / 100.0f);
             expPoint += 1 + additionalExp; 
             if (expPoint >= levelUpPoint)
@@ -55,7 +55,7 @@ namespace Script.UIManager
                     levelUpPoint += 5;
                     expBar.maxValue = levelUpPoint;
                 }
-                yield return StartCoroutine(levelUpRewardManager.LevelUpReward());
+                StartCoroutine(levelUpRewardManager.LevelUpReward());
             }
             expBar.value = expPoint;
             expBar.DOValue(expPoint, 0.5f);

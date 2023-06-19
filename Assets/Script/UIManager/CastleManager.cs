@@ -11,11 +11,11 @@ namespace Script.UIManager
           [SerializeField] protected internal Slider hpBar;
           [SerializeField] private TextMeshProUGUI hpText;
           [SerializeField] private GameManager gameManager;
-          public int hpPoint = 1000;
-          public int maxHpPoint = 1000;
+          public float hpPoint = 1000;
+          public float maxHpPoint = 1000;
 
           private bool Damaged => hpPoint < PreviousHpPoint;
-          private int PreviousHpPoint { get; set; }
+          private float PreviousHpPoint { get; set; }
           
           private void Start()
           {
@@ -34,7 +34,7 @@ namespace Script.UIManager
               hpPoint -= enemyBase.CrushDamage;
               hpBar.DOValue(hpPoint, 1.0f);
               UpdateHpText();
-              FindObjectOfType<EnemyBase>().EnemyKilledEvents(enemyBase.gameObject);
+              FindObjectOfType<EnemyBase>().EnemyKilledEvents(enemyBase);
               if (hpPoint > 0) return;
               hpPoint = 0;
               hpBar.value = hpPoint;

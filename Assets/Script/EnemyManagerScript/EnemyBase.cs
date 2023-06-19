@@ -1,3 +1,4 @@
+using System.Collections;
 using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
@@ -12,10 +13,11 @@ namespace Script.EnemyManagerScript
     {
         private Slider _hpSlider;
         public enum KillReasons { ByPlayer }
-        public int number = 0;
+        public int number;
         public float healthPoint; // 적 오브젝트의 체력
         public float maxHealthPoint;
-        protected internal int CrushDamage; // 충돌시 데미지
+        private float _currentHealth;
+        protected internal float CrushDamage; // 충돌시 데미지
         protected internal float MoveSpeed; // 적 오브젝트의 이동속도, 1f 는 1초에 1Grid를 가는 속도 숫자가 커질수록 느려져야 함
         public enum EnemyTypes { Boss, BasicA, BasicD,Slow, Fast }
         protected internal EnemyTypes EnemyType; // 적 타입 빠른적, 느린적, 보통적, 보스
@@ -24,10 +26,7 @@ namespace Script.EnemyManagerScript
         public enum SpawnZones { A, B, C, D, E }
         protected internal SpawnZones SpawnZone;
         private static readonly object Lock = new object();
-        private float _currentHealth;
-        // public delegate void EnemyKilledEventHandler(object source, EventArgs args);
-        // public event EnemyKilledEventHandler EnemyKilled;
-
+        private bool _isDead;
         public bool IsRestraint { get; set; }
         public bool IsSlow { get; set; }
         private Coroutine _poisonEffectCoroutine;
@@ -43,7 +42,7 @@ namespace Script.EnemyManagerScript
                     var venomSac = FindObjectOfType<VenomSac>();
                     if (venomSac != null && gameObject.activeInHierarchy)
                     {
-                        _poisonEffectCoroutine = StartCoroutine(venomSac.PoisonEffect(this));
+                        _poisonEffectCoroutine = venomSac.PoisonEffect(this);
                     }
                 }
                 else
@@ -61,6 +60,7 @@ namespace Script.EnemyManagerScript
         public void Initialize()
         {
             _enforceManager = FindObjectOfType<EnforceManager>();
+
             var wave = FindObjectOfType<GameManager>().wave;
             _hpSlider = GetComponentInChildren<Slider>(true);
 
@@ -77,32 +77,44 @@ namespace Script.EnemyManagerScript
         protected internal virtual void EnemyProperty()
         {
         }
-        public void ReceiveDamage(float damage,KillReasons reason = KillReasons.ByPlayer)
+        public void ReceiveDamage(EnemyBase detectEnemy, float damage, KillReasons reason = KillReasons.ByPlayer)
         {
             lock (Lock)
             {
+                if (_isDead)
+                {
+                    Debug.Log($"Received damage for already dead enemy {number}. Ignoring damage.");
+                    return;
+                }
+                Debug.Log($"ReceiveDamage called for enemy {number}. Current HP: {_currentHealth}, Damage: {damage}");
                 _currentHealth -= damage;
                 UpdateHpSlider();
-                if (_currentHealth >= 0) return;
-                if (ExpManager.Instance != null && gameObject.activeInHierarchy)
-                {
-                    StartCoroutine(ExpManager.Instance.HandleEnemyKilled(reason));
-                }
+                if (_currentHealth > 0 || _isDead) return;
+                Debug.Log($"Enemy {number} is dying.");
+                _isDead = true; // Mark the enemy as dead to prevent multiple death events
+                ExpManager.Instance.HandleEnemyKilled(reason);
                 if (_enforceManager.physicIncreaseDamage)
                 {
                     _enforceManager.PhysicIncreaseDamage();
                 }
-                EnemyKilledEvents(gameObject);
+                if (!CharacterBase.detectedEnemies.Contains(detectEnemy.gameObject)) // Check if enemy is still in the list before removing it
+                {
+                    EnemyKilledEvents(detectEnemy);
+                }
             }
         }
 
-        public void EnemyKilledEvents(GameObject detectedEnemy)
+        public void EnemyKilledEvents(EnemyBase detectedEnemy)
         {
-            Debug.Log(detectedEnemy.GetComponent<EnemyBase>().number);
-            FindObjectOfType<EnemyPool>().ReturnToPool(detectedEnemy);
-            FindObjectOfType<WaveManager>().EnemyDestroyEvent();
-            CharacterBase.detectedEnemies.Remove(detectedEnemy);
+            var enemy = detectedEnemy.gameObject;
+            var enemyPool = FindObjectOfType<EnemyPool>();
+            var waveManager = FindObjectOfType<WaveManager>();
+            Debug.Log($"Enemy {number} killed, returning to pool.");
+            CharacterBase.detectedEnemies.Remove(enemy);
+            waveManager.EnemyDestroyEvent();
+            enemyPool.ReturnToPool(enemy);
         }
+
         private void UpdateHpSlider()
         {
             _hpSlider.DOValue(_currentHealth, 0.5f);

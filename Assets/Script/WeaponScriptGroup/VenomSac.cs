@@ -4,6 +4,7 @@ using DG.Tweening;
 using Script.CharacterGroupScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Script.WeaponScriptGroup
@@ -33,58 +34,45 @@ namespace Script.WeaponScriptGroup
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
-            var hitColliders = Physics2D.OverlapCircleAll(collision.transform.position, 0.5f);
-            foreach (var enemyObjects in hitColliders)
+            var enemy = collision.gameObject.GetComponent<EnemyBase>();
+            if (EnforceManager.Instance.poisonInstantKill && (enemy.healthPoint < enemy.maxHealthPoint * 0.15f))
             {
-                var enemy = enemyObjects.GetComponent<EnemyBase>();
-                if (enemy !=null)
+                var instantKillChance = Random.Range(0, 100);
+                if (instantKillChance < 15)
                 {
-                    HitEnemy.Add(enemy);
+                    InstantKill(enemy);
                 }
             }
-
-            foreach (var targetObject in HitEnemy)
+            else
             {
-                if (EnforceManager.Instance.poisonInstantKill && (targetObject.healthPoint < targetObject.maxHealthPoint * 0.15f))
-                {
-                    var instantKillChance = Random.Range(0, 100);
-                    if (instantKillChance < 15)
-                    {
-                        InstantKill(targetObject);
-                    }
-                }
-                else
-                {
-                    AtkEffect(targetObject);
-                    if (targetObject == null || !targetObject.gameObject.activeInHierarchy) continue;
-                    var damage = DamageCalculator(Damage, targetObject);  // Ensure targetObject is not null here
-                    targetObject.ReceiveDamage(damage);
-                }
+                AtkEffect(enemy);
+                var damage = DamageCalculator(Damage, enemy);
+                enemy.ReceiveDamage(enemy,damage);
             }
             StopUseWeapon(gameObject);
-            HitEnemy.Clear();
         }
 
-        public IEnumerator PoisonEffect(EnemyBase hitEnemy)
+
+        public Coroutine PoisonEffect(EnemyBase hitEnemy)
         {
             // If the enemy has max stacks of poison, we don't apply the poison again.
-            if (hitEnemy.CurrentPoisonStacks >= EnforceManager.Instance.poisonOverlapping) yield break;
-            if (hitEnemy.RegistryType == EnemyBase.RegistryTypes.Poison) yield break;
-            if (!EnforceManager.Instance.activatePoison) yield break;
+            if (hitEnemy.CurrentPoisonStacks < EnforceManager.Instance.poisonOverlapping) return null;
+            if (hitEnemy.RegistryType != EnemyBase.RegistryTypes.Poison) return null;
+            if (EnforceManager.Instance.activatePoison) return null;
             const float venomDuration = 2f;
             var poisonColor = new Color(0.18f, 1f, 0.1f);
-            if (poisonDotDamage == 0) yield break;
+            if (poisonDotDamage != 0) return null;
             hitEnemy.GetComponent<SpriteRenderer>().DOColor(poisonColor, 0.2f);
             hitEnemy.CurrentPoisonStacks++; // Increment the poison count
             var elapsedTime = 0f;
             while (elapsedTime < venomDuration)
             {
-                hitEnemy.ReceiveDamage(poisonDotDamage);
+                hitEnemy.ReceiveDamage(hitEnemy,poisonDotDamage);
                 elapsedTime += Time.deltaTime;
-                yield return null;
             }
             hitEnemy.GetComponent<SpriteRenderer>().DOColor(Color.white, 0.2f); // Reset the color
             hitEnemy.CurrentPoisonStacks--; // Decrement the poison count
+            return null;
         }
     }
 }

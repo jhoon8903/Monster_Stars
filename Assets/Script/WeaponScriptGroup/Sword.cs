@@ -19,14 +19,9 @@ namespace Script.WeaponScriptGroup
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
-            HitEnemy.Add(enemy);
-            foreach (var enemyObject in HitEnemy)
-            {
-                AtkEffect(enemy);
-                var damage = DamageCalculator(Damage, enemyObject);
-                enemy.ReceiveDamage(damage);
-            }
-            HitEnemy.Clear();
+            AtkEffect(enemy);
+            var damage = DamageCalculator(Damage, enemy);
+            enemy.ReceiveDamage(enemy,damage);
         }
     }
 }

@@ -96,7 +96,7 @@ namespace Script.CharacterGroupScript
             UnitLevel = 2;
             Type = Types.Character;
             unitGroup = UnitGroups.E;
-            defaultDamage = 100;
+            defaultDamage = 100f;
             defaultAtkRate = 0.8f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
@@ -130,7 +130,7 @@ namespace Script.CharacterGroupScript
             UnitLevel = 4;
             Type = Types.Character;
             unitGroup = UnitGroups.E;
-            defaultDamage *= 2;
+            defaultDamage *= 2f;
             defaultAtkRate = 0.8f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;

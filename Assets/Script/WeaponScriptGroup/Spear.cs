@@ -46,35 +46,28 @@ namespace Script.WeaponScriptGroup
                     .SetEase(Ease.Linear)
                     .OnComplete(() => StopUseWeapon(gameObject));
             }
-
         }
-
-
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
+            if (enemy == null || HitEnemy.Contains(enemy)) return; // Skip if it's already hit
             HitEnemy.Add(enemy);
-            foreach (var enemyObject in HitEnemy)
+            AtkEffect(enemy);
+            var damage = DamageCalculator(Damage, enemy);
+            enemy.ReceiveDamage(enemy,damage);
+            switch (EnforceManager.Instance.divinePenetrate)
             {
-                AtkEffect(enemyObject);
-                var damage = DamageCalculator(Damage, enemyObject);
-                enemy.ReceiveDamage(damage);
-            }
-            
-            if (!EnforceManager.Instance.divinePenetrate )
-            {
-                StopUseWeapon(gameObject);
-            }
-            else
-            {
-                if (HitEnemy.Count == 2)
-                {
+                case true when HitEnemy.Count == 2:
                     StopUseWeapon(gameObject);
-                }
+                    HitEnemy.Clear(); // Only clear when the weapon stops
+                    break;
+                case false:
+                    StopUseWeapon(gameObject);
+                    HitEnemy.Clear();
+                    break;
             }
-            HitEnemy.Clear();
         }
     }
 }

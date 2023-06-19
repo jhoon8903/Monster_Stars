@@ -40,6 +40,7 @@ namespace Script.WeaponScriptGroup
         protected void StopUseWeapon(GameObject weapon)
         {
             isInUse = false;
+            HitEnemy.Clear();
             WeaponsPool.ReturnToPool(weapon);
         }
         protected void AtkEffect(EnemyBase enemyObject)
@@ -206,12 +207,12 @@ namespace Script.WeaponScriptGroup
             }
             return damage;
         }
-        protected void InstantKill(EnemyBase target)
+        protected static void InstantKill(EnemyBase target)
         {
-            FindObjectOfType<EnemyBase>().EnemyKilledEvents(target.gameObject);
+            FindObjectOfType<EnemyBase>().EnemyKilledEvents(target);
             if (ExpManager.Instance == null) return;
             const EnemyBase.KillReasons reason = EnemyBase.KillReasons.ByPlayer;
-            StartCoroutine(ExpManager.Instance.HandleEnemyKilled(reason));
+            ExpManager.Instance.HandleEnemyKilled(reason);
         }
     }
 }

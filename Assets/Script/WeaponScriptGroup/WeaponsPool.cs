@@ -52,11 +52,7 @@ namespace Script.WeaponScriptGroup
             _secondWeapon = objectToSpawn.transform.Find("SecondSword"); // Replace with the actual name of your second weapon
             if (enforceManager.physicIncreaseWeaponScale)
             {
-                if (_pivotSword == null)
-                {
-                    Debug.Log(_pivotSword);
-                }
-                else
+                if (_pivotSword != null)
                 {
                     _pivotSword.transform.localScale = new Vector3(2f,1.7f,0);
                 }

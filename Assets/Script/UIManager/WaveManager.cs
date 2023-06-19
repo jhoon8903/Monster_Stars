@@ -65,11 +65,14 @@ namespace Script.UIManager
         {
             lock (EnemyLock)
             {
+                Debug.Log($"Enemy destroyed, current total count: {enemyTotalCount}.");
                 enemyTotalCount -= 1;
+                Debug.Log($"After destroying an enemy, total count: {enemyTotalCount}.");
                 if (enemyTotalCount != 0) return;
                 StartCoroutine(gameManager.ContinueOrLose());
             }
         }
+
 
     }
 }

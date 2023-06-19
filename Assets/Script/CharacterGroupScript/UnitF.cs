@@ -14,7 +14,7 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level4Sprite; // Sprite for level 4
         [SerializeField] private Sprite level5Sprite; // Sprite for level 5
         private SpriteRenderer _spriteRenderer; // Reference to the SpriteRenderer component
-        private float _detectionSize = 1.0f; // Size of the detection circle
+        private float _detectionSize = 1.5f; // Size of the detection circle
         public void Awake()
         {
             unitGroup = UnitGroups.F;
@@ -59,7 +59,7 @@ namespace Script.CharacterGroupScript
             var detectionCenter = (Vector2)transform.position;
             if (EnforceManager.Instance.poisonIncreaseAtkRange)
             {
-                _detectionSize = 2.0f;
+                _detectionSize = 2.5f;
             }
             var colliders = Physics2D.OverlapCircleAll(detectionCenter, _detectionSize);
             var currentlyDetectedEnemies = new List<GameObject>();
@@ -89,8 +89,8 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.F;
             defaultDamage = 0f;
-            defaultAtkRate = 0;
-            defaultAtkDistance = 0;
+            defaultAtkRate = 0f;
+            defaultAtkDistance = 0f;
             _spriteRenderer.sprite = level1Sprite;
             UnitAtkType = UnitAtkTypes.Gas;
             UnitProperty = UnitProperties.Poison;
@@ -104,7 +104,7 @@ namespace Script.CharacterGroupScript
             UnitLevel = 2;
             Type = Types.Character;
             unitGroup = UnitGroups.F;
-            defaultDamage = 120;
+            defaultDamage = 120f;
             defaultAtkRate = 1.2f;
             defaultAtkDistance = 1f;
             projectileSpeed = 1.0f;

@@ -20,19 +20,14 @@ namespace Script.WeaponScriptGroup
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
-            HitEnemy.Add(enemy);
-            foreach (var enemyObject in HitEnemy)
+            AtkEffect(enemy);
+            if (EnforceManager.Instance.waterRestraintKnockBack)
             {
-                AtkEffect(enemyObject);
-                if (EnforceManager.Instance.waterRestraintKnockBack)
-                {
-                    KnockBackEffect(enemyObject);
-                }
-                var damage = DamageCalculator(Damage, enemyObject);
-                enemyObject.ReceiveDamage(damage);
-                StopUseWeapon(gameObject);
+                KnockBackEffect(enemy);
             }
-            HitEnemy.Clear();
+            var damage = DamageCalculator(Damage, enemy);
+            enemy.ReceiveDamage(enemy,damage);
+            StopUseWeapon(gameObject);
         }
         private static bool KnockBackEffect(EnemyBase enemyObject)
         {

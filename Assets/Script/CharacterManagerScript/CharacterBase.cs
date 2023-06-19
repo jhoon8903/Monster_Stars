@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using Script.EnemyManagerScript;
 using Script.RewardScript;
-using UnityEngine.Serialization;
 
 namespace Script.CharacterManagerScript
 {
@@ -95,13 +92,6 @@ namespace Script.CharacterManagerScript
         {
             var increaseRateAmount = EnforceManager.Instance.increaseAtkRate;
             defaultAtkRate *= 1.0f + (increaseRateAmount / 100f);
-        }
-
-        protected void OnEnemyKilled(object source, EventArgs args)
-        {
-            var enemyBase = (EnemyBase)source;
-            // enemyBase.EnemyKilled -= OnEnemyKilled;
-            detectedEnemies.Remove(enemyBase.gameObject);
         }
     }
 }
