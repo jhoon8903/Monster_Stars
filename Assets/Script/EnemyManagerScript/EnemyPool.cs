@@ -8,12 +8,10 @@ namespace Script.EnemyManagerScript
     {
         [SerializeField] private EnemyManager enemyManager;
         private List<GameObject> _pooledEnemy = new List<GameObject>();
-        private readonly List<GameObject> _pooledDefaultEnemy = new List<GameObject>();
-
+        private List<GameObject> _pooledDefaultEnemy = new List<GameObject>();
         public List<EnemyBase> enemyBases = new List<EnemyBase>();
         public void Awake()
         {
-            
             _pooledDefaultEnemy = new List<GameObject>();
             foreach (var enemySettings in enemyManager.enemyList)
             {
@@ -26,8 +24,8 @@ namespace Script.EnemyManagerScript
                     _pooledDefaultEnemy.Add(obj);
                 }
             }
-
-            _poolEnemy = _pooledDefaultEnemy.ToList();
+            _pooledEnemy = _pooledDefaultEnemy.ToList();
+        }
 
         public GameObject GetPooledEnemy(EnemyBase.EnemyTypes enemyType)
         {
@@ -45,6 +43,6 @@ namespace Script.EnemyManagerScript
             obj.transform.localScale = Vector3.one;
             obj.SetActive(false);
         }
+
     }
-}
 }
