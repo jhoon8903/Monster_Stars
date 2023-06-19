@@ -11,9 +11,10 @@ namespace Script.EnemyManagerScript
         private readonly List<GameObject> _pooledDefaultEnemy = new List<GameObject>();
 
         public List<EnemyBase> enemyBases = new List<EnemyBase>();
-        
         public void Awake()
         {
+            
+            _pooledDefaultEnemy = new List<GameObject>();
             foreach (var enemySettings in enemyManager.enemyList)
             {
                 for (var i = 0; i < enemySettings.poolSize; i++)
@@ -25,8 +26,8 @@ namespace Script.EnemyManagerScript
                     _pooledDefaultEnemy.Add(obj);
                 }
             }
-            _pooledEnemy = _pooledDefaultEnemy;
-        }
+
+            _poolEnemy = _pooledDefaultEnemy.ToList();
 
         public GameObject GetPooledEnemy(EnemyBase.EnemyTypes enemyType)
         {
@@ -45,4 +46,5 @@ namespace Script.EnemyManagerScript
             obj.SetActive(false);
         }
     }
+}
 }
