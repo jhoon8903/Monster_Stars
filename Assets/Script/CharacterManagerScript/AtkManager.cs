@@ -1,6 +1,9 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using Script.RewardScript;
 using Script.WeaponScriptGroup;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Script.CharacterManagerScript
@@ -21,47 +24,65 @@ namespace Script.CharacterManagerScript
     {
         [SerializeField] private CharacterPool characterPool; // Reference to the character pool
         [SerializeField] private WeaponsPool weaponsPool; // Reference to the weapon pool
+        [SerializeField] private EnforceManager enforceManager;
+        [SerializeField] private GameManager gameManager;
+        public float attackRate = 1;
+          public List<GameObject> enemyList = new List<GameObject>();
 
-        public void CheckForAttack()
+        public IEnumerator CheckForAttack()
         {
-            var characters = characterPool.UsePoolCharacterList(); // Get the list of characters from the character pool
-            foreach (var characterBase in from character in characters select character
-                .GetComponent<CharacterBase>() into characterBase where characterBase.UnitLevel >= 2 let enemies = characterBase
-                .DetectEnemies() where enemies.Count > 0 select characterBase)
+            var characters = characterPool.UsePoolCharacterList();
+            foreach (var atkUnit in characters
+                         .Select(character => character.GetComponent<CharacterBase>())
+                         .Where(atkUnit => atkUnit.UnitLevel >= 2))
             {
-                AtkMotion(characterBase); // Trigger attack motion for the character
+                StartCoroutine(AtkMotion(atkUnit));
             }
+            yield return null;
         }
-
-        // Perform attack motion for the given unit
-        private void AtkMotion(CharacterBase unit)
+        private IEnumerator AtkMotion(CharacterBase unit)
         {
-            var atkUnit = unit.gameObject; // Attacking unit
-            var unitAtkType = unit.UnitAtkType; // Attack type of the unit
-            var unitGroup = unit.unitGroup; // Group of the unit
+            var atkRate = unit.GetComponent<CharacterBase>().defaultAtkRate * attackRate * 3.5f;
 
-            // Choose the attack method based on the unit's attack type
-            switch (unitAtkType)
+            while (gameManager.isBattle)
             {
-                case CharacterBase.UnitAtkTypes.Projectile:
-                    ProjectileAttack(atkUnit, unitGroup); // Perform projectile attack
-                    break;
-                case CharacterBase.UnitAtkTypes.GuideProjectile:
-                    GuideProjectileAttack(atkUnit, unitGroup); // Perform guided projectile attack
-                    break;
-                case CharacterBase.UnitAtkTypes.Gas:
-                    GasAttack(atkUnit, unitGroup); // Perform gas attack
-                    break;
-                case CharacterBase.UnitAtkTypes.Circle:
-                    CircleAttack(atkUnit, unitGroup); // Perform circle attack
-                    break;
-                default:
-                    Debug.Log($"unitGroup: {unitGroup} / uniAtkType: {atkUnit}");
-                    break;
-            }
-        }
+                if(Time.timeScale == 0)
+                {
+                    yield return null;
+                    continue;
+                }
+                enemyList = unit.DetectEnemies();
+                Debug.Log($"{unit.name} / LIstCount: {enemyList.Count}");
 
-        // Perform attack using the specified weapon type for projectile attack
+                if (enemyList.Count > 0)
+                {
+                    enemyList.RemoveAll(enemy => enemy == null || !enemy.activeInHierarchy);
+                    var atkUnit = unit.gameObject; // Attacking unit
+                    var unitAtkType = unit.UnitAtkType; // Attack type of the unit
+                    var unitGroup = unit.unitGroup; // Group of the unit
+                    switch (unitAtkType)
+                    {
+                        case CharacterBase.UnitAtkTypes.Projectile:
+                           ProjectileAttack(atkUnit, unitGroup); // Perform projectile attack
+                            break;
+                        case CharacterBase.UnitAtkTypes.Gas:
+                           GasAttack(atkUnit, unitGroup); // Perform gas attack
+                            break;
+                        case CharacterBase.UnitAtkTypes.Circle:
+                            CircleAttack(atkUnit, unitGroup); // Perform circle attack
+                            break;
+                        default:
+                            throw new ArgumentOutOfRangeException();
+                    }
+                }
+                else
+                {
+                    yield return new WaitForSecondsRealtime(0.1f);
+                }
+                yield return new WaitForSecondsRealtime(atkRate);
+            }
+            // ReSharper disable once IteratorNeverReturns
+        }
         private void ProjectileAttack(GameObject unit, CharacterBase.UnitGroups unitGroup)
         {
             switch (unitGroup)
@@ -72,49 +93,60 @@ namespace Script.CharacterManagerScript
                 case CharacterBase.UnitGroups.E:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.IceCrystal)); // Perform attack with an ice crystal
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(unitGroup), unitGroup, null);
             }
         }
-
-        // Perform guided projectile attack
-        private void GuideProjectileAttack(GameObject unit, CharacterBase.UnitGroups unitGroup)
-        {
-            // Add code for GuideProjectileAttack
-        }
-
-        // Perform gas attack
         private void GasAttack(GameObject unit, CharacterBase.UnitGroups unitGroup)
         {
             switch (unitGroup)
             {
                 case CharacterBase.UnitGroups.F:
-                    Attack(new AttackData(unit, WeaponsPool.WeaponType.VenomSac));
+                    if (enforceManager.poisonDoubleAtk )
+                    {
+                        StartCoroutine(GasDoubleAtk(unit, 0.3f));
+                    }
+                    else
+                    {
+                       Attack(new AttackData(unit, WeaponsPool.WeaponType.VenomSac));
+                    }
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(unitGroup), unitGroup, null);
             }
         }
-
-        // Perform circle attack
         private void CircleAttack(GameObject unit, CharacterBase.UnitGroups unitGroup)
         {
             switch (unitGroup)
             {
                 case CharacterBase.UnitGroups.D:
-                    Attack(new AttackData(unit, WeaponsPool.WeaponType.Sword)); // Perform attack with a sword for group D
+                    if (unit.GetComponent<CharacterBase>().CurrentWeapon == null || unit.GetComponent<CharacterBase>().CurrentWeapon.activeSelf == false)
+                    {
+                        unit.GetComponent<CharacterBase>().CurrentWeapon = Attack(new AttackData(unit, WeaponsPool.WeaponType.Sword)); // Perform attack with a sword for group D
+                    }
                     break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(unitGroup), unitGroup, null);
             }
         }
 
-        // Perform the attack using the specified attack data
-        private void Attack(AttackData attackData)
+        private GameObject Attack(AttackData attackData)
         {
             var unit = attackData.Unit; // Attacking unit
             var weaponType = attackData.WeaponType; // Type of weapon used for the attack
             var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.transform.position, unit.transform.rotation); // Get the weapon object from the weapon pool
             var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>(); // Get the weapon base component
             weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>()); // Initialize the weapon with the character's information
-            var useWeapon = weaponBase.UseWeapon(); // Perform the weapon's attack logic
-    
+            StartCoroutine(weaponBase.UseWeapon()); // Perform the weapon's attack logic
             weaponsPool.SetSprite(weaponType, attackData.Unit.GetComponent<CharacterBase>().UnitLevel, weaponObject); // Set the weapon's sprite based on the character's level
-            StartCoroutine(useWeapon); // Start the attack coroutine
+            return weaponObject;
+        }
+
+        private IEnumerator GasDoubleAtk(GameObject unit,float atkDuration)
+        {
+            Attack(new AttackData(unit, WeaponsPool.WeaponType.VenomSac));
+            yield return new WaitForSecondsRealtime(atkDuration);
+            Attack(new AttackData(unit, WeaponsPool.WeaponType.VenomSac));
         }
     }
 }

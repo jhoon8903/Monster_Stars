@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5314217969191077853}
-  - component: {fileID: 5314217969191077850}
   - component: {fileID: -2426375240556639222}
   - component: {fileID: -3954771324490422337}
+  - component: {fileID: 1307041946654653737}
   m_Layer: 6
   m_Name: Unit_A
-  m_TagString: Untagged
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -34,34 +34,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5314217969191077850
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5314217969191077851}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 97c8ae47ce10b4466afa07039e35c08f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  defaultDamage: 0
-  increaseDamage: 0
-  defaultAtkRate: 0
-  increaseAtkRate: 0
-  projectileSpeed: 0
-  swingSpeed: 0
-  defaultAtkDistance: 0
-  increaseAtkDistance: 0
-  defaultAtkRange: {x: 0, y: 0, z: 0}
-  increaseAtkRange: {x: 0, y: 0, z: 0}
-  penetrate: 0
-  level1Sprite: {fileID: 21300000, guid: cde7f7e4515054958b57c49e7626a076, type: 3}
-  level2Sprite: {fileID: 21300000, guid: 6737680cda13243429d2860dce821d54, type: 3}
-  level3Sprite: {fileID: 21300000, guid: a7059ed98032c48e1bb0105f4d3e5167, type: 3}
-  level4Sprite: {fileID: 21300000, guid: 6b1e7428272534791b3f2b8b60fece24, type: 3}
-  level5Sprite: {fileID: 21300000, guid: 451a5fe249f644d1794500899cf32548, type: 3}
 --- !u!212 &-2426375240556639222
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -140,3 +112,28 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &1307041946654653737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5314217969191077851}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97c8ae47ce10b4466afa07039e35c08f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unitGroup: 0
+  defaultDamage: 0
+  defaultAtkRate: 0
+  projectileSpeed: 0
+  swingSpeed: 0
+  defaultAtkDistance: 0
+  defaultAtkRange: {x: 0, y: 0, z: 0}
+  detectedEnemies: []
+  level1Sprite: {fileID: 21300000, guid: cde7f7e4515054958b57c49e7626a076, type: 3}
+  level2Sprite: {fileID: 21300000, guid: 6737680cda13243429d2860dce821d54, type: 3}
+  level3Sprite: {fileID: 21300000, guid: a7059ed98032c48e1bb0105f4d3e5167, type: 3}
+  level4Sprite: {fileID: 21300000, guid: 6b1e7428272534791b3f2b8b60fece24, type: 3}
+  level5Sprite: {fileID: 21300000, guid: 451a5fe249f644d1794500899cf32548, type: 3}

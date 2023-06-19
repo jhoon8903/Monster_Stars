@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 313470104981615552}
   m_Layer: 6
   m_Name: Unit_D
-  m_TagString: Untagged
+  m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -53,6 +53,7 @@ MonoBehaviour:
   swingSpeed: 0
   defaultAtkDistance: 0
   defaultAtkRange: {x: 0, y: 0, z: 0}
+  detectedEnemies: []
   level1Sprite: {fileID: 21300000, guid: e5f04f56f7cbd4d089482aeb5e6f51d4, type: 3}
   level2Sprite: {fileID: 21300000, guid: 69edff90bcfd74617bc7ee5f13aefb6b, type: 3}
   level3Sprite: {fileID: 21300000, guid: 4358c5c568d714cfa8a51ad80355fc50, type: 3}

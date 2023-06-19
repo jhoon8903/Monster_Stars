@@ -1,46 +1,73 @@
 using System.Collections;
 using DG.Tweening;
 using Script.EnemyManagerScript;
+using Script.RewardScript;
 using UnityEngine;
 
 namespace Script.WeaponScriptGroup
 {
     public class Spear : WeaponBase
     {
-        private float _lastHitTime;
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
-            var maxDistanceY = CharacterBase.defaultAtkDistance;
-            var distance = Mathf.Abs(transform.position.y - maxDistanceY);
-            var adjustedSpeed = Speed * distance;
-            var timeToMove = distance / adjustedSpeed;
 
-            transform.DOMoveY(distance, timeToMove)
-                .SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(this.gameObject));
+            // Detect enemies in both directions
+            if (EnforceManager.Instance.divineAtkRange)
+            {
+                FireProjectile(-Distance); // Fire in -y direction
+                FireProjectile(Distance); // Fire in +y direction
+            }
+            else
+            {
+                FireProjectile(Distance); // Fire in +y direction
+            }
+        }
 
-            yield return new WaitForSecondsRealtime(FireRate);
+// This method handles the actual firing of the projectile.
+        private void FireProjectile(float distance)
+        {
+            var duration = Mathf.Abs(distance) / Speed;
+            float endPosition;
+
+            if (distance < 0)
+            {
+                // If we're moving in the negative direction, we need to rotate the projectile.
+                transform.rotation = Quaternion.Euler(0, 0, 180);
+                endPosition = StartingPosition.y - distance;
+                transform.DOMoveY(-endPosition, duration)
+                    .SetEase(Ease.Linear)
+                    .OnComplete(() => StopUseWeapon(gameObject));
+            }
+            else
+            {
+                endPosition = StartingPosition.y + distance;
+                transform.DOMoveY(endPosition, duration)
+                    .SetEase(Ease.Linear)
+                    .OnComplete(() => StopUseWeapon(gameObject));
+            }
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
-            if (enemy != null && enemy.gameObject.activeInHierarchy)
+            if (enemy == null || HitEnemy.Contains(enemy)) return; // Skip if it's already hit
+            HitEnemy.Add(enemy);
+            AtkEffect(enemy);
+            var damage = DamageCalculator(Damage, enemy);
+            enemy.ReceiveDamage(enemy,damage);
+            switch (EnforceManager.Instance.divinePenetrate)
             {
-                enemy.ReceiveDamage(Damage, unitProperty, unitEffect);
+                case true when HitEnemy.Count == 2:
+                    StopUseWeapon(gameObject);
+                    HitEnemy.Clear(); // Only clear when the weapon stops
+                    break;
+                case false:
+                    StopUseWeapon(gameObject);
+                    HitEnemy.Clear();
+                    break;
             }
-            StopUseWeapon(gameObject);
         }
-
-        private void OnTriggerStay2D(Collider2D collision)
-        {
-            if (!collision.gameObject.CompareTag("Enemy")) return;
-            var enemy = collision.gameObject.GetComponent<EnemyBase>();
-            if (enemy == null || !enemy.gameObject.activeInHierarchy || !(Time.time > _lastHitTime + FireRate)) return;
-            enemy.ReceiveDamage(Damage, unitProperty, unitEffect);
-            _lastHitTime = Time.time;
-        }
-
     }
 }

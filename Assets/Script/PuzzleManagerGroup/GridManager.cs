@@ -1,8 +1,9 @@
-using Script.CharacterManagerScript;
-using UnityEngine;
 using DG.Tweening;
+using Script.CharacterManagerScript;
+using Script.EnemyManagerScript;
+using UnityEngine;
 
-namespace Script
+namespace Script.PuzzleManagerGroup
 {
     public sealed class GridManager : MonoBehaviour
     {
@@ -36,17 +37,22 @@ namespace Script
 
         public void AddRow()
         {
-            
-            if (gridHeight >= MaxRows) return;  // 최대 행 개수를 초과하면 추가 행을 생성하지 않음
-            
+            var enemyBase = FindObjectOfType<EnemyBase>();
+            if (enemyBase.EnemyType != EnemyBase.EnemyTypes.Boss)
+            {
+                enemyBase.healthPoint *= 0.4f;
+            }
+
+            if (gridHeight >= MaxRows) return; // Do not create additional rows if the maximum number of rows is exceeded
+
             var newGridCells = new GameObject[gridWidth, gridHeight+1];
-            
+
             for (var x = 0; x < gridWidth; x++)
             {
                 for (var y = 0; y < gridHeight; y++)
                 {
-                    newGridCells[x, y] = _gridCells[x, y];
-                }                                                               
+                    newGridCells[x, y + 1] = _gridCells[x, y]; // move rows one step up
+                }
             }
             gridHeight++;
 
@@ -60,14 +66,14 @@ namespace Script
             {
                 var spritePrefab = (x + _currentRowType) % 2 == 0 ? grid1Sprite : grid2Sprite;
                 var newCell = Instantiate(spritePrefab, new Vector3(x, 0, 0), Quaternion.identity, transform);
-                newGridCells[x, gridHeight - 1] = newCell; // Store the new cell in the newGridCells array
+                newGridCells[x, 0] = newCell; // Store the new cell in the newGridCells array
             }
-            _currentRowType = _currentRowType == 1 ? 2 : 1;  // 현재 행의 타입 변경
+
             _gridCells = newGridCells; // Update _gridCells to point to the new array
+            ResetBossSpawnColor();
         }
         public void ApplyBossSpawnColor(Vector3Int bossArea)
          {
-             Debug.Log("BossStage");
              bossSpawnArea = bossArea;
              var orangeColor = new Color32(255,147, 0, 255); // RGB로 주황색 정의
              var brownColor = new Color32(217, 191, 156, 255); // RGB로 갈색 정의
@@ -84,7 +90,7 @@ namespace Script
          }
 
          // 보스 스폰 위치의 색상을 원래대로 복원하는 함수
-         public void ResetBossSpawnColor()
+         private void ResetBossSpawnColor()
          {
              var backgroundColor = new Color32(22, 101, 123, 255);
              Camera.main.DOColor(backgroundColor, 2.0f);
@@ -96,11 +102,9 @@ namespace Script
                  for (var x = 0; x < gridWidth; x++)
                  {
                      var cell = _gridCells[x, y];
-                     // Add _currentRowType to the color decision
-                     cell.GetComponent<SpriteRenderer>().DOColor((x + y) % 2 == 0 ? color1 : color2, 2.0f);
+                     cell.GetComponent<SpriteRenderer>().DOColor((x + y) % 2 == 0 ? color2 : color1, 2.0f);
                  }
              }
          }
-
     }
 }

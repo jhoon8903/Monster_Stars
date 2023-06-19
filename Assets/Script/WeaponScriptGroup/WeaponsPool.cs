@@ -1,15 +1,12 @@
 using System.Collections.Generic;
+using Script.RewardScript;
 using UnityEngine;
 
 namespace Script.WeaponScriptGroup
 {
     public class WeaponsPool : MonoBehaviour
     {
-        public enum WeaponType
-        {
-            None ,Spear, Sword, Dart, IceCrystal, VenomSac
-        }
-
+        public enum WeaponType { None ,Spear, Sword, Dart, IceCrystal, VenomSac }
         [System.Serializable]
         public class Weapon
         {
@@ -17,27 +14,26 @@ namespace Script.WeaponScriptGroup
             public GameObject weaponPrefab;
             public List<Sprite> weaponSprite;
         }
-
         public List<Weapon> weapons;
         [SerializeField] private int weaponPoolCapacity = 20;
         private Dictionary<WeaponType, Queue<GameObject>> _poolDictionary;
         private static readonly Vector3 InitLocalScale = new Vector3(1f, 1f , 1f);
-
+        private Transform _mainWeapon;
+        private Transform _secondWeapon;
+        [SerializeField] private EnforceManager enforceManager;
+        private GameObject _pivotSword;
         private void Start()
         {
             _poolDictionary = new Dictionary<WeaponType, Queue<GameObject>>();
-        
             foreach (var weapon in weapons)
             {
                 var objectPool = new Queue<GameObject>();
-
                 for (var i = 0; i < weaponPoolCapacity; i++)
                 {
                     var obj = Instantiate(weapon.weaponPrefab, transform);
                     obj.SetActive(false);
                     objectPool.Enqueue(obj);
                 }
-
                 _poolDictionary.Add(weapon.weaponType, objectPool);
             }
         }
@@ -48,33 +44,72 @@ namespace Script.WeaponScriptGroup
             {
                 return null;
             }
-
             var objectToSpawn = _poolDictionary[weaponType].Dequeue();
-
-            objectToSpawn.SetActive(true);
             objectToSpawn.transform.position = position;
             objectToSpawn.transform.rotation = rotation;
-
+            _pivotSword = FindInChildren(objectToSpawn, "Sword(Clone)");
+            _mainWeapon = objectToSpawn.transform.Find("FirstSword"); // Replace with the actual name of your main weapon
+            _secondWeapon = objectToSpawn.transform.Find("SecondSword"); // Replace with the actual name of your second weapon
+            if (enforceManager.physicIncreaseWeaponScale)
+            {
+                if (_pivotSword != null)
+                {
+                    _pivotSword.transform.localScale = new Vector3(2f,1.7f,0);
+                }
+            }
+            if (_mainWeapon != null)
+            {
+                _mainWeapon.gameObject.SetActive(true);
+            }
+            if (weaponType == WeaponType.Sword && _secondWeapon != null)
+            {
+                _secondWeapon.gameObject.SetActive(enforceManager.physicAdditionalWeapon);
+            }
             _poolDictionary[weaponType].Enqueue(objectToSpawn);
-            objectToSpawn.transform.localScale = InitLocalScale;
+            objectToSpawn.SetActive(true);
             return objectToSpawn;
         }
 
         public void SetSprite(WeaponType weaponType, int level, GameObject weaponObject)
         {
-            var spriteRenderer = weaponObject.GetComponentInChildren<SpriteRenderer>();
             var weapon = weapons.Find(w => w.weaponType == weaponType);
-        
-            if (level - 2 < weapon.weaponSprite.Count)
+
+            if (level - 1 >= weapon.weaponSprite.Count) return;
+            var spriteRenderer = weaponObject.GetComponentInChildren<SpriteRenderer>();
+            // ReSharper disable once Unity.NoNullPropagation
+            var spriteRendererSecond = _secondWeapon?.GetComponentInChildren<SpriteRenderer>();
+
+            spriteRenderer.sprite = weapon.weaponSprite[level - 1];
+
+            if (spriteRendererSecond != null && enforceManager.physicAdditionalWeapon)
             {
-                spriteRenderer.sprite = weapon.weaponSprite[level - 2];
+                spriteRendererSecond.sprite = weapon.weaponSprite[level - 1];
             }
         }
 
         public static void ReturnToPool(GameObject weapon)
         {
+            weapon.transform.localScale = InitLocalScale;
             weapon.SetActive(false);
         }
+
+        private static GameObject FindInChildren(GameObject parent, string name)
+        {
+            if (parent.name == name)
+                return parent;
+    
+            foreach (Transform child in parent.transform)
+            {
+                if (child.name == name)
+                    return child.gameObject;
+        
+                var result = FindInChildren(child.gameObject, name);
+                if (result != null)
+                    return result;
+            }
+            return null;
+        }
+
     }  
 }
 

@@ -5,10 +5,11 @@ using System.Linq;
 using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
+using Script.UIManager;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Script
+namespace Script.PuzzleManagerGroup
 {
     public class SpawnManager : MonoBehaviour
     {
@@ -17,10 +18,9 @@ namespace Script
         [SerializeField] private MatchManager matchManager;  
         [SerializeField] private CommonRewardManager rewardManger;
         [SerializeField] private GameManager gameManager;
-
+        [SerializeField] private CountManager countManager;
+        [SerializeField] private EnforceManager enforceManager;
         public bool isWave10Spawning = false;
-        private int highLevelCharacterCount = 6;
-
         public bool isMatched = false;
         
         public GameObject CharacterObject(Vector3 spawnPosition)
@@ -32,9 +32,8 @@ namespace Script
         }
         public IEnumerator PositionUpCharacterObject()
         {
-            //if (isMatched) yield break;
-            //isMatched = true;
             var swipeManager = GetComponent<SwipeManager>();
+            swipeManager.isBusy = true;
             var moves = new List<(GameObject, Vector3Int)>();
             for (var x = 0; x < gridManager.gridWidth; x++)
             { 
@@ -53,18 +52,25 @@ namespace Script
                 }
             }
             yield return StartCoroutine(PerformMoves(moves));
+            yield return StartCoroutine(matchManager.CheckMatches());
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
             yield return StartCoroutine(matchManager.CheckMatches());
 
-            
-
-            //isMatched = false;
-            if (rewardManger.PendingTreasure.Count == 0)  {
+            if (rewardManger.PendingTreasure.Count == 0)
+            {
                 swipeManager.isBusy = false;
-                yield break;
             }
-            rewardManger.EnqueueTreasure(rewardManger.PendingTreasure.Dequeue());
+            else
+            {
+                rewardManger.EnqueueTreasure();
+            }
+
+            if (countManager.TotalMoveCount == 0 && !gameManager.isBattle)
+            {
+                yield return gameManager.Count0Call();
+            }
         }
+
         private static IEnumerator MoveCharacter(GameObject gameObject, Vector3Int targetPosition, float duration = 0.3f)
         {
             if (gameObject == null) yield break;
@@ -74,6 +80,7 @@ namespace Script
     
             yield return moveTween.WaitForCompletion();
         }
+
         private IEnumerator PerformMoves(IEnumerable<(GameObject, Vector3Int)> moves)
         {
             var moveCoroutines
@@ -131,18 +138,18 @@ namespace Script
             notUsePoolCharacterList.RemoveAt(randomIndex);
             return newCharacter;
         }
-        public IEnumerator Wave10Spawn()
+        public IEnumerator BossStageSpawnRule()
         {
             isWave10Spawning = true;
             
             var saveCharacterList = characterPool.UsePoolCharacterList();
             var highLevelCharacters = saveCharacterList
                 .OrderByDescending(character => character.GetComponent<CharacterBase>().UnitLevel)
-                .Take(highLevelCharacterCount)
+                .Take(enforceManager.highLevelCharacterCount)
                 .ToList();
             yield return StartCoroutine(gameManager.WaitForPanelToClose());
             foreach (var character in saveCharacterList
-                         .Where(character => !highLevelCharacters.Contains(character)))
+                        .Where(character => !highLevelCharacters.Contains(character)))
             {
                 character.GetComponent<CharacterBase>().CharacterReset();
                 character.SetActive(false);
@@ -151,15 +158,24 @@ namespace Script
             var highestY = gridManager.gridHeight - 1;
             var moves = new List<(GameObject, Vector3Int)>();
 
-            for (var x = 0; x < highLevelCharacters.Count; x++)
+            var currentColumn = 0;
+            var currentRow = highestY;
+
+            foreach (var character in highLevelCharacters)
             {
-                var newGridPosition = new Vector3Int(x, highestY, 0);
-                moves.Add((highLevelCharacters[x], newGridPosition));
+                var newGridPosition = new Vector3Int(currentColumn, currentRow, 0);
+                moves.Add((character, newGridPosition));
+
+                currentColumn++;
+                if (currentColumn < gridManager.gridWidth) continue;
+                currentColumn = 0; // Reset column
+                currentRow--; // Move to the next row
             }
 
             yield return StartCoroutine(PerformMovesSequentially(moves));
             moves.Clear();
-            for (var y = highestY - 1; y >= 0; y--)
+
+            for (var y = currentRow; y >= 0; y--) // Start from the current row
             {
                 for (var x = 0; x < gridManager.gridWidth; x++)
                 {
@@ -174,21 +190,17 @@ namespace Script
                 }
                 yield return StartCoroutine(PerformMoves(moves)); // Move all characters to the current row at once
                 moves.Clear();
-            } 
+            }
             yield return StartCoroutine(matchManager.CheckMatches());
             isWave10Spawning = false;
         }
+
         private IEnumerator PerformMovesSequentially(List<(GameObject, Vector3Int)> moves)
         {
             foreach (var (o, targetPosition) in moves)
             {
                 yield return StartCoroutine(MoveCharacter(o, targetPosition));
             }
-        }
-
-        public void nextCharacterUpgrade(int moveCharacterCount)
-        {
-            highLevelCharacterCount += moveCharacterCount;
         }
     }
 }

@@ -29,7 +29,6 @@ namespace Script.EnemyManagerScript
             }
 
             _poolEnemy = _pooledDefaultEnemy.ToList();
-        }
 
         public GameObject GetPooledEnemy(EnemyBase.EnemyTypes enemyType)
         {
@@ -43,10 +42,11 @@ namespace Script.EnemyManagerScript
             return spawnEnemy;
         }
 
-        public void ReturnToPool(GameObject obj)
-        { 
-            obj.transform.localPosition = new Vector3(0, 20, 0);
+        public static void ReturnToPool(GameObject obj)
+        {
+            obj.transform.localScale = Vector3.one;
             obj.SetActive(false);
         }
     }
+}
 }

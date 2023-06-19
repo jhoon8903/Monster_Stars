@@ -21,7 +21,8 @@ namespace Script.RewardScript
             NextStage,
             Gold,
             // Divine Property
-            DivineRestraint,
+            DivineActiveRestraint,
+            DivineRestraintTime,
             DivinePenetrate,
             DivineRestraintDamage,
             DivineAtkRange,
@@ -35,9 +36,10 @@ namespace Script.RewardScript
             // Poison Property
             PoisonDoubleAtk,
             PoisonRestraintAdditionalDamage,
-            PoisonIncreaseTime,
+            PoisonActivate,
             PoisonInstantKill,
             PoisonIncreaseAtkRange,
+            PoisonOverlapping,
             // Water Property
             WaterStun,
             WaterIncreaseSlowTime,
@@ -124,10 +126,10 @@ namespace Script.RewardScript
                 new ExpBlueData(b,6,ExpData.Types.CastleMaxHp, new []{200}),
                 new ExpBlueData(b,8,ExpData.Types.CastleRecovery, new []{200}),
                 new ExpBlueData(b,11, ExpData.Types.Slow, new []{15}),
-                new ExpBlueData(b,100,ExpData.Types.DivineRestraintDamage, new []{100}),
                 new ExpBlueData(b,100,ExpData.Types.DivineAtkRange, new []{1}),
                 new ExpBlueData(b,200,ExpData.Types.PhysicSlowAdditionalDamage,new []{100}),
                 new ExpBlueData(b,300,ExpData.Types.PoisonDoubleAtk, new []{2}),
+                new ExpBlueData(b,300,ExpData.Types.PoisonOverlapping, new[]{1}),
                 new ExpBlueData(b,400,ExpData.Types.WaterIncreaseSlowTime, new []{1}),
                 new ExpBlueData(b,400,ExpData.Types.WaterIncreaseDamage, new []{50})
             };
@@ -139,14 +141,15 @@ namespace Script.RewardScript
                 new ExpPurpleData(p,3,ExpData.Types.StepLimit, new []{1} ),
                 new ExpPurpleData(p,12,ExpData.Types.StepDirection, new []{1}),
                 new ExpPurpleData(p,10,ExpData.Types.NextStage, new []{1,2}),
-                new ExpPurpleData(p,100,ExpData.Types.DivineRestraint, new []{1}),
+                new ExpPurpleData(p,100,ExpData.Types.DivineActiveRestraint, new []{1}),
+                new ExpPurpleData(p,100,ExpData.Types.DivineRestraintTime, new []{1}),
                 new ExpPurpleData(p,100,ExpData.Types.DivinePenetrate, new []{1}),
                 new ExpPurpleData(p,200,ExpData.Types.PhysicAtkSpeed, new []{50}),
                 new ExpPurpleData(p,200,ExpData.Types.PhysicIncreaseDamage, new []{5}),
                 new ExpPurpleData(p,200,ExpData.Types.PhysicIncreaseWeaponScale, new []{5}),
-                new ExpPurpleData(p,300,ExpData.Types.PoisonIncreaseTime, new []{2}),
                 new ExpPurpleData(p,300,ExpData.Types.PoisonInstantKill, new []{15}),
                 new ExpPurpleData(p,300,ExpData.Types.PoisonIncreaseAtkRange, new []{1}),
+                new ExpPurpleData(p,300,ExpData.Types.PoisonActivate, new []{1}),
                 new ExpPurpleData(p,400,ExpData.Types.WaterIncreaseSlowPower, new []{50}),
                 new ExpPurpleData(p,400,ExpData.Types.WaterRestraintKnockBack, new []{1}),
             };

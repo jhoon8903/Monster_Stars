@@ -1,9 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
-using Script.EnemyManagerScript;
 using Script.UIManager;
 using TMPro;
 using UnityEngine;
@@ -32,97 +30,111 @@ namespace Script.RewardScript
         [SerializeField] internal Sprite blueSprite; // 파란색 버튼 스프라이트
         [SerializeField] internal Sprite purpleSprite; // 보라색 버튼 스프라이트
         [SerializeField] private Exp exp; // 경험치
-        [SerializeField] private SpawnManager spawnManager;
         [SerializeField] private ExpManager expManager;
-        [SerializeField] private CountManager countManager;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private CharacterManager characterManager;
-        [SerializeField] private SwipeManager swipeManager;
-        [SerializeField] private CastleManager castleManager;
-        [SerializeField] private EnemyManager enemyManager;
-
+        [SerializeField] private EnforceManager enforceManager;
+        private ExpData _selectedPowerUp;
         private void ProcessExpReward(ExpData selectedReward)
         {
-            var findCharacterManager = FindObjectOfType<CharacterManager>();
             switch (selectedReward.Type)
             {
                 case ExpData.Types.GroupDamage: 
-                    findCharacterManager.IncreaseGroupDamage(selectedReward.Property[0]);
+                    enforceManager.IncreaseGroupDamage(selectedReward.Property[0]);
                     break;
                 case ExpData.Types.GroupAtkSpeed:
-                    findCharacterManager.IncreaseGroupAtkRate(selectedReward.Property[0]);
+                    enforceManager.IncreaseGroupRate(selectedReward.Property[0]);
                     break;
                 case ExpData.Types.StepLimit:
-                    countManager.PermanentIncreaseMoveCount(selectedReward.Property[0]); 
-                    characterManager.permanentIncreaseMovementCount = true;
+                    enforceManager.PermanentIncreaseMoveCount(selectedReward.Property[0]);
                     break;
                 case ExpData.Types.StepDirection:
-                    swipeManager.EnableDiagonalMovement(); 
-                    characterManager.diagonalMovement = true;
+                    enforceManager.diagonalMovement = true; 
                     break;
                 case ExpData.Types.Exp:
-                    expManager.IncreaseExpBuff(selectedReward.Property[0]); 
-                    characterManager.expPercentage += 5;
+                    enforceManager.IncreaseExpBuff(selectedReward.Property[0]);
                     break;
                 case ExpData.Types.CastleRecovery:
-                    gameManager.RecoveryCastle = true; 
-                    characterManager.recoveryCastle = true;
+                    enforceManager.recoveryCastle = true;
                     break;
                 case ExpData.Types.CastleMaxHp:
-                    castleManager.IncreaseMaxHp(selectedReward.Property[0]);
+                    enforceManager.IncreaseCastleMaxHp();
                     break;
                 case ExpData.Types.Slow:
-                    // enemyManager.DecreaseMoveSpeed(selectedReward.Property[0]); 
-                    characterManager.slowCount += 1;
+                    enforceManager.slowCount += 1;
                     break;
                 case ExpData.Types.NextStage:
-                    spawnManager.nextCharacterUpgrade(selectedReward.Property[0]); 
-                    characterManager.nextStageMembersSelectCount += 1;
+                    enforceManager.NextCharacterUpgrade(selectedReward.Property[0]);
                     break;
                 case ExpData.Types.Gold:
                     characterManager.goldGetMore = true; 
                     Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}");
                     break;
-                // case ExpData.Types.DivineRestraint:
-                //     break;
-                // case ExpData.Types.DivinePenetrate:
-                //     break;
-                // case ExpData.Types.DivineRestraintDamage:
-                //     break;
-                // case ExpData.Types.DivineAtkRange:
-                //     break;
-                // case ExpData.Types.DivinePoisonAdditionalDamage:
-                //     break;
-                // case ExpData.Types.PhysicAdditionalWeapon:
-                //     break;
-                // case ExpData.Types.PhysicIncreaseWeaponScale:
-                //     break;
-                // case ExpData.Types.PhysicSlowAdditionalDamage:
-                //     break;
-                // case ExpData.Types.PhysicAtkSpeed:
-                //     break;
-                // case ExpData.Types.PhysicIncreaseDamage:
-                //     break;
-                // case ExpData.Types.PoisonDoubleAtk:
-                //     break;
-                // case ExpData.Types.PoisonRestraintAdditionalDamage:
-                //     break;
-                // case ExpData.Types.PoisonIncreaseTime:
-                //     break;
-                // case ExpData.Types.PoisonInstantKill:
-                //     break;
-                // case ExpData.Types.PoisonIncreaseAtkRange:
-                //     break;
-                // case ExpData.Types.WaterStun:
-                //     break;
-                // case ExpData.Types.WaterIncreaseSlowTime:
-                //     break;
-                // case ExpData.Types.WaterIncreaseSlowPower:
-                //     break;
-                // case ExpData.Types.WaterRestraintKnockBack:
-                //     break;
-                // case ExpData.Types.WaterIncreaseDamage:
-                //     break;
+                case ExpData.Types.DivineActiveRestraint:
+                    enforceManager.activeRestraint = true;
+                    break;
+                case ExpData.Types.DivineRestraintTime:
+                    enforceManager.increaseRestraintTime += 0.1f;
+                    break;
+                case ExpData.Types.DivinePenetrate:
+                    enforceManager.divinePenetrate = true;
+                    break;
+                case ExpData.Types.DivineAtkRange:
+                    enforceManager.divineAtkRange = true;
+                    break;
+                case ExpData.Types.DivinePoisonAdditionalDamage:
+                    enforceManager.divinePoisonAdditionalDamage = true;
+                    break;
+                // 칼 추가 확인 완료
+                case ExpData.Types.PhysicAdditionalWeapon:
+                    enforceManager.physicAdditionalWeapon = true;
+                    break;
+                case ExpData.Types.PhysicIncreaseWeaponScale:
+                    enforceManager.physicIncreaseWeaponScale = true;
+                    break;
+                // 둔화 적 추가 데미지 적용
+                case ExpData.Types.PhysicSlowAdditionalDamage:
+                    enforceManager.physicSlowAdditionalDamage = true;
+                    break;
+                case ExpData.Types.PhysicAtkSpeed:
+                    enforceManager.IncreasePhysicAtkSpeed();
+                    break;
+                case ExpData.Types.PhysicIncreaseDamage:
+                    enforceManager.PhysicIncreaseDamage();
+                    break;
+                case ExpData.Types.PoisonDoubleAtk:
+                    enforceManager.poisonDoubleAtk = true;
+                    break;
+                case ExpData.Types.PoisonRestraintAdditionalDamage:
+                    enforceManager.poisonRestraintAdditionalDamage = true;
+                    break;
+                case ExpData.Types.PoisonActivate:
+                    enforceManager.activatePoison = true;
+                    break;
+                case ExpData.Types.PoisonInstantKill:
+                    enforceManager.poisonInstantKill = true;
+                    break;
+                case ExpData.Types.PoisonIncreaseAtkRange:
+                    enforceManager.poisonIncreaseAtkRange = true;
+                    break;
+                case ExpData.Types.PoisonOverlapping:
+                    enforceManager.AddPoisonOverlapping();
+                    break;
+                case ExpData.Types.WaterStun:
+                    enforceManager.waterStun = true;
+                    break;
+                case ExpData.Types.WaterIncreaseSlowTime:
+                    enforceManager.IncreaseSlowTime();
+                    break;
+                case ExpData.Types.WaterIncreaseSlowPower:
+                    enforceManager.waterIncreaseSlowPower = true;
+                    break;
+                case ExpData.Types.WaterRestraintKnockBack:
+                    enforceManager.waterRestraintKnockBack = true;
+                    break;
+                case ExpData.Types.WaterIncreaseDamage:
+                    enforceManager.WaterIncreaseDamage();
+                    break;
                 default: 
                     Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}"); 
                     break;
@@ -132,18 +144,7 @@ namespace Script.RewardScript
         private void Selected(ExpData selectedReward)
         {
             levelUpRewardPanel.SetActive(false);
-            if (countManager.baseMoveCount == 0)
-            {
-                gameManager.GameSpeed();
-            }
-            else
-            {
-                Time.timeScale = 1; // 게임 재개
-            }
-            if (!spawnManager.isWave10Spawning)
-            {
-                StartCoroutine(spawnManager.PositionUpCharacterObject());
-            }
+            gameManager.GameSpeed();
             ProcessExpReward(selectedReward);
         }
         public IEnumerator LevelUpReward() // 레벨업 보상 처리
@@ -175,34 +176,121 @@ namespace Script.RewardScript
             {
                 var total = greenChance + blueChance + purpleChance;
                 var randomValue = Random.Range(0, total);
-                ExpData selectedPowerUp = null;
+
                 if (randomValue < greenChance)
                 {
-                    selectedPowerUp = LevelUpUnique(exp.ExpGreenList, selectedCodes);
+                    _selectedPowerUp = LevelUpUnique(exp.ExpGreenList, selectedCodes);
                 }
                 else if (randomValue < greenChance + blueChance)
                 {
-                    selectedPowerUp = LevelUpUnique(exp.ExpBlueList, selectedCodes);
+                    _selectedPowerUp = LevelUpUnique(exp.ExpBlueList, selectedCodes);
                 }
                 else
                 {
-                    selectedPowerUp = LevelUpUnique(exp.ExpPurpleList, selectedCodes);
+                    _selectedPowerUp = LevelUpUnique(exp.ExpPurpleList, selectedCodes);
                 }
-                if (selectedPowerUp == null) continue;
-                levelUpPowerUps.Add(selectedPowerUp);
-                selectedCodes.Add(selectedPowerUp.Code);
+                if (_selectedPowerUp == null) continue;
+                levelUpPowerUps.Add(_selectedPowerUp);
+                selectedCodes.Add(_selectedPowerUp.Code);
             }
             return levelUpPowerUps;
         }
-        private static ExpData LevelUpUnique(IEnumerable<ExpData> powerUps, ICollection<int> selectedCodes)
+        private ExpData LevelUpUnique(IEnumerable<ExpData> powerUpsData, ICollection<int> selectedCodes)
         {
-            var validOptions = powerUps.Where(p => !selectedCodes.Contains(p.Code)).ToList();
-            if (validOptions.Count == 0)
+            var validOptions = powerUpsData.Where(p => IsValidOption(p, selectedCodes));
+            return SelectRandom(validOptions);
+        }
+        private bool IsValidOption (ExpData powerUp, ICollection<int> selectedCodes)
+        {
+            if (selectedCodes.Contains(powerUp.Code)) return false;
+            switch (powerUp.Type)
             {
-                return null;
+                case ExpData.Types.Slow:
+                    if(enforceManager.slowCount > 3) return false;
+                    break;
+                case ExpData.Types.Exp:
+                    if (enforceManager.expPercentage > 30) return false;
+                    break;
+                case ExpData.Types.CastleRecovery:
+                    if (enforceManager.recoveryCastle) return false;
+                    break;
+                case ExpData.Types.NextStage:
+                    if (enforceManager.SelectedCount > 3) return false;
+                    break;
+                case ExpData.Types.StepDirection:
+                    if (enforceManager.diagonalMovement || gameManager.wave !=11) return false;
+                    break;
+                case ExpData.Types.StepLimit:
+                    if (enforceManager.permanentIncreaseMovementCount > 3) return false;
+                    break;
+                case ExpData.Types.CastleMaxHp:
+                    if (enforceManager.castleMaxHp >= 1000) return false;
+                    break;
+                case ExpData.Types.DivineRestraintTime:
+                    if (!enforceManager.activeRestraint) return false;
+                    break;
+                case ExpData.Types.DivinePenetrate:
+                    if (enforceManager.divinePenetrate) return false;
+                    break;
+                case ExpData.Types.DivineAtkRange:
+                    if(enforceManager.divineAtkRange) return false;
+                    break;
+                case ExpData.Types.DivinePoisonAdditionalDamage:
+                    if(enforceManager.divinePoisonAdditionalDamage) return false;
+                    break;
+                case ExpData.Types.PhysicAdditionalWeapon:
+                    if(enforceManager.physicAdditionalWeapon) return false;
+                    break;
+                case ExpData.Types.PhysicIncreaseWeaponScale:
+                    if(enforceManager.physicIncreaseWeaponScale) return false;
+                    break;
+                case ExpData.Types.PhysicSlowAdditionalDamage:
+                    if(enforceManager.physicSlowAdditionalDamage) return false;
+                    break;
+                case ExpData.Types.PhysicAtkSpeed:
+                    if(enforceManager.increasePhysicAtkSpeed > 4f) return false;
+                    break;
+                case ExpData.Types.PoisonDoubleAtk:
+                    if(enforceManager.poisonDoubleAtk) return false;
+                    break;
+                case ExpData.Types.PoisonRestraintAdditionalDamage:
+                    if(enforceManager.poisonRestraintAdditionalDamage) return false;
+                    break;
+                case ExpData.Types.PoisonActivate:
+                    if (enforceManager.activatePoison) return false;
+                    break;
+                case ExpData.Types.PoisonInstantKill:
+                    if(enforceManager.poisonInstantKill) return false;
+                    break;
+                case ExpData.Types.PoisonIncreaseAtkRange:
+                    if(enforceManager.poisonIncreaseAtkRange) return false;
+                    break;
+                case ExpData.Types.WaterStun:
+                    if(enforceManager.waterStun) return false;
+                    break;
+                case ExpData.Types.WaterIncreaseSlowTime:
+                    if(enforceManager.waterIncreaseSlowTime > 5f) return false;
+                    break;
+                case ExpData.Types.WaterIncreaseSlowPower:
+                    if(enforceManager.waterIncreaseSlowPower) return false;
+                    break;
+                case ExpData.Types.WaterRestraintKnockBack:
+                    if(enforceManager.waterRestraintKnockBack) return false;
+                    break;
+                case ExpData.Types.WaterIncreaseDamage:
+                    break;
+                default:
+                    return true;
             }
-            var randomIndex = Random.Range(0, validOptions.Count);
-            return validOptions[randomIndex];
+            return true;
+        }
+        private static ExpData SelectRandom(IEnumerable<ExpData> validOptions)
+        {
+            var commonDataList = validOptions.ToList();
+            var count = commonDataList.Count();
+            if (count == 0) return null;
+            var randomIndex = Random.Range(0, count);
+            return commonDataList.ElementAt(randomIndex);
         }
         private void LevelUpDisplay(IReadOnlyList<ExpData> powerUps)
         {
@@ -228,7 +316,7 @@ namespace Script.RewardScript
                     powerText.text = $"대각선 이동 가능"; 
                     break;
                 case ExpData.Types.Exp:
-                    powerText.text = $"적 처치시 경험치 획득량 {p}% 증가\n(최대 30%)";
+                    powerText.text = $"적 처치시 경험치 획득량 {p}% 증가\n(현재 {enforceManager.expPercentage}% 최대 30%)";
                     break;
                 case ExpData.Types.CastleRecovery:
                     powerText.text = $"웨이브 종료까지 피해를 입지 않으면\n캐슬 체력 {p} 매 웨이브 마다 증가";
@@ -237,22 +325,19 @@ namespace Script.RewardScript
                     powerText.text = $"캐슬 최대체력 {p} 증가"; 
                     break;
                 case ExpData.Types.Slow:
-                    powerText.text = $"적 이도속도 {p}% 감소 (최대 60%)";
+                    powerText.text = $"다음 웨이브 부터는 적 이동속도 {p}% 감소\n( 현재 {15*enforceManager.slowCount}% / 최대 60%)";
                     break;
                 case ExpData.Types.NextStage:
-                    powerText.text = $"보스 스테이지 이후 {p} 개의\n케릭터 추가 이동 (최대 3개)";
+                    powerText.text = $"보스 스테이지 이후 {p} 개의\n케릭터 추가 이동 (현재 {enforceManager.highLevelCharacterCount})";
                     break;
                 case ExpData.Types.Gold:
                     powerText.text = $"5 매치시 골드 {p} 추가 획득";
                     break;
-                case ExpData.Types.DivineRestraint:
+                case ExpData.Types.DivineRestraintTime:
                     powerText.text = $"[A그룹 - 노랑] 속박 지속시간이 {p} 초 증가";
                     break;
                 case ExpData.Types.DivinePenetrate:
                     powerText.text = $"[A그룹 - 노랑] 투사체가 적을 1회 관통합니다."; 
-                    break;
-                case ExpData.Types.DivineRestraintDamage:
-                    powerText.text = $"[A그룹 - 노랑] 속박 데미지 100% 증가\n(틱 데미지 10% 증가)"; 
                     break;
                 case ExpData.Types.DivineAtkRange:
                     powerText.text = $"[A그룹 - 노랑] 뒤쪽 방향 공격이 가능";
@@ -275,14 +360,17 @@ namespace Script.RewardScript
                 case ExpData.Types.PhysicIncreaseDamage:
                     powerText.text = $"[D그룹 - 보라] 적을 죽이면 적 1기당\n모든 D그룹의 데미지가 5% 증가 (해당 웨이브만 적용)";
                     break;
+                case ExpData.Types.PoisonActivate:
+                    powerText.text = $"[F그룹 - 초록] 중독 데미지 생성";
+                    break;
+                case ExpData.Types.PoisonOverlapping:
+                    powerText.text = $"[F그룹 - 초록] 중독 중첩 1 증가 생성";
+                    break;
                 case ExpData.Types.PoisonDoubleAtk:
                     powerText.text = $"[F그룹 - 초록] 공격이 더블어택으로 변경";
                     break;
                 case ExpData.Types.PoisonRestraintAdditionalDamage:
                     powerText.text = $"[F그룹 - 초록] 속박된 적에게 가하는 데미지 200% 증가";
-                    break;
-                case ExpData.Types.PoisonIncreaseTime:
-                    powerText.text = $"[F그룹 - 초록] 중독시간이 2초 증가";
                     break;
                 case ExpData.Types.PoisonInstantKill:
                     powerText.text = $"[F그룹 - 초록] 체력 15% 미만의 적은 15% 확률로 즉사";
@@ -294,7 +382,7 @@ namespace Script.RewardScript
                     powerText.text = $"[E그룹 - 파랑] 명중시 15% 확률로 1초간 적 기절";
                     break;
                 case ExpData.Types.WaterIncreaseSlowTime:
-                    powerText.text = $"[E그룹 - 파랑] 둔화 지속시간 0.5초 증가";
+                    powerText.text = $"[E그룹 - 파랑] 둔화 지속시간 0.2초 증가 최대 5초";
                     break;
                 case ExpData.Types.WaterIncreaseSlowPower:
                     powerText.text = $"[E그룹 - 파랑] 둔화강도 50% 증가";
@@ -303,10 +391,8 @@ namespace Script.RewardScript
                     powerText.text = $"[E그룹 - 파랑] 속박된 적을 뒤로 1칸 밀쳐냄";
                     break;
                 case ExpData.Types.WaterIncreaseDamage:
-                    powerText.text = $"[E그룹 - 파랑] 공격력 50% 증가";
+                    powerText.text = $"[E그룹 - 파랑] 공격력 20%씩 증가";
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
             powerCode.text = $"{powerUp.Code}";
             btnBadge.sprite = powerUp.BtnColor;

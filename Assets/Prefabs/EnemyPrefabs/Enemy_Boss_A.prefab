@@ -367,10 +367,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69d9a45d767b741e68becdbf3b194671, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemySpawnManager: {fileID: 0}
-  expManager: {fileID: 0}
-  hpSlider: {fileID: 2369799286406651144}
   number: 0
+  healthPoint: 0
+  maxHealthPoint: 0
 --- !u!60 &6056268316380219218
 PolygonCollider2D:
   m_ObjectHideFlags: 0
@@ -381,7 +380,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}

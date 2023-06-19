@@ -59,7 +59,6 @@ namespace Script.CharacterGroupScript
             defaultDamage = 0;
             defaultAtkRate = 0;
             defaultAtkDistance = 0;
-            defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level1Sprite;
         }
 
@@ -73,7 +72,6 @@ namespace Script.CharacterGroupScript
             defaultDamage = 90;
             defaultAtkRate = 0.1f;
             defaultAtkDistance = 0.1f;
-            defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level2Sprite;
         }
 
@@ -86,7 +84,6 @@ namespace Script.CharacterGroupScript
             defaultDamage = 3;
             defaultAtkRate = 0.3f;
             defaultAtkDistance = 0.2f;
-            defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level3Sprite;
         }
 
@@ -99,7 +96,6 @@ namespace Script.CharacterGroupScript
             defaultDamage = 9;
             defaultAtkRate = 0.9f;
             defaultAtkDistance = 0.3f;
-            defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level4Sprite;
         }
 
@@ -112,7 +108,6 @@ namespace Script.CharacterGroupScript
             defaultDamage = 27;
             defaultAtkRate = 2.7f;
             defaultAtkDistance = 0.4f;
-            defaultAtkRange = Vector3.zero;
             _spriteRenderer.sprite = level5Sprite;
         }
     }

@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,7 +16,7 @@ namespace Script.UIManager
         [SerializeField] private TextMeshProUGUI expText;
         [SerializeField] private LevelUpRewardManager levelUpRewardManager;
         [SerializeField] private TextMeshProUGUI levelText;
-        [SerializeField] private float additionalExpPercent = 0;
+        [SerializeField] private EnforceManager enforceManager;
         public int level = 0;
         public static ExpManager Instance { get; private set; }
 
@@ -41,13 +42,12 @@ namespace Script.UIManager
 
         public void HandleEnemyKilled(EnemyBase.KillReasons reason)
         {
-            if (reason == EnemyBase.KillReasons.ByCastle) return;
-            var additionalExp = expPoint * (additionalExpPercent / 100.0f);
+            if (reason != EnemyBase.KillReasons.ByPlayer) return;
+            var additionalExp = expPoint * (enforceManager.expPercentage / 100.0f);
             expPoint += 1 + additionalExp; 
             if (expPoint >= levelUpPoint)
             {
                 level++;
-                StartCoroutine(levelUpRewardManager.LevelUpReward());
                 UpdateLevelText(level);
                 expPoint = 0;
                 if (level <= 14)
@@ -55,6 +55,7 @@ namespace Script.UIManager
                     levelUpPoint += 5;
                     expBar.maxValue = levelUpPoint;
                 }
+                StartCoroutine(levelUpRewardManager.LevelUpReward());
             }
             expBar.value = expPoint;
             expBar.DOValue(expPoint, 0.5f);
@@ -69,11 +70,6 @@ namespace Script.UIManager
         private void UpdateLevelText(int text)
         {
             levelText.text = $"LV {text}";
-        }
-
-        public void IncreaseExpBuff(float increaseAmount)
-        {
-            additionalExpPercent += increaseAmount;
         }
     }
 }

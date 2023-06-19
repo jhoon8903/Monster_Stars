@@ -6,7 +6,7 @@ namespace Script.EnemyScript
     {
         protected internal override void EnemyProperty()
         {
-            HealthPoint = 550;
+            healthPoint = 550;
             CrushDamage = 200;
             MoveSpeed = 1.2f;
             EnemyType = EnemyTypes.Slow;

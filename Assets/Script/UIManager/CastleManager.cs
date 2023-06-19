@@ -1,66 +1,52 @@
-using System;
 using Script.EnemyManagerScript;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
-using Script.CharacterManagerScript;
 
 namespace Script.UIManager
 {
       public class CastleManager : MonoBehaviour
       {
-          [SerializeField] private Slider hpBar;
+          [SerializeField] protected internal Slider hpBar;
           [SerializeField] private TextMeshProUGUI hpText;
-          [SerializeField] private EnemyPool enemyPool;
           [SerializeField] private GameManager gameManager;
-          [SerializeField] private EnemySpawnManager enemySpawnManager;
-          public int hpPoint = 1000;
-          public int maxHpPoint = 1000;
-          public event Action OnEnemyKilled;
-          private int PreviousHpPoint { get; set; }
-      
-          // Start is called before the first frame update
+          public float hpPoint = 1000;
+          public float maxHpPoint = 1000;
+
+          private bool Damaged => hpPoint < PreviousHpPoint;
+          private float PreviousHpPoint { get; set; }
+          
           private void Start()
           {
-              
-              // Set the max value of the Slider to the max HP
+              PreviousHpPoint = hpPoint;
               hpBar.maxValue = maxHpPoint;
-              // Set the current value of the Slider to the current HP
               hpBar.value = hpPoint;
-              // Set the initial HP Text
               UpdateHpText();
           }
       
           private void OnTriggerEnter2D(Collider2D collision)
           {
-              
+              DOTween.Kill(collision);
               if (!collision.gameObject.CompareTag("Enemy")) return;
               var enemyBase = collision.gameObject.GetComponent<EnemyBase>();
               if (enemyBase == null) return;
-              enemyBase.RegistryDamageFunction(enemyBase.HealthPoint, CharacterBase.UnitProperties.None,EnemyBase.KillReasons.ByCastle); 
               hpPoint -= enemyBase.CrushDamage;
-              // Animate the change in value
-              hpBar.DOValue(hpPoint, 1.0f); // Change 0.5f to whatever duration you want for the animation
+              hpBar.DOValue(hpPoint, 1.0f);
               UpdateHpText();
-              OnEnemyKilled += () => enemySpawnManager.fieldList.Remove(enemyBase.gameObject);
-              enemyPool.ReturnToPool(enemyBase.gameObject);
-              OnEnemyKilled?.Invoke();
+              FindObjectOfType<EnemyBase>().EnemyKilledEvents(enemyBase);
               if (hpPoint > 0) return;
               hpPoint = 0;
               hpBar.value = hpPoint;
               UpdateHpText();
               StartCoroutine(gameManager.ContinueOrLose());
           }
-          
-          public bool Damaged => hpPoint < PreviousHpPoint;
 
-          public void UpdatePreviousHp()
+          private void UpdatePreviousHp()
           {
               PreviousHpPoint = hpPoint;
           }
           
-          // Method to update the HP text
           private void UpdateHpText()
           {
               hpText.text = $"{hpPoint} / {maxHpPoint}";
@@ -77,6 +63,23 @@ namespace Script.UIManager
               hpBar.maxValue = maxHpPoint;
               hpBar.value = hpPoint;
               UpdateHpText();
+          }
+
+          public void RecoveryCastle()
+          {
+              if (!Damaged)
+              {
+                  hpPoint += 200;
+                  if (hpPoint > maxHpPoint)
+                  {
+                      hpPoint = maxHpPoint;
+                  }
+              }
+              else
+              {
+                  return;
+              }
+              UpdatePreviousHp();
           }
       }
 }

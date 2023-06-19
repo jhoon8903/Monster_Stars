@@ -1,7 +1,8 @@
 using System.Collections;
 using DG.Tweening;
+using Script.CharacterGroupScript;
 using Script.CharacterManagerScript;
-using Script.EnemyManagerScript;
+using Script.PuzzleManagerGroup;
 using Script.RewardScript;
 using Script.UIManager;
 using TMPro;
@@ -19,25 +20,22 @@ namespace Script
         [SerializeField] private SwipeManager swipeManager;
         [SerializeField] private CameraManager cameraManager;
         [SerializeField] private BackGroundManager backgroundManager;
-        [SerializeField] private EnemySpawnManager enemySpawnManager;
-        [SerializeField] private EnemyPatternManager enemyPatternManager;
         [SerializeField] private WaveManager waveManager;
         [SerializeField] private GameObject gamePanel;
         [SerializeField] private GameObject commonRewardPanel;
         [SerializeField] private GameObject expRewardPanel;
-        [SerializeField] private AtkManager atkManager;
         [SerializeField] private TextMeshProUGUI speedUpText;
         [SerializeField] private TextMeshProUGUI waveText;
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
+        [SerializeField] private AtkManager atkManager;
+        [SerializeField] private EnforceManager enforceManager;
         private readonly WaitForSecondsRealtime _waitOneSecRealtime = new WaitForSecondsRealtime(1f);
         private readonly WaitForSecondsRealtime _waitTwoSecRealtime = new WaitForSecondsRealtime(2f);
-        private bool _speedUp = false;
+        private bool _speedUp;
         public int wave = 1;
         private Vector3Int _bossSpawnArea;
-        private bool _isBattle = false;
-        public bool RecoveryCastle { get; set; } = false;
-
+        public bool isBattle;
 
         private void Start()
         {
@@ -49,26 +47,17 @@ namespace Script
             GameSpeedSelect();
             StartCoroutine(spawnManager.PositionUpCharacterObject()); // 매치 시작 후 확인
             swipeManager.isBusy = false;
+            DOTween.SetTweensCapacity(200000, 500);
         }
         public IEnumerator Count0Call()
         {
-            _isBattle = true;
+            isBattle = true;
             yield return _waitOneSecRealtime;
             cameraManager.CameraBattleSizeChange();
             backgroundManager.ChangeBattleSize();
             yield return _waitTwoSecRealtime;
-            StartCoroutine(waveManager.StartWave(wave));
-            while (enemySpawnManager.fieldList.Count > 0)
-            {
-                yield return StartCoroutine(WaitForPanelToClose());
-                GameSpeed();
-                atkManager.CheckForAttack();
-                StartCoroutine(enemyPatternManager.Zone_Move());
-                yield return _waitOneSecRealtime;
-                if (enemySpawnManager.fieldList.Count != 0) continue;
-            }
-            StartCoroutine(ContinueOrLose());
-            _isBattle = false;
+            StartCoroutine(waveManager.WaveController(wave));
+            StartCoroutine(atkManager.CheckForAttack());
         }
         public IEnumerator WaitForPanelToClose()
         {
@@ -76,21 +65,19 @@ namespace Script
             {
                 while (commonRewardPanel.activeSelf)
                 {
-                    yield return null; // Wait until the next frame
+                    yield return null;
                 }
             }
 
-            if (expRewardPanel.activeSelf)
+            if (!expRewardPanel.activeSelf) yield break;
+            while (expRewardPanel.activeSelf)
             {
-                while (expRewardPanel.activeSelf)
-                {
-                    yield return null; // Wait until the next frame
-                }
+                yield return null;
             }
         }
         public IEnumerator ContinueOrLose()
         {
-            DOTween.KillAll(true);
+            isBattle = false;
             if (castleManager.hpPoint != 0)
             {
                 wave++;
@@ -98,9 +85,10 @@ namespace Script
                 if (wave == 11)
                 {
                     yield return StartCoroutine(commonRewardManager.WaveReward());
-                    yield return StartCoroutine(spawnManager.Wave10Spawn());
+                    yield return StartCoroutine(spawnManager.BossStageSpawnRule());
                 }
                 NextStage();
+                FindObjectOfType<UnitD>().ResetDamage();
             }
             else
             {
@@ -116,27 +104,15 @@ namespace Script
         {
             Time.timeScale = 1;
             _bossSpawnArea = new Vector3Int(Random.Range(2,5), 10, 0);
-            var previousWave = wave - 1;
             if (wave % 10 == 0)
             {
                 gridManager.ApplyBossSpawnColor(_bossSpawnArea);
             }
-            if (previousWave % 10 == 0)
-            {
-                gridManager.ResetBossSpawnColor();
-            }
 
-            if (RecoveryCastle && !castleManager.Damaged)
+            if (enforceManager.recoveryCastle)
             {
-                castleManager.hpPoint += 200;
-                if (castleManager.hpPoint > castleManager.maxHpPoint)
-                {
-                    castleManager.hpPoint = castleManager.maxHpPoint;
-                }
+                castleManager.RecoveryCastle();
             }
-
-            // Update previous HP
-            castleManager.UpdatePreviousHp();
             moveCount = 7;
             countManager.Initialize(moveCount);
             backgroundManager.ChangePuzzleSize();
@@ -153,18 +129,20 @@ namespace Script
             {
                 _speedUp = true;
                 speedUpText.text = "x2";
+                GameSpeed();
             }
             else
             {
                 _speedUp = false;
                 speedUpText.text = "x1";
+                GameSpeed();
             }
         }
         public void GameSpeed()
         {
-            if (countManager.baseMoveCount == 0 && _speedUp)
+            if (_speedUp)
             {
-                Time.timeScale = _isBattle ? 2 : 1;
+                Time.timeScale = isBattle ? 2 : 1;
             }
             else
             {

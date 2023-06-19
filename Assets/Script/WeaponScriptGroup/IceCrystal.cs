@@ -1,45 +1,43 @@
 using System.Collections;
 using DG.Tweening;
 using Script.EnemyManagerScript;
+using Script.RewardScript;
 using UnityEngine;
 
 namespace Script.WeaponScriptGroup
 {
     public class IceCrystal : WeaponBase
     {
-        private EnemyBase _cachedEnemy;
-        private float _lastHitTime;
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
-            var MaxDistanceY = CharacterBase.defaultAtkDistance;
-            var distance = Mathf.Abs(transform.position.y - MaxDistanceY);
-            var adjustedSpeed = Speed * distance;
-            var timeToMove = distance / adjustedSpeed;
-            transform.DOMoveY(transform.position.y + MaxDistanceY, timeToMove).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(this.gameObject));
-
-            yield return new WaitForSecondsRealtime(FireRate);
+            var duration = Distance / Speed;
+            var endPosition = StartingPosition.y + Distance;
+            transform.DOMoveY(endPosition, duration).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(this.gameObject));
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
-            if (enemy != null && enemy.gameObject.activeInHierarchy)
+            AtkEffect(enemy);
+            if (EnforceManager.Instance.waterRestraintKnockBack)
             {
-                enemy.ReceiveDamage(Damage, unitProperty, unitEffect);
+                KnockBackEffect(enemy);
             }
+            var damage = DamageCalculator(Damage, enemy);
+            enemy.ReceiveDamage(enemy,damage);
             StopUseWeapon(gameObject);
         }
-
-        private void OnTriggerStay2D(Collider2D collision)
+        private static bool KnockBackEffect(EnemyBase enemyObject)
         {
-            if (!collision.gameObject.CompareTag("Enemy")) return;
-            var enemy = collision.gameObject.GetComponent<EnemyBase>();
-            if (enemy == null || !enemy.gameObject.activeInHierarchy || !(Time.time > _lastHitTime + FireRate)) return;
-            enemy.ReceiveDamage(Damage, unitProperty, unitEffect);
-            _lastHitTime = Time.time;
+            var knockBack = false;
+            if (enemyObject.IsRestraint)
+            {
+                enemyObject.transform.DOMoveY(enemyObject.transform.position.y + 0.5f, 0.2f)
+                    .OnComplete(() => knockBack = true);
+            }
+            return knockBack;
         }
-
     }
 }

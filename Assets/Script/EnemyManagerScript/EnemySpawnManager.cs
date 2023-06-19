@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
+using Script.PuzzleManagerGroup;
 using Script.UIManager;
 using UnityEngine;
 
@@ -18,15 +19,14 @@ namespace Script.EnemyManagerScript
         [SerializeField] private EnemyManager enemyManager;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private CharacterPool characterPool;
-        [SerializeField] private ExpManager expManager;
         [SerializeField] private GridManager gridManager;
+        [SerializeField] private EnemyPatternManager enemyPatternManager;
+        [SerializeField] private WaveManager waveManager;
 
         private Dictionary<EnemyBase.SpawnZones, Transform> _spawnZones;
-        public List<GameObject> fieldList = new List<GameObject>();
 
         private void Start()
         {
-            expManager = GetComponent<ExpManager>();
             _spawnZones = new Dictionary<EnemyBase.SpawnZones, Transform>()
             {
                 { EnemyBase.SpawnZones.A, spawnZoneA },
@@ -41,46 +41,44 @@ namespace Script.EnemyManagerScript
         {
             for (var i = 0; i < count; i++)
             {
-                SpawnEnemy(enemyType);
+                StartCoroutine(SpawnEnemy(enemyType));
             }
             yield return null;
         }
+
         public void SpawnBoss(int wave)
         {
+            waveManager.set = 1;
             var bossObject = Instantiate(wave == 10 ? enemyManager.stage10BossPrefab : enemyManager.stage20BossPrefab, transform);
-            bossObject.transform.position = gridManager.bossSpawnArea;
-            bossObject.SetActive(true);
-            fieldList.Add(bossObject);
+            var enemyBase = bossObject.GetComponent<EnemyBase>();
+            
+            enemyBase.transform.position = gridManager.bossSpawnArea;
+            GameObject o;
+            (o = enemyBase.gameObject).SetActive(true);
+            StartCoroutine(enemyPatternManager.Boss_Move(o));
         }
 
-        private void SpawnEnemy(EnemyBase.EnemyTypes enemyType)
+        private IEnumerator SpawnEnemy(EnemyBase.EnemyTypes enemyType)
         {
             var enemyToSpawn = enemyPool.GetPooledEnemy(enemyType);
             if (enemyToSpawn == null)
             {
-                return;
+                Debug.LogError("No available enemy to spawn");
+                yield break;
             }
-
-            if (enemyToSpawn.GetComponent<EnemyBase>().EnemyType == EnemyBase.EnemyTypes.Fast)
-            {
-                enemyToSpawn.transform.localScale = Vector3.one * 0.8f;
-            }
-            else if (enemyToSpawn.GetComponent<EnemyBase>().EnemyType == EnemyBase.EnemyTypes.Slow)
-            {
-                enemyToSpawn.transform.localScale = Vector3.one * 1.5f;
-            }
-            else
-            {
-                enemyToSpawn.transform.localScale = Vector3.one;
-            }
+            enemyToSpawn.transform.localScale = enemyToSpawn.GetComponent<EnemyBase>().EnemyType switch
+                {
+                    EnemyBase.EnemyTypes.Fast => Vector3.one * 0.6f,
+                    EnemyBase.EnemyTypes.Slow => Vector3.one * 1f,
+                    _ => Vector3.one * 0.8f
+                };
             var enemyZone = enemyToSpawn.GetComponent<EnemyBase>().SpawnZone;
             var spawnPos = GetRandomPointInBounds(enemyZone);
             var enemyBase = enemyToSpawn.GetComponent<EnemyBase>();
-            enemyBase.Initialize();
-            enemyBase.OnEnemyKilled += reason => { fieldList.Remove(enemyToSpawn); };
-            fieldList.Add(enemyToSpawn);
-            enemyToSpawn.SetActive(true);
             enemyToSpawn.transform.position = spawnPos;
+            enemyToSpawn.SetActive(true);
+            enemyBase.Initialize();
+            yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyToSpawn));
         }
 
         private Vector3 GetRandomPointInBounds(EnemyBase.SpawnZones zone)
@@ -99,16 +97,13 @@ namespace Script.EnemyManagerScript
                     if (xPositions.Count > 0)
                     {
                         xPosition = xPositions[Random.Range(0, xPositions.Count)];
-                        return new Vector3(xPosition, spawnPos.y + Random.Range(-0.5f, 0.5f), 0);
+                        return new Vector3(xPosition, spawnPos.y + Random.Range(-1f, 1f), 0);
                     }
                 }
                 xPosition = Random.Range(0, 6);
-                return new Vector3(xPosition, 9.5f , 0);
+                return new Vector3(xPosition, 9.5f + Random.Range(-1f, 1f) , 0);
             }
-            else
-            {
-                return spawnPos;
-            }
+            return spawnPos;
         }
     }
 }

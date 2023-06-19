@@ -685,22 +685,22 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   gridManager: {fileID: 8808150501734532426}
   spawnManager: {fileID: 149521964}
-  moveCount: 15
+  moveCount: 13
   swipeManager: {fileID: 149521965}
   cameraManager: {fileID: 758648960}
   backgroundManager: {fileID: 1011029961}
-  enemySpawnManager: {fileID: 329010038}
-  enemyPatternManager: {fileID: 329010039}
   waveManager: {fileID: 149521968}
   gamePanel: {fileID: 267564636}
   commonRewardPanel: {fileID: 903150599}
   expRewardPanel: {fileID: 1331568212}
-  atkManager: {fileID: 149521967}
   speedUpText: {fileID: 302776536}
   waveText: {fileID: 651631795}
   castleManager: {fileID: 1177777546}
   commonRewardManager: {fileID: 2120144519}
+  atkManager: {fileID: 149521967}
+  enforceManager: {fileID: 1595735486}
   wave: 1
+  isBattle: 0
 --- !u!4 &149521959
 Transform:
   m_ObjectHideFlags: 0
@@ -729,20 +729,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterList:
-  - {fileID: 5314217969191077850, guid: 282ca571fdd1a418f8655667bc8cf479, type: 3}
+  - {fileID: 1307041946654653737, guid: 282ca571fdd1a418f8655667bc8cf479, type: 3}
   - {fileID: 996077009063285667, guid: e5eae943fb66c47e5961725f82c5a2ff, type: 3}
   - {fileID: 4196842440807729694, guid: 10ae02ed26a9b4edc803ef0448003341, type: 3}
   - {fileID: 5553006608696507336, guid: 438d7922ea8534dd6a3cfa7664f14cb7, type: 3}
   - {fileID: 2939207743086641073, guid: b3c344a1ee72a45e3aef34b9e39575c5, type: 3}
   characterPool: {fileID: 1097818334}
-  expPercentage: 0
-  addRowCount: 0
-  slowCount: 0
-  nextStageMembersSelectCount: 0
-  diagonalMovement: 0
-  _5MatchUpgradeOption: 0
-  permanentIncreaseMovementCount: 0
-  recoveryCastle: 0
   goldGetMore: 0
 --- !u!114 &149521964
 MonoBehaviour:
@@ -761,6 +753,8 @@ MonoBehaviour:
   matchManager: {fileID: 149521966}
   rewardManger: {fileID: 2120144519}
   gameManager: {fileID: 149521958}
+  countManager: {fileID: 841622520}
+  enforceManager: {fileID: 1595735486}
   isWave10Spawning: 0
   isMatched: 0
 --- !u!114 &149521965
@@ -776,6 +770,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   isBusy: 0
+  isUp: 0
   minSwipeLength: 0.3
   spawnManager: {fileID: 149521964}
   countManager: {fileID: 841622520}
@@ -783,8 +778,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   matchManager: {fileID: 149521966}
-  characterPool: {fileID: 1097818334}
   rewardManager: {fileID: 2120144519}
+  enforceManager: {fileID: 1595735486}
 --- !u!114 &149521966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -801,6 +796,7 @@ MonoBehaviour:
   characterPool: {fileID: 1097818334}
   countManager: {fileID: 841622520}
   commonRewardManager: {fileID: 2120144519}
+  enforceManager: {fileID: 1595735486}
 --- !u!114 &149521967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -815,6 +811,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterPool: {fileID: 1097818334}
   weaponsPool: {fileID: 1537456864}
+  enforceManager: {fileID: 1595735486}
+  gameManager: {fileID: 149521958}
+  attackRate: 1
+  enemyList: []
 --- !u!114 &149521968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -828,6 +828,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemySpawnManager: {fileID: 329010038}
+  gameManager: {fileID: 149521958}
+  atkManager: {fileID: 149521967}
+  enemyTotalCount: 0
+  set: 0
 --- !u!1 &187153451
 GameObject:
   m_ObjectHideFlags: 0
@@ -1631,16 +1635,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyList:
   - enemyPrefab: {fileID: 4608296790683070460, guid: 47528aa86487a4455a068d9ab3f94f2f, type: 3}
-    enemyBase: {fileID: 329010040}
     poolSize: 40
   - enemyPrefab: {fileID: 1593285363578843117, guid: 0c6a7b6d8e2364455ad516d97e1634e6, type: 3}
-    enemyBase: {fileID: 329010040}
     poolSize: 40
   - enemyPrefab: {fileID: 8190566129223033203, guid: 78f7bd1c20b3e408a94ce003baa58533, type: 3}
-    enemyBase: {fileID: 329010040}
     poolSize: 40
   - enemyPrefab: {fileID: 5917879149447133458, guid: c60bfe49f25eb4538ab2af51b28dce02, type: 3}
-    enemyBase: {fileID: 329010040}
     poolSize: 40
   stage10BossPrefab: {fileID: 7359858875132129289, guid: d950a24d876c844ed8550ef75818ee5c, type: 3}
   stage20BossPrefab: {fileID: 5587507376329632665, guid: 250bcee026ef64a07a567359a4e2ac2b, type: 3}
@@ -1665,9 +1665,9 @@ MonoBehaviour:
   enemyManager: {fileID: 329010036}
   gameManager: {fileID: 149521958}
   characterPool: {fileID: 1097818334}
-  expManager: {fileID: 841622521}
   gridManager: {fileID: 8808150501734532426}
-  fieldList: []
+  enemyPatternManager: {fileID: 329010039}
+  waveManager: {fileID: 149521968}
 --- !u!114 &329010039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1680,7 +1680,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65933e619ef454066b4b1f65dd5bd44f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemySpawnManager: {fileID: 329010038}
+  castle: {fileID: 1177777540}
+  waveManager: {fileID: 149521968}
+  gameManager: {fileID: 149521958}
+  enforceManager: {fileID: 1595735486}
 --- !u!114 &329010040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1694,8 +1697,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   number: 0
-  HealthPoint: 0
-  canMove: 1
+  healthPoint: 0
+  maxHealthPoint: 0
+  currentHealth: 0
 --- !u!1 &362582815
 GameObject:
   m_ObjectHideFlags: 0
@@ -3666,7 +3670,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: -1
   m_SortingLayerID: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 5
   m_TargetDisplay: 0
 --- !u!224 &841622519
 RectTransform:
@@ -3709,9 +3713,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efbe2bcfadc2c4db98ffaea9f9e7b363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseMoveCount: 0
   moveCountText: {fileID: 1733803903}
-  gameManager: {fileID: 149521958}
 --- !u!114 &841622521
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3730,7 +3732,7 @@ MonoBehaviour:
   expText: {fileID: 941016687}
   levelUpRewardManager: {fileID: 2120144522}
   levelText: {fileID: 1240016084}
-  additionalExpPercent: 0
+  enforceManager: {fileID: 1595735486}
   level: 0
 --- !u!1 &903150599
 GameObject:
@@ -4374,7 +4376,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterManager: {fileID: 149521963}
   poolSize: 15
-  _pooledCharacters: []
+  pooledCharacters:
+  - {fileID: 5314217969191077851, guid: 282ca571fdd1a418f8655667bc8cf479, type: 3}
+  - {fileID: 996077009063285666, guid: e5eae943fb66c47e5961725f82c5a2ff, type: 3}
+  - {fileID: 5553006608696507343, guid: 438d7922ea8534dd6a3cfa7664f14cb7, type: 3}
+  - {fileID: 4196842440807729695, guid: 10ae02ed26a9b4edc803ef0448003341, type: 3}
+  - {fileID: 109876181003132260, guid: b3c344a1ee72a45e3aef34b9e39575c5, type: 3}
 --- !u!4 &1097818335
 Transform:
   m_ObjectHideFlags: 0
@@ -4530,11 +4537,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpBar: {fileID: 430691236}
   hpText: {fileID: 2009872133}
-  enemyPool: {fileID: 2016604888}
   gameManager: {fileID: 149521958}
-  enemySpawnManager: {fileID: 329010038}
-  hpPoint: 100000
-  maxHpPoint: 10000
+  hpPoint: 1000
+  maxHpPoint: 1000
 --- !u!1 &1211532197
 GameObject:
   m_ObjectHideFlags: 0
@@ -5836,6 +5841,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1537456865}
   - component: {fileID: 1537456864}
+  - component: {fileID: 1537456866}
   m_Layer: 0
   m_Name: WeaponPool
   m_TagString: Untagged
@@ -5887,6 +5893,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: f604e062448844dffaf8bd2544a41b0d, type: 3}
     - {fileID: 21300000, guid: 1fcd99742122641d0a9bfecf3512d171, type: 3}
   weaponPoolCapacity: 30
+  enforceManager: {fileID: 1595735486}
 --- !u!4 &1537456865
 Transform:
   m_ObjectHideFlags: 0
@@ -5902,6 +5909,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1537456866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1537456863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbbeeeda3a9dc4b2cbeb8c2573a5891a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  isInUse: 0
 --- !u!1 &1563434128
 GameObject:
   m_ObjectHideFlags: 0
@@ -6015,6 +6035,87 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -1.2000008}
   m_SizeDelta: {x: 0, y: -1.6}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1595735485
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1595735487}
+  - component: {fileID: 1595735486}
+  m_Layer: 0
+  m_Name: ' EnforceManager'
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1595735486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595735485}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8241d3f1f5c534ecb9999427601faf0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterManager: {fileID: 149521963}
+  countManager: {fileID: 841622520}
+  castleManager: {fileID: 1177777546}
+  gridManager: {fileID: 8808150501734532426}
+  activeRestraint: 0
+  increaseRestraintTime: 0
+  divinePenetrate: 0
+  divineAtkRange: 0
+  divinePoisonAdditionalDamage: 0
+  divinePoisonAdditionalDamageCount: 1
+  physicAdditionalWeapon: 0
+  physicIncreaseWeaponScale: 0
+  physicSlowAdditionalDamage: 0
+  increasePhysicAtkSpeed: 1
+  physicIncreaseDamage: 0
+  increasePhysicsDamage: 1
+  poisonDoubleAtk: 0
+  poisonRestraintAdditionalDamage: 0
+  poisonInstantKill: 0
+  poisonIncreaseAtkRange: 0
+  activatePoison: 0
+  poisonOverlapping: 1
+  waterStun: 0
+  waterIncreaseSlowTime: 0
+  waterIncreaseSlowPower: 0
+  waterRestraintKnockBack: 0
+  addRowCount: 0
+  slowCount: 0
+  diagonalMovement: 0
+  recoveryCastle: 0
+  castleMaxHp: 0
+  highLevelCharacterCount: 6
+  expPercentage: 0
+  permanentIncreaseMovementCount: 0
+  match5Upgrade: 0
+  increaseAtkDamage: 0
+  increaseAtkRate: 0
+--- !u!4 &1595735487
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1595735485}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.09737077, y: -2.079399, z: -0.0007605022}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 16
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1612419085
 GameObject:
   m_ObjectHideFlags: 0
@@ -6443,10 +6544,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
+  m_fontSize: 69.05
   m_fontSizeBase: 100
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
@@ -7454,13 +7555,8 @@ MonoBehaviour:
   spawnManager: {fileID: 149521964}
   countManager: {fileID: 841622520}
   gameManager: {fileID: 149521958}
-  gridManager: {fileID: 8808150501734532426}
-  swipeManager: {fileID: 149521965}
-  expManager: {fileID: 841622521}
-  castleManager: {fileID: 1177777546}
-  matchManager: {fileID: 149521966}
-  enemyManager: {fileID: 329010036}
   characterManager: {fileID: 149521963}
+  enforceManager: {fileID: 1595735486}
   openBoxing: 0
 --- !u!4 &2120144520
 Transform:
@@ -7519,14 +7615,10 @@ MonoBehaviour:
   blueSprite: {fileID: 21300000, guid: 80c21376e7ba044b5b85fe6ce5af6ceb, type: 3}
   purpleSprite: {fileID: 21300000, guid: 16bf61ff488364d4d925a56598d91ebd, type: 3}
   exp: {fileID: 2120144521}
-  spawnManager: {fileID: 149521964}
   expManager: {fileID: 841622521}
-  countManager: {fileID: 841622520}
   gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
-  swipeManager: {fileID: 149521965}
-  castleManager: {fileID: 1177777546}
-  enemyManager: {fileID: 329010036}
+  enforceManager: {fileID: 1595735486}
 --- !u!1 &2143130367
 GameObject:
   m_ObjectHideFlags: 0
