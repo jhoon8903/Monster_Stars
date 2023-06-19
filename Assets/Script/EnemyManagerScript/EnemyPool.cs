@@ -7,11 +7,10 @@ namespace Script.EnemyManagerScript
     public class EnemyPool : MonoBehaviour
     {
         [SerializeField] private EnemyManager enemyManager;
-        private List<GameObject> _pooledDefaultEnemy;
-        private List<GameObject> _poolEnemy;
+        private List<GameObject> _pooledEnemy = new List<GameObject>();
+        private readonly List<GameObject> _pooledDefaultEnemy = new List<GameObject>();
 
-
-
+        public List<EnemyBase> enemyBases = new List<EnemyBase>();
         public void Awake()
         {
             
@@ -32,15 +31,14 @@ namespace Script.EnemyManagerScript
 
         public GameObject GetPooledEnemy(EnemyBase.EnemyTypes enemyType)
         {
-            var spawnEnemy = _poolEnemy
-                .FirstOrDefault(t =>
-                    !t.activeInHierarchy &&
-                    t.GetComponent<EnemyBase>().EnemyType == enemyType);
-            _poolEnemy.Remove(spawnEnemy);
+            var spawnEnemy = _pooledEnemy.FirstOrDefault(t => !t.activeInHierarchy && t.GetComponent<EnemyBase>().EnemyType == enemyType);
+            _pooledEnemy.Remove(spawnEnemy);
+            if (_pooledEnemy.Count == 0) _pooledEnemy = _pooledDefaultEnemy;
 
-            if (_poolEnemy.Count == 0) _poolEnemy = _pooledDefaultEnemy.ToList();
+            enemyBases.Add(spawnEnemy.GetComponent<EnemyBase>());
             return spawnEnemy;
         }
+
 
         public static void ReturnToPool(GameObject obj)
         {
