@@ -2,6 +2,7 @@ using Script.EnemyManagerScript;
 using UnityEngine;
 using System.Collections;
 using Script.CharacterManagerScript;
+using System.Collections.Generic;
 
 namespace Script.UIManager
 {
@@ -9,9 +10,12 @@ namespace Script.UIManager
     {
         [SerializeField] private EnemySpawnManager enemySpawnManager;
         [SerializeField] private GameManager gameManager;
-        [SerializeField] private AtkManager atkManager;
+        [SerializeField] private EnemyPool enemypool;
         public int enemyTotalCount;
         public int set;
+        public List<EnemyBase> enemies = new List<EnemyBase>();
+
+        
         private static readonly object EnemyLock = new object();
 
         private static (int normal, int slow, int fast, int sets) GetSpawnCountForWave(int wave)
@@ -63,14 +67,15 @@ namespace Script.UIManager
             enemyTotalCount = (n + s + f) * set;
         }
 
-        public void EnemyDestroyEvent()
+        public void EnemyDestroyEvent(EnemyBase enemyBase)
         {
+            enemies = enemypool.enemyBases;
             lock (EnemyLock)
             {
                 Debug.Log($"Enemy destroyed, current total count: {enemyTotalCount}.");
-                enemyTotalCount -= 1;
+                enemies.Remove(enemyBase);
                 Debug.Log($"After destroying an enemy, total count: {enemyTotalCount}.");
-                if (atkManager.enemyList.Count != 0) return;
+                if (enemies.Count != 0) return;
                 StartCoroutine(gameManager.ContinueOrLose());
             }
         }

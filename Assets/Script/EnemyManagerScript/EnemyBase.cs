@@ -99,7 +99,6 @@ namespace Script.EnemyManagerScript
                 {
                     _enforceManager.PhysicIncreaseDamage();
                 }
-                
             }
         }
 
@@ -110,7 +109,7 @@ namespace Script.EnemyManagerScript
             var characterBase = FindObjectOfType<CharacterBase>();
             Debug.Log($"Enemy {number} killed, returning to pool.");
             characterBase.DeleteList(detectedEnemy);
-            waveManager.EnemyDestroyEvent();
+            waveManager.EnemyDestroyEvent(detectedEnemy);
             EnemyPool.ReturnToPool(enemy);
         }
 

@@ -9,7 +9,8 @@ namespace Script.EnemyManagerScript
         [SerializeField] private EnemyManager enemyManager;
         private List<GameObject> _pooledEnemy = new List<GameObject>();
         private readonly List<GameObject> _pooledDefaultEnemy = new List<GameObject>();
-       
+
+        public List<EnemyBase> enemyBases = new List<EnemyBase>();
         
         public void Awake()
         {
@@ -32,8 +33,11 @@ namespace Script.EnemyManagerScript
             var spawnEnemy = _pooledEnemy.FirstOrDefault(t => !t.activeInHierarchy && t.GetComponent<EnemyBase>().EnemyType == enemyType);
             _pooledEnemy.Remove(spawnEnemy);
             if (_pooledEnemy.Count == 0) _pooledEnemy = _pooledDefaultEnemy;
+
+            enemyBases.Add(spawnEnemy.GetComponent<EnemyBase>());
             return spawnEnemy;
         }
+
 
         public static void ReturnToPool(GameObject obj)
         {
