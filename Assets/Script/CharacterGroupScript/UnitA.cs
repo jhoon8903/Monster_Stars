@@ -69,20 +69,15 @@ namespace Script.CharacterGroupScript
             }
 
             var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize, 0f);
-            
+            var currentlyDetectedEnemies = new List<GameObject>();
             foreach (var enemyObject in colliders)
             {
                 if (!enemyObject.gameObject.CompareTag("Enemy") || !enemyObject.gameObject.activeInHierarchy) continue;
                 var enemyBase = enemyObject.GetComponent<EnemyBase>();
-                _currentlyDetectedEnemies.Add(enemyBase.gameObject);
+                currentlyDetectedEnemies.Add(enemyBase.gameObject);
             }
-            return _currentlyDetectedEnemies;
-        }
-
-        private readonly List<GameObject> _currentlyDetectedEnemies = new List<GameObject>();
-        protected internal override void DeleteList(EnemyBase enemyObject)
-        {
-            _currentlyDetectedEnemies.Remove(enemyObject.gameObject);
+            detectedEnemies = currentlyDetectedEnemies;
+            return detectedEnemies;
         }
 
 

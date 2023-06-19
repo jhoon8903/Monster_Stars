@@ -61,19 +61,15 @@ namespace Script.CharacterGroupScript
                 _detectionSize = 2.5f;
             }
             var colliders = Physics2D.OverlapCircleAll(detectionCenter, _detectionSize);
+            var currentlyDetectedEnemies = new List<GameObject>();
             foreach (var enemyObject in colliders)
             {
                 if (!enemyObject.gameObject.CompareTag("Enemy") || !enemyObject.gameObject.activeInHierarchy) continue;
                 var enemyBase = enemyObject.GetComponent<EnemyBase>();
-                _currentlyDetectedEnemies.Add(enemyBase.gameObject);
+                currentlyDetectedEnemies.Add(enemyBase.gameObject);
             }
-            return _currentlyDetectedEnemies;
-        }
-
-        private readonly List<GameObject> _currentlyDetectedEnemies = new List<GameObject>();
-        protected internal override void DeleteList(EnemyBase enemyObject)
-        {
-            _currentlyDetectedEnemies.Remove(enemyObject.gameObject);
+            detectedEnemies = currentlyDetectedEnemies;
+            return detectedEnemies;
         }
 
         // Draws a wire sphere in the Scene view to visualize the detection circle

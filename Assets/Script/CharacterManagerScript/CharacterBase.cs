@@ -31,6 +31,7 @@ namespace Script.CharacterManagerScript
         private readonly Vector3 _levelUpScale = new Vector3(1.2f, 1.2f, 0); // Scale to use when leveling up
         public GameObject CurrentWeapon { get; set; }
         protected internal bool IsClicked { get; set; }
+        public static List<GameObject> detectedEnemies = new List<GameObject>();
 
 
 
@@ -72,10 +73,6 @@ namespace Script.CharacterManagerScript
         protected internal void ResetLevel()
         {
             Level = 1;
-        }
-
-        protected internal virtual void DeleteList(EnemyBase enemyObject)
-        {
         }
 
         // Detect enemies and return a list of detected enemy game objects

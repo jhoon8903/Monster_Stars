@@ -1,7 +1,6 @@
 using Script.EnemyManagerScript;
 using UnityEngine;
 using System.Collections;
-using Script.CharacterManagerScript;
 using System.Collections.Generic;
 
 namespace Script.UIManager
@@ -10,9 +9,8 @@ namespace Script.UIManager
     {
         [SerializeField] private EnemySpawnManager enemySpawnManager;
         [SerializeField] private GameManager gameManager;
-        [SerializeField] private EnemyPool enemypool;
+        [SerializeField] private EnemyPool enemyPool;
         public int enemyTotalCount;
-        public int set;
         public List<EnemyBase> enemies = new List<EnemyBase>();
 
         
@@ -41,12 +39,10 @@ namespace Script.UIManager
         public IEnumerator WaveController(int wave)
         {
             var (normalCount, slowCount, fastCount, sets) = GetSpawnCountForWave(wave);
-            CountSet(normalCount, slowCount, fastCount, sets);
 
             if (wave is 10 or 20)
             {
                 enemySpawnManager.SpawnBoss(wave);
-                enemyTotalCount = 1;
             }
             else
             {
@@ -61,20 +57,13 @@ namespace Script.UIManager
             }
         }
 
-        private void CountSet(int n,int s,int f,int sets)
-        {
-            set = sets;
-            enemyTotalCount = (n + s + f) * set;
-        }
-
         public void EnemyDestroyEvent(EnemyBase enemyBase)
         {
-            enemies = enemypool.enemyBases;
+      
             lock (EnemyLock)
             {
-                Debug.Log($"Enemy destroyed, current total count: {enemyTotalCount}.");
+                enemies = enemyPool.enemyBases;
                 enemies.Remove(enemyBase);
-                Debug.Log($"After destroying an enemy, total count: {enemyTotalCount}.");
                 if (enemies.Count != 0) return;
                 StartCoroutine(gameManager.ContinueOrLose());
             }

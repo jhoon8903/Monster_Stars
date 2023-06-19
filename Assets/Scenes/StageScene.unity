@@ -829,9 +829,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemySpawnManager: {fileID: 329010038}
   gameManager: {fileID: 149521958}
-  enemypool: {fileID: 2016604888}
+  enemyPool: {fileID: 2016604888}
   enemyTotalCount: 0
-  set: 0
   enemies: []
 --- !u!1 &187153451
 GameObject:
@@ -7307,6 +7306,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyManager: {fileID: 329010036}
+  pooledEnemy: []
+  pooledDefaultEnemy: []
   enemyBases: []
 --- !u!4 &2016604889
 Transform:
