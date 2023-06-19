@@ -7,12 +7,13 @@ namespace Script.EnemyManagerScript
     public class EnemyPool : MonoBehaviour
     {
         [SerializeField] private EnemyManager enemyManager;
-        private List<GameObject> _pooledEnemy = new List<GameObject>();
-        private List<GameObject> _pooledDefaultEnemy = new List<GameObject>();
+        [SerializeField] private List<GameObject> pooledEnemy = new List<GameObject>();
+        [SerializeField] private  List<GameObject> pooledDefaultEnemy = new List<GameObject>();
+
         public List<EnemyBase> enemyBases = new List<EnemyBase>();
+        
         public void Awake()
         {
-            _pooledDefaultEnemy = new List<GameObject>();
             foreach (var enemySettings in enemyManager.enemyList)
             {
                 for (var i = 0; i < enemySettings.poolSize; i++)
@@ -21,20 +22,21 @@ namespace Script.EnemyManagerScript
                     obj.GetComponent<EnemyBase>().number = i + 1;
                     obj.GetComponent<EnemyBase>().EnemyProperty();
                     obj.SetActive(false);
-                    _pooledDefaultEnemy.Add(obj);
+                    pooledDefaultEnemy.Add(obj);
                 }
             }
-            _pooledEnemy = _pooledDefaultEnemy.ToList();
+            pooledEnemy = pooledDefaultEnemy.ToList();
         }
 
         public GameObject GetPooledEnemy(EnemyBase.EnemyTypes enemyType)
         {
-            var spawnEnemy = _pooledEnemy.FirstOrDefault(t => !t.activeInHierarchy && t.GetComponent<EnemyBase>().EnemyType == enemyType);
-            _pooledEnemy.Remove(spawnEnemy);
-            if (_pooledEnemy.Count == 0) _pooledEnemy = _pooledDefaultEnemy;
-
+            var spawnEnemy = pooledEnemy.FirstOrDefault(t => !t.activeInHierarchy && t.GetComponent<EnemyBase>().EnemyType == enemyType);
+            pooledEnemy.Remove(spawnEnemy);
+            if (pooledEnemy.Count == 0) pooledEnemy = pooledDefaultEnemy.ToList();
+            if (spawnEnemy == null) return null;
             enemyBases.Add(spawnEnemy.GetComponent<EnemyBase>());
             return spawnEnemy;
+
         }
 
 
@@ -43,6 +45,5 @@ namespace Script.EnemyManagerScript
             obj.transform.localScale = Vector3.one;
             obj.SetActive(false);
         }
-
     }
 }
