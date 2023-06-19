@@ -32,10 +32,10 @@ namespace Script
         [SerializeField] private EnforceManager enforceManager;
         private readonly WaitForSecondsRealtime _waitOneSecRealtime = new WaitForSecondsRealtime(1f);
         private readonly WaitForSecondsRealtime _waitTwoSecRealtime = new WaitForSecondsRealtime(2f);
-        private bool _speedUp = false;
+        private bool _speedUp;
         public int wave = 1;
         private Vector3Int _bossSpawnArea;
-        public bool isBattle = false;
+        public bool isBattle;
 
         private void Start()
         {
@@ -136,7 +136,7 @@ namespace Script
                 _speedUp = false;
                 speedUpText.text = "x1";
                 GameSpeed();
-            } ;
+            }
         }
         public void GameSpeed()
         {

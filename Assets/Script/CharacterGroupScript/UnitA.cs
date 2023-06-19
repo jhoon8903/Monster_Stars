@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Script.CharacterManagerScript;
+using Script.EnemyManagerScript;
 using Script.RewardScript;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ namespace Script.CharacterGroupScript
         private SpriteRenderer _spriteRenderer; // Reference to the SpriteRenderer component
         private const float DetectionWidth = 1f; // Width of detection box
         private const float DetectionHeight = 8f; // Height of detection box
+        
         public void Awake()
         {
             unitGroup = UnitGroups.A;
@@ -50,32 +52,39 @@ namespace Script.CharacterGroupScript
             Level1(); // Set level back to 1
         }
 
-      public override List<GameObject> DetectEnemies()
-{
-    Vector2 detectionSize;
-    Vector2 detectionCenter;
+        public override List<GameObject> DetectEnemies()
+        {
+            Vector2 detectionSize;
+            Vector2 detectionCenter;
 
-    if (EnforceManager.Instance.divineAtkRange)
-    {
-        detectionSize = new Vector2(DetectionWidth - 0.5f, DetectionHeight * 2); // Double the detection height
-        detectionCenter = (Vector2)transform.position; // Center the detection box around the current position
-    }
-    else
-    {
-        detectionSize = new Vector2(DetectionWidth - 0.5f, DetectionHeight);
-        detectionCenter = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
-    }
+            if (EnforceManager.Instance.divineAtkRange)
+            {
+                detectionSize = new Vector2(DetectionWidth - 0.5f, DetectionHeight * 2); // Double the detection height
+                detectionCenter = (Vector2)transform.position; // Center the detection box around the current position
+            }
+            else
+            {
+                detectionSize = new Vector2(DetectionWidth - 0.5f, DetectionHeight);
+                detectionCenter = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
+            }
 
-    var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize, 0f);
-    var currentlyDetectedEnemies = new List<GameObject>();
-    foreach (var enemyObject in colliders)
-    {
-        if (!enemyObject.gameObject.CompareTag("Enemy")) continue;
-        currentlyDetectedEnemies.Add(enemyObject.gameObject);
-    }
-    detectedEnemies = currentlyDetectedEnemies;
-    return detectedEnemies;
-}
+            var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize, 0f);
+            
+            foreach (var enemyObject in colliders)
+            {
+                if (!enemyObject.gameObject.CompareTag("Enemy") || !enemyObject.gameObject.activeInHierarchy) continue;
+                var enemyBase = enemyObject.GetComponent<EnemyBase>();
+                _currentlyDetectedEnemies.Add(enemyBase.gameObject);
+            }
+            return _currentlyDetectedEnemies;
+        }
+
+        private readonly List<GameObject> _currentlyDetectedEnemies = new List<GameObject>();
+        protected internal override void DeleteList(EnemyBase enemyObject)
+        {
+            _currentlyDetectedEnemies.Remove(enemyObject.gameObject);
+        }
+
 
 // Draws a wire cube in the Scene view to visualize the detection box
 public void OnDrawGizmos()

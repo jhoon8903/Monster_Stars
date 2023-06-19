@@ -812,6 +812,7 @@ MonoBehaviour:
   characterPool: {fileID: 1097818334}
   weaponsPool: {fileID: 1537456864}
   enforceManager: {fileID: 1595735486}
+  gameManager: {fileID: 149521958}
   attackRate: 1
   enemyList: []
 --- !u!114 &149521968
@@ -828,6 +829,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemySpawnManager: {fileID: 329010038}
   gameManager: {fileID: 149521958}
+  atkManager: {fileID: 149521967}
   enemyTotalCount: 0
   set: 0
 --- !u!1 &187153451
@@ -1697,6 +1699,7 @@ MonoBehaviour:
   number: 0
   healthPoint: 0
   maxHealthPoint: 0
+  currentHealth: 0
 --- !u!1 &362582815
 GameObject:
   m_ObjectHideFlags: 0

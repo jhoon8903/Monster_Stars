@@ -57,14 +57,19 @@ namespace Script.CharacterGroupScript
             var detectionSize = new Vector2(DetectionWidth-0.5f, DetectionHeight);
             var detectionCenter = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
             var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize, 0f);
-            var currentlyDetectedEnemies = new List<GameObject>();
             foreach (var enemyObject in colliders)
             {
-                if (!enemyObject.gameObject.CompareTag("Enemy")) continue;
-                currentlyDetectedEnemies.Add(enemyObject.gameObject);
+                if (!enemyObject.gameObject.CompareTag("Enemy") || !enemyObject.gameObject.activeInHierarchy) continue;
+                var enemyBase = enemyObject.GetComponent<EnemyBase>();
+                _currentlyDetectedEnemies.Add(enemyBase.gameObject);
             }
-            detectedEnemies = currentlyDetectedEnemies;
-            return detectedEnemies;
+            return _currentlyDetectedEnemies;
+        }
+
+        private readonly List<GameObject> _currentlyDetectedEnemies = new List<GameObject>();
+        protected internal override void DeleteList(EnemyBase enemyObject)
+        {
+            _currentlyDetectedEnemies.Remove(enemyObject.gameObject);
         }
 
         // Draws a wire cube in the Scene view to visualize the detection box

@@ -35,8 +35,9 @@ namespace Script.EnemyManagerScript
             return spawnEnemy;
         }
 
-        public void ReturnToPool(GameObject obj)
+        public static void ReturnToPool(GameObject obj)
         {
+            obj.transform.localScale = Vector3.one;
             obj.SetActive(false);
         }
     }

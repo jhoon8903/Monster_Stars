@@ -16,7 +16,7 @@ namespace Script.EnemyManagerScript
         public int number;
         public float healthPoint; // 적 오브젝트의 체력
         public float maxHealthPoint;
-        private float _currentHealth;
+        public float currentHealth;
         protected internal float CrushDamage; // 충돌시 데미지
         protected internal float MoveSpeed; // 적 오브젝트의 이동속도, 1f 는 1초에 1Grid를 가는 속도 숫자가 커질수록 느려져야 함
         public enum EnemyTypes { Boss, BasicA, BasicD,Slow, Fast }
@@ -69,10 +69,10 @@ namespace Script.EnemyManagerScript
                 healthPoint *= Mathf.Pow(1.3f, wave - 1);
             }
             maxHealthPoint = healthPoint;
-            _currentHealth = maxHealthPoint;
+            currentHealth = maxHealthPoint;
             _hpSlider.maxValue = maxHealthPoint;
-            _hpSlider.value = _currentHealth;
-            UpdateHpSlider();
+            _hpSlider.value = currentHealth;
+            StartCoroutine(UpdateHpSlider());
         }
         protected internal virtual void EnemyProperty()
         {
@@ -86,38 +86,38 @@ namespace Script.EnemyManagerScript
                     Debug.Log($"Received damage for already dead enemy {number}. Ignoring damage.");
                     return;
                 }
-                Debug.Log($"ReceiveDamage called for enemy {number}. Current HP: {_currentHealth}, Damage: {damage}");
-                _currentHealth -= damage;
-                UpdateHpSlider();
-                if (_currentHealth > 0 || _isDead) return;
-                Debug.Log($"Enemy {number} is dying.");
-                _isDead = true; // Mark the enemy as dead to prevent multiple death events
+                Debug.Log($"ReceiveDamage called for enemy {number}. Current HP: {currentHealth}, Damage: {damage}");
+                currentHealth -= damage;
+                StartCoroutine(UpdateHpSlider());
+                if (currentHealth > 0f ||  _isDead) return;
+                _isDead = true;
+                EnemyKilledEvents(detectEnemy);
+                Debug.Log($"Enemy {detectEnemy.number} is dying.");
+                 // Mark the enemy as dead to prevent multiple death events
                 ExpManager.Instance.HandleEnemyKilled(reason);
                 if (_enforceManager.physicIncreaseDamage)
                 {
                     _enforceManager.PhysicIncreaseDamage();
                 }
-                if (!CharacterBase.detectedEnemies.Contains(detectEnemy.gameObject)) // Check if enemy is still in the list before removing it
-                {
-                    EnemyKilledEvents(detectEnemy);
-                }
+                
             }
         }
 
         public void EnemyKilledEvents(EnemyBase detectedEnemy)
         {
             var enemy = detectedEnemy.gameObject;
-            var enemyPool = FindObjectOfType<EnemyPool>();
             var waveManager = FindObjectOfType<WaveManager>();
+            var characterBase = FindObjectOfType<CharacterBase>();
             Debug.Log($"Enemy {number} killed, returning to pool.");
-            CharacterBase.detectedEnemies.Remove(enemy);
+            characterBase.DeleteList(detectedEnemy);
             waveManager.EnemyDestroyEvent();
-            enemyPool.ReturnToPool(enemy);
+            EnemyPool.ReturnToPool(enemy);
         }
 
-        private void UpdateHpSlider()
+        private IEnumerator UpdateHpSlider()
         {
-            _hpSlider.DOValue(_currentHealth, 0.5f);
+            yield return _hpSlider.DOValue(currentHealth, 0.1f);
+            
         }
     }
 }

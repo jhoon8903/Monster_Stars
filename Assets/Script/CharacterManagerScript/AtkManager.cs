@@ -25,8 +25,9 @@ namespace Script.CharacterManagerScript
         [SerializeField] private CharacterPool characterPool; // Reference to the character pool
         [SerializeField] private WeaponsPool weaponsPool; // Reference to the weapon pool
         [SerializeField] private EnforceManager enforceManager;
+        [SerializeField] private GameManager gameManager;
         public float attackRate = 1;
-        public List<GameObject> enemyList = new List<GameObject>();
+          public List<GameObject> enemyList = new List<GameObject>();
 
         public IEnumerator CheckForAttack()
         {
@@ -43,7 +44,7 @@ namespace Script.CharacterManagerScript
         {
             var atkRate = unit.GetComponent<CharacterBase>().defaultAtkRate * attackRate * 3.5f;
 
-            while (true)
+            while (gameManager.isBattle)
             {
                 if(Time.timeScale == 0)
                 {
@@ -51,9 +52,11 @@ namespace Script.CharacterManagerScript
                     continue;
                 }
                 enemyList = unit.DetectEnemies();
+                Debug.Log($"{unit.name} / LIstCount: {enemyList.Count}");
 
                 if (enemyList.Count > 0)
                 {
+                    enemyList.RemoveAll(enemy => enemy == null || !enemy.activeInHierarchy);
                     var atkUnit = unit.gameObject; // Attacking unit
                     var unitAtkType = unit.UnitAtkType; // Attack type of the unit
                     var unitGroup = unit.unitGroup; // Group of the unit

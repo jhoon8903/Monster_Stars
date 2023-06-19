@@ -1,6 +1,7 @@
 using Script.EnemyManagerScript;
 using UnityEngine;
 using System.Collections;
+using Script.CharacterManagerScript;
 
 namespace Script.UIManager
 {
@@ -8,6 +9,7 @@ namespace Script.UIManager
     {
         [SerializeField] private EnemySpawnManager enemySpawnManager;
         [SerializeField] private GameManager gameManager;
+        [SerializeField] private AtkManager atkManager;
         public int enemyTotalCount;
         public int set;
         private static readonly object EnemyLock = new object();
@@ -68,7 +70,7 @@ namespace Script.UIManager
                 Debug.Log($"Enemy destroyed, current total count: {enemyTotalCount}.");
                 enemyTotalCount -= 1;
                 Debug.Log($"After destroying an enemy, total count: {enemyTotalCount}.");
-                if (enemyTotalCount != 0) return;
+                if (atkManager.enemyList.Count != 0) return;
                 StartCoroutine(gameManager.ContinueOrLose());
             }
         }
