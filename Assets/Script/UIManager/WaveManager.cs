@@ -10,6 +10,7 @@ namespace Script.UIManager
         [SerializeField] private EnemySpawnManager enemySpawnManager;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private AtkManager atkManager;
+        
         public int enemyTotalCount;
         public int set;
         private static readonly object EnemyLock = new object();
