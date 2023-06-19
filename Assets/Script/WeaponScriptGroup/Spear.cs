@@ -4,7 +4,6 @@ using DG.Tweening;
 using Script.CharacterGroupScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
-using Unity.VisualScripting;
 using UnityEngine;
 namespace Script.WeaponScriptGroup
 {
@@ -21,21 +20,13 @@ namespace Script.WeaponScriptGroup
             {
                 _enemyTransform = enemy.transform.position;
             }
-            _distance = Vector3.Distance(transform.position, _enemyTransform);
-            var adjustedSpeed = Speed * _distance;
+
+            var position = transform.position;
+            _distance = Vector3.Distance(position, _enemyTransform);
+            var adjustedSpeed = Speed * _distance * 2.0f;
             var timeToMove = _distance / adjustedSpeed;
             transform.DOMove(_enemyTransform, timeToMove).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(gameObject));
-            
-            if (_enemyTransform.y > transform.position.y)
-            {
-                // _enemyTransform의 y 축이 더 높음
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-            }
-            else
-            {
-                // _enemyTransform의 y 축이 더 낮음
-                transform.rotation = Quaternion.Euler(0, 0, 180);
-            }
+            transform.rotation = Quaternion.Euler(0, 0, _enemyTransform.y > position.y ? 0 : 180);
         }
         private void OnTriggerEnter2D(Collider2D collision)
         {

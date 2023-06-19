@@ -62,10 +62,8 @@ namespace Script.EnemyManagerScript
         public void Initialize()
         {
             _enforceManager = FindObjectOfType<EnforceManager>();
-
             var wave = FindObjectOfType<GameManager>().wave;
             _hpSlider = GetComponentInChildren<Slider>(true);
-
             if (EnemyType != EnemyTypes.Boss)
             {
                 healthPoint *= Mathf.Pow(1.3f, wave - 1);
@@ -85,22 +83,18 @@ namespace Script.EnemyManagerScript
             {
                 if (_isDead)
                 {
-                    Debug.Log($"Received damage for already dead enemy {number}. Ignoring damage.");
                     return;
                 }
-                Debug.Log($"ReceiveDamage called for enemy {number}. Current HP: {currentHealth}, Damage: {damage}");
                 currentHealth -= damage;
                 StartCoroutine(UpdateHpSlider());
                 if (currentHealth > 0f ||  _isDead) return;
                 _isDead = true;
-                EnemyKilledEvents(detectEnemy);
-                Debug.Log($"Enemy {detectEnemy.number} is dying.");
-                 // Mark the enemy as dead to prevent multiple death events
                 ExpManager.Instance.HandleEnemyKilled(reason);
                 if (_enforceManager.physicIncreaseDamage)
                 {
                     _enforceManager.PhysicIncreaseDamage();
                 }
+                EnemyKilledEvents(detectEnemy);
             }
         }
 
@@ -109,7 +103,6 @@ namespace Script.EnemyManagerScript
             var enemy = detectedEnemy.gameObject;
             var waveManager = FindObjectOfType<WaveManager>();
             var characterBase = FindObjectOfType<CharacterBase>();
-            Debug.Log($"Enemy {number} killed, returning to pool.");
             characterBase.DeleteList(detectedEnemy);
             waveManager.EnemyDestroyEvent(detectedEnemy);
             EnemyPool.ReturnToPool(enemy);

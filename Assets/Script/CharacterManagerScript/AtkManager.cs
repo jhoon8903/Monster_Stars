@@ -52,11 +52,9 @@ namespace Script.CharacterManagerScript
                     continue;
                 }
                 enemyList = unit.DetectEnemies();
-                Debug.Log($"{unit.name} / LIstCount: {enemyList.Count}");
 
                 if (enemyList.Count > 0)
                 {
-                    enemyList.RemoveAll(enemy => enemy == null || !enemy.activeInHierarchy);
                     var atkUnit = unit.gameObject; // Attacking unit
                     var unitAtkType = unit.UnitAtkType; // Attack type of the unit
                     var unitGroup = unit.unitGroup; // Group of the unit
