@@ -20,8 +20,8 @@ namespace Script.WeaponScriptGroup
         private static readonly Vector3 InitLocalScale = new Vector3(1f, 1f , 1f);
         private Transform _mainWeapon;
         private Transform _secondWeapon;
-        private Transform _pivotSword;
         [SerializeField] private EnforceManager enforceManager;
+        private GameObject _pivotSword;
         private void Start()
         {
             _poolDictionary = new Dictionary<WeaponType, Queue<GameObject>>();
@@ -47,13 +47,20 @@ namespace Script.WeaponScriptGroup
             var objectToSpawn = _poolDictionary[weaponType].Dequeue();
             objectToSpawn.transform.position = position;
             objectToSpawn.transform.rotation = rotation;
-            if (enforceManager.physicIncreaseWeaponScale)
-            {
-                _pivotSword = objectToSpawn.transform.Find("Sword");
-                _pivotSword.transform.localScale = new Vector3(2f,1.7f,0);
-            }
+            _pivotSword = FindInChildren(objectToSpawn, "Sword(Clone)");
             _mainWeapon = objectToSpawn.transform.Find("FirstSword"); // Replace with the actual name of your main weapon
             _secondWeapon = objectToSpawn.transform.Find("SecondSword"); // Replace with the actual name of your second weapon
+            if (enforceManager.physicIncreaseWeaponScale)
+            {
+                if (_pivotSword == null)
+                {
+                    Debug.Log(_pivotSword);
+                }
+                else
+                {
+                    _pivotSword.transform.localScale = new Vector3(2f,1.7f,0);
+                }
+            }
             if (_mainWeapon != null)
             {
                 _mainWeapon.gameObject.SetActive(true);
@@ -89,6 +96,24 @@ namespace Script.WeaponScriptGroup
             weapon.transform.localScale = InitLocalScale;
             weapon.SetActive(false);
         }
+
+        private static GameObject FindInChildren(GameObject parent, string name)
+        {
+            if (parent.name == name)
+                return parent;
+    
+            foreach (Transform child in parent.transform)
+            {
+                if (child.name == name)
+                    return child.gameObject;
+        
+                var result = FindInChildren(child.gameObject, name);
+                if (result != null)
+                    return result;
+            }
+            return null;
+        }
+
     }  
 }
 

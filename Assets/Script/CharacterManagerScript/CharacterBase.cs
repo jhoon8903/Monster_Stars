@@ -31,7 +31,7 @@ namespace Script.CharacterManagerScript
         public bool PermanentLevelUp { get; set; } // Indicates if the unit has permanent level up
         private readonly Vector3 _initialScale = Vector3.one; // Initial scale of the character
         private readonly Vector3 _levelUpScale = new Vector3(1.2f, 1.2f, 0); // Scale to use when leveling up
-        public List<GameObject> detectedEnemies = new List<GameObject>();
+        public static List<GameObject> detectedEnemies = new List<GameObject>();
         public GameObject CurrentWeapon { get; set; }
         protected internal bool IsClicked { get; set; }
 
@@ -100,7 +100,7 @@ namespace Script.CharacterManagerScript
         protected void OnEnemyKilled(object source, EventArgs args)
         {
             var enemyBase = (EnemyBase)source;
-            enemyBase.EnemyKilled -= OnEnemyKilled;
+            // enemyBase.EnemyKilled -= OnEnemyKilled;
             detectedEnemies.Remove(enemyBase.gameObject);
         }
     }

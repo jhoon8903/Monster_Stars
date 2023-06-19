@@ -1,10 +1,8 @@
-using System;
 using Script.EnemyManagerScript;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
-using Script.RewardScript;
 
 namespace Script.UIManager
 {
@@ -12,10 +10,7 @@ namespace Script.UIManager
       {
           [SerializeField] protected internal Slider hpBar;
           [SerializeField] private TextMeshProUGUI hpText;
-          [SerializeField] private EnemyPool enemyPool;
           [SerializeField] private GameManager gameManager;
-          [SerializeField] private WaveManager waveManager;
-          [SerializeField] private EnforceManager enforceManager;
           public int hpPoint = 1000;
           public int maxHpPoint = 1000;
 
@@ -32,15 +27,14 @@ namespace Script.UIManager
       
           private void OnTriggerEnter2D(Collider2D collision)
           {
-              collision.DOKill();
+              DOTween.Kill(collision);
               if (!collision.gameObject.CompareTag("Enemy")) return;
               var enemyBase = collision.gameObject.GetComponent<EnemyBase>();
               if (enemyBase == null) return;
               hpPoint -= enemyBase.CrushDamage;
               hpBar.DOValue(hpPoint, 1.0f);
               UpdateHpText();
-              waveManager.EnemyDestroyInvoke();
-              enemyPool.ReturnToPool(enemyBase.gameObject);
+              FindObjectOfType<EnemyBase>().EnemyKilledEvents(enemyBase.gameObject);
               if (hpPoint > 0) return;
               hpPoint = 0;
               hpBar.value = hpPoint;

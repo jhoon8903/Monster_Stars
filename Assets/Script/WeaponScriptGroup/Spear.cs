@@ -11,14 +11,45 @@ namespace Script.WeaponScriptGroup
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
-            var duration = Distance / Speed;
-            var endPosition = StartingPosition.y 
-                              // + (EnforceManager.Instance.divineAtkRange? -Distance : 
-                                  + Distance;
-                                  // );
-            transform.rotation = Quaternion.Euler(0,0,EnforceManager.Instance.divineAtkRange? 180: 0);
-            transform.DOMoveY(endPosition, duration).SetEase(Ease.Linear).OnComplete(() => { StopUseWeapon(gameObject);});
+
+            // Detect enemies in both directions
+            if (EnforceManager.Instance.divineAtkRange)
+            {
+                FireProjectile(-Distance); // Fire in -y direction
+                FireProjectile(Distance); // Fire in +y direction
+            }
+            else
+            {
+                FireProjectile(Distance); // Fire in +y direction
+            }
         }
+
+// This method handles the actual firing of the projectile.
+        private void FireProjectile(float distance)
+        {
+            var duration = Mathf.Abs(distance) / Speed;
+            float endPosition;
+
+            if (distance < 0)
+            {
+                // If we're moving in the negative direction, we need to rotate the projectile.
+                transform.rotation = Quaternion.Euler(0, 0, 180);
+                endPosition = StartingPosition.y - distance;
+                transform.DOMoveY(-endPosition, duration)
+                    .SetEase(Ease.Linear)
+                    .OnComplete(() => StopUseWeapon(gameObject));
+            }
+            else
+            {
+                endPosition = StartingPosition.y + distance;
+                transform.DOMoveY(endPosition, duration)
+                    .SetEase(Ease.Linear)
+                    .OnComplete(() => StopUseWeapon(gameObject));
+            }
+
+        }
+
+
 
         private void OnTriggerEnter2D(Collider2D collision)
         {

@@ -18,15 +18,13 @@ namespace Script.WeaponScriptGroup
         private CharacterBase.UnitEffects UnitEffect { get; set; }
         protected Vector3 StartingPosition;
         protected CharacterBase CharacterBase;
-        protected readonly System.Random Random = new System.Random();
+        private readonly System.Random _random = new System.Random();
         private EnemyBase _poisonedEnemy;
         protected readonly List<EnemyBase> HitEnemy = new List<EnemyBase>();
-        private WaveManager _waveManager;
 
         public void InitializeWeapon(CharacterBase characterBase)
         {
             CharacterBase = characterBase;
-            _waveManager = FindObjectOfType<WaveManager>();
         }
         public virtual IEnumerator UseWeapon()
         {
@@ -36,7 +34,7 @@ namespace Script.WeaponScriptGroup
             StartingPosition = transform.position;
             Distance = CharacterBase.defaultAtkDistance;
             Damage = CharacterBase.defaultDamage;
-            Speed = CharacterBase.projectileSpeed;
+            Speed = CharacterBase.projectileSpeed * 2f;
             yield return null;
         }
         protected void StopUseWeapon(GameObject weapon)
@@ -130,7 +128,7 @@ namespace Script.WeaponScriptGroup
         private void IsRestraint(EnemyBase enemyStatus)
         {
             if (!EnforceManager.Instance.activeRestraint) return;
-            if (Random.Next(100) < 20)
+            if (_random.Next(100) < 20)
             {
                 enemyStatus.IsRestraint = true;
             }
@@ -208,13 +206,12 @@ namespace Script.WeaponScriptGroup
             }
             return damage;
         }
-        protected void InstantKill(EnemyBase enemy)
+        protected void InstantKill(EnemyBase target)
         {
-            WeaponsPool.ReturnToPool(gameObject);
-            _waveManager.EnemyDestroyInvoke();
+            FindObjectOfType<EnemyBase>().EnemyKilledEvents(target.gameObject);
             if (ExpManager.Instance == null) return;
             const EnemyBase.KillReasons reason = EnemyBase.KillReasons.ByPlayer;
-            ExpManager.Instance.HandleEnemyKilled(reason);
+            StartCoroutine(ExpManager.Instance.HandleEnemyKilled(reason));
         }
     }
 }

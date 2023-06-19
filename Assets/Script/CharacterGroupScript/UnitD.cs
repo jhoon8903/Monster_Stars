@@ -58,18 +58,7 @@ namespace Script.CharacterGroupScript
             foreach (var enemyObject in colliders)
             {
                 if (!enemyObject.gameObject.CompareTag("Enemy")) continue;
-                var enemyBase = enemyObject.GetComponent<EnemyBase>();
-                enemyBase.EnemyKilled += OnEnemyKilled;
                 currentlyDetectedEnemies.Add(enemyObject.gameObject);
-            }
-
-            foreach (var detectedEnemy in detectedEnemies)
-            {
-                if (!currentlyDetectedEnemies.Contains(detectedEnemy))
-                {
-                    var enemyBase = detectedEnemy.GetComponent<EnemyBase>();
-                    enemyBase.EnemyKilled -= OnEnemyKilled;
-                }
             }
             detectedEnemies = currentlyDetectedEnemies;
 

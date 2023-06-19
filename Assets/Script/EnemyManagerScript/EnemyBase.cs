@@ -1,6 +1,4 @@
-using System;
 using DG.Tweening;
-using Script.CharacterGroupScript;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
@@ -19,7 +17,7 @@ namespace Script.EnemyManagerScript
         public float maxHealthPoint;
         protected internal int CrushDamage; // 충돌시 데미지
         protected internal float MoveSpeed; // 적 오브젝트의 이동속도, 1f 는 1초에 1Grid를 가는 속도 숫자가 커질수록 느려져야 함
-        public enum EnemyTypes { Boss, Basic, Slow, Fast }
+        public enum EnemyTypes { Boss, BasicA, BasicD,Slow, Fast }
         protected internal EnemyTypes EnemyType; // 적 타입 빠른적, 느린적, 보통적, 보스
         public enum RegistryTypes { Physics, Divine, Poison, None }
         protected internal RegistryTypes RegistryType; // 저항타입, 만약 공격하는 적이 해당 타입과 일치하면 20%의 데미지를 덜 입게 됨
@@ -27,11 +25,11 @@ namespace Script.EnemyManagerScript
         protected internal SpawnZones SpawnZone;
         private static readonly object Lock = new object();
         private float _currentHealth;
-        public delegate void EnemyKilledEventHandler(object source, EventArgs args);
-        public event EnemyKilledEventHandler EnemyKilled;
+        // public delegate void EnemyKilledEventHandler(object source, EventArgs args);
+        // public event EnemyKilledEventHandler EnemyKilled;
 
-        public bool IsRestraint { get; set; } = false;
-        public bool IsSlow { get; set; } = false;
+        public bool IsRestraint { get; set; }
+        public bool IsSlow { get; set; }
         private Coroutine _poisonEffectCoroutine;
         private bool _isPoison;
         public bool IsPoison
@@ -71,7 +69,7 @@ namespace Script.EnemyManagerScript
                 healthPoint *= Mathf.Pow(1.3f, wave - 1);
             }
             maxHealthPoint = healthPoint;
-            _currentHealth = healthPoint;
+            _currentHealth = maxHealthPoint;
             _hpSlider.maxValue = maxHealthPoint;
             _hpSlider.value = _currentHealth;
             UpdateHpSlider();
@@ -86,18 +84,24 @@ namespace Script.EnemyManagerScript
                 _currentHealth -= damage;
                 UpdateHpSlider();
                 if (_currentHealth >= 0) return;
+                if (ExpManager.Instance != null && gameObject.activeInHierarchy)
+                {
+                    StartCoroutine(ExpManager.Instance.HandleEnemyKilled(reason));
+                }
                 if (_enforceManager.physicIncreaseDamage)
                 {
                     _enforceManager.PhysicIncreaseDamage();
                 }
-                EnemyKilled?.Invoke(this, EventArgs.Empty);
-                FindObjectOfType<EnemyPool>().ReturnToPool(gameObject);
-                FindObjectOfType<WaveManager>().EnemyDestroyInvoke();
-                if (ExpManager.Instance != null)
-                {
-                    ExpManager.Instance.HandleEnemyKilled(reason);
-                }
+                EnemyKilledEvents(gameObject);
             }
+        }
+
+        public void EnemyKilledEvents(GameObject detectedEnemy)
+        {
+            Debug.Log(detectedEnemy.GetComponent<EnemyBase>().number);
+            FindObjectOfType<EnemyPool>().ReturnToPool(detectedEnemy);
+            FindObjectOfType<WaveManager>().EnemyDestroyEvent();
+            CharacterBase.detectedEnemies.Remove(detectedEnemy);
         }
         private void UpdateHpSlider()
         {

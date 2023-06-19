@@ -41,7 +41,7 @@ namespace Script.CharacterManagerScript
         }
         private IEnumerator AtkMotion(CharacterBase unit)
         {
-            var atkRate = unit.GetComponent<CharacterBase>().defaultAtkRate * attackRate * 5;
+            var atkRate = unit.GetComponent<CharacterBase>().defaultAtkRate * attackRate * 3.5f;
 
             while (true)
             {
@@ -60,10 +60,10 @@ namespace Script.CharacterManagerScript
                     switch (unitAtkType)
                     {
                         case CharacterBase.UnitAtkTypes.Projectile:
-                            ProjectileAttack(atkUnit, unitGroup); // Perform projectile attack
+                           ProjectileAttack(atkUnit, unitGroup); // Perform projectile attack
                             break;
                         case CharacterBase.UnitAtkTypes.Gas:
-                            GasAttack(atkUnit, unitGroup); // Perform gas attack
+                           GasAttack(atkUnit, unitGroup); // Perform gas attack
                             break;
                         case CharacterBase.UnitAtkTypes.Circle:
                             CircleAttack(atkUnit, unitGroup); // Perform circle attack
@@ -105,7 +105,7 @@ namespace Script.CharacterManagerScript
                     }
                     else
                     {
-                        Attack(new AttackData(unit, WeaponsPool.WeaponType.VenomSac));
+                       Attack(new AttackData(unit, WeaponsPool.WeaponType.VenomSac));
                     }
                     break;
                 default:

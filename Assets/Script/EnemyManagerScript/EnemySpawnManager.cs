@@ -61,8 +61,12 @@ namespace Script.EnemyManagerScript
         private IEnumerator SpawnEnemy(EnemyBase.EnemyTypes enemyType)
         {
             var enemyToSpawn = enemyPool.GetPooledEnemy(enemyType);
-            if (enemyToSpawn == null) yield return
-                enemyToSpawn.transform.localScale = enemyToSpawn.GetComponent<EnemyBase>().EnemyType switch
+            if (enemyToSpawn == null)
+            {
+                Debug.LogError("No available enemy to spawn");
+                yield break;
+            }
+            enemyToSpawn.transform.localScale = enemyToSpawn.GetComponent<EnemyBase>().EnemyType switch
                 {
                     EnemyBase.EnemyTypes.Fast => Vector3.one * 0.6f,
                     EnemyBase.EnemyTypes.Slow => Vector3.one * 1f,
@@ -99,10 +103,7 @@ namespace Script.EnemyManagerScript
                 xPosition = Random.Range(0, 6);
                 return new Vector3(xPosition, 9.5f + Random.Range(-1f, 1f) , 0);
             }
-            else
-            {
-                return spawnPos;
-            }
+            return spawnPos;
         }
     }
 }

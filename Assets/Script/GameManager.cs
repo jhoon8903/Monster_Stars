@@ -102,7 +102,6 @@ namespace Script
         }
         private void NextStage()
         {
-            DOTween.KillAll(true);
             Time.timeScale = 1;
             _bossSpawnArea = new Vector3Int(Random.Range(2,5), 10, 0);
             if (wave % 10 == 0)

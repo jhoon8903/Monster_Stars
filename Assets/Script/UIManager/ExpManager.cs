@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -39,15 +40,14 @@ namespace Script.UIManager
             }
         }
 
-        public void HandleEnemyKilled(EnemyBase.KillReasons reason)
+        public IEnumerator HandleEnemyKilled(EnemyBase.KillReasons reason)
         {
-            if (reason != EnemyBase.KillReasons.ByPlayer) return;
+            if (reason != EnemyBase.KillReasons.ByPlayer) yield break;
             var additionalExp = expPoint * (enforceManager.expPercentage / 100.0f);
             expPoint += 1 + additionalExp; 
             if (expPoint >= levelUpPoint)
             {
                 level++;
-                StartCoroutine(levelUpRewardManager.LevelUpReward());
                 UpdateLevelText(level);
                 expPoint = 0;
                 if (level <= 14)
@@ -55,6 +55,7 @@ namespace Script.UIManager
                     levelUpPoint += 5;
                     expBar.maxValue = levelUpPoint;
                 }
+                yield return StartCoroutine(levelUpRewardManager.LevelUpReward());
             }
             expBar.value = expPoint;
             expBar.DOValue(expPoint, 0.5f);

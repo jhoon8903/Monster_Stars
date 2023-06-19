@@ -698,6 +698,7 @@ MonoBehaviour:
   castleManager: {fileID: 1177777546}
   commonRewardManager: {fileID: 2120144519}
   atkManager: {fileID: 149521967}
+  enforceManager: {fileID: 1595735486}
   wave: 1
   isBattle: 0
 --- !u!4 &149521959
@@ -827,7 +828,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemySpawnManager: {fileID: 329010038}
   gameManager: {fileID: 149521958}
-  atkManager: {fileID: 149521967}
   enemyTotalCount: 0
   set: 0
 --- !u!1 &187153451
@@ -4534,12 +4534,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   hpBar: {fileID: 430691236}
   hpText: {fileID: 2009872133}
-  enemyPool: {fileID: 2016604888}
   gameManager: {fileID: 149521958}
-  waveManager: {fileID: 149521968}
-  enforceManager: {fileID: 0}
-  hpPoint: 100000
-  maxHpPoint: 10000
+  hpPoint: 1000
+  maxHpPoint: 1000
 --- !u!1 &1211532197
 GameObject:
   m_ObjectHideFlags: 0

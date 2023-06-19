@@ -66,19 +66,7 @@ namespace Script.CharacterGroupScript
             foreach (var enemyObject in colliders)
             {
                 if (!enemyObject.gameObject.CompareTag("Enemy")) continue;
-                var enemyBase = enemyObject.GetComponent<EnemyBase>();
-                enemyBase.EnemyKilled += OnEnemyKilled;
                 currentlyDetectedEnemies.Add(enemyObject.gameObject);
-            }
-
-            foreach (var detectedEnemy in detectedEnemies)
-            {
-                if (!currentlyDetectedEnemies.Contains(detectedEnemy))
-                {
-                    // Unsubscribe from EnemyKilled event.
-                    var enemyBase = detectedEnemy.GetComponent<EnemyBase>();
-                    enemyBase.EnemyKilled -= OnEnemyKilled;
-                }
             }
             detectedEnemies = currentlyDetectedEnemies;
             return detectedEnemies;
@@ -119,7 +107,7 @@ namespace Script.CharacterGroupScript
             defaultDamage = 120;
             defaultAtkRate = 1.2f;
             defaultAtkDistance = 1f;
-            projectileSpeed = 2.0f;
+            projectileSpeed = 1.0f;
             _spriteRenderer.sprite = level2Sprite;
             UnitAtkType = UnitAtkTypes.Gas;
             UnitProperty = UnitProperties.Poison;
@@ -136,7 +124,7 @@ namespace Script.CharacterGroupScript
             defaultDamage *= 1.7f;
             defaultAtkRate = 1.2f;
             defaultAtkDistance = 1f;
-            projectileSpeed = 2.0f;
+            projectileSpeed = 1.0f;
             _spriteRenderer.sprite = level3Sprite;
             UnitAtkType = UnitAtkTypes.Gas;
             UnitProperty = UnitProperties.Poison;
@@ -153,7 +141,7 @@ namespace Script.CharacterGroupScript
             defaultDamage *= 2.0f;
             defaultAtkRate = 1.2f;
             defaultAtkDistance = 1f;
-            projectileSpeed = 2.0f;
+            projectileSpeed = 1.0f;
             _spriteRenderer.sprite = level4Sprite;
             UnitAtkType = UnitAtkTypes.Gas;
             UnitProperty = UnitProperties.Poison;
@@ -170,7 +158,7 @@ namespace Script.CharacterGroupScript
             defaultDamage *= 2.3f;
             defaultAtkRate = 1.2f;
             defaultAtkDistance = 1f;
-            projectileSpeed = 2.0f;
+            projectileSpeed = 1.0f;
             _spriteRenderer.sprite = level5Sprite;
             UnitAtkType = UnitAtkTypes.Gas;
             UnitProperty = UnitProperties.Poison;

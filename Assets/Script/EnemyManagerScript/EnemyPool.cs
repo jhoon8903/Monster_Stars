@@ -29,8 +29,7 @@ namespace Script.EnemyManagerScript
 
         public GameObject GetPooledEnemy(EnemyBase.EnemyTypes enemyType)
         {
-            var spawnEnemy = _pooledEnemy
-                .FirstOrDefault(t => !t.activeInHierarchy && t.GetComponent<EnemyBase>().EnemyType == enemyType);
+            var spawnEnemy = _pooledEnemy.FirstOrDefault(t => !t.activeInHierarchy && t.GetComponent<EnemyBase>().EnemyType == enemyType);
             _pooledEnemy.Remove(spawnEnemy);
             if (_pooledEnemy.Count == 0) _pooledEnemy = _pooledDefaultEnemy;
             return spawnEnemy;
@@ -38,8 +37,6 @@ namespace Script.EnemyManagerScript
 
         public void ReturnToPool(GameObject obj)
         {
-            obj.transform.position = new Vector3(-4,-4,0);
-            obj.transform.localPosition = new Vector3(0, 20, 0);
             obj.SetActive(false);
         }
     }

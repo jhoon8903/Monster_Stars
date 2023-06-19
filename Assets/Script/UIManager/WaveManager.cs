@@ -1,8 +1,6 @@
-using System;
 using Script.EnemyManagerScript;
 using UnityEngine;
 using System.Collections;
-using Script.CharacterManagerScript;
 
 namespace Script.UIManager
 {
@@ -10,15 +8,9 @@ namespace Script.UIManager
     {
         [SerializeField] private EnemySpawnManager enemySpawnManager;
         [SerializeField] private GameManager gameManager;
-        [SerializeField] private AtkManager atkManager;
-        public int enemyTotalCount = 0;
+        public int enemyTotalCount;
         public int set;
-        public event Action EnemyDestroy;
-
-        private void Start()
-        {
-            EnemyDestroy += EnemyDestroyEvent;
-        }
+        private static readonly object EnemyLock = new object();
 
         private static (int normal, int slow, int fast, int sets) GetSpawnCountForWave(int wave)
         {
@@ -54,7 +46,8 @@ namespace Script.UIManager
             {
                 for (var i = 0; i < sets; i++)
                 {
-                    StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Basic, normalCount));
+                    StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.BasicA, normalCount/2));
+                    StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.BasicD, normalCount/2));
                     StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Slow, slowCount));
                     StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Fast, fastCount));
                     yield return new WaitForSeconds(3f);
@@ -68,16 +61,15 @@ namespace Script.UIManager
             enemyTotalCount = (n + s + f) * set;
         }
 
-        private void EnemyDestroyEvent()
+        public void EnemyDestroyEvent()
         {
-            enemyTotalCount -= 1;
-            if (enemyTotalCount != 0) return;
-            StartCoroutine(gameManager.ContinueOrLose());
+            lock (EnemyLock)
+            {
+                enemyTotalCount -= 1;
+                if (enemyTotalCount != 0) return;
+                StartCoroutine(gameManager.ContinueOrLose());
+            }
         }
 
-        public void EnemyDestroyInvoke()
-        {
-            EnemyDestroy?.Invoke();
-        }
     }
 }
