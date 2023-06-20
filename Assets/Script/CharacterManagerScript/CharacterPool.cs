@@ -46,14 +46,6 @@ namespace Script.CharacterManagerScript
             return sortedList;
         }
 
-        public void ListInspector()
-        {
-            foreach (GameObject item in SortPoolCharacterList())
-            {
-                Debug.Log("item : " + item + " (" + item.transform.position.x + ", " + item.transform.position.y + ")");
-            }
-        }
-
         public static void ReturnToPool(GameObject obj)
         {
             if (obj == null) return;

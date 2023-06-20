@@ -166,6 +166,20 @@ namespace Script.PuzzleManagerGroup
 
         }
 
+        public void ListInspector()
+        {
+            foreach (GameObject item in characterPool.SortPoolCharacterList())
+            {
+                Debug.Log("item : " + item + " (" + item.transform.position.x + ", " + item.transform.position.y + ")");
+            }
+        }
+        public void StartCheckMatches()
+        {
+            Debug.Log("제거실시!! 썌애끼 기열!!!");
+            StartCoroutine(CheckMatches());
+        }
+
+
         // 이 메소드는 주어진 캐릭터 객체를 풀로 반환하는 기능을 수행합니다.
         private void ReturnObject(GameObject character)
         {   
