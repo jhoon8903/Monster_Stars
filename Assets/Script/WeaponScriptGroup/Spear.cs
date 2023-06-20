@@ -9,9 +9,9 @@ namespace Script.WeaponScriptGroup
 {
     public class Spear : WeaponBase
     {
+        private float _distance;
         private Vector3 _enemyTransform;
         private List<GameObject> _enemyTransforms = new List<GameObject>();
-
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
@@ -20,17 +20,20 @@ namespace Script.WeaponScriptGroup
             {
                 _enemyTransform = enemy.transform.position;
             }
-
-            var position = transform.position;
-            var timeToMove = Speed * 1.5f;
-
-            if (EnforceManager.Instance.divineAtkRange)
-            {
-                transform.rotation = Quaternion.Euler(0, 0, _enemyTransform.y > position.y ? 0 : 180);
-            }
+            _distance = Vector3.Distance(transform.position, _enemyTransform);
+            var timeToMove = _distance / Speed;
             transform.DOMove(_enemyTransform, timeToMove).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(gameObject));
+            if (_enemyTransform.y > transform.position.y)
+            {
+                // _enemyTransform의 y 축이 더 높음
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+            else
+            {
+                // _enemyTransform의 y 축이 더 낮음
+                transform.rotation = Quaternion.Euler(0, 0, 180);
+            }
         }
-
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;

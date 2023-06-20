@@ -58,7 +58,6 @@ namespace Script.EnemyManagerScript
         protected internal int CurrentPoisonStacks { get; set; }
 
 
-
         public void Initialize()
         {
             _enforceManager = FindObjectOfType<EnforceManager>();
@@ -103,7 +102,7 @@ namespace Script.EnemyManagerScript
             var enemy = detectedEnemy.gameObject;
             var waveManager = FindObjectOfType<WaveManager>();
             var characterBase = FindObjectOfType<CharacterBase>();
-            characterBase.DeleteList(detectedEnemy);
+            characterBase.DetectEnemies().Remove(detectedEnemy.gameObject);
             waveManager.EnemyDestroyEvent(detectedEnemy);
             EnemyPool.ReturnToPool(enemy);
         }
@@ -111,7 +110,6 @@ namespace Script.EnemyManagerScript
         private IEnumerator UpdateHpSlider()
         {
             yield return _hpSlider.DOValue(currentHealth, 0.1f);
-            
         }
     }
 }

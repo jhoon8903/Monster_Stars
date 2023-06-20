@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
-using Script.EnemyManagerScript;
 using Script.RewardScript;
 
 namespace Script.CharacterManagerScript

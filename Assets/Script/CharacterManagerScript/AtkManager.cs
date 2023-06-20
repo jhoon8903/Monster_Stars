@@ -77,7 +77,16 @@ namespace Script.CharacterManagerScript
                 {
                     yield return new WaitForSecondsRealtime(0.1f);
                 }
-                yield return new WaitForSecondsRealtime(atkRate);
+
+                if (gameManager.speedUp)
+                {
+                    yield return new WaitForSecondsRealtime(atkRate/2);
+                }
+                else
+                {
+                    yield return new WaitForSecondsRealtime(atkRate);
+                }
+              
             }
             // ReSharper disable once IteratorNeverReturns
         }

@@ -68,7 +68,5 @@ namespace Script.UIManager
                 StartCoroutine(gameManager.ContinueOrLose());
             }
         }
-
-
     }
 }

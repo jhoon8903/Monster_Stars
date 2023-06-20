@@ -699,6 +699,7 @@ MonoBehaviour:
   commonRewardManager: {fileID: 2120144519}
   atkManager: {fileID: 149521967}
   enforceManager: {fileID: 1595735486}
+  speedUp: 0
   wave: 1
   isBattle: 0
 --- !u!4 &149521959
@@ -1634,13 +1635,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyList:
   - enemyPrefab: {fileID: 4608296790683070460, guid: 47528aa86487a4455a068d9ab3f94f2f, type: 3}
-    poolSize: 50
+    poolSize: 40
   - enemyPrefab: {fileID: 1593285363578843117, guid: 0c6a7b6d8e2364455ad516d97e1634e6, type: 3}
-    poolSize: 50
+    poolSize: 25
   - enemyPrefab: {fileID: 8190566129223033203, guid: 78f7bd1c20b3e408a94ce003baa58533, type: 3}
-    poolSize: 50
+    poolSize: 25
   - enemyPrefab: {fileID: 5917879149447133458, guid: c60bfe49f25eb4538ab2af51b28dce02, type: 3}
-    poolSize: 50
+    poolSize: 40
   stage10BossPrefab: {fileID: 7359858875132129289, guid: d950a24d876c844ed8550ef75818ee5c, type: 3}
   stage20BossPrefab: {fileID: 5587507376329632665, guid: 250bcee026ef64a07a567359a4e2ac2b, type: 3}
 --- !u!114 &329010038
