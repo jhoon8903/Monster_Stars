@@ -1683,7 +1683,6 @@ MonoBehaviour:
   castle: {fileID: 1177777540}
   waveManager: {fileID: 149521968}
   gameManager: {fileID: 149521958}
-  enforceManager: {fileID: 1595735486}
 --- !u!1 &362582815
 GameObject:
   m_ObjectHideFlags: 0
@@ -6048,12 +6047,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8241d3f1f5c534ecb9999427601faf0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterManager: {fileID: 149521963}
   countManager: {fileID: 841622520}
   castleManager: {fileID: 1177777546}
   gridManager: {fileID: 8808150501734532426}
   activeRestraint: 0
-  increaseRestraintTime: 0
+  increaseRestraintTime: 1
   divinePenetrate: 0
   divineAtkRange: 0
   divinePoisonAdditionalDamage: 0
@@ -6071,7 +6069,7 @@ MonoBehaviour:
   activatePoison: 0
   poisonOverlapping: 1
   waterStun: 0
-  waterIncreaseSlowTime: 0
+  waterIncreaseSlowTime: 1
   waterIncreaseSlowPower: 0
   waterRestraintKnockBack: 0
   addRowCount: 0

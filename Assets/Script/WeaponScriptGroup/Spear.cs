@@ -21,7 +21,7 @@ namespace Script.WeaponScriptGroup
                 _enemyTransform = enemy.transform.position;
             }
             _distance = Vector3.Distance(transform.position, _enemyTransform);
-            var timeToMove = _distance / Speed;
+            var timeToMove = _distance / Speed * 1.5f;
             transform.DOMove(_enemyTransform, timeToMove).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(gameObject));
             if (_enemyTransform.y > transform.position.y)
             {

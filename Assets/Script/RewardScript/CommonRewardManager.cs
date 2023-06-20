@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Script.CharacterManagerScript;
-using Script.EnemyManagerScript;
 using Script.PuzzleManagerGroup;
 using Script.UIManager;
 using TMPro;
@@ -40,14 +39,14 @@ namespace Script.RewardScript
         [SerializeField] private EnforceManager enforceManager;
 
         public readonly Queue<GameObject> PendingTreasure = new Queue<GameObject>(); // 보류 중인 보물 큐
-        private GameObject _currentTreasure = null; // 현재 보물
+        private GameObject _currentTreasure; // 현재 보물
         public bool openBoxing = true;
-        private bool _waveRewards = false;
-        private List<CommonData> _powerUps = null;
-        private string _groupName = null;
+        private bool _waveRewards;
+        private List<CommonData> _powerUps;
+        private string _groupName;
         private int _bossRewardSelected;
 
-        private bool _isOpenBox = false;
+        private bool _isOpenBox;
         // 1. 상자가 매치 되면 상자를 큐에 추가
         public void EnqueueTreasure()
         {
@@ -105,14 +104,14 @@ namespace Script.RewardScript
                         var secondDesiredPowerUp = new CommonBlueData(blueSprite, 11, CommonData.Types.Slow, new[] { 15 });
                         commonPowerUps.Add(secondDesiredPowerUp);
                         selectedCodes.Add(secondDesiredPowerUp.Code);
-                        var thirdDesiredPowerUp = new CommonPurpleData(purpleSprite, 13, CommonData.Types.StepDirection, new int[] { 1 });
+                        var thirdDesiredPowerUp = new CommonPurpleData(purpleSprite, 13, CommonData.Types.StepDirection, new[] { 1 });
                         selectedCodes.Add(thirdDesiredPowerUp.Code);
                         commonPowerUps.Add(thirdDesiredPowerUp);
                         _bossRewardSelected = 1;
                     }
                     else
                     {
-                        CommonData selectedPowerUp = null;
+                        CommonData selectedPowerUp;
                         switch (forcedColor)
                         {
                             case "blue" when i == 0: selectedPowerUp = CommonUnique(common.CommonBlueList, selectedCodes); break;
@@ -134,7 +133,7 @@ namespace Script.RewardScript
                 }
                 else
                 {
-                    CommonData selectedPowerUp = null;
+                    CommonData selectedPowerUp;
                     switch (forcedColor)
                     {
                         case "blue" when i == 0: selectedPowerUp = CommonUnique(common.CommonBlueList, selectedCodes); break;
@@ -177,7 +176,7 @@ namespace Script.RewardScript
                         if (enforceManager.expPercentage > 30) return false; // Make sure the EXP increment does not exceed 30%
                         break;
                     case CommonData.Types.AddRow:
-                        return gameManager.wave is 11 or 21 && (enforceManager.addRowCount < 2 ? true : false); // Show row extra reward only after boss stage, up to 2 times
+                        return gameManager.wave is 11 or 21 && (enforceManager.addRowCount < 2); // Show row extra reward only after boss stage, up to 2 times
                     case CommonData.Types.Slow:
                         if (enforceManager.slowCount <= 3) return false; // Displays the enemy movement speed reduction effect up to 3 times
                         break;
@@ -201,8 +200,6 @@ namespace Script.RewardScript
                         break;
                     case CommonData.Types.Gold:
                         if (characterManager.goldGetMore) return false;
-                        break;
-                    default:
                         break;
                 }
                 return true;
@@ -252,7 +249,7 @@ namespace Script.RewardScript
                     powerText.text = $"총 이동횟수 {powerUp.Property[0]} 증가"; 
                     break;
                 case CommonData.Types.StepDirection: 
-                    powerText.text = $"대각선 이동가능"; 
+                    powerText.text = "대각선 이동가능"; 
                     break;
                 case CommonData.Types.RandomLevelUp: 
                     powerText.text = $"퍼즐상의 랜덤한 {powerUp.Property[0]}개의 케릭터 1 레벨 증가"; 
@@ -285,8 +282,6 @@ namespace Script.RewardScript
                 case CommonData.Types.AddRow: 
                     powerText.text = $"가로줄이 {powerUp.Property[0]} 증가"; 
                     break;
-                default:
-                    break;
             }
             powerCode.text = $"{powerUp.Code}";
             btnBadge.sprite = powerUp.BtnColor;
@@ -309,13 +304,13 @@ namespace Script.RewardScript
                 case "Unit_Treasure00":
                     break;
                 case "Unit_Treasure01":
-                    yield return StartCoroutine(CommonChance(70, 25, 5, null));
+                    yield return StartCoroutine(CommonChance(80, 17, 3, null));
                     break;
                 case "Unit_Treasure02":
-                    yield return StartCoroutine(CommonChance(30, 55, 15, "blue"));
+                    yield return StartCoroutine(CommonChance(50, 40, 10, "blue"));
                     break;
                 case "Unit_Treasure03":
-                    yield return StartCoroutine(CommonChance(0, 50, 50, "purple"));
+                    yield return StartCoroutine(CommonChance(0, 70, 30, "purple"));
                     break;
             }
 
@@ -353,11 +348,6 @@ namespace Script.RewardScript
             {
                 StartCoroutine(spawnManager.PositionUpCharacterObject());
             }
-            //if (PendingTreasure.Count > 0)
-            //{
-            //    _currentTreasure = PendingTreasure.Dequeue();
-            //    EnqueueTreasure();
-            //}
             else
             {
                 _currentTreasure = null; // 현재 보물 없음
@@ -424,7 +414,7 @@ namespace Script.RewardScript
                 default: Debug.LogWarning($"Unhandled reward type: {selectedCommonReward.Type}"); 
                     break;
             }
-            selectedCommonReward._chosenProperty = null;
+            selectedCommonReward.chosenProperty = null;
         }
         
         // # 보스 웨이브 클리어 변도 보상

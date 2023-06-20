@@ -10,7 +10,6 @@ namespace Script.UIManager
         [SerializeField] private EnemySpawnManager enemySpawnManager;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private EnemyPool enemyPool;
-        public int enemyTotalCount;
         public List<EnemyBase> enemies = new List<EnemyBase>();
 
         

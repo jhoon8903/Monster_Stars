@@ -70,7 +70,11 @@ namespace Script.WeaponScriptGroup
             switch (enemyStatus.RegistryType)
             {
                 case EnemyBase.RegistryTypes.Physics:
+                    IsRestraint(enemyStatus);
+                    break;
                 case EnemyBase.RegistryTypes.Poison:
+                    IsRestraint(enemyStatus);
+                    break;
                 case EnemyBase.RegistryTypes.None:
                     IsRestraint(enemyStatus);
                     break;
@@ -86,7 +90,11 @@ namespace Script.WeaponScriptGroup
             switch (enemyStatus.RegistryType)
             {
                 case EnemyBase.RegistryTypes.Divine:
+                    IsPoison(enemyStatus);
+                    break;
                 case EnemyBase.RegistryTypes.Physics:
+                    IsPoison(enemyStatus);
+                    break;
                 case EnemyBase.RegistryTypes.None:
                     IsPoison(enemyStatus);
                     break;
@@ -102,8 +110,14 @@ namespace Script.WeaponScriptGroup
             switch (enemyStatus.RegistryType)
             {
                 case EnemyBase.RegistryTypes.Divine:
+                    IsSlow(enemyStatus);
+                    break;
                 case EnemyBase.RegistryTypes.Physics:
+                    IsSlow(enemyStatus);
+                    break;
                 case EnemyBase.RegistryTypes.Poison:
+                    IsSlow(enemyStatus);
+                    break;
                 case EnemyBase.RegistryTypes.None:
                     IsSlow(enemyStatus);
                     break;

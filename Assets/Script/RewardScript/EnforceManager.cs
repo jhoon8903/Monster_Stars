@@ -1,4 +1,3 @@
-using Script.CharacterManagerScript;
 using Script.PuzzleManagerGroup;
 using Script.UIManager;
 using UnityEngine;
@@ -7,10 +6,7 @@ namespace Script.RewardScript
 {
     public class EnforceManager : MonoBehaviour
     {
-
-
         // Script Group
-        [SerializeField] private CharacterManager characterManager;
         [SerializeField] private CountManager countManager;
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private GridManager gridManager;
@@ -107,7 +103,7 @@ namespace Script.RewardScript
         
         [Header("넉백")] public bool waterRestraintKnockBack;
 
-        [Header("공격력증가")] protected internal float IncreaseWaterDamage = 1;
+        [Header("공격력증가")] protected internal float IncreaseWaterDamage = 1f;
         protected internal void WaterIncreaseDamage()
         {
             IncreaseWaterDamage *= 1.2f;

@@ -27,8 +27,8 @@ namespace Script.EnemyManagerScript
         protected internal SpawnZones SpawnZone;
         private static readonly object Lock = new object();
         private bool _isDead;
-        public bool IsRestraint { get; set; }
-        public bool IsSlow { get; set; }
+        public bool IsRestraint;
+        public bool IsSlow;
         private Coroutine _poisonEffectCoroutine;
         private bool _isPoison;
         public bool IsPoison
