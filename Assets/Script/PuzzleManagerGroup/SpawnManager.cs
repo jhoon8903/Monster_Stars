@@ -65,7 +65,7 @@ namespace Script.PuzzleManagerGroup
                 }
             }
             yield return StartCoroutine(PerformMoves(moves));
-            yield return StartCoroutine(matchManager.CheckMatches());
+            //yield return StartCoroutine(matchManager.CheckMatches());
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
             //yield return StartCoroutine(matchManager.CheckMatches());
 

@@ -156,6 +156,10 @@ namespace Script.PuzzleManagerGroup
             var characterList = characterPool.SortPoolCharacterList();
             foreach (GameObject character in FindConsecutiveCharacters(characterList))
             {
+
+            }
+                foreach (GameObject character in FindConsecutiveCharacters(characterList))
+            {
                 yield return StartCoroutine(swipeManager.AllMatchesCheck(character));
                 Debug.Log("대상은? " + character +" ("+ character.transform.position.x + ", " + character.transform.position.y + ")");
             }
@@ -822,7 +826,7 @@ namespace Script.PuzzleManagerGroup
                             List<GameObject> currentList = new List<GameObject>();
                             for (int j = i - (sameCount - 1); j <= i; j++)
                             {
-                                currentList.Add(characters[j]);
+                                currentList.Add(characters[j-1]);
                             }
                             result.Add(currentList);// 후보에 추가합니다
                         }
@@ -840,7 +844,7 @@ namespace Script.PuzzleManagerGroup
                         List<GameObject> currentList = new List<GameObject>();
                         for (int j = i - (sameCount - 1); j <= i; j++)
                         {
-                            currentList.Add(characters[j]);
+                            currentList.Add(characters[j-1]);
                         }
                         result.Add(currentList);// 후보에 추가합니다
                     }
@@ -891,7 +895,7 @@ namespace Script.PuzzleManagerGroup
                                 List<GameObject> currentList = new List<GameObject>();
                                 for (int k = index - totalColumns * sameCount; k <= index - totalColumns; k += totalColumns)
                                 {
-                                    currentList.Add(characters[k]);
+                                    currentList.Add(characters[k-1]);
                                 }
                                 result.Add(currentList); // 후보에 추가합니다
                             }
@@ -904,7 +908,7 @@ namespace Script.PuzzleManagerGroup
                             List<GameObject> currentList = new List<GameObject>();
                             for (int k = index - totalColumns * (sameCount - 1); k <= index; k += totalColumns)
                             {
-                                currentList.Add(characters[k]);
+                                currentList.Add(characters[k-1]);
                             }
                             result.Add(currentList);
                         }
