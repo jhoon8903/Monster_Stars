@@ -9,6 +9,19 @@ using Script.UIManager;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+
+struct Tile
+{
+    CharacterBase characterBase;
+    bool isSingle;
+
+    public Tile(CharacterBase characterBase, bool isSingle)
+    {
+        this.characterBase = characterBase;
+        this.isSingle = isSingle;
+    }
+}
+ 
 namespace Script.PuzzleManagerGroup
 {
     public class SpawnManager : MonoBehaviour
@@ -54,7 +67,7 @@ namespace Script.PuzzleManagerGroup
             yield return StartCoroutine(PerformMoves(moves));
             yield return StartCoroutine(matchManager.CheckMatches());
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
-            yield return StartCoroutine(matchManager.CheckMatches());
+            //yield return StartCoroutine(matchManager.CheckMatches());
 
             if (rewardManger.PendingTreasure.Count == 0)
             {
