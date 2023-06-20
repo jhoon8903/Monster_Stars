@@ -38,8 +38,8 @@ namespace Script.CharacterManagerScript
 
         public List<GameObject> SortPoolCharacterList()
         {
-            List<GameObject> sortedList = pooledCharacters
-                .OrderByDescending(t => t.transform.position.y)
+            List<GameObject> sortedList = UsePoolCharacterList()
+                .OrderBy(t => t.transform.position.y)
                 .ThenBy(t => t.transform.position.x)
                 .ToList();
 
