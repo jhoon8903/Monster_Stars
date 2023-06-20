@@ -87,8 +87,8 @@ namespace Script.CharacterGroupScript
             UnitLevel = 1;
             Type = Types.Character;
             unitGroup = UnitGroups.F;
-            defaultDamage = 0f;
-            defaultAtkRate = 0f;
+            DefaultDamage = 0f;
+            DefaultAtkRate = 0f;
             defaultAtkDistance = 0f;
             _spriteRenderer.sprite = level1Sprite;
             UnitAtkType = UnitAtkTypes.Gas;
@@ -103,8 +103,8 @@ namespace Script.CharacterGroupScript
             UnitLevel = 2;
             Type = Types.Character;
             unitGroup = UnitGroups.F;
-            defaultDamage = 120f;
-            defaultAtkRate = 1.2f;
+            DefaultDamage = 120f;
+            DefaultAtkRate = 1.2f;
             defaultAtkDistance = 1f;
             projectileSpeed = 1.0f;
             _spriteRenderer.sprite = level2Sprite;
@@ -120,8 +120,8 @@ namespace Script.CharacterGroupScript
             UnitLevel = 3;
             Type = Types.Character;
             unitGroup = UnitGroups.F;
-            defaultDamage *= 1.7f;
-            defaultAtkRate = 1.2f;
+            DefaultDamage *= 1.7f;
+            DefaultAtkRate = 1.2f;
             defaultAtkDistance = 1f;
             projectileSpeed = 1.0f;
             _spriteRenderer.sprite = level3Sprite;
@@ -137,8 +137,8 @@ namespace Script.CharacterGroupScript
             UnitLevel = 4;
             Type = Types.Character;
             unitGroup = UnitGroups.F;
-            defaultDamage *= 2.0f;
-            defaultAtkRate = 1.2f;
+            DefaultDamage *= 2.0f;
+            DefaultAtkRate = 1.2f;
             defaultAtkDistance = 1f;
             projectileSpeed = 1.0f;
             _spriteRenderer.sprite = level4Sprite;
@@ -154,8 +154,8 @@ namespace Script.CharacterGroupScript
             UnitLevel = 5;
             Type = Types.Character;
             unitGroup = UnitGroups.F;
-            defaultDamage *= 2.3f;
-            defaultAtkRate = 1.2f;
+            DefaultDamage *= 2.3f;
+            DefaultAtkRate = 1.2f;
             defaultAtkDistance = 1f;
             projectileSpeed = 1.0f;
             _spriteRenderer.sprite = level5Sprite;

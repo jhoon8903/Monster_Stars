@@ -162,20 +162,12 @@ namespace Script.RewardScript
         protected internal void IncreaseGroupDamage(int increaseAmount)
         {
             increaseAtkDamage += increaseAmount;
-            foreach (var character in characterManager.characterList)
-            {
-                character.IncreaseDamage();
-            }
         }
 
         [Header("전체 공격속도 증가 (%)")] public float increaseAtkRate = 1f;
         protected internal void IncreaseGroupRate(float increaseRateAmount)
         {
             increaseAtkRate += increaseRateAmount;
-            foreach (var character  in characterManager.characterList)
-            {
-                   character.IncreaseAtkRate();
-            }
         }
     }                                                                   
 }

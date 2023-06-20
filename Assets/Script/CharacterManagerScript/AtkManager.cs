@@ -42,7 +42,7 @@ namespace Script.CharacterManagerScript
         }
         private IEnumerator AtkMotion(CharacterBase unit)
         {
-            var atkRate = unit.GetComponent<CharacterBase>().defaultAtkRate * attackRate * 3.5f;
+            var atkRate = unit.GetComponent<CharacterBase>().DefaultAtkRate * attackRate * 3.5f;
 
             while (gameManager.isBattle)
             {

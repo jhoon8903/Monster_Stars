@@ -33,7 +33,7 @@ namespace Script.WeaponScriptGroup
             UnitEffect = CharacterBase.UnitEffect;
             StartingPosition = transform.position;
             Distance = CharacterBase.defaultAtkDistance;
-            Damage = CharacterBase.defaultDamage;
+            Damage = CharacterBase.DefaultDamage;
             Speed = CharacterBase.projectileSpeed * 2f;
             yield return null;
         }
