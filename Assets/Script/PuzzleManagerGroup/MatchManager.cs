@@ -176,6 +176,7 @@ namespace Script.PuzzleManagerGroup
         }
         public void StartCheckMatches()
         {
+            ListInspector();
             StartCoroutine(CheckMatches());
         }
 
@@ -1091,7 +1092,8 @@ namespace Script.PuzzleManagerGroup
         {
             foreach(GameObject character in characters)
             {
-                yield return StartCoroutine(swipeManager.AllMatchesCheck(character));   
+                yield return StartCoroutine(swipeManager.AllMatchesCheck(character));
+                countManager.IncrementComboCount();
             }
             yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
         }

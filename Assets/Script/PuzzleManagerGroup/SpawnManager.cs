@@ -68,7 +68,7 @@ namespace Script.PuzzleManagerGroup
             StartCoroutine(SpawnAndMoveNewCharacters());
 
 
-            yield return StartCoroutine(CheckPotition());
+            StartCoroutine(CheckPotition());
 
             if (rewardManger.PendingTreasure.Count == 0)
             {
