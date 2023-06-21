@@ -1091,7 +1091,7 @@ namespace Script.PuzzleManagerGroup
         {
             foreach(GameObject character in characters)
             {
-                yield return StartCoroutine(swipeManager.AllMatchesCheck(character));
+                yield return StartCoroutine(swipeManager.AllMatchesCheck(character));   
             }
             yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
         }
