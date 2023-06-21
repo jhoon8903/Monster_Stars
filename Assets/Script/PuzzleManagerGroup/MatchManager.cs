@@ -874,7 +874,6 @@ namespace Script.PuzzleManagerGroup
                 for (int j = 0; j < totalRows; j++)
                 {
                     int index = j * totalColumns + i;
-                    Debug.Log("item : "+ index + "번은 "+ characters[index] + " (" + characters[index].transform.position.x + ", " + characters[index].transform.position.y + ")");
                     // j가 0일 때는 새롭게 1층, 즉 컬럼이 전환된 시점이므로 이전 열에 대한 처리를 무조건 적으로 검토합니다
                     if (j == 0)
                     {
@@ -896,7 +895,7 @@ namespace Script.PuzzleManagerGroup
                     else
                     {
                         // 이전 인덱스의 정보와 동일하다 (첫 번째 행 제외)
-                        if (tempLevel == characters[index - totalColumns].GetComponent<CharacterBase>().Level && tempUnitGroup == characters[index - totalColumns].GetComponent<CharacterBase>().unitGroup)
+                        if (tempLevel == characters[index].GetComponent<CharacterBase>().Level && tempUnitGroup == characters[index].GetComponent<CharacterBase>().unitGroup)
                         {
                             sameCount++;
                         }
@@ -906,7 +905,7 @@ namespace Script.PuzzleManagerGroup
                             if (sameCount >= 3) // 이전 열까지 누적된 동일 캐릭터의 연결이 3개 이상인지 확인합니다
                             {
                                 List<GameObject> currentList = new List<GameObject>();
-                                for (int k = (i - 1) + (totalColumns * (totalRows - sameCount)); k <= (i - 1) + (totalColumns * (totalRows - 1)); k += totalColumns)
+                                for (int k = i + (totalColumns * (j - sameCount)); k <= i + (totalColumns * j-1); k += totalColumns)
                                 {
                                     currentList.Add(characters[k]);
                                 }
@@ -915,9 +914,11 @@ namespace Script.PuzzleManagerGroup
 
                             tempLevel = characters[index].GetComponent<CharacterBase>().Level;
                             tempUnitGroup = characters[index].GetComponent<CharacterBase>().unitGroup;
-                            sameCount = 1; // 동일 캐릭터의 배열 길이는 1부터 시작
+                            sameCount = 1; // 동일 캐릭터 배열 길이는 1부터 시작
                         }
                     }
+                    Debug.Log("item : " + index + "번은 "+ characters[index].GetComponent<CharacterBase>().unitGroup + " + characters[index].transform.position.x + " + " + characters[index].transform.position.y + ");
+                    Debug.Log("item : " + index + "번에서 현재 sameCount는? " + sameCount);
                 }
             }
             return result;
@@ -997,11 +998,12 @@ namespace Script.PuzzleManagerGroup
                 if (!foundMatchedPair)
                 {
                     Debug.Log("맞출려는 세로길이는?" + columnList.Count);
+                    int tempindex = 0;
                     foreach (GameObject item in columnList)
                     {
-                        int tempindex = 0;
                         Debug.Log("위 배열의 " + tempindex +"번째 요소의 좌표? ("+ columnList[tempindex].transform.position.x +", "+
                             columnList[tempindex].transform.position.y+")");
+                        tempindex++;
                     }
                     int index = Mathf.FloorToInt(columnList.Count / 2f);
                     GameObject gameObject = columnList[index];
