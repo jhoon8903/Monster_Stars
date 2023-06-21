@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 namespace Script.CharacterManagerScript
 {
@@ -28,10 +29,21 @@ namespace Script.CharacterManagerScript
         {
             return pooledCharacters.Where(t => !t.activeSelf).ToList();
         }
-
+        public int callCount = 0;
         public List<GameObject> UsePoolCharacterList()
         {
+            Debug.Log("callCount = " + ++callCount);
             return pooledCharacters.Where(t => t.activeSelf).ToList();
+        }
+
+        public List<GameObject> SortPoolCharacterList()
+        {
+            List<GameObject> sortedList = UsePoolCharacterList()
+                .OrderBy(t => t.transform.position.y)
+                .ThenBy(t => t.transform.position.x)
+                .ToList();
+
+            return sortedList;
         }
 
         public static void ReturnToPool(GameObject obj)

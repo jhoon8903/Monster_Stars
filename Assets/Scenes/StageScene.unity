@@ -685,7 +685,7 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   gridManager: {fileID: 8808150501734532426}
   spawnManager: {fileID: 149521964}
-  moveCount: 13
+  moveCount: 1000
   swipeManager: {fileID: 149521965}
   cameraManager: {fileID: 758648960}
   backgroundManager: {fileID: 1011029961}
@@ -792,6 +792,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c25b8e9bfddd44f41a718109ac5ffb9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  swipeManager: {fileID: 0}
   spawnManager: {fileID: 149521964}
   characterPool: {fileID: 1097818334}
   countManager: {fileID: 841622520}
@@ -4363,6 +4364,7 @@ MonoBehaviour:
   - {fileID: 5553006608696507343, guid: 438d7922ea8534dd6a3cfa7664f14cb7, type: 3}
   - {fileID: 4196842440807729695, guid: 10ae02ed26a9b4edc803ef0448003341, type: 3}
   - {fileID: 109876181003132260, guid: b3c344a1ee72a45e3aef34b9e39575c5, type: 3}
+  callCount: 0
 --- !u!4 &1097818335
 Transform:
   m_ObjectHideFlags: 0
@@ -4416,7 +4418,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -120.000244}
+  m_AnchoredPosition: {x: 0, y: -120.00012}
   m_SizeDelta: {x: 2000, y: 500}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1177777542
@@ -7425,7 +7427,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 200}
+  m_AnchoredPosition: {x: 0, y: 199.99988}
   m_SizeDelta: {x: 0, y: 600}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2030067378
