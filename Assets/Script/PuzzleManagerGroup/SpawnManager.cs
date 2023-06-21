@@ -20,6 +20,7 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private GameManager gameManager;
         [SerializeField] private CountManager countManager;
         [SerializeField] private EnforceManager enforceManager;
+        [SerializeField] private CommonRewardManager commonRewardManager;
         public bool isWave10Spawning = false;
         public bool isMatched = false;
         
@@ -65,9 +66,18 @@ namespace Script.PuzzleManagerGroup
                 rewardManger.EnqueueTreasure();
             }
 
-            if (countManager.TotalMoveCount == 0 && !gameManager.isBattle)
+            if (countManager.TotalMoveCount == 0 && !gameManager.IsBattle)
             {
-                yield return gameManager.Count0Call();
+                while (commonRewardManager.isOpenBox)
+                {
+                    StartCoroutine(gameManager.WaitForPanelToClose());
+                    yield return new WaitForSecondsRealtime(0.5f);
+                }
+
+                if (countManager.TotalMoveCount == 0)
+                {
+                    yield return StartCoroutine(gameManager.Count0Call());
+                }
             }
         }
 

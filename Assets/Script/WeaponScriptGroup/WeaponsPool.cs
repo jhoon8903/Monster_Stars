@@ -49,7 +49,7 @@ namespace Script.WeaponScriptGroup
             {
                 if (_pivotSword != null)
                 {
-                    _pivotSword.transform.localScale = new Vector3(2f,1.7f,0);
+                    _pivotSword.transform.localScale = new Vector3(1.5f,2.3f,1f);
                 }
             }
             _poolDictionary[weaponType].Enqueue(objectToSpawn);

@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 using DG.Tweening;
 using Script.RewardScript;
-using Script.UIManager;
 using Random = System.Random;
 
 namespace Script.EnemyManagerScript
@@ -11,6 +10,7 @@ namespace Script.EnemyManagerScript
     {
         [SerializeField] private GameObject castle;
         [SerializeField] private GameManager gameManager;
+        [SerializeField] private EnemyPool enemyPool;
         private GameObject _enemyObjects;
         private float _duration;
         private readonly Random _random = new System.Random();
@@ -21,10 +21,9 @@ namespace Script.EnemyManagerScript
             var enemyBase = _enemyObjects.GetComponent<EnemyBase>(); 
             enemyBase.EnemyProperty();
             var position = _enemyObjects.transform.position;
-            var endPosition = new Vector3(position.x, castle.transform.position.y-5, 0);
-            var slowCount = EnforceManager.Instance.slowCount;
+            var endPosition = new Vector3(position.x, castle.transform.position.y-4, 0);
+            var slowCount = EnforceManager.Instance.SlowCount();
             var speedReductionFactor = 1f + slowCount * 0.15f;
-            speedReductionFactor = Mathf.Min(speedReductionFactor, 1.6f);
             _duration = enemyBase.MoveSpeed * 40f * speedReductionFactor;
 
             switch (enemyBase.SpawnZone)
@@ -64,9 +63,9 @@ namespace Script.EnemyManagerScript
         {
             gameManager.GameSpeed();
             var enemyBase = enemyObject.GetComponent<EnemyBase>();
-            enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
+            enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear).OnComplete(()=>enemyPool.ReturnToPool(enemyBase.gameObject));
 
-            while (gameManager.isBattle)
+            while (gameManager.IsBattle)
             {
                 if (enemyBase.isRestraint)
                 {
@@ -82,7 +81,7 @@ namespace Script.EnemyManagerScript
             }
         }
 
-        private static IEnumerator RestrainEffect(EnemyBase enemyBase, Vector3 endPosition, float duration)
+        private IEnumerator RestrainEffect(EnemyBase enemyBase, Vector3 endPosition, float duration)
         {
             var overTime = EnforceManager.Instance.IncreaseRestraintTime();
             var restraintColor = new Color(0.59f, 0.43f, 0f); 
@@ -95,7 +94,7 @@ namespace Script.EnemyManagerScript
 
             yield return enemyBase.isRestraint = false;
             enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
-            enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
+            enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear).OnComplete(()=>enemyPool.ReturnToPool(enemyBase.gameObject));
             }
 
         private IEnumerator SlowEffect(EnemyBase enemyBase, Vector3 endPosition, float duration)
@@ -110,17 +109,17 @@ namespace Script.EnemyManagerScript
                 DOTween.Kill(enemyBase.transform);
                 yield return new WaitForSecondsRealtime(1f);
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(new Color(1f, 1f, 1f, 1f), 0.1f);
-                enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
+                enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear).OnComplete(()=>enemyPool.ReturnToPool(enemyBase.gameObject));
 
             }
             else
             {
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(slowColor, 0.1f);
-                enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration * slowPowerDuration).SetEase(Ease.Linear);
+                enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration * slowPowerDuration).SetEase(Ease.Linear).OnComplete(()=>enemyPool.ReturnToPool(enemyBase.gameObject));
                 yield return new WaitForSecondsRealtime(slowTime);
                 yield return enemyBase.isSlow = false;
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
-                enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
+                enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear).OnComplete(()=>enemyPool.ReturnToPool(enemyBase.gameObject));
             }
         }
     }

@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Script.RewardScript;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Script.EnemyManagerScript
@@ -58,9 +57,13 @@ namespace Script.EnemyManagerScript
             EnforceManager.Instance.OnAddRow -= ClearList;
         }
 
-        public static void ReturnToPool(GameObject obj)
+        public void ReturnToPool(GameObject obj)
         {
             DOTween.Kill(obj);
+            if (pooledEnemy.Contains(obj))
+            {
+                pooledEnemy.Remove(obj);
+            }
             obj.GetComponent<EnemyBase>().isDead = false;
             obj.transform.localScale = Vector3.one;
             obj.SetActive(false);

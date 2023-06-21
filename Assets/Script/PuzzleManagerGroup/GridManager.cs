@@ -58,7 +58,7 @@ namespace Script.PuzzleManagerGroup
                 newGridCells[x, 0] = newCell; // Store the new cell in the newGridCells array
             }
             _gridCells = newGridCells; // Update _gridCells to point to the new array
-            ResetBossSpawnColor();
+            // ResetBossSpawnColor();
         }
         public void ApplyBossSpawnColor(Vector3Int bossArea)
          {
@@ -78,7 +78,7 @@ namespace Script.PuzzleManagerGroup
          }
 
          // 보스 스폰 위치의 색상을 원래대로 복원하는 함수
-         private void ResetBossSpawnColor()
+         public void ResetBossSpawnColor()
          {
              var backgroundColor = new Color32(22, 101, 123, 255);
              Camera.main.DOColor(backgroundColor, 2.0f);

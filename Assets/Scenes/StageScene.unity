@@ -700,7 +700,6 @@ MonoBehaviour:
   atkManager: {fileID: 149521967}
   speedUp: 0
   wave: 1
-  isBattle: 0
 --- !u!4 &149521959
 Transform:
   m_ObjectHideFlags: 0
@@ -755,6 +754,7 @@ MonoBehaviour:
   gameManager: {fileID: 149521958}
   countManager: {fileID: 841622520}
   enforceManager: {fileID: 1595735486}
+  commonRewardManager: {fileID: 2120144519}
   isWave10Spawning: 0
   isMatched: 0
 --- !u!114 &149521965
@@ -813,7 +813,6 @@ MonoBehaviour:
   weaponsPool: {fileID: 1537456864}
   enforceManager: {fileID: 1595735486}
   gameManager: {fileID: 149521958}
-  attackRate: 0
   enemyList: []
 --- !u!114 &149521968
 MonoBehaviour:
@@ -1680,6 +1679,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   castle: {fileID: 1177777540}
   gameManager: {fileID: 149521958}
+  enemyPool: {fileID: 2016604888}
 --- !u!1 &362582815
 GameObject:
   m_ObjectHideFlags: 0
@@ -3008,7 +3008,6 @@ MonoBehaviour:
   mainCamera: {fileID: 758648958}
   targetSize: 10
   duration: 1
-  gameManager: {fileID: 149521958}
 --- !u!1 &765140112
 GameObject:
   m_ObjectHideFlags: 0
@@ -6042,7 +6041,7 @@ MonoBehaviour:
   castleManager: {fileID: 1177777546}
   gridManager: {fileID: 8808150501734532426}
   activeRestraint: 0
-  increaseRestraintTime: 1
+  increaseRestraintTime: 0
   divinePenetrate: 0
   divineAtkRange: 0
   divinePoisonAdditionalDamage: 0
@@ -7532,7 +7531,9 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
+  gridManager: {fileID: 0}
   openBoxing: 0
+  isOpenBox: 0
 --- !u!4 &2120144520
 Transform:
   m_ObjectHideFlags: 0

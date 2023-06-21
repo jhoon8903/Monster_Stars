@@ -7,6 +7,7 @@ using Script.PuzzleManagerGroup;
 using Script.UIManager;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -36,6 +37,7 @@ namespace Script.RewardScript
         [SerializeField] private CountManager countManager;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private CharacterManager characterManager;
+        [SerializeField] private GridManager gridManager;
 
         public readonly Queue<GameObject> PendingTreasure = new Queue<GameObject>(); // 보류 중인 보물 큐
         private GameObject _currentTreasure; // 현재 보물
@@ -45,13 +47,13 @@ namespace Script.RewardScript
         private string _groupName;
         private int _bossRewardSelected;
 
-        private bool _isOpenBox;
+        public bool isOpenBox;
         // 1. 상자가 매치 되면 상자를 큐에 추가
         public void EnqueueTreasure()
         {
-            if (_isOpenBox) return;
+            if (isOpenBox) return;
 
-            _isOpenBox = true;
+            isOpenBox = true;
             var treasure = PendingTreasure.Dequeue();
             openBoxing = true;
             var shake = treasure.transform.DOShakeScale(1.0f, 0.5f, 8); // 흔들리는 애니메이션 재생
@@ -325,7 +327,7 @@ namespace Script.RewardScript
                 EnqueueTreasure();
             }
 
-            _isOpenBox = false;
+            isOpenBox = false;
         }
 
         // 10. 상자 선택
@@ -356,6 +358,9 @@ namespace Script.RewardScript
                 _currentTreasure = null; // 현재 보물 없음
             }
             ProcessCommonReward(selectedReward);
+            if (!_waveRewards) return;
+            gridManager.ResetBossSpawnColor();
+            _waveRewards = false;
         }
 
         // 12. 선택된 버프 적용 

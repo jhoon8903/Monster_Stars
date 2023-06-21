@@ -84,7 +84,7 @@ namespace Script.EnemyManagerScript
                     return;
                 }
                 currentHealth -= damage;
-                if (gameObject == null) return;
+                if (gameObject == null || !gameObject.activeInHierarchy) return;
                 StartCoroutine(UpdateHpSlider());
                 if (currentHealth > 0f ||  isDead) return;
                 isDead = true;
@@ -93,7 +93,6 @@ namespace Script.EnemyManagerScript
                 {
                     EnforceManager.Instance.PhysicIncreaseDamage();
                 }
-                DOTween.Kill(detectEnemy);
                 EnemyKilledEvents(detectEnemy);
             }
         }
@@ -103,11 +102,11 @@ namespace Script.EnemyManagerScript
             var enemy = detectedEnemy.gameObject;
             var waveManager = FindObjectOfType<WaveManager>();
             var characterBase = FindObjectOfType<CharacterBase>();
+            var enemyPool = FindObjectOfType<EnemyPool>();
 
             characterBase.DetectEnemies().Remove(detectedEnemy.gameObject);
             waveManager.EnemyDestroyEvent(detectedEnemy);
-            EnemyPool.ReturnToPool(enemy);
-  
+            enemyPool.ReturnToPool(enemy);
         }
 
         private IEnumerator UpdateHpSlider()
