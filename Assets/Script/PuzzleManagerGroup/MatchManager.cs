@@ -135,7 +135,7 @@ namespace Script.PuzzleManagerGroup
             return matchFound;
         }
 
-
+        public bool isMatchActivated = false;
         // 이 메소드는 매치를 확인하는 동안 계속해서 매치가 발견되는지 확인합니다.
         // 매치가 발견되면 콤보 카운트를 증가시키고, 스왑이 발생하지 않았음을 표시한 후 캐릭터를 상승시킵니다.
         // 매치가 발견되지 않을 때까지 반복합니다.
@@ -143,7 +143,7 @@ namespace Script.PuzzleManagerGroup
         {
             if (_isMatched) yield break;
             _isMatched = true;
-
+            FindConsecutiveTilesInColumn(characterPool.SortPoolCharacterList());
             yield return new WaitForSeconds(0.2f);
             //var characterList = characterPool.SortPoolCharacterList().Where(IsMatched).ToList();
             //foreach (var character in characterList)
@@ -157,6 +157,7 @@ namespace Script.PuzzleManagerGroup
             //yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
             var characterList = characterPool.SortPoolCharacterList();
             int count = 0;
+            isMatchActivated = false;
             foreach (GameObject character in FindConsecutiveCharacters(characterList))
             {
                 yield return StartCoroutine(swipeManager.AllMatchesCheck(character));
@@ -164,25 +165,20 @@ namespace Script.PuzzleManagerGroup
                 Debug.Log("대상은? " + character +" ("+ character.transform.position.x + ", " + character.transform.position.y + ")");
                 count++;
                 if (count > 1)
+                {
                     countManager.IncrementComboCount();
+                    isMatchActivated = true;
+                }
             }
             yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
-
-
             _isMatched = false;
 
         }
 
-        public void ListInspector()
-        {
-            FindConsecutiveTilesInColumn(characterPool.SortPoolCharacterList());
-
-            
-
-        }
         public void StartCheckMatches()
         {
-            ListInspector();
+            //이상하게 이걸 한 번 실행해야 오류가 안납니다. 추후 수정 필요
+            FindConsecutiveTilesInColumn(characterPool.SortPoolCharacterList());
             StartCoroutine(CheckMatches());
         }
 

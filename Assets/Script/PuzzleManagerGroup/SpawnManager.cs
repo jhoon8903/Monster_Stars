@@ -65,10 +65,8 @@ namespace Script.PuzzleManagerGroup
                 }
             }
             yield return StartCoroutine(PerformMoves(moves));
-            StartCoroutine(SpawnAndMoveNewCharacters());
-
-
-            StartCoroutine(CheckPosition());
+            yield return StartCoroutine(SpawnAndMoveNewCharacters());
+            yield return StartCoroutine(CheckPosition());
 
             if (rewardManger.PendingTreasure.Count == 0)
             {
@@ -86,28 +84,49 @@ namespace Script.PuzzleManagerGroup
         }
         bool startMatch = false;
         float totalPos = 0;
+        public int num_CheckPos = 0;//로그 콜 회수를 측정하기 위한 변수입니다.
+        bool isMatchActivated = false;
         IEnumerator CheckPosition()
         {
-            Debug.Log("CheckPos!!!");
+            num_CheckPos++;
+            Debug.Log("CheckPos!!! " + num_CheckPos);
             //if (startMatch || isMatched) yield break;
 
             var wait = new WaitForSeconds(0.05f);
+            int maxRows = characterPool.UsePoolCharacterList().Count / 6;
+            int maxCount = maxRows * (maxRows - 1) * 3;
 
             startMatch = true;
             totalPos = characterPool.UsePoolCharacterList().Sum(t=> t.transform.position.y);
 
             Debug.Log("totalPos : " + totalPos);
 
-            int maxRows = characterPool.UsePoolCharacterList().Count / 6;
-            int maxCount = maxRows * (maxRows - 1) * 3;
             while (totalPos != maxCount)
             {
-                yield return wait;
+                while(characterPool.SortPoolCharacterList().Count < characterPool.UsePoolCharacterList().Count)
+                {
+                    yield return wait;
+                }
                 totalPos = characterPool.UsePoolCharacterList().Sum(t => t.transform.position.y);
             }
-            
-            matchManager.StartCheckMatches();
+
+            yield return StartCoroutine(matchManager.CheckMatches());
             startMatch = false;
+            isMatchActivated = matchManager.isMatchActivated;
+            if (isMatchActivated)
+            {
+                StartCoroutine(CheckPosition());
+                yield break;
+            }
+            else
+            {
+                yield break;
+            }
+        }
+
+        public void ActivateCheckPosition()
+        {
+            StartCoroutine(CheckPosition());
         }
 
         private static IEnumerator MoveCharacter(GameObject gameObject, Vector3Int targetPosition, float duration = 0.3f)
