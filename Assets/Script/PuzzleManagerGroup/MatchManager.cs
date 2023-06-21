@@ -808,6 +808,28 @@ namespace Script.PuzzleManagerGroup
 
             for (int i = 0; i < characters.Count; i++)
             {
+                if(i == characters.Count - 1)
+                {
+                    if (tempLevel == characters[i].GetComponent<CharacterBase>().Level && tempUnitGroup == characters[i].GetComponent<CharacterBase>().unitGroup)
+                    {
+                        sameCount++;
+                        List<GameObject> currentList = new List<GameObject>();
+                        for (int j = i - sameCount + 1; j <= i; j++)
+                        {
+                            currentList.Add(characters[j]);
+                        }
+                        result.Add(currentList);// 후보에 추가합니다
+                    }
+                    else
+                    {
+                        List<GameObject> currentList = new List<GameObject>();
+                        for (int j = i - sameCount; j <= i - 1; j++)
+                        {
+                            currentList.Add(characters[j]);
+                        }
+                        result.Add(currentList);// 후보에 추가합니다
+                    }
+                }
                 if ((i / 6) < currentFloor) // "6/6이 되기 전까진 1층 보다 낮다"꼴 의 흐름입니다.
                 {
                     // 이전 인덱스의 정보와 동일하다?
@@ -874,6 +896,34 @@ namespace Script.PuzzleManagerGroup
                 for (int j = 0; j < totalRows; j++)
                 {
                     int index = j * totalColumns + i;
+                    //가장 마지막 인덱스인 경우 예외처리를 해줍니다
+                    if(index == characters.Count - 1)
+                    {
+                        if (tempLevel == characters[index].GetComponent<CharacterBase>().Level && tempUnitGroup == characters[index].GetComponent<CharacterBase>().unitGroup)
+                        {
+                            sameCount++;
+                            List<GameObject> currentList = new List<GameObject>();
+                            for (int k = i + (totalColumns * (j - sameCount + 1)); k <= i + (totalColumns * j); k += totalColumns)
+                            {
+                                currentList.Add(characters[k]);
+                            }
+                            result.Add(currentList);
+                        }
+                        else
+                        {
+                            // 동일 식별자를 공유하는 캐릭터의 연속이 깨졌으므로 이전까지의 흐름을 저장합니다
+                            if (sameCount >= 3) // 이전 열까지 누적된 동일 캐릭터의 연결이 3개 이상인지 확인합니다
+                            {
+                                List<GameObject> currentList = new List<GameObject>();
+                                for (int k = i + (totalColumns * (j - sameCount)); k <= i + (totalColumns * j - 1); k += totalColumns)
+                                {
+                                    currentList.Add(characters[k]);
+                                }
+                                result.Add(currentList);
+                            }
+                        }
+                        break;
+                    }
                     // j가 0일 때는 새롭게 1층, 즉 컬럼이 전환된 시점이므로 이전 열에 대한 처리를 무조건 적으로 검토합니다
                     if (j == 0)
                     {
