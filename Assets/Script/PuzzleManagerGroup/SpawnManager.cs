@@ -68,7 +68,7 @@ namespace Script.PuzzleManagerGroup
             StartCoroutine(SpawnAndMoveNewCharacters());
 
 
-            StartCoroutine(CheckPotition());
+            StartCoroutine(CheckPosition());
 
             if (rewardManger.PendingTreasure.Count == 0)
             {
@@ -86,7 +86,7 @@ namespace Script.PuzzleManagerGroup
         }
         bool startMatch = false;
         float totalPos = 0;
-        IEnumerator CheckPotition()
+        IEnumerator CheckPosition()
         {
             Debug.Log("CheckPos!!!");
             //if (startMatch || isMatched) yield break;
@@ -103,7 +103,7 @@ namespace Script.PuzzleManagerGroup
                 yield return wait;
                 totalPos = characterPool.UsePoolCharacterList().Sum(t => t.transform.position.y);
             }
-
+            
             matchManager.StartCheckMatches();
             startMatch = false;
         }

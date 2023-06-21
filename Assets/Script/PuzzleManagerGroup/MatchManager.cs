@@ -144,6 +144,7 @@ namespace Script.PuzzleManagerGroup
             if (_isMatched) yield break;
             _isMatched = true;
 
+            yield return new WaitForSeconds(0.2f);
             //var characterList = characterPool.SortPoolCharacterList().Where(IsMatched).ToList();
             //foreach (var character in characterList)
             //{
@@ -158,6 +159,7 @@ namespace Script.PuzzleManagerGroup
             foreach (GameObject character in FindConsecutiveCharacters(characterList))
             {
                 yield return StartCoroutine(swipeManager.AllMatchesCheck(character));
+
                 Debug.Log("대상은? " + character +" ("+ character.transform.position.x + ", " + character.transform.position.y + ")");
             }
             yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
@@ -1093,7 +1095,6 @@ namespace Script.PuzzleManagerGroup
             foreach(GameObject character in characters)
             {
                 yield return StartCoroutine(swipeManager.AllMatchesCheck(character));
-                countManager.IncrementComboCount();
             }
             yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
         }
