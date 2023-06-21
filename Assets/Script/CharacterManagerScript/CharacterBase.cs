@@ -20,28 +20,17 @@ namespace Script.CharacterManagerScript
         protected internal UnitProperties UnitProperty = UnitProperties.None; // Property of the unit
         public enum UnitEffects { Slow, Bleed, Poison, Burn, Stun, Strike, Restraint, None } // Effects of units
         protected internal UnitEffects UnitEffect = UnitEffects.None; // Effect of the unit
-        public float _baseDamage;  // Base damage of the unit
-        public float _baseAtkRate; // Base attack rate of the unit
-
+        public float baseDamage;  // Base damage of the unit
         public float DefaultDamage
         {
             get
             {
                 var increaseDamageAmount = EnforceManager.Instance.increaseAtkDamage;
-                return _baseDamage * (1.0f + (increaseDamageAmount / 100f));
+                return baseDamage * (1.0f + (increaseDamageAmount / 100f));
             }
-            protected set => _baseDamage = value;
+            protected set => baseDamage = value;
         }
-        public float DefaultAtkRate
-        {
-            get
-            {
-                var increaseRateAmount = EnforceManager.Instance.increaseAtkRate;
-                return _baseAtkRate * (1.0f + (increaseRateAmount / 100f));
-            }
-            protected set => _baseAtkRate = value;
-        }
-
+        public float defaultAtkRate;
         public float projectileSpeed; // Projectile speed of the unit
         public float swingSpeed; // Swing speed of the unit
         public float defaultAtkDistance; // Default attack distance of the unit

@@ -42,7 +42,7 @@ namespace Script.UIManager
               StartCoroutine(gameManager.ContinueOrLose());
           }
 
-          private void UpdatePreviousHp()
+          public void UpdatePreviousHp()
           {
               PreviousHpPoint = hpPoint;
           }
@@ -74,10 +74,6 @@ namespace Script.UIManager
                   {
                       hpPoint = maxHpPoint;
                   }
-              }
-              else
-              {
-                  return;
               }
               UpdatePreviousHp();
           }

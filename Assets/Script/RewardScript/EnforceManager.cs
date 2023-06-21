@@ -1,3 +1,4 @@
+using System;
 using Script.PuzzleManagerGroup;
 using Script.UIManager;
 using UnityEngine;
@@ -112,12 +113,17 @@ namespace Script.RewardScript
 
 
 
-        [Header("\n\n공통강화\n")] [Header("가로줄 추가")]
+        [Header("\n\n공통강화\n")] 
+        [Header("가로줄 추가")]
         public int addRowCount;
+        public delegate void AddRowDelegate();
+        public event AddRowDelegate OnAddRow;
+
         protected internal void AddRow()
         {
             addRowCount += 1;
             gridManager.AddRow();
+            OnAddRow?.Invoke();
         }
         [Header("적 이동속도 감소 15%증가 (최대 45%)")] public int slowCount;
         [Header("대각선 이동")] public bool diagonalMovement;
@@ -147,9 +153,6 @@ namespace Script.RewardScript
         protected internal void PermanentIncreaseMoveCount(int increaseStepAmount)
         {
             permanentIncreaseMovementCount += increaseStepAmount;
-            countManager.RewardMoveCount += permanentIncreaseMovementCount;
-            countManager.TotalMoveCount = countManager.BaseMoveCount + countManager.RewardMoveCount;
-            countManager.UpdateMoveCountText();
         }
        
         [Header("5매치 가운데 유닛 추가 레벨증가")] public bool match5Upgrade ;

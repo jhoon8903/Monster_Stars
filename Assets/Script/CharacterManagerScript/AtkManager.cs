@@ -26,8 +26,8 @@ namespace Script.CharacterManagerScript
         [SerializeField] private WeaponsPool weaponsPool; // Reference to the weapon pool
         [SerializeField] private EnforceManager enforceManager;
         [SerializeField] private GameManager gameManager;
-        public float attackRate = 1;
-          public List<GameObject> enemyList = new List<GameObject>();
+        private const float AttackRate = 2f;
+        public List<GameObject> enemyList = new List<GameObject>();
 
         public IEnumerator CheckForAttack()
         {
@@ -42,8 +42,7 @@ namespace Script.CharacterManagerScript
         }
         private IEnumerator AtkMotion(CharacterBase unit)
         {
-            var atkRate = unit.GetComponent<CharacterBase>().DefaultAtkRate * attackRate * 3.5f;
-
+            var atkRate = unit.GetComponent<CharacterBase>().defaultAtkRate * (AttackRate - EnforceManager.Instance.increaseAtkRate / 100f);
             while (gameManager.isBattle)
             {
                 if(Time.timeScale == 0)
@@ -75,18 +74,10 @@ namespace Script.CharacterManagerScript
                 }
                 else
                 {
-                    yield return new WaitForSecondsRealtime(0.1f);
+                    yield return new WaitForSecondsRealtime(0.2f);
                 }
 
-                if (gameManager.speedUp)
-                {
-                    yield return new WaitForSecondsRealtime(atkRate/2);
-                }
-                else
-                {
-                    yield return new WaitForSecondsRealtime(atkRate);
-                }
-              
+                yield return new WaitForSecondsRealtime( gameManager.speedUp ? atkRate/2 : atkRate);
             }
             // ReSharper disable once IteratorNeverReturns
         }

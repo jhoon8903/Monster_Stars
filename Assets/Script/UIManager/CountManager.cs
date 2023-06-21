@@ -1,3 +1,4 @@
+using Script.RewardScript;
 using TMPro;
 using UnityEngine;
 
@@ -6,22 +7,24 @@ namespace Script.UIManager
     public class CountManager : MonoBehaviour
     {
         private int _comboCount;
-        protected internal int BaseMoveCount;
-        protected internal int RewardMoveCount;
+        private int _baseMoveCount;
+        private int _rewardMoveCount;
+        private int _stepRewardCount;
         protected internal int TotalMoveCount;
         public bool IsSwapOccurred { get; set; } = false;
         public TextMeshProUGUI moveCountText;
 
         public void Initialize(int initialMoveCount)
         {
-            BaseMoveCount = initialMoveCount;
-            RewardMoveCount = 0;
-            TotalMoveCount = BaseMoveCount;
+            _baseMoveCount = initialMoveCount;
+            _rewardMoveCount = EnforceManager.Instance.permanentIncreaseMovementCount;
+            TotalMoveCount = _baseMoveCount + _rewardMoveCount;
             _comboCount = 0;
+            _stepRewardCount = 0;
             UpdateMoveCountText();
         }
 
-        protected internal void UpdateMoveCountText()
+        private void UpdateMoveCountText()
         {
             moveCountText.text = $"{TotalMoveCount}";
         }
@@ -33,17 +36,17 @@ namespace Script.UIManager
         
         public void DecreaseMoveCount()
         {
-            if (BaseMoveCount <= 0) return;
-            BaseMoveCount--;
-            TotalMoveCount = BaseMoveCount;
+            if (_baseMoveCount <= 0) return;
+            TotalMoveCount--;
             UpdateMoveCountText();
         }
 
-        private void IncreaseMoveCount(int comboCount)
+        public void IncreaseMoveCount(int comboCount)
         {
-            BaseMoveCount += comboCount;
-            TotalMoveCount = BaseMoveCount;
+            _stepRewardCount += comboCount;
+            TotalMoveCount += _stepRewardCount;
             UpdateMoveCountText();
+            _stepRewardCount = 0;
         }
 
         public void IncrementComboCount()
@@ -51,13 +54,6 @@ namespace Script.UIManager
             _comboCount++;
             IncreaseMoveCount(_comboCount);
             _comboCount = 0;
-        }
-
-        public void IncreaseRewardMoveCount(int increaseAmount)
-        {
-            BaseMoveCount += increaseAmount;
-            TotalMoveCount = BaseMoveCount;
-            UpdateMoveCountText();
         }
     }
 }

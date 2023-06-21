@@ -89,7 +89,6 @@ namespace Script.RewardScript
         {
             var commonPowerUps = new List<CommonData>();
             var selectedCodes = new HashSet<int>();
-
             for (var i = 0; i < 3; i++)
             {
                 if (gameManager.wave is 11 or 21)
@@ -132,6 +131,7 @@ namespace Script.RewardScript
                 }
                 else
                 {
+                    _bossRewardSelected = 0;
                     CommonData selectedPowerUp;
                     switch (forcedColor)
                     {
@@ -176,6 +176,7 @@ namespace Script.RewardScript
                         break;
                     case CommonData.Types.AddRow:
                         if (EnforceManager.Instance.addRowCount > 2) return false;
+                        if (_bossRewardSelected == 1) return false;
                         if (gameManager.wave != 11) return false;
                         break;// Show row extra reward only after boss stage, up to 2 times
                     case CommonData.Types.Slow:
@@ -371,8 +372,8 @@ namespace Script.RewardScript
                 case CommonData.Types.GroupAtkSpeed: 
                     EnforceManager.Instance.IncreaseGroupRate(selectedCommonReward.Property[0]); 
                     break;  // 전체 공격 속도 증가 효과
-                case CommonData.Types.Step: 
-                    countManager.IncreaseRewardMoveCount(selectedCommonReward.Property[0]); 
+                case CommonData.Types.Step:
+                    countManager.IncreaseMoveCount(selectedCommonReward.Property[0]);
                     break;            // 카운트 증가
                 case CommonData.Types.StepLimit: 
                     EnforceManager.Instance.PermanentIncreaseMoveCount(selectedCommonReward.Property[0]);

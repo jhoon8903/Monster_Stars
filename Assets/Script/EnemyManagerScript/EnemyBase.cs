@@ -55,13 +55,11 @@ namespace Script.EnemyManagerScript
                 }
             }
         }
-        private EnforceManager _enforceManager;
         protected internal int CurrentPoisonStacks { get; set; }
-
 
         public void Initialize()
         {
-            _enforceManager = FindObjectOfType<EnforceManager>();
+            EnforceManager.Instance.OnAddRow += ResetEnemyHealthPoint;
             var wave = FindObjectOfType<GameManager>().wave;
             _hpSlider = GetComponentInChildren<Slider>(true);
             if (EnemyType != EnemyTypes.Boss)
@@ -86,15 +84,16 @@ namespace Script.EnemyManagerScript
                     return;
                 }
                 currentHealth -= damage;
-                // Debug.Log($"EnemyNum: {detectEnemy.number} / hp: {currentHealth} / Damage: {damage}");
+                if (gameObject == null) return;
                 StartCoroutine(UpdateHpSlider());
                 if (currentHealth > 0f ||  isDead) return;
                 isDead = true;
                 ExpManager.Instance.HandleEnemyKilled(reason);
-                if (_enforceManager.physicIncreaseDamage)
+                if (EnforceManager.Instance.physicIncreaseDamage)
                 {
-                    _enforceManager.PhysicIncreaseDamage();
+                    EnforceManager.Instance.PhysicIncreaseDamage();
                 }
+                DOTween.Kill(detectEnemy);
                 EnemyKilledEvents(detectEnemy);
             }
         }
@@ -104,14 +103,29 @@ namespace Script.EnemyManagerScript
             var enemy = detectedEnemy.gameObject;
             var waveManager = FindObjectOfType<WaveManager>();
             var characterBase = FindObjectOfType<CharacterBase>();
+
             characterBase.DetectEnemies().Remove(detectedEnemy.gameObject);
             waveManager.EnemyDestroyEvent(detectedEnemy);
             EnemyPool.ReturnToPool(enemy);
+  
         }
 
         private IEnumerator UpdateHpSlider()
         {
             yield return _hpSlider.DOValue(currentHealth, 0.1f);
+        }
+
+        private void ResetEnemyHealthPoint()
+        {
+           maxHealthPoint *= 0.4f;
+           healthPoint = maxHealthPoint;
+           currentHealth = maxHealthPoint;
+           _hpSlider.value = currentHealth;
+        }
+
+        private void OnDestroy()
+        {
+            EnforceManager.Instance.OnAddRow -= ResetEnemyHealthPoint;
         }
     }
 }

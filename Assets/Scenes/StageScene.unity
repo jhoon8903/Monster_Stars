@@ -698,7 +698,6 @@ MonoBehaviour:
   castleManager: {fileID: 1177777546}
   commonRewardManager: {fileID: 2120144519}
   atkManager: {fileID: 149521967}
-  enforceManager: {fileID: 1595735486}
   speedUp: 0
   wave: 1
   isBattle: 0
@@ -814,7 +813,7 @@ MonoBehaviour:
   weaponsPool: {fileID: 1537456864}
   enforceManager: {fileID: 1595735486}
   gameManager: {fileID: 149521958}
-  attackRate: 1
+  attackRate: 0
   enemyList: []
 --- !u!114 &149521968
 MonoBehaviour:
@@ -1680,7 +1679,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   castle: {fileID: 1177777540}
-  waveManager: {fileID: 149521968}
   gameManager: {fileID: 149521958}
 --- !u!1 &362582815
 GameObject:
@@ -6072,7 +6070,7 @@ MonoBehaviour:
   castleMaxHp: 0
   highLevelCharacterCount: 6
   expPercentage: 0
-  permanentIncreaseMovementCount: 0
+  permanentIncreaseMovementCount: 1
   match5Upgrade: 0
   increaseAtkDamage: 0
   increaseAtkRate: 0
@@ -7763,7 +7761,6 @@ MonoBehaviour:
   gridWidth: 6
   grid1Sprite: {fileID: 5878419415431634990, guid: 9cb9c040a9abd43d0b20b1828f4cbc7e, type: 3}
   grid2Sprite: {fileID: 2861231161325905373, guid: 366ac8b27ec804d8aa934708a02a4c3b, type: 3}
-  characterPool: {fileID: 1097818334}
   bossSpawnArea: {x: 0, y: 0, z: 0}
 --- !u!4 &8808150501734532427
 Transform:

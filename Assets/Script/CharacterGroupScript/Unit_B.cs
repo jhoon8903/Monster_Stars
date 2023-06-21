@@ -57,7 +57,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.B;
             DefaultDamage = 0;
-            DefaultAtkRate = 0;
+            defaultAtkRate = 0;
             defaultAtkDistance = 0;
             _spriteRenderer.sprite = level1Sprite;
         }
@@ -70,7 +70,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.B;
             DefaultDamage = 1;
-            DefaultAtkRate = 0.1f;
+            defaultAtkRate = 0.1f;
             defaultAtkDistance = 0.1f;
             _spriteRenderer.sprite = level2Sprite;
             UnitAtkType = UnitAtkTypes.Circle;
@@ -86,7 +86,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.B;
             DefaultDamage = 3;
-            DefaultAtkRate = 0.3f;
+            defaultAtkRate = 0.3f;
             defaultAtkDistance = 0.2f;
             _spriteRenderer.sprite = level3Sprite;
             UnitAtkType = UnitAtkTypes.Circle;
@@ -102,7 +102,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.B;
             DefaultDamage = 9;
-            DefaultAtkRate = 0.9f;
+            defaultAtkRate = 0.9f;
             defaultAtkDistance = 0.3f;
             _spriteRenderer.sprite = level4Sprite;
             UnitAtkType = UnitAtkTypes.Circle;
@@ -118,7 +118,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.B;
             DefaultDamage = 27;
-            DefaultAtkRate = 2.7f;
+            defaultAtkRate = 2.7f;
             defaultAtkDistance = 0.4f;
             _spriteRenderer.sprite = level5Sprite;
             UnitAtkType = UnitAtkTypes.Circle;

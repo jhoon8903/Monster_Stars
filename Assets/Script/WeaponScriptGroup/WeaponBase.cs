@@ -158,7 +158,6 @@ namespace Script.WeaponScriptGroup
         }
         protected float DamageCalculator(float damage,EnemyBase enemyBase)
         {
-            Debug.Log($"CharacterName: {CharacterBase.name} / CharacterProperty: {UnitProperty}/ damage: {damage}");
             switch (UnitProperty)
             {
                 case CharacterBase.UnitProperties.Divine:

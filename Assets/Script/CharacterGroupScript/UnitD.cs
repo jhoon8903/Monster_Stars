@@ -85,7 +85,7 @@ namespace Script.CharacterGroupScript
             UnitLevel = 1;
             Type = Types.Character;
             unitGroup = UnitGroups.D;
-            DefaultAtkRate = 0;
+            defaultAtkRate = 0;
             defaultAtkDistance = 0;
             _spriteRenderer.sprite = level1Sprite;
         }
@@ -96,7 +96,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.D;
             DefaultDamage += (250f * EnforceManager.Instance.increasePhysicsDamage);
-            DefaultAtkRate = 1f * EnforceManager.Instance.increasePhysicAtkSpeed ;
+            defaultAtkRate = 1f * EnforceManager.Instance.increasePhysicAtkSpeed ;
             swingSpeed = 2f * EnforceManager.Instance.increasePhysicAtkSpeed;
             defaultAtkDistance = 1f;
             _spriteRenderer.sprite = level2Sprite;
@@ -111,7 +111,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.D;
             DefaultDamage *= 1.7f;
-            DefaultAtkRate = 1f * EnforceManager.Instance.increasePhysicAtkSpeed ;
+            defaultAtkRate = 1f * EnforceManager.Instance.increasePhysicAtkSpeed ;
             swingSpeed = 2f * EnforceManager.Instance.increasePhysicAtkSpeed;
             defaultAtkDistance = 1f;
             _spriteRenderer.sprite = level3Sprite;
@@ -126,7 +126,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.D;
             DefaultDamage *= 2.0f;
-            DefaultAtkRate = 1f * EnforceManager.Instance.increasePhysicAtkSpeed ;
+            defaultAtkRate = 1f * EnforceManager.Instance.increasePhysicAtkSpeed ;
             swingSpeed = 2f * EnforceManager.Instance.increasePhysicAtkSpeed;
             defaultAtkDistance = 1f;
             _spriteRenderer.sprite = level4Sprite;
@@ -141,7 +141,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.D;
             DefaultDamage *= 2.3f;
-            DefaultAtkRate = 1f * EnforceManager.Instance.increasePhysicAtkSpeed ;
+            defaultAtkRate = 1f * EnforceManager.Instance.increasePhysicAtkSpeed ;
             swingSpeed = 2f * EnforceManager.Instance.increasePhysicAtkSpeed;
             defaultAtkDistance = 1f;
             _spriteRenderer.sprite = level5Sprite;

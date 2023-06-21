@@ -10,7 +10,6 @@ namespace Script.EnemyManagerScript
     public class EnemyPatternManager : MonoBehaviour
     {
         [SerializeField] private GameObject castle;
-        [SerializeField] private WaveManager waveManager;
         [SerializeField] private GameManager gameManager;
         private GameObject _enemyObjects;
         private float _duration;

@@ -110,7 +110,7 @@ public void OnDrawGizmos()
             unitGroup = UnitGroups.A;
             Type = Types.Character;
             DefaultDamage = 0;
-            DefaultAtkRate = 0;
+            defaultAtkRate = 0;
             defaultAtkDistance = 0;
             _spriteRenderer.sprite = level1Sprite;
         }
@@ -121,7 +121,7 @@ public void OnDrawGizmos()
             Type = Types.Character;
             unitGroup = UnitGroups.A;
             DefaultDamage = 150f;
-            DefaultAtkRate = 1f;
+            defaultAtkRate = 1f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             _spriteRenderer.sprite = level2Sprite;
@@ -136,7 +136,7 @@ public void OnDrawGizmos()
             Type = Types.Character;
             unitGroup = UnitGroups.A;
             DefaultDamage *= 1.7f;
-            DefaultAtkRate = 1f;
+            defaultAtkRate = 1f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             _spriteRenderer.sprite = level3Sprite;
@@ -151,7 +151,7 @@ public void OnDrawGizmos()
             Type = Types.Character;
             unitGroup = UnitGroups.A;
             DefaultDamage *= 2f;
-            DefaultAtkRate = 1f;
+            defaultAtkRate = 1f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             _spriteRenderer.sprite = level4Sprite;
@@ -166,7 +166,7 @@ public void OnDrawGizmos()
             Type = Types.Character;
             unitGroup = UnitGroups.A;
             DefaultDamage *= 2.3f;
-            DefaultAtkRate = 1f;
+            defaultAtkRate = 1f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             _spriteRenderer.sprite = level5Sprite;

@@ -20,7 +20,7 @@ namespace Script.UIManager
         public void CameraPuzzleSizeChange()
         {
             mainCamera.transform.DOMove(mainCamera.transform.position, duration);
-            mainCamera.DOOrthoSize(8f, duration).OnComplete(() => GameManager.KillMotion());
+            mainCamera.DOOrthoSize(8f, duration);
         }
     }
 }

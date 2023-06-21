@@ -1,6 +1,4 @@
 using DG.Tweening;
-using Script.CharacterManagerScript;
-using Script.EnemyManagerScript;
 using UnityEngine;
 
 namespace Script.PuzzleManagerGroup
@@ -11,9 +9,8 @@ namespace Script.PuzzleManagerGroup
         public int gridWidth = 6;  // 그리드의 너비
         public GameObject grid1Sprite;  // 그리드 스프라이트 1
         public GameObject grid2Sprite;  // 그리드 스프라이트 2
-        private int _currentRowType = 1;  // 현재 행의 타입
+        private const int CurrentRowType = 1; // 현재 행의 타입
         private const int MaxRows = 8;  // 최대 행 개수
-        [SerializeField] private CharacterPool characterPool; // 캐릭터 풀
         // 보스 스폰 영역 정보를 저장하는 변수
         public Vector3Int bossSpawnArea;
         // 그리드 스프라이트를 관리하는 2차원 배열
@@ -37,16 +34,8 @@ namespace Script.PuzzleManagerGroup
 
         public void AddRow()
         {
-            var enemyBase = FindObjectOfType<EnemyBase>();
-            if (enemyBase.EnemyType != EnemyBase.EnemyTypes.Boss)
-            {
-                enemyBase.healthPoint *= 0.4f;
-            }
-
             if (gridHeight >= MaxRows) return; // Do not create additional rows if the maximum number of rows is exceeded
-
             var newGridCells = new GameObject[gridWidth, gridHeight+1];
-
             for (var x = 0; x < gridWidth; x++)
             {
                 for (var y = 0; y < gridHeight; y++)
@@ -64,11 +53,10 @@ namespace Script.PuzzleManagerGroup
             }
             for (var x = 0; x < gridWidth; x++)
             {
-                var spritePrefab = (x + _currentRowType) % 2 == 0 ? grid1Sprite : grid2Sprite;
+                var spritePrefab = (x + CurrentRowType) % 2 == 0 ? grid1Sprite : grid2Sprite;
                 var newCell = Instantiate(spritePrefab, new Vector3(x, 0, 0), Quaternion.identity, transform);
                 newGridCells[x, 0] = newCell; // Store the new cell in the newGridCells array
             }
-
             _gridCells = newGridCells; // Update _gridCells to point to the new array
             ResetBossSpawnColor();
         }

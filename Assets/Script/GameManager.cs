@@ -29,7 +29,6 @@ namespace Script
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private AtkManager atkManager;
-        [SerializeField] private EnforceManager enforceManager;
         private readonly WaitForSecondsRealtime _waitOneSecRealtime = new WaitForSecondsRealtime(1f);
         private readonly WaitForSecondsRealtime _waitTwoSecRealtime = new WaitForSecondsRealtime(2f);
         public bool speedUp;
@@ -85,6 +84,8 @@ namespace Script
                 if (wave == 11)
                 {
                     yield return StartCoroutine(commonRewardManager.WaveReward());
+                    moveCount = 7;
+                    countManager.Initialize(moveCount);
                     yield return StartCoroutine(spawnManager.BossStageSpawnRule());
                 }
                 NextStage();
@@ -97,7 +98,7 @@ namespace Script
         }
         private void LoseGame()
         {
-            DOTween.KillAll(true);
+            KillMotion();
             Time.timeScale = 0;
             gamePanel.SetActive(true);
         }
@@ -110,17 +111,21 @@ namespace Script
                 gridManager.ApplyBossSpawnColor(_bossSpawnArea);
             }
 
-            if (enforceManager.recoveryCastle)
+            if (EnforceManager.Instance.recoveryCastle)
             {
                 castleManager.RecoveryCastle();
             }
-            moveCount = 7;
-            countManager.Initialize(moveCount);
+            castleManager.UpdatePreviousHp();
+            if (wave != 11)
+            {
+                moveCount = 7;
+                countManager.Initialize(moveCount);
+            }
             backgroundManager.ChangePuzzleSize();
             cameraManager.CameraPuzzleSizeChange();
         }
 
-        public static void KillMotion()
+        private static void KillMotion()
         {
             DOTween.KillAll(true);
         }

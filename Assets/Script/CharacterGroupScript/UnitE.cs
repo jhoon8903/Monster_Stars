@@ -85,7 +85,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.E;
             DefaultDamage = 0;
-            DefaultAtkRate = 0;
+            defaultAtkRate = 0;
             defaultAtkDistance = 0;
             _spriteRenderer.sprite = level1Sprite;
         }
@@ -98,7 +98,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.E;
             DefaultDamage = 100f;
-            DefaultAtkRate = 0.8f;
+            defaultAtkRate = 0.8f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             _spriteRenderer.sprite = level2Sprite;
@@ -115,7 +115,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.E;
             DefaultDamage *= 1.7f;
-            DefaultAtkRate = 0.8f;
+            defaultAtkRate = 0.8f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             _spriteRenderer.sprite = level3Sprite;
@@ -132,7 +132,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.E;
             DefaultDamage *= 2f;
-            DefaultAtkRate = 0.8f;
+            defaultAtkRate = 0.8f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             _spriteRenderer.sprite = level4Sprite;
@@ -149,7 +149,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.E;
             DefaultDamage *= 2.3f;
-            DefaultAtkRate = 0.8f;
+            defaultAtkRate = 0.8f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             _spriteRenderer.sprite = level5Sprite;
