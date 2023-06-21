@@ -156,11 +156,15 @@ namespace Script.PuzzleManagerGroup
             //}
             //yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
             var characterList = characterPool.SortPoolCharacterList();
+            int count = 0;
             foreach (GameObject character in FindConsecutiveCharacters(characterList))
             {
                 yield return StartCoroutine(swipeManager.AllMatchesCheck(character));
 
                 Debug.Log("대상은? " + character +" ("+ character.transform.position.x + ", " + character.transform.position.y + ")");
+                count++;
+                if (count > 1)
+                    countManager.IncrementComboCount();
             }
             yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
 
