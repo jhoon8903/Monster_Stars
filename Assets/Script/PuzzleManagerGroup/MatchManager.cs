@@ -997,6 +997,12 @@ namespace Script.PuzzleManagerGroup
                 if (!foundMatchedPair)
                 {
                     Debug.Log("맞출려는 세로길이는?" + columnList.Count);
+                    foreach (GameObject item in columnList)
+                    {
+                        int tempindex = 0;
+                        Debug.Log("위 배열의 " + tempindex +"번째 요소의 좌표? ("+ columnList[tempindex].transform.position.x +", "+
+                            columnList[tempindex].transform.position.y+")");
+                    }
                     int index = Mathf.FloorToInt(columnList.Count / 2f);
                     GameObject gameObject = columnList[index];
                     if (!matchingGameObjects.Contains(gameObject))
