@@ -9,19 +9,6 @@ using Script.UIManager;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-
-struct Tile
-{
-    CharacterBase characterBase;
-    bool isSingle;
-
-    public Tile(CharacterBase characterBase, bool isSingle)
-    {
-        this.characterBase = characterBase;
-        this.isSingle = isSingle;
-    }
-}
- 
 namespace Script.PuzzleManagerGroup
 {
     public class SpawnManager : MonoBehaviour
@@ -65,10 +52,9 @@ namespace Script.PuzzleManagerGroup
                 }
             }
             yield return StartCoroutine(PerformMoves(moves));
-            StartCoroutine(SpawnAndMoveNewCharacters());
-
-
-            StartCoroutine(CheckPotition());
+            yield return StartCoroutine(matchManager.CheckMatches());
+            yield return StartCoroutine(SpawnAndMoveNewCharacters());
+            yield return StartCoroutine(matchManager.CheckMatches());
 
             if (rewardManger.PendingTreasure.Count == 0)
             {
@@ -83,29 +69,6 @@ namespace Script.PuzzleManagerGroup
             {
                 yield return gameManager.Count0Call();
             }
-        }
-        bool startMatch = false;
-        float totalPos = 0;
-        IEnumerator CheckPotition()
-        {
-            Debug.Log("CheckPos!!!");
-            //if (startMatch || isMatched) yield break;
-
-            var wait = new WaitForSeconds(0.05f);
-
-            startMatch = true;
-            totalPos = characterPool.UsePoolCharacterList().Sum(t=> t.transform.position.y);
-
-            Debug.Log("totalPos : " + totalPos);
-
-            while(totalPos != 90)
-            {
-                yield return wait;
-                totalPos = characterPool.UsePoolCharacterList().Sum(t => t.transform.position.y);
-            }
-
-            matchManager.StartCheckMatches();
-            startMatch = false;
         }
 
         private static IEnumerator MoveCharacter(GameObject gameObject, Vector3Int targetPosition, float duration = 0.3f)
