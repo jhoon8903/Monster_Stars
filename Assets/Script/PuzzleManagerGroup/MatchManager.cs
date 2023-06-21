@@ -9,6 +9,7 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 using static Script.CharacterManagerScript.CharacterBase;
+using static UnityEditor.Progress;
 
 namespace Script.PuzzleManagerGroup
 {
@@ -156,10 +157,6 @@ namespace Script.PuzzleManagerGroup
             var characterList = characterPool.SortPoolCharacterList();
             foreach (GameObject character in FindConsecutiveCharacters(characterList))
             {
-
-            }
-                foreach (GameObject character in FindConsecutiveCharacters(characterList))
-            {
                 yield return StartCoroutine(swipeManager.AllMatchesCheck(character));
                 Debug.Log("대상은? " + character +" ("+ character.transform.position.x + ", " + character.transform.position.y + ")");
             }
@@ -172,14 +169,13 @@ namespace Script.PuzzleManagerGroup
 
         public void ListInspector()
         {
-            foreach (GameObject item in characterPool.SortPoolCharacterList())
-            {
-                Debug.Log("item : " + item + " (" + item.transform.position.x + ", " + item.transform.position.y + ")");
-            }
+            FindConsecutiveTilesInColumn(characterPool.SortPoolCharacterList());
+
+            
+
         }
         public void StartCheckMatches()
         {
-            Debug.Log("제거실시!! 썌애끼 기열!!!");
             StartCoroutine(CheckMatches());
         }
 
@@ -824,9 +820,9 @@ namespace Script.PuzzleManagerGroup
                         if (sameCount >= 3)//이전 층수까지 누적된 동일 캐릭터의 연결이 3개 이상인지 확인합니다
                         {
                             List<GameObject> currentList = new List<GameObject>();
-                            for (int j = i - (sameCount - 1); j <= i; j++)
+                            for (int j = i - (sameCount); j <= i-1; j++)
                             {
-                                currentList.Add(characters[j-1]);
+                                currentList.Add(characters[j]);
                             }
                             result.Add(currentList);// 후보에 추가합니다
                         }
@@ -842,9 +838,9 @@ namespace Script.PuzzleManagerGroup
                     if(sameCount >= 3)//이전 층수까지 누적된 동일 캐릭터의 연결이 3개 이상인지 확인합니다
                     {
                         List<GameObject> currentList = new List<GameObject>();
-                        for (int j = i - (sameCount - 1); j <= i; j++)
+                        for (int j = i - sameCount; j <= i-1; j++)
                         {
-                            currentList.Add(characters[j-1]);
+                            currentList.Add(characters[j]);
                         }
                         result.Add(currentList);// 후보에 추가합니다
                     }
@@ -871,19 +867,36 @@ namespace Script.PuzzleManagerGroup
             int rows = characters.Count / 6;
             int totalColumns = 6;
 
-            // 열 방향으로 탐색
+            // 열 방향으로 탐색(i가 x축이 됩니다)
             for (int i = 0; i < totalColumns; i++)
             {
                 // 행 방향으로 탐색
                 for (int j = 0; j < rows; j++)
                 {
                     int index = j * totalColumns + i;
+                    Debug.Log("item : " + characters[index] + " (" + characters[index].transform.position.x + ", " + characters[index].transform.position.y + ")");
+                    // j가 0일 때는 새롭게 1층, 즉 컬럼이 전환된 시점이므로 이전 열에 대한 처리를 무조건 적으로 검토합니다
+                    if (j == 0)
+                    {
+                        // 이전까지의 마지막 요소 처리
+                        if (sameCount >= 3)
+                        {
+                            List<GameObject> currentList = new List<GameObject>();
+                            for (int k = (i-1) + (totalColumns * (rows - sameCount -1)); k <= (i-1) + (totalColumns * (rows - 1)); k += totalColumns)
+                            {
+                                currentList.Add(characters[k]);
+                            }
+                            result.Add(currentList);
+                        }
 
-                    // 인덱스 범위 확인
-                    if (index < characters.Count)
+                        tempLevel = characters[index].GetComponent<CharacterBase>().Level;
+                        tempUnitGroup = characters[index].GetComponent<CharacterBase>().unitGroup;
+                        sameCount = 1; // 새로운 열로 이동한 후, 동일한 캐릭터의 수를 다시 1로 초기화합니다
+                    }
+                    else
                     {
                         // 이전 인덱스의 정보와 동일하다 (첫 번째 행 제외)
-                        if (j == 0 || tempLevel == characters[index - totalColumns].GetComponent<CharacterBase>().Level && tempUnitGroup == characters[index - totalColumns].GetComponent<CharacterBase>().unitGroup)
+                        if (tempLevel == characters[index - totalColumns].GetComponent<CharacterBase>().Level && tempUnitGroup == characters[index - totalColumns].GetComponent<CharacterBase>().unitGroup)
                         {
                             sameCount++;
                         }
@@ -893,31 +906,19 @@ namespace Script.PuzzleManagerGroup
                             if (sameCount >= 3) // 이전 열까지 누적된 동일 캐릭터의 연결이 3개 이상인지 확인합니다
                             {
                                 List<GameObject> currentList = new List<GameObject>();
-                                for (int k = index - totalColumns * sameCount; k <= index - totalColumns; k += totalColumns)
+                                for (int k = (i - 1) + (totalColumns * (rows - sameCount - 1)); k <= (i - 1) + (totalColumns * (rows - 1)); k += totalColumns)
                                 {
-                                    currentList.Add(characters[k-1]);
+                                    currentList.Add(characters[k]);
                                 }
-                                result.Add(currentList); // 후보에 추가합니다
+                                result.Add(currentList);
                             }
+
+                            tempLevel = characters[index].GetComponent<CharacterBase>().Level;
+                            tempUnitGroup = characters[index].GetComponent<CharacterBase>().unitGroup;
                             sameCount = 1; // 동일 캐릭터의 배열 길이는 1부터 시작
                         }
-
-                        // 마지막 요소 처리
-                        if (j == characters.Count - 1 && sameCount >= 3)
-                        {
-                            List<GameObject> currentList = new List<GameObject>();
-                            for (int k = index - totalColumns * (sameCount - 1); k <= index; k += totalColumns)
-                            {
-                                currentList.Add(characters[k-1]);
-                            }
-                            result.Add(currentList);
-                        }
-
-                        tempLevel = characters[index].GetComponent<CharacterBase>().Level;
-                        tempUnitGroup = characters[index].GetComponent<CharacterBase>().unitGroup;
                     }
                 }
-                sameCount = 1; // 새로운 열로 이동한 후, 동일한 캐릭터의 수를 다시 1로 초기화합니다
             }
             return result;
         }
@@ -958,6 +959,7 @@ namespace Script.PuzzleManagerGroup
             {
                 bool foundMatchedPair = false;
 
+                //기존에 후보명단에 올라있는지 검토
                 foreach (MatchedPair matchedPair in matchedPairs)
                 {
                     if (matchedPair.rowList == rowList)
@@ -969,8 +971,8 @@ namespace Script.PuzzleManagerGroup
 
                 if (!foundMatchedPair)
                 {
-                    int index = Mathf.FloorToInt(rowList.Count / 2f);
-                    GameObject gameObject = rowList[index];
+                    int index = Mathf.FloorToInt(rowList.Count / 2f);//정해진 후보들 {a, b, c}읠 길이3에 대해 평균값을 구한다
+                    GameObject gameObject = rowList[index];//평균값이 1라면 {a,b,c}에서 b를 구한다
                     if (!matchingGameObjects.Contains(gameObject))
                     {
                         matchingGameObjects.Add(gameObject);
