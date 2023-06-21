@@ -699,6 +699,7 @@ MonoBehaviour:
   commonRewardManager: {fileID: 2120144519}
   atkManager: {fileID: 149521967}
   enforceManager: {fileID: 1595735486}
+  speedUp: 0
   wave: 1
   isBattle: 0
 --- !u!4 &149521959
@@ -813,6 +814,7 @@ MonoBehaviour:
   characterPool: {fileID: 1097818334}
   weaponsPool: {fileID: 1537456864}
   enforceManager: {fileID: 1595735486}
+  gameManager: {fileID: 149521958}
   attackRate: 1
   enemyList: []
 --- !u!114 &149521968
@@ -829,8 +831,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemySpawnManager: {fileID: 329010038}
   gameManager: {fileID: 149521958}
-  enemyTotalCount: 0
-  set: 0
+  enemyPool: {fileID: 2016604888}
+  enemies: []
 --- !u!1 &187153451
 GameObject:
   m_ObjectHideFlags: 0
@@ -1732,7 +1734,6 @@ GameObject:
   - component: {fileID: 329010038}
   - component: {fileID: 329010036}
   - component: {fileID: 329010039}
-  - component: {fileID: 329010040}
   m_Layer: 0
   m_Name: EnemyManager
   m_TagString: Untagged
@@ -1771,9 +1772,9 @@ MonoBehaviour:
   - enemyPrefab: {fileID: 4608296790683070460, guid: 47528aa86487a4455a068d9ab3f94f2f, type: 3}
     poolSize: 40
   - enemyPrefab: {fileID: 1593285363578843117, guid: 0c6a7b6d8e2364455ad516d97e1634e6, type: 3}
-    poolSize: 40
+    poolSize: 25
   - enemyPrefab: {fileID: 8190566129223033203, guid: 78f7bd1c20b3e408a94ce003baa58533, type: 3}
-    poolSize: 40
+    poolSize: 25
   - enemyPrefab: {fileID: 5917879149447133458, guid: c60bfe49f25eb4538ab2af51b28dce02, type: 3}
     poolSize: 40
   stage10BossPrefab: {fileID: 7359858875132129289, guid: d950a24d876c844ed8550ef75818ee5c, type: 3}
@@ -1817,22 +1818,6 @@ MonoBehaviour:
   castle: {fileID: 1177777540}
   waveManager: {fileID: 149521968}
   gameManager: {fileID: 149521958}
-  enforceManager: {fileID: 1595735486}
---- !u!114 &329010040
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 329010034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00e0262d9ffcd4d219f10b5f7db48d58, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  number: 0
-  healthPoint: 0
-  maxHealthPoint: 0
 --- !u!1 &362582815
 GameObject:
   m_ObjectHideFlags: 0
@@ -3296,6 +3281,7 @@ MonoBehaviour:
   mainCamera: {fileID: 758648958}
   targetSize: 10
   duration: 1
+  gameManager: {fileID: 149521958}
 --- !u!1 &765140112
 GameObject:
   m_ObjectHideFlags: 0
@@ -6413,12 +6399,6 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 51fba7ea733704a9ca01a6c0e771fa9c, type: 3}
     - {fileID: 21300000, guid: 1b0ee16596d024571a96861c1a7fdb68, type: 3}
     - {fileID: 21300000, guid: b0e6d7a59d004402e98c7c06da6242d2, type: 3}
-  - weaponType: 3
-    weaponPrefab: {fileID: 8649400312568899830, guid: 8df1ec6e1714342209b5372efc1262d1, type: 3}
-    weaponSprite:
-    - {fileID: 21300000, guid: 4deb41924c3644b29bc24f99dac2fee8, type: 3}
-    - {fileID: 21300000, guid: caf8d3aeb0287451eb128ae60e366038, type: 3}
-    - {fileID: 21300000, guid: ea9410c3e9f4d4e88b519cda9ccf4e5d, type: 3}
   - weaponType: 4
     weaponPrefab: {fileID: 9036301952792892721, guid: a443ab3c0a89c49209a06173b80218e0, type: 3}
     weaponSprite:
@@ -6432,7 +6412,6 @@ MonoBehaviour:
     - {fileID: 21300000, guid: f604e062448844dffaf8bd2544a41b0d, type: 3}
     - {fileID: 21300000, guid: 1fcd99742122641d0a9bfecf3512d171, type: 3}
   weaponPoolCapacity: 30
-  enforceManager: {fileID: 1595735486}
 --- !u!4 &1537456865
 Transform:
   m_ObjectHideFlags: 0
@@ -6603,12 +6582,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8241d3f1f5c534ecb9999427601faf0f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterManager: {fileID: 149521963}
   countManager: {fileID: 841622520}
   castleManager: {fileID: 1177777546}
   gridManager: {fileID: 8808150501734532426}
   activeRestraint: 0
-  increaseRestraintTime: 0
+  increaseRestraintTime: 1
   divinePenetrate: 0
   divineAtkRange: 0
   divinePoisonAdditionalDamage: 0
@@ -6626,7 +6604,7 @@ MonoBehaviour:
   activatePoison: 0
   poisonOverlapping: 1
   waterStun: 0
-  waterIncreaseSlowTime: 0
+  waterIncreaseSlowTime: 1
   waterIncreaseSlowPower: 0
   waterRestraintKnockBack: 0
   addRowCount: 0
@@ -7862,6 +7840,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyManager: {fileID: 329010036}
+  pooledEnemy: []
+  pooledDefaultEnemy: []
+  enemyBases: []
 --- !u!4 &2016604889
 Transform:
   m_ObjectHideFlags: 0
@@ -8095,7 +8076,6 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
-  enforceManager: {fileID: 1595735486}
   openBoxing: 0
 --- !u!4 &2120144520
 Transform:
@@ -8157,7 +8137,6 @@ MonoBehaviour:
   expManager: {fileID: 841622521}
   gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
-  enforceManager: {fileID: 1595735486}
 --- !u!1 &2143130367
 GameObject:
   m_ObjectHideFlags: 0

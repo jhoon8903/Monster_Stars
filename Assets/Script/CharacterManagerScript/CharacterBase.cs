@@ -20,17 +20,39 @@ namespace Script.CharacterManagerScript
         protected internal UnitProperties UnitProperty = UnitProperties.None; // Property of the unit
         public enum UnitEffects { Slow, Bleed, Poison, Burn, Stun, Strike, Restraint, None } // Effects of units
         protected internal UnitEffects UnitEffect = UnitEffects.None; // Effect of the unit
-        public float defaultDamage; // Default damage of the unit
-        public float defaultAtkRate; // Default attack rate of the unit
+        public float _baseDamage;  // Base damage of the unit
+        public float _baseAtkRate; // Base attack rate of the unit
+
+        public float DefaultDamage
+        {
+            get
+            {
+                var increaseDamageAmount = EnforceManager.Instance.increaseAtkDamage;
+                return _baseDamage * (1.0f + (increaseDamageAmount / 100f));
+            }
+            protected set => _baseDamage = value;
+        }
+        public float DefaultAtkRate
+        {
+            get
+            {
+                var increaseRateAmount = EnforceManager.Instance.increaseAtkRate;
+                return _baseAtkRate * (1.0f + (increaseRateAmount / 100f));
+            }
+            protected set => _baseAtkRate = value;
+        }
+
         public float projectileSpeed; // Projectile speed of the unit
         public float swingSpeed; // Swing speed of the unit
         public float defaultAtkDistance; // Default attack distance of the unit
         public bool PermanentLevelUp { get; set; } // Indicates if the unit has permanent level up
         private readonly Vector3 _initialScale = Vector3.one; // Initial scale of the character
         private readonly Vector3 _levelUpScale = new Vector3(1.2f, 1.2f, 0); // Scale to use when leveling up
-        public static List<GameObject> detectedEnemies = new List<GameObject>();
         public GameObject CurrentWeapon { get; set; }
         protected internal bool IsClicked { get; set; }
+        protected static List<GameObject> detectedEnemies = new List<GameObject>();
+
+
 
 
 
@@ -78,20 +100,6 @@ namespace Script.CharacterManagerScript
         public virtual List<GameObject> DetectEnemies()
         {
             return new List<GameObject>();
-        }
-
-        // Increase the default damage of the character by a given amount
-        public void IncreaseDamage()
-        {
-            var increaseDamageAmount = EnforceManager.Instance.increaseAtkDamage;
-            defaultDamage *= 1.0f + (increaseDamageAmount / 100f);
-        }
-
-        // Increase the default attack rate of the character by a given amount
-        public void IncreaseAtkRate()
-        {
-            var increaseRateAmount = EnforceManager.Instance.increaseAtkRate;
-            defaultAtkRate *= 1.0f + (increaseRateAmount / 100f);
         }
     }
 }

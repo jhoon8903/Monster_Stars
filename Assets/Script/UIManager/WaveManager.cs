@@ -1,6 +1,7 @@
 using Script.EnemyManagerScript;
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Script.UIManager
 {
@@ -8,8 +9,10 @@ namespace Script.UIManager
     {
         [SerializeField] private EnemySpawnManager enemySpawnManager;
         [SerializeField] private GameManager gameManager;
-        public int enemyTotalCount;
-        public int set;
+        [SerializeField] private EnemyPool enemyPool;
+        public List<EnemyBase> enemies = new List<EnemyBase>();
+
+        
         private static readonly object EnemyLock = new object();
 
         private static (int normal, int slow, int fast, int sets) GetSpawnCountForWave(int wave)
@@ -35,12 +38,10 @@ namespace Script.UIManager
         public IEnumerator WaveController(int wave)
         {
             var (normalCount, slowCount, fastCount, sets) = GetSpawnCountForWave(wave);
-            CountSet(normalCount, slowCount, fastCount, sets);
 
             if (wave is 10 or 20)
             {
                 enemySpawnManager.SpawnBoss(wave);
-                enemyTotalCount = 1;
             }
             else
             {
@@ -55,24 +56,16 @@ namespace Script.UIManager
             }
         }
 
-        private void CountSet(int n,int s,int f,int sets)
+        public void EnemyDestroyEvent(EnemyBase enemyBase)
         {
-            set = sets;
-            enemyTotalCount = (n + s + f) * set;
-        }
-
-        public void EnemyDestroyEvent()
-        {
+      
             lock (EnemyLock)
             {
-                Debug.Log($"Enemy destroyed, current total count: {enemyTotalCount}.");
-                enemyTotalCount -= 1;
-                Debug.Log($"After destroying an enemy, total count: {enemyTotalCount}.");
-                if (enemyTotalCount != 0) return;
+                enemies = enemyPool.enemyBases;
+                enemies.Remove(enemyBase);
+                if (enemies.Count != 0) return;
                 StartCoroutine(gameManager.ContinueOrLose());
             }
         }
-
-
     }
 }

@@ -18,9 +18,6 @@ namespace Script.WeaponScriptGroup
         [SerializeField] private int weaponPoolCapacity = 20;
         private Dictionary<WeaponType, Queue<GameObject>> _poolDictionary;
         private static readonly Vector3 InitLocalScale = new Vector3(1f, 1f , 1f);
-        private Transform _mainWeapon;
-        private Transform _secondWeapon;
-        [SerializeField] private EnforceManager enforceManager;
         private GameObject _pivotSword;
         private void Start()
         {
@@ -48,22 +45,12 @@ namespace Script.WeaponScriptGroup
             objectToSpawn.transform.position = position;
             objectToSpawn.transform.rotation = rotation;
             _pivotSword = FindInChildren(objectToSpawn, "Sword(Clone)");
-            _mainWeapon = objectToSpawn.transform.Find("FirstSword"); // Replace with the actual name of your main weapon
-            _secondWeapon = objectToSpawn.transform.Find("SecondSword"); // Replace with the actual name of your second weapon
-            if (enforceManager.physicIncreaseWeaponScale)
+            if (EnforceManager.Instance.physicIncreaseWeaponScale)
             {
                 if (_pivotSword != null)
                 {
                     _pivotSword.transform.localScale = new Vector3(2f,1.7f,0);
                 }
-            }
-            if (_mainWeapon != null)
-            {
-                _mainWeapon.gameObject.SetActive(true);
-            }
-            if (weaponType == WeaponType.Sword && _secondWeapon != null)
-            {
-                _secondWeapon.gameObject.SetActive(enforceManager.physicAdditionalWeapon);
             }
             _poolDictionary[weaponType].Enqueue(objectToSpawn);
             objectToSpawn.SetActive(true);
@@ -73,18 +60,9 @@ namespace Script.WeaponScriptGroup
         public void SetSprite(WeaponType weaponType, int level, GameObject weaponObject)
         {
             var weapon = weapons.Find(w => w.weaponType == weaponType);
-
             if (level - 1 >= weapon.weaponSprite.Count) return;
             var spriteRenderer = weaponObject.GetComponentInChildren<SpriteRenderer>();
-            // ReSharper disable once Unity.NoNullPropagation
-            var spriteRendererSecond = _secondWeapon?.GetComponentInChildren<SpriteRenderer>();
-
             spriteRenderer.sprite = weapon.weaponSprite[level - 1];
-
-            if (spriteRendererSecond != null && enforceManager.physicAdditionalWeapon)
-            {
-                spriteRendererSecond.sprite = weapon.weaponSprite[level - 1];
-            }
         }
 
         public static void ReturnToPool(GameObject weapon)
@@ -97,7 +75,6 @@ namespace Script.WeaponScriptGroup
         {
             if (parent.name == name)
                 return parent;
-    
             foreach (Transform child in parent.transform)
             {
                 if (child.name == name)
@@ -109,7 +86,6 @@ namespace Script.WeaponScriptGroup
             }
             return null;
         }
-
     }  
 }
 

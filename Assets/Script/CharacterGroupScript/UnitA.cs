@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Script.CharacterManagerScript;
+using Script.EnemyManagerScript;
 using Script.RewardScript;
 using UnityEngine;
 
@@ -15,6 +16,7 @@ namespace Script.CharacterGroupScript
         private SpriteRenderer _spriteRenderer; // Reference to the SpriteRenderer component
         private const float DetectionWidth = 1f; // Width of detection box
         private const float DetectionHeight = 8f; // Height of detection box
+        
         public void Awake()
         {
             unitGroup = UnitGroups.A;
@@ -50,32 +52,34 @@ namespace Script.CharacterGroupScript
             Level1(); // Set level back to 1
         }
 
-      public override List<GameObject> DetectEnemies()
-{
-    Vector2 detectionSize;
-    Vector2 detectionCenter;
+        public override List<GameObject> DetectEnemies()
+        {
+            Vector2 detectionSize;
+            Vector2 detectionCenter;
 
-    if (EnforceManager.Instance.divineAtkRange)
-    {
-        detectionSize = new Vector2(DetectionWidth - 0.5f, DetectionHeight * 2); // Double the detection height
-        detectionCenter = (Vector2)transform.position; // Center the detection box around the current position
-    }
-    else
-    {
-        detectionSize = new Vector2(DetectionWidth - 0.5f, DetectionHeight);
-        detectionCenter = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
-    }
+            if (EnforceManager.Instance.divineAtkRange)
+            {
+                detectionSize = new Vector2(DetectionWidth - 0.5f, DetectionHeight * 2); // Double the detection height
+                detectionCenter = (Vector2)transform.position; // Center the detection box around the current position
+            }
+            else
+            {
+                detectionSize = new Vector2(DetectionWidth - 0.5f, DetectionHeight);
+                detectionCenter = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
+            }
 
-    var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize, 0f);
-    var currentlyDetectedEnemies = new List<GameObject>();
-    foreach (var enemyObject in colliders)
-    {
-        if (!enemyObject.gameObject.CompareTag("Enemy")) continue;
-        currentlyDetectedEnemies.Add(enemyObject.gameObject);
-    }
-    detectedEnemies = currentlyDetectedEnemies;
-    return detectedEnemies;
-}
+            var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize, 0f);
+            var currentlyDetectedEnemies = new List<GameObject>();
+            foreach (var enemyObject in colliders)
+            {
+                if (!enemyObject.gameObject.CompareTag("Enemy") || !enemyObject.gameObject.activeInHierarchy) continue;
+                var enemyBase = enemyObject.GetComponent<EnemyBase>();
+                currentlyDetectedEnemies.Add(enemyBase.gameObject);
+            }
+            detectedEnemies = currentlyDetectedEnemies;
+            return detectedEnemies;
+        }
+
 
 // Draws a wire cube in the Scene view to visualize the detection box
 public void OnDrawGizmos()
@@ -105,8 +109,8 @@ public void OnDrawGizmos()
             UnitLevel = 1;
             unitGroup = UnitGroups.A;
             Type = Types.Character;
-            defaultDamage = 0;
-            defaultAtkRate = 0;
+            DefaultDamage = 0;
+            DefaultAtkRate = 0;
             defaultAtkDistance = 0;
             _spriteRenderer.sprite = level1Sprite;
         }
@@ -116,8 +120,8 @@ public void OnDrawGizmos()
             UnitLevel = 2;
             Type = Types.Character;
             unitGroup = UnitGroups.A;
-            defaultDamage = 150f;
-            defaultAtkRate = 1f;
+            DefaultDamage = 150f;
+            DefaultAtkRate = 1f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             _spriteRenderer.sprite = level2Sprite;
@@ -131,8 +135,8 @@ public void OnDrawGizmos()
             UnitLevel = 3;
             Type = Types.Character;
             unitGroup = UnitGroups.A;
-            defaultDamage *= 1.7f;
-            defaultAtkRate = 1f;
+            DefaultDamage *= 1.7f;
+            DefaultAtkRate = 1f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             _spriteRenderer.sprite = level3Sprite;
@@ -146,8 +150,8 @@ public void OnDrawGizmos()
             UnitLevel = 4;
             Type = Types.Character;
             unitGroup = UnitGroups.A;
-            defaultDamage *= 2f;
-            defaultAtkRate = 1f;
+            DefaultDamage *= 2f;
+            DefaultAtkRate = 1f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             _spriteRenderer.sprite = level4Sprite;
@@ -161,8 +165,8 @@ public void OnDrawGizmos()
             UnitLevel = 5;
             Type = Types.Character;
             unitGroup = UnitGroups.A;
-            defaultDamage *= 2.3f;
-            defaultAtkRate = 1f;
+            DefaultDamage *= 2.3f;
+            DefaultAtkRate = 1f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             _spriteRenderer.sprite = level5Sprite;

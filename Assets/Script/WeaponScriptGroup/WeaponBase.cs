@@ -33,7 +33,7 @@ namespace Script.WeaponScriptGroup
             UnitEffect = CharacterBase.UnitEffect;
             StartingPosition = transform.position;
             Distance = CharacterBase.defaultAtkDistance;
-            Damage = CharacterBase.defaultDamage;
+            Damage = CharacterBase.DefaultDamage;
             Speed = CharacterBase.projectileSpeed * 2f;
             yield return null;
         }
@@ -70,7 +70,11 @@ namespace Script.WeaponScriptGroup
             switch (enemyStatus.RegistryType)
             {
                 case EnemyBase.RegistryTypes.Physics:
+                    IsRestraint(enemyStatus);
+                    break;
                 case EnemyBase.RegistryTypes.Poison:
+                    IsRestraint(enemyStatus);
+                    break;
                 case EnemyBase.RegistryTypes.None:
                     IsRestraint(enemyStatus);
                     break;
@@ -86,7 +90,11 @@ namespace Script.WeaponScriptGroup
             switch (enemyStatus.RegistryType)
             {
                 case EnemyBase.RegistryTypes.Divine:
+                    IsPoison(enemyStatus);
+                    break;
                 case EnemyBase.RegistryTypes.Physics:
+                    IsPoison(enemyStatus);
+                    break;
                 case EnemyBase.RegistryTypes.None:
                     IsPoison(enemyStatus);
                     break;
@@ -102,8 +110,14 @@ namespace Script.WeaponScriptGroup
             switch (enemyStatus.RegistryType)
             {
                 case EnemyBase.RegistryTypes.Divine:
+                    IsSlow(enemyStatus);
+                    break;
                 case EnemyBase.RegistryTypes.Physics:
+                    IsSlow(enemyStatus);
+                    break;
                 case EnemyBase.RegistryTypes.Poison:
+                    IsSlow(enemyStatus);
+                    break;
                 case EnemyBase.RegistryTypes.None:
                     IsSlow(enemyStatus);
                     break;
@@ -131,12 +145,12 @@ namespace Script.WeaponScriptGroup
             if (!EnforceManager.Instance.activeRestraint) return;
             if (_random.Next(100) < 20)
             {
-                enemyStatus.IsRestraint = true;
+                enemyStatus.isRestraint = true;
             }
         }
         private static void IsSlow(EnemyBase enemyStatus)
         {
-            enemyStatus.IsSlow = true;
+            enemyStatus.isSlow = true;
         }
         private static void IsPoison(EnemyBase enemyStatus)
         {
@@ -166,14 +180,14 @@ namespace Script.WeaponScriptGroup
                 case CharacterBase.UnitProperties.Physics:
                     if (enemyBase.RegistryType != EnemyBase.RegistryTypes.Physics)
                     {
-                        if (EnforceManager.Instance.physicSlowAdditionalDamage && enemyBase.IsSlow)
+                        if (EnforceManager.Instance.physicSlowAdditionalDamage && enemyBase.isSlow)
                         {
                             damage *= 2.0f;
                         }
 
                         if (EnforceManager.Instance.physicIncreaseDamage)
                         {
-                            damage += damage * EnforceManager.Instance.increasePhysicsDamage;
+                            damage *= damage * (1f + EnforceManager.Instance.increasePhysicsDamage);
                         }
                         return damage;
                     }
@@ -187,7 +201,7 @@ namespace Script.WeaponScriptGroup
                 case CharacterBase.UnitProperties.Poison:
                     if (enemyBase.RegistryType != EnemyBase.RegistryTypes.Poison)
                     {
-                        if (EnforceManager.Instance.poisonRestraintAdditionalDamage && enemyBase.IsRestraint)
+                        if (EnforceManager.Instance.poisonRestraintAdditionalDamage && enemyBase.isRestraint)
                         {
                             damage *= 2.0f;
                         }

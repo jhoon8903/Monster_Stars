@@ -1,4 +1,3 @@
-using Script.CharacterManagerScript;
 using Script.PuzzleManagerGroup;
 using Script.UIManager;
 using UnityEngine;
@@ -7,10 +6,7 @@ namespace Script.RewardScript
 {
     public class EnforceManager : MonoBehaviour
     {
-
-
         // Script Group
-        [SerializeField] private CharacterManager characterManager;
         [SerializeField] private CountManager countManager;
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private GridManager gridManager;
@@ -107,7 +103,7 @@ namespace Script.RewardScript
         
         [Header("넉백")] public bool waterRestraintKnockBack;
 
-        [Header("공격력증가")] protected internal float IncreaseWaterDamage = 1;
+        [Header("공격력증가")] protected internal float IncreaseWaterDamage = 1f;
         protected internal void WaterIncreaseDamage()
         {
             IncreaseWaterDamage *= 1.2f;
@@ -127,10 +123,10 @@ namespace Script.RewardScript
         [Header("적 이동속도 감소 15%증가 (최대 45%)")] public int slowCount;
         [Header("대각선 이동")] public bool diagonalMovement;
         [Header("Castle 체력회복 200")] public bool recoveryCastle;
-        [Header("Castle 최대체력 증가 (최대 2000)")] public int castleMaxHp;
+        [Header("Castle 최대체력 증가 (최대 2000)")] public float castleMaxHp;
         protected internal void IncreaseCastleMaxHp()
         {
-            castleMaxHp += 200;
+            castleMaxHp += 200f;
             castleManager.IncreaseMaxHp(castleMaxHp);
         }
 
@@ -162,20 +158,12 @@ namespace Script.RewardScript
         protected internal void IncreaseGroupDamage(int increaseAmount)
         {
             increaseAtkDamage += increaseAmount;
-            foreach (var character in characterManager.characterList)
-            {
-                character.IncreaseDamage();
-            }
         }
 
         [Header("전체 공격속도 증가 (%)")] public float increaseAtkRate = 1f;
         protected internal void IncreaseGroupRate(float increaseRateAmount)
         {
             increaseAtkRate += increaseRateAmount;
-            foreach (var character  in characterManager.characterList)
-            {
-                   character.IncreaseAtkRate();
-            }
         }
     }                                                                   
 }

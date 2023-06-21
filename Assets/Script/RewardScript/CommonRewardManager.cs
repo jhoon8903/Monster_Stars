@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Script.CharacterManagerScript;
-using Script.EnemyManagerScript;
 using Script.PuzzleManagerGroup;
 using Script.UIManager;
 using TMPro;
@@ -37,17 +36,16 @@ namespace Script.RewardScript
         [SerializeField] private CountManager countManager;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private CharacterManager characterManager;
-        [SerializeField] private EnforceManager enforceManager;
 
         public readonly Queue<GameObject> PendingTreasure = new Queue<GameObject>(); // 보류 중인 보물 큐
-        private GameObject _currentTreasure = null; // 현재 보물
+        private GameObject _currentTreasure; // 현재 보물
         public bool openBoxing = true;
-        private bool _waveRewards = false;
-        private List<CommonData> _powerUps = null;
-        private string _groupName = null;
+        private bool _waveRewards;
+        private List<CommonData> _powerUps;
+        private string _groupName;
         private int _bossRewardSelected;
 
-        private bool _isOpenBox = false;
+        private bool _isOpenBox;
         // 1. 상자가 매치 되면 상자를 큐에 추가
         public void EnqueueTreasure()
         {
@@ -105,14 +103,14 @@ namespace Script.RewardScript
                         var secondDesiredPowerUp = new CommonBlueData(blueSprite, 11, CommonData.Types.Slow, new[] { 15 });
                         commonPowerUps.Add(secondDesiredPowerUp);
                         selectedCodes.Add(secondDesiredPowerUp.Code);
-                        var thirdDesiredPowerUp = new CommonPurpleData(purpleSprite, 13, CommonData.Types.StepDirection, new int[] { 1 });
+                        var thirdDesiredPowerUp = new CommonPurpleData(purpleSprite, 13, CommonData.Types.StepDirection, new[] { 1 });
                         selectedCodes.Add(thirdDesiredPowerUp.Code);
                         commonPowerUps.Add(thirdDesiredPowerUp);
                         _bossRewardSelected = 1;
                     }
                     else
                     {
-                        CommonData selectedPowerUp = null;
+                        CommonData selectedPowerUp;
                         switch (forcedColor)
                         {
                             case "blue" when i == 0: selectedPowerUp = CommonUnique(common.CommonBlueList, selectedCodes); break;
@@ -134,7 +132,7 @@ namespace Script.RewardScript
                 }
                 else
                 {
-                    CommonData selectedPowerUp = null;
+                    CommonData selectedPowerUp;
                     switch (forcedColor)
                     {
                         case "blue" when i == 0: selectedPowerUp = CommonUnique(common.CommonBlueList, selectedCodes); break;
@@ -171,38 +169,39 @@ namespace Script.RewardScript
                 switch (powerUp.Type)
                 {
                     case CommonData.Types.CastleMaxHp:
-                        if (enforceManager.castleMaxHp >= 1000) return false; // Make sure the max HP of the castle does not exceed 2000
+                        if (EnforceManager.Instance.castleMaxHp >= 1000) return false; // Make sure the max HP of the castle does not exceed 2000
                         break;
                     case CommonData.Types.Exp:
-                        if (enforceManager.expPercentage > 30) return false; // Make sure the EXP increment does not exceed 30%
+                        if (EnforceManager.Instance.expPercentage > 30) return false; // Make sure the EXP increment does not exceed 30%
                         break;
                     case CommonData.Types.AddRow:
-                        return gameManager.wave is 11 or 21 && (enforceManager.addRowCount < 2 ? true : false); // Show row extra reward only after boss stage, up to 2 times
+                        if (EnforceManager.Instance.addRowCount > 2) return false;
+                        if (gameManager.wave != 11) return false;
+                        break;// Show row extra reward only after boss stage, up to 2 times
                     case CommonData.Types.Slow:
-                        if (enforceManager.slowCount <= 3) return false; // Displays the enemy movement speed reduction effect up to 3 times
+                        if (EnforceManager.Instance.slowCount <= 3) return false; // Displays the enemy movement speed reduction effect up to 3 times
                         break;
                     case CommonData.Types.NextStage:
-                        if (enforceManager.SelectedCount > 3) return false; // Only use up to 3 next stage character upgrades
+                        if (EnforceManager.Instance.SelectedCount > 3) return false; // Only use up to 3 next stage character upgrades
                         break;
                     case CommonData.Types.StepDirection:
-                        if (enforceManager.diagonalMovement || gameManager.wave !=11) return false; // If diagonal movement is possible, don't show this option
+                        if (EnforceManager.Instance.diagonalMovement)return false;
+                        if (gameManager.wave !=11)return false; // If diagonal movement is possible, don't show this option
                         break;
                     case CommonData.Types.Match5Upgrade:
-                        if (enforceManager.match5Upgrade) return false; // Don't show this option if 5 matching upgrade option is enabled
+                        if (EnforceManager.Instance.match5Upgrade) return false; // Don't show this option if 5 matching upgrade option is enabled
                         break;
                     case CommonData.Types.StepLimit:
-                        if (enforceManager.permanentIncreaseMovementCount > 3) return false; // don't show this option if permanent move count increment is enabled
+                        if (EnforceManager.Instance.permanentIncreaseMovementCount > 1) return false; // don't show this option if permanent move count increment is enabled
                         break;
                     case CommonData.Types.CastleRecovery:
-                        if (enforceManager.recoveryCastle) return false; // Castle recovery can only be used once
+                        if (EnforceManager.Instance.recoveryCastle) return false; // Castle recovery can only be used once
                         break;
                     case CommonData.Types.GroupLevelUp:
                         if (characterManager.CharacterGroupLevelUpIndexes.Contains(powerUp.Property[0])) return false; // Do not display GroupLevelUp options for groups where LevelUpPattern is executed
                         break;
                     case CommonData.Types.Gold:
                         if (characterManager.goldGetMore) return false;
-                        break;
-                    default:
                         break;
                 }
                 return true;
@@ -233,7 +232,7 @@ namespace Script.RewardScript
             {
                 case CommonData.Types.Exp: 
                     powerText.text = $"적 처치 경험치{powerUp.Property[0]}% 증가 " +
-                                     $"({enforceManager.expPercentage}% /30%)"; 
+                                     $"({EnforceManager.Instance.expPercentage}% /30%)"; 
                     break;
                 case CommonData.Types.Slow: 
                     powerText.text = $"적 이동속도 감소 {powerUp.Property[0]}% " +
@@ -252,7 +251,7 @@ namespace Script.RewardScript
                     powerText.text = $"총 이동횟수 {powerUp.Property[0]} 증가"; 
                     break;
                 case CommonData.Types.StepDirection: 
-                    powerText.text = $"대각선 이동가능"; 
+                    powerText.text = "대각선 이동가능"; 
                     break;
                 case CommonData.Types.RandomLevelUp: 
                     powerText.text = $"퍼즐상의 랜덤한 {powerUp.Property[0]}개의 케릭터 1 레벨 증가"; 
@@ -277,15 +276,13 @@ namespace Script.RewardScript
                                      "레벨이 1 더 증가"; 
                     break;
                 case CommonData.Types.NextStage: 
-                    powerText.text = $"보스 스테이지 이후 {powerUp.Property[0]} 개의\n케릭터 추가 이동 (현재 {enforceManager.highLevelCharacterCount})";
+                    powerText.text = $"보스 스테이지 이후 {powerUp.Property[0]} 개의\n케릭터 추가 이동 (현재 {EnforceManager.Instance.highLevelCharacterCount})";
                     break;
                 case CommonData.Types.Gold: 
                     powerText.text = $"5개 매치시 Gold가 1 증가"; 
                     break;
                 case CommonData.Types.AddRow: 
                     powerText.text = $"가로줄이 {powerUp.Property[0]} 증가"; 
-                    break;
-                default:
                     break;
             }
             powerCode.text = $"{powerUp.Code}";
@@ -309,13 +306,13 @@ namespace Script.RewardScript
                 case "Unit_Treasure00":
                     break;
                 case "Unit_Treasure01":
-                    yield return StartCoroutine(CommonChance(70, 25, 5, null));
+                    yield return StartCoroutine(CommonChance(80, 17, 3, null));
                     break;
                 case "Unit_Treasure02":
-                    yield return StartCoroutine(CommonChance(30, 55, 15, "blue"));
+                    yield return StartCoroutine(CommonChance(60, 35, 5, "blue"));
                     break;
                 case "Unit_Treasure03":
-                    yield return StartCoroutine(CommonChance(0, 50, 50, "purple"));
+                    yield return StartCoroutine(CommonChance(0, 80, 20, "purple"));
                     break;
             }
 
@@ -353,11 +350,6 @@ namespace Script.RewardScript
             {
                 StartCoroutine(spawnManager.PositionUpCharacterObject());
             }
-            //if (PendingTreasure.Count > 0)
-            //{
-            //    _currentTreasure = PendingTreasure.Dequeue();
-            //    EnqueueTreasure();
-            //}
             else
             {
                 _currentTreasure = null; // 현재 보물 없음
@@ -371,22 +363,22 @@ namespace Script.RewardScript
             switch (selectedCommonReward.Type)
             {
                 case CommonData.Types.AddRow:
-                    enforceManager.AddRow();
+                    EnforceManager.Instance.AddRow();
                     break; // Row 추가 강화 효과
                 case CommonData.Types.GroupDamage: 
-                    enforceManager.IncreaseGroupDamage(selectedCommonReward.Property[0]); 
+                    EnforceManager.Instance.IncreaseGroupDamage(selectedCommonReward.Property[0]); 
                     break;     // 전체 데미지 증가 효과
                 case CommonData.Types.GroupAtkSpeed: 
-                    enforceManager.IncreaseGroupRate(selectedCommonReward.Property[0]); 
+                    EnforceManager.Instance.IncreaseGroupRate(selectedCommonReward.Property[0]); 
                     break;  // 전체 공격 속도 증가 효과
                 case CommonData.Types.Step: 
                     countManager.IncreaseRewardMoveCount(selectedCommonReward.Property[0]); 
                     break;            // 카운트 증가
                 case CommonData.Types.StepLimit: 
-                    enforceManager.PermanentIncreaseMoveCount(selectedCommonReward.Property[0]);
+                    EnforceManager.Instance.PermanentIncreaseMoveCount(selectedCommonReward.Property[0]);
                     break; // 영구적 카운트 증가
                 case CommonData.Types.StepDirection: 
-                    enforceManager.diagonalMovement = true; 
+                    EnforceManager.Instance.diagonalMovement = true; 
                     break;    // 대각선 이동
                 case CommonData.Types.RandomLevelUp: 
                     characterManager.RandomCharacterLevelUp(selectedCommonReward.Property[0]); 
@@ -399,22 +391,22 @@ namespace Script.RewardScript
                     characterManager.CharacterGroupLevelUpIndexes.Add(selectedCommonReward.Property[0]); 
                     break; // 기본 2레벨 케릭터 생성
                 case CommonData.Types.Exp: 
-                    enforceManager.IncreaseExpBuff(selectedCommonReward.Property[0]);
+                    EnforceManager.Instance.IncreaseExpBuff(selectedCommonReward.Property[0]);
                     break;  // 경험치 5% 증가
                 case CommonData.Types.CastleRecovery:
-                    enforceManager.recoveryCastle = true;
+                    EnforceManager.Instance.recoveryCastle = true;
                     break;         // 성 체력 회복
                 case CommonData.Types.CastleMaxHp: 
-                    enforceManager.IncreaseCastleMaxHp();
+                    EnforceManager.Instance.IncreaseCastleMaxHp();
                     break;  
                 case CommonData.Types.Match5Upgrade: 
-                    enforceManager.match5Upgrade = true;
+                    EnforceManager.Instance.match5Upgrade = true;
                     break;     // 5매치 패턴 업그레이드
                 case CommonData.Types.Slow:
-                    enforceManager.slowCount += 1; 
+                    EnforceManager.Instance.slowCount += 1; 
                     break; // 적 이동속도 감소 
                 case CommonData.Types.NextStage: 
-                    enforceManager.NextCharacterUpgrade(selectedCommonReward.Property[0]);
+                    EnforceManager.Instance.NextCharacterUpgrade(selectedCommonReward.Property[0]);
                     break; // 보드 초기화 시 케릭터 상속되는 케릭터 Count 증가
                 case CommonData.Types.Gold: 
                     characterManager.goldGetMore = true; 
@@ -424,7 +416,7 @@ namespace Script.RewardScript
                 default: Debug.LogWarning($"Unhandled reward type: {selectedCommonReward.Type}"); 
                     break;
             }
-            selectedCommonReward._chosenProperty = null;
+            selectedCommonReward.chosenProperty = null;
         }
         
         // # 보스 웨이브 클리어 변도 보상

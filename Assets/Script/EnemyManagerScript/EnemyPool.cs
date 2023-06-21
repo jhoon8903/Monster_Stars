@@ -7,9 +7,10 @@ namespace Script.EnemyManagerScript
     public class EnemyPool : MonoBehaviour
     {
         [SerializeField] private EnemyManager enemyManager;
-        private List<GameObject> _pooledEnemy = new List<GameObject>();
-        private readonly List<GameObject> _pooledDefaultEnemy = new List<GameObject>();
-       
+        [SerializeField] private List<GameObject> pooledEnemy = new List<GameObject>();
+        [SerializeField] private  List<GameObject> pooledDefaultEnemy = new List<GameObject>();
+
+        public List<EnemyBase> enemyBases = new List<EnemyBase>();
         
         public void Awake()
         {
@@ -21,22 +22,31 @@ namespace Script.EnemyManagerScript
                     obj.GetComponent<EnemyBase>().number = i + 1;
                     obj.GetComponent<EnemyBase>().EnemyProperty();
                     obj.SetActive(false);
-                    _pooledDefaultEnemy.Add(obj);
+                    pooledDefaultEnemy.Add(obj);
                 }
             }
-            _pooledEnemy = _pooledDefaultEnemy;
+            pooledEnemy = pooledDefaultEnemy.ToList();
         }
 
         public GameObject GetPooledEnemy(EnemyBase.EnemyTypes enemyType)
         {
-            var spawnEnemy = _pooledEnemy.FirstOrDefault(t => !t.activeInHierarchy && t.GetComponent<EnemyBase>().EnemyType == enemyType);
-            _pooledEnemy.Remove(spawnEnemy);
-            if (_pooledEnemy.Count == 0) _pooledEnemy = _pooledDefaultEnemy;
+            var spawnEnemy = pooledEnemy.FirstOrDefault(t => !t.activeInHierarchy && t.GetComponent<EnemyBase>().EnemyType == enemyType);
+            pooledEnemy.Remove(spawnEnemy);
+            if (spawnEnemy == null || pooledEnemy.Count(t => t.GetComponent<EnemyBase>().EnemyType == enemyType) < 1)
+            {
+                pooledEnemy.Clear();
+                pooledEnemy = pooledDefaultEnemy.ToList();
+                Debug.Log("Enemy List 초기화!");
+            }
+            if (spawnEnemy == null) return null;
+            enemyBases.Add(spawnEnemy.GetComponent<EnemyBase>());
             return spawnEnemy;
         }
 
-        public void ReturnToPool(GameObject obj)
+
+        public static void ReturnToPool(GameObject obj)
         {
+            obj.transform.localScale = Vector3.one;
             obj.SetActive(false);
         }
     }

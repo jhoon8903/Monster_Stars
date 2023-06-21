@@ -1,53 +1,39 @@
 using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
+using Script.CharacterGroupScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
 using UnityEngine;
-
 namespace Script.WeaponScriptGroup
 {
     public class Spear : WeaponBase
     {
+        private float _distance;
+        private Vector3 _enemyTransform;
+        private List<GameObject> _enemyTransforms = new List<GameObject>();
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
-
-            // Detect enemies in both directions
-            if (EnforceManager.Instance.divineAtkRange)
+            _enemyTransforms = CharacterBase.GetComponent<UnitA>().DetectEnemies();
+            foreach (var enemy in _enemyTransforms)
             {
-                FireProjectile(-Distance); // Fire in -y direction
-                FireProjectile(Distance); // Fire in +y direction
+                _enemyTransform = enemy.transform.position;
+            }
+            _distance = Vector3.Distance(transform.position, _enemyTransform);
+            var timeToMove = _distance / Speed * 1.5f;
+            transform.DOMoveY(_enemyTransform.y, timeToMove).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(gameObject));
+            if (_enemyTransform.y > transform.position.y)
+            {
+                // _enemyTransform의 y 축이 더 높음
+                transform.rotation = Quaternion.Euler(0, 0, 0);
             }
             else
             {
-                FireProjectile(Distance); // Fire in +y direction
-            }
-        }
-
-// This method handles the actual firing of the projectile.
-        private void FireProjectile(float distance)
-        {
-            var duration = Mathf.Abs(distance) / Speed;
-            float endPosition;
-
-            if (distance < 0)
-            {
-                // If we're moving in the negative direction, we need to rotate the projectile.
+                // _enemyTransform의 y 축이 더 낮음
                 transform.rotation = Quaternion.Euler(0, 0, 180);
-                endPosition = StartingPosition.y - distance;
-                transform.DOMoveY(-endPosition, duration)
-                    .SetEase(Ease.Linear)
-                    .OnComplete(() => StopUseWeapon(gameObject));
-            }
-            else
-            {
-                endPosition = StartingPosition.y + distance;
-                transform.DOMoveY(endPosition, duration)
-                    .SetEase(Ease.Linear)
-                    .OnComplete(() => StopUseWeapon(gameObject));
             }
         }
-
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;

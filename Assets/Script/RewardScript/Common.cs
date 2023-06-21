@@ -6,7 +6,7 @@ namespace Script.RewardScript
     public class CommonData
     {
         private static readonly System.Random Random = new System.Random();
-        public int? _chosenProperty;
+        public int? chosenProperty;
         public enum Types 
         { GroupDamage, GroupAtkSpeed, Step, StepLimit, StepDirection , RandomLevelUp, GroupLevelUp, LevelUpPattern, Exp, CastleRecovery, CastleMaxHp, Match5Upgrade, Slow, NextStage, Gold, AddRow}
         public Types Type { get; private set; }
@@ -15,8 +15,8 @@ namespace Script.RewardScript
         { 
             get
             {
-                _chosenProperty ??= RandomChanceMethod(_property);
-                return new[] { _chosenProperty.Value };
+                chosenProperty ??= RandomChanceMethod(_property);
+                return new[] { chosenProperty.Value };
             } 
         }
         public int Code { get; set; }
@@ -88,7 +88,6 @@ namespace Script.RewardScript
                 new CommonBlueData(b,7,CommonData.Types.Gold, new []{1}),
                 new CommonBlueData(b,8,CommonData.Types.CastleMaxHp, new []{200}),
                 new CommonBlueData(b,9,CommonData.Types.CastleRecovery, new []{200}),
-                new CommonBlueData(b,10,CommonData.Types.Match5Upgrade, new []{1}),
                 new CommonBlueData(b,11,CommonData.Types.Slow, new []{15})
             };
 
@@ -101,6 +100,7 @@ namespace Script.RewardScript
                 new CommonPurpleData(p,13,CommonData.Types.StepDirection, new []{1}),
                 new CommonPurpleData(p,14,CommonData.Types.NextStage, new []{1,2}),
                 new CommonPurpleData(p,15,CommonData.Types.LevelUpPattern, new []{0,1,2,3}),
+                new CommonPurpleData(p,10,CommonData.Types.Match5Upgrade, new []{1}),
                 new CommonPurpleData(p,16,CommonData.Types.AddRow, new []{1})
             };
         }

@@ -32,17 +32,17 @@ namespace Script
         [SerializeField] private EnforceManager enforceManager;
         private readonly WaitForSecondsRealtime _waitOneSecRealtime = new WaitForSecondsRealtime(1f);
         private readonly WaitForSecondsRealtime _waitTwoSecRealtime = new WaitForSecondsRealtime(2f);
-        private bool _speedUp = false;
+        public bool speedUp;
         public int wave = 1;
         private Vector3Int _bossSpawnArea;
-        public bool isBattle = false;
+        public bool isBattle;
 
         private void Start()
         {
             swipeManager.isBusy = true;
             countManager.Initialize(moveCount); // 이동 횟수 초기화
             gridManager.GenerateInitialGrid(); // 초기 그리드 생성
-            _speedUp = true;
+            speedUp = true;
             waveText.text = $"{wave}";
             GameSpeedSelect();
             StartCoroutine(spawnManager.PositionUpCharacterObject()); // 매치 시작 후 확인
@@ -97,6 +97,7 @@ namespace Script
         }
         private void LoseGame()
         {
+            DOTween.KillAll(true);
             Time.timeScale = 0;
             gamePanel.SetActive(true);
         }
@@ -118,29 +119,36 @@ namespace Script
             backgroundManager.ChangePuzzleSize();
             cameraManager.CameraPuzzleSizeChange();
         }
+
+        public static void KillMotion()
+        {
+            DOTween.KillAll(true);
+        }
+
         public void RetryGame()
         {
             Time.timeScale = 1;
+            DOTween.KillAll(true);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
         public void GameSpeedSelect()
         {
-            if (_speedUp == false)
+            if (speedUp == false)
             {
-                _speedUp = true;
+                speedUp = true;
                 speedUpText.text = "x2";
                 GameSpeed();
             }
             else
             {
-                _speedUp = false;
+                speedUp = false;
                 speedUpText.text = "x1";
                 GameSpeed();
-            } ;
+            }
         }
         public void GameSpeed()
         {
-            if (_speedUp)
+            if (speedUp)
             {
                 Time.timeScale = isBattle ? 2 : 1;
             }

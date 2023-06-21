@@ -52,7 +52,7 @@ namespace Script.UIManager
               hpText.text = $"{hpPoint} / {maxHpPoint}";
           }
 
-          public void IncreaseMaxHp(int increaseAmount)
+          public void IncreaseMaxHp(float increaseAmount)
           {
               maxHpPoint += increaseAmount;
               hpPoint += increaseAmount;

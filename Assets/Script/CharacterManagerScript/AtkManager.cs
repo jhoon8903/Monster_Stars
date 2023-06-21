@@ -25,8 +25,9 @@ namespace Script.CharacterManagerScript
         [SerializeField] private CharacterPool characterPool; // Reference to the character pool
         [SerializeField] private WeaponsPool weaponsPool; // Reference to the weapon pool
         [SerializeField] private EnforceManager enforceManager;
+        [SerializeField] private GameManager gameManager;
         public float attackRate = 1;
-        public List<GameObject> enemyList = new List<GameObject>();
+          public List<GameObject> enemyList = new List<GameObject>();
 
         public IEnumerator CheckForAttack()
         {
@@ -41,9 +42,9 @@ namespace Script.CharacterManagerScript
         }
         private IEnumerator AtkMotion(CharacterBase unit)
         {
-            var atkRate = unit.GetComponent<CharacterBase>().defaultAtkRate * attackRate * 3.5f;
+            var atkRate = unit.GetComponent<CharacterBase>().DefaultAtkRate * attackRate * 3.5f;
 
-            while (true)
+            while (gameManager.isBattle)
             {
                 if(Time.timeScale == 0)
                 {
@@ -76,7 +77,16 @@ namespace Script.CharacterManagerScript
                 {
                     yield return new WaitForSecondsRealtime(0.1f);
                 }
-                yield return new WaitForSecondsRealtime(atkRate);
+
+                if (gameManager.speedUp)
+                {
+                    yield return new WaitForSecondsRealtime(atkRate/2);
+                }
+                else
+                {
+                    yield return new WaitForSecondsRealtime(atkRate);
+                }
+              
             }
             // ReSharper disable once IteratorNeverReturns
         }
@@ -136,6 +146,7 @@ namespace Script.CharacterManagerScript
             weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>()); // Initialize the weapon with the character's information
             StartCoroutine(weaponBase.UseWeapon()); // Perform the weapon's attack logic
             weaponsPool.SetSprite(weaponType, attackData.Unit.GetComponent<CharacterBase>().UnitLevel, weaponObject); // Set the weapon's sprite based on the character's level
+
             return weaponObject;
         }
 
