@@ -128,7 +128,7 @@ namespace Script
         public void RetryGame()
         {
             Time.timeScale = 1;
-            DOTween.KillAll(true);
+            KillMotion();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
         public void GameSpeedSelect()

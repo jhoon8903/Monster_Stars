@@ -27,7 +27,7 @@ namespace Script.EnemyManagerScript
         public enum SpawnZones { A, B, C, D, E }
         protected internal SpawnZones SpawnZone;
         private static readonly object Lock = new object();
-        private bool _isDead;
+        public bool isDead;
         public bool isRestraint;
         public bool isSlow;
         private Coroutine _poisonEffectCoroutine;
@@ -81,15 +81,15 @@ namespace Script.EnemyManagerScript
         {
             lock (Lock)
             {
-                if (_isDead)
+                if (isDead)
                 {
                     return;
                 }
                 currentHealth -= damage;
                 // Debug.Log($"EnemyNum: {detectEnemy.number} / hp: {currentHealth} / Damage: {damage}");
                 StartCoroutine(UpdateHpSlider());
-                if (currentHealth > 0f ||  _isDead) return;
-                _isDead = true;
+                if (currentHealth > 0f ||  isDead) return;
+                isDead = true;
                 ExpManager.Instance.HandleEnemyKilled(reason);
                 if (_enforceManager.physicIncreaseDamage)
                 {

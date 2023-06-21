@@ -14,7 +14,7 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level4Sprite; // Sprite for level 4
         [SerializeField] private Sprite level5Sprite; // Sprite for level 5
         private SpriteRenderer _spriteRenderer ; 
-        private float _detectionSize; 
+        private float _detectionSize = 1.5f; 
         private float _currentDamage;
         
         public void Awake()
@@ -53,7 +53,10 @@ namespace Script.CharacterGroupScript
         public override List<GameObject> DetectEnemies()
         {
             var detectionCenter = (Vector2)transform.position;
-            _detectionSize = EnforceManager.Instance.physicIncreaseWeaponScale ? 2.5f : 1.5f;
+            if (EnforceManager.Instance.physicIncreaseWeaponScale)
+            {
+                _detectionSize = 2.5f;
+            }
             var colliders = Physics2D.OverlapCircleAll(detectionCenter, _detectionSize);
             var currentlyDetectedEnemies = new List<GameObject>();
             foreach (var enemyObject in colliders)

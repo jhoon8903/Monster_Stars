@@ -18,7 +18,6 @@ namespace Script.RewardScript
             if (Instance == null)
             {
                 Instance = this;
-                DontDestroyOnLoad(gameObject);
             }
             else
             {

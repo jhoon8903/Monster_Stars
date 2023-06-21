@@ -46,6 +46,7 @@ namespace Script.EnemyManagerScript
 
         public static void ReturnToPool(GameObject obj)
         {
+            obj.GetComponent<EnemyBase>().isDead = false;
             obj.transform.localScale = Vector3.one;
             obj.SetActive(false);
         }

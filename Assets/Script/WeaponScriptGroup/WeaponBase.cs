@@ -158,6 +158,7 @@ namespace Script.WeaponScriptGroup
         }
         protected float DamageCalculator(float damage,EnemyBase enemyBase)
         {
+            Debug.Log($"CharacterName: {CharacterBase.name} / CharacterProperty: {UnitProperty}/ damage: {damage}");
             switch (UnitProperty)
             {
                 case CharacterBase.UnitProperties.Divine:
@@ -219,6 +220,7 @@ namespace Script.WeaponScriptGroup
                         damage += damage * EnforceManager.Instance.IncreaseWaterDamage;
                         return damage;
             }
+           
             return damage;
         }
         protected static void InstantKill(EnemyBase target)

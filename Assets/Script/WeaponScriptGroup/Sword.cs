@@ -28,9 +28,7 @@ namespace Script.WeaponScriptGroup
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
             AtkEffect(enemy);
-            Debug.Log($"Sword Origin Damage {Damage}");
             var damage = DamageCalculator(Damage, enemy);
-            Debug.Log($"Sword Calculator Damage {damage}");
             enemy.ReceiveDamage(enemy,damage);
         }
     }
