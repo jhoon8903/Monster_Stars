@@ -98,7 +98,9 @@ namespace Script.PuzzleManagerGroup
 
             Debug.Log("totalPos : " + totalPos);
 
-            while(totalPos != 90)
+            int maxRows = characterPool.UsePoolCharacterList().Count / 6;
+            int maxCount = maxRows * (maxRows - 1) * 3;
+            while (totalPos != maxCount)
             {
                 yield return wait;
                 totalPos = characterPool.UsePoolCharacterList().Sum(t => t.transform.position.y);
