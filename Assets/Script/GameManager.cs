@@ -103,7 +103,6 @@ namespace Script
         }
         private void NextStage()
         {
-            DOTween.KillAll(true);
             Time.timeScale = 1;
             _bossSpawnArea = new Vector3Int(Random.Range(2,5), 10, 0);
             if (wave % 10 == 0)
@@ -120,10 +119,16 @@ namespace Script
             backgroundManager.ChangePuzzleSize();
             cameraManager.CameraPuzzleSizeChange();
         }
-        public void RetryGame()
+
+        public static void KillMotion()
         {
             DOTween.KillAll(true);
+        }
+
+        public void RetryGame()
+        {
             Time.timeScale = 1;
+            DOTween.KillAll(true);
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
         public void GameSpeedSelect()

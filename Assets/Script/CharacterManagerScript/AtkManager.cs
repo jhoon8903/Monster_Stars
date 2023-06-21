@@ -146,6 +146,7 @@ namespace Script.CharacterManagerScript
             weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>()); // Initialize the weapon with the character's information
             StartCoroutine(weaponBase.UseWeapon()); // Perform the weapon's attack logic
             weaponsPool.SetSprite(weaponType, attackData.Unit.GetComponent<CharacterBase>().UnitLevel, weaponObject); // Set the weapon's sprite based on the character's level
+
             return weaponObject;
         }
 

@@ -69,12 +69,12 @@ namespace Script.EnemyManagerScript
 
             while (gameManager.isBattle)
             {
-                if (enemyBase.IsRestraint)
+                if (enemyBase.isRestraint)
                 {
                    StartCoroutine(RestrainEffect(enemyBase, endPosition, duration));
                 }
                 
-                if (enemyBase.IsSlow)
+                if (enemyBase.isSlow)
                 {
                    StartCoroutine(SlowEffect(enemyBase, endPosition, duration));
                 }
@@ -94,7 +94,7 @@ namespace Script.EnemyManagerScript
 
             yield return new WaitForSecondsRealtime(overTime);
 
-            yield return enemyBase.IsRestraint = false;
+            yield return enemyBase.isRestraint = false;
             enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
             enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
             }
@@ -119,7 +119,7 @@ namespace Script.EnemyManagerScript
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(slowColor, 0.1f);
                 enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration * slowPowerDuration).SetEase(Ease.Linear);
                 yield return new WaitForSecondsRealtime(slowTime);
-                yield return enemyBase.IsSlow = false;
+                yield return enemyBase.isSlow = false;
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
                 enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
             }

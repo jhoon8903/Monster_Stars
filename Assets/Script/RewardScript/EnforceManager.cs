@@ -123,10 +123,10 @@ namespace Script.RewardScript
         [Header("적 이동속도 감소 15%증가 (최대 45%)")] public int slowCount;
         [Header("대각선 이동")] public bool diagonalMovement;
         [Header("Castle 체력회복 200")] public bool recoveryCastle;
-        [Header("Castle 최대체력 증가 (최대 2000)")] public int castleMaxHp;
+        [Header("Castle 최대체력 증가 (최대 2000)")] public float castleMaxHp;
         protected internal void IncreaseCastleMaxHp()
         {
-            castleMaxHp += 200;
+            castleMaxHp += 200f;
             castleManager.IncreaseMaxHp(castleMaxHp);
         }
 

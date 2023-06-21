@@ -32,7 +32,7 @@ namespace Script.WeaponScriptGroup
         private static bool KnockBackEffect(EnemyBase enemyObject)
         {
             var knockBack = false;
-            if (enemyObject.IsRestraint)
+            if (enemyObject.isRestraint)
             {
                 enemyObject.transform.DOMoveY(enemyObject.transform.position.y + 0.5f, 0.2f)
                     .OnComplete(() => knockBack = true);

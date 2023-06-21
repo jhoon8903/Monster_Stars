@@ -20,8 +20,8 @@ namespace Script.CharacterManagerScript
         protected internal UnitProperties UnitProperty = UnitProperties.None; // Property of the unit
         public enum UnitEffects { Slow, Bleed, Poison, Burn, Stun, Strike, Restraint, None } // Effects of units
         protected internal UnitEffects UnitEffect = UnitEffects.None; // Effect of the unit
-        private float _baseDamage;  // Base damage of the unit
-        private float _baseAtkRate; // Base attack rate of the unit
+        public float _baseDamage;  // Base damage of the unit
+        public float _baseAtkRate; // Base attack rate of the unit
 
         public float DefaultDamage
         {

@@ -25,15 +25,15 @@ Transform:
   m_GameObject: {fileID: 3655712775022857593}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 0.85, z: 0}
-  m_ConstrainProportionsScale: 1
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9122937210202259448}
-  - {fileID: 6671869707204222762}
+  - {fileID: 1045793287831054731}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &8706647224950350076
+--- !u!1 &7352846425856929885
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,40 +41,40 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6671869707204222762}
-  - component: {fileID: 1502477197968970986}
-  - component: {fileID: 8148135705885351623}
-  - component: {fileID: 2306572134407069708}
-  - component: {fileID: 6785492758293891986}
+  - component: {fileID: 1045793287831054731}
+  - component: {fileID: 7450749966866043959}
+  - component: {fileID: 7557220690023316619}
+  - component: {fileID: 3074982482925526344}
+  - component: {fileID: 6124622278440570803}
   m_Layer: 0
-  m_Name: SecondSword
+  m_Name: Sword
   m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6671869707204222762
+  m_IsActive: 0
+--- !u!4 &1045793287831054731
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8706647224950350076}
+  m_GameObject: {fileID: 7352846425856929885}
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: 0, y: -0.65, z: 0}
   m_LocalScale: {x: 1, y: 1.5, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 31043104356447180}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 180}
---- !u!212 &1502477197968970986
+--- !u!212 &7450749966866043959
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8706647224950350076}
+  m_GameObject: {fileID: 7352846425856929885}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -120,14 +120,14 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!50 &8148135705885351623
+--- !u!50 &7557220690023316619
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8706647224950350076}
+  m_GameObject: {fileID: 7352846425856929885}
   m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
@@ -141,13 +141,13 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!114 &2306572134407069708
+--- !u!114 &3074982482925526344
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8706647224950350076}
+  m_GameObject: {fileID: 7352846425856929885}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9610cbef636454ebcb20196aa02cc553, type: 3}
@@ -155,13 +155,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInUse: 0
   pivotPoint: {fileID: 3655712775022857593}
---- !u!61 &6785492758293891986
+  secondSword: {fileID: 7352846425856929885}
+--- !u!61 &6124622278440570803
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8706647224950350076}
+  m_GameObject: {fileID: 7352846425856929885}
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
@@ -195,7 +196,7 @@ GameObject:
   - component: {fileID: 1099193105142148418}
   - component: {fileID: 49286777979405469}
   m_Layer: 0
-  m_Name: FirstSword
+  m_Name: Sword
   m_TagString: Weapon
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -303,6 +304,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInUse: 0
   pivotPoint: {fileID: 3655712775022857593}
+  secondSword: {fileID: 7352846425856929885}
 --- !u!61 &49286777979405469
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -831,7 +831,6 @@ MonoBehaviour:
   enemySpawnManager: {fileID: 329010038}
   gameManager: {fileID: 149521958}
   enemyPool: {fileID: 2016604888}
-  enemyTotalCount: 0
   enemies: []
 --- !u!1 &187153451
 GameObject:
@@ -3011,6 +3010,7 @@ MonoBehaviour:
   mainCamera: {fileID: 758648958}
   targetSize: 10
   duration: 1
+  gameManager: {fileID: 149521958}
 --- !u!1 &765140112
 GameObject:
   m_ObjectHideFlags: 0
@@ -5857,12 +5857,6 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 51fba7ea733704a9ca01a6c0e771fa9c, type: 3}
     - {fileID: 21300000, guid: 1b0ee16596d024571a96861c1a7fdb68, type: 3}
     - {fileID: 21300000, guid: b0e6d7a59d004402e98c7c06da6242d2, type: 3}
-  - weaponType: 3
-    weaponPrefab: {fileID: 8649400312568899830, guid: 8df1ec6e1714342209b5372efc1262d1, type: 3}
-    weaponSprite:
-    - {fileID: 21300000, guid: 4deb41924c3644b29bc24f99dac2fee8, type: 3}
-    - {fileID: 21300000, guid: caf8d3aeb0287451eb128ae60e366038, type: 3}
-    - {fileID: 21300000, guid: ea9410c3e9f4d4e88b519cda9ccf4e5d, type: 3}
   - weaponType: 4
     weaponPrefab: {fileID: 9036301952792892721, guid: a443ab3c0a89c49209a06173b80218e0, type: 3}
     weaponSprite:
@@ -5876,7 +5870,6 @@ MonoBehaviour:
     - {fileID: 21300000, guid: f604e062448844dffaf8bd2544a41b0d, type: 3}
     - {fileID: 21300000, guid: 1fcd99742122641d0a9bfecf3512d171, type: 3}
   weaponPoolCapacity: 30
-  enforceManager: {fileID: 1595735486}
 --- !u!4 &1537456865
 Transform:
   m_ObjectHideFlags: 0
@@ -7541,7 +7534,6 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
-  enforceManager: {fileID: 1595735486}
   openBoxing: 0
 --- !u!4 &2120144520
 Transform:
@@ -7603,7 +7595,6 @@ MonoBehaviour:
   expManager: {fileID: 841622521}
   gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
-  enforceManager: {fileID: 1595735486}
 --- !u!1 &2143130367
 GameObject:
   m_ObjectHideFlags: 0

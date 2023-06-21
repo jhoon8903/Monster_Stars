@@ -22,7 +22,7 @@ namespace Script.WeaponScriptGroup
             }
             _distance = Vector3.Distance(transform.position, _enemyTransform);
             var timeToMove = _distance / Speed * 1.5f;
-            transform.DOMove(_enemyTransform, timeToMove).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(gameObject));
+            transform.DOMoveY(_enemyTransform.y, timeToMove).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(gameObject));
             if (_enemyTransform.y > transform.position.y)
             {
                 // _enemyTransform의 y 축이 더 높음

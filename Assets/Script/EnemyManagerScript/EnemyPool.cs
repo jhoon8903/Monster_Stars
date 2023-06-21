@@ -32,9 +32,11 @@ namespace Script.EnemyManagerScript
         {
             var spawnEnemy = pooledEnemy.FirstOrDefault(t => !t.activeInHierarchy && t.GetComponent<EnemyBase>().EnemyType == enemyType);
             pooledEnemy.Remove(spawnEnemy);
-            if (spawnEnemy == null || pooledEnemy.Count(t => t.GetComponent<EnemyBase>().EnemyType == enemyType) < 10)
+            if (spawnEnemy == null || pooledEnemy.Count(t => t.GetComponent<EnemyBase>().EnemyType == enemyType) < 1)
             {
+                pooledEnemy.Clear();
                 pooledEnemy = pooledDefaultEnemy.ToList();
+                Debug.Log("Enemy List 초기화!");
             }
             if (spawnEnemy == null) return null;
             enemyBases.Add(spawnEnemy.GetComponent<EnemyBase>());

@@ -5,6 +5,7 @@ using Script.RewardScript;
 using Script.UIManager;
 using Script.WeaponScriptGroup;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.EnemyManagerScript
@@ -27,8 +28,8 @@ namespace Script.EnemyManagerScript
         protected internal SpawnZones SpawnZone;
         private static readonly object Lock = new object();
         private bool _isDead;
-        public bool IsRestraint;
-        public bool IsSlow;
+        public bool isRestraint;
+        public bool isSlow;
         private Coroutine _poisonEffectCoroutine;
         private bool _isPoison;
         public bool IsPoison
@@ -85,6 +86,7 @@ namespace Script.EnemyManagerScript
                     return;
                 }
                 currentHealth -= damage;
+                // Debug.Log($"EnemyNum: {detectEnemy.number} / hp: {currentHealth} / Damage: {damage}");
                 StartCoroutine(UpdateHpSlider());
                 if (currentHealth > 0f ||  _isDead) return;
                 _isDead = true;

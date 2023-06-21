@@ -9,6 +9,7 @@ namespace Script.UIManager
         public Camera mainCamera;
         [SerializeField] private float targetSize = 10f;
         [SerializeField] private float duration = 1.0f;
+        [SerializeField] private GameManager gameManager;
 
         public void CameraBattleSizeChange()
         {
@@ -19,7 +20,7 @@ namespace Script.UIManager
         public void CameraPuzzleSizeChange()
         {
             mainCamera.transform.DOMove(mainCamera.transform.position, duration);
-            mainCamera.DOOrthoSize(8f, duration);
+            mainCamera.DOOrthoSize(8f, duration).OnComplete(() => GameManager.KillMotion());
         }
     }
 }
