@@ -140,6 +140,7 @@ namespace Script
             StartCoroutine(KillMotion());
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
+
         public void GameSpeedSelect()
         {
             if (speedUp == false)

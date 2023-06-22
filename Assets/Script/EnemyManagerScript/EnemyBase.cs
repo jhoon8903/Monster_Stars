@@ -77,7 +77,7 @@ namespace Script.EnemyManagerScript
         }
         public void ReceiveDamage(EnemyBase detectEnemy, float damage, KillReasons reason = KillReasons.ByPlayer)
         {
-            var stopPattern = FindObjectOfType<EnemyPatternManager>().Zone_Move(detectEnemy.gameObject);
+            // var stopPattern = FindObjectOfType<EnemyPatternManager>().Zone_Move(detectEnemy);
             lock (Lock)
             {
                 if (isDead)
@@ -90,7 +90,7 @@ namespace Script.EnemyManagerScript
                 if (currentHealth > 0f ||  isDead) return;
                 isDead = true;
                 StopCoroutine(UpdateHpSlider());
-                StopCoroutine(stopPattern);
+                // StopCoroutine(stopPattern);
                 ExpManager.Instance.HandleEnemyKilled(reason);
                 if (EnforceManager.Instance.physicIncreaseDamage)
                 {

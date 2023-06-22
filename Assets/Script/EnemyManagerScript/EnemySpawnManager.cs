@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
 using Script.PuzzleManagerGroup;
-using Script.UIManager;
 using UnityEngine;
 
 namespace Script.EnemyManagerScript
@@ -21,9 +20,10 @@ namespace Script.EnemyManagerScript
         [SerializeField] private CharacterPool characterPool;
         [SerializeField] private GridManager gridManager;
         [SerializeField] private EnemyPatternManager enemyPatternManager;
-        [SerializeField] private WaveManager waveManager;
 
         private Dictionary<EnemyBase.SpawnZones, Transform> _spawnZones;
+        private readonly System.Random _sysRandom = new System.Random();
+        public int randomX;
 
         private void Start()
         {
@@ -42,67 +42,78 @@ namespace Script.EnemyManagerScript
             for (var i = 0; i < count; i++)
             {
                 StartCoroutine(SpawnEnemy(enemyType));
+                yield return new WaitForSecondsRealtime(0.2f);
+                yield return null;
             }
-            yield return null;
         }
 
         public void SpawnBoss(int wave)
         {
-            var bossObject = Instantiate(wave == 10 ? enemyManager.stage10BossPrefab : enemyManager.stage20BossPrefab, transform);
+            var bossObject = Instantiate(wave == 10 ? enemyManager.stage10BossPrefab : enemyManager.stage20BossPrefab,
+                transform);
             var enemyBase = bossObject.GetComponent<EnemyBase>();
-            waveManager.enemies.Add(enemyBase);
+            enemyPool.enemyBases.Clear();
+            enemyPool.enemyBases.Add(enemyBase);
             enemyBase.transform.position = gridManager.bossSpawnArea;
-            var o = enemyBase.gameObject;
-            o.SetActive(true);
-            StartCoroutine(enemyPatternManager.Boss_Move(o));
+            enemyBase.gameObject.SetActive(true);
+            enemyBase.Initialize();
+            StartCoroutine(enemyPatternManager.Boss_Move(enemyBase.gameObject));
         }
 
         private IEnumerator SpawnEnemy(EnemyBase.EnemyTypes enemyType)
         {
             var enemyToSpawn = enemyPool.GetPooledEnemy(enemyType);
-            if (enemyToSpawn == null)
-            {
-                Debug.LogError("No available enemy to spawn");
-                yield break;
-            }
-            enemyToSpawn.transform.localScale = enemyToSpawn.GetComponent<EnemyBase>().EnemyType switch
-                {
-                    EnemyBase.EnemyTypes.Fast => Vector3.one * 0.6f,
-                    EnemyBase.EnemyTypes.Slow => Vector3.one * 1f,
-                    _ => Vector3.one * 0.8f
-                };
-            var enemyZone = enemyToSpawn.GetComponent<EnemyBase>().SpawnZone;
-            var spawnPos = GetRandomPointInBounds(enemyZone);
             var enemyBase = enemyToSpawn.GetComponent<EnemyBase>();
-            enemyToSpawn.transform.position = spawnPos;
-            enemyToSpawn.SetActive(true);
+
+            enemyBase.transform.localScale = enemyBase.EnemyType switch
+            {
+                EnemyBase.EnemyTypes.Fast => Vector3.one * 0.6f,
+                EnemyBase.EnemyTypes.Slow => Vector3.one * 1f,
+                _ => Vector3.one * 0.8f
+            };
+            var spawnPosition = Vector3.zero;
+            yield return StartCoroutine(GetRandomPointInBounds(enemyBase.SpawnZone, pos => spawnPosition = pos));
+
+            enemyBase.transform.position = spawnPosition;
+            Debug.Log($"포지션 1 EnemyNumber: {enemyBase.gameObject.name} / Position: { enemyBase.gameObject.transform.position}");
+            enemyBase.gameObject.SetActive(true);
+            Debug.Log($"포지션 2 EnemyNumber: {enemyBase.gameObject.name} / Position: { enemyBase.gameObject.transform.position}");
             enemyBase.Initialize();
-            yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyToSpawn));
+            Debug.Log($"포지션 3 EnemyNumber: {enemyBase.gameObject.name} / Position: { enemyBase.gameObject.transform.position}");
+
+            yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyBase));
         }
 
-        private Vector3 GetRandomPointInBounds(EnemyBase.SpawnZones zone)
+        private IEnumerator GetRandomPointInBounds(EnemyBase.SpawnZones zone, System.Action<Vector3> callback)
         {
-            var spawnPos = _spawnZones[zone].position;
+            var spawnPosition = Vector3.zero;
             if (zone == EnemyBase.SpawnZones.A)
             {
-                float xPosition;
+                var spawnPosY = _spawnZones[zone].position.y;
+
                 if (gameManager.wave is 1 or 2 or 3)
                 {
                     var characters = characterPool.UsePoolCharacterList();
-                    var xPositions = (from character in characters where character
-                        .GetComponent<CharacterBase>().Level >= 2 select character.transform.position.x)
+                    var xPositions = (from character in characters
+                            where character
+                                .GetComponent<CharacterBase>().Level >= 2
+                            select character.transform.position.x)
                         .ToList();
 
                     if (xPositions.Count > 0)
                     {
-                        xPosition = xPositions[Random.Range(0, xPositions.Count)];
-                        return new Vector3(xPosition, spawnPos.y + Random.Range(-1f, 1f), 0);
+                        var randomIndex = _sysRandom.Next(xPositions.Count);
+                        spawnPosition = new Vector3(xPositions[randomIndex], spawnPosY + _sysRandom.Next(-1, 2), 0);
                     }
                 }
-                xPosition = Random.Range(0, 6);
-                return new Vector3(xPosition, 9.5f + Random.Range(-1f, 1f) , 0);
+                else
+                {
+                    randomX = _sysRandom.Next(0, 6);
+                    spawnPosition = new Vector3(randomX, spawnPosY + _sysRandom.Next(-1, 2), 0);
+                }
             }
-            return spawnPos;
+            callback?.Invoke(spawnPosition);
+            yield return null;
         }
     }
 }

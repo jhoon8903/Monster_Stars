@@ -14,7 +14,7 @@ namespace Script.EnemyManagerScript
 
         public List<EnemyBase> enemyBases = new List<EnemyBase>();
         
-        public void Awake()
+        public void Start()
         {
             foreach (var enemySettings in enemyManager.enemyList)
             {
@@ -48,7 +48,6 @@ namespace Script.EnemyManagerScript
 
         public void ReturnToPool(GameObject obj)
         {
-            DOTween.Kill(obj.transform);
             if (pooledEnemy.Contains(obj))
             {
                 pooledEnemy.Remove(obj);
@@ -56,6 +55,7 @@ namespace Script.EnemyManagerScript
             obj.GetComponent<EnemyBase>().isDead = false;
             obj.transform.localScale = Vector3.one;
             obj.SetActive(false);
+            DOTween.Kill(obj.transform);
         }
     }
 }

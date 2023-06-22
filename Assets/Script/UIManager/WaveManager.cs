@@ -10,10 +10,6 @@ namespace Script.UIManager
         [SerializeField] private EnemySpawnManager enemySpawnManager;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private EnemyPool enemyPool;
-        public List<EnemyBase> enemies = new List<EnemyBase>();
-
-        
-        private static readonly object EnemyLock = new object();
 
         private static (int normal, int slow, int fast, int sets) GetSpawnCountForWave(int wave)
         {
@@ -47,25 +43,20 @@ namespace Script.UIManager
             {
                 for (var i = 0; i < sets; i++)
                 {
-                    StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.BasicA, normalCount/2));
-                    StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.BasicD, normalCount/2));
-                    StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Slow, slowCount));
-                    StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Fast, fastCount));
-                    yield return new WaitForSeconds(3f);
+                   yield return StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.BasicA, normalCount/2));
+                   yield return  StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.BasicD, normalCount/2));
+                   yield return  StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Slow, slowCount));
+                   yield return  StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Fast, fastCount)); 
+                   yield return new WaitForSeconds(4f);
                 }
             }
         }
 
         public void EnemyDestroyEvent(EnemyBase enemyBase)
         {
-      
-            lock (EnemyLock)
-            {
-                enemies = enemyPool.enemyBases;
-                enemies.Remove(enemyBase);
-                if (enemies.Count != 0) return;
-                StartCoroutine(gameManager.ContinueOrLose());
-            }
+            enemyPool.enemyBases.Remove(enemyBase);
+            if (enemyPool.enemyBases.Count != 0) return;
+            StartCoroutine(gameManager.ContinueOrLose());
         }
     }
 }

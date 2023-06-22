@@ -756,6 +756,7 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   enforceManager: {fileID: 1595735486}
   commonRewardManager: {fileID: 2120144519}
+  swipeManager: {fileID: 149521965}
   isWave10Spawning: 0
   isMatched: 0
 --- !u!114 &149521965
@@ -798,6 +799,8 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   commonRewardManager: {fileID: 2120144519}
   enforceManager: {fileID: 1595735486}
+  swipeManager: {fileID: 149521965}
+  isMatchActivated: 0
 --- !u!114 &149521967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -830,7 +833,6 @@ MonoBehaviour:
   enemySpawnManager: {fileID: 329010038}
   gameManager: {fileID: 149521958}
   enemyPool: {fileID: 2016604888}
-  enemies: []
 --- !u!1 &187153451
 GameObject:
   m_ObjectHideFlags: 0
@@ -1665,7 +1667,6 @@ MonoBehaviour:
   characterPool: {fileID: 1097818334}
   gridManager: {fileID: 8808150501734532426}
   enemyPatternManager: {fileID: 329010039}
-  waveManager: {fileID: 149521968}
 --- !u!114 &329010039
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1680,7 +1681,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   castle: {fileID: 1177777540}
   gameManager: {fileID: 149521958}
-  enemyPool: {fileID: 2016604888}
 --- !u!1 &362582815
 GameObject:
   m_ObjectHideFlags: 0
@@ -7532,7 +7532,7 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
-  gridManager: {fileID: 0}
+  gridManager: {fileID: 8808150501734532426}
   openBoxing: 0
   isOpenBox: 0
 --- !u!4 &2120144520

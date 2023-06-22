@@ -21,6 +21,7 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private CountManager countManager;
         [SerializeField] private EnforceManager enforceManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
+        [SerializeField] private SwipeManager swipeManager;
         public bool isWave10Spawning;
         public bool isMatched;
         private float _totalPos;
@@ -36,8 +37,7 @@ namespace Script.PuzzleManagerGroup
 
         public IEnumerator PositionUpCharacterObject()
         {
-            var swipeManager = GetComponent<SwipeManager>();
-            swipeManager.isBusy = true;
+            yield return swipeManager.isBusy = true;
             var moves = new List<(GameObject, Vector3Int)>();
             for (var x = 0; x < gridManager.gridWidth; x++)
             {
@@ -50,7 +50,6 @@ namespace Script.PuzzleManagerGroup
                     {
                         emptyCellCount++;
                     }
-
                     if (emptyCellCount <= 0) continue;
                     var targetPosition = new Vector3Int(x, y + emptyCellCount, 0);
                     moves.Add((currentObject, targetPosition));
@@ -69,20 +68,18 @@ namespace Script.PuzzleManagerGroup
                 rewardManger.EnqueueTreasure();
             }
 
-            if (countManager.TotalMoveCount == 0 && !gameManager.IsBattle)
+            if (countManager.TotalMoveCount != 0 || gameManager.IsBattle) yield break;
+           
+            while (commonRewardManager.isOpenBox)
             {
-                while (commonRewardManager.isOpenBox)
-                {
-                    StartCoroutine(gameManager.WaitForPanelToClose());
-                    yield return new WaitForSecondsRealtime(0.5f);
-                }
-
-                if (countManager.TotalMoveCount == 0)
-                {
-                    yield return StartCoroutine(gameManager.Count0Call());
-                }
+                StartCoroutine(gameManager.WaitForPanelToClose());
+                yield return new WaitForSecondsRealtime(0.5f);
             }
-            yield return gameManager.Count0Call();
+
+            if (countManager.TotalMoveCount == 0)
+            {
+                yield return StartCoroutine(gameManager.Count0Call());
+            }
         }
 
 
@@ -90,7 +87,7 @@ namespace Script.PuzzleManagerGroup
         {
             if (isMatched) yield break;
 
-            var wait = new WaitForSeconds(0.05f);
+            var wait = new WaitForSeconds(0.1f);
             var maxRows = characterPool.UsePoolCharacterList().Count / 6;
             var maxCount = maxRows * (maxRows - 1) * 3;
 
@@ -106,11 +103,14 @@ namespace Script.PuzzleManagerGroup
             }
 
             yield return StartCoroutine(matchManager.CheckMatches());
+            
             _isMatchActivated = matchManager.isMatchActivated;
+            
             if (rewardManger.openBoxing)
             {
                 yield break;
             }
+            
             if(_isMatchActivated)
             {
                 StartCoroutine(CheckPosition());
