@@ -55,11 +55,12 @@ namespace Script.PuzzleManagerGroup
             var worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
             return new Vector2(worldPoint.x, worldPoint.y);
         }
-        
+
+        bool isSoon = false;
         // 선택된 게임 오브젝트를 식별하고 첫 번째 터치 위치를 저장하는 초기 터치 또는 클릭 이벤트를 처리합니다.
         private void HandleTouchDown(Vector2 point2D)
         {
-            if (isBusy)
+            if (isBusy || isSoon)
             {
                 return;
             }
@@ -69,8 +70,16 @@ namespace Script.PuzzleManagerGroup
             ScaleObject(_startObject, new Vector3(1.2f,1.2f,1.2f), 0.2f);
             _startObject.GetComponent<CharacterBase>().IsClicked = true;
             _firstTouchPosition = point2D;
+            StartCoroutine(CheckSoon());
         }
 
+        WaitForSeconds CheckSoonWait = new WaitForSeconds(0.5f);
+        IEnumerator CheckSoon()
+        {
+            isSoon = true;
+            yield return CheckSoonWait;
+            isSoon = false;
+        }
         // 사용자가 손가락을 떼거나 마우스 버튼을 놓을 때 처리합니다. 시작 개체의 크기를 조정하고 다음 스 와이프를 위해 무효화합니다.
         private void HandleTouchUp()
         {
