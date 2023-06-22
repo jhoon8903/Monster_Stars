@@ -1667,6 +1667,7 @@ MonoBehaviour:
   characterPool: {fileID: 1097818334}
   gridManager: {fileID: 8808150501734532426}
   enemyPatternManager: {fileID: 329010039}
+  randomX: 0
 --- !u!114 &329010039
 MonoBehaviour:
   m_ObjectHideFlags: 0

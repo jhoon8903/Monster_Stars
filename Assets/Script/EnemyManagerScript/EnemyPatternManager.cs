@@ -13,7 +13,7 @@ namespace Script.EnemyManagerScript
         [SerializeField] private GameManager gameManager;
         private float _duration;
         private readonly Random _random = new System.Random();
-        private Dictionary<EnemyBase, Tween> enemyMoveTweens = new Dictionary<EnemyBase, Tween>();
+        private readonly Dictionary<EnemyBase, Tween> _enemyMoveTween = new Dictionary<EnemyBase, Tween>();
 
         public IEnumerator Zone_Move(EnemyBase enemyBase)
         {
@@ -48,7 +48,7 @@ namespace Script.EnemyManagerScript
         private IEnumerator PatternACoroutine(EnemyBase enemyBase, float endPosition, float duration)
         {
             gameManager.GameSpeed();
-            enemyMoveTweens[enemyBase] = enemyBase.transform.DOMoveY(endPosition, duration).SetEase(Ease.Linear);
+            _enemyMoveTween[enemyBase] = enemyBase.transform.DOMoveY(endPosition, duration).SetEase(Ease.Linear);
             while (gameManager.IsBattle)
             {
                 if (enemyBase.isRestraint)
@@ -73,10 +73,10 @@ namespace Script.EnemyManagerScript
 
             enemyBase.GetComponent<SpriteRenderer>().DOColor(restraintColor, 0.1f);
             // Pause the tween
-            enemyMoveTweens[enemyBase].Pause();
+            _enemyMoveTween[enemyBase].Pause();
             yield return new WaitForSecondsRealtime(overTime);
             // Resume the tween
-            enemyMoveTweens[enemyBase].Play();
+            _enemyMoveTween[enemyBase].Play();
 
             enemyBase.isRestraint = false;
             enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
@@ -93,28 +93,28 @@ namespace Script.EnemyManagerScript
             {
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(new Color(1f, 1f, 1f, 0.3f), 0.1f);
                 // Pause the tween
-                enemyMoveTweens[enemyBase].Pause();
+                _enemyMoveTween[enemyBase].Pause();
                 yield return new WaitForSecondsRealtime(1f);
                 // Resume the tween
-                enemyMoveTweens[enemyBase].Play();
+                _enemyMoveTween[enemyBase].Play();
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(new Color(1f, 1f, 1f, 1f), 0.1f);
             }
             else
             {
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(slowColor, 0.1f);
                 // Get the current progress of the original move tween
-                var currentProgress = enemyMoveTweens[enemyBase].ElapsedPercentage(false);
+                var currentProgress = _enemyMoveTween[enemyBase].ElapsedPercentage(false);
                 // Kill the original move tween
-                enemyMoveTweens[enemyBase].Kill();
+                _enemyMoveTween[enemyBase].Kill();
 
                 // Slow down the move tween and restart it from the current progress
-                enemyMoveTweens[enemyBase] = DOTween.To(() => enemyBase.transform.position.y, y => enemyBase.transform.position = new Vector3(enemyBase.transform.position.x, y, enemyBase.transform.position.z), endPosition, duration * slowPowerDuration * (1 - currentProgress)).SetEase(Ease.Linear);
+                _enemyMoveTween[enemyBase] = DOTween.To(() => enemyBase.transform.position.y, y => enemyBase.transform.position = new Vector3(enemyBase.transform.position.x, y, enemyBase.transform.position.z), endPosition, duration * slowPowerDuration * (1 - currentProgress)).SetEase(Ease.Linear);
                 yield return new WaitForSecondsRealtime(slowTime);
                 // Kill the slow move tween
-                enemyMoveTweens[enemyBase].Kill();
+                _enemyMoveTween[enemyBase].Kill();
 
                 // Restart the original move tween from the current progress
-                enemyMoveTweens[enemyBase] = DOTween.To(() => enemyBase.transform.position.y, y => enemyBase.transform.position = new Vector3(enemyBase.transform.position.x, y, enemyBase.transform.position.z), endPosition, duration * (1 - currentProgress)).SetEase(Ease.Linear);
+                _enemyMoveTween[enemyBase] = DOTween.To(() => enemyBase.transform.position.y, y => enemyBase.transform.position = new Vector3(enemyBase.transform.position.x, y, enemyBase.transform.position.z), endPosition, duration * (1 - currentProgress)).SetEase(Ease.Linear);
 
                 enemyBase.isSlow = false;
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);

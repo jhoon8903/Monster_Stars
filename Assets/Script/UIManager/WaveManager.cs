@@ -23,7 +23,6 @@ namespace Script.UIManager
             {
                 baseCount = wave - 10;
             }
-    
             var normalCount = baseCount + 3;
             var slowCount = baseCount - 1;
             var fastCount = baseCount - 1;
@@ -43,11 +42,20 @@ namespace Script.UIManager
             {
                 for (var i = 0; i < sets; i++)
                 {
-                   yield return StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.BasicA, normalCount/2));
-                   yield return  StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.BasicD, normalCount/2));
-                   yield return  StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Slow, slowCount));
-                   yield return  StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Fast, fastCount)); 
-                   yield return new WaitForSeconds(4f);
+                    var normalCountA = normalCount / 2;
+                    var normalCountB = normalCount / 2;
+
+                    // normalCount가 홀수인 경우
+                    if (normalCount % 2 == 1)
+                    {
+                        normalCountA += 1; // BasicA 타입의 적이 한 명 더 생성됩니다.
+                    }
+
+                    yield return StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.BasicA, normalCountA));
+                    yield return StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.BasicD, normalCountB));
+                    yield return StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Slow, slowCount));
+                    yield return StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Fast, fastCount)); 
+                    yield return new WaitForSeconds(4f);
                 }
             }
         }
