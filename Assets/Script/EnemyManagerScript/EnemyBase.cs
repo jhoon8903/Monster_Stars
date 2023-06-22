@@ -5,7 +5,6 @@ using Script.RewardScript;
 using Script.UIManager;
 using Script.WeaponScriptGroup;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.EnemyManagerScript
@@ -61,6 +60,7 @@ namespace Script.EnemyManagerScript
         {
             EnforceManager.Instance.OnAddRow += ResetEnemyHealthPoint;
             var wave = FindObjectOfType<GameManager>().wave;
+            
             _hpSlider = GetComponentInChildren<Slider>(true);
             if (EnemyType != EnemyTypes.Boss)
             {
@@ -77,6 +77,7 @@ namespace Script.EnemyManagerScript
         }
         public void ReceiveDamage(EnemyBase detectEnemy, float damage, KillReasons reason = KillReasons.ByPlayer)
         {
+            var stopPattern = FindObjectOfType<EnemyPatternManager>().Zone_Move(detectEnemy.gameObject);
             lock (Lock)
             {
                 if (isDead)
@@ -88,6 +89,8 @@ namespace Script.EnemyManagerScript
                 StartCoroutine(UpdateHpSlider());
                 if (currentHealth > 0f ||  isDead) return;
                 isDead = true;
+                StopCoroutine(UpdateHpSlider());
+                StopCoroutine(stopPattern);
                 ExpManager.Instance.HandleEnemyKilled(reason);
                 if (EnforceManager.Instance.physicIncreaseDamage)
                 {

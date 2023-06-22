@@ -140,7 +140,7 @@ namespace Script.CharacterManagerScript
             weaponsPool.SetSprite(weaponType, attackData.Unit.GetComponent<CharacterBase>().UnitLevel, weaponObject); // Set the weapon's sprite based on the character's level
             if (!gameManager.IsBattle)
             {
-                DOTween.Kill(weaponObject);
+                DOTween.Kill(weaponObject.transform);
             }
             return weaponObject;
         }

@@ -2,6 +2,7 @@ using System.Collections;
 using DG.Tweening;
 using Script.CharacterGroupScript;
 using Script.CharacterManagerScript;
+using Script.EnemyManagerScript;
 using Script.PuzzleManagerGroup;
 using Script.RewardScript;
 using Script.UIManager;
@@ -29,6 +30,7 @@ namespace Script
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private AtkManager atkManager;
+        [SerializeField] private EnemyPool enemyPool;
         private readonly WaitForSecondsRealtime _waitOneSecRealtime = new WaitForSecondsRealtime(1f);
         private readonly WaitForSecondsRealtime _waitTwoSecRealtime = new WaitForSecondsRealtime(2f);
         public bool speedUp;
@@ -39,12 +41,12 @@ namespace Script
         private void Start()
         {
             swipeManager.isBusy = true;
-            countManager.Initialize(moveCount); // 이동 횟수 초기화
-            gridManager.GenerateInitialGrid(); // 초기 그리드 생성
+            countManager.Initialize(moveCount);
+            gridManager.GenerateInitialGrid(); 
             speedUp = true;
             waveText.text = $"{wave}";
             GameSpeedSelect();
-            StartCoroutine(spawnManager.PositionUpCharacterObject()); // 매치 시작 후 확인
+            StartCoroutine(spawnManager.PositionUpCharacterObject());
             swipeManager.isBusy = false;
             DOTween.SetTweensCapacity(200000, 500);
         }
@@ -123,6 +125,7 @@ namespace Script
             }
             yield return StartCoroutine(backgroundManager.ChangePuzzleSize());
             yield return StartCoroutine(cameraManager.CameraPuzzleSizeChange());
+            enemyPool.ClearList();
         }
 
         private static IEnumerator KillMotion()

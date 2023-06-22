@@ -10,7 +10,6 @@ namespace Script.EnemyManagerScript
     {
         [SerializeField] private GameObject castle;
         [SerializeField] private GameManager gameManager;
-        [SerializeField] private EnemyPool enemyPool;
         private GameObject _enemyObjects;
         private float _duration;
         private readonly Random _random = new System.Random();
@@ -63,20 +62,20 @@ namespace Script.EnemyManagerScript
         {
             gameManager.GameSpeed();
             var enemyBase = enemyObject.GetComponent<EnemyBase>();
-            enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear).OnComplete(()=>enemyPool.ReturnToPool(enemyBase.gameObject));
+            enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
 
             while (gameManager.IsBattle)
             {
                 if (enemyBase.isRestraint)
                 {
-                   StartCoroutine(RestrainEffect(enemyBase, endPosition, duration));
+                    StartCoroutine(RestrainEffect(enemyBase, endPosition, duration));
                 }
                 
                 if (enemyBase.isSlow)
                 {
-                   StartCoroutine(SlowEffect(enemyBase, endPosition, duration));
+                    
+                    StartCoroutine(SlowEffect(enemyBase, endPosition, duration));
                 }
-
                 yield return new WaitForSecondsRealtime(0.1f); // add some delay to prevent infinite loop
             }
         }
@@ -88,13 +87,13 @@ namespace Script.EnemyManagerScript
             var originColor = new Color(1, 1, 1);
             
             enemyBase.GetComponent<SpriteRenderer>().DOColor(restraintColor, 0.1f);
-            DOTween.Kill(enemyBase.transform);
+            // DOTween.Kill(enemyBase.transform);
 
             yield return new WaitForSecondsRealtime(overTime);
 
             yield return enemyBase.isRestraint = false;
             enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
-            enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear).OnComplete(()=>enemyPool.ReturnToPool(enemyBase.gameObject));
+            enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
             }
 
         private IEnumerator SlowEffect(EnemyBase enemyBase, Vector3 endPosition, float duration)
@@ -106,20 +105,20 @@ namespace Script.EnemyManagerScript
             if (EnforceManager.Instance.waterStun && _random.Next(100) < 15)
             {
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(new Color(1f, 1f, 1f, 0.3f), 0.1f);
-                DOTween.Kill(enemyBase.transform);
+                // DOTween.Kill(enemyBase.transform);
                 yield return new WaitForSecondsRealtime(1f);
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(new Color(1f, 1f, 1f, 1f), 0.1f);
-                enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear).OnComplete(()=>enemyPool.ReturnToPool(enemyBase.gameObject));
+                enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
 
             }
             else
             {
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(slowColor, 0.1f);
-                enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration * slowPowerDuration).SetEase(Ease.Linear).OnComplete(()=>enemyPool.ReturnToPool(enemyBase.gameObject));
+                enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration * slowPowerDuration).SetEase(Ease.Linear);
                 yield return new WaitForSecondsRealtime(slowTime);
                 yield return enemyBase.isSlow = false;
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
-                enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear).OnComplete(()=>enemyPool.ReturnToPool(enemyBase.gameObject));
+                enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
             }
         }
     }
