@@ -685,7 +685,7 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   gridManager: {fileID: 8808150501734532426}
   spawnManager: {fileID: 149521964}
-  moveCount: 1000
+  moveCount: 13
   swipeManager: {fileID: 149521965}
   cameraManager: {fileID: 758648960}
   backgroundManager: {fileID: 1011029961}
@@ -698,9 +698,9 @@ MonoBehaviour:
   castleManager: {fileID: 1177777546}
   commonRewardManager: {fileID: 2120144519}
   atkManager: {fileID: 149521967}
+  enemyPool: {fileID: 2016604888}
   speedUp: 0
   wave: 1
-  isBattle: 0
 --- !u!4 &149521959
 Transform:
   m_ObjectHideFlags: 0
@@ -755,6 +755,7 @@ MonoBehaviour:
   gameManager: {fileID: 149521958}
   countManager: {fileID: 841622520}
   enforceManager: {fileID: 1595735486}
+  commonRewardManager: {fileID: 2120144519}
   isWave10Spawning: 0
   isMatched: 0
 --- !u!114 &149521965
@@ -792,7 +793,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c25b8e9bfddd44f41a718109ac5ffb9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  swipeManager: {fileID: 0}
   spawnManager: {fileID: 149521964}
   characterPool: {fileID: 1097818334}
   countManager: {fileID: 841622520}
@@ -814,7 +814,6 @@ MonoBehaviour:
   weaponsPool: {fileID: 1537456864}
   enforceManager: {fileID: 1595735486}
   gameManager: {fileID: 149521958}
-  attackRate: 0
   enemyList: []
 --- !u!114 &149521968
 MonoBehaviour:
@@ -1681,6 +1680,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   castle: {fileID: 1177777540}
   gameManager: {fileID: 149521958}
+  enemyPool: {fileID: 2016604888}
 --- !u!1 &362582815
 GameObject:
   m_ObjectHideFlags: 0
@@ -2705,10 +2705,10 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 100
+  m_fontSize: 69.05
   m_fontSizeBase: 100
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
@@ -3009,7 +3009,6 @@ MonoBehaviour:
   mainCamera: {fileID: 758648958}
   targetSize: 10
   duration: 1
-  gameManager: {fileID: 149521958}
 --- !u!1 &765140112
 GameObject:
   m_ObjectHideFlags: 0
@@ -3930,7 +3929,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 0 / 0
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ab47b3ea1bc084bb58890a488dedabf8, type: 2}
   m_sharedMaterial: {fileID: -8956775509540403330, guid: ab47b3ea1bc084bb58890a488dedabf8, type: 2}
@@ -3957,7 +3956,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34.5
+  m_fontSize: 50
   m_fontSizeBase: 50
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -4364,7 +4363,6 @@ MonoBehaviour:
   - {fileID: 5553006608696507343, guid: 438d7922ea8534dd6a3cfa7664f14cb7, type: 3}
   - {fileID: 4196842440807729695, guid: 10ae02ed26a9b4edc803ef0448003341, type: 3}
   - {fileID: 109876181003132260, guid: b3c344a1ee72a45e3aef34b9e39575c5, type: 3}
-  callCount: 0
 --- !u!4 &1097818335
 Transform:
   m_ObjectHideFlags: 0
@@ -4418,7 +4416,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: -120.00012}
+  m_AnchoredPosition: {x: 0, y: -120.000244}
   m_SizeDelta: {x: 2000, y: 500}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1177777542
@@ -4910,8 +4908,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 90
-  m_fontSizeBase: 90
+  m_fontSize: 60
+  m_fontSizeBase: 60
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -6044,7 +6042,7 @@ MonoBehaviour:
   castleManager: {fileID: 1177777546}
   gridManager: {fileID: 8808150501734532426}
   activeRestraint: 0
-  increaseRestraintTime: 1
+  increaseRestraintTime: 0
   divinePenetrate: 0
   divineAtkRange: 0
   divinePoisonAdditionalDamage: 0
@@ -6072,7 +6070,7 @@ MonoBehaviour:
   castleMaxHp: 0
   highLevelCharacterCount: 6
   expPercentage: 0
-  permanentIncreaseMovementCount: 1
+  permanentIncreaseMovementCount: 0
   match5Upgrade: 0
   increaseAtkDamage: 0
   increaseAtkRate: 0
@@ -7113,7 +7111,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 10000 / 10000
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ab47b3ea1bc084bb58890a488dedabf8, type: 2}
   m_sharedMaterial: {fileID: -8956775509540403330, guid: ab47b3ea1bc084bb58890a488dedabf8, type: 2}
@@ -7140,7 +7138,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 34.5
+  m_fontSize: 72
   m_fontSizeBase: 90
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -7427,7 +7425,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 199.99988}
+  m_AnchoredPosition: {x: 0, y: 200}
   m_SizeDelta: {x: 0, y: 600}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2030067378
@@ -7534,7 +7532,9 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
+  gridManager: {fileID: 0}
   openBoxing: 0
+  isOpenBox: 0
 --- !u!4 &2120144520
 Transform:
   m_ObjectHideFlags: 0

@@ -249,11 +249,5 @@ namespace Script.PuzzleManagerGroup
             matchManager.IsMatched(characterObject);
             yield return null;
         }
-        public IEnumerator AllMatchesCheck(GameObject characterObject)
-        {
-            if (characterObject == null) yield break;
-            matchManager.IsMatched(characterObject);
-            yield return null;
-        }
     }
 }

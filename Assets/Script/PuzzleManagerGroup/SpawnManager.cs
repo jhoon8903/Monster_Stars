@@ -9,19 +9,6 @@ using Script.UIManager;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-
-struct Tile
-{
-    CharacterBase characterBase;
-    bool isSingle;
-
-    public Tile(CharacterBase characterBase, bool isSingle)
-    {
-        this.characterBase = characterBase;
-        this.isSingle = isSingle;
-    }
-}
- 
 namespace Script.PuzzleManagerGroup
 {
     public class SpawnManager : MonoBehaviour
@@ -33,6 +20,7 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private GameManager gameManager;
         [SerializeField] private CountManager countManager;
         [SerializeField] private EnforceManager enforceManager;
+        [SerializeField] private CommonRewardManager commonRewardManager;
         public bool isWave10Spawning = false;
         public bool isMatched = false;
         
@@ -77,8 +65,19 @@ namespace Script.PuzzleManagerGroup
                 rewardManger.EnqueueTreasure();
             }
 
-            if (countManager.TotalMoveCount == 0 && !gameManager.isBattle)
+            if (countManager.TotalMoveCount == 0 && !gameManager.IsBattle)
             {
+                while (commonRewardManager.isOpenBox)
+                {
+                    StartCoroutine(gameManager.WaitForPanelToClose());
+                    yield return new WaitForSecondsRealtime(0.5f);
+                }
+
+                if (countManager.TotalMoveCount == 0)
+                {
+                    yield return StartCoroutine(gameManager.Count0Call());
+                }
+            }
                 yield return gameManager.Count0Call();
             }
         }

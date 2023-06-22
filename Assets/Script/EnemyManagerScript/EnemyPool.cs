@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Script.RewardScript;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Script.EnemyManagerScript
@@ -17,7 +16,6 @@ namespace Script.EnemyManagerScript
         
         public void Awake()
         {
-            EnforceManager.Instance.OnAddRow += ClearList;
             foreach (var enemySettings in enemyManager.enemyList)
             {
                 for (var i = 0; i < enemySettings.poolSize; i++)
@@ -36,31 +34,25 @@ namespace Script.EnemyManagerScript
         {
             var spawnEnemy = pooledEnemy.FirstOrDefault(t => !t.activeInHierarchy && t.GetComponent<EnemyBase>().EnemyType == enemyType);
             pooledEnemy.Remove(spawnEnemy);
-
-            if (spawnEnemy == null || pooledEnemy.Count(t => t.GetComponent<EnemyBase>().EnemyType == enemyType) < 1)
-            {
-                ClearList();
-            }
             if (spawnEnemy == null) return null;
             enemyBases.Add(spawnEnemy.GetComponent<EnemyBase>());
             return spawnEnemy;
         }
 
-        private void ClearList()
+        public void ClearList()
         {
             pooledEnemy.Clear();
             pooledEnemy = pooledDefaultEnemy.ToList();
             Debug.Log("Enemy List 초기화!");
         }
 
-        private void OnDestroy()
+        public void ReturnToPool(GameObject obj)
         {
-            EnforceManager.Instance.OnAddRow -= ClearList;
-        }
-
-        public static void ReturnToPool(GameObject obj)
-        {
-            DOTween.Kill(obj);
+            DOTween.Kill(obj.transform);
+            if (pooledEnemy.Contains(obj))
+            {
+                pooledEnemy.Remove(obj);
+            }
             obj.GetComponent<EnemyBase>().isDead = false;
             obj.transform.localScale = Vector3.one;
             obj.SetActive(false);

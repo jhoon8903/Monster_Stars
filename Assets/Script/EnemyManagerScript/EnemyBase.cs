@@ -5,7 +5,6 @@ using Script.RewardScript;
 using Script.UIManager;
 using Script.WeaponScriptGroup;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.EnemyManagerScript
@@ -61,6 +60,7 @@ namespace Script.EnemyManagerScript
         {
             EnforceManager.Instance.OnAddRow += ResetEnemyHealthPoint;
             var wave = FindObjectOfType<GameManager>().wave;
+            
             _hpSlider = GetComponentInChildren<Slider>(true);
             if (EnemyType != EnemyTypes.Boss)
             {
@@ -77,6 +77,7 @@ namespace Script.EnemyManagerScript
         }
         public void ReceiveDamage(EnemyBase detectEnemy, float damage, KillReasons reason = KillReasons.ByPlayer)
         {
+            var stopPattern = FindObjectOfType<EnemyPatternManager>().Zone_Move(detectEnemy.gameObject);
             lock (Lock)
             {
                 if (isDead)
@@ -84,16 +85,17 @@ namespace Script.EnemyManagerScript
                     return;
                 }
                 currentHealth -= damage;
-                if (gameObject == null) return;
+                if (gameObject == null || !gameObject.activeInHierarchy) return;
                 StartCoroutine(UpdateHpSlider());
                 if (currentHealth > 0f ||  isDead) return;
                 isDead = true;
+                StopCoroutine(UpdateHpSlider());
+                StopCoroutine(stopPattern);
                 ExpManager.Instance.HandleEnemyKilled(reason);
                 if (EnforceManager.Instance.physicIncreaseDamage)
                 {
                     EnforceManager.Instance.PhysicIncreaseDamage();
                 }
-                DOTween.Kill(detectEnemy);
                 EnemyKilledEvents(detectEnemy);
             }
         }
@@ -103,11 +105,11 @@ namespace Script.EnemyManagerScript
             var enemy = detectedEnemy.gameObject;
             var waveManager = FindObjectOfType<WaveManager>();
             var characterBase = FindObjectOfType<CharacterBase>();
+            var enemyPool = FindObjectOfType<EnemyPool>();
 
             characterBase.DetectEnemies().Remove(detectedEnemy.gameObject);
             waveManager.EnemyDestroyEvent(detectedEnemy);
-            EnemyPool.ReturnToPool(enemy);
-  
+            enemyPool.ReturnToPool(enemy);
         }
 
         private IEnumerator UpdateHpSlider()

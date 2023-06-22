@@ -1,32 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
-using static Script.CharacterManagerScript.CharacterBase;
-using static UnityEditor.Progress;
 
 namespace Script.PuzzleManagerGroup
 {
     public sealed class MatchManager : MonoBehaviour
     {
-        [SerializeField] private SwipeManager swipeManager;
         [SerializeField] private SpawnManager spawnManager;
         [SerializeField] private CharacterPool characterPool;
         [SerializeField] private CountManager countManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private EnforceManager enforceManager;
         private bool _isMatched = false;
-
-        private void Awake()
-        {
-            swipeManager = GetComponent<SwipeManager>();
-        }
 
         // 이 메소드는 주어진 캐릭터 객체가 매치되는지 확인하는 기능을 수행합니다. 매치 여부를 반환합니다.
         public bool IsMatched(GameObject swapCharacter)
@@ -181,7 +170,6 @@ namespace Script.PuzzleManagerGroup
             FindConsecutiveTilesInColumn(characterPool.SortPoolCharacterList());
             StartCoroutine(CheckMatches());
         }
-
 
         // 이 메소드는 주어진 캐릭터 객체를 풀로 반환하는 기능을 수행합니다.
         private void ReturnObject(GameObject character)
@@ -800,7 +788,6 @@ namespace Script.PuzzleManagerGroup
             }
             return true;
         }
-
         List<List<GameObject>> FindConsecutiveTilesInRow(List<GameObject> characters)
         {
             List<List<GameObject>> result = new List<List<GameObject>>();

@@ -1,3 +1,4 @@
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
 using Vector2 = UnityEngine.Vector2;
@@ -21,18 +22,20 @@ namespace Script.UIManager
         }
 
 
-        public void ChangeBattleSize()
+        public IEnumerator ChangeBattleSize()
         {
             backGround.DOAnchorPos3D(Vector3.zero, 1f);
             castle.DOSizeDelta(new Vector2(1100f, 300f), 1f);
             castle.DOAnchorPos3D(new Vector3(0f, 250f, 0f), 1f);
+            yield return null;
         }
 
-        public void ChangePuzzleSize()
+        public IEnumerator ChangePuzzleSize()
         {
             backGround.DOAnchorPos3D(_originalBackGroundPosition, 1f);
             castle.DOSizeDelta(_originalCastleSize, 1f);
             castle.DOAnchorPos3D(_originalCastlePosition, 1f);
+            yield return null;
         }
     }
 }

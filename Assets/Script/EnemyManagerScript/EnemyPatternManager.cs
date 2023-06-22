@@ -2,7 +2,6 @@ using System.Collections;
 using UnityEngine;
 using DG.Tweening;
 using Script.RewardScript;
-using Script.UIManager;
 using Random = System.Random;
 
 namespace Script.EnemyManagerScript
@@ -21,10 +20,9 @@ namespace Script.EnemyManagerScript
             var enemyBase = _enemyObjects.GetComponent<EnemyBase>(); 
             enemyBase.EnemyProperty();
             var position = _enemyObjects.transform.position;
-            var endPosition = new Vector3(position.x, castle.transform.position.y-5, 0);
-            var slowCount = EnforceManager.Instance.slowCount;
+            var endPosition = new Vector3(position.x, castle.transform.position.y-4, 0);
+            var slowCount = EnforceManager.Instance.SlowCount();
             var speedReductionFactor = 1f + slowCount * 0.15f;
-            speedReductionFactor = Mathf.Min(speedReductionFactor, 1.6f);
             _duration = enemyBase.MoveSpeed * 40f * speedReductionFactor;
 
             switch (enemyBase.SpawnZone)
@@ -66,30 +64,30 @@ namespace Script.EnemyManagerScript
             var enemyBase = enemyObject.GetComponent<EnemyBase>();
             enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);
 
-            while (gameManager.isBattle)
+            while (gameManager.IsBattle)
             {
                 if (enemyBase.isRestraint)
                 {
-                   StartCoroutine(RestrainEffect(enemyBase, endPosition, duration));
+                    StartCoroutine(RestrainEffect(enemyBase, endPosition, duration));
                 }
                 
                 if (enemyBase.isSlow)
                 {
-                   StartCoroutine(SlowEffect(enemyBase, endPosition, duration));
+                    
+                    StartCoroutine(SlowEffect(enemyBase, endPosition, duration));
                 }
-
                 yield return new WaitForSecondsRealtime(0.1f); // add some delay to prevent infinite loop
             }
         }
 
-        private static IEnumerator RestrainEffect(EnemyBase enemyBase, Vector3 endPosition, float duration)
+        private IEnumerator RestrainEffect(EnemyBase enemyBase, Vector3 endPosition, float duration)
         {
             var overTime = EnforceManager.Instance.IncreaseRestraintTime();
             var restraintColor = new Color(0.59f, 0.43f, 0f); 
             var originColor = new Color(1, 1, 1);
             
             enemyBase.GetComponent<SpriteRenderer>().DOColor(restraintColor, 0.1f);
-            DOTween.Kill(enemyBase.transform);
+            // DOTween.Kill(enemyBase.transform);
 
             yield return new WaitForSecondsRealtime(overTime);
 
@@ -107,7 +105,7 @@ namespace Script.EnemyManagerScript
             if (EnforceManager.Instance.waterStun && _random.Next(100) < 15)
             {
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(new Color(1f, 1f, 1f, 0.3f), 0.1f);
-                DOTween.Kill(enemyBase.transform);
+                // DOTween.Kill(enemyBase.transform);
                 yield return new WaitForSecondsRealtime(1f);
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(new Color(1f, 1f, 1f, 1f), 0.1f);
                 enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration).SetEase(Ease.Linear);

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using Script.RewardScript;
 using Script.WeaponScriptGroup;
 using UnityEngine;
@@ -43,7 +44,7 @@ namespace Script.CharacterManagerScript
         private IEnumerator AtkMotion(CharacterBase unit)
         {
             var atkRate = unit.GetComponent<CharacterBase>().defaultAtkRate * (AttackRate - EnforceManager.Instance.increaseAtkRate / 100f);
-            while (gameManager.isBattle)
+            while (gameManager.IsBattle)
             {
                 if(Time.timeScale == 0)
                 {
@@ -137,7 +138,10 @@ namespace Script.CharacterManagerScript
             weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>()); // Initialize the weapon with the character's information
             StartCoroutine(weaponBase.UseWeapon()); // Perform the weapon's attack logic
             weaponsPool.SetSprite(weaponType, attackData.Unit.GetComponent<CharacterBase>().UnitLevel, weaponObject); // Set the weapon's sprite based on the character's level
-
+            if (!gameManager.IsBattle)
+            {
+                DOTween.Kill(weaponObject.transform);
+            }
             return weaponObject;
         }
 

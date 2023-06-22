@@ -24,10 +24,15 @@ namespace Script.UIManager
               hpBar.value = hpPoint;
               UpdateHpText();
           }
+
+          private void UpdateHpText()
+          {
+              hpText.text = $"{hpPoint} / {maxHpPoint}";
+          }
       
           private void OnTriggerEnter2D(Collider2D collision)
           {
-              DOTween.Kill(collision);
+              DOTween.Kill(collision.transform);
               if (!collision.gameObject.CompareTag("Enemy")) return;
               var enemyBase = collision.gameObject.GetComponent<EnemyBase>();
               if (enemyBase == null) return;
@@ -42,14 +47,11 @@ namespace Script.UIManager
               StartCoroutine(gameManager.ContinueOrLose());
           }
 
+
+
           public void UpdatePreviousHp()
           {
               PreviousHpPoint = hpPoint;
-          }
-          
-          private void UpdateHpText()
-          {
-              hpText.text = $"{hpPoint} / {maxHpPoint}";
           }
 
           public void IncreaseMaxHp(float increaseAmount)

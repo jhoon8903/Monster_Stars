@@ -2,6 +2,7 @@ using System.Collections;
 using DG.Tweening;
 using Script.CharacterGroupScript;
 using Script.CharacterManagerScript;
+using Script.EnemyManagerScript;
 using Script.PuzzleManagerGroup;
 using Script.RewardScript;
 using Script.UIManager;
@@ -29,31 +30,32 @@ namespace Script
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private AtkManager atkManager;
+        [SerializeField] private EnemyPool enemyPool;
         private readonly WaitForSecondsRealtime _waitOneSecRealtime = new WaitForSecondsRealtime(1f);
         private readonly WaitForSecondsRealtime _waitTwoSecRealtime = new WaitForSecondsRealtime(2f);
         public bool speedUp;
         public int wave = 1;
         private Vector3Int _bossSpawnArea;
-        public bool isBattle;
+        public bool IsBattle { get; private set; }
 
         private void Start()
         {
             swipeManager.isBusy = true;
-            countManager.Initialize(moveCount); // 이동 횟수 초기화
-            gridManager.GenerateInitialGrid(); // 초기 그리드 생성
+            countManager.Initialize(moveCount);
+            gridManager.GenerateInitialGrid(); 
             speedUp = true;
             waveText.text = $"{wave}";
             GameSpeedSelect();
-            StartCoroutine(spawnManager.PositionUpCharacterObject()); // 매치 시작 후 확인
+            StartCoroutine(spawnManager.PositionUpCharacterObject());
             swipeManager.isBusy = false;
             DOTween.SetTweensCapacity(200000, 500);
         }
         public IEnumerator Count0Call()
         {
-            isBattle = true;
+            IsBattle = true;
             yield return _waitOneSecRealtime;
-            cameraManager.CameraBattleSizeChange();
-            backgroundManager.ChangeBattleSize();
+            StartCoroutine(cameraManager.CameraBattleSizeChange());
+            StartCoroutine(backgroundManager.ChangeBattleSize());
             yield return _waitTwoSecRealtime;
             StartCoroutine(waveManager.WaveController(wave));
             StartCoroutine(atkManager.CheckForAttack());
@@ -76,7 +78,7 @@ namespace Script
         }
         public IEnumerator ContinueOrLose()
         {
-            isBattle = false;
+            IsBattle = false;
             if (castleManager.hpPoint != 0)
             {
                 wave++;
@@ -88,7 +90,7 @@ namespace Script
                     countManager.Initialize(moveCount);
                     yield return StartCoroutine(spawnManager.BossStageSpawnRule());
                 }
-                NextStage();
+                yield return StartCoroutine(NextStage());
                 FindObjectOfType<UnitD>().ResetDamage();
             }
             else
@@ -98,11 +100,11 @@ namespace Script
         }
         private void LoseGame()
         {
-            KillMotion();
+            StartCoroutine(KillMotion());
             Time.timeScale = 0;
             gamePanel.SetActive(true);
         }
-        private void NextStage()
+        private IEnumerator NextStage()
         {
             Time.timeScale = 1;
             _bossSpawnArea = new Vector3Int(Random.Range(2,5), 10, 0);
@@ -121,19 +123,21 @@ namespace Script
                 moveCount = 7;
                 countManager.Initialize(moveCount);
             }
-            backgroundManager.ChangePuzzleSize();
-            cameraManager.CameraPuzzleSizeChange();
+            yield return StartCoroutine(backgroundManager.ChangePuzzleSize());
+            yield return StartCoroutine(cameraManager.CameraPuzzleSizeChange());
+            enemyPool.ClearList();
         }
 
-        private static void KillMotion()
+        private static IEnumerator KillMotion()
         {
             DOTween.KillAll(true);
+            yield return null;
         }
 
         public void RetryGame()
         {
             Time.timeScale = 1;
-            KillMotion();
+            StartCoroutine(KillMotion());
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
         }
         public void GameSpeedSelect()
@@ -155,7 +159,7 @@ namespace Script
         {
             if (speedUp)
             {
-                Time.timeScale = isBattle ? 2 : 1;
+                Time.timeScale = IsBattle ? 2 : 1;
             }
             else
             {
