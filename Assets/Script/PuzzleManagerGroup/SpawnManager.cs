@@ -110,12 +110,16 @@ namespace Script.PuzzleManagerGroup
 
             yield return StartCoroutine(matchManager.CheckMatches());
             isMatchActivated = matchManager.isMatchActivated;
+            //콤보 후 상자보상 선택시 무한루프 빠지던 현상처리하는 코드입니다.
+            //추후에도 무한루프로 의심되는 현상이 생기면 아래 조건문에 or로 상황을 설정해서
+            //해당 CheckPosition 무한 순환문을 빨리 끊어주면 해결될 가능성이 높습니다.
             if (rewardManger.openBoxing)
             {
                 yield break;
             }
             else if(isMatchActivated)
             {
+                //자기자신을 다시 호출하므로 무한루프에 빠지는 걸 주의해야 합니다.
                 StartCoroutine(CheckPosition());
                 yield break;
             }
