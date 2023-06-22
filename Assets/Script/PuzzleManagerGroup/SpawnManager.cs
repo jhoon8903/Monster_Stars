@@ -82,7 +82,6 @@ namespace Script.PuzzleManagerGroup
                 yield return gameManager.Count0Call();
             }
         }
-        bool startMatch = false;
         float totalPos = 0;
         public int num_CheckPos = 0;//로그 콜 회수를 측정하기 위한 변수입니다.
         bool isMatchActivated = false;
@@ -90,13 +89,12 @@ namespace Script.PuzzleManagerGroup
         {
             num_CheckPos++;
             Debug.Log("CheckPos!!! " + num_CheckPos);
-            //if (startMatch || isMatched) yield break;
+            if (isMatched) yield break;
 
             var wait = new WaitForSeconds(0.05f);
             int maxRows = characterPool.UsePoolCharacterList().Count / 6;
             int maxCount = maxRows * (maxRows - 1) * 3;
 
-            startMatch = true;
             totalPos = characterPool.UsePoolCharacterList().Sum(t=> t.transform.position.y);
 
             Debug.Log("totalPos : " + totalPos);
@@ -111,22 +109,16 @@ namespace Script.PuzzleManagerGroup
             }
 
             yield return StartCoroutine(matchManager.CheckMatches());
-            startMatch = false;
             isMatchActivated = matchManager.isMatchActivated;
-            if (isMatchActivated)
+            if (rewardManger.openBoxing)
+            {
+                yield break;
+            }
+            else if(isMatchActivated)
             {
                 StartCoroutine(CheckPosition());
                 yield break;
             }
-            else
-            {
-                yield break;
-            }
-        }
-
-        public void ActivateCheckPosition()
-        {
-            StartCoroutine(CheckPosition());
         }
 
         private static IEnumerator MoveCharacter(GameObject gameObject, Vector3Int targetPosition, float duration = 0.3f)
