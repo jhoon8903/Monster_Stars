@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
-using Script.RewardScript;
 using UnityEngine;
 
 namespace Script.EnemyManagerScript
@@ -48,14 +47,15 @@ namespace Script.EnemyManagerScript
 
         public void ReturnToPool(EnemyBase enemyBase)
         {
-            if (pooledEnemy.Contains(enemyBase.gameObject))
+            var enemyBaseGameObject = enemyBase.gameObject;
+            if (pooledEnemy.Contains(enemyBaseGameObject))
             {
-                pooledEnemy.Remove(enemyBase.gameObject);
+                pooledEnemy.Remove(enemyBaseGameObject);
             }
             enemyBase.isDead = false;
             enemyBase.transform.localScale = Vector3.one;
-            enemyBase.gameObject.SetActive(false);
-            DOTween.Kill(enemyBase,true);
+            DOTween.Kill(enemyBaseGameObject,true); 
+            enemyBaseGameObject.SetActive(false);
         }
     }
 }

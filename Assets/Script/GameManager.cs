@@ -106,7 +106,10 @@ namespace Script
         }
         private IEnumerator NextStage()
         {
+
             Time.timeScale = 1;
+            yield return StartCoroutine(KillMotion());
+            yield return new WaitForSecondsRealtime(0.5f);
             _bossSpawnArea = new Vector3Int(Random.Range(2,5), 10, 0);
             if (wave % 10 == 0)
             {
@@ -126,12 +129,12 @@ namespace Script
             yield return StartCoroutine(backgroundManager.ChangePuzzleSize());
             yield return StartCoroutine(cameraManager.CameraPuzzleSizeChange());
             enemyPool.ClearList();
+            
         }
 
         private static IEnumerator KillMotion()
         {
-            DOTween.KillAll(true);
-            yield return null;
+           yield return DOTween.KillAll(true);
         }
 
         public void RetryGame()
