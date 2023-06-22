@@ -13,9 +13,9 @@ namespace Script.PuzzleManagerGroup
 {
     public class SpawnManager : MonoBehaviour
     {
-        [SerializeField] private CharacterPool characterPool;  
-        [SerializeField] private GridManager gridManager; 
-        [SerializeField] private MatchManager matchManager;  
+        [SerializeField] private CharacterPool characterPool;
+        [SerializeField] private GridManager gridManager;
+        [SerializeField] private MatchManager matchManager;
         [SerializeField] private CommonRewardManager rewardManger;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private CountManager countManager;
@@ -23,23 +23,24 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private CommonRewardManager commonRewardManager;
         public bool isWave10Spawning = false;
         public bool isMatched = false;
-        
+
         public GameObject CharacterObject(Vector3 spawnPosition)
         {
             var spawnCharacters = characterPool.UsePoolCharacterList();
-            return (from character in spawnCharacters 
-                where character.transform.position == spawnPosition 
+            return (from character in spawnCharacters
+                where character.transform.position == spawnPosition
                 select character.gameObject).FirstOrDefault();
         }
+
         public IEnumerator PositionUpCharacterObject()
         {
             var swipeManager = GetComponent<SwipeManager>();
             swipeManager.isBusy = true;
             var moves = new List<(GameObject, Vector3Int)>();
             for (var x = 0; x < gridManager.gridWidth; x++)
-            { 
+            {
                 var emptyCellCount = 0;
-                for (var y = gridManager.gridHeight - 1; y >= 0; y--) 
+                for (var y = gridManager.gridHeight - 1; y >= 0; y--)
                 {
                     var currentPosition = new Vector3Int(x, y, 0);
                     var currentObject = CharacterObject(currentPosition);
@@ -47,11 +48,13 @@ namespace Script.PuzzleManagerGroup
                     {
                         emptyCellCount++;
                     }
+
                     if (emptyCellCount <= 0) continue;
                     var targetPosition = new Vector3Int(x, y + emptyCellCount, 0);
                     moves.Add((currentObject, targetPosition));
                 }
             }
+
             yield return StartCoroutine(PerformMoves(moves));
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
             yield return StartCoroutine(CheckPosition());
@@ -78,16 +81,16 @@ namespace Script.PuzzleManagerGroup
                     yield return StartCoroutine(gameManager.Count0Call());
                 }
             }
-                yield return gameManager.Count0Call();
-            }
+
+            yield return gameManager.Count0Call();
         }
+
         float totalPos = 0;
         public int num_CheckPos = 0;//로그 콜 회수를 측정하기 위한 변수입니다.
         bool isMatchActivated = false;
         IEnumerator CheckPosition()
         {
             num_CheckPos++;
-            Debug.Log("CheckPos!!! " + num_CheckPos);
             if (isMatched) yield break;
 
             var wait = new WaitForSeconds(0.05f);
@@ -95,8 +98,6 @@ namespace Script.PuzzleManagerGroup
             int maxCount = maxRows * (maxRows - 1) * 3;
 
             totalPos = characterPool.UsePoolCharacterList().Sum(t=> t.transform.position.y);
-
-            Debug.Log("totalPos : " + totalPos);
 
             while (totalPos != maxCount)
             {

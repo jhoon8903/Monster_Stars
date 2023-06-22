@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
@@ -15,6 +14,7 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private CountManager countManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private EnforceManager enforceManager;
+        [SerializeField] private SwipeManager swipeManager;
         private bool _isMatched = false;
 
         // 이 메소드는 주어진 캐릭터 객체가 매치되는지 확인하는 기능을 수행합니다. 매치 여부를 반환합니다.
@@ -150,8 +150,6 @@ namespace Script.PuzzleManagerGroup
             foreach (GameObject character in FindConsecutiveCharacters(characterList))
             {
                 yield return StartCoroutine(swipeManager.AllMatchesCheck(character));
-
-                Debug.Log("대상은? " + character +" ("+ character.transform.position.x + ", " + character.transform.position.y + ")");
                 count++;
                 if (count > 1)
                 {
@@ -161,7 +159,6 @@ namespace Script.PuzzleManagerGroup
             }
             yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
             _isMatched = false;
-
         }
 
         public void StartCheckMatches()
@@ -792,7 +789,7 @@ namespace Script.PuzzleManagerGroup
         {
             List<List<GameObject>> result = new List<List<GameObject>>();
             int tempLevel = 0; // 캐릭터의 레벨 기준을 현재 인덱스와 비교하기위해 잠시 저장합니다
-            UnitGroups tempUnitGroup = UnitGroups.None; // 캐릭터의 종류를 판단하기 위해 식별 인덱스를 잠시 저장
+            CharacterBase.UnitGroups tempUnitGroup = CharacterBase.UnitGroups.None; // 캐릭터의 종류를 판단하기 위해 식별 인덱스를 잠시 저장
             int currentFloor = 1; // 현재 계산 중인 캐릭터가 몇 층인지를 판단
             int sameCount = 1; // 현재 인덱스까지 몇 개의 캐릭터가 동일하게 연결됐는지를 "갱신"
 
@@ -873,7 +870,7 @@ namespace Script.PuzzleManagerGroup
             // 결과를 저장할 List를 초기화합니다
             List<List<GameObject>> result = new List<List<GameObject>>();
             int tempLevel = 0; // 캐릭터의 레벨 기준을 현재 인덱스와 비교하기 위해 잠시 저장합니다
-            UnitGroups tempUnitGroup = UnitGroups.None; // 캐릭터의 종류를 판단하기 위해 식별 인덱스를 잠시 저장
+            CharacterBase.UnitGroups tempUnitGroup = CharacterBase.UnitGroups.None; // 캐릭터의 종류를 판단하기 위해 식별 인덱스를 잠시 저장
             int sameCount = 1; // 현재 인덱스까지 몇 개의 캐릭터가 동일하게 연결됐는지를 "갱신"
 
             int totalRows = characters.Count / 6;
@@ -957,8 +954,6 @@ namespace Script.PuzzleManagerGroup
                             sameCount = 1; // 동일 캐릭터 배열 길이는 1부터 시작
                         }
                     }
-                    Debug.Log("item : " + index + "번은 "+ characters[index].GetComponent<CharacterBase>().unitGroup + " + characters[index].transform.position.x + " + " + characters[index].transform.position.y + ");
-                    Debug.Log("item : " + index + "번에서 현재 sameCount는? " + sameCount);
                 }
             }
             return result;
@@ -1037,12 +1032,9 @@ namespace Script.PuzzleManagerGroup
 
                 if (!foundMatchedPair)
                 {
-                    Debug.Log("맞출려는 세로길이는?" + columnList.Count);
                     int tempindex = 0;
                     foreach (GameObject item in columnList)
                     {
-                        Debug.Log("위 배열의 " + tempindex +"번째 요소의 좌표? ("+ columnList[tempindex].transform.position.x +", "+
-                            columnList[tempindex].transform.position.y+")");
                         tempindex++;
                     }
                     int index = Mathf.FloorToInt(columnList.Count / 2f);
