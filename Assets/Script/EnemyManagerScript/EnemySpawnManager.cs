@@ -75,12 +75,8 @@ namespace Script.EnemyManagerScript
             yield return StartCoroutine(GetRandomPointInBounds(enemyBase.SpawnZone, pos => spawnPosition = pos));
 
             enemyBase.transform.position = spawnPosition;
-            Debug.Log($"포지션 1 EnemyNumber: {enemyBase.gameObject.name} / Position: { enemyBase.gameObject.transform.position}");
             enemyBase.gameObject.SetActive(true);
-            Debug.Log($"포지션 2 EnemyNumber: {enemyBase.gameObject.name} / Position: { enemyBase.gameObject.transform.position}");
             enemyBase.Initialize();
-            Debug.Log($"포지션 3 EnemyNumber: {enemyBase.gameObject.name} / Position: { enemyBase.gameObject.transform.position}");
-
             yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyBase));
         }
 

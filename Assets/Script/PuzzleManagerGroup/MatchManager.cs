@@ -869,12 +869,15 @@ namespace Script.PuzzleManagerGroup
                         if (tempLevel == characters[index].GetComponent<CharacterBase>().Level && tempUnitGroup == characters[index].GetComponent<CharacterBase>().unitGroup)
                         {
                             sameCount++;
-                            var currentList = new List<GameObject>();
-                            for (var k = i + (totalColumns * (j - sameCount + 1)); k <= i + (totalColumns * j); k += totalColumns)
+                            if (sameCount >= 3) // 방금 위에서 ++한 값을 포함해서 이번 열까지 누적된 동일 캐릭터의 연결이 3개 이상인지 확인합니다
                             {
-                                currentList.Add(characters[k]);
+                                var currentList = new List<GameObject>();
+                                for (var k = i + (totalColumns * (j - sameCount)); k <= i + (totalColumns * j - 1); k += totalColumns)
+                                {
+                                    currentList.Add(characters[k]);
+                                }
+                                result.Add(currentList);
                             }
-                            result.Add(currentList);
                         }
                         else
                         {
@@ -889,6 +892,7 @@ namespace Script.PuzzleManagerGroup
                                 result.Add(currentList);
                             }
                         }
+                        //이전 요소에 대한 처리로 넘어가지 않도록 break로 끊어줍니다. 따라서 Log를 여기서만 따로 발생시킵니다.
                         break;
                     }
                     // j가 0일 때는 새롭게 1층, 즉 컬럼이 전환된 시점이므로 이전 열에 대한 처리를 무조건 적으로 검토합니다

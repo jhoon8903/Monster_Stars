@@ -46,16 +46,16 @@ namespace Script.EnemyManagerScript
             Debug.Log("Enemy List 초기화!");
         }
 
-        public void ReturnToPool(GameObject obj)
+        public void ReturnToPool(EnemyBase enemyBase)
         {
-            if (pooledEnemy.Contains(obj))
+            if (pooledEnemy.Contains(enemyBase.gameObject))
             {
-                pooledEnemy.Remove(obj);
+                pooledEnemy.Remove(enemyBase.gameObject);
             }
-            obj.GetComponent<EnemyBase>().isDead = false;
-            obj.transform.localScale = Vector3.one;
-            obj.SetActive(false);
-            DOTween.Kill(obj.transform);
+            enemyBase.isDead = false;
+            enemyBase.transform.localScale = Vector3.one;
+            enemyBase.gameObject.SetActive(false);
+            DOTween.Kill(enemyBase,true);
         }
     }
 }

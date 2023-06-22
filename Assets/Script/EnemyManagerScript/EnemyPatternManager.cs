@@ -15,7 +15,6 @@ namespace Script.EnemyManagerScript
 
         public IEnumerator Zone_Move(EnemyBase enemyBase)
         {
-            // enemyBase.EnemyProperty();
             var endPosition = castle.transform.position.y-4;
             var slowCount = EnforceManager.Instance.SlowCount();
             var speedReductionFactor = 1f + slowCount * 0.15f;
@@ -46,8 +45,7 @@ namespace Script.EnemyManagerScript
             var bossObject = boss.GetComponent<EnemyBase>();
             bossObject.EnemyProperty();
             bossObject.Initialize();
-            var position = boss.transform.position;
-            var endPosition = new Vector3(position.x, castle.transform.position.y-5, 0);
+            var endPosition = castle.transform.position.y-5;
             var duration = bossObject.MoveSpeed * 40f;
             StartCoroutine(PatternACoroutine(bossObject, endPosition, duration));
             yield return null;
@@ -56,7 +54,7 @@ namespace Script.EnemyManagerScript
         private IEnumerator PatternACoroutine(EnemyBase enemyBase, float endPosition, float duration)
         {
             gameManager.GameSpeed();
-            enemyBase.transform.DOMoveY(endPosition, duration).SetEase(Ease.Linear);
+             enemyBase.transform.DOMoveY(endPosition, duration).SetEase(Ease.Linear);
             while (gameManager.IsBattle)
             {
                 if (enemyBase.isRestraint)
@@ -94,14 +92,19 @@ namespace Script.EnemyManagerScript
             if (EnforceManager.Instance.waterStun && _random.Next(100) < 15)
             {
                 yield return enemyBase.GetComponent<SpriteRenderer>().DOColor(new Color(1f, 1f, 1f, 0.3f), 0.1f);
-                yield return DOTween.Pause(1f);
+                enemyBase.DOPause();
+                yield return new WaitForSecondsRealtime(1f);
+                enemyBase.DOPlay();
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(new Color(1f, 1f, 1f, 1f), 0.1f);
             }
             else
             {
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(slowColor, 0.1f);
-                enemyBase.gameObject.transform.DOMoveY(endPosition.y, duration * slowPowerDuration).SetEase(Ease.Linear);
+                enemyBase.DOPause();
+                var slow = enemyBase.gameObject.transform.DOMoveY(endPosition, duration * slowPowerDuration).SetEase(Ease.Linear);
                 yield return new WaitForSecondsRealtime(slowTime);
+                DOTween.Kill(slow);
+                enemyBase.DOPlay();
                 yield return enemyBase.isSlow = false;
                 enemyBase.GetComponent<SpriteRenderer>().DOColor(originColor, 0.1f);
             }

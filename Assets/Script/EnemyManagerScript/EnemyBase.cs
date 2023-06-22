@@ -102,14 +102,13 @@ namespace Script.EnemyManagerScript
 
         public void EnemyKilledEvents(EnemyBase detectedEnemy)
         {
-            var enemy = detectedEnemy.gameObject;
             var waveManager = FindObjectOfType<WaveManager>();
             var characterBase = FindObjectOfType<CharacterBase>();
             var enemyPool = FindObjectOfType<EnemyPool>();
 
             characterBase.DetectEnemies().Remove(detectedEnemy.gameObject);
             waveManager.EnemyDestroyEvent(detectedEnemy);
-            enemyPool.ReturnToPool(enemy);
+            enemyPool.ReturnToPool(detectedEnemy);
         }
 
         private IEnumerator UpdateHpSlider()
