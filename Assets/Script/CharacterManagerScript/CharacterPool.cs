@@ -36,7 +36,7 @@ namespace Script.CharacterManagerScript
 
         public List<GameObject> SortPoolCharacterList()
         {
-            List<GameObject> sortedList = UsePoolCharacterList()
+            var sortedList = UsePoolCharacterList()
                 .OrderBy(t => t.transform.position.y)
                 .ThenBy(t => t.transform.position.x)
                 .ToList();

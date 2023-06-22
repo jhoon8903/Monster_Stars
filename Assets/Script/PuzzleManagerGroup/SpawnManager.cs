@@ -21,8 +21,10 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private CountManager countManager;
         [SerializeField] private EnforceManager enforceManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
-        public bool isWave10Spawning = false;
-        public bool isMatched = false;
+        public bool isWave10Spawning;
+        public bool isMatched;
+        private float _totalPos;
+        private bool _isMatchActivated;
 
         public GameObject CharacterObject(Vector3 spawnPosition)
         {
@@ -54,7 +56,6 @@ namespace Script.PuzzleManagerGroup
                     moves.Add((currentObject, targetPosition));
                 }
             }
-
             yield return StartCoroutine(PerformMoves(moves));
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
             yield return StartCoroutine(CheckPosition());
@@ -81,47 +82,38 @@ namespace Script.PuzzleManagerGroup
                     yield return StartCoroutine(gameManager.Count0Call());
                 }
             }
-
             yield return gameManager.Count0Call();
         }
 
-        float totalPos = 0;
-        public int num_CheckPos = 0;//로그 콜 회수를 측정하기 위한 변수입니다.
-        bool isMatchActivated = false;
-        IEnumerator CheckPosition()
+
+        private IEnumerator CheckPosition()
         {
-            num_CheckPos++;
             if (isMatched) yield break;
 
             var wait = new WaitForSeconds(0.05f);
-            int maxRows = characterPool.UsePoolCharacterList().Count / 6;
-            int maxCount = maxRows * (maxRows - 1) * 3;
+            var maxRows = characterPool.UsePoolCharacterList().Count / 6;
+            var maxCount = maxRows * (maxRows - 1) * 3;
 
-            totalPos = characterPool.UsePoolCharacterList().Sum(t=> t.transform.position.y);
+            _totalPos = characterPool.UsePoolCharacterList().Sum(t=> t.transform.position.y);
 
-            while (totalPos != maxCount)
+            while (_totalPos != maxCount)
             {
                 while(characterPool.SortPoolCharacterList().Count < characterPool.UsePoolCharacterList().Count)
                 {
                     yield return wait;
                 }
-                totalPos = characterPool.UsePoolCharacterList().Sum(t => t.transform.position.y);
+                _totalPos = characterPool.UsePoolCharacterList().Sum(t => t.transform.position.y);
             }
 
             yield return StartCoroutine(matchManager.CheckMatches());
-            isMatchActivated = matchManager.isMatchActivated;
-            //콤보 후 상자보상 선택시 무한루프 빠지던 현상처리하는 코드입니다.
-            //추후에도 무한루프로 의심되는 현상이 생기면 아래 조건문에 or로 상황을 설정해서
-            //해당 CheckPosition 무한 순환문을 빨리 끊어주면 해결될 가능성이 높습니다.
+            _isMatchActivated = matchManager.isMatchActivated;
             if (rewardManger.openBoxing)
             {
                 yield break;
             }
-            else if(isMatchActivated)
+            if(_isMatchActivated)
             {
-                //자기자신을 다시 호출하므로 무한루프에 빠지는 걸 주의해야 합니다.
                 StartCoroutine(CheckPosition());
-                yield break;
             }
         }
 

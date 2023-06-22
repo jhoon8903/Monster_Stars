@@ -1,5 +1,5 @@
 using System.Collections;
-using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
@@ -10,8 +10,9 @@ namespace Script.PuzzleManagerGroup
 {
     public sealed class SwipeManager : MonoBehaviour
     {
-        public bool isBusy = false;
-        public bool isUp = false;
+        private bool _isSoon;
+        public bool isBusy;
+        public bool isUp;
         private GameObject _startObject; // 초기에 터치된 객체를 추적하는 데 사용됩니다.
         private GameObject _returnObject; // 원래 위치로 돌아갈 객체를 추적하는 데 사용됩니다.
         private Vector2 _firstTouchPosition; // 첫 터치의 위치를 저장합니다.
@@ -52,15 +53,15 @@ namespace Script.PuzzleManagerGroup
         // 사용자의 터치 포인트 또는 마우스 클릭 포인트를 화면 좌표에서 세계 좌표로 변환합니다.
         private static Vector2 GetTouchPoint()
         {
-            var worldPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            var worldPoint = Camera.main!.ScreenToWorldPoint(Input.mousePosition);
             return new Vector2(worldPoint.x, worldPoint.y);
         }
 
-        bool isSoon = false;
+
         // 선택된 게임 오브젝트를 식별하고 첫 번째 터치 위치를 저장하는 초기 터치 또는 클릭 이벤트를 처리합니다.
         private void HandleTouchDown(Vector2 point2D)
         {
-            if (isBusy || isSoon)
+            if (isBusy || _isSoon)
             {
                 return;
             }
@@ -73,26 +74,24 @@ namespace Script.PuzzleManagerGroup
             StartCoroutine(CheckSoon());
         }
 
-        WaitForSeconds CheckSoonWait = new WaitForSeconds(0.5f);
-        IEnumerator CheckSoon()
+        private readonly WaitForSeconds _checkSoonWait = new WaitForSeconds(0.5f);
+
+        private IEnumerator CheckSoon()
         {
-            isSoon = true;
-            yield return CheckSoonWait;
-            isSoon = false;
+            _isSoon = true;
+            yield return _checkSoonWait;
+            _isSoon = false;
         }
         // 사용자가 손가락을 떼거나 마우스 버튼을 놓을 때 처리합니다. 시작 개체의 크기를 조정하고 다음 스 와이프를 위해 무효화합니다.
         private void HandleTouchUp()
         {
             ScaleObject(_startObject, Vector3.one, 0.2f);
-            List<GameObject> allObject = FindObjectOfType<CharacterPool>().UsePoolCharacterList();
+            var allObject = FindObjectOfType<CharacterPool>().UsePoolCharacterList();
 
-            foreach (var character in allObject)
+            foreach (var character in allObject.Where(character => character.GetComponent<CharacterBase>().IsClicked))
             {
-                if (character.GetComponent<CharacterBase>().IsClicked)
-                {
-                    ScaleObject(character, Vector3.one, 0.2f);
-                    character.GetComponent<CharacterBase>().IsClicked = false;
-                }
+                ScaleObject(character, Vector3.one, 0.2f);
+                character.GetComponent<CharacterBase>().IsClicked = false;
             }
             _startObject = null;
         }
