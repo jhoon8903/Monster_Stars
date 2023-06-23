@@ -38,8 +38,7 @@ namespace Script.EnemyManagerScript
         }
 
         public IEnumerator SpawnEnemies(EnemyBase.EnemyTypes enemyType, int count)
-        { 
-            Debug.Log(count);
+        {
             for (var i = 0; i < count; i++)
             {
                 StartCoroutine(SpawnEnemy(enemyType));

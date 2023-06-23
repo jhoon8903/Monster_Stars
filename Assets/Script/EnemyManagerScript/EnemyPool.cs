@@ -8,7 +8,7 @@ namespace Script.EnemyManagerScript
     public class EnemyPool : MonoBehaviour
     {
         [SerializeField] private EnemyManager enemyManager;
-        [SerializeField] private List<GameObject> pooledEnemy = new List<GameObject>();
+        [SerializeField] public List<GameObject> pooledEnemy = new List<GameObject>();
         [SerializeField] private  List<GameObject> pooledDefaultEnemy = new List<GameObject>();
 
         public List<EnemyBase> enemyBases = new List<EnemyBase>();
@@ -54,7 +54,6 @@ namespace Script.EnemyManagerScript
             }
             enemyBase.isDead = false;
             enemyBase.transform.localScale = Vector3.one;
-            DOTween.Kill(enemyBaseGameObject,true); 
             enemyBaseGameObject.SetActive(false);
         }
     }

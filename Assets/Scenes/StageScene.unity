@@ -685,7 +685,7 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   gridManager: {fileID: 8808150501734532426}
   spawnManager: {fileID: 149521964}
-  moveCount: 13
+  moveCount: 15
   swipeManager: {fileID: 149521965}
   cameraManager: {fileID: 758648960}
   backgroundManager: {fileID: 1011029961}
@@ -1680,7 +1680,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65933e619ef454066b4b1f65dd5bd44f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  castle: {fileID: 1177777540}
   gameManager: {fileID: 149521958}
 --- !u!1 &362582815
 GameObject:
@@ -4520,8 +4519,8 @@ MonoBehaviour:
   hpBar: {fileID: 430691236}
   hpText: {fileID: 2009872133}
   gameManager: {fileID: 149521958}
-  hpPoint: 1000
-  maxHpPoint: 1000
+  hpPoint: 100000
+  maxHpPoint: 100000
 --- !u!1 &1211532197
 GameObject:
   m_ObjectHideFlags: 0
