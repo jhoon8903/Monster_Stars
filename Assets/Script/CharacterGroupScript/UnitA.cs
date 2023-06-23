@@ -60,7 +60,7 @@ namespace Script.CharacterGroupScript
             if (EnforceManager.Instance.divineAtkRange)
             {
                 detectionSize = new Vector2(DetectionWidth - 0.5f, DetectionHeight * 2); // Double the detection height
-                detectionCenter = (Vector2)transform.position; // Center the detection box around the current position
+                detectionCenter = transform.position; // Center the detection box around the current position
             }
             else
             {
@@ -91,7 +91,7 @@ public void OnDrawGizmos()
     if (EnforceManager.Instance.divineAtkRange)
     {
         detectionSize = new Vector2(DetectionWidth - 0.5f, DetectionHeight * 2); // Double the detection height
-        detectionCenter = (Vector2)transform.position; // Center the detection box around the current position
+        detectionCenter = transform.position; // Center the detection box around the current position
     }
     else
     {

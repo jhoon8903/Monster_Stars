@@ -11,7 +11,7 @@ namespace Script.UIManager
         private int _rewardMoveCount;
         private int _stepRewardCount;
         protected internal int TotalMoveCount;
-        public bool IsSwapOccurred { get; set; } = false;
+        public bool IsSwapOccurred { get; set; }
         public TextMeshProUGUI moveCountText;
 
         public void Initialize(int initialMoveCount)

@@ -72,8 +72,8 @@ namespace Script.PuzzleManagerGroup
            
             while (commonRewardManager.isOpenBox)
             {
-                StartCoroutine(gameManager.WaitForPanelToClose());
-                yield return new WaitForSecondsRealtime(0.5f);
+                yield return StartCoroutine(gameManager.WaitForPanelToClose());
+                yield return new WaitForSeconds(0.5f);
             }
 
             if (countManager.TotalMoveCount == 0)

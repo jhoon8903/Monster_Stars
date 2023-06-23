@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using DG.Tweening;
 using Script.CharacterGroupScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
@@ -12,6 +11,12 @@ namespace Script.WeaponScriptGroup
         private float _distance;
         private Vector3 _enemyTransform;
         private List<GameObject> _enemyTransforms = new List<GameObject>();
+        private Rigidbody2D _rigidbody2D;
+        private void Awake()
+        {
+            _rigidbody2D = GetComponent<Rigidbody2D>();
+        }
+
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
@@ -20,19 +25,16 @@ namespace Script.WeaponScriptGroup
             {
                 _enemyTransform = enemy.transform.position;
             }
-            _distance = Vector3.Distance(transform.position, _enemyTransform);
-            var timeToMove = _distance / Speed * 1.5f;
-            transform.DOMoveY(_enemyTransform.y, timeToMove).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(gameObject));
-            if (_enemyTransform.y > transform.position.y)
-            {
-                // _enemyTransform의 y 축이 더 높음
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-            }
-            else
-            {
-                // _enemyTransform의 y 축이 더 낮음
-                transform.rotation = Quaternion.Euler(0, 0, 180);
-            }
+
+            var position = transform.position;
+            _distance = Vector3.Distance(position, _enemyTransform);
+            var velocityDirection = (_enemyTransform.y > position.y) ? 1 : -1;
+            _rigidbody2D.velocity = new Vector2(0, Speed * velocityDirection);
+
+            transform.rotation = Quaternion.Euler(0, 0, _enemyTransform.y > transform.position.y ? 0 : 180);
+
+            yield return new WaitForSeconds(_distance / Speed);
+            StopUseWeapon(gameObject);
         }
         private void OnTriggerEnter2D(Collider2D collision)
         {

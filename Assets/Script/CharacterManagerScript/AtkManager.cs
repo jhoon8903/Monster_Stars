@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using DG.Tweening;
 using Script.RewardScript;
 using Script.WeaponScriptGroup;
 using UnityEngine;
@@ -11,8 +10,8 @@ namespace Script.CharacterManagerScript
 {
     public class AttackData
     {
-        public GameObject Unit { get; private set; } // Reference to the attacking unit
-        public WeaponsPool.WeaponType WeaponType { get; private set; } // Type of the weapon used for the attack
+        public GameObject Unit { get; } // Reference to the attacking unit
+        public WeaponsPool.WeaponType WeaponType { get;} // Type of the weapon used for the attack
 
         public AttackData(GameObject unit, WeaponsPool.WeaponType weaponType)
         {
@@ -29,6 +28,20 @@ namespace Script.CharacterManagerScript
         [SerializeField] private GameManager gameManager;
         private const float AttackRate = 2f;
         public List<GameObject> enemyList = new List<GameObject>();
+        public List<GameObject> weaponsList = new List<GameObject>();
+        public static AtkManager Instance { get; private set; }
+
+        public void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
+        }
 
         public IEnumerator CheckForAttack()
         {
@@ -46,11 +59,7 @@ namespace Script.CharacterManagerScript
             var atkRate = unit.GetComponent<CharacterBase>().defaultAtkRate * (AttackRate - EnforceManager.Instance.increaseAtkRate / 100f);
             while (gameManager.IsBattle)
             {
-                if(Time.timeScale == 0)
-                {
-                    yield return null;
-                    continue;
-                }
+                yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 enemyList = unit.DetectEnemies();
 
                 if (enemyList.Count > 0)
@@ -73,12 +82,7 @@ namespace Script.CharacterManagerScript
                             throw new ArgumentOutOfRangeException();
                     }
                 }
-                else
-                {
-                    yield return new WaitForSecondsRealtime(0.2f);
-                }
-
-                yield return new WaitForSecondsRealtime( gameManager.speedUp ? atkRate/2 : atkRate);
+                yield return new WaitForSeconds(atkRate);
             }
             // ReSharper disable once IteratorNeverReturns
         }
@@ -136,20 +140,34 @@ namespace Script.CharacterManagerScript
             var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.transform.position, unit.transform.rotation); // Get the weapon object from the weapon pool
             var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>(); // Get the weapon base component
             weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>()); // Initialize the weapon with the character's information
+            weaponsList.Add(weaponBase.gameObject);
             StartCoroutine(weaponBase.UseWeapon()); // Perform the weapon's attack logic
             weaponsPool.SetSprite(weaponType, attackData.Unit.GetComponent<CharacterBase>().UnitLevel, weaponObject); // Set the weapon's sprite based on the character's level
-            if (!gameManager.IsBattle)
-            {
-                DOTween.Kill(weaponObject.transform);
-            }
+            
             return weaponObject;
         }
 
         private IEnumerator GasDoubleAtk(GameObject unit,float atkDuration)
         {
             Attack(new AttackData(unit, WeaponsPool.WeaponType.VenomSac));
-            yield return new WaitForSecondsRealtime(atkDuration);
+            yield return new WaitForSeconds(atkDuration);
             Attack(new AttackData(unit, WeaponsPool.WeaponType.VenomSac));
+        }
+
+        public void ClearWeapons()
+        {
+            if (weaponsList.Count > 0)
+            {
+                var weaponsListCopy = weaponsList.ToList();
+                foreach (var weapon in weaponsListCopy)
+                {
+                    var weaponBase = weapon.GetComponent<WeaponBase>();
+                    if (weaponBase.isInUse)
+                    {
+                        weaponBase.StopUseWeapon(weaponBase.gameObject);
+                    }
+                }
+            }
         }
     }
 }

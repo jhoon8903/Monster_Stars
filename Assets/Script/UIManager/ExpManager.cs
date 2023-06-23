@@ -1,4 +1,3 @@
-using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,14 +9,15 @@ namespace Script.UIManager
 {
     public class ExpManager : MonoBehaviour
     {
-        [SerializeField] private float expPoint = 0;
+        [SerializeField] private float expPoint ;
         [SerializeField] private int levelUpPoint = 5;
         [SerializeField] private Slider expBar;
         [SerializeField] private TextMeshProUGUI expText;
         [SerializeField] private LevelUpRewardManager levelUpRewardManager;
         [SerializeField] private TextMeshProUGUI levelText;
         [SerializeField] private EnforceManager enforceManager;
-        public int level = 0;
+        private static readonly object Lock = new object();
+        public int level;
         public static ExpManager Instance { get; private set; }
 
         private void Start()
@@ -42,24 +42,27 @@ namespace Script.UIManager
 
         public void HandleEnemyKilled(EnemyBase.KillReasons reason)
         {
-            if (reason != EnemyBase.KillReasons.ByPlayer) return;
-            var additionalExp = expPoint * (enforceManager.expPercentage / 100.0f);
-            expPoint += 1 + additionalExp; 
-            if (expPoint >= levelUpPoint)
+            lock (Lock)
             {
-                level++;
-                UpdateLevelText(level);
-                expPoint = 0;
-                if (level <= 14)
+                if (reason != EnemyBase.KillReasons.ByPlayer) return;
+                var additionalExp = expPoint * (enforceManager.expPercentage / 100.0f);
+                expPoint += 1 + additionalExp; 
+                if (expPoint >= levelUpPoint)
                 {
-                    levelUpPoint += 5;
-                    expBar.maxValue = levelUpPoint;
+                    level++;
+                    UpdateLevelText(level);
+                    expPoint = 0;
+                    if (level <= 14)
+                    {
+                        levelUpPoint += 5;
+                        expBar.maxValue = levelUpPoint;
+                    }
+                    StartCoroutine(levelUpRewardManager.LevelUpReward());
                 }
-                StartCoroutine(levelUpRewardManager.LevelUpReward());
+                expBar.value = expPoint;
+                expBar.DOValue(expPoint, 0.5f);
+                UpdateExpText();
             }
-            expBar.value = expPoint;
-            expBar.DOValue(expPoint, 0.5f);
-            UpdateExpText();
         }
 
         private void UpdateExpText()

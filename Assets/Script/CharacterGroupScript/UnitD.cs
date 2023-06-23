@@ -97,7 +97,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.D;
             DefaultDamage += (250f * EnforceManager.Instance.increasePhysicsDamage);
             defaultAtkRate = 1f * EnforceManager.Instance.increasePhysicAtkSpeed ;
-            swingSpeed = 2f * EnforceManager.Instance.increasePhysicAtkSpeed;
+            swingSpeed = 1f * EnforceManager.Instance.increasePhysicAtkSpeed;
             defaultAtkDistance = 1f;
             _spriteRenderer.sprite = level2Sprite;
             UnitAtkType = UnitAtkTypes.Circle;
@@ -112,7 +112,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.D;
             DefaultDamage *= 1.7f;
             defaultAtkRate = 1f * EnforceManager.Instance.increasePhysicAtkSpeed ;
-            swingSpeed = 2f * EnforceManager.Instance.increasePhysicAtkSpeed;
+            swingSpeed = 1f * EnforceManager.Instance.increasePhysicAtkSpeed;
             defaultAtkDistance = 1f;
             _spriteRenderer.sprite = level3Sprite;
             UnitAtkType = UnitAtkTypes.Circle;
@@ -127,7 +127,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.D;
             DefaultDamage *= 2.0f;
             defaultAtkRate = 1f * EnforceManager.Instance.increasePhysicAtkSpeed ;
-            swingSpeed = 2f * EnforceManager.Instance.increasePhysicAtkSpeed;
+            swingSpeed = 1f * EnforceManager.Instance.increasePhysicAtkSpeed;
             defaultAtkDistance = 1f;
             _spriteRenderer.sprite = level4Sprite;
             UnitAtkType = UnitAtkTypes.Circle;
@@ -142,7 +142,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.D;
             DefaultDamage *= 2.3f;
             defaultAtkRate = 1f * EnforceManager.Instance.increasePhysicAtkSpeed ;
-            swingSpeed = 2f * EnforceManager.Instance.increasePhysicAtkSpeed;
+            swingSpeed = 1f * EnforceManager.Instance.increasePhysicAtkSpeed;
             defaultAtkDistance = 1f;
             _spriteRenderer.sprite = level5Sprite;
             UnitAtkType = UnitAtkTypes.Circle;

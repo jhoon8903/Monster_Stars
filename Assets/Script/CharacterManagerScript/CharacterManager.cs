@@ -9,7 +9,7 @@ namespace Script.CharacterManagerScript
         [SerializeField] internal List<CharacterBase> characterList = new List<CharacterBase>(); // List of character bases
         [SerializeField] private CharacterPool characterPool; // Reference to the character pool
         public readonly HashSet<int> CharacterGroupLevelUpIndexes = new HashSet<int>();
-        public bool goldGetMore = false;
+        public bool goldGetMore;
 
         // Level up a random selection of characters a specified number of times
         public void RandomCharacterLevelUp(int characterCount)

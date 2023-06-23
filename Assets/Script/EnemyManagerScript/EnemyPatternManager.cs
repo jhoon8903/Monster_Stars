@@ -10,12 +10,14 @@ namespace Script.EnemyManagerScript
         [SerializeField] private GameManager gameManager;
         private readonly Dictionary<EnemyBase, Rigidbody2D> _enemyRigidbodies = new Dictionary<EnemyBase, Rigidbody2D>();
         private float _velocity;
+        public float moveSpeedOffset = 0.5f;
         private readonly System.Random _random = new System.Random();
         public IEnumerator Zone_Move(EnemyBase enemyBase)
         {
+            
             var slowCount = EnforceManager.Instance.SlowCount();
             var speedReductionFactor = 1f + slowCount * 0.15f;
-            _velocity = enemyBase.MoveSpeed * speedReductionFactor * 0.5f ;
+            _velocity = enemyBase.MoveSpeed * speedReductionFactor * moveSpeedOffset ;
 
             switch (enemyBase.SpawnZone)
             {
@@ -32,7 +34,6 @@ namespace Script.EnemyManagerScript
         public IEnumerator Boss_Move(GameObject boss)
         {
             var bossObject = boss.GetComponent<EnemyBase>();
-            bossObject.EnemyProperty();
             bossObject.Initialize();
             StartCoroutine(PatternACoroutine(bossObject, _velocity * 0.8f));
             yield return null;
@@ -40,13 +41,14 @@ namespace Script.EnemyManagerScript
 
         private IEnumerator PatternACoroutine(EnemyBase enemyBase, float velocity)
         {
-            gameManager.GameSpeed();
+            
             var rb = enemyBase.GetComponent<Rigidbody2D>();
             _enemyRigidbodies[enemyBase] = rb;
             rb.velocity = new Vector2(0, -velocity);
 
             while (gameManager.IsBattle)
             {
+               yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 if (enemyBase.isRestraint)
                 {
                     yield return StartCoroutine(RestrainEffect(enemyBase));
@@ -55,7 +57,7 @@ namespace Script.EnemyManagerScript
                 {
                     yield return StartCoroutine(SlowEffect(enemyBase));
                 }
-                yield return new WaitForSecondsRealtime(0.1f);
+                yield return new WaitForSeconds(0.1f);
             }
         }
 
@@ -67,8 +69,8 @@ namespace Script.EnemyManagerScript
 
             enemyBase.GetComponent<SpriteRenderer>().color = restraintColor;
             _enemyRigidbodies[enemyBase].velocity = Vector2.zero;
-            yield return new WaitForSecondsRealtime(overTime);
-            _enemyRigidbodies[enemyBase].velocity = new Vector2(0, _velocity);
+            yield return new WaitForSeconds(overTime);
+            _enemyRigidbodies[enemyBase].velocity = new Vector2(0, -_velocity);
             enemyBase.isRestraint = false;
             enemyBase.GetComponent<SpriteRenderer>().color = originColor;
         }
@@ -83,7 +85,12 @@ namespace Script.EnemyManagerScript
             if (EnforceManager.Instance.waterStun && _random.Next(100) < 15)
             {
                 _enemyRigidbodies[enemyBase].velocity = Vector2.zero;
-                yield return new WaitForSecondsRealtime(1f);
+                yield return new WaitForSeconds(1f);
+            }
+            else if (EnforceManager.Instance.waterRestraintKnockBack && enemyBase.isRestraint )
+            {
+                _enemyRigidbodies[enemyBase].velocity = new Vector2(0, 0.5f);
+                yield return new WaitForSeconds(0.1f);
             }
             else
             {
@@ -91,7 +98,7 @@ namespace Script.EnemyManagerScript
                     EnforceManager.Instance.waterIncreaseSlowPower 
                         ? new Vector2(0, -_velocity*0.6f) 
                         : new Vector2(0, -_velocity*0.4f);
-                yield return new WaitForSecondsRealtime(slowTime);
+                yield return new WaitForSeconds(slowTime);
             }
             _enemyRigidbodies[enemyBase].velocity = new Vector2(0, -_velocity);
             enemyBase.isSlow = false;

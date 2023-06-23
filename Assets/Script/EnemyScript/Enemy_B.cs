@@ -4,7 +4,7 @@ namespace Script.EnemyScript
 {
     public class Enemy_B : EnemyBase
     {
-        protected internal override void EnemyProperty()
+        public override void Initialize()
         {
             healthPoint = 550;
             CrushDamage = 200;
@@ -12,6 +12,7 @@ namespace Script.EnemyScript
             EnemyType = EnemyTypes.Slow;
             SpawnZone = SpawnZones.A;
             RegistryType = RegistryTypes.Divine;
+            base.Initialize();
         }
     }
 }

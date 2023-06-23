@@ -3,81 +3,72 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using Script.RewardScript;
 
 namespace Script.UIManager
 {
-      public class CastleManager : MonoBehaviour
-      {
-          [SerializeField] protected internal Slider hpBar;
-          [SerializeField] private TextMeshProUGUI hpText;
-          [SerializeField] private GameManager gameManager;
-          public float hpPoint = 1000;
-          public float maxHpPoint = 1000;
+    public class CastleManager : MonoBehaviour
+    {
+        [SerializeField] protected internal Slider hpBar;
+        [SerializeField] private TextMeshProUGUI hpText;
+        [SerializeField] private GameManager gameManager;
+        public float HpPoint { get; private set; }
+        private float MaxHpPoint { get; set; }
+        public float baseCastleHp = 1000;
+        private float _increaseHp;
+        public bool TookDamageLastWave { get; set; }
 
-          private bool Damaged => hpPoint < PreviousHpPoint;
-          private float PreviousHpPoint { get; set; }
-          
-          private void Start()
-          {
-              PreviousHpPoint = hpPoint;
-              hpBar.maxValue = maxHpPoint;
-              hpBar.value = hpPoint;
-              UpdateHpText();
-          }
+        private void Start()
+        {
+            _increaseHp = EnforceManager.Instance.castleMaxHp;
+            HpPoint = baseCastleHp;
+            MaxHpPoint = baseCastleHp;
+            hpBar.maxValue = MaxHpPoint;
+            hpBar.value = HpPoint;
+            UpdateHpText();
+        }
 
-          private void UpdateHpText()
-          {
-              hpText.text = $"{hpPoint} / {maxHpPoint}";
-          }
-      
-          private void OnTriggerEnter2D(Collider2D collision)
-          {
-              DOTween.Kill(collision.transform);
-              if (!collision.gameObject.CompareTag("Enemy")) return;
-              var enemyBase = collision.gameObject.GetComponent<EnemyBase>();
-              if (enemyBase == null) return;
-              hpPoint -= enemyBase.CrushDamage;
-              hpBar.DOValue(hpPoint, 1.0f);
-              UpdateHpText();
-              FindObjectOfType<EnemyBase>().EnemyKilledEvents(enemyBase);
-              if (hpPoint > 0) return;
-              hpPoint = 0;
-              hpBar.value = hpPoint;
-              UpdateHpText();
-              StartCoroutine(gameManager.ContinueOrLose());
-          }
+        private void UpdateHpText()
+        {
+            hpText.text = $"{HpPoint} / {MaxHpPoint}";
+        }
+
+        private void OnTriggerEnter2D(Collider2D collision)
+        {
+            if (!collision.gameObject.CompareTag("Enemy")) return;
+            var enemyBase = collision.gameObject.GetComponent<EnemyBase>();
+            if (enemyBase == null) return;
+            HpPoint -= enemyBase.CrushDamage;
+            TookDamageLastWave = true;
+            hpBar.DOValue(HpPoint, 1.0f);
+            UpdateHpText();
+            FindObjectOfType<EnemyBase>().EnemyKilledEvents(enemyBase);
+            if (HpPoint > 0) return;
+            HpPoint = 0;
+            hpBar.value = HpPoint;
+            UpdateHpText();
+            StartCoroutine(gameManager.ContinueOrLose());
+        }
+
+        public void IncreaseMaxHp()
+        {
+            _increaseHp = EnforceManager.Instance.castleMaxHp;
+            MaxHpPoint = baseCastleHp + _increaseHp; 
+            HpPoint += 200f;
+            hpBar.maxValue = MaxHpPoint;
+            hpBar.value = HpPoint;
+            UpdateHpText();
+        }
 
 
-
-          public void UpdatePreviousHp()
-          {
-              PreviousHpPoint = hpPoint;
-          }
-
-          public void IncreaseMaxHp(float increaseAmount)
-          {
-              maxHpPoint += increaseAmount;
-              hpPoint += increaseAmount;
-              if (hpPoint > maxHpPoint)
-              {
-                  hpPoint = maxHpPoint;
-              }
-              hpBar.maxValue = maxHpPoint;
-              hpBar.value = hpPoint;
-              UpdateHpText();
-          }
-
-          public void RecoveryCastle()
-          {
-              if (!Damaged)
-              {
-                  hpPoint += 200;
-                  if (hpPoint > maxHpPoint)
-                  {
-                      hpPoint = maxHpPoint;
-                  }
-              }
-              UpdatePreviousHp();
-          }
-      }
+        public void RecoverCastleHp()
+        {
+            if (TookDamageLastWave) return;
+            HpPoint += 200;
+            if (HpPoint > MaxHpPoint)
+            {
+                HpPoint = MaxHpPoint;
+            }
+        }
+    }
 }

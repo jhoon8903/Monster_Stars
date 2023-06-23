@@ -13,7 +13,7 @@ namespace Script.WeaponScriptGroup
         private float _distance;
         private Vector3 _enemyTransform;
         private List<GameObject> _enemyTransforms = new List<GameObject>();
-        public float poisonDotDamage = 5f;
+        public float poisonDotDamage;
 
         public override IEnumerator UseWeapon()
         {
@@ -52,26 +52,40 @@ namespace Script.WeaponScriptGroup
         }
 
 
-        public Coroutine PoisonEffect(EnemyBase hitEnemy)
+        public IEnumerator PoisonEffect(EnemyBase hitEnemy)
         {
             // If the enemy has max stacks of poison, we don't apply the poison again.
-            if (hitEnemy.CurrentPoisonStacks < EnforceManager.Instance.poisonOverlapping) return null;
-            if (hitEnemy.RegistryType != EnemyBase.RegistryTypes.Poison) return null;
-            if (EnforceManager.Instance.activatePoison) return null;
-            const float venomDuration = 2f;
+           
+            if (hitEnemy.RegistryType == EnemyBase.RegistryTypes.Poison) yield break;
+            if (!EnforceManager.Instance.activatePoison) yield break;
+            poisonDotDamage = Damage * 0.1f;
             var poisonColor = new Color(0.18f, 1f, 0.1f);
-            if (poisonDotDamage != 0) return null;
             hitEnemy.GetComponent<SpriteRenderer>().DOColor(poisonColor, 0.2f);
-            hitEnemy.CurrentPoisonStacks++; // Increment the poison count
-            var elapsedTime = 0f;
-            while (elapsedTime < venomDuration)
+            hitEnemy.CurrentPoisonStacks++;
+            if (hitEnemy.CurrentPoisonStacks >= EnforceManager.Instance.poisonOverlapping) // Increment the poison count
             {
-                hitEnemy.ReceiveDamage(hitEnemy,poisonDotDamage);
-                elapsedTime += Time.deltaTime;
+                hitEnemy.CurrentPoisonStacks = EnforceManager.Instance.poisonOverlapping;
+            }
+            Debug.Log(hitEnemy.CurrentPoisonStacks);
+
+            const float venomDuration = 2f;
+            var elapsedTime = 0f;
+
+            for (var i = 0; i < hitEnemy.CurrentPoisonStacks; i++)
+            {
+                while (elapsedTime < venomDuration)
+                {
+    
+                    hitEnemy.ReceiveDamage(hitEnemy,poisonDotDamage);
+                    Debug.Log($"중첩{i}도트데미지: {poisonDotDamage}");
+                    yield return new WaitForSeconds(1f);
+                    elapsedTime += Time.deltaTime;
+                } 
+                
             }
             hitEnemy.GetComponent<SpriteRenderer>().DOColor(Color.white, 0.2f); // Reset the color
             hitEnemy.CurrentPoisonStacks--; // Decrement the poison count
-            return null;
+            hitEnemy.IsPoison = false;
         }
     }
 }

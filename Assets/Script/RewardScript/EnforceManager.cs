@@ -1,4 +1,3 @@
-using System;
 using Script.PuzzleManagerGroup;
 using Script.UIManager;
 using UnityEngine;
@@ -7,8 +6,6 @@ namespace Script.RewardScript
 {
     public class EnforceManager : MonoBehaviour
     {
-        // Script Group
-        [SerializeField] private CountManager countManager;
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private GridManager gridManager;
 
@@ -140,7 +137,7 @@ namespace Script.RewardScript
         protected internal void IncreaseCastleMaxHp()
         {
             castleMaxHp += 200f;
-            castleManager.IncreaseMaxHp(castleMaxHp);
+            castleManager.IncreaseMaxHp();
         }
 
         [Header("보드 초기화 케릭터")] public int highLevelCharacterCount = 6;

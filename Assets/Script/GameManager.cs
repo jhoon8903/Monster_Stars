@@ -48,7 +48,7 @@ namespace Script
             GameSpeedSelect();
             StartCoroutine(spawnManager.PositionUpCharacterObject());
             swipeManager.isBusy = false;
-            DOTween.SetTweensCapacity(200000, 500);
+            DOTween.SetTweensCapacity(100000, 500);
         }
         public IEnumerator Count0Call()
         {
@@ -59,6 +59,7 @@ namespace Script
             yield return _waitTwoSecRealtime;
             StartCoroutine(waveManager.WaveController(wave));
             StartCoroutine(atkManager.CheckForAttack());
+            GameSpeed();
         }
         public IEnumerator WaitForPanelToClose()
         {
@@ -79,7 +80,8 @@ namespace Script
         public IEnumerator ContinueOrLose()
         {
             IsBattle = false;
-            if (castleManager.hpPoint != 0)
+            AtkManager.Instance.ClearWeapons();
+            if (castleManager.HpPoint != 0)
             {
                 wave++;
                 waveText.text = $"{wave}";
@@ -97,6 +99,7 @@ namespace Script
             {
                 LoseGame();
             }
+            AtkManager.Instance.weaponsList.Clear();
         }
         private void LoseGame()
         {
@@ -106,7 +109,6 @@ namespace Script
         }
         private IEnumerator NextStage()
         {
-
             Time.timeScale = 1;
             yield return StartCoroutine(KillMotion());
             yield return new WaitForSecondsRealtime(0.5f);
@@ -118,9 +120,9 @@ namespace Script
 
             if (EnforceManager.Instance.recoveryCastle)
             {
-                castleManager.RecoveryCastle();
+                castleManager.RecoverCastleHp();
             }
-            castleManager.UpdatePreviousHp();
+            castleManager.TookDamageLastWave = false;
             if (wave != 11)
             {
                 moveCount = 7;
@@ -129,7 +131,6 @@ namespace Script
             yield return StartCoroutine(backgroundManager.ChangePuzzleSize());
             yield return StartCoroutine(cameraManager.CameraPuzzleSizeChange());
             enemyPool.ClearList();
-            
         }
 
         private static IEnumerator KillMotion()

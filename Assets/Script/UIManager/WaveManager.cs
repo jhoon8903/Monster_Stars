@@ -1,7 +1,6 @@
 using Script.EnemyManagerScript;
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace Script.UIManager
 {
@@ -55,7 +54,7 @@ namespace Script.UIManager
                     yield return StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.BasicD, normalCountB));
                     yield return StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Slow, slowCount));
                     yield return StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Fast, fastCount)); 
-                    yield return new WaitForSeconds(4f);
+                    yield return new WaitForSeconds(3f);
                 }
             }
         }

@@ -37,10 +37,11 @@ namespace Script.WeaponScriptGroup
             Speed = CharacterBase.projectileSpeed * 2f;
             yield return null;
         }
-        protected void StopUseWeapon(GameObject weapon)
+        public void StopUseWeapon(GameObject weapon)
         {
             isInUse = false;
             HitEnemy.Clear();
+            AtkManager.Instance.weaponsList.Remove(weapon);
             WeaponsPool.ReturnToPool(weapon);
         }
         protected void AtkEffect(EnemyBase enemyObject)
@@ -224,10 +225,9 @@ namespace Script.WeaponScriptGroup
         }
         protected static void InstantKill(EnemyBase target)
         {
-            FindObjectOfType<EnemyBase>().EnemyKilledEvents(target);
-            if (ExpManager.Instance == null) return;
             const EnemyBase.KillReasons reason = EnemyBase.KillReasons.ByPlayer;
             ExpManager.Instance.HandleEnemyKilled(reason);
+            FindObjectOfType<EnemyBase>().EnemyKilledEvents(target);
         }
     }
 }

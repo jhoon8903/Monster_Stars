@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using DG.Tweening;
 using UnityEngine;
 
 namespace Script.EnemyManagerScript
@@ -21,7 +20,7 @@ namespace Script.EnemyManagerScript
                 {
                     var obj = Instantiate(enemySettings.enemyPrefab, transform);
                     obj.GetComponent<EnemyBase>().number = i + 1;
-                    obj.GetComponent<EnemyBase>().EnemyProperty();
+                    obj.GetComponent<EnemyBase>().Initialize();
                     obj.SetActive(false);
                     pooledDefaultEnemy.Add(obj);
                 }
@@ -53,7 +52,11 @@ namespace Script.EnemyManagerScript
                 pooledEnemy.Remove(enemyBaseGameObject);
             }
             enemyBase.isDead = false;
+            enemyBase.IsPoison = false;
+            enemyBase.isSlow = false;
+            enemyBase.isRestraint = false;
             enemyBase.transform.localScale = Vector3.one;
+            enemyBase.GetComponent<SpriteRenderer>().color = Color.white;
             enemyBaseGameObject.SetActive(false);
         }
     }

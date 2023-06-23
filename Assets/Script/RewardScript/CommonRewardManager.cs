@@ -7,7 +7,6 @@ using Script.PuzzleManagerGroup;
 using Script.UIManager;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 

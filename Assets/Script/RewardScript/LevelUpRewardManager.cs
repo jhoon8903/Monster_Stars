@@ -149,6 +149,7 @@ namespace Script.RewardScript
         public IEnumerator LevelUpReward() // 레벨업 보상 처리
         {
             Time.timeScale = 0; // 게임 일시 정지
+            Debug.Log($"레벨업 리워드 패널 {Time.timeScale}");
             levelUpRewardPanel.SetActive(true); // 보물 패널 활성화
             var playerLevel = expManager.level;
             if (playerLevel <= 9)

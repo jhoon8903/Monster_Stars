@@ -41,8 +41,9 @@ namespace Script.EnemyManagerScript
         {
             for (var i = 0; i < count; i++)
             {
+                yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 StartCoroutine(SpawnEnemy(enemyType));
-                yield return new WaitForSecondsRealtime(0.2f);
+                yield return new WaitForSeconds(0.2f);
             }
         }
 
@@ -72,7 +73,6 @@ namespace Script.EnemyManagerScript
             };
             var spawnPosition = Vector3.zero;
             yield return StartCoroutine(GetRandomPointInBounds(enemyBase.SpawnZone, pos => spawnPosition = pos));
-
             enemyBase.transform.position = spawnPosition;
             enemyBase.gameObject.SetActive(true);
             enemyBase.Initialize();

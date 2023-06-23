@@ -1,19 +1,25 @@
 using System.Collections;
-using DG.Tweening;
 using Script.EnemyManagerScript;
-using Script.RewardScript;
 using UnityEngine;
 
 namespace Script.WeaponScriptGroup
 {
     public class IceCrystal : WeaponBase
     {
+        private Rigidbody2D _rigidbody2D;
+        
+        private void Awake()
+        {
+            _rigidbody2D = GetComponent<Rigidbody2D>();
+        }
+
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
-            var duration = Distance / Speed;
-            var endPosition = StartingPosition.y + Distance;
-            transform.DOMoveY(endPosition, duration).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(this.gameObject));
+            _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, Speed);
+            var useTime = Distance / Speed;
+            yield return new WaitForSeconds(useTime);
+            StopUseWeapon(gameObject);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -21,23 +27,9 @@ namespace Script.WeaponScriptGroup
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
             AtkEffect(enemy);
-            if (EnforceManager.Instance.waterRestraintKnockBack)
-            {
-                KnockBackEffect(enemy);
-            }
             var damage = DamageCalculator(Damage, enemy);
             enemy.ReceiveDamage(enemy,damage);
             StopUseWeapon(gameObject);
-        }
-        private static bool KnockBackEffect(EnemyBase enemyObject)
-        {
-            var knockBack = false;
-            if (enemyObject.isRestraint)
-            {
-                enemyObject.transform.DOMoveY(enemyObject.transform.position.y + 0.5f, 0.2f)
-                    .OnComplete(() => knockBack = true);
-            }
-            return knockBack;
         }
     }
 }

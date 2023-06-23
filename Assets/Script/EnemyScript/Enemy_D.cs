@@ -1,11 +1,10 @@
 using Script.EnemyManagerScript;
-using UnityEngine;
 
 namespace Script.EnemyScript
 {
     public class Enemy_D : EnemyBase
     {
-        protected internal override void EnemyProperty()
+        public override void Initialize()
         {
             healthPoint = 400;
             CrushDamage = 160;
@@ -13,6 +12,7 @@ namespace Script.EnemyScript
             EnemyType = EnemyTypes.BasicD;
             SpawnZone = SpawnZones.A;
             RegistryType = RegistryTypes.Physics;
+            base.Initialize();
         }
     }
 }
