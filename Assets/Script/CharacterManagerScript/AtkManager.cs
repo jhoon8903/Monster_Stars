@@ -93,8 +93,17 @@ namespace Script.CharacterManagerScript
                 case CharacterBase.UnitGroups.A:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.Spear)); // Perform attack with a spear
                     break;
+                case CharacterBase.UnitGroups.B:
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.Dark));
+                    break;
+                case CharacterBase.UnitGroups.C:
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.IceCrystal));
+                    break;
                 case CharacterBase.UnitGroups.E:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.IceCrystal)); // Perform attack with an ice crystal
+                    break;
+                case CharacterBase.UnitGroups.H:
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.Dart));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(unitGroup), unitGroup, null);
@@ -113,6 +122,9 @@ namespace Script.CharacterManagerScript
                     {
                        Attack(new AttackData(unit, WeaponsPool.WeaponType.VenomSac));
                     }
+                    break;
+                case CharacterBase.UnitGroups.G:
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.FireBall));
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(unitGroup), unitGroup, null);
@@ -156,17 +168,13 @@ namespace Script.CharacterManagerScript
 
         public void ClearWeapons()
         {
-            if (weaponsList.Count > 0)
+            if (weaponsList.Count <= 0) return;
+            var weaponsListCopy = weaponsList.ToList();
+            foreach (var weaponBase in weaponsListCopy
+                         .Select(weapon => weapon.GetComponent<WeaponBase>())
+                         .Where(weaponBase => weaponBase.isInUse))
             {
-                var weaponsListCopy = weaponsList.ToList();
-                foreach (var weapon in weaponsListCopy)
-                {
-                    var weaponBase = weapon.GetComponent<WeaponBase>();
-                    if (weaponBase.isInUse)
-                    {
-                        weaponBase.StopUseWeapon(weaponBase.gameObject);
-                    }
-                }
+                weaponBase.StopUseWeapon(weaponBase.gameObject);
             }
         }
     }

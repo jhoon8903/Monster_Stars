@@ -12,13 +12,13 @@ namespace Script.CharacterManagerScript
         protected internal int UnitLevel; // Level of the unit
         public enum Types { Character, Treasure } // Types of characters
         protected internal Types Type; // Type of the character
-        public enum UnitGroups { A,B,C,D,E,F,None } // Groups of units
+        public enum UnitGroups { A,B,C,D,E,F,G,H,None } // Groups of units
         public UnitGroups unitGroup; // Group of the unit
         public enum UnitAtkTypes {None,  Projectile, GuideProjectile, Gas, Circle, Vibrate, Boomerang } // Attack types of units
         protected internal UnitAtkTypes UnitAtkType = UnitAtkTypes.None; // Attack type of the unit
         public enum UnitProperties { Divine, Darkness, Physics, Water, Poison, Fire, None } // Properties of units
         protected internal UnitProperties UnitProperty = UnitProperties.None; // Property of the unit
-        public enum UnitEffects { Slow, Bleed, Poison, Burn, Stun, Strike, Restraint, None } // Effects of units
+        public enum UnitEffects { Slow, Bleed, Poison, Burn, Stun, Strike, Restraint, Darkness, None } // Effects of units
         protected internal UnitEffects UnitEffect = UnitEffects.None; // Effect of the unit
         public float baseDamage;  // Base damage of the unit
         public float DefaultDamage
@@ -40,10 +40,6 @@ namespace Script.CharacterManagerScript
         public GameObject CurrentWeapon { get; set; }
         protected internal bool IsClicked { get; set; }
         protected static List<GameObject> detectedEnemies = new List<GameObject>();
-
-
-
-
 
         public void OnEnable()
         {

@@ -66,7 +66,6 @@ namespace Script.WeaponScriptGroup
             {
                 hitEnemy.CurrentPoisonStacks = EnforceManager.Instance.poisonOverlapping;
             }
-            Debug.Log(hitEnemy.CurrentPoisonStacks);
 
             const float venomDuration = 2f;
             var elapsedTime = 0f;
@@ -80,12 +79,11 @@ namespace Script.WeaponScriptGroup
                     Debug.Log($"중첩{i}도트데미지: {poisonDotDamage}");
                     yield return new WaitForSeconds(1f);
                     elapsedTime += Time.deltaTime;
-                } 
-                
+                }
             }
             hitEnemy.GetComponent<SpriteRenderer>().DOColor(Color.white, 0.2f); // Reset the color
             hitEnemy.CurrentPoisonStacks--; // Decrement the poison count
-            hitEnemy.IsPoison = false;
+            hitEnemy.isPoison = false;
         }
     }
 }

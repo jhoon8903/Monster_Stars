@@ -24,88 +24,108 @@ namespace Script.RewardScript
         }
 
 
-        [Header("\n\n신성 속성\n")] 
-
-        [Header("속박속성 부여")] public bool activeRestraint;
-        [Header("속박시간 증가")] public float increaseRestraintTime = 0.1f; 
-        protected internal float IncreaseRestraintTime()
+        [Header("\n\nUnit_A 신성 속성\n")]
+        [Header("속박 활성화")] public bool activeRestraint;
+        [Header("속박시간 증가")] public float increaseRestraintTime = 0.1f; protected internal float IncreaseRestraintTime()
         {
             var restraintTime = 1f;
             restraintTime += increaseRestraintTime;
             return restraintTime;
         }
-        
         [Header("관통 효과")] public bool divinePenetrate;
-        
-        [Header("백 어택")] public bool divineAtkRange; 
-        
-        [Header("중독 시 데미지증가")] public bool divinePoisonAdditionalDamage;
-        public int divinePoisonAdditionalDamageCount = 1;
-        
+        [Header("백 어택")] public bool divineAtkRange;
+        [Header("중독 시 데미지증가")] public bool divinePoisonAdditionalDamage; public int divinePoisonAdditionalDamageCount = 1;
 
-        [Header("\n\n물리 속성\n")]
 
-        [Header("Sword 추가")] public bool physicAdditionalWeapon; 
-        
+        [Header("\n\n Unit_B 어둠 속성\n\n")] 
+        [Header("둔화상태 적 추가 데미지")]  public bool darkSlowAdditionalDamage;
+        [Header("출혈상태 적 추가 데미지")] public bool darkBleedAdditionalDamage;
+        [Header("공격속도 17% 상승 ")] public int darkIncreaseAtkSpeed; protected internal void DarkIncreaseAtkSpeed()
+        {
+            darkIncreaseAtkSpeed ++;
+        } 
+        [Header("관통 효과")] public bool darkProjectilePenetration ;
+        [Header("공격방향 추가")] public bool darkAdditionalFrontAttack;
+
+
+        [Header("\n\nUnit_C 물 속성2\n\n")] 
+        [Header("공격력 증가")] public int water2IncreaseDamage; protected internal void Water2IncreaseDamage()
+        {
+            water2IncreaseDamage++;
+        }
+        [Header("출혈상태 적 공격시 속박")] public bool water2BleedAdditionalRestraint;
+        [Header("둔화지속시간 증가")] public int water2IncreaseSlowTime; protected internal void Water2IncreaseSlowTime()
+        {
+            water2IncreaseSlowTime++;
+        }
+        [Header("백 어택")] public bool water2BackAttack;
+        [Header("투사체 추가")] public bool water2AdditionalProjectile;
+
+
+        [Header("\n\nUnit_D 물리 속성\n")]
+        [Header("Sword 추가")] public bool physicAdditionalWeapon;
         [Header("Sword 크기 2배")] public bool physicIncreaseWeaponScale;
-        
         [Header("둔화 시 데미지추가")] public bool physicSlowAdditionalDamage;
-        
-        [Header("공격속도 증가")] public float increasePhysicAtkSpeed = 1f;
-        protected internal void IncreasePhysicAtkSpeed()
+        [Header("공격속도 증가")] public float increasePhysicAtkSpeed = 1f; protected internal void IncreasePhysicAtkSpeed()
         {
             increasePhysicAtkSpeed += 0.2f;
         }
-        
-        [Header("데미지 증가")] public bool physicIncreaseDamage;
-        public float increasePhysicsDamage = 1f;
-        protected internal void PhysicIncreaseDamage()
+        [Header("데미지 증가")] public bool physicIncreaseDamage; public float increasePhysicsDamage = 1f; protected internal void PhysicIncreaseDamage()
         {
             increasePhysicsDamage += 0.05f;
         }
 
 
-        [Header("\n\n독 속성\n")] 
-        
-        
+
+        [Header("\n\nUnit_E 물 속성\n")] 
+        [Header("화상상태 적 추가데미지")] public bool waterBurnAdditionalDamage;
+        [Header("속박상태 적 추가데미지")] public bool waterRestraintIncreaseDamage;
+        [Header("둔화강도 증가")] public bool waterIncreaseSlowPower;
+        [Header("공격력증가")] protected internal float IncreaseWaterDamage = 1f; protected internal void WaterIncreaseDamage()
+        {
+            IncreaseWaterDamage *= 1.2f;
+        }
+        [Header("좌/우 동시 공격")] public bool waterSideAttack;
+
+
+        [Header("\n\nUnit_F 독 속성\n")]
         [Header("더블어택")] public bool poisonDoubleAtk;
-        
         [Header("속박된 적 추가데미지")] public bool poisonRestraintAdditionalDamage;
-
         [Header("15% 확률 즉사")] public bool poisonInstantKill;
-        
         [Header("공격사거리 1 증가")] public bool poisonIncreaseAtkRange;
-
         [Header("중독활성화")] public bool activatePoison;
-
-        [Header("중족최대 중첩수 증가")] public int poisonOverlapping = 1;
-        protected internal void AddPoisonOverlapping()
+        [Header("중족최대 중첩수 증가")] public int poisonOverlapping = 1; protected internal void AddPoisonOverlapping()
         {
             poisonOverlapping += 1;
         }
 
 
 
-        [Header("\n\n물 속성\n")] 
-        
-        [Header("15% 적 기절")] public bool waterStun;
-        
-        [Header("둔화시간 증가")] public float waterIncreaseSlowTime = 1f;
-        protected internal void IncreaseSlowTime()
+        [Header("\n\nUnit_G 불 속성\n\n")] 
+        [Header("출혈상태 적 추가 데미지")] public bool fireBleedingAdditionalDamage;
+        [Header("공격력 증가")] public int fireIncreaseDamage; protected internal void FireIncreaseDamage()
         {
-            waterIncreaseSlowTime += 0.2f;
+            fireIncreaseDamage++;
         }
-        
-        [Header("둔화강도 증가")] public bool waterIncreaseSlowPower;
-        
-        [Header("넉백")] public bool waterRestraintKnockBack;
+        [Header("중독상태 적 기절")] public bool firePoisonAdditionalStun;
+        [Header("공격사거리 1 증가")] public bool fireIncreaseAtkRange;
+        [Header("화상효과 비활성화 => 추가 데미지")] public bool fireDeleteBurnIncreaseDamage;
 
-        [Header("공격력증가")] protected internal float IncreaseWaterDamage = 1f;
-        protected internal void WaterIncreaseDamage()
+
+
+        [Header("\n\nUnit_H 물리 속성\n\n")] 
+        [Header("출혈중첩 증가")] public int physics2AdditionalBleedingLayer = 1; protected internal void Physics2AdditionalBleedingLayer()
         {
-            IncreaseWaterDamage *= 1.2f;
-        }
+            physics2AdditionalBleedingLayer++;
 
+        }
+        [Header("출혈 활성화")] public bool physics2ActivateBleed;
+        [Header("공격속도 증가")] public int physics2AdditionalAtkSpeed; protected internal void Physics2AdditionalAtkSpeed()
+        {
+            physics2AdditionalAtkSpeed++;
+        }
+        [Header("투사체 추가")] public bool physics2AdditionalProjectile;
+        [Header("관통 효과")] public bool physics2ProjectilePenetration;                                                                                                 
 
 
 
@@ -171,6 +191,13 @@ namespace Script.RewardScript
         protected internal void IncreaseGroupRate(float increaseRateAmount)
         {
             increaseAtkRate += increaseRateAmount;
+        }
+
+        [Header("이동횟수 추가")] public int rewardMoveCount;
+
+        protected internal void RewardMoveCount(int moveCount)
+        {
+            rewardMoveCount += moveCount;
         }
     }                                                                   
 }

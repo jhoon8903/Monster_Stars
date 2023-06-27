@@ -22,6 +22,7 @@ namespace Script.UIManager
             _comboCount = 0;
             _stepRewardCount = 0;
             UpdateMoveCountText();
+            EnforceManager.Instance.rewardMoveCount = 0;
         }
 
         private void UpdateMoveCountText()

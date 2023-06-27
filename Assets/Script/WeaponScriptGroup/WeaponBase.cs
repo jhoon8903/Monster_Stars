@@ -16,6 +16,7 @@ namespace Script.WeaponScriptGroup
         protected float Distance { get; private set; }
         private CharacterBase.UnitProperties UnitProperty { get; set; }
         private CharacterBase.UnitEffects UnitEffect { get; set; }
+        private CharacterBase.UnitGroups UnitGroup { get; set; }
         protected Vector3 StartingPosition;
         protected CharacterBase CharacterBase;
         private readonly System.Random _random = new System.Random();
@@ -29,6 +30,7 @@ namespace Script.WeaponScriptGroup
         public virtual IEnumerator UseWeapon()
         {
             isInUse = true;
+            
             UnitProperty = CharacterBase.UnitProperty;
             UnitEffect = CharacterBase.UnitEffect;
             StartingPosition = transform.position;
@@ -61,6 +63,12 @@ namespace Script.WeaponScriptGroup
                 case CharacterBase.UnitEffects.None:
                     PhysicsAttribution(enemyObject);
                     break;
+                case CharacterBase.UnitEffects.Burn:
+                    BurnAttribution(enemyObject);
+                    break;
+                case CharacterBase.UnitEffects.Bleed:
+                     BleedAttribution(enemyObject);
+                     break;
                 default:
                     Debug.Log("UnKnown AtkEffect");
                     return;
@@ -133,8 +141,42 @@ namespace Script.WeaponScriptGroup
             {
                 case EnemyBase.RegistryTypes.Divine:
                 case EnemyBase.RegistryTypes.Physics:
+                case EnemyBase.RegistryTypes.None:
+                    IsPoison(enemyStatus);
+                    break;
+                case EnemyBase.RegistryTypes.Poison:
+                    break;
+                default:
+                    Debug.Log("UnKnown Registries");
+                    break;
+            }
+        }
+
+        private static void BurnAttribution(EnemyBase enemyStatus)
+        {
+            switch (enemyStatus.RegistryType)
+            {
+                case EnemyBase.RegistryTypes.Divine:
+                case EnemyBase.RegistryTypes.Physics:
                 case EnemyBase.RegistryTypes.Poison:
                 case EnemyBase.RegistryTypes.None:
+                    IsBurn(enemyStatus);
+                    break;
+                default:
+                    Debug.Log("UnKnown Registries");
+                    break;
+            }
+        }
+
+        private static void BleedAttribution(EnemyBase enemyStatus)
+        {
+            switch (enemyStatus.RegistryType)
+            {
+                case EnemyBase.RegistryTypes.Divine:
+                case EnemyBase.RegistryTypes.Physics:
+                case EnemyBase.RegistryTypes.Poison:
+                case EnemyBase.RegistryTypes.None:
+                    IsBleed(enemyStatus);
                     break;
                 default:
                     Debug.Log("UnKnown Registries");
@@ -155,7 +197,20 @@ namespace Script.WeaponScriptGroup
         }
         private static void IsPoison(EnemyBase enemyStatus)
         {
-            enemyStatus.IsPoison = true;
+            if (!EnforceManager.Instance.activatePoison) return;
+            enemyStatus.isPoison = true;
+        }
+
+        private static void IsBurn(EnemyBase enemyStatus)
+        {
+            if (EnforceManager.Instance.fireDeleteBurnIncreaseDamage) return;
+            enemyStatus.isBurn = true;
+        }
+
+        private static void IsBleed(EnemyBase enemyStatus)
+        {
+            if (!EnforceManager.Instance.physics2ActivateBleed) return;
+            enemyStatus.isBleed = true;
         }
         protected float DamageCalculator(float damage,EnemyBase enemyBase)
         {
@@ -164,12 +219,11 @@ namespace Script.WeaponScriptGroup
                 case CharacterBase.UnitProperties.Divine:
                     if (enemyBase.RegistryType != EnemyBase.RegistryTypes.Divine)
                     {
-                        if (EnforceManager.Instance.divinePoisonAdditionalDamage && enemyBase.IsPoison)
+                        if (EnforceManager.Instance.divinePoisonAdditionalDamage && enemyBase.isPoison)
                         {
-                            var increaseDamage = 1f + (0.3f * EnforceManager.Instance.divinePoisonAdditionalDamageCount );
+                            var increaseDamage = 1f + (1f * EnforceManager.Instance.divinePoisonAdditionalDamageCount );
                             damage *= increaseDamage;
                         }
-                        return damage;
                     } 
                     
                     if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Divine)
@@ -190,7 +244,6 @@ namespace Script.WeaponScriptGroup
                         {
                             damage *= damage * (1f + EnforceManager.Instance.increasePhysicsDamage);
                         }
-                        return damage;
                     }
 
                     if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Physics)
@@ -204,9 +257,8 @@ namespace Script.WeaponScriptGroup
                     {
                         if (EnforceManager.Instance.poisonRestraintAdditionalDamage && enemyBase.isRestraint)
                         {
-                            damage *= 2.0f;
+                            damage *= 3.0f;
                         }
-                        return damage;
                     }
 
                     if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Poison)
@@ -216,11 +268,50 @@ namespace Script.WeaponScriptGroup
                     return damage;
 
                 case CharacterBase.UnitProperties.Water:
+                    if (UnitGroup == CharacterBase.UnitGroups.C)
+                    {
+                        if (EnforceManager.Instance.water2IncreaseDamage >= 1)
+                        {
+                            damage *= 1f + (0.09f * EnforceManager.Instance.water2IncreaseDamage);
+                        }
+                    }
 
-                        damage += damage * EnforceManager.Instance.IncreaseWaterDamage;
-                        return damage;
+                    if (UnitGroup == CharacterBase.UnitGroups.E)
+                    {
+                        if (enemyBase.isRestraint && EnforceManager.Instance.waterRestraintIncreaseDamage)
+                        {
+                            damage *= 2.0f;
+                        }
+                        if (enemyBase.isBurn && EnforceManager.Instance.waterBurnAdditionalDamage)
+                        {
+                            damage *= 3.0f;
+                        }
+                    }
+                    return damage * EnforceManager.Instance.IncreaseWaterDamage;
+                
+                case CharacterBase.UnitProperties.Fire:
+                    if (enemyBase.isBleed && EnforceManager.Instance.fireBleedingAdditionalDamage)
+                    {
+                        damage *= 2.5f ;
+                    }
+
+                    if (EnforceManager.Instance.fireDeleteBurnIncreaseDamage)
+                    {
+                        damage *= 3.0f;
+                    }
+                    return damage * (1f + 0.15f * EnforceManager.Instance.fireIncreaseDamage);
+                
+                case CharacterBase.UnitProperties.Darkness:
+                    if (enemyBase.isSlow && EnforceManager.Instance.darkSlowAdditionalDamage)
+                    {
+                        damage *= 1.5f;
+                    }
+                    if (enemyBase.isBleed && EnforceManager.Instance.darkBleedAdditionalDamage)
+                    {
+                        damage *= 3.0f;
+                    }
+                    return damage;
             }
-           
             return damage;
         }
         protected static void InstantKill(EnemyBase target)
@@ -228,6 +319,20 @@ namespace Script.WeaponScriptGroup
             const EnemyBase.KillReasons reason = EnemyBase.KillReasons.ByPlayer;
             ExpManager.Instance.HandleEnemyKilled(reason);
             FindObjectOfType<EnemyBase>().EnemyKilledEvents(target);
+        }
+
+        protected static IEnumerator FlickerEffect(SpriteRenderer renderer, Color targetColor, float duration)
+        {
+            var originalColor = renderer.color;
+            var elapsedTime = 0f;
+            while (elapsedTime < duration)
+            {
+                var lerpValue = (Mathf.Sin(elapsedTime / duration * (2f * Mathf.PI)) + 1f) / 2f;
+                renderer.color = Color.Lerp(originalColor, targetColor, lerpValue);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+            renderer.color = originalColor;
         }
     }
 }

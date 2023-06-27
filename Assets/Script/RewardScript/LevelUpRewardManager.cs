@@ -44,8 +44,8 @@ namespace Script.RewardScript
                 case ExpData.Types.GroupAtkSpeed:
                     EnforceManager.Instance.IncreaseGroupRate(selectedReward.Property[0]);
                     break;
-                case ExpData.Types.StepLimit:
-                    EnforceManager.Instance.PermanentIncreaseMoveCount(selectedReward.Property[0]);
+                case ExpData.Types.Step:
+                    EnforceManager.Instance.RewardMoveCount(selectedReward.Property[0]);
                     break;
                 case ExpData.Types.StepDirection:
                     EnforceManager.Instance.diagonalMovement = true; 
@@ -84,14 +84,12 @@ namespace Script.RewardScript
                 case ExpData.Types.DivinePoisonAdditionalDamage:
                     EnforceManager.Instance.divinePoisonAdditionalDamage = true;
                     break;
-                // 칼 추가 확인 완료
                 case ExpData.Types.PhysicAdditionalWeapon:
                     EnforceManager.Instance.physicAdditionalWeapon = true;
                     break;
                 case ExpData.Types.PhysicIncreaseWeaponScale:
                     EnforceManager.Instance.physicIncreaseWeaponScale = true;
                     break;
-                // 둔화 적 추가 데미지 적용
                 case ExpData.Types.PhysicSlowAdditionalDamage:
                     EnforceManager.Instance.physicSlowAdditionalDamage = true;
                     break;
@@ -100,6 +98,21 @@ namespace Script.RewardScript
                     break;
                 case ExpData.Types.PhysicIncreaseDamage:
                     EnforceManager.Instance.PhysicIncreaseDamage();
+                    break;
+                case ExpData.Types.Physics2AdditionalBleedingLayer:
+                    EnforceManager.Instance.Physics2AdditionalBleedingLayer();
+                    break;
+                case ExpData.Types.Physics2ActivateBleed:
+                    EnforceManager.Instance.physics2ActivateBleed = true;
+                    break;
+                case ExpData.Types.Physics2AdditionalAtkSpeed:
+                    EnforceManager.Instance.Physics2AdditionalAtkSpeed();
+                    break;
+                case ExpData.Types.Physics2AdditionalProjectile:
+                    EnforceManager.Instance.physics2AdditionalProjectile = true; 
+                    break;
+                case ExpData.Types.Physics2ProjectilePenetration:
+                    EnforceManager.Instance.physics2ProjectilePenetration = true;
                     break;
                 case ExpData.Types.PoisonDoubleAtk:
                     EnforceManager.Instance.poisonDoubleAtk = true;
@@ -119,20 +132,65 @@ namespace Script.RewardScript
                 case ExpData.Types.PoisonOverlapping:
                     EnforceManager.Instance.AddPoisonOverlapping();
                     break;
-                case ExpData.Types.WaterStun:
-                    EnforceManager.Instance.waterStun = true;
-                    break;
-                case ExpData.Types.WaterIncreaseSlowTime:
-                    EnforceManager.Instance.IncreaseSlowTime();
+                case ExpData.Types.WaterBurnAdditionalDamage:
+                    EnforceManager.Instance.waterBurnAdditionalDamage = true;
                     break;
                 case ExpData.Types.WaterIncreaseSlowPower:
                     EnforceManager.Instance.waterIncreaseSlowPower = true;
                     break;
-                case ExpData.Types.WaterRestraintKnockBack:
-                    EnforceManager.Instance.waterRestraintKnockBack = true;
+                case ExpData.Types.WaterRestraintIncreaseDamage:
+                    EnforceManager.Instance.waterRestraintIncreaseDamage = true;
                     break;
                 case ExpData.Types.WaterIncreaseDamage:
                     EnforceManager.Instance.WaterIncreaseDamage();
+                    break;
+                case ExpData.Types.WaterSideAttack:
+                    EnforceManager.Instance.waterSideAttack = true;
+                    break;
+                case ExpData.Types.Water2IncreaseDamage:
+                    EnforceManager.Instance.Water2IncreaseDamage();
+                    break;
+                case ExpData.Types.Water2BleedAdditionalRestraint:
+                    EnforceManager.Instance.water2BleedAdditionalRestraint = true;
+                    break;
+                case ExpData.Types.Water2IncreaseSlowTime:
+                    EnforceManager.Instance.Water2IncreaseSlowTime();
+                    break;
+                case ExpData.Types.Water2BackAttack:
+                    EnforceManager.Instance.water2BackAttack = true;
+                    break;
+                case ExpData.Types.Water2AdditionalProjectile:
+                    EnforceManager.Instance.water2AdditionalProjectile = true;
+                    break;
+                case ExpData.Types.FireBleedingAdditionalDamage:
+                    EnforceManager.Instance.fireBleedingAdditionalDamage = true;
+                    break;
+                case ExpData.Types.FireIncreaseDamage:
+                    EnforceManager.Instance.FireIncreaseDamage();
+                    break;
+                case ExpData.Types.FirePoisonAdditionalStun:
+                    EnforceManager.Instance.firePoisonAdditionalStun = true;
+                    break;
+                case ExpData.Types.FireIncreaseAtkRange:
+                    EnforceManager.Instance.fireIncreaseAtkRange = true;
+                    break;
+                case ExpData.Types.FireDeleteBurnIncreaseDamage:
+                    EnforceManager.Instance.fireDeleteBurnIncreaseDamage = true;
+                    break;
+                case ExpData.Types.DarkSlowAdditionalDamage:
+                    EnforceManager.Instance.darkSlowAdditionalDamage = true;
+                    break;
+                case ExpData.Types.DarkBleedAdditionalDamage:
+                    EnforceManager.Instance.darkBleedAdditionalDamage = true;
+                    break;
+                case ExpData.Types.DarkProjectilePenetration:
+                    EnforceManager.Instance.darkProjectilePenetration = true;
+                    break;
+                case ExpData.Types.DarkAdditionalFrontAttack:
+                    EnforceManager.Instance.darkAdditionalFrontAttack = true;
+                    break;
+                case ExpData.Types.DarkIncreaseAtkSpeed:
+                    EnforceManager.Instance.DarkIncreaseAtkSpeed();
                     break;
                 default: 
                     Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}"); 
@@ -221,12 +279,12 @@ namespace Script.RewardScript
                     if (EnforceManager.Instance.diagonalMovement) return false;
                     if (gameManager.wave !=11) return false;
                     break;
-                case ExpData.Types.StepLimit:
-                    if (EnforceManager.Instance.permanentIncreaseMovementCount > 1) return false;
-                    break;
                 case ExpData.Types.CastleMaxHp:
                     if (EnforceManager.Instance.castleMaxHp >= 1000) return false;
                     break;
+               case ExpData.Types.DivineActiveRestraint:
+                   if (EnforceManager.Instance.activeRestraint) return false;
+                   break;
                 case ExpData.Types.DivineRestraintTime:
                     if (!EnforceManager.Instance.activeRestraint) return false;
                     break;
@@ -234,53 +292,122 @@ namespace Script.RewardScript
                     if (EnforceManager.Instance.divinePenetrate) return false;
                     break;
                 case ExpData.Types.DivineAtkRange:
-                    if(EnforceManager.Instance.divineAtkRange) return false;
+                    if (EnforceManager.Instance.divineAtkRange) return false;
                     break;
                 case ExpData.Types.DivinePoisonAdditionalDamage:
-                    if(EnforceManager.Instance.divinePoisonAdditionalDamage) return false;
+
                     if (!EnforceManager.Instance.activatePoison) return false;
+                    if (EnforceManager.Instance.divinePoisonAdditionalDamage) return false;
                     break;
                 case ExpData.Types.PhysicAdditionalWeapon:
-                    if(EnforceManager.Instance.physicAdditionalWeapon) return false;
+                    if (EnforceManager.Instance.physicAdditionalWeapon) return false;
                     break;
                 case ExpData.Types.PhysicIncreaseWeaponScale:
-                    if(EnforceManager.Instance.physicIncreaseWeaponScale) return false;
+                    if (EnforceManager.Instance.physicIncreaseWeaponScale) return false;
                     break;
                 case ExpData.Types.PhysicSlowAdditionalDamage:
-                    if(EnforceManager.Instance.physicSlowAdditionalDamage) return false;
+                    if (EnforceManager.Instance.physicSlowAdditionalDamage) return false;
+                    break;
+                case ExpData.Types.PhysicAtkSpeed:
+                    if (EnforceManager.Instance.increasePhysicAtkSpeed >= 15) return false;
+                    break;
+                case ExpData.Types.PhysicIncreaseDamage:
+                    if (EnforceManager.Instance.physicIncreaseDamage) return false;
+                    break;
+                case ExpData.Types.Physics2AdditionalBleedingLayer:
+                    if (EnforceManager.Instance.physics2AdditionalBleedingLayer >= 5) return false;
+                    break;
+                case ExpData.Types.Physics2ActivateBleed:
+                    if (EnforceManager.Instance.physics2ActivateBleed) return false;
+                    break;
+                case ExpData.Types.Physics2AdditionalAtkSpeed:
+                    if (EnforceManager.Instance.physics2AdditionalAtkSpeed >= 15) return false;
+                    break;
+                case ExpData.Types.Physics2AdditionalProjectile:
+                    if (EnforceManager.Instance.physics2AdditionalProjectile) return false;
+                    break;
+                case ExpData.Types.Physics2ProjectilePenetration:
+                    if (EnforceManager.Instance.physics2ProjectilePenetration) return false;
                     break;
                 case ExpData.Types.PoisonDoubleAtk:
-                    if(EnforceManager.Instance.poisonDoubleAtk) return false;
+                    if (EnforceManager.Instance.poisonDoubleAtk) return false;
                     break;
                 case ExpData.Types.PoisonRestraintAdditionalDamage:
-                    if(EnforceManager.Instance.poisonRestraintAdditionalDamage) return false;
                     if (!EnforceManager.Instance.activeRestraint) return false;
+                    if (EnforceManager.Instance.poisonRestraintAdditionalDamage) return false;
                     break;
                 case ExpData.Types.PoisonActivate:
                     if (EnforceManager.Instance.activatePoison) return false;
                     break;
                 case ExpData.Types.PoisonInstantKill:
-                    if(EnforceManager.Instance.poisonInstantKill) return false;
                     if (!EnforceManager.Instance.activatePoison) return false;
+                    if (EnforceManager.Instance.poisonInstantKill) return false;
                     break;
                 case ExpData.Types.PoisonIncreaseAtkRange:
-                    if(EnforceManager.Instance.poisonIncreaseAtkRange) return false;
+                    if (EnforceManager.Instance.poisonIncreaseAtkRange) return false;
                     break;
                 case ExpData.Types.PoisonOverlapping:
                     if (!EnforceManager.Instance.activatePoison) return false;
                     break;
-                case ExpData.Types.WaterStun:
-                    if(EnforceManager.Instance.waterStun) return false;
-                    break;
-                case ExpData.Types.WaterIncreaseSlowTime:
-                    if(EnforceManager.Instance.waterIncreaseSlowTime > 5f) return false;
+                case ExpData.Types.WaterBurnAdditionalDamage:
+                    if (EnforceManager.Instance.waterBurnAdditionalDamage) return false;
+                    if (EnforceManager.Instance.fireDeleteBurnIncreaseDamage) return false;
                     break;
                 case ExpData.Types.WaterIncreaseSlowPower:
-                    if(EnforceManager.Instance.waterIncreaseSlowPower) return false;
+                    if (EnforceManager.Instance.waterIncreaseSlowPower) return false;
                     break;
-                case ExpData.Types.WaterRestraintKnockBack:
-                    if(EnforceManager.Instance.waterRestraintKnockBack) return false;
+                case ExpData.Types.WaterRestraintIncreaseDamage:
                     if (!EnforceManager.Instance.activeRestraint) return false;
+                    if (EnforceManager.Instance.waterRestraintIncreaseDamage) return false;
+                    break;
+                case ExpData.Types.WaterSideAttack:
+                    if (EnforceManager.Instance.waterSideAttack) return false;
+                    break;
+                case ExpData.Types.Water2BleedAdditionalRestraint:
+                    if (!EnforceManager.Instance.activeRestraint) return false;
+                    if ( EnforceManager.Instance.water2BleedAdditionalRestraint) return false;
+                    break;
+                case ExpData.Types.Water2IncreaseSlowTime:
+                    if (EnforceManager.Instance.water2IncreaseSlowTime >= 5) return false;
+                    break;
+                case ExpData.Types.Water2BackAttack:
+                    if (EnforceManager.Instance.water2BackAttack) return false;
+                    break;
+                case ExpData.Types.Water2AdditionalProjectile:
+                    if ( EnforceManager.Instance.water2AdditionalProjectile) return false;
+                    break;
+                case ExpData.Types.FireBleedingAdditionalDamage:
+                    if (!EnforceManager.Instance.physics2ActivateBleed) return false;
+                    if ( EnforceManager.Instance.fireBleedingAdditionalDamage) return false;
+                    break;
+                case ExpData.Types.FireIncreaseDamage:
+                    if (EnforceManager.Instance.fireIncreaseDamage >= 15) return false;
+                    break;
+                case ExpData.Types.FirePoisonAdditionalStun:
+                    if (!EnforceManager.Instance.activatePoison) return false;
+                    if (EnforceManager.Instance.firePoisonAdditionalStun) return false;
+                    break;
+                case ExpData.Types.FireIncreaseAtkRange:
+                    if (EnforceManager.Instance.fireIncreaseAtkRange) return false;
+                    break;
+                case ExpData.Types.FireDeleteBurnIncreaseDamage:
+                    if (EnforceManager.Instance.fireDeleteBurnIncreaseDamage)  return false;
+                    break;
+                case ExpData.Types.DarkSlowAdditionalDamage:
+                    if ( EnforceManager.Instance.darkSlowAdditionalDamage ) return false;
+                    break;
+                case ExpData.Types.DarkBleedAdditionalDamage:
+                    if (!EnforceManager.Instance.physics2ActivateBleed) return false;
+                    if (EnforceManager.Instance.darkBleedAdditionalDamage ) return false;
+                    break;
+                case ExpData.Types.DarkProjectilePenetration:
+                    if (EnforceManager.Instance.darkProjectilePenetration) return false;
+                    break;
+                case ExpData.Types.DarkAdditionalFrontAttack:
+                    if (EnforceManager.Instance.darkAdditionalFrontAttack ) return false;
+                    break;
+                case ExpData.Types.DarkIncreaseAtkSpeed:
+                    if (EnforceManager.Instance.darkIncreaseAtkSpeed >= 15) return false;
                     break;
                 default:
                     return true;
@@ -312,11 +439,11 @@ namespace Script.RewardScript
                 case ExpData.Types.GroupAtkSpeed:
                     powerText.text = $"전체 공격속도 {p}% 증가";
                     break;
-                case ExpData.Types.StepLimit:
-                    powerText.text = $"최대 이동거리 {p} 증가";
-                    break;
                 case ExpData.Types.StepDirection:
-                    powerText.text = $"대각선 이동 가능"; 
+                    powerText.text = "대각선 이동 가능"; 
+                    break;
+                case ExpData.Types.Step:
+                    powerText.text = $"다음 Wave 이동횟수 {p} 증가";
                     break;
                 case ExpData.Types.Exp:
                     powerText.text = $"적 처치시 경험치 획득량 {p}% 증가\n(현재 {EnforceManager.Instance.expPercentage}% 최대 30%)";
@@ -351,6 +478,36 @@ namespace Script.RewardScript
                 case ExpData.Types.DivinePoisonAdditionalDamage:
                     powerText.text = "[A그룹 - 노랑] 중독상태의 적에게 30% 공격력이 증가";
                     break;
+                case ExpData.Types.DarkSlowAdditionalDamage:
+                    powerText.text = "[B그룹 - 미정] 둔화상태의 적에게 추가 데미지 50%";
+                    break;
+                case ExpData.Types.DarkBleedAdditionalDamage:
+                    powerText.text = "[B그룹 - 미정] 출혈상태의 적에게 추가 데미지 200%";
+                    break;
+                case ExpData.Types.DarkProjectilePenetration:
+                    powerText.text = "[B그룹 - 미정] 관통 효과 적용";
+                    break;
+                case ExpData.Types.DarkAdditionalFrontAttack:
+                    powerText.text = "[B그룹 - 미정] 공격시 위쪽으로 추가 공격";
+                    break;
+                case ExpData.Types.DarkIncreaseAtkSpeed:
+                    powerText.text = "[B그룹 - 미] 공격속도 17% 증가 (최대 255%)";
+                    break;
+                case ExpData.Types.Water2IncreaseDamage:
+                    powerText.text = "[C그룹 - 미정] 공격력 9% 증가";
+                    break;
+                case ExpData.Types.Water2BleedAdditionalRestraint:
+                    powerText.text = "[C그룹 - 미정] 출혈상태의 적에게 20% 확률로 속박 시킴";
+                    break;
+                case ExpData.Types.Water2IncreaseSlowTime:
+                    powerText.text = "[C그룹 - 미정] 둔화 지속시간 1초 증가 (최대 6초)";
+                    break;
+                case ExpData.Types.Water2BackAttack:
+                    powerText.text = "[C그룹 - 미정] 뒤쪽으로 공격이 가능해짐";
+                    break;
+                case ExpData.Types.Water2AdditionalProjectile:
+                    powerText.text = "[C그룹 - 미정] 발사체 1개 추가";
+                    break;
                 case ExpData.Types.PhysicAdditionalWeapon:
                     powerText.text = "[D그룹 - 보라] 검 1개 추가";
                     break;
@@ -365,6 +522,21 @@ namespace Script.RewardScript
                     break;
                 case ExpData.Types.PhysicIncreaseDamage:
                     powerText.text = "[D그룹 - 보라] 적을 죽이면 적 1기당\n모든 D그룹의 데미지가 5% 증가 (해당 웨이브만 적용)";
+                    break;
+                case ExpData.Types.WaterIncreaseSlowPower:
+                    powerText.text = "[E그룹 - 파랑] 둔화강도 50% 증가";
+                    break;
+                case ExpData.Types.WaterRestraintIncreaseDamage:
+                    powerText.text = "[E그룹 - 파랑] 속박된 적을 공격시 100% 추가데미지";
+                    break;
+                case ExpData.Types.WaterIncreaseDamage:
+                    powerText.text = "[E그룹 - 파랑] 공격력 20%씩 증가";
+                    break;
+                case ExpData.Types.WaterBurnAdditionalDamage:
+                    powerText.text = "[E그룹 - 파랑] 화상상태의 적에게 추가 데미지 200%";
+                    break;
+                case ExpData.Types.WaterSideAttack:
+                    powerText.text = "[E그룹 - 파랑] 공격시, 투사체가 좌우 동시 발사";
                     break;
                 case ExpData.Types.PoisonActivate:
                     powerText.text = "[F그룹 - 초록] 중독 효과부여";
@@ -384,20 +556,35 @@ namespace Script.RewardScript
                 case ExpData.Types.PoisonIncreaseAtkRange:
                     powerText.text = "[F그룹 - 초록] 사거리 1칸 증가";
                     break;
-                case ExpData.Types.WaterStun:
-                    powerText.text = "[E그룹 - 파랑] 명중시 15% 확률로 1초간 적 기절";
+                case ExpData.Types.FireBleedingAdditionalDamage:
+                    powerText.text = "[G그룹 - 미정] 출혈상태의 적에게 추가 데미지 150%";
                     break;
-                case ExpData.Types.WaterIncreaseSlowTime:
-                    powerText.text = "[E그룹 - 파랑] 둔화 지속시간 0.2초 증가 최대 5초";
+                case ExpData.Types.FireIncreaseDamage:
+                    powerText.text = "[G그룹 - 미정] 데미지 15% 증가 (최대 225%)";
                     break;
-                case ExpData.Types.WaterIncreaseSlowPower:
-                    powerText.text = "[E그룹 - 파랑] 둔화강도 50% 증가";
+                case ExpData.Types.FirePoisonAdditionalStun:
+                    powerText.text = "[G그룹 - 미정] 중독상태의 적을 공격시 20% 확률로 기절";
                     break;
-                case ExpData.Types.WaterRestraintKnockBack:
-                    powerText.text = "[E그룹 - 파랑] 속박된 적을 뒤로 0.5칸 밀쳐냄";
+                case ExpData.Types.FireIncreaseAtkRange:
+                    powerText.text = "[G그룹 - 미정] 사거리 1칸 증가";
                     break;
-                case ExpData.Types.WaterIncreaseDamage:
-                    powerText.text = "[E그룹 - 파랑] 공격력 20%씩 증가";
+                case ExpData.Types.FireDeleteBurnIncreaseDamage:
+                    powerText.text = "[G그룹 - 미정] 화상효과를 비활성화 하고, 추가 데미지 200% 증가";
+                    break;
+                case ExpData.Types.Physics2ActivateBleed:
+                    powerText.text = "[H그룹 - 미정] 출혈 효과 적용 (초당 Damage의 10%)";
+                    break;
+                case ExpData.Types.Physics2AdditionalBleedingLayer:
+                    powerText.text = "[H그룹 - 미정] 출혈 중첩 1 증가";
+                    break;
+                case ExpData.Types.Physics2AdditionalAtkSpeed:
+                    powerText.text = "[H그룹 - 미정] 공격속도 17% 증가 (최대 255% / 15회)";
+                    break;
+                case ExpData.Types.Physics2AdditionalProjectile:
+                    powerText.text = "[그룹H - 미정] 발사체 1개 추가"; 
+                    break;
+                case ExpData.Types.Physics2ProjectilePenetration:
+                    powerText.text = "[그룹H - 미정] 관통 1회 증가"; 
                     break;
             }
             powerCode.text = $"{powerUp.Code}";

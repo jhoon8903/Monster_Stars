@@ -1,5 +1,6 @@
 using System.Collections;
 using Script.EnemyManagerScript;
+using Script.RewardScript;
 using UnityEngine;
 
 namespace Script.WeaponScriptGroup
@@ -16,8 +17,19 @@ namespace Script.WeaponScriptGroup
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
-            _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, Speed);
             var useTime = Distance / Speed;
+            if (EnforceManager.Instance.waterSideAttack)
+            {
+                _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x - 1, Speed);
+                _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x + 1, Speed);
+            }
+
+            if (EnforceManager.Instance.water2BackAttack)
+            {
+                _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, -Speed);
+            }
+            _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, Speed);
+            
             yield return new WaitForSeconds(useTime);
             StopUseWeapon(gameObject);
         }

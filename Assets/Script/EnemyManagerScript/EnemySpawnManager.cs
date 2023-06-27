@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
+using Script.EnemyScript;
 using Script.PuzzleManagerGroup;
 using UnityEngine;
 
@@ -47,17 +48,18 @@ namespace Script.EnemyManagerScript
             }
         }
 
-        public void SpawnBoss(int wave)
+        public IEnumerator SpawnBoss(int wave)
         {
             var bossObject = Instantiate(wave == 10 ? enemyManager.stage10BossPrefab : enemyManager.stage20BossPrefab,
                 transform);
             var enemyBase = bossObject.GetComponent<EnemyBase>();
+            enemyBase.Initialize();
             enemyPool.enemyBases.Clear();
             enemyPool.enemyBases.Add(enemyBase);
             enemyBase.transform.position = gridManager.bossSpawnArea;
             enemyBase.gameObject.SetActive(true);
             enemyBase.Initialize();
-            StartCoroutine(enemyPatternManager.Boss_Move(enemyBase.gameObject));
+            yield return StartCoroutine(enemyPatternManager.Boss_Move(enemyBase.gameObject));
         }
 
         private IEnumerator SpawnEnemy(EnemyBase.EnemyTypes enemyType)

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using DG.Tweening;
 using Script.CharacterManagerScript;
@@ -22,6 +23,8 @@ namespace Script.EnemyManagerScript
         protected internal SpawnZones SpawnZone;
         protected internal bool isDead;
         protected internal int CurrentPoisonStacks { get; set; }
+        protected internal int BurningStack { get; set; }
+        protected internal int BleedingStack { get; set; }
         private static readonly object Lock = new object();
         public enum KillReasons { ByPlayer }
         public int number;
@@ -47,17 +50,56 @@ namespace Script.EnemyManagerScript
                 }
             }
         }
-        
-        public virtual void Initialize()
+
+        public bool isBurn;
+
+        public bool IsBurn
+        {
+            get => isBurn;
+            set
+            {
+                isBurn = value;
+                if (!isBurn) return;
+                var fireBall = FindObjectOfType<FireBall>();
+                if (fireBall != null && gameObject.activeInHierarchy)
+                {
+                    StartCoroutine(fireBall.BurningEffect(this));
+                }
+            }
+        }
+
+        public bool isBleed;
+
+        public bool IsBleed
+        {
+            get => isBleed;
+            set
+            {
+                isBleed = value;
+                if(!isBleed) return;
+                var dart = FindObjectOfType<Dart>();
+                if (dart != null && gameObject.activeInHierarchy)
+                {
+                    StartCoroutine(dart.BleedEffect(this));
+                }
+
+            }
+        }
+
+        public void Awake()
         {
             EnforceManager.Instance.OnAddRow += ResetEnemyHealthPoint;
+        }
+
+        public virtual void Initialize()
+        {
             var wave = FindObjectOfType<GameManager>().wave;
             _hpSlider = GetComponentInChildren<Slider>(true);
             if (EnemyType != EnemyTypes.Boss)
             {
                 lastIncreaseHealthPoint = healthPoint  * Mathf.Pow(1.3f, wave - 1);
             }
-            maxHealthPoint = lastIncreaseHealthPoint;
+            maxHealthPoint = lastIncreaseHealthPoint != 0 ? lastIncreaseHealthPoint : healthPoint;
             healthPoint = maxHealthPoint;
             currentHealth = maxHealthPoint;
             _hpSlider.maxValue = maxHealthPoint;

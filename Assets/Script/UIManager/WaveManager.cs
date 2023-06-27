@@ -35,7 +35,7 @@ namespace Script.UIManager
 
             if (wave is 10 or 20)
             {
-                enemySpawnManager.SpawnBoss(wave);
+                yield return StartCoroutine(enemySpawnManager.SpawnBoss(wave));
             }
             else
             {

@@ -5857,7 +5857,7 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 1b0ee16596d024571a96861c1a7fdb68, type: 3}
     - {fileID: 21300000, guid: b0e6d7a59d004402e98c7c06da6242d2, type: 3}
   - weaponType: 4
-    weaponPrefab: {fileID: 9036301952792892721, guid: a443ab3c0a89c49209a06173b80218e0, type: 3}
+    weaponPrefab: {fileID: 4927612771845471254, guid: a443ab3c0a89c49209a06173b80218e0, type: 3}
     weaponSprite:
     - {fileID: 21300000, guid: ff9139bbc52264c5f91b289c60207e67, type: 3}
     - {fileID: 21300000, guid: e79e94a51ca334212aa1fe57f06a0085, type: 3}
@@ -6047,22 +6047,42 @@ MonoBehaviour:
   divineAtkRange: 0
   divinePoisonAdditionalDamage: 0
   divinePoisonAdditionalDamageCount: 1
+  darkSlowAdditionalDamage: 0
+  darkBleedAdditionalDamage: 0
+  darkIncreaseAtkSpeed: 0
+  darkProjectilePenetration: 0
+  darkAdditionalFrontAttack: 0
+  water2IncreaseDamage: 0
+  water2BleedAdditionalRestraint: 0
+  water2IncreaseSlowTime: 0
+  water2BackAttack: 0
+  water2AdditionalProjectile: 0
   physicAdditionalWeapon: 0
   physicIncreaseWeaponScale: 0
   physicSlowAdditionalDamage: 0
   increasePhysicAtkSpeed: 1
   physicIncreaseDamage: 0
   increasePhysicsDamage: 1
+  waterBurnAdditionalDamage: 0
+  waterRestraintIncreaseDamage: 0
+  waterIncreaseSlowPower: 0
+  waterSideAttack: 0
   poisonDoubleAtk: 0
   poisonRestraintAdditionalDamage: 0
   poisonInstantKill: 0
   poisonIncreaseAtkRange: 0
   activatePoison: 0
   poisonOverlapping: 1
-  waterStun: 0
-  waterIncreaseSlowTime: 1
-  waterIncreaseSlowPower: 0
-  waterRestraintKnockBack: 0
+  fireBleedingAdditionalDamage: 0
+  fireIncreaseDamage: 0
+  firePoisonAdditionalStun: 0
+  fireIncreaseAtkRange: 0
+  fireDeleteBurnIncreaseDamage: 0
+  physics2AdditionalBleedingLayer: 1
+  physics2ActivateBleed: 0
+  physics2AdditionalAtkSpeed: 0
+  physics2AdditionalProjectile: 0
+  physics2ProjectilePenetration: 0
   addRowCount: 0
   slowCount: 0
   diagonalMovement: 0
@@ -6074,6 +6094,7 @@ MonoBehaviour:
   match5Upgrade: 0
   increaseAtkDamage: 0
   increaseAtkRate: 0
+  rewardMoveCount: 0
 --- !u!4 &1595735487
 Transform:
   m_ObjectHideFlags: 0

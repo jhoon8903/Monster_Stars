@@ -125,7 +125,7 @@ namespace Script
             castleManager.TookDamageLastWave = false;
             if (wave != 11)
             {
-                moveCount = 7;
+                moveCount = 7 + EnforceManager.Instance.rewardMoveCount;
                 countManager.Initialize(moveCount);
             }
             yield return StartCoroutine(backgroundManager.ChangePuzzleSize());

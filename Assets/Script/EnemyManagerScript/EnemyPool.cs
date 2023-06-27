@@ -52,7 +52,7 @@ namespace Script.EnemyManagerScript
                 pooledEnemy.Remove(enemyBaseGameObject);
             }
             enemyBase.isDead = false;
-            enemyBase.IsPoison = false;
+            enemyBase.isPoison = false;
             enemyBase.isSlow = false;
             enemyBase.isRestraint = false;
             enemyBase.transform.localScale = Vector3.one;

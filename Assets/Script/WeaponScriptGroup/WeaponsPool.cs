@@ -6,7 +6,7 @@ namespace Script.WeaponScriptGroup
 {
     public class WeaponsPool : MonoBehaviour
     {
-        public enum WeaponType { None ,Spear, Sword, Dart, IceCrystal, VenomSac }
+        public enum WeaponType { None ,Spear, Sword, Dart, IceCrystal, VenomSac, FireBall,Dark }
         [System.Serializable]
         public class Weapon
         {
@@ -44,6 +44,25 @@ namespace Script.WeaponScriptGroup
             var objectToSpawn = _poolDictionary[weaponType].Dequeue();
             objectToSpawn.transform.position = position;
             objectToSpawn.transform.rotation = rotation;
+
+            var dart1 = FindInChildren(objectToSpawn, "Dart1");
+            var dart2 = FindInChildren(objectToSpawn, "Dart2");
+
+            if (dart1 != null && dart2 != null)
+            {
+                dart1.SetActive(!EnforceManager.Instance.physics2AdditionalProjectile);
+                dart2.SetActive(EnforceManager.Instance.physics2AdditionalProjectile);
+            }
+
+            var iceCrystal1 = FindInChildren(objectToSpawn, "IceCrystal1");
+            var iceCrystal2 = FindInChildren(objectToSpawn, "IceCrystal2");
+
+            if (iceCrystal1 != null && iceCrystal2 != null)
+            {
+                iceCrystal1.SetActive(!EnforceManager.Instance.water2AdditionalProjectile);
+                iceCrystal2.SetActive(EnforceManager.Instance.water2AdditionalProjectile);
+            }
+
             _pivotSword = FindInChildren(objectToSpawn, "Sword(Clone)");
             if (EnforceManager.Instance.physicIncreaseWeaponScale)
             {
