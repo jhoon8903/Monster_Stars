@@ -8,7 +8,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
-
 namespace Script.RewardScript
 {
     public class LevelUpRewardManager : MonoBehaviour
@@ -34,6 +33,7 @@ namespace Script.RewardScript
         [SerializeField] private GameManager gameManager;
         [SerializeField] private CharacterManager characterManager;
         private ExpData _selectedPowerUp;
+        public HashSet<CharacterBase.UnitGroups> unitGroups = new HashSet<CharacterBase.UnitGroups>();
         private void ProcessExpReward(ExpData selectedReward)
         {
             switch (selectedReward.Type)
@@ -186,9 +186,9 @@ namespace Script.RewardScript
                 case ExpData.Types.DarkProjectilePenetration:
                     EnforceManager.Instance.darkProjectilePenetration = true;
                     break;
-                case ExpData.Types.DarkAdditionalFrontAttack:
-                    EnforceManager.Instance.darkAdditionalFrontAttack = true;
-                    break;
+                // case ExpData.Types.DarkAdditionalFrontAttack:
+                //     EnforceManager.Instance.darkAdditionalFrontAttack = true;
+                //     break;
                 case ExpData.Types.DarkIncreaseAtkSpeed:
                     EnforceManager.Instance.DarkIncreaseAtkSpeed();
                     break;
@@ -260,6 +260,13 @@ namespace Script.RewardScript
         }
         private bool IsValidOption (ExpData powerUp, ICollection<int> selectedCodes)
         {
+            unitGroups = new HashSet<CharacterBase.UnitGroups>();
+            var list = characterManager.characterList;
+            foreach (var characterBase in list)
+            {
+                var character = characterBase.GetComponent<CharacterBase>().unitGroup;
+                unitGroups.Add(character);
+            }
             if (selectedCodes.Contains(powerUp.Code)) return false;
             switch (powerUp.Type)
             {
@@ -283,130 +290,174 @@ namespace Script.RewardScript
                     if (EnforceManager.Instance.castleMaxHp >= 1000) return false;
                     break;
                case ExpData.Types.DivineActiveRestraint:
+                   if (!unitGroups.Contains(CharacterBase.UnitGroups.A)) return false;
                    if (EnforceManager.Instance.activeRestraint) return false;
                    break;
                 case ExpData.Types.DivineRestraintTime:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.A)) return false;
                     if (!EnforceManager.Instance.activeRestraint) return false;
                     break;
                 case ExpData.Types.DivinePenetrate:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.A)) return false;
                     if (EnforceManager.Instance.divinePenetrate) return false;
                     break;
                 case ExpData.Types.DivineAtkRange:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.A)) return false;
                     if (EnforceManager.Instance.divineAtkRange) return false;
                     break;
                 case ExpData.Types.DivinePoisonAdditionalDamage:
-
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.A)) return false;
                     if (!EnforceManager.Instance.activatePoison) return false;
                     if (EnforceManager.Instance.divinePoisonAdditionalDamage) return false;
                     break;
                 case ExpData.Types.PhysicAdditionalWeapon:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.D)) return false;
                     if (EnforceManager.Instance.physicAdditionalWeapon) return false;
                     break;
                 case ExpData.Types.PhysicIncreaseWeaponScale:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.D)) return false;
                     if (EnforceManager.Instance.physicIncreaseWeaponScale) return false;
                     break;
                 case ExpData.Types.PhysicSlowAdditionalDamage:
+                    if (!((unitGroups.Contains(CharacterBase.UnitGroups.D) && unitGroups.Contains(CharacterBase.UnitGroups.E)) ||
+                          unitGroups.Contains(CharacterBase.UnitGroups.D) && unitGroups.Contains(CharacterBase.UnitGroups.C))) return false;
                     if (EnforceManager.Instance.physicSlowAdditionalDamage) return false;
                     break;
                 case ExpData.Types.PhysicAtkSpeed:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.D)) return false;
                     if (EnforceManager.Instance.increasePhysicAtkSpeed >= 15) return false;
                     break;
                 case ExpData.Types.PhysicIncreaseDamage:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.D)) return false;
                     if (EnforceManager.Instance.physicIncreaseDamage) return false;
                     break;
                 case ExpData.Types.Physics2AdditionalBleedingLayer:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.H)) return false;
+                    if (!EnforceManager.Instance.physics2ActivateBleed) return false;
                     if (EnforceManager.Instance.physics2AdditionalBleedingLayer >= 5) return false;
                     break;
                 case ExpData.Types.Physics2ActivateBleed:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.H)) return false;
                     if (EnforceManager.Instance.physics2ActivateBleed) return false;
                     break;
                 case ExpData.Types.Physics2AdditionalAtkSpeed:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.H)) return false;
                     if (EnforceManager.Instance.physics2AdditionalAtkSpeed >= 15) return false;
                     break;
                 case ExpData.Types.Physics2AdditionalProjectile:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.H)) return false;
                     if (EnforceManager.Instance.physics2AdditionalProjectile) return false;
                     break;
                 case ExpData.Types.Physics2ProjectilePenetration:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.H)) return false;
                     if (EnforceManager.Instance.physics2ProjectilePenetration) return false;
                     break;
                 case ExpData.Types.PoisonDoubleAtk:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.F)) return false;
                     if (EnforceManager.Instance.poisonDoubleAtk) return false;
                     break;
                 case ExpData.Types.PoisonRestraintAdditionalDamage:
+                    if (!((unitGroups.Contains(CharacterBase.UnitGroups.C) && unitGroups.Contains(CharacterBase.UnitGroups.H) && unitGroups.Contains(CharacterBase.UnitGroups.F) && EnforceManager.Instance.water2BleedAdditionalRestraint) 
+                          || (unitGroups.Contains(CharacterBase.UnitGroups.A) && unitGroups.Contains(CharacterBase.UnitGroups.F)))) return false;
                     if (!EnforceManager.Instance.activeRestraint) return false;
                     if (EnforceManager.Instance.poisonRestraintAdditionalDamage) return false;
                     break;
                 case ExpData.Types.PoisonActivate:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.F)) return false;
                     if (EnforceManager.Instance.activatePoison) return false;
                     break;
                 case ExpData.Types.PoisonInstantKill:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.F)) return false;
                     if (!EnforceManager.Instance.activatePoison) return false;
                     if (EnforceManager.Instance.poisonInstantKill) return false;
                     break;
                 case ExpData.Types.PoisonIncreaseAtkRange:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.F)) return false;
                     if (EnforceManager.Instance.poisonIncreaseAtkRange) return false;
                     break;
                 case ExpData.Types.PoisonOverlapping:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.F)) return false;
                     if (!EnforceManager.Instance.activatePoison) return false;
                     break;
                 case ExpData.Types.WaterBurnAdditionalDamage:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.E)) return false;
                     if (EnforceManager.Instance.waterBurnAdditionalDamage) return false;
                     if (EnforceManager.Instance.fireDeleteBurnIncreaseDamage) return false;
                     break;
                 case ExpData.Types.WaterIncreaseSlowPower:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.E)) return false;
                     if (EnforceManager.Instance.waterIncreaseSlowPower) return false;
                     break;
+                case ExpData.Types.WaterIncreaseDamage:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.E)) return false;
+                    break;
                 case ExpData.Types.WaterRestraintIncreaseDamage:
+                    if (!(unitGroups.Contains(CharacterBase.UnitGroups.A) && unitGroups.Contains(CharacterBase.UnitGroups.E))) return false;
                     if (!EnforceManager.Instance.activeRestraint) return false;
                     if (EnforceManager.Instance.waterRestraintIncreaseDamage) return false;
                     break;
                 case ExpData.Types.WaterSideAttack:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.E)) return false;
                     if (EnforceManager.Instance.waterSideAttack) return false;
                     break;
                 case ExpData.Types.Water2BleedAdditionalRestraint:
+                    if (!(unitGroups.Contains(CharacterBase.UnitGroups.C) && unitGroups.Contains(CharacterBase.UnitGroups.H))) return false;
                     if (!EnforceManager.Instance.activeRestraint) return false;
                     if ( EnforceManager.Instance.water2BleedAdditionalRestraint) return false;
                     break;
                 case ExpData.Types.Water2IncreaseSlowTime:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.C)) return false;
                     if (EnforceManager.Instance.water2IncreaseSlowTime >= 5) return false;
                     break;
                 case ExpData.Types.Water2BackAttack:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.C)) return false;
                     if (EnforceManager.Instance.water2BackAttack) return false;
                     break;
                 case ExpData.Types.Water2AdditionalProjectile:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.C)) return false;
                     if ( EnforceManager.Instance.water2AdditionalProjectile) return false;
                     break;
                 case ExpData.Types.FireBleedingAdditionalDamage:
+                    if (!(unitGroups.Contains(CharacterBase.UnitGroups.G) && unitGroups.Contains(CharacterBase.UnitGroups.H))) return false;
                     if (!EnforceManager.Instance.physics2ActivateBleed) return false;
                     if ( EnforceManager.Instance.fireBleedingAdditionalDamage) return false;
                     break;
                 case ExpData.Types.FireIncreaseDamage:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.G)) return false;
                     if (EnforceManager.Instance.fireIncreaseDamage >= 15) return false;
                     break;
                 case ExpData.Types.FirePoisonAdditionalStun:
+                    if (!(unitGroups.Contains(CharacterBase.UnitGroups.F) && unitGroups.Contains(CharacterBase.UnitGroups.G))) return false;
                     if (!EnforceManager.Instance.activatePoison) return false;
                     if (EnforceManager.Instance.firePoisonAdditionalStun) return false;
                     break;
                 case ExpData.Types.FireIncreaseAtkRange:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.G)) return false;
                     if (EnforceManager.Instance.fireIncreaseAtkRange) return false;
                     break;
                 case ExpData.Types.FireDeleteBurnIncreaseDamage:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.G)) return false;
                     if (EnforceManager.Instance.fireDeleteBurnIncreaseDamage)  return false;
                     break;
                 case ExpData.Types.DarkSlowAdditionalDamage:
+                    if (!((unitGroups.Contains(CharacterBase.UnitGroups.B) && unitGroups.Contains(CharacterBase.UnitGroups.E)) ||
+                          unitGroups.Contains(CharacterBase.UnitGroups.B) && unitGroups.Contains(CharacterBase.UnitGroups.C))) return false;
                     if ( EnforceManager.Instance.darkSlowAdditionalDamage ) return false;
                     break;
                 case ExpData.Types.DarkBleedAdditionalDamage:
+                    if (!(unitGroups.Contains(CharacterBase.UnitGroups.B) && unitGroups.Contains(CharacterBase.UnitGroups.H))) return false;
                     if (!EnforceManager.Instance.physics2ActivateBleed) return false;
                     if (EnforceManager.Instance.darkBleedAdditionalDamage ) return false;
                     break;
                 case ExpData.Types.DarkProjectilePenetration:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.B)) return false;
                     if (EnforceManager.Instance.darkProjectilePenetration) return false;
                     break;
-                case ExpData.Types.DarkAdditionalFrontAttack:
-                    if (EnforceManager.Instance.darkAdditionalFrontAttack ) return false;
-                    break;
+                // case ExpData.Types.DarkAdditionalFrontAttack:
+                //     if (EnforceManager.Instance.darkAdditionalFrontAttack ) return false;
+                //     break;
                 case ExpData.Types.DarkIncreaseAtkSpeed:
+                    if (!unitGroups.Contains(CharacterBase.UnitGroups.B)) return false;
                     if (EnforceManager.Instance.darkIncreaseAtkSpeed >= 15) return false;
                     break;
                 default:
@@ -487,9 +538,9 @@ namespace Script.RewardScript
                 case ExpData.Types.DarkProjectilePenetration:
                     powerText.text = "[B그룹 - 미정] 관통 효과 적용";
                     break;
-                case ExpData.Types.DarkAdditionalFrontAttack:
-                    powerText.text = "[B그룹 - 미정] 공격시 위쪽으로 추가 공격";
-                    break;
+                // case ExpData.Types.DarkAdditionalFrontAttack:
+                //     powerText.text = "[B그룹 - 미정] 공격시 위쪽으로 추가 공격";
+                //     break;
                 case ExpData.Types.DarkIncreaseAtkSpeed:
                     powerText.text = "[B그룹 - 미] 공격속도 17% 증가 (최대 255%)";
                     break;

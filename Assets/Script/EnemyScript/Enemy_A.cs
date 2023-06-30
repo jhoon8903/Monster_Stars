@@ -6,13 +6,12 @@ namespace Script.EnemyScript
     {
         public override void Initialize()
         {
-            base.Initialize();
             healthPoint = 400f;
             CrushDamage = 160;
             MoveSpeed = 1f;
             EnemyType = EnemyTypes.BasicA;
             SpawnZone = SpawnZones.A;
-            RegistryType = RegistryTypes.Physics;
+            RegistryType = RegistryTypes.Burn;
             base.Initialize();
         }
     }

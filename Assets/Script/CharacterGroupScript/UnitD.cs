@@ -16,12 +16,35 @@ namespace Script.CharacterGroupScript
         private SpriteRenderer _spriteRenderer ; 
         private float _detectionSize = 1.5f; 
         private float _currentDamage;
+        private int _currentCharacterObjectLevel=30;
+        private int _currentCharacterPieceCount=40;
+      
         
+        public override void Initialize()
+        {
+            unitGroup = UnitGroups.D;
+            UnitProperty = UnitProperties.Physics;
+            CharacterObjectLevel = _currentCharacterObjectLevel;
+            CharacterPieceCount = _currentCharacterPieceCount;
+            base.Initialize();
+        }
         public void Awake()
         {
             unitGroup = UnitGroups.D;
             _spriteRenderer = GetComponent<SpriteRenderer>();
             Level1();
+        }
+
+        public override Sprite GetSpriteForLevel(int characterObjectLevel)
+        {
+            return characterObjectLevel switch
+            {
+                <= 9 => level1Sprite,
+                <= 19 => level2Sprite,
+                <= 29 => level3Sprite,
+                <= 39 => level4Sprite,
+                _ => level5Sprite
+            };
         }
         protected override void LevelUp()
         {
@@ -88,6 +111,7 @@ namespace Script.CharacterGroupScript
             defaultAtkRate = 0;
             defaultAtkDistance = 0;
             _spriteRenderer.sprite = level1Sprite;
+            UnitProperty = UnitProperties.Physics;
         }
         private void Level2()
         {

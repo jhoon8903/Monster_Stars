@@ -11,7 +11,7 @@ namespace Script.EnemyScript
             MoveSpeed = 1.2f;
             EnemyType = EnemyTypes.Slow;
             SpawnZone = SpawnZones.A;
-            RegistryType = RegistryTypes.Divine;
+            RegistryType = RegistryTypes.Water;
             base.Initialize();
         }
     }

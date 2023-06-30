@@ -15,12 +15,34 @@ namespace Script.CharacterGroupScript
         private SpriteRenderer _spriteRenderer; // Reference to the SpriteRenderer component
         private const float DetectionWidth = 1f; // Width of the detection box
         private const float DetectionHeight = 9f; // Height of the detection box
+        private int _currentCharacterObjectLevel=26;
+        private int _currentCharacterPieceCount=10;
+      
+        
+        public override void Initialize()
+        {
+            unitGroup = UnitGroups.E;
+            UnitProperty = UnitProperties.Water;
+            CharacterObjectLevel = _currentCharacterObjectLevel;
+            CharacterPieceCount = _currentCharacterPieceCount;
+            base.Initialize();
+        }
         public void Awake()
         {
             _spriteRenderer = GetComponent<SpriteRenderer>(); // Get the reference to the SpriteRenderer component attached to this object
             Level1(); // Set initial level to level 1
         }
-
+        public override Sprite GetSpriteForLevel(int characterObjectLevel)
+        {
+            return characterObjectLevel switch
+            {
+                <= 9 => level1Sprite,
+                <= 19 => level2Sprite,
+                <= 29 => level3Sprite,
+                <= 39 => level4Sprite,
+                _ => level5Sprite
+            };
+        }
         protected override void LevelUp()
         {
             base.LevelUp(); // Increment the level
@@ -88,6 +110,7 @@ namespace Script.CharacterGroupScript
             defaultAtkRate = 0;
             defaultAtkDistance = 0;
             _spriteRenderer.sprite = level1Sprite;
+            UnitProperty = UnitProperties.Water;
         }
 
         // Sets the properties for level 2 of the character

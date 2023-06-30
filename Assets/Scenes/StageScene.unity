@@ -699,6 +699,7 @@ MonoBehaviour:
   commonRewardManager: {fileID: 2120144519}
   atkManager: {fileID: 149521967}
   enemyPool: {fileID: 2016604888}
+  levelUpRewardManager: {fileID: 2120144522}
   speedUp: 0
   wave: 1
 --- !u!4 &149521959
@@ -729,11 +730,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterList:
-  - {fileID: 1307041946654653737, guid: 282ca571fdd1a418f8655667bc8cf479, type: 3}
-  - {fileID: 996077009063285667, guid: e5eae943fb66c47e5961725f82c5a2ff, type: 3}
-  - {fileID: 4196842440807729694, guid: 10ae02ed26a9b4edc803ef0448003341, type: 3}
-  - {fileID: 5553006608696507336, guid: 438d7922ea8534dd6a3cfa7664f14cb7, type: 3}
-  - {fileID: 2939207743086641073, guid: b3c344a1ee72a45e3aef34b9e39575c5, type: 3}
+  - {fileID: 9161629068888336141, guid: 739cf734236e449859707c22bb97c24a, type: 3}
+  - {fileID: 7725269076765781265, guid: b3d3d9be139574f9692f6336a789659f, type: 3}
+  - {fileID: 2775731209932646854, guid: 50100ccb47c504a73a7c8e65b95b9285, type: 3}
+  - {fileID: 7786321694734890730, guid: d03f023d8b2cd49cdac846c313ff3870, type: 3}
+  - {fileID: 1053235717240956053, guid: b3c344a1ee72a45e3aef34b9e39575c5, type: 3}
   characterPool: {fileID: 1097818334}
   goldGetMore: 0
 --- !u!114 &149521964
@@ -850,7 +851,7 @@ GameObject:
   m_Icon: {fileID: 2974397684917235467, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &187153452
 Transform:
   m_ObjectHideFlags: 0
@@ -907,12 +908,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 7482667652216324306, guid: d9175c67aed5b4a91b62cd0b8bf00cd4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0ae2b74b1edd14bb18dd7b65ae916a54, type: 3}
   m_Color: {r: 0.8773585, g: 0.60037607, b: 0.1779548, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -1635,16 +1636,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyList:
-  - enemyPrefab: {fileID: 4608296790683070460, guid: 47528aa86487a4455a068d9ab3f94f2f, type: 3}
+  - enemyPrefab: {fileID: 8515113840192690951, guid: 64a56c22730b94f5480b47b001d6bbc8, type: 3}
     poolSize: 40
-  - enemyPrefab: {fileID: 1593285363578843117, guid: 0c6a7b6d8e2364455ad516d97e1634e6, type: 3}
+  - enemyPrefab: {fileID: 1159701843232548358, guid: 9b734a8fb4e8b417a9f7dc75ac5340bd, type: 3}
     poolSize: 25
-  - enemyPrefab: {fileID: 8190566129223033203, guid: 78f7bd1c20b3e408a94ce003baa58533, type: 3}
+  - enemyPrefab: {fileID: 7896109070651907299, guid: 231455e46ecd4491e83213526bf2a90e, type: 3}
     poolSize: 25
-  - enemyPrefab: {fileID: 5917879149447133458, guid: c60bfe49f25eb4538ab2af51b28dce02, type: 3}
+  - enemyPrefab: {fileID: 5411779804348357104, guid: 8ef2a8d204fb542a0a6a5c3dda8de653, type: 3}
     poolSize: 40
-  stage10BossPrefab: {fileID: 7359858875132129289, guid: d950a24d876c844ed8550ef75818ee5c, type: 3}
-  stage20BossPrefab: {fileID: 5587507376329632665, guid: 250bcee026ef64a07a567359a4e2ac2b, type: 3}
+  stage10BossPrefab: {fileID: 5789142652586811858, guid: 18be4b048fd8a40fbadab1199bbdec9a, type: 3}
+  stage20BossPrefab: {fileID: 5789142652586811858, guid: 18be4b048fd8a40fbadab1199bbdec9a, type: 3}
 --- !u!114 &329010038
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1852,7 +1853,7 @@ GameObject:
   m_Icon: {fileID: 419385456094870383, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &395845445
 Transform:
   m_ObjectHideFlags: 0
@@ -1863,7 +1864,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 6.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 12
@@ -1909,12 +1910,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 7482667652216324306, guid: d9175c67aed5b4a91b62cd0b8bf00cd4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0ae2b74b1edd14bb18dd7b65ae916a54, type: 3}
   m_Color: {r: 0.39684942, g: 0.9245283, b: 0.45621917, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -4359,12 +4360,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterManager: {fileID: 149521963}
   poolSize: 15
-  pooledCharacters:
-  - {fileID: 5314217969191077851, guid: 282ca571fdd1a418f8655667bc8cf479, type: 3}
-  - {fileID: 996077009063285666, guid: e5eae943fb66c47e5961725f82c5a2ff, type: 3}
-  - {fileID: 5553006608696507343, guid: 438d7922ea8534dd6a3cfa7664f14cb7, type: 3}
-  - {fileID: 4196842440807729695, guid: 10ae02ed26a9b4edc803ef0448003341, type: 3}
-  - {fileID: 109876181003132260, guid: b3c344a1ee72a45e3aef34b9e39575c5, type: 3}
 --- !u!4 &1097818335
 Transform:
   m_ObjectHideFlags: 0
@@ -5051,7 +5046,7 @@ GameObject:
   m_Icon: {fileID: 5132851093641282708, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1295326740
 Transform:
   m_ObjectHideFlags: 0
@@ -5108,12 +5103,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 7482667652216324306, guid: d9175c67aed5b4a91b62cd0b8bf00cd4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0ae2b74b1edd14bb18dd7b65ae916a54, type: 3}
   m_Color: {r: 0.9622642, g: 0.077162705, b: 0.077162705, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -5845,29 +5840,47 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weapons:
   - weaponType: 1
-    weaponPrefab: {fileID: 919158475592552322, guid: e35a13cb4286b4224b0ee4a6183f2ecd, type: 3}
+    weaponPrefab: {fileID: 7562509153400648891, guid: e35a13cb4286b4224b0ee4a6183f2ecd, type: 3}
     weaponSprite:
     - {fileID: 21300000, guid: f0ff49d2632744b1ba3888a79275003b, type: 3}
     - {fileID: 21300000, guid: e105923690c284d77917339833fafdc1, type: 3}
     - {fileID: 21300000, guid: 811be4170ef194535a13a43cdde4ead0, type: 3}
   - weaponType: 2
-    weaponPrefab: {fileID: 3655712775022857593, guid: 913efda9b1a924d8295d81f4a8e0425b, type: 3}
+    weaponPrefab: {fileID: 6977216343903192613, guid: 913efda9b1a924d8295d81f4a8e0425b, type: 3}
     weaponSprite:
     - {fileID: 21300000, guid: 51fba7ea733704a9ca01a6c0e771fa9c, type: 3}
     - {fileID: 21300000, guid: 1b0ee16596d024571a96861c1a7fdb68, type: 3}
     - {fileID: 21300000, guid: b0e6d7a59d004402e98c7c06da6242d2, type: 3}
   - weaponType: 4
-    weaponPrefab: {fileID: 4927612771845471254, guid: a443ab3c0a89c49209a06173b80218e0, type: 3}
+    weaponPrefab: {fileID: 3983145824219025459, guid: a443ab3c0a89c49209a06173b80218e0, type: 3}
     weaponSprite:
     - {fileID: 21300000, guid: ff9139bbc52264c5f91b289c60207e67, type: 3}
     - {fileID: 21300000, guid: e79e94a51ca334212aa1fe57f06a0085, type: 3}
     - {fileID: 21300000, guid: 8eae3651817d64f9eb4c079f86929c02, type: 3}
   - weaponType: 5
-    weaponPrefab: {fileID: 8064812932368117223, guid: 51e34c248059c4409a2c90e111ca73af, type: 3}
+    weaponPrefab: {fileID: 5641614456890173724, guid: 51e34c248059c4409a2c90e111ca73af, type: 3}
     weaponSprite:
     - {fileID: 21300000, guid: 4d7c6c22b8df0451185d482befa4c8db, type: 3}
     - {fileID: 21300000, guid: f604e062448844dffaf8bd2544a41b0d, type: 3}
     - {fileID: 21300000, guid: 1fcd99742122641d0a9bfecf3512d171, type: 3}
+  - weaponType: 3
+    weaponPrefab: {fileID: 2083184677537458400, guid: ae0ea0905a3c64c54983db31744e4622, type: 3}
+    weaponSprite:
+    - {fileID: 21300000, guid: 4deb41924c3644b29bc24f99dac2fee8, type: 3}
+    - {fileID: 21300000, guid: caf8d3aeb0287451eb128ae60e366038, type: 3}
+    - {fileID: 21300000, guid: ea9410c3e9f4d4e88b519cda9ccf4e5d, type: 3}
+  - weaponType: 6
+    weaponPrefab: {fileID: 4988187611640326199, guid: 75aec2e2b907b492e9b510def0a65e9f, type: 3}
+    weaponSprite:
+    - {fileID: 21300000, guid: 192f36c3aca97463c95b35f1c210bce8, type: 3}
+    - {fileID: 21300000, guid: f55ad512f41294265882a74cfc452a19, type: 3}
+    - {fileID: 21300000, guid: 4c9403bcd07e84de5a950f28204ea689, type: 3}
+  - weaponType: 7
+    weaponPrefab: {fileID: 6482642830505478264, guid: 0f67720a8ce2440c9b35e8e39c9a0c48, type: 3}
+    weaponSprite:
+    - {fileID: 21300000, guid: e23fa7a2dc595431eb19e13a639795b9, type: 3}
+    - {fileID: 21300000, guid: 2d8dd5b65758d495f94f29fd3907ebf3, type: 3}
+    - {fileID: 21300000, guid: a8ada1627ade4412089fe2a147b39656, type: 3}
   weaponPoolCapacity: 30
 --- !u!4 &1537456865
 Transform:
@@ -6051,7 +6064,6 @@ MonoBehaviour:
   darkBleedAdditionalDamage: 0
   darkIncreaseAtkSpeed: 0
   darkProjectilePenetration: 0
-  darkAdditionalFrontAttack: 0
   water2IncreaseDamage: 0
   water2BleedAdditionalRestraint: 0
   water2IncreaseSlowTime: 0
@@ -6385,7 +6397,7 @@ GameObject:
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1719658935
 Transform:
   m_ObjectHideFlags: 0
@@ -6442,12 +6454,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 7482667652216324306, guid: d9175c67aed5b4a91b62cd0b8bf00cd4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0ae2b74b1edd14bb18dd7b65ae916a54, type: 3}
   m_Color: {r: 0.3504361, g: 0.59257644, b: 0.990566, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -6728,7 +6740,7 @@ GameObject:
   m_Icon: {fileID: 5721338939258241955, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1890169007
 Transform:
   m_ObjectHideFlags: 0
@@ -6785,12 +6797,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 7482667652216324306, guid: d9175c67aed5b4a91b62cd0b8bf00cd4, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0ae2b74b1edd14bb18dd7b65ae916a54, type: 3}
   m_Color: {r: 0.9433962, g: 0.88245994, b: 0.26254895, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.2, y: 0.2}
+  m_Size: {x: 1, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1

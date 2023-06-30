@@ -15,11 +15,35 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level5Sprite; // Sprite for level 5
         private SpriteRenderer _spriteRenderer; // Reference to the SpriteRenderer component
         private float _detectionSize = 1.5f; // Size of the detection circle
+        private int _currentCharacterObjectLevel=24;
+        private int _currentCharacterPieceCount=11;
+      
+        
+        public override void Initialize()
+        {
+            unitGroup = UnitGroups.F;
+            UnitProperty = UnitProperties.Poison;
+            CharacterObjectLevel = _currentCharacterObjectLevel;
+            CharacterPieceCount = _currentCharacterPieceCount;
+            base.Initialize();
+        }
         public void Awake()
         {
             unitGroup = UnitGroups.F;
             _spriteRenderer = GetComponent<SpriteRenderer>(); // Get the reference to the SpriteRenderer component attached to this object
             Level1(); // Set initial level to level 1
+        }
+
+        public override Sprite GetSpriteForLevel(int characterObjectLevel)
+        {
+            return characterObjectLevel switch
+            {
+                <= 9 => level1Sprite,
+                <= 19 => level2Sprite,
+                <= 29 => level3Sprite,
+                <= 39 => level4Sprite,
+                _ => level5Sprite
+            };
         }
 
         protected override void LevelUp()

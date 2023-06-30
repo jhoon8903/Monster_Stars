@@ -7,6 +7,8 @@ namespace Script.CharacterManagerScript
 {
     public class CharacterBase : MonoBehaviour
     {
+        protected internal int CharacterObjectLevel { get; set; }
+        protected internal int CharacterPieceCount { get; set; }
         protected internal int Level { get; private set; } = 1; // Current level of the character
         protected internal string CharacterName; // Name of the character
         protected internal int UnitLevel; // Level of the unit
@@ -49,6 +51,12 @@ namespace Script.CharacterManagerScript
             }
         }
 
+        public virtual void Initialize()
+        {
+
+        }
+
+
         // Perform scale animation when leveling up
         public void LevelUpScale(GameObject levelUpObject)
         {
@@ -85,6 +93,11 @@ namespace Script.CharacterManagerScript
         public virtual List<GameObject> DetectEnemies()
         {
             return new List<GameObject>();
+        }
+
+        public virtual Sprite GetSpriteForLevel(int characterObjectLevel)
+        {
+            return null;
         }
     }
 }

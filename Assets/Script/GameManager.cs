@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Linq;
 using DG.Tweening;
 using Script.CharacterGroupScript;
 using Script.CharacterManagerScript;
@@ -31,6 +32,7 @@ namespace Script
         [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private AtkManager atkManager;
         [SerializeField] private EnemyPool enemyPool;
+        [SerializeField] private LevelUpRewardManager levelUpRewardManager;
         private readonly WaitForSecondsRealtime _waitOneSecRealtime = new WaitForSecondsRealtime(1f);
         private readonly WaitForSecondsRealtime _waitTwoSecRealtime = new WaitForSecondsRealtime(2f);
         public bool speedUp;
@@ -93,7 +95,10 @@ namespace Script
                     yield return StartCoroutine(spawnManager.BossStageSpawnRule());
                 }
                 yield return StartCoroutine(NextStage());
-                FindObjectOfType<UnitD>().ResetDamage();
+                if (levelUpRewardManager.unitGroups.Contains(CharacterBase.UnitGroups.D) && EnforceManager.Instance.physicIncreaseDamage)
+                {
+                    FindObjectOfType<UnitD>().ResetDamage();
+                }
             }
             else
             {

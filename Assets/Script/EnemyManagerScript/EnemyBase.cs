@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using DG.Tweening;
 using Script.CharacterManagerScript;
@@ -16,9 +15,9 @@ namespace Script.EnemyManagerScript
 
         protected internal float CrushDamage; // 충돌시 데미지
         protected internal float MoveSpeed; // 적 오브젝트의 이동속도, 1f 는 1초에 1Grid를 가는 속도 숫자가 커질수록 느려져야 함
-        public enum EnemyTypes { Boss, BasicA, BasicD,Slow, Fast }
+        public enum EnemyTypes { Boss, BasicA, BasicD, Slow, Fast }
         protected internal EnemyTypes EnemyType; // 적 타입 빠른적, 느린적, 보통적, 보스
-        public enum RegistryTypes { Physics, Divine, Poison, None }
+        public enum RegistryTypes { Physics, Divine, Poison, Burn, Water, Darkness,  None }
         protected internal RegistryTypes RegistryType; // 저항타입, 만약 공격하는 적이 해당 타입과 일치하면 20%의 데미지를 덜 입게 됨
         protected internal SpawnZones SpawnZone;
         protected internal bool isDead;
@@ -95,10 +94,7 @@ namespace Script.EnemyManagerScript
         {
             var wave = FindObjectOfType<GameManager>().wave;
             _hpSlider = GetComponentInChildren<Slider>(true);
-            if (EnemyType != EnemyTypes.Boss)
-            {
-                lastIncreaseHealthPoint = healthPoint  * Mathf.Pow(1.3f, wave - 1);
-            }
+            if (EnemyType != EnemyTypes.Boss) lastIncreaseHealthPoint = healthPoint  * Mathf.Pow(1.3f, wave - 1);
             maxHealthPoint = lastIncreaseHealthPoint != 0 ? lastIncreaseHealthPoint : healthPoint;
             healthPoint = maxHealthPoint;
             currentHealth = maxHealthPoint;
@@ -108,24 +104,16 @@ namespace Script.EnemyManagerScript
         }
         public void ReceiveDamage(EnemyBase detectEnemy, float damage, KillReasons reason = KillReasons.ByPlayer)
         {
-            // var stopPattern = FindObjectOfType<EnemyPatternManager>().Zone_Move(detectEnemy);
             lock (Lock)
             {
-                if (isDead)
-                {
-                    return;
-                }
+                if (isDead) return;
                 currentHealth -= damage;
                 if (gameObject == null || !gameObject.activeInHierarchy) return;
                 StartCoroutine(UpdateHpSlider());
                 if (currentHealth > 0f ||  isDead) return;
                 isDead = true;
-                // StopCoroutine(UpdateHpSlider());
                 ExpManager.Instance.HandleEnemyKilled(reason);
-                if (EnforceManager.Instance.physicIncreaseDamage)
-                {
-                    EnforceManager.Instance.PhysicIncreaseDamage();
-                }
+                if (EnforceManager.Instance.physicIncreaseDamage) EnforceManager.Instance.PhysicIncreaseDamage();
                 EnemyKilledEvents(detectEnemy);
             }
         }

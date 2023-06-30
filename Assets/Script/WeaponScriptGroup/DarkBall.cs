@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Script.CharacterGroupScript;
@@ -23,34 +22,33 @@ namespace Script.WeaponScriptGroup
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
-
-            _enemyTransforms = CharacterBase.GetComponent<UnitB>().DetectEnemies();
-
-            foreach (var enemy in _enemyTransforms)
+            EnemyBase currentEnemy = null;
+            while (isInUse)
             {
-                _enemyTransform = enemy.transform.position;
+                _enemyTransforms = CharacterBase.GetComponent<UnitB>().DetectEnemies();
+                if (_enemyTransforms.Count > 0)
+                {
+                    _enemyTransforms.Sort((enemy1, enemy2) => Vector3.Distance(transform.position, enemy1.transform.position)
+                        .CompareTo(Vector3.Distance(transform.position, enemy2.transform.position)));
+                    if (currentEnemy == null || !currentEnemy.gameObject.activeInHierarchy || 
+                        Vector3.Distance(transform.position, currentEnemy.transform.position) > 
+                        Vector3.Distance(transform.position, _enemyTransforms[0].transform.position))
+                    {
+                        currentEnemy = _enemyTransforms[0].GetComponent<EnemyBase>();
+                    }
+                }
+                else
+                {
+                    StopUseWeapon(gameObject);
+                    yield break;
+                }
+                var direction = (currentEnemy.transform.position - transform.position).normalized;
+                _rigidbody2D.velocity = direction * Speed;
+                yield return null;
             }
 
-            var position = transform.position;
-            _distance = Vector3.Distance(position, _enemyTransform);
-            var velocityDirectionX = _enemyTransform.x > position.x ? 1 : -1;
-    
-            _rigidbody2D.velocity = new Vector2(Speed * velocityDirectionX, 0);
-            transform.rotation = Quaternion.Euler(0, 0, _enemyTransform.x > transform.position.x ? 90 : 270);
-
-            yield return new WaitForSeconds(_distance / Speed);
             StopUseWeapon(gameObject);
-
-            if (EnforceManager.Instance.darkAdditionalFrontAttack)
-            {
-                _rigidbody2D.velocity = new Vector2(transform.position.x, Speed);
-                transform.rotation = Quaternion.Euler(0, 0, 0);
-                yield return new WaitForSeconds(_distance / Speed);
-                StopUseWeapon(gameObject);
-            }
         }
-
-
 
         private void OnTriggerEnter2D(Collider2D collision)
         {

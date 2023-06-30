@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -67,42 +68,51 @@ namespace Script.RewardScript
 
         public void Start()
         {
+            var csvFile = Resources.Load<TextAsset>("commonData");
+            if (csvFile == null)
+            {
+                Debug.LogError("File not found in Resources folder");
+                return;
+            }
+
             var g = commonRewardManager.greenSprite;
             var b = commonRewardManager.blueSprite;
             var p = commonRewardManager.purpleSprite;
-            CommonGreenList = new List<CommonData>
-            {
-                new CommonGreenData(g,1, CommonData.Types.GroupDamage, new[]{4}),
-                new CommonGreenData(g,2,CommonData.Types.GroupAtkSpeed,new[]{4}),
-                new CommonGreenData(g,3,CommonData.Types.Step,new []{2,3,4}),
-                new CommonGreenData(g,4,CommonData.Types.RandomLevelUp, new []{2,3}),
-                new CommonGreenData(g,5,CommonData.Types.GroupLevelUp, new []{0,1,2,3}),
-                new CommonGreenData(g,6,CommonData.Types.Exp, new []{5}),
-            };
+            CommonGreenList = new List<CommonData>();
+            CommonBlueList = new List<CommonData>();
+            CommonPurpleList = new List<CommonData>();
+            var csvData = csvFile.text.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
 
-            CommonBlueList = new List<CommonData>
+            for (var i = 1; i < csvData.Length; i++)
             {
-                new CommonBlueData(b,1,CommonData.Types.GroupDamage, new []{8}),
-                new CommonBlueData(b,2,CommonData.Types.GroupAtkSpeed, new []{6,7,8,9,10}),
-                new CommonBlueData(b,3,CommonData.Types.Step, new []{7,8,9,10}),
-                new CommonBlueData(b,7,CommonData.Types.Gold, new []{1}),
-                new CommonBlueData(b,8,CommonData.Types.CastleMaxHp, new []{200}),
-                new CommonBlueData(b,9,CommonData.Types.CastleRecovery, new []{200}),
-                new CommonBlueData(b,11,CommonData.Types.Slow, new []{15})
-            };
+                var data = csvData[i].Split(',');
 
-            CommonPurpleList = new List<CommonData>
-            {
-                new CommonPurpleData(p,1,CommonData.Types.GroupDamage,new []{18}),
-                new CommonPurpleData(p,2,CommonData.Types.GroupAtkSpeed, new []{19}),
-                new CommonPurpleData(p,3,CommonData.Types.Step, new []{14,15,16,17}),
-                new CommonPurpleData(p,12,CommonData.Types.StepLimit, new []{1} ),
-                new CommonPurpleData(p,13,CommonData.Types.StepDirection, new []{1}),
-                new CommonPurpleData(p,14,CommonData.Types.NextStage, new []{1,2}),
-                new CommonPurpleData(p,15,CommonData.Types.LevelUpPattern, new []{0,1,2,3}),
-                new CommonPurpleData(p,10,CommonData.Types.Match5Upgrade, new []{1}),
-                new CommonPurpleData(p,16,CommonData.Types.AddRow, new []{1})
-            };
+                var color = data[0] switch
+                {
+                    "Green" => g,
+                    "Blue" => b,
+                    _ => p
+                };
+
+                var code = int.Parse(data[1]);
+                var type = (CommonData.Types)Enum.Parse(typeof(CommonData.Types), data[2]);
+                var property = data[3].Contains(" ")
+                    ? Array.ConvertAll(data[3].Split(' '), int.Parse)
+                    : new [] { int.Parse(data[3]) };
+
+                switch (data[0])
+                {
+                    case "Green":
+                        CommonGreenList.Add(new CommonGreenData(color, code, type, property));
+                        break;
+                    case "Blue":
+                        CommonBlueList.Add(new CommonBlueData(color, code, type, property));
+                        break;
+                    default:
+                        CommonPurpleList.Add(new CommonPurpleData(color, code, type, property));
+                        break;
+                }
+            }
         }
     }
 }

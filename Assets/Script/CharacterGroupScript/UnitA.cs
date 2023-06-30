@@ -16,13 +16,40 @@ namespace Script.CharacterGroupScript
         private SpriteRenderer _spriteRenderer; // Reference to the SpriteRenderer component
         private const float DetectionWidth = 1f; // Width of detection box
         private const float DetectionHeight = 8f; // Height of detection box
+        private int _currentCharacterObjectLevel=10;
+        private int _currentCharacterPieceCount=13;
+      
+        
+        public override void Initialize()
+        {
+            unitGroup = UnitGroups.A;
+            UnitProperty = UnitProperties.Divine;
+            CharacterObjectLevel = _currentCharacterObjectLevel;
+            CharacterPieceCount = _currentCharacterPieceCount;
+            base.Initialize();
+        }
         
         public void Awake()
         {
             unitGroup = UnitGroups.A;
+            UnitProperty = UnitProperties.Divine;
             _spriteRenderer = GetComponent<SpriteRenderer>(); // Get the reference to the SpriteRenderer component attached to this object
             Level1(); // Set initial level to level 1
         }
+
+
+        public override Sprite GetSpriteForLevel(int characterObjectLevel)
+        {
+            return characterObjectLevel switch
+            {
+                <= 5 => level1Sprite,
+                <= 10 => level2Sprite,
+                <= 15 => level3Sprite,
+                <= 20 => level4Sprite,
+                _ => level5Sprite
+            };
+        }
+
         protected override void LevelUp()
         {
             base.LevelUp();
@@ -51,7 +78,6 @@ namespace Script.CharacterGroupScript
             ResetLevel(); // Reset the character's level
             Level1(); // Set level back to 1
         }
-
         public override List<GameObject> DetectEnemies()
         {
             Vector2 detectionSize;
@@ -79,10 +105,7 @@ namespace Script.CharacterGroupScript
             detectedEnemies = currentlyDetectedEnemies;
             return detectedEnemies;
         }
-
-
-// Draws a wire cube in the Scene view to visualize the detection box
-public void OnDrawGizmos()
+        public void OnDrawGizmos()
 {
     // Draw a wire cube to visualize the detection box in the Scene view
     Vector2 detectionSize;
@@ -112,6 +135,7 @@ public void OnDrawGizmos()
             DefaultDamage = 0;
             defaultAtkRate = 0;
             defaultAtkDistance = 0;
+            UnitProperty = UnitProperties.Divine;
             _spriteRenderer.sprite = level1Sprite;
         }
         private void Level2()

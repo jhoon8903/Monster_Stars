@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Script.CharacterManagerScript;
@@ -69,6 +70,9 @@ namespace Script.WeaponScriptGroup
                 case CharacterBase.UnitEffects.Bleed:
                      BleedAttribution(enemyObject);
                      break;
+                case CharacterBase.UnitEffects.Stun:
+                case CharacterBase.UnitEffects.Strike:
+                case CharacterBase.UnitEffects.Darkness:
                 default:
                     Debug.Log("UnKnown AtkEffect");
                     return;
@@ -78,16 +82,14 @@ namespace Script.WeaponScriptGroup
         {
             switch (enemyStatus.RegistryType)
             {
+                case EnemyBase.RegistryTypes.Burn:
+                case EnemyBase.RegistryTypes.Water:
+                case EnemyBase.RegistryTypes.Darkness:
                 case EnemyBase.RegistryTypes.Physics:
-                    IsRestraint(enemyStatus);
-                    break;
                 case EnemyBase.RegistryTypes.Poison:
-                    IsRestraint(enemyStatus);
-                    break;
                 case EnemyBase.RegistryTypes.None:
-                    IsRestraint(enemyStatus);
-                    break;
                 case EnemyBase.RegistryTypes.Divine:
+                    IsRestraint(enemyStatus);
                     break;
                 default:
                     Debug.Log("UnKnown Registries");
@@ -99,15 +101,13 @@ namespace Script.WeaponScriptGroup
             switch (enemyStatus.RegistryType)
             {
                 case EnemyBase.RegistryTypes.Divine:
-                    IsPoison(enemyStatus);
-                    break;
                 case EnemyBase.RegistryTypes.Physics:
-                    IsPoison(enemyStatus);
-                    break;
                 case EnemyBase.RegistryTypes.None:
-                    IsPoison(enemyStatus);
-                    break;
                 case EnemyBase.RegistryTypes.Poison:
+                case EnemyBase.RegistryTypes.Burn:
+                case EnemyBase.RegistryTypes.Water:
+                case EnemyBase.RegistryTypes.Darkness:
+                    IsPoison(enemyStatus);
                     break;
                 default:
                     Debug.Log("UnKnown Registries");
@@ -119,15 +119,12 @@ namespace Script.WeaponScriptGroup
             switch (enemyStatus.RegistryType)
             {
                 case EnemyBase.RegistryTypes.Divine:
-                    IsSlow(enemyStatus);
-                    break;
                 case EnemyBase.RegistryTypes.Physics:
-                    IsSlow(enemyStatus);
-                    break;
                 case EnemyBase.RegistryTypes.Poison:
-                    IsSlow(enemyStatus);
-                    break;
                 case EnemyBase.RegistryTypes.None:
+                case EnemyBase.RegistryTypes.Burn:
+                case EnemyBase.RegistryTypes.Water:
+                case EnemyBase.RegistryTypes.Darkness:
                     IsSlow(enemyStatus);
                     break;
                 default:
@@ -142,9 +139,10 @@ namespace Script.WeaponScriptGroup
                 case EnemyBase.RegistryTypes.Divine:
                 case EnemyBase.RegistryTypes.Physics:
                 case EnemyBase.RegistryTypes.None:
-                    IsPoison(enemyStatus);
-                    break;
                 case EnemyBase.RegistryTypes.Poison:
+                case EnemyBase.RegistryTypes.Burn:
+                case EnemyBase.RegistryTypes.Water:
+                case EnemyBase.RegistryTypes.Darkness:
                     break;
                 default:
                     Debug.Log("UnKnown Registries");
@@ -160,6 +158,9 @@ namespace Script.WeaponScriptGroup
                 case EnemyBase.RegistryTypes.Physics:
                 case EnemyBase.RegistryTypes.Poison:
                 case EnemyBase.RegistryTypes.None:
+                case EnemyBase.RegistryTypes.Burn:
+                case EnemyBase.RegistryTypes.Water:
+                case EnemyBase.RegistryTypes.Darkness:
                     IsBurn(enemyStatus);
                     break;
                 default:
@@ -176,6 +177,9 @@ namespace Script.WeaponScriptGroup
                 case EnemyBase.RegistryTypes.Physics:
                 case EnemyBase.RegistryTypes.Poison:
                 case EnemyBase.RegistryTypes.None:
+                case EnemyBase.RegistryTypes.Burn:
+                case EnemyBase.RegistryTypes.Water:
+                case EnemyBase.RegistryTypes.Darkness:
                     IsBleed(enemyStatus);
                     break;
                 default:
@@ -198,19 +202,19 @@ namespace Script.WeaponScriptGroup
         private static void IsPoison(EnemyBase enemyStatus)
         {
             if (!EnforceManager.Instance.activatePoison) return;
-            enemyStatus.isPoison = true;
+            enemyStatus.IsPoison = true;
         }
 
         private static void IsBurn(EnemyBase enemyStatus)
         {
             if (EnforceManager.Instance.fireDeleteBurnIncreaseDamage) return;
-            enemyStatus.isBurn = true;
+            enemyStatus.IsBurn = true;
         }
 
         private static void IsBleed(EnemyBase enemyStatus)
         {
             if (!EnforceManager.Instance.physics2ActivateBleed) return;
-            enemyStatus.isBleed = true;
+            enemyStatus.IsBleed = true;
         }
         protected float DamageCalculator(float damage,EnemyBase enemyBase)
         {
@@ -268,27 +272,43 @@ namespace Script.WeaponScriptGroup
                     return damage;
 
                 case CharacterBase.UnitProperties.Water:
-                    if (UnitGroup == CharacterBase.UnitGroups.C)
+                    switch (UnitGroup)
                     {
-                        if (EnforceManager.Instance.water2IncreaseDamage >= 1)
+                        case CharacterBase.UnitGroups.C:
                         {
-                            damage *= 1f + (0.09f * EnforceManager.Instance.water2IncreaseDamage);
-                        }
-                    }
+                            if (EnforceManager.Instance.water2IncreaseDamage >= 1)
+                            {
+                                damage *= 1f + (0.09f * EnforceManager.Instance.water2IncreaseDamage);
+                            }
 
-                    if (UnitGroup == CharacterBase.UnitGroups.E)
-                    {
-                        if (enemyBase.isRestraint && EnforceManager.Instance.waterRestraintIncreaseDamage)
-                        {
-                            damage *= 2.0f;
+                            if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Water)
+                            {
+                                damage *= 0.8f;
+                            }
+                            return damage;
                         }
-                        if (enemyBase.isBurn && EnforceManager.Instance.waterBurnAdditionalDamage)
+
+                        case CharacterBase.UnitGroups.E:
                         {
-                            damage *= 3.0f;
+                            if (enemyBase.isRestraint && EnforceManager.Instance.waterRestraintIncreaseDamage)
+                            {
+                                damage *= 2.0f;
+                            }
+
+                            if (enemyBase.isBurn && EnforceManager.Instance.waterBurnAdditionalDamage)
+                            {
+                                damage *= 3.0f;
+                            }
+
+                            if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Water)
+                            {
+                                damage *= 0.8f;
+                            }
+
+                            return damage * EnforceManager.Instance.IncreaseWaterDamage;
                         }
                     }
-                    return damage * EnforceManager.Instance.IncreaseWaterDamage;
-                
+                    break;
                 case CharacterBase.UnitProperties.Fire:
                     if (enemyBase.isBleed && EnforceManager.Instance.fireBleedingAdditionalDamage)
                     {
@@ -298,6 +318,11 @@ namespace Script.WeaponScriptGroup
                     if (EnforceManager.Instance.fireDeleteBurnIncreaseDamage)
                     {
                         damage *= 3.0f;
+                    }
+
+                    if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Burn)
+                    {
+                        damage *= 0.8f;
                     }
                     return damage * (1f + 0.15f * EnforceManager.Instance.fireIncreaseDamage);
                 
@@ -310,7 +335,16 @@ namespace Script.WeaponScriptGroup
                     {
                         damage *= 3.0f;
                     }
+
+                    if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Darkness)
+                    {
+                        damage *= 0.8f;
+                    }
                     return damage;
+                case CharacterBase.UnitProperties.None:
+                    return damage;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
             return damage;
         }

@@ -45,7 +45,7 @@ namespace Script.RewardScript
             darkIncreaseAtkSpeed ++;
         } 
         [Header("관통 효과")] public bool darkProjectilePenetration ;
-        [Header("공격방향 추가")] public bool darkAdditionalFrontAttack;
+        // [Header("공격방향 추가")] public bool darkAdditionalFrontAttack;
 
 
         [Header("\n\nUnit_C 물 속성2\n\n")] 

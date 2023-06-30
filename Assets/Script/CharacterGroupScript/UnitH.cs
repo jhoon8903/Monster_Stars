@@ -14,15 +14,39 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level4Sprite; // Sprite for level 4
         [SerializeField] private Sprite level5Sprite; // Sprite for level 5
         private SpriteRenderer _spriteRenderer; // Reference to the SpriteRenderer component
-        private const float DetectionWidth = 1f; // Width of detection box
-        private const float DetectionHeight = 8f; // Height of detection box
+        private float _detectionWidth; // Width of detection box
+        private const float DetectionHeight = 9f; // Height of detection box
+        private int _currentCharacterObjectLevel=8;
+        private int _currentCharacterPieceCount=15;
+      
         
+        public override void Initialize()
+        {
+            unitGroup = UnitGroups.H;
+            UnitProperty = UnitProperties.Physics;
+            CharacterObjectLevel = _currentCharacterObjectLevel;
+            CharacterPieceCount = _currentCharacterPieceCount;
+            base.Initialize();
+        }
         public void Awake()
         {
             unitGroup = UnitGroups.H;
             _spriteRenderer = GetComponent<SpriteRenderer>(); // Get the reference to the SpriteRenderer component attached to this object
             Level1(); // Set initial level to level 1
         }
+
+        public override Sprite GetSpriteForLevel(int characterObjectLevel)
+        {
+            return characterObjectLevel switch
+            {
+                <= 9 => level1Sprite,
+                <= 19 => level2Sprite,
+                <= 29 => level3Sprite,
+                <= 39 => level4Sprite,
+                _ => level5Sprite
+            };
+        }
+
         protected override void LevelUp()
         {
             base.LevelUp();
@@ -54,7 +78,8 @@ namespace Script.CharacterGroupScript
 
         public override List<GameObject> DetectEnemies()
         {
-            var detectionSize = new Vector2(DetectionWidth - 0.5f, DetectionHeight);
+            _detectionWidth = EnforceManager.Instance.water2AdditionalProjectile ? 3f : 0.8f;
+            var detectionSize = new Vector2(_detectionWidth, DetectionHeight);
             var detectionCenter = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
 
             var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize, 0f);
@@ -68,17 +93,14 @@ namespace Script.CharacterGroupScript
             detectedEnemies = currentlyDetectedEnemies;
             return detectedEnemies;
         }
-
-
-// Draws a wire cube in the Scene view to visualize the detection box
-public void OnDrawGizmos()
-{
-    // Draw a wire cube to visualize the detection box in the Scene view
-    var detectionSize = new Vector2(DetectionWidth - 0.5f, DetectionHeight);
-    var detectionCenter = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
-    Gizmos.color = Color.magenta;
-    Gizmos.DrawWireCube(detectionCenter, detectionSize);
-}
+        public void OnDrawGizmos()
+        {
+            _detectionWidth = EnforceManager.Instance.water2AdditionalProjectile ? 3f : 0.8f;
+            var detectionSize = new Vector2(_detectionWidth, DetectionHeight);
+            var detectionCenter = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireCube(detectionCenter, detectionSize);
+        }
 
         private void Level1()
         {
@@ -90,6 +112,7 @@ public void OnDrawGizmos()
             defaultAtkRate = 0;
             defaultAtkDistance = 0;
             _spriteRenderer.sprite = level1Sprite;
+            UnitProperty = UnitProperties.Physics;
         }
         private void Level2()
         {

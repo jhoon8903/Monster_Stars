@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using Script.RewardScript;
 using Script.WeaponScriptGroup;
 using UnityEngine;
@@ -78,6 +79,9 @@ namespace Script.CharacterManagerScript
                         case CharacterBase.UnitAtkTypes.Circle:
                             CircleAttack(atkUnit, unitGroup); // Perform circle attack
                             break;
+                        case CharacterBase.UnitAtkTypes.GuideProjectile:
+                            GuideProjectileAttack(atkUnit, unitGroup);
+                            break;
                         default:
                             throw new ArgumentOutOfRangeException();
                     }
@@ -93,17 +97,28 @@ namespace Script.CharacterManagerScript
                 case CharacterBase.UnitGroups.A:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.Spear)); // Perform attack with a spear
                     break;
-                case CharacterBase.UnitGroups.B:
-                    Attack(new AttackData(unit, WeaponsPool.WeaponType.Dark));
-                    break;
                 case CharacterBase.UnitGroups.C:
-                    Attack(new AttackData(unit, WeaponsPool.WeaponType.IceCrystal));
+                    if (EnforceManager.Instance.water2AdditionalProjectile)
+                    {
+                        StartCoroutine(TripleAttack(new AttackData(unit, WeaponsPool.WeaponType.IceCrystal)));
+                    }
+                    else
+                    {
+                        Attack(new AttackData(unit, WeaponsPool.WeaponType.IceCrystal));
+                    }
                     break;
                 case CharacterBase.UnitGroups.E:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.IceCrystal)); // Perform attack with an ice crystal
                     break;
                 case CharacterBase.UnitGroups.H:
-                    Attack(new AttackData(unit, WeaponsPool.WeaponType.Dart));
+                    if (EnforceManager.Instance.physics2AdditionalProjectile)
+                    {
+                        StartCoroutine(TripleAttack(new AttackData(unit, WeaponsPool.WeaponType.Dart)));
+                    }
+                    else
+                    {
+                        Attack(new AttackData(unit, WeaponsPool.WeaponType.Dart));
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(unitGroup), unitGroup, null);
@@ -114,7 +129,7 @@ namespace Script.CharacterManagerScript
             switch (unitGroup)
             {
                 case CharacterBase.UnitGroups.F:
-                    if (enforceManager.poisonDoubleAtk )
+                    if (enforceManager.poisonDoubleAtk)
                     {
                         StartCoroutine(GasDoubleAtk(unit, 0.3f));
                     }
@@ -145,17 +160,28 @@ namespace Script.CharacterManagerScript
             }
         }
 
+        private void GuideProjectileAttack(GameObject unit, CharacterBase.UnitGroups unitGroup)
+        {
+            switch (unitGroup)
+            {
+                case CharacterBase.UnitGroups.B:
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.Dark));
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(unitGroup), unitGroup, null);
+            }
+        }
+
         private GameObject Attack(AttackData attackData)
         {
-            var unit = attackData.Unit; // Attacking unit
-            var weaponType = attackData.WeaponType; // Type of weapon used for the attack
-            var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.transform.position, unit.transform.rotation); // Get the weapon object from the weapon pool
-            var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>(); // Get the weapon base component
-            weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>()); // Initialize the weapon with the character's information
+            var unit = attackData.Unit;
+            var weaponType = attackData.WeaponType; 
+            var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.transform.position, unit.transform.rotation);
+            var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
+            weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
             weaponsList.Add(weaponBase.gameObject);
-            StartCoroutine(weaponBase.UseWeapon()); // Perform the weapon's attack logic
-            weaponsPool.SetSprite(weaponType, attackData.Unit.GetComponent<CharacterBase>().UnitLevel, weaponObject); // Set the weapon's sprite based on the character's level
-            
+            StartCoroutine(weaponBase.UseWeapon());
+            weaponsPool.SetSprite(weaponType, attackData.Unit.GetComponent<CharacterBase>().UnitLevel, weaponObject);
             return weaponObject;
         }
 
@@ -165,6 +191,31 @@ namespace Script.CharacterManagerScript
             yield return new WaitForSeconds(atkDuration);
             Attack(new AttackData(unit, WeaponsPool.WeaponType.VenomSac));
         }
+
+        private IEnumerator TripleAttack(AttackData attackData)
+        {
+            var unit = attackData.Unit;
+            var weaponType = attackData.WeaponType; 
+            const float offset = 0.7f; // Change this to the desired offset distance
+            var unitPosition = unit.transform.position;
+            var weaponPositions = new Vector3[]
+            {
+                new Vector3(unitPosition.x - offset, unitPosition.y, 0),
+                unitPosition,
+                new Vector3(unitPosition.x + offset, unitPosition.y, 0)
+            };
+            foreach (var position in weaponPositions)
+            {
+                var weaponObject = weaponsPool.SpawnFromPool(weaponType, position, unit.transform.rotation);
+                var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
+                weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
+                weaponsList.Add(weaponBase.gameObject);
+                StartCoroutine(weaponBase.UseWeapon());
+                weaponsPool.SetSprite(weaponType, unit.GetComponent<CharacterBase>().UnitLevel, weaponObject);
+            }
+            yield return null;
+        }
+
 
         public void ClearWeapons()
         {
