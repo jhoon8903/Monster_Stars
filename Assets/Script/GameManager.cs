@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Linq;
 using DG.Tweening;
 using Script.CharacterGroupScript;
 using Script.CharacterManagerScript;
@@ -50,7 +49,6 @@ namespace Script
             GameSpeedSelect();
             StartCoroutine(spawnManager.PositionUpCharacterObject());
             swipeManager.isBusy = false;
-            DOTween.SetTweensCapacity(100000, 500);
         }
         public IEnumerator Count0Call()
         {

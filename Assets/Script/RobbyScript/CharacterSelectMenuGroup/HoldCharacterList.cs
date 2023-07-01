@@ -4,116 +4,189 @@ using Script.CharacterManagerScript;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace Script.RobbyScript.CharacterSelectMenuGroup
 {
-    [Serializable] 
-    public class UnitScrollPosition
-    {
-        public Image unitBackGround;
-        public GameObject unit; // 프리팹
-        public Slider unitLevelSlider;
-        public TextMeshProUGUI unitLevelText;
-        public Slider unitPieceSlider;
-        public TextMeshProUGUI unitPieceText;
-    }
-
-    public class UnitInformation
-    {
-        public CharacterBase unit;
-        public Color unitBackColor;
-        public Sprite unitSprite;
-        public int unitLevelValue;
-        public int unitLevelMaxValue;
-        public int unitPieceValue;
-        public int unitPieceMaxvalue;
-    }
-    public class HoldCharacterList : MonoBehaviour
-    {
-        [SerializeField] private SelectedCharacter selectedCharacter;
+    public class HoldCharacterList : MonoBehaviour, IPointerClickHandler
+    {                    
         [SerializeField] private List<CharacterBase> characterList = new List<CharacterBase>();
-        [SerializeField] private List<UnitScrollPosition> unitScrollPosition;
-        [SerializeField] private Sprite defaultLocker;
-        public UnitInformation unitInformation;
+        [SerializeField] private GameObject selectedContent;
+        [SerializeField] private GameObject mainUnitContent;
+        [SerializeField] private GameObject activateUnitContent;
+        [SerializeField] private GameObject inActivateUnitContent;
+        [SerializeField] private UnitIcon unitIconPrefab;
+        [SerializeField] private InformationPanel informationPanel;
+        [SerializeField] private GameObject warningPanel;
+        [SerializeField] private TextMeshProUGUI messageText;
+        private int _selectedInstanceCount = 0;
+        private GameObject _activeStatusPanel;
 
-        private void Start()
+        public void InstanceUnit()
         {
-            HoldList();
-        }
-
-        private void HoldList()
-        {
-            for (var i = 0; i < unitScrollPosition.Count; i++)
+            foreach (var character in characterList)
             {
-                if (i < characterList.Count)
+                character.Initialize();
+                if (character.UnLock)
                 {
-                    var character = characterList[i];
-                    var characterBase = character.GetComponent<CharacterBase>();
-                    characterBase.Initialize();
-
-                    var unitProperties = characterBase.UnitProperty;
-                    unitScrollPosition[i].unitBackGround.GetComponent<Image>().color = unitProperties switch
+                    if (character.Selected)
                     {
-                        CharacterBase.UnitProperties.Divine => new Color(0.9725f, 1f, 0f, 1f),
-                        CharacterBase.UnitProperties.Darkness => new Color(0.2402f, 0f, 1f, 1f),
-                        CharacterBase.UnitProperties.Fire => new Color(1f, 0.0319f, 0f, 1f),
-                        CharacterBase.UnitProperties.Physics => new Color(0.4433f, 0.4433f, 0.4433f, 1f),
-                        CharacterBase.UnitProperties.Poison => new Color(0f, 1f, 0.2585f, 1f),
-                        CharacterBase.UnitProperties.Water => new Color(0f, 0.6099f, 1f, 1f),
-                        CharacterBase.UnitProperties.None => new Color(1f, 1f, 1f, 1f),
-                        _ => throw new ArgumentOutOfRangeException(nameof(unitProperties))
-                    };
-                    var unitColor = unitScrollPosition[i].unitBackGround.GetComponent<Image>().color;
-
-                    var spriteForLevel = character.GetSpriteForLevel(character.CharacterObjectLevel);
-                    var unitLevel = characterBase.CharacterObjectLevel;
-                    unitScrollPosition[i].unit.GetComponent<Image>().sprite = spriteForLevel;
-                    var unitSprite = unitScrollPosition[i].unit.GetComponent<Image>().sprite;
-                    
-                    unitScrollPosition[i].unitLevelSlider.maxValue = 30;
-                    unitScrollPosition[i].unitLevelSlider.value = unitLevel;
-                    unitScrollPosition[i].unitLevelText.text = $"{unitScrollPosition[i].unitLevelSlider.value}/30";
-                    var levelMaxValue = (int)unitScrollPosition[i].unitLevelSlider.maxValue;
-                    var levelValue = (int)unitScrollPosition[i].unitLevelSlider.value;
-
-                    
-                    var requiredMax = (unitLevel * 5);
-                    var pieceCount = characterBase.CharacterPieceCount;
-                    unitScrollPosition[i].unitPieceSlider.maxValue = requiredMax;
-                    unitScrollPosition[i].unitPieceSlider.value = pieceCount;
-                    unitScrollPosition[i].unitPieceText.text = $"{unitScrollPosition[i].unitPieceSlider.value}/{unitScrollPosition[i].unitPieceSlider.maxValue}";
-                    var pieceMaxValue = (int)unitScrollPosition[i].unitPieceSlider.maxValue;
-                    var pieceValue = (int)unitScrollPosition[i].unitPieceSlider.value;
-                    CharacterInformation(characterBase, unitColor, unitSprite, levelMaxValue, levelValue, pieceMaxValue,
-                        pieceValue);
+                        var selectedUnitInstance = Instantiate(unitIconPrefab, selectedContent.transform, false);
+                        SetupUnitIcon(selectedUnitInstance, character);
+                        UpdateMainUnitContent();
+                    }
+                    else
+                    {
+                        var activeUnitInstance = Instantiate(unitIconPrefab, selectedContent.transform, false);
+                        activeUnitInstance.transform.SetParent(activateUnitContent.transform, false);
+                        SetupUnitIcon(activeUnitInstance,character);
+                    }
                 }
                 else
                 {
-                    unitScrollPosition[i].unitBackGround.color = new Color(0.6415f, 0.6415f, 0.6415f, 1f);
-                    unitScrollPosition[i].unit.GetComponent<Image>().sprite = defaultLocker;
-                    unitScrollPosition[i].unitLevelSlider.maxValue = 0;
-                    unitScrollPosition[i].unitLevelSlider.value = 0;
-                    unitScrollPosition[i].unitLevelText.text = "0/0";
-                    unitScrollPosition[i].unitPieceSlider.maxValue = 0;
-                    unitScrollPosition[i].unitPieceSlider.value = 0;
-                    unitScrollPosition[i].unitPieceText.text = "0/0";
+                    var unitInstance = Instantiate(unitIconPrefab, inActivateUnitContent.transform, false);
+                    SetupInActiveUnitIcon(unitInstance, character);
                 }
             }
         }
-
-        public void CharacterInformation(CharacterBase characterBase, Color unitColor, Sprite unitSprite,
-            int levelMaxValue, int levelValue, int pieceMaxValue, int pieceValue)
+        private void SetupUnitIcon(UnitIcon unitInstance, CharacterBase character)
         {
-            unitInformation = new UnitInformation
+     
+
+            unitInstance.unitBackGround.GetComponent<Image>().color = character.UnitProperty switch
             {
-                unit = characterBase,
-                unitBackColor = unitColor,
-                unitSprite = unitSprite,
-                unitLevelMaxValue = levelMaxValue,
-                unitLevelValue = levelValue,
-                unitPieceMaxvalue = pieceMaxValue,
-                unitPieceValue = pieceValue
+                CharacterBase.UnitProperties.Divine => new Color(0.9725f, 1f, 0f, 1f),
+                CharacterBase.UnitProperties.Darkness => new Color(0.2402f, 0f, 1f, 1f),
+                CharacterBase.UnitProperties.Fire => new Color(1f, 0.0319f, 0f, 1f),
+                CharacterBase.UnitProperties.Physics => new Color(0.6509f, 0.6509f, 0.6509f, 1f),
+                CharacterBase.UnitProperties.Poison => new Color(0f, 1f, 0.2585f, 1f),
+                CharacterBase.UnitProperties.Water => new Color(0f, 0.6099f, 1f, 1f),
+                CharacterBase.UnitProperties.None => new Color(1f, 1f, 1f, 1f),
+                _ => throw new ArgumentOutOfRangeException(nameof(character.UnitProperty))
             };
+            unitInstance.unit.GetComponent<Image>().sprite = character.GetSpriteForLevel(character.CharacterObjectLevel);
+            unitInstance.levelBack.color = character.UnitProperty switch
+            {
+                CharacterBase.UnitProperties.Divine => new Color(0.7064f, 0.7264f, 0f, 1f),
+                CharacterBase.UnitProperties.Darkness => new Color(0.1489f, 0f, 0.6226f, 1f),
+                CharacterBase.UnitProperties.Fire => new Color(0.5188f, 0.06162f, 0f, 1f),
+                CharacterBase.UnitProperties.Physics => new Color(0.4433f, 0.4433f, 0.4433f, 1f),
+                CharacterBase.UnitProperties.Poison => new Color(0f, 0.5566f, 0.1430f, 1f),
+                CharacterBase.UnitProperties.Water => new Color(0f, 0.3231f, 0.5183f, 1f),
+                CharacterBase.UnitProperties.None => new Color(1f, 1f, 1f, 1f),
+                _ => throw new ArgumentOutOfRangeException(nameof(character.UnitProperty))
+            };
+            unitInstance.unitLevelText.text = $"레벨 {character.CharacterObjectLevel}";
+            unitInstance.unitPieceSlider.maxValue = character.CharacterMaxPiece;
+            unitInstance.unitPieceSlider.value = character.CharacterPieceCount;
+            unitInstance.unitPieceText.text = $"{unitInstance.unitPieceSlider.value}/{unitInstance.unitPieceSlider.maxValue}";
+            
+            unitInstance.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                OpenStatusPanel(unitInstance, character);
+            });
+            unitInstance.infoBtn.onClick.AddListener(() =>
+            {
+                informationPanel.OpenInfoPanel(unitInstance, character);
+            });
+            unitInstance.removeBtn.onClick.AddListener(() =>
+            {
+                character.Selected = false;
+                SelectedUnitHolder.Instance.selectedUnit.Remove(character);
+                unitInstance.transform.SetParent(activateUnitContent.transform);
+                unitInstance.statusPanel.SetActive(false);
+                UpdateMainUnitContent();
+                _selectedInstanceCount--;
+            });
+            unitInstance.useBtn.onClick.AddListener(() =>
+            {
+                if (_selectedInstanceCount < 4)
+                {
+                    character.Selected = true;
+                    SelectedUnitHolder.Instance.selectedUnit.Add(character);
+                    unitInstance.transform.SetParent(selectedContent.transform);
+                    unitInstance.statusPanel.SetActive(false);
+                    UpdateMainUnitContent();
+                    _selectedInstanceCount++;
+                }
+                else
+                { 
+                    warningPanel.SetActive(true);
+                    messageText.text = "더이상 배치할 수 없습니다.";
+                }
+            });
+        }
+        private void SetupInActiveUnitIcon(UnitIcon unitInstance, CharacterBase characterBase)
+        {
+            unitInstance.unitBackGround.GetComponent<Image>().color = Color.gray;
+            unitInstance.unit.GetComponent<Image>().sprite = characterBase.GetSpriteForLevel(1);
+            unitInstance.unit.GetComponent<Image>().color = Color.grey;
+            unitInstance.levelBack.color = new Color(0.4433f, 0.4433f, 0.4433f, 1f);
+            unitInstance.unitLevelText.text = "비활성화";
+            unitInstance.unitPieceSlider.maxValue = 5;
+            unitInstance.unitPieceSlider.value = 0;
+            unitInstance.unitPieceText.text = $"{unitInstance.unitPieceSlider.value}/{unitInstance.unitPieceSlider.maxValue}";
+            
+            unitInstance.GetComponent<Button>().onClick.AddListener(() =>
+            {
+                OpenStatusPanel(unitInstance, characterBase);
+            });
+
+        }
+        private void OpenStatusPanel(UnitIcon unitInstance, CharacterBase characterBase)
+        {
+            if (_activeStatusPanel == null)
+            {
+                unitInstance.statusPanel.SetActive(true);
+                _activeStatusPanel = unitInstance.statusPanel;
+            }
+            else if (_activeStatusPanel != null && _activeStatusPanel != unitInstance.statusPanel)
+            {
+                _activeStatusPanel.SetActive(false);
+                unitInstance.statusPanel.SetActive(true);
+                _activeStatusPanel = unitInstance.statusPanel;
+            }
+
+            switch (characterBase.UnLock)
+            {
+                case true when characterBase.Selected:
+                {
+                    unitInstance.infoBtn.gameObject.SetActive(true);
+                    unitInstance.levelUpBtn.gameObject.SetActive(characterBase.CharacterPieceCount > characterBase.CharacterMaxPiece);
+                    unitInstance.removeBtn.gameObject.SetActive(true);
+                    unitInstance.useBtn.gameObject.SetActive(false);
+                    break;
+                }
+                case true when !characterBase.Selected:
+                {
+                    unitInstance.infoBtn.gameObject.SetActive(true);
+                    unitInstance.levelUpBtn.gameObject.SetActive(characterBase.CharacterPieceCount > characterBase.CharacterMaxPiece);
+                    unitInstance.removeBtn.gameObject.SetActive(false);
+                    unitInstance.useBtn.gameObject.SetActive(true);
+                    break;
+                }
+                case false:
+                    informationPanel.OpenInfoPanel(unitInstance, characterBase);
+                    break;
+            }
+        }
+        private void UpdateMainUnitContent()
+        {
+            foreach (Transform child in mainUnitContent.transform)
+            {
+                Destroy(child.gameObject);
+            }
+            foreach (Transform child in selectedContent.transform)
+            {
+                Instantiate(child.gameObject, mainUnitContent.transform, false);
+            }
+        }
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            if (_activeStatusPanel == null ||
+                _activeStatusPanel.transform == eventData.pointerCurrentRaycast.gameObject.transform) return;
+            _activeStatusPanel.SetActive(false);
+            _activeStatusPanel = null;
         }
     }
 }

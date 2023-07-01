@@ -10,7 +10,7 @@ namespace Script.RobbyScript.TopMenuGroup
         [SerializeField] private TextMeshProUGUI staminaText;
         [SerializeField] private TextMeshProUGUI staminaRecoveryTime;
         public int currentStamina;
-        private const int MaxStamina = 50;
+        private const int MaxStamina = 30;
         private const float RecoveryCooldown = 180.0f;
         private float _currentCooldown;
         private const string LastTimeKey = "LastTimeKey";
@@ -37,7 +37,7 @@ namespace Script.RobbyScript.TopMenuGroup
                 LoadStaminaState();
             }
         }
-        private void SaveStaminaState()
+        public void SaveStaminaState()
         {
             PlayerPrefs.SetString(LastTimeKey, DateTime.UtcNow.ToString());
             PlayerPrefs.SetInt("Stamina", currentStamina);
@@ -49,7 +49,7 @@ namespace Script.RobbyScript.TopMenuGroup
             var lastDateTime = DateTime.Parse(lastTime);
             var elapsed = DateTime.UtcNow - lastDateTime;
             var recoveryAmount = Mathf.FloorToInt((float)elapsed.TotalSeconds / RecoveryCooldown);
-            currentStamina = PlayerPrefs.GetInt("Stamina", 0); // 시작 스테미나 설정 기본 MaxStamina
+            currentStamina = PlayerPrefs.GetInt("Stamina", MaxStamina); // 시작 스테미나 설정 기본 MaxStamina
             currentStamina = Mathf.Min(MaxStamina, currentStamina + recoveryAmount);
             _currentCooldown = PlayerPrefs.GetFloat("Cooldown", RecoveryCooldown);
             _currentCooldown -= (float)(elapsed.TotalSeconds % RecoveryCooldown);
@@ -57,7 +57,7 @@ namespace Script.RobbyScript.TopMenuGroup
             _currentCooldown += RecoveryCooldown;
             currentStamina = Mathf.Min(MaxStamina, currentStamina + 1);
         }
-        private void StaminaUpdate()
+        public void StaminaUpdate()
         {
             staminaText.text = $"{currentStamina}/{MaxStamina}";
         }
@@ -73,6 +73,7 @@ namespace Script.RobbyScript.TopMenuGroup
             {
                 if (currentStamina < MaxStamina)
                 {
+                    staminaRecoveryTime.gameObject.SetActive(true);
                     _currentCooldown -= Time.deltaTime;
                     if (_currentCooldown <= 0)
                     {

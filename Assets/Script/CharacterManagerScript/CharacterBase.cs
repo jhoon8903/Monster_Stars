@@ -7,22 +7,28 @@ namespace Script.CharacterManagerScript
 {
     public class CharacterBase : MonoBehaviour
     {
-        protected internal int CharacterObjectLevel { get; set; }
-        protected internal int CharacterPieceCount { get; set; }
-        protected internal int Level { get; private set; } = 1; // Current level of the character
-        protected internal string CharacterName; // Name of the character
-        protected internal int UnitLevel; // Level of the unit
-        public enum Types { Character, Treasure } // Types of characters
-        protected internal Types Type; // Type of the character
-        public enum UnitGroups { A,B,C,D,E,F,G,H,None } // Groups of units
-        public UnitGroups unitGroup; // Group of the unit
-        public enum UnitAtkTypes {None,  Projectile, GuideProjectile, Gas, Circle, Vibrate, Boomerang } // Attack types of units
-        protected internal UnitAtkTypes UnitAtkType = UnitAtkTypes.None; // Attack type of the unit
-        public enum UnitProperties { Divine, Darkness, Physics, Water, Poison, Fire, None } // Properties of units
-        protected internal UnitProperties UnitProperty = UnitProperties.None; // Property of the unit
-        public enum UnitEffects { Slow, Bleed, Poison, Burn, Stun, Strike, Restraint, Darkness, None } // Effects of units
-        protected internal UnitEffects UnitEffect = UnitEffects.None; // Effect of the unit
-        public float baseDamage;  // Base damage of the unit
+        // Robby Source
+        protected internal int CharacterObjectLevel { get; protected set; }
+        protected internal int CharacterPieceCount { get; protected set; }
+        protected internal int CharacterMaxPiece { get; private set; }
+        protected internal bool UnLock { get; set; }
+        protected internal bool Selected { get; set; }
+        
+        
+        protected internal int Level { get; private set; } = 1; 
+        protected internal string CharacterName;
+        protected internal int UnitLevel; 
+        public enum Types { Character, Treasure }
+        protected internal Types Type; 
+        public enum UnitGroups { A,B,C,D,E,F,G,H,None }
+        public UnitGroups unitGroup; 
+        public enum UnitAtkTypes {None,  Projectile, GuideProjectile, Gas, Circle, Vibrate, Boomerang } 
+        protected internal UnitAtkTypes UnitAtkType = UnitAtkTypes.None;
+        public enum UnitProperties { Divine, Darkness, Physics, Water, Poison, Fire, None } 
+        protected internal UnitProperties UnitProperty = UnitProperties.None;
+        public enum UnitEffects { Slow, Bleed, Poison, Burn, Stun, Strike, Restraint, Darkness, None } 
+        protected internal UnitEffects UnitEffect = UnitEffects.None;
+        public float baseDamage;
         public float DefaultDamage
         {
             get
@@ -33,12 +39,12 @@ namespace Script.CharacterManagerScript
             protected set => baseDamage = value;
         }
         public float defaultAtkRate;
-        public float projectileSpeed; // Projectile speed of the unit
-        public float swingSpeed; // Swing speed of the unit
-        public float defaultAtkDistance; // Default attack distance of the unit
-        public bool PermanentLevelUp { get; set; } // Indicates if the unit has permanent level up
-        private readonly Vector3 _initialScale = Vector3.one; // Initial scale of the character
-        private readonly Vector3 _levelUpScale = new Vector3(1.2f, 1.2f, 0); // Scale to use when leveling up
+        public float projectileSpeed; 
+        public float swingSpeed;
+        public float defaultAtkDistance;
+        public bool PermanentLevelUp { get; set; } 
+        private readonly Vector3 _initialScale = Vector3.one; 
+        private readonly Vector3 _levelUpScale = new Vector3(1.2f, 1.2f, 0); 
         public GameObject CurrentWeapon { get; set; }
         protected internal bool IsClicked { get; set; }
         protected static List<GameObject> detectedEnemies = new List<GameObject>();
@@ -53,11 +59,8 @@ namespace Script.CharacterManagerScript
 
         public virtual void Initialize()
         {
-
+            CharacterMaxPiece = CharacterObjectLevel * 5;
         }
-
-
-        // Perform scale animation when leveling up
         public void LevelUpScale(GameObject levelUpObject)
         {
             var sequence = DOTween.Sequence(); // Create a sequence for animations
@@ -71,30 +74,22 @@ namespace Script.CharacterManagerScript
                     .DOScale(_initialScale, 0.3f)); // Scale down the object
             scaleDown.WaitForCompletion();
         }
-
-        // Level up the character
         protected virtual void LevelUp()
         {
             Level++;
         }
-
-        // Reset the character's level
         protected internal virtual void CharacterReset()
         {
             ResetLevel();
         }
-        // Reset the level of the character
         protected internal void ResetLevel()
         {
             Level = 1;
         }
-
-        // Detect enemies and return a list of detected enemy game objects
         public virtual List<GameObject> DetectEnemies()
         {
             return new List<GameObject>();
         }
-
         public virtual Sprite GetSpriteForLevel(int characterObjectLevel)
         {
             return null;

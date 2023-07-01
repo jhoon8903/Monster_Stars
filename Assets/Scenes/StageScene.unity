@@ -729,13 +729,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 174e5bb825a1e45ef8b861bf9c2fd4a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterList:
-  - {fileID: 9161629068888336141, guid: 739cf734236e449859707c22bb97c24a, type: 3}
-  - {fileID: 7725269076765781265, guid: b3d3d9be139574f9692f6336a789659f, type: 3}
-  - {fileID: 2775731209932646854, guid: 50100ccb47c504a73a7c8e65b95b9285, type: 3}
-  - {fileID: 7786321694734890730, guid: d03f023d8b2cd49cdac846c313ff3870, type: 3}
-  - {fileID: 1053235717240956053, guid: b3c344a1ee72a45e3aef34b9e39575c5, type: 3}
   characterPool: {fileID: 1097818334}
+  treasureBox: {fileID: 1053235717240956053, guid: b3c344a1ee72a45e3aef34b9e39575c5, type: 3}
   goldGetMore: 0
 --- !u!114 &149521964
 MonoBehaviour:

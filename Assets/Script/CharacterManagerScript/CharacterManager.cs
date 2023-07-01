@@ -1,17 +1,28 @@
 using System.Collections.Generic;
 using System.Linq;
+using Script.RobbyScript.CharacterSelectMenuGroup;
 using UnityEngine;
 
 namespace Script.CharacterManagerScript
 {
     public class CharacterManager : MonoBehaviour
     {
-        [SerializeField] internal List<CharacterBase> characterList = new List<CharacterBase>(); // List of character bases
-        [SerializeField] private CharacterPool characterPool; // Reference to the character pool
+        [SerializeField] private CharacterPool characterPool;
+        [SerializeField] private CharacterBase treasureBox;
+        public List<CharacterBase> characterList = new List<CharacterBase>();
         public readonly HashSet<int> CharacterGroupLevelUpIndexes = new HashSet<int>();
         public bool goldGetMore;
+        private List<CharacterBase> _instanceUnit = new List<CharacterBase>();
 
-        // Level up a random selection of characters a specified number of times
+        public void Awake()
+        {
+            _instanceUnit = SelectedUnitHolder.Instance.selectedUnit;
+            foreach (var unit in _instanceUnit)
+            {
+                characterList.Add(unit);
+            }
+            characterList.Add(treasureBox);
+        }
         public void RandomCharacterLevelUp(int characterCount)
         {
             var activeCharacters = characterPool.UsePoolCharacterList();
@@ -34,9 +45,6 @@ namespace Script.CharacterManagerScript
                     character.GetComponent<CharacterBase>()?.UnitLevel < 5).ToList();
             }
         }
-
-
-        // Level up all characters in a specific group
         public void CharacterGroupLevelUp(int characterListIndex)
         {
             var group = characterList[characterListIndex].unitGroup;
@@ -51,8 +59,6 @@ namespace Script.CharacterManagerScript
                 }
             }
         }
-
-        // Set the permanent level up flag for all characters in a specific group
         public void PermanentIncreaseCharacter(int characterListIndex)
         {
             var levelUpGroup = characterList[characterListIndex].unitGroup;

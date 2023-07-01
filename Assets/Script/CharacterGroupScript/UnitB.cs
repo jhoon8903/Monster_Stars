@@ -27,6 +27,8 @@ namespace Script.CharacterGroupScript
             UnitProperty = UnitProperties.Darkness;
             CharacterObjectLevel = _currentCharacterObjectLevel;
             CharacterPieceCount = _currentCharacterPieceCount;
+            UnLock = true;
+            Selected = false;
             base.Initialize();
         }
         public void Awake()

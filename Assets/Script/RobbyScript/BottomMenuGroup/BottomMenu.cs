@@ -1,18 +1,39 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class BottomMenu : MonoBehaviour
+namespace Script.RobbyScript.BottomMenuGroup
 {
-    // Start is called before the first frame update
-    void Start()
+    public class BottomMenu : MonoBehaviour
     {
-        
-    }
+        [SerializeField] private GameObject mainPanel;
+        [SerializeField] private GameObject unitPanel;
+        [SerializeField] private GameObject storePanel;
+        [SerializeField] private Button mainBtn;
+        [SerializeField] private Button unitSelectBtn;
+        [SerializeField] private Button storeBtn;
+        [SerializeField] private Button blankBtn1;
+        [SerializeField] private Button blankBtn2;
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        private void OnEnable()
+        {
+            mainBtn.onClick.AddListener(()=>
+            {
+                mainPanel.SetActive(true);
+                unitPanel.SetActive(false);
+                storePanel.SetActive(false);
+            });
+            unitSelectBtn.onClick.AddListener(()=>
+            {
+                mainPanel.SetActive(false);
+                unitPanel.SetActive(true);
+                storePanel.SetActive(false);
+            });
+            storeBtn.onClick.AddListener(() =>
+            {
+                mainPanel.SetActive(false);
+                unitPanel.SetActive(false);
+                storePanel.SetActive(true);
+            });
+        }
     }
 }
