@@ -55,6 +55,8 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         }
         private void SetupUnitIcon(UnitIcon unitInstance, CharacterBase character)
         {
+            unitInstance.CharacterBase = character;
+
             unitInstance.unitBackGround.GetComponent<Image>().color = character.UnitProperty switch
             {
                 CharacterBase.UnitProperties.Divine => new Color(0.9725f, 1f, 0f, 1f),
@@ -66,7 +68,9 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 CharacterBase.UnitProperties.None => new Color(1f, 1f, 1f, 1f),
                 _ => throw new ArgumentOutOfRangeException(nameof(character.UnitProperty))
             };
+            
             unitInstance.unit.GetComponent<Image>().sprite = character.GetSpriteForLevel(character.CharacterObjectLevel);
+            
             unitInstance.levelBack.color = character.UnitProperty switch
             {
                 CharacterBase.UnitProperties.Divine => new Color(0.7064f, 0.7264f, 0f, 1f),
@@ -119,10 +123,12 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 }
             });
         }
-        private void SetupInActiveUnitIcon(UnitIcon unitInstance, CharacterBase characterBase)
+        private void SetupInActiveUnitIcon(UnitIcon unitInstance, CharacterBase character)
         {
+            unitInstance.CharacterBase = character;
+
             unitInstance.unitBackGround.GetComponent<Image>().color = Color.gray;
-            unitInstance.unit.GetComponent<Image>().sprite = characterBase.GetSpriteForLevel(1);
+            unitInstance.unit.GetComponent<Image>().sprite = character.GetSpriteForLevel(1);
             unitInstance.unit.GetComponent<Image>().color = Color.grey;
             unitInstance.levelBack.color = new Color(0.4433f, 0.4433f, 0.4433f, 1f);
             unitInstance.unitLevelText.text = "비활성화";
@@ -132,7 +138,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             
             unitInstance.GetComponent<Button>().onClick.AddListener(() =>
             {
-                OpenStatusPanel(unitInstance, characterBase);
+                OpenStatusPanel(unitInstance, character);
             });
 
         }
@@ -155,9 +161,8 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 case true when characterBase.Selected:
                 {
                     unitInstance.infoBtn.gameObject.SetActive(true);
-                    unitInstance.levelUpBtn.gameObject.SetActive(characterBase.CharacterPieceCount > characterBase.CharacterMaxPiece);
-                    unitInstance.removeBtn.gameObject.SetActive(true);
-                    unitInstance.useBtn.gameObject.SetActive(false);
+                    unitInstance.levelUpBtn.gameObject.SetActive(characterBase.CharacterPieceCount > characterBase.CharacterMaxPiece); unitInstance.removeBtn.gameObject.SetActive(true);
+                    unitInstance.useBtn.gameObject.SetActive(false); 
                     break;
                 }
                 case true when !characterBase.Selected:
@@ -179,11 +184,23 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             {
                 Destroy(child.gameObject);
             }
+
             foreach (Transform child in selectedContent.transform)
             {
-                Instantiate(child.gameObject, mainUnitContent.transform, false);
+                var newUnitInstance = Instantiate(child.gameObject, mainUnitContent.transform, false);
+                var newUnit = newUnitInstance.GetComponent<UnitIcon>();
+                var originalUnit = child.GetComponent<UnitIcon>();
+                newUnit.CharacterBase = originalUnit.CharacterBase;
+                var newUnitBase = newUnit.CharacterBase;
+                newUnit.GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    newUnit.statusPanel.SetActive(false);
+                    informationPanel.OpenInfoPanel(newUnit, newUnitBase);
+                });
             }
+
         }
+
         public void OnPointerClick(PointerEventData eventData)
         {
             if (_activeStatusPanel == null ||

@@ -1,3 +1,4 @@
+using Script.CharacterManagerScript;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -17,5 +18,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         public Button levelUpBtn;
         public Button removeBtn;
         public Button useBtn;
+        public CharacterBase CharacterBase { get; set; }
     }
 }

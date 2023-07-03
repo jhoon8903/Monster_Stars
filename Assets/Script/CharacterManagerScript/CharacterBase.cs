@@ -56,7 +56,6 @@ namespace Script.CharacterManagerScript
                 Level = 2;
             }
         }
-
         public virtual void Initialize()
         {
             CharacterMaxPiece = CharacterObjectLevel * 5;

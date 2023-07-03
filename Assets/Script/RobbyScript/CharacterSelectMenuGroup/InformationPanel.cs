@@ -12,6 +12,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         [SerializeField] private GameObject infoPanel;
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private GameObject unit;
+        [SerializeField] private TextMeshProUGUI unitLevel;
         [SerializeField] private TextMeshProUGUI unitProperty;
         [SerializeField] private TextMeshProUGUI unitNoticeText;
         [SerializeField] private GameObject unitInformation;
@@ -29,19 +30,20 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         private void Information(Component unitInstance, CharacterBase characterBase)
         {
             nameText.text = characterBase.name;
-            unit.GetComponent<Image>().sprite = characterBase.GetComponent<Image>().sprite;
+            unit.GetComponent<Image>().sprite = characterBase.GetSpriteForLevel(characterBase.CharacterObjectLevel);
+            unitLevel.text = $"LV.{characterBase.CharacterObjectLevel}";
             unitProperty.text = UnitPropertyText(characterBase);
-            // unitNoticeText.text = "UnitNotice.csv";
-            // foreach (var unitInfo in unitInformationNotice)
-            // {
-            //     unitInformation.transform = unitInfo;
-            //     skillSprite = unitInfo;
-            //     skillNoticeText.text = unitInfo;
-            // }
-            // foreach (var skill in unitSkillListCsv)
-            // {
-            //     unitSkillList = skill;
-            // }
+            // // unitNoticeText.text = "UnitNotice.csv";
+            // // foreach (var unitInfo in unitInformationNotice)
+            // // {
+            // //     unitInformation.transform = unitInfo;
+            // //     skillSprite = unitInfo;
+            // //     skillNoticeText.text = unitInfo;
+            // // }
+            // // foreach (var skill in unitSkillListCsv)
+            // // {
+            // //     unitSkillList = skill;
+            // // }
             var unitLevelUpPrice = characterBase.CharacterObjectLevel * 500;
             levelUpCoinText.text = unitLevelUpPrice.ToString();
         }
