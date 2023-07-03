@@ -19,7 +19,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         [SerializeField] private InformationPanel informationPanel;
         [SerializeField] private GameObject warningPanel;
         [SerializeField] private TextMeshProUGUI messageText;
-        private int _selectedInstanceCount = 0;
         private GameObject _activeStatusPanel;
 
         public void InstanceUnit()
@@ -29,6 +28,11 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 character.Initialize();
                 if (character.UnLock)
                 {
+                    if (PlayerPrefs.HasKey(character.unitGroup.ToString()) && PlayerPrefs.GetInt(character.unitGroup.ToString()) == 1)
+                    {
+                        character.Selected = true;
+                    }
+
                     if (character.Selected)
                     {
                         var selectedUnitInstance = Instantiate(unitIconPrefab, selectedContent.transform, false);
@@ -51,8 +55,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         }
         private void SetupUnitIcon(UnitIcon unitInstance, CharacterBase character)
         {
-     
-
             unitInstance.unitBackGround.GetComponent<Image>().color = character.UnitProperty switch
             {
                 CharacterBase.UnitProperties.Divine => new Color(0.9725f, 1f, 0f, 1f),
@@ -93,21 +95,22 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             {
                 character.Selected = false;
                 SelectedUnitHolder.Instance.selectedUnit.Remove(character);
+                PlayerPrefs.DeleteKey(character.unitGroup.ToString());
                 unitInstance.transform.SetParent(activateUnitContent.transform);
                 unitInstance.statusPanel.SetActive(false);
                 UpdateMainUnitContent();
-                _selectedInstanceCount--;
             });
             unitInstance.useBtn.onClick.AddListener(() =>
             {
-                if (_selectedInstanceCount < 4)
+                if (SelectedUnitHolder.Instance.selectedUnit.Count < 4)
                 {
                     character.Selected = true;
                     SelectedUnitHolder.Instance.selectedUnit.Add(character);
+                    PlayerPrefs.SetInt(character.unitGroup.ToString(), 1);
+                    PlayerPrefs.Save();
                     unitInstance.transform.SetParent(selectedContent.transform);
                     unitInstance.statusPanel.SetActive(false);
                     UpdateMainUnitContent();
-                    _selectedInstanceCount++;
                 }
                 else
                 { 

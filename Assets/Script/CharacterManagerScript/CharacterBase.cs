@@ -11,7 +11,7 @@ namespace Script.CharacterManagerScript
         protected internal int CharacterObjectLevel { get; protected set; }
         protected internal int CharacterPieceCount { get; protected set; }
         protected internal int CharacterMaxPiece { get; private set; }
-        protected internal bool UnLock { get; set; }
+        protected internal bool UnLock { get; protected set; }
         protected internal bool Selected { get; set; }
         
         
@@ -21,7 +21,7 @@ namespace Script.CharacterManagerScript
         public enum Types { Character, Treasure }
         protected internal Types Type; 
         public enum UnitGroups { A,B,C,D,E,F,G,H,None }
-        public UnitGroups unitGroup; 
+        public UnitGroups unitGroup = UnitGroups.None; 
         public enum UnitAtkTypes {None,  Projectile, GuideProjectile, Gas, Circle, Vibrate, Boomerang } 
         protected internal UnitAtkTypes UnitAtkType = UnitAtkTypes.None;
         public enum UnitProperties { Divine, Darkness, Physics, Water, Poison, Fire, None } 
