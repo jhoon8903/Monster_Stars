@@ -23,7 +23,7 @@ namespace Script.RobbyScript.MainMenuGroup
 
         private void StartGame()
         {
-            if (SelectedUnitHolder.Instance.selectedUnit.Count == 4)
+            if ( SelectedUnitHolder.Instance.selectedUnit.Count == 4)
             {
                 if (staminaScript.currentStamina >= 6)
                 {

@@ -13,6 +13,7 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level3Sprite; // Sprite for level 3
         [SerializeField] private Sprite level4Sprite; // Sprite for level 4
         [SerializeField] private Sprite level5Sprite; // Sprite for level 5
+
         private SpriteRenderer _spriteRenderer; // Reference to the SpriteRenderer component
         private const float DetectionWidth = 1f; // Width of detection box
         private const float DetectionHeight = 8f; // Height of detection box

@@ -31,6 +31,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     if (PlayerPrefs.HasKey(character.unitGroup.ToString()) && PlayerPrefs.GetInt(character.unitGroup.ToString()) == 1)
                     {
                         character.Selected = true;
+                        SelectedUnitHolder.Instance.selectedUnit.Add(character);
                     }
 
                     if (character.Selected)
