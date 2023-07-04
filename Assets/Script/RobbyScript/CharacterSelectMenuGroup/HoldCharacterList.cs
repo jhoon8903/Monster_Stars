@@ -33,13 +33,12 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
 
         public void InstanceUnit()
         {
-            
             foreach (var character in characterList)
-            {
+            {           
                 character.Initialize();
                 if (character.UnLock)
                 {
-                    if (PlayerPrefs.HasKey(character.unitGroup.ToString()) && PlayerPrefs.GetInt(character.unitGroup.ToString()) == 1)
+                    if (PlayerPrefs.HasKey(character.unitGroup.ToString()))
                     {
                         character.Selected = true;
                         SelectedUnitHolder.Instance.selectedUnit.Add(character);
@@ -68,7 +67,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         private void SetupUnitIcon(UnitIcon unitInstance, CharacterBase character)
         {
             unitInstance.CharacterBase = character;
-            character.Initialize();
             UpdateUnit(unitInstance, character);
             unitInstance.GetComponent<Button>().onClick.AddListener(() =>
             {
@@ -113,7 +111,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             });
         }
 
-        public void UpdateUnit(UnitIcon unitInstance, CharacterBase character)
+        public static void UpdateUnit(UnitIcon unitInstance, CharacterBase character)
         {
             unitInstance.unitBackGround.GetComponent<Image>().color = character.UnitProperty switch
             {
@@ -176,7 +174,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 unitInstance.statusPanel.SetActive(true);
                 _activeStatusPanel = unitInstance.statusPanel;
             }
-
+         
             switch (characterBase.UnLock)
             {
                 case true when characterBase.Selected:

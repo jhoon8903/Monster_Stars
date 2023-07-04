@@ -77,7 +77,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 levelUpBtn.GetComponent<Button>().onClick.AddListener(() =>
                 {
                     characterBase.UnitLevelUp();
-                    holdCharacterList.UpdateUnit(unitInstance, characterBase);
+                    HoldCharacterList.UpdateUnit(unitInstance, characterBase);
                     Information(unitInstance, characterBase);
                     StartCoroutine(CheckForLevelUp(unitInstance, characterBase)); 
                 });

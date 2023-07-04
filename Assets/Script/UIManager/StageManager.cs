@@ -32,6 +32,7 @@ namespace Script.UIManager
         public int maxStageCount = 50;
         public bool ClearBoss { get; set; }
         private const string ClearedStageKey = "ClearedStage";
+        private const string ClearedWaveKey = "ClearedWave";
         public List<CharacterBase> rewardUnitList = new List<CharacterBase>();
         public bool isStageClear;
 
@@ -45,8 +46,8 @@ namespace Script.UIManager
             {
                 Destroy(gameObject);
             }
-
             currentStage = PlayerPrefs.GetInt(ClearedStageKey, 1);
+            currentWave = PlayerPrefs.GetInt(ClearedWaveKey, 1);
         }
 
 
@@ -64,7 +65,6 @@ namespace Script.UIManager
 
         public void StartWave()
         {
-
             StartCoroutine(waveManager.WaveController(currentWave));
             StartCoroutine(AtkManager.Instance.CheckForAttack());
         }
@@ -88,6 +88,7 @@ namespace Script.UIManager
 
             GetCoin(currentStage, currentWave);
             currentWave++;
+            PlayerPrefs.SetInt(ClearedWaveKey, currentWave); // currentWave 값을 저장하는 코드 추가
             UpdateWaveText();
         }
 
@@ -97,8 +98,9 @@ namespace Script.UIManager
             var clearStage = currentStage;
             ClearReward(clearStage);
             currentStage++;
-            currentWave = 1;
+            currentWave = 1; // Stage가 clear 되면 wave는 다시 1로 초기화
             PlayerPrefs.SetInt(ClearedStageKey, currentStage);
+            PlayerPrefs.SetInt(ClearedWaveKey, currentWave); // currentWave 값을 저장하는 코드 추가
             PlayerPrefs.Save();
             continueBtn.GetComponent<Button>().onClick.AddListener(LoadRobby);
         }
