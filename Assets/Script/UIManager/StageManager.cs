@@ -105,7 +105,7 @@ namespace Script.UIManager
             continueBtn.GetComponent<Button>().onClick.AddListener(LoadRobby);
         }
 
-        private static void LoadRobby()
+        public void LoadRobby()
         {
             SceneManager.LoadScene("SelectScene");
         }
