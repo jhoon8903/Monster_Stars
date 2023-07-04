@@ -3,14 +3,15 @@ using System.Collections.Generic;
 using Script.CharacterManagerScript;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using Button = UnityEngine.UI.Button;
+using Image = UnityEngine.UI.Image;
 
 namespace Script.RobbyScript.CharacterSelectMenuGroup
 {
     public class HoldCharacterList : MonoBehaviour, IPointerClickHandler
     {                    
-        [SerializeField] private List<CharacterBase> characterList = new List<CharacterBase>();
+        [SerializeField] private List<CharacterBase> characterList;
         [SerializeField] private GameObject selectedContent;
         [SerializeField] private GameObject mainUnitContent;
         [SerializeField] private GameObject activateUnitContent;
@@ -21,8 +22,18 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         [SerializeField] private TextMeshProUGUI messageText;
         private GameObject _activeStatusPanel;
 
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                PlayerPrefs.DeleteAll();
+            }
+        }
+
         public void InstanceUnit()
         {
+            
             foreach (var character in characterList)
             {
                 character.Initialize();
@@ -57,43 +68,20 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         private void SetupUnitIcon(UnitIcon unitInstance, CharacterBase character)
         {
             unitInstance.CharacterBase = character;
-
-            unitInstance.unitBackGround.GetComponent<Image>().color = character.UnitProperty switch
-            {
-                CharacterBase.UnitProperties.Divine => new Color(0.9725f, 1f, 0f, 1f),
-                CharacterBase.UnitProperties.Darkness => new Color(0.2402f, 0f, 1f, 1f),
-                CharacterBase.UnitProperties.Fire => new Color(1f, 0.0319f, 0f, 1f),
-                CharacterBase.UnitProperties.Physics => new Color(0.6509f, 0.6509f, 0.6509f, 1f),
-                CharacterBase.UnitProperties.Poison => new Color(0f, 1f, 0.2585f, 1f),
-                CharacterBase.UnitProperties.Water => new Color(0f, 0.6099f, 1f, 1f),
-                CharacterBase.UnitProperties.None => new Color(1f, 1f, 1f, 1f),
-                _ => throw new ArgumentOutOfRangeException(nameof(character.UnitProperty))
-            };
-            
-            unitInstance.unit.GetComponent<Image>().sprite = character.GetSpriteForLevel(character.CharacterObjectLevel);
-            
-            unitInstance.levelBack.color = character.UnitProperty switch
-            {
-                CharacterBase.UnitProperties.Divine => new Color(0.7064f, 0.7264f, 0f, 1f),
-                CharacterBase.UnitProperties.Darkness => new Color(0.1489f, 0f, 0.6226f, 1f),
-                CharacterBase.UnitProperties.Fire => new Color(0.5188f, 0.06162f, 0f, 1f),
-                CharacterBase.UnitProperties.Physics => new Color(0.4433f, 0.4433f, 0.4433f, 1f),
-                CharacterBase.UnitProperties.Poison => new Color(0f, 0.5566f, 0.1430f, 1f),
-                CharacterBase.UnitProperties.Water => new Color(0f, 0.3231f, 0.5183f, 1f),
-                CharacterBase.UnitProperties.None => new Color(1f, 1f, 1f, 1f),
-                _ => throw new ArgumentOutOfRangeException(nameof(character.UnitProperty))
-            };
-            unitInstance.unitLevelText.text = $"레벨 {character.CharacterObjectLevel}";
-            unitInstance.unitPieceSlider.maxValue = character.CharacterMaxPiece;
-            unitInstance.unitPieceSlider.value = character.CharacterPieceCount;
-            unitInstance.unitPieceText.text = $"{unitInstance.unitPieceSlider.value}/{unitInstance.unitPieceSlider.maxValue}";
-            
+            character.Initialize();
+            UpdateUnit(unitInstance, character);
             unitInstance.GetComponent<Button>().onClick.AddListener(() =>
             {
                 OpenStatusPanel(unitInstance, character);
             });
             unitInstance.infoBtn.onClick.AddListener(() =>
             {
+                informationPanel.OpenInfoPanel(unitInstance, character);
+            });
+            unitInstance.levelUpBtn.onClick.AddListener(() =>
+            {
+                unitInstance.statusPanel.SetActive(false);
+                _activeStatusPanel = null;
                 informationPanel.OpenInfoPanel(unitInstance, character);
             });
             unitInstance.removeBtn.onClick.AddListener(() =>
@@ -124,10 +112,42 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 }
             });
         }
+
+        public void UpdateUnit(UnitIcon unitInstance, CharacterBase character)
+        {
+            unitInstance.unitBackGround.GetComponent<Image>().color = character.UnitProperty switch
+            {
+                CharacterBase.UnitProperties.Divine => new Color(0.9725f, 1f, 0f, 1f),
+                CharacterBase.UnitProperties.Darkness => new Color(0.2402f, 0f, 1f, 1f),
+                CharacterBase.UnitProperties.Fire => new Color(1f, 0.0319f, 0f, 1f),
+                CharacterBase.UnitProperties.Physics => new Color(0.6509f, 0.6509f, 0.6509f, 1f),
+                CharacterBase.UnitProperties.Poison => new Color(0f, 1f, 0.2585f, 1f),
+                CharacterBase.UnitProperties.Water => new Color(0f, 0.6099f, 1f, 1f),
+                CharacterBase.UnitProperties.None => new Color(1f, 1f, 1f, 1f),
+                _ => throw new ArgumentOutOfRangeException(nameof(character.UnitProperty))
+            };
+            
+            unitInstance.unit.GetComponent<Image>().sprite = character.GetSpriteForLevel(character.CharacterObjectLevel);
+            
+            unitInstance.levelBack.color = character.UnitProperty switch
+            {
+                CharacterBase.UnitProperties.Divine => new Color(0.7064f, 0.7264f, 0f, 1f),
+                CharacterBase.UnitProperties.Darkness => new Color(0.1489f, 0f, 0.6226f, 1f),
+                CharacterBase.UnitProperties.Fire => new Color(0.5188f, 0.06162f, 0f, 1f),
+                CharacterBase.UnitProperties.Physics => new Color(0.4433f, 0.4433f, 0.4433f, 1f),
+                CharacterBase.UnitProperties.Poison => new Color(0f, 0.5566f, 0.1430f, 1f),
+                CharacterBase.UnitProperties.Water => new Color(0f, 0.3231f, 0.5183f, 1f),
+                CharacterBase.UnitProperties.None => new Color(1f, 1f, 1f, 1f),
+                _ => throw new ArgumentOutOfRangeException(nameof(character.UnitProperty))
+            };
+            unitInstance.unitLevelText.text = $"레벨 {character.CharacterObjectLevel}";
+            unitInstance.unitPieceSlider.maxValue = character.CharacterMaxPiece;
+            unitInstance.unitPieceSlider.value = character.CharacterPieceCount;
+            unitInstance.unitPieceText.text = $"{character.CharacterPieceCount}/{unitInstance.unitPieceSlider.maxValue}";
+        }
         private void SetupInActiveUnitIcon(UnitIcon unitInstance, CharacterBase character)
         {
             unitInstance.CharacterBase = character;
-
             unitInstance.unitBackGround.GetComponent<Image>().color = Color.gray;
             unitInstance.unit.GetComponent<Image>().sprite = character.GetSpriteForLevel(1);
             unitInstance.unit.GetComponent<Image>().color = Color.grey;
@@ -162,16 +182,35 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 case true when characterBase.Selected:
                 {
                     unitInstance.infoBtn.gameObject.SetActive(true);
-                    unitInstance.levelUpBtn.gameObject.SetActive(characterBase.CharacterPieceCount > characterBase.CharacterMaxPiece); unitInstance.removeBtn.gameObject.SetActive(true);
-                    unitInstance.useBtn.gameObject.SetActive(false); 
+                    if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece)
+                    {
+                        unitInstance.levelUpBtn.gameObject.SetActive(true);
+                        unitInstance.removeBtn.gameObject.SetActive(false);
+                        unitInstance.useBtn.gameObject.SetActive(false); 
+                    }
+                    else
+                    {
+                        unitInstance.levelUpBtn.gameObject.SetActive(false);
+                        unitInstance.removeBtn.gameObject.SetActive(true);
+                        unitInstance.useBtn.gameObject.SetActive(false); 
+                    }
                     break;
                 }
                 case true when !characterBase.Selected:
                 {
                     unitInstance.infoBtn.gameObject.SetActive(true);
-                    unitInstance.levelUpBtn.gameObject.SetActive(characterBase.CharacterPieceCount > characterBase.CharacterMaxPiece);
-                    unitInstance.removeBtn.gameObject.SetActive(false);
-                    unitInstance.useBtn.gameObject.SetActive(true);
+                    if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece)
+                    {
+                        unitInstance.levelUpBtn.gameObject.SetActive(true);
+                        unitInstance.removeBtn.gameObject.SetActive(false);
+                        unitInstance.useBtn.gameObject.SetActive(false);
+                    }
+                    else
+                    {
+                        unitInstance.levelUpBtn.gameObject.SetActive(false);
+                        unitInstance.removeBtn.gameObject.SetActive(false);
+                        unitInstance.useBtn.gameObject.SetActive(true);
+                    }
                     break;
                 }
                 case false:
@@ -201,7 +240,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             }
 
         }
-
         public void OnPointerClick(PointerEventData eventData)
         {
             if (_activeStatusPanel == null ||

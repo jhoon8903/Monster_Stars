@@ -8,9 +8,12 @@ namespace Script.CharacterManagerScript
     public class CharacterBase : MonoBehaviour
     {
         // Robby Source
-        protected internal int CharacterObjectLevel { get; protected set; }
-        protected internal int CharacterPieceCount { get; protected set; }
-        protected internal int CharacterMaxPiece { get; private set; }
+        protected internal int CharacterObjectLevel { get; set; } = 1;
+        protected internal int CharacterPieceCount { get; set; }
+        protected internal int CharacterMaxPiece { get; set; }
+
+        public enum UnitGrades { Green, Blue, Purple }
+        protected internal UnitGrades UnitGrade;
         protected internal bool UnLock { get; protected set; }
         protected internal bool Selected { get; set; }
         
@@ -92,6 +95,12 @@ namespace Script.CharacterManagerScript
         public virtual Sprite GetSpriteForLevel(int characterObjectLevel)
         {
             return null;
+        }
+        public void UnitLevelUp()
+        {
+            CharacterObjectLevel++;
+            CharacterMaxPiece = CharacterObjectLevel * 5;
+            CharacterPieceCount -= CharacterMaxPiece;
         }
     }
 }

@@ -92,7 +92,7 @@ namespace Script.EnemyManagerScript
 
         public virtual void Initialize()
         {
-            var wave = FindObjectOfType<GameManager>().wave;
+            var wave = StageManager.Instance.currentWave;
             _hpSlider = GetComponentInChildren<Slider>(true);
             if (EnemyType != EnemyTypes.Boss) lastIncreaseHealthPoint = healthPoint  * Mathf.Pow(1.3f, wave - 1);
             maxHealthPoint = lastIncreaseHealthPoint != 0 ? lastIncreaseHealthPoint : healthPoint;

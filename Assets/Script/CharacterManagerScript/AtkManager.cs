@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 using Script.RewardScript;
 using Script.WeaponScriptGroup;
 using UnityEngine;
@@ -198,7 +197,7 @@ namespace Script.CharacterManagerScript
             var weaponType = attackData.WeaponType; 
             const float offset = 0.7f; // Change this to the desired offset distance
             var unitPosition = unit.transform.position;
-            var weaponPositions = new Vector3[]
+            var weaponPositions = new []
             {
                 new Vector3(unitPosition.x - offset, unitPosition.y, 0),
                 unitPosition,

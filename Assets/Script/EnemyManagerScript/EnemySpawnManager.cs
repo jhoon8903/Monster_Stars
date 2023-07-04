@@ -4,6 +4,7 @@ using System.Linq;
 using Script.CharacterManagerScript;
 using Script.EnemyScript;
 using Script.PuzzleManagerGroup;
+using Script.UIManager;
 using UnityEngine;
 
 namespace Script.EnemyManagerScript
@@ -50,15 +51,15 @@ namespace Script.EnemyManagerScript
 
         public IEnumerator SpawnBoss(int wave)
         {
-            var bossObject = Instantiate(wave == 10 ? enemyManager.stage10BossPrefab : enemyManager.stage20BossPrefab,
-                transform);
+            var bossObject = Instantiate(enemyManager.stageBoss, transform);
             var enemyBase = bossObject.GetComponent<EnemyBase>();
-            enemyBase.Initialize();
+            // enemyBase.Initialize();
             enemyPool.enemyBases.Clear();
             enemyPool.enemyBases.Add(enemyBase);
             enemyBase.transform.position = gridManager.bossSpawnArea;
             enemyBase.gameObject.SetActive(true);
             enemyBase.Initialize();
+            enemyBase.healthPoint *= 1f + wave * 0.2f;
             yield return StartCoroutine(enemyPatternManager.Boss_Move(enemyBase.gameObject));
         }
 
@@ -88,7 +89,7 @@ namespace Script.EnemyManagerScript
             {
                 var spawnPosY = _spawnZones[zone].position.y;
 
-                if (gameManager.wave is 1 or 2 or 3)
+                if (StageManager.Instance.currentWave is 1 or 2 or 3)
                 {
                     var characters = characterPool.UsePoolCharacterList();
                     var xPositions = (from character in characters

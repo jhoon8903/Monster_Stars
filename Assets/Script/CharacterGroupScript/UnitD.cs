@@ -16,16 +16,13 @@ namespace Script.CharacterGroupScript
         private SpriteRenderer _spriteRenderer ; 
         private float _detectionSize = 1.5f; 
         private float _currentDamage;
-        private int _currentCharacterObjectLevel=30;
-        private int _currentCharacterPieceCount=40;
-      
-        
+
+
         public override void Initialize()
         {
             unitGroup = UnitGroups.D;
             UnitProperty = UnitProperties.Physics;
-            CharacterObjectLevel = _currentCharacterObjectLevel;
-            CharacterPieceCount = _currentCharacterPieceCount;
+            UnitGrade = UnitGrades.Green;
             UnLock = true;
             Selected = false;
             base.Initialize();

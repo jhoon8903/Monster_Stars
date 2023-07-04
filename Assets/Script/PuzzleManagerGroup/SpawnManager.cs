@@ -34,7 +34,6 @@ namespace Script.PuzzleManagerGroup
                 where character.transform.position == spawnPosition
                 select character.gameObject).FirstOrDefault();
         }
-
         public IEnumerator PositionUpCharacterObject()
         {
             yield return swipeManager.isBusy = true;
@@ -81,18 +80,13 @@ namespace Script.PuzzleManagerGroup
                 yield return StartCoroutine(gameManager.Count0Call());
             }
         }
-
-
         private IEnumerator CheckPosition()
         {
             if (isMatched) yield break;
-
             var wait = new WaitForSeconds(0.1f);
             var maxRows = characterPool.UsePoolCharacterList().Count / 6;
             var maxCount = maxRows * (maxRows - 1) * 3;
-
             _totalPos = characterPool.UsePoolCharacterList().Sum(t=> t.transform.position.y);
-
             while (_totalPos != maxCount)
             {
                 while(characterPool.SortPoolCharacterList().Count < characterPool.UsePoolCharacterList().Count)
@@ -101,22 +95,11 @@ namespace Script.PuzzleManagerGroup
                 }
                 _totalPos = characterPool.UsePoolCharacterList().Sum(t => t.transform.position.y);
             }
-
             yield return StartCoroutine(matchManager.CheckMatches());
-            
             _isMatchActivated = matchManager.isMatchActivated;
-            
-            if (rewardManger.openBoxing)
-            {
-                yield break;
-            }
-            
-            if(_isMatchActivated)
-            {
-                StartCoroutine(CheckPosition());
-            }
+            if (rewardManger.openBoxing) yield break;
+            if (_isMatchActivated) StartCoroutine(CheckPosition());
         }
-
         private static IEnumerator MoveCharacter(GameObject gameObject, Vector3Int targetPosition, float duration = 0.3f)
         {
             if (gameObject == null) yield break;
@@ -126,7 +109,6 @@ namespace Script.PuzzleManagerGroup
     
             yield return moveTween.WaitForCompletion();
         }
-
         private IEnumerator PerformMoves(IEnumerable<(GameObject, Vector3Int)> moves)
         {
             var moveCoroutines
@@ -184,29 +166,25 @@ namespace Script.PuzzleManagerGroup
             notUsePoolCharacterList.RemoveAt(randomIndex);
             return newCharacter;
         }
-        public IEnumerator BossStageSpawnRule()
+        public IEnumerator BossStageClearRule()
         {
             isWave10Spawning = true;
-            
+            yield return StartCoroutine(gameManager.WaitForPanelToClose());
             var saveCharacterList = characterPool.UsePoolCharacterList();
             var highLevelCharacters = saveCharacterList
                 .OrderByDescending(character => character.GetComponent<CharacterBase>().UnitLevel)
                 .Take(enforceManager.highLevelCharacterCount)
                 .ToList();
-            yield return StartCoroutine(gameManager.WaitForPanelToClose());
             foreach (var character in saveCharacterList
-                        .Where(character => !highLevelCharacters.Contains(character)))
+                         .Where(character => !highLevelCharacters.Contains(character)))
             {
                 character.GetComponent<CharacterBase>().CharacterReset();
                 character.SetActive(false);
             }
-
             var highestY = gridManager.gridHeight - 1;
             var moves = new List<(GameObject, Vector3Int)>();
-
             var currentColumn = 0;
             var currentRow = highestY;
-
             foreach (var character in highLevelCharacters)
             {
                 var newGridPosition = new Vector3Int(currentColumn, currentRow, 0);
@@ -217,10 +195,8 @@ namespace Script.PuzzleManagerGroup
                 currentColumn = 0; // Reset column
                 currentRow--; // Move to the next row
             }
-
             yield return StartCoroutine(PerformMovesSequentially(moves));
             moves.Clear();
-
             for (var y = currentRow; y >= 0; y--) // Start from the current row
             {
                 for (var x = 0; x < gridManager.gridWidth; x++)
@@ -240,7 +216,6 @@ namespace Script.PuzzleManagerGroup
             yield return StartCoroutine(matchManager.CheckMatches());
             isWave10Spawning = false;
         }
-
         private IEnumerator PerformMovesSequentially(List<(GameObject, Vector3Int)> moves)
         {
             foreach (var (o, targetPosition) in moves)

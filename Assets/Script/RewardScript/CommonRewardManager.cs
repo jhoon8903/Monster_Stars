@@ -56,7 +56,6 @@ namespace Script.RewardScript
             var treasure = PendingTreasure.Dequeue();
             openBoxing = true;
             var shake = treasure.transform.DOShakeScale(1.0f, 0.5f, 8); // 흔들리는 애니메이션 재생
-
             shake.OnComplete(() =>
             {
                 _currentTreasure = treasure;
@@ -68,11 +67,11 @@ namespace Script.RewardScript
         // 2. 상자마다의 확률 분배
         private IEnumerator CommonChance(int greenChance, int blueChance, int purpleChance, string forcedColor)
         {
-            if (gameManager.wave == 11)
+            if (StageManager.Instance.currentWave >= 11)
             {
-                greenChance = 30;
-                blueChance = 55;
-                purpleChance = 15;
+                greenChance = 60;
+                blueChance = 35;
+                purpleChance = 5;
                 _powerUps = CommonPowerList(greenChance, blueChance, purpleChance, "blue");
                 CommonDisplay(_powerUps);
                 yield return null;
@@ -92,47 +91,20 @@ namespace Script.RewardScript
             var selectedCodes = new HashSet<int>();
             for (var i = 0; i < 3; i++)
             {
-                if (gameManager.wave is 11 or 21)
+                if (StageManager.Instance.ClearBoss)
                 {
-                    if (_waveRewards && _bossRewardSelected == 0)
-                    {
-                        _bossRewardSelected = 0;
-                        var firstDesiredPowerUp = new CommonPurpleData(purpleSprite, 16, CommonData.Types.AddRow, new[] { 1 });
-                        commonPowerUps.Add(firstDesiredPowerUp); 
-                        selectedCodes.Add(firstDesiredPowerUp.Code);
-                        var secondDesiredPowerUp = new CommonBlueData(blueSprite, 11, CommonData.Types.Slow, new[] { 15 });
-                        commonPowerUps.Add(secondDesiredPowerUp);
-                        selectedCodes.Add(secondDesiredPowerUp.Code);
-                        var thirdDesiredPowerUp = new CommonPurpleData(purpleSprite, 13, CommonData.Types.StepDirection, new[] { 1 });
-                        selectedCodes.Add(thirdDesiredPowerUp.Code);
-                        commonPowerUps.Add(thirdDesiredPowerUp);
-                        _bossRewardSelected = 1;
-                    }
-                    else
-                    {
-                        CommonData selectedPowerUp;
-                        switch (forcedColor)
-                        {
-                            case "blue" when i == 0: selectedPowerUp = CommonUnique(common.CommonBlueList, selectedCodes); break;
-                            case "purple" when i == 0: selectedPowerUp = CommonUnique(common.CommonPurpleList, selectedCodes); break;
-                            default:
-                            {
-                                var total = greenChance + blueChance + purpleChance;
-                                var randomValue = Random.Range(0, total);
-                                if (randomValue < greenChance) { selectedPowerUp = CommonUnique(common.CommonGreenList, selectedCodes); }
-                                else if (randomValue < greenChance + blueChance) { selectedPowerUp = CommonUnique(common.CommonBlueList, selectedCodes); }                                                                           
-                                else { selectedPowerUp = CommonUnique(common.CommonPurpleList, selectedCodes); }
-                                break;
-                            }
-                        }
-                        if (selectedPowerUp == null) continue;
-                        commonPowerUps.Add(selectedPowerUp);
-                        selectedCodes.Add(selectedPowerUp.Code);
-                    }
+                    var firstDesiredPowerUp = new CommonPurpleData(purpleSprite, 16, CommonData.Types.AddRow, new[] { 1 });
+                    commonPowerUps.Add(firstDesiredPowerUp); 
+                    selectedCodes.Add(firstDesiredPowerUp.Code);
+                    var secondDesiredPowerUp = new CommonBlueData(blueSprite, 11, CommonData.Types.Slow, new[] { 15 });
+                    commonPowerUps.Add(secondDesiredPowerUp);
+                    selectedCodes.Add(secondDesiredPowerUp.Code);
+                    var thirdDesiredPowerUp = new CommonPurpleData(purpleSprite, 13, CommonData.Types.StepDirection, new[] { 1 });
+                    selectedCodes.Add(thirdDesiredPowerUp.Code);
+                    commonPowerUps.Add(thirdDesiredPowerUp);
                 }
                 else
                 {
-                    _bossRewardSelected = 0;
                     CommonData selectedPowerUp;
                     switch (forcedColor)
                     {
@@ -152,6 +124,7 @@ namespace Script.RewardScript
                     commonPowerUps.Add(selectedPowerUp);
                     selectedCodes.Add(selectedPowerUp.Code);
                 }
+                StageManager.Instance.ClearBoss = false;
             }
             return commonPowerUps;
         }
@@ -177,8 +150,8 @@ namespace Script.RewardScript
                         break;
                     case CommonData.Types.AddRow:
                         if (EnforceManager.Instance.addRowCount > 2) return false;
-                        if (_bossRewardSelected == 1) return false;
-                        if (gameManager.wave != 11) return false;
+                        if (!StageManager.Instance.ClearBoss) return false;
+                        if (StageManager.Instance.currentWave % 10 != 0 ) return false;
                         break;// Show row extra reward only after boss stage, up to 2 times
                     case CommonData.Types.Slow:
                         if (EnforceManager.Instance.slowCount <= 3) return false; // Displays the enemy movement speed reduction effect up to 3 times
@@ -188,7 +161,8 @@ namespace Script.RewardScript
                         break;
                     case CommonData.Types.StepDirection:
                         if (EnforceManager.Instance.diagonalMovement)return false;
-                        if (gameManager.wave !=11)return false; // If diagonal movement is possible, don't show this option
+                        if (!StageManager.Instance.ClearBoss) return false;
+                        if (StageManager.Instance.currentWave % 10 != 0 ) return false;
                         break;
                     case CommonData.Types.Match5Upgrade:
                         if (EnforceManager.Instance.match5Upgrade) return false; // Don't show this option if 5 matching upgrade option is enabled

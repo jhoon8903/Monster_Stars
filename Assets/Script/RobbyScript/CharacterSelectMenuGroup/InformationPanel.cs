@@ -1,7 +1,7 @@
 using System;
+using System.Collections;
 using Script.CharacterManagerScript;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +9,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
 {
     public class InformationPanel : MonoBehaviour
     {
+        [SerializeField] private HoldCharacterList holdCharacterList;
         [SerializeField] private GameObject infoPanel;
         [SerializeField] private TextMeshProUGUI nameText;
         [SerializeField] private GameObject unit;
@@ -17,6 +18,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         [SerializeField] private TextMeshProUGUI unitNoticeText;
         [SerializeField] private GameObject unitInformation;
         [SerializeField] private GameObject unitSkillList;
+        [SerializeField] private GameObject levelUpBtn;
         [SerializeField] private TextMeshProUGUI levelUpCoinText;
         private Sprite _skillSprite;
         private TextMeshProUGUI _skillNoticeText;
@@ -24,7 +26,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         public void OpenInfoPanel(UnitIcon unitInstance, CharacterBase characterBase)
         {
             infoPanel.SetActive(true);
-            Information(unitInstance, characterBase);
+            StartCoroutine(CheckForLevelUp(unitInstance, characterBase));
         }
 
         private void Information(Component unitInstance, CharacterBase characterBase)
@@ -63,6 +65,30 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 _ => throw new ArgumentOutOfRangeException()
             };
             return unit;
+        }
+
+        private IEnumerator CheckForLevelUp(UnitIcon unitInstance, CharacterBase characterBase)
+        {
+            levelUpBtn.GetComponent<Button>().onClick.RemoveAllListeners();
+            if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece)
+            {
+                levelUpBtn.GetComponent<Button>().interactable = true;
+
+                levelUpBtn.GetComponent<Button>().onClick.AddListener(() =>
+                {
+                    characterBase.UnitLevelUp();
+                    holdCharacterList.UpdateUnit(unitInstance, characterBase);
+                    Information(unitInstance, characterBase);
+                    StartCoroutine(CheckForLevelUp(unitInstance, characterBase)); 
+                });
+            }
+            else
+            {
+                levelUpBtn.GetComponent<Button>().interactable = false;
+                levelUpCoinText.color = Color.gray;
+            }
+            Information(unitInstance, characterBase);
+            yield return null;
         }
     }
 }

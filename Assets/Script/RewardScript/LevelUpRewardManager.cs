@@ -284,7 +284,8 @@ namespace Script.RewardScript
                     break;
                 case ExpData.Types.StepDirection:
                     if (EnforceManager.Instance.diagonalMovement) return false;
-                    if (gameManager.wave !=11) return false;
+                    if (!StageManager.Instance.ClearBoss) return false;
+                    if (StageManager.Instance.currentWave % 10 != 0 ) return false;
                     break;
                 case ExpData.Types.CastleMaxHp:
                     if (EnforceManager.Instance.castleMaxHp >= 1000) return false;
