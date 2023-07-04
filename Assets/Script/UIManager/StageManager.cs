@@ -103,10 +103,12 @@ namespace Script.UIManager
             PlayerPrefs.SetInt(ClearedWaveKey, currentWave); // currentWave 값을 저장하는 코드 추가
             PlayerPrefs.Save();
             continueBtn.GetComponent<Button>().onClick.AddListener(LoadRobby);
+            
         }
 
-        private static void LoadRobby()
+        private void LoadRobby()
         {
+            isStageClear = false;
             SceneManager.LoadScene("SelectScene");
         }
 
@@ -120,7 +122,7 @@ namespace Script.UIManager
             stageClearPanel.SetActive(true);
             RewardUnitPiece(stage);
             GetCoin(stage, 30);
-            isStageClear = false;
+         
         }
 
         private void GetCoin(int stage, int wave)
