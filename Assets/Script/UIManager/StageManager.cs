@@ -106,7 +106,7 @@ namespace Script.UIManager
             
         }
 
-        private void LoadRobby()
+        public void LoadRobby()
         {
             isStageClear = false;
             SceneManager.LoadScene("SelectScene");
