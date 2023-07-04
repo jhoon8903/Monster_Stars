@@ -12,7 +12,7 @@ public class PauseManager : MonoBehaviour
     [SerializeField]
     private GameObject pauseBtn;
     [SerializeField]
-    private GameObject continueBtn;
+    private GameObject robbyBtn;
     [SerializeField]
     private GameObject resumeBtn;
 
@@ -22,7 +22,7 @@ public class PauseManager : MonoBehaviour
     void Start()
     {
         pauseBtn.GetComponent<Button>().onClick.AddListener(Pause);
-        continueBtn.GetComponent<Button>().onClick.AddListener(()=>StageManager.Instance.LoadRobby());
+        robbyBtn.GetComponent<Button>().onClick.AddListener(()=>StageManager.Instance.LoadRobby());
         resumeBtn.GetComponent<Button>().onClick.AddListener(Resume);
     }
 
