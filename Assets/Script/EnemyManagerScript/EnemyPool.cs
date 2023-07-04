@@ -41,7 +41,6 @@ namespace Script.EnemyManagerScript
         {
             pooledEnemy.Clear();
             pooledEnemy = pooledDefaultEnemy.ToList();
-            Debug.Log("Enemy List 초기화!");
         }
 
         public void ReturnToPool(EnemyBase enemyBase)

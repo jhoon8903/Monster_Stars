@@ -91,8 +91,7 @@ namespace Script
             {
                 IsClear = true;
                 yield return StartCoroutine(NextWave());
-                if (levelUpRewardManager.unitGroups
-                        .Contains(CharacterBase.UnitGroups.D) && 
+                if (levelUpRewardManager.HasUnitInGroup(CharacterBase.UnitGroups.D) && 
                     EnforceManager.Instance.physicIncreaseDamage)  
                     FindObjectOfType<UnitD>().ResetDamage();
             }

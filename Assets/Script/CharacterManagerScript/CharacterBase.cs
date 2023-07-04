@@ -8,9 +8,9 @@ namespace Script.CharacterManagerScript
     public class CharacterBase : MonoBehaviour
     {
         // Robby Source
-        protected internal int CharacterObjectLevel { get; set; } = 1;
+        protected internal int CharacterObjectLevel { get; private set; } = 1;
         protected internal int CharacterPieceCount { get; set; }
-        protected internal int CharacterMaxPiece { get; set; }
+        protected internal int CharacterMaxPiece { get; private set; }
 
         public enum UnitGrades { Green, Blue, Purple }
         protected internal UnitGrades UnitGrade;
