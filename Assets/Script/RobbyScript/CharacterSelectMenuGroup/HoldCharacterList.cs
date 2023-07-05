@@ -22,8 +22,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         [SerializeField] private GameObject warningPanel;
         [SerializeField] private TextMeshProUGUI messageText;
         private GameObject _activeStatusPanel;
-        public Dictionary<UnitIcon, UnitIcon> unitIconMapping = new Dictionary<UnitIcon, UnitIcon>();
-
+        private readonly Dictionary<UnitIcon, UnitIcon> _unitIconMapping = new Dictionary<UnitIcon, UnitIcon>();
 
         private void Update()
         {
@@ -113,7 +112,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             });
         }
 
-        public void UpdateUnit(UnitIcon unitInstance, CharacterBase character)
+        public static void UpdateUnit(UnitIcon unitInstance, CharacterBase character)
         {
             unitInstance.unitBackGround.GetComponent<Image>().color = character.UnitProperty switch
             {
@@ -220,7 +219,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         }
         private void UpdateMainUnitContent()
         {
-            unitIconMapping.Clear();
+            _unitIconMapping.Clear();
 
             foreach (Transform child in mainUnitContent.transform)
             {
@@ -231,7 +230,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 var newUnitInstance = Instantiate(child.gameObject, mainUnitContent.transform, false);
                 var newUnit = newUnitInstance.GetComponent<UnitIcon>();
                 var originalUnit = child.GetComponent<UnitIcon>();
-                unitIconMapping[originalUnit] = newUnit;
+                _unitIconMapping[originalUnit] = newUnit;
                 newUnit.CharacterBase = originalUnit.CharacterBase;
                 var newUnitBase = newUnit.CharacterBase;
                 newUnit.GetComponent<Button>().onClick.AddListener(() =>
@@ -245,7 +244,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         public void SyncWithSelected(UnitIcon unitIcon, CharacterBase unitBase)
         {
             var correspondingUnit 
-                = (from pair in unitIconMapping where pair.Key 
+                = (from pair in _unitIconMapping where pair.Key 
                     == unitIcon || pair.Value == unitIcon select (pair.Key == unitIcon) 
                     ? pair.Value 
                     : pair.Key).FirstOrDefault();
@@ -255,10 +254,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             correspondingUnit.statusPanel.SetActive(unitIcon.statusPanel.activeSelf);
             UpdateUnit(unitIcon, unitBase);
             UpdateUnit(correspondingUnit, unitBase);
-            // informationPanel.OpenInfoPanel(correspondingUnit, unitBase);
         }
-
-
 
         public void OnPointerClick(PointerEventData eventData)
         {

@@ -78,7 +78,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 {
                     StartCoroutine(characterBase.UnitLevelUp());
                     StartCoroutine(CheckForLevelUp(unitInstance, characterBase)); 
-                    holdCharacterList.UpdateUnit(unitInstance, characterBase);
+                    HoldCharacterList.UpdateUnit(unitInstance, characterBase);
                     holdCharacterList.SyncWithSelected(unitInstance, characterBase);
                     Information(unitInstance, characterBase);
                 });
