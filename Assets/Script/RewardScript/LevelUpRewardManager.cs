@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,15 @@ namespace Script.RewardScript
         [SerializeField] private CharacterManager characterManager;
         public List<CharacterBase> playingUnit = new List<CharacterBase>();
         private ExpData _selectedPowerUp;
+
+        private void Start()
+        {
+            foreach (var unit in characterManager.characterList)
+            {
+                playingUnit.Add(unit);
+            }
+        }
+
         private void ProcessExpReward(ExpData selectedReward)
         {
             switch (selectedReward.Type)
@@ -265,7 +275,6 @@ namespace Script.RewardScript
 
         private bool IsValidOption (ExpData powerUp, ICollection<int> selectedCodes)
         {
-           playingUnit = characterManager.characterList;
             if (selectedCodes.Contains(powerUp.Code)) return false;
             switch (powerUp.Type)
             {
@@ -516,127 +525,127 @@ namespace Script.RewardScript
                     powerText.text = $"5 매치시 골드 {p} 추가 획득";
                     break;
                 case ExpData.Types.DivineActiveRestraint:
-                    powerText.text = "[A그룹 - 노랑] 적중된 적은 20% 확률로 속박 1초";
+                    powerText.text = "[A그룹(신성)] 적중된 적은 20% 확률로 속박 1초";
                     break;
                 case ExpData.Types.DivineRestraintTime:
-                    powerText.text = "[A그룹 - 노랑] 속박 지속시간이 0.1 초 증가";
+                    powerText.text = "[A그룹(신성)] 속박 지속시간이 0.1 초 증가";
                     break;
                 case ExpData.Types.DivinePenetrate:
-                    powerText.text = "[A그룹 - 노랑] 투사체가 적을 1회 관통합니다."; 
+                    powerText.text = "[A그룹(신성)] 투사체가 적을 1회 관통합니다."; 
                     break;
                 case ExpData.Types.DivineAtkRange:
-                    powerText.text = "[A그룹 - 노랑] 뒤쪽 방향 공격이 가능";
+                    powerText.text = "[A그룹(신성)] 뒤쪽 방향 공격이 가능";
                     break;
                 case ExpData.Types.DivinePoisonAdditionalDamage:
-                    powerText.text = "[A그룹 - 노랑] 중독상태의 적에게 30% 공격력이 증가";
+                    powerText.text = "[A그룹(신성)] 중독상태의 적에게 30% 공격력이 증가";
                     break;
                 case ExpData.Types.DarkSlowAdditionalDamage:
-                    powerText.text = "[B그룹 - 미정] 둔화상태의 적에게 추가 데미지 50%";
+                    powerText.text = "[B그룹(어둠)] 둔화상태의 적에게 추가 데미지 50%";
                     break;
                 case ExpData.Types.DarkBleedAdditionalDamage:
-                    powerText.text = "[B그룹 - 미정] 출혈상태의 적에게 추가 데미지 200%";
+                    powerText.text = "[B그룹(어둠)] 출혈상태의 적에게 추가 데미지 200%";
                     break;
                 case ExpData.Types.DarkProjectilePenetration:
-                    powerText.text = "[B그룹 - 미정] 관통 효과 적용";
+                    powerText.text = "[B그룹(어둠)] 관통 효과 적용";
                     break;
                 // case ExpData.Types.DarkAdditionalFrontAttack:
                 //     powerText.text = "[B그룹 - 미정] 공격시 위쪽으로 추가 공격";
                 //     break;
                 case ExpData.Types.DarkIncreaseAtkSpeed:
-                    powerText.text = "[B그룹 - 미] 공격속도 17% 증가 (최대 255%)";
+                    powerText.text = "[B그룹(어둠)] 공격속도 17% 증가 (최대 255%)";
                     break;
                 case ExpData.Types.Water2IncreaseDamage:
-                    powerText.text = "[C그룹 - 미정] 공격력 9% 증가";
+                    powerText.text = "[C그룹(어둠)] 공격력 9% 증가";
                     break;
                 case ExpData.Types.Water2BleedAdditionalRestraint:
-                    powerText.text = "[C그룹 - 미정] 출혈상태의 적에게 20% 확률로 속박 시킴";
+                    powerText.text = "[C그룹(물)] 출혈상태의 적에게 20% 확률로 속박 시킴";
                     break;
                 case ExpData.Types.Water2IncreaseSlowTime:
-                    powerText.text = "[C그룹 - 미정] 둔화 지속시간 1초 증가 (최대 6초)";
+                    powerText.text = "[C그룹(물)] 둔화 지속시간 1초 증가 (최대 6초)";
                     break;
                 case ExpData.Types.Water2BackAttack:
-                    powerText.text = "[C그룹 - 미정] 뒤쪽으로 공격이 가능해짐";
+                    powerText.text = "[C그룹(물)] 뒤쪽으로 공격이 가능해짐";
                     break;
                 case ExpData.Types.Water2AdditionalProjectile:
-                    powerText.text = "[C그룹 - 미정] 발사체 1개 추가";
+                    powerText.text = "[C그룹(물)] 발사체 1개 추가";
                     break;
                 case ExpData.Types.PhysicAdditionalWeapon:
-                    powerText.text = "[D그룹 - 보라] 검 1개 추가";
+                    powerText.text = "[D그룹(물리)] 검 1개 추가";
                     break;
                 case ExpData.Types.PhysicIncreaseWeaponScale:
-                    powerText.text = "[D그룹 - 보라] 검의 크기가 100% 증가합니다.";
+                    powerText.text = "[D그룹(물리)] 검의 크기가 100% 증가합니다.";
                     break;
                 case ExpData.Types.PhysicSlowAdditionalDamage:
-                    powerText.text = "[D그룹 - 보라] 둔화된 적에게 데비지 100% 증가";
+                    powerText.text = "[D그룹(물리)] 둔화된 적에게 데비지 100% 증가";
                     break;
                 case ExpData.Types.PhysicAtkSpeed:
-                    powerText.text = "[D그룹 - 보라] 공격속도가 20% 증가";
+                    powerText.text = "[D그룹(물리)] 공격속도가 20% 증가";
                     break;
                 case ExpData.Types.PhysicIncreaseDamage:
-                    powerText.text = "[D그룹 - 보라] 적을 죽이면 적 1기당\n모든 D그룹의 데미지가 5% 증가 (해당 웨이브만 적용)";
+                    powerText.text = "[D그룹(물리)] 적을 죽이면 적 1기당\n모든 D그룹의 데미지가 5% 증가 (해당 웨이브만 적용)";
                     break;
                 case ExpData.Types.WaterIncreaseSlowPower:
-                    powerText.text = "[E그룹 - 파랑] 둔화강도 50% 증가";
+                    powerText.text = "[E그룹(물)] 둔화강도 50% 증가";
                     break;
                 case ExpData.Types.WaterRestraintIncreaseDamage:
-                    powerText.text = "[E그룹 - 파랑] 속박된 적을 공격시 100% 추가데미지";
+                    powerText.text = "[E그룹(물)] 속박된 적을 공격시 100% 추가데미지";
                     break;
                 case ExpData.Types.WaterIncreaseDamage:
-                    powerText.text = "[E그룹 - 파랑] 공격력 20%씩 증가";
+                    powerText.text = "[E그룹(물)] 공격력 20%씩 증가";
                     break;
                 case ExpData.Types.WaterBurnAdditionalDamage:
-                    powerText.text = "[E그룹 - 파랑] 화상상태의 적에게 추가 데미지 200%";
+                    powerText.text = "[E그룹(물)] 화상상태의 적에게 추가 데미지 200%";
                     break;
                 case ExpData.Types.WaterSideAttack:
-                    powerText.text = "[E그룹 - 파랑] 공격시, 투사체가 좌우 동시 발사";
+                    powerText.text = "[E그룹(물)] 공격시, 투사체가 좌우 동시 발사";
                     break;
                 case ExpData.Types.PoisonActivate:
-                    powerText.text = "[F그룹 - 초록] 중독 효과부여";
+                    powerText.text = "[F그룹(독)] 중독 효과부여";
                     break;
                 case ExpData.Types.PoisonOverlapping:
-                    powerText.text = "[F그룹 - 초록] 중독 중첩 1 증가";
+                    powerText.text = "[F그룹(독)] 중독 중첩 1 증가";
                     break;
                 case ExpData.Types.PoisonDoubleAtk:
-                    powerText.text = "[F그룹 - 초록] 공격이 더블어택으로 변경";
+                    powerText.text = "[F그룹(독)] 공격이 더블어택으로 변경";
                     break;
                 case ExpData.Types.PoisonRestraintAdditionalDamage:
-                    powerText.text = "[F그룹 - 초록] 속박된 적에게 가하는 데미지 200% 증가";
+                    powerText.text = "[F그룹(독)] 속박된 적에게 가하는 데미지 200% 증가";
                     break;
                 case ExpData.Types.PoisonInstantKill:
-                    powerText.text = "[F그룹 - 초록] 체력 15% 미만의 적은 15% 확률로 즉사";
+                    powerText.text = "[F그룹(독)] 체력 15% 미만의 적은 15% 확률로 즉사";
                     break;
                 case ExpData.Types.PoisonIncreaseAtkRange:
-                    powerText.text = "[F그룹 - 초록] 사거리 1칸 증가";
+                    powerText.text = "[F그룹(독)] 사거리 1칸 증가";
                     break;
                 case ExpData.Types.FireBleedingAdditionalDamage:
-                    powerText.text = "[G그룹 - 미정] 출혈상태의 적에게 추가 데미지 150%";
+                    powerText.text = "[G그룹(불)] 출혈상태의 적에게 추가 데미지 150%";
                     break;
                 case ExpData.Types.FireIncreaseDamage:
-                    powerText.text = "[G그룹 - 미정] 데미지 15% 증가 (최대 225%)";
+                    powerText.text = "[G그룹(불)] 데미지 15% 증가 (최대 225%)";
                     break;
                 case ExpData.Types.FirePoisonAdditionalStun:
-                    powerText.text = "[G그룹 - 미정] 중독상태의 적을 공격시 20% 확률로 기절";
+                    powerText.text = "[G그룹(불)] 중독상태의 적을 공격시 20% 확률로 기절";
                     break;
                 case ExpData.Types.FireIncreaseAtkRange:
-                    powerText.text = "[G그룹 - 미정] 사거리 1칸 증가";
+                    powerText.text = "[G그룹(불)] 사거리 1칸 증가";
                     break;
                 case ExpData.Types.FireDeleteBurnIncreaseDamage:
-                    powerText.text = "[G그룹 - 미정] 화상효과를 비활성화 하고, 추가 데미지 200% 증가";
+                    powerText.text = "[G그룹(불)] 화상효과를 비활성화 하고, 추가 데미지 200% 증가";
                     break;
                 case ExpData.Types.Physics2ActivateBleed:
-                    powerText.text = "[H그룹 - 미정] 출혈 효과 적용 (초당 Damage의 10%)";
+                    powerText.text = "[H그룹(물리)] 출혈 효과 적용 (초당 Damage의 10%)";
                     break;
                 case ExpData.Types.Physics2AdditionalBleedingLayer:
-                    powerText.text = "[H그룹 - 미정] 출혈 중첩 1 증가";
+                    powerText.text = "[H그룹(물리)] 출혈 중첩 1 증가";
                     break;
                 case ExpData.Types.Physics2AdditionalAtkSpeed:
-                    powerText.text = "[H그룹 - 미정] 공격속도 17% 증가 (최대 255% / 15회)";
+                    powerText.text = "[H그룹(물리)] 공격속도 17% 증가 (최대 255% / 15회)";
                     break;
                 case ExpData.Types.Physics2AdditionalProjectile:
-                    powerText.text = "[그룹H - 미정] 발사체 1개 추가"; 
+                    powerText.text = "[그룹H(물리)] 발사체 1개 추가"; 
                     break;
                 case ExpData.Types.Physics2ProjectilePenetration:
-                    powerText.text = "[그룹H - 미정] 관통 1회 증가"; 
+                    powerText.text = "[그룹H(물리)] 관통 1회 증가"; 
                     break;
             }
             powerCode.text = $"{powerUp.Code}";

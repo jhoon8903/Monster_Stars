@@ -75,6 +75,8 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             });
             unitInstance.infoBtn.onClick.AddListener(() =>
             {
+                unitInstance.statusPanel.SetActive(false);
+                _activeStatusPanel = null;
                 informationPanel.OpenInfoPanel(unitInstance, character);
             });
             unitInstance.levelUpBtn.onClick.AddListener(() =>
