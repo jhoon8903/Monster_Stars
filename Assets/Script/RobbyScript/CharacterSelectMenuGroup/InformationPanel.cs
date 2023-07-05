@@ -87,7 +87,9 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 levelUpBtn.GetComponent<Button>().interactable = false;
                 levelUpCoinText.color = Color.gray;
             }
+            HoldCharacterList.UpdateUnit(unitInstance, characterBase);
             Information(unitInstance, characterBase);
+            
             yield return null;
         }
     }

@@ -137,6 +137,7 @@ namespace Script.UIManager
             };
             CoinsScript.Instance.Coin += coin;
             CoinsScript.Instance.UpdateCoin();
+            goods.goodsValue.text = $"{coin}";
             if (!isStageClear) return;
             Instantiate(goods, rewardBox.transform);
             goods.goodsBack.GetComponent<Image>().color = Color.cyan;
