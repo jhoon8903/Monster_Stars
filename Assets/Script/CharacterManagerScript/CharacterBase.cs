@@ -100,7 +100,15 @@ namespace Script.CharacterManagerScript
         {
             CharacterObjectLevel++;
             CharacterMaxPiece = CharacterObjectLevel * 5;
-            CharacterPieceCount -= CharacterMaxPiece;
+            // CharacterPieceCount -= CharacterMaxPiece;
+            Debug.Log(" CharacterPieceCount:" + CharacterPieceCount);
+            Debug.Log(" CharacterMaxPiece:" + CharacterMaxPiece);
+            if(CharacterMaxPiece> CharacterPieceCount)
+            {
+                Debug.Log("????");
+            }
+            int newPieceCount = CharacterPieceCount - CharacterMaxPiece;
+            CharacterPieceCount = Mathf.Max(newPieceCount); // 새로운 값이 음수면 0으로 설정
         }
     }
 }
