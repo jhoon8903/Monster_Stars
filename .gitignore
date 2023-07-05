@@ -60,10 +60,11 @@ sysinfo.txt
 *.aab
 *.unitypackage
 *.app
-*.bundle
+
 
 # Crashlytics generated file
 crashlytics-build.properties
+Firebase/Plugins/x86_64/FirebaseCppApp-11_2_0.bundle 
 
 # Packed Addressables
 /[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
