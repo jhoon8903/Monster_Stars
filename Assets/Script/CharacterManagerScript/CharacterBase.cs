@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
@@ -96,19 +97,12 @@ namespace Script.CharacterManagerScript
         {
             return null;
         }
-        public void UnitLevelUp()
+        public IEnumerator UnitLevelUp()
         {
+            CharacterPieceCount -= CharacterMaxPiece;
             CharacterObjectLevel++;
             CharacterMaxPiece = CharacterObjectLevel * 5;
-            // CharacterPieceCount -= CharacterMaxPiece;
-            Debug.Log(" CharacterPieceCount:" + CharacterPieceCount);
-            Debug.Log(" CharacterMaxPiece:" + CharacterMaxPiece);
-            if(CharacterMaxPiece> CharacterPieceCount)
-            {
-                Debug.Log("????");
-            }
-            int newPieceCount = CharacterPieceCount - CharacterMaxPiece;
-            CharacterPieceCount = Mathf.Max(newPieceCount); // 새로운 값이 음수면 0으로 설정
+            yield return null;
         }
     }
 }

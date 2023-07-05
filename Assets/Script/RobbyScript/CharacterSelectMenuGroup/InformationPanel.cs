@@ -76,10 +76,11 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
 
                 levelUpBtn.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    characterBase.UnitLevelUp();
-                    HoldCharacterList.UpdateUnit(unitInstance, characterBase);
-                    Information(unitInstance, characterBase);
+                    StartCoroutine(characterBase.UnitLevelUp());
                     StartCoroutine(CheckForLevelUp(unitInstance, characterBase)); 
+                    holdCharacterList.UpdateUnit(unitInstance, characterBase);
+                    holdCharacterList.SyncWithSelected(unitInstance, characterBase);
+                    Information(unitInstance, characterBase);
                 });
             }
             else
@@ -87,9 +88,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 levelUpBtn.GetComponent<Button>().interactable = false;
                 levelUpCoinText.color = Color.gray;
             }
-            HoldCharacterList.UpdateUnit(unitInstance, characterBase);
             Information(unitInstance, characterBase);
-            
             yield return null;
         }
     }

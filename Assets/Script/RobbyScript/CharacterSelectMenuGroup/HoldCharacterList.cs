@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Script.CharacterManagerScript;
 using TMPro;
 using UnityEngine;
@@ -21,6 +22,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         [SerializeField] private GameObject warningPanel;
         [SerializeField] private TextMeshProUGUI messageText;
         private GameObject _activeStatusPanel;
+        public Dictionary<UnitIcon, UnitIcon> unitIconMapping = new Dictionary<UnitIcon, UnitIcon>();
 
 
         private void Update()
@@ -111,7 +113,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             });
         }
 
-        public static void UpdateUnit(UnitIcon unitInstance, CharacterBase character)
+        public void UpdateUnit(UnitIcon unitInstance, CharacterBase character)
         {
             unitInstance.unitBackGround.GetComponent<Image>().color = character.UnitProperty switch
             {
@@ -218,26 +220,46 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         }
         private void UpdateMainUnitContent()
         {
+            unitIconMapping.Clear();
+
             foreach (Transform child in mainUnitContent.transform)
             {
                 Destroy(child.gameObject);
             }
-
             foreach (Transform child in selectedContent.transform)
             {
                 var newUnitInstance = Instantiate(child.gameObject, mainUnitContent.transform, false);
                 var newUnit = newUnitInstance.GetComponent<UnitIcon>();
                 var originalUnit = child.GetComponent<UnitIcon>();
+                unitIconMapping[originalUnit] = newUnit;
                 newUnit.CharacterBase = originalUnit.CharacterBase;
                 var newUnitBase = newUnit.CharacterBase;
                 newUnit.GetComponent<Button>().onClick.AddListener(() =>
                 {
                     newUnit.statusPanel.SetActive(false);
                     informationPanel.OpenInfoPanel(newUnit, newUnitBase);
+                    SyncWithSelected(newUnit, newUnitBase);
                 });
             }
-
         }
+        public void SyncWithSelected(UnitIcon unitIcon, CharacterBase unitBase)
+        {
+            var correspondingUnit 
+                = (from pair in unitIconMapping where pair.Key 
+                    == unitIcon || pair.Value == unitIcon select (pair.Key == unitIcon) 
+                    ? pair.Value 
+                    : pair.Key).FirstOrDefault();
+
+            if (correspondingUnit == null) return;
+            correspondingUnit.CharacterBase = unitBase;
+            correspondingUnit.statusPanel.SetActive(unitIcon.statusPanel.activeSelf);
+            UpdateUnit(unitIcon, unitBase);
+            UpdateUnit(correspondingUnit, unitBase);
+            // informationPanel.OpenInfoPanel(correspondingUnit, unitBase);
+        }
+
+
+
         public void OnPointerClick(PointerEventData eventData)
         {
             if (_activeStatusPanel == null ||
