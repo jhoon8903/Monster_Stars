@@ -14,7 +14,6 @@ namespace Script.EnemyManagerScript
         private VenomSac _venomSac;
         private FireBall _fireBall;
         private Dart _dart;
-        private WaveManager _waveManager;
         private CharacterBase _characterBase;
         private EnemyPool _enemyPool;
         private Slider _hpSlider;
@@ -127,11 +126,10 @@ namespace Script.EnemyManagerScript
 
         public void EnemyKilledEvents(EnemyBase detectedEnemy)
         {
-            var waveManager = FindObjectOfType<WaveManager>();
             var characterBase = FindObjectOfType<CharacterBase>();
             var enemyPool = FindObjectOfType<EnemyPool>();
             characterBase.DetectEnemies().Remove(detectedEnemy.gameObject);
-            waveManager.EnemyDestroyEvent(detectedEnemy);
+            StageManager.Instance.EnemyDestroyEvent(detectedEnemy);
             enemyPool.ReturnToPool(detectedEnemy);
         }
 

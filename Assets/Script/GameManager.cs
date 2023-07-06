@@ -82,7 +82,6 @@ namespace Script
                 yield return null;
             }
         }
-
         public IEnumerator ContinueOrLose()
         {
             IsBattle = false;
@@ -134,12 +133,6 @@ namespace Script
         {
            yield return DOTween.KillAll(true);
         }
-        public void RetryGame()
-        {
-            Time.timeScale = 1;
-            StartCoroutine(KillMotion());
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-        }
         public void GameSpeedSelect()
         {
             if (speedUp == false)
@@ -165,6 +158,17 @@ namespace Script
             {
                 Time.timeScale = 1;
             }
+        }
+
+        public void RetryGame()
+        {
+            Time.timeScale = 1;
+            StartCoroutine(KillMotion());
+        }
+
+        public void ReturnRobby()
+        {
+            SceneManager.LoadScene("SelectScene");
         }
     }
 }

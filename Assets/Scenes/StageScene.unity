@@ -662,7 +662,6 @@ GameObject:
   - component: {fileID: 149521965}
   - component: {fileID: 149521966}
   - component: {fileID: 149521967}
-  - component: {fileID: 149521968}
   - component: {fileID: 149521969}
   m_Layer: 0
   m_Name: GameManager
@@ -812,20 +811,6 @@ MonoBehaviour:
   gameManager: {fileID: 149521958}
   enemyList: []
   weaponsList: []
---- !u!114 &149521968
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 149521957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ccf5e39ef05414774a5c16eb29c7cc7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemySpawnManager: {fileID: 329010038}
-  enemyPool: {fileID: 2016604888}
 --- !u!114 &149521969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -840,25 +825,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   commonRewardManager: {fileID: 2120144519}
   spawnManager: {fileID: 149521964}
-  stageClearPanel: {fileID: 1542113634}
-  rewardBox: {fileID: 1231737032}
   continueBtn: {fileID: 1952921046}
-  goods: {fileID: 3094762634428683866, guid: dccbcae767e944a48a11b819fcc0423d, type: 3}
-  waveManager: {fileID: 149521968}
   waveText: {fileID: 651631795}
+  enemySpawnManager: {fileID: 329010038}
+  enemyPool: {fileID: 2016604888}
   currentStage: 1
-  currentWave: 9
+  currentWave: 1
   maxWaveCount: 30
-  maxStageCount: 50
-  rewardUnitList:
-  - {fileID: 5992232989211166785, guid: 2ad6ee95e5ce04ceb92b97a4ecbab105, type: 3}
-  - {fileID: 9161629068888336141, guid: 739cf734236e449859707c22bb97c24a, type: 3}
-  - {fileID: 7725269076765781265, guid: b3d3d9be139574f9692f6336a789659f, type: 3}
-  - {fileID: 7739206391200044397, guid: f9115785478064dc781c0df40bd3a446, type: 3}
-  - {fileID: 2093963163649565063, guid: fd48557f732c84ffd91ce5d734746603, type: 3}
-  - {fileID: 8552942239932251840, guid: 927344b3c65004b149f23d4ee8065c8f, type: 3}
-  - {fileID: 7786321694734890730, guid: d03f023d8b2cd49cdac846c313ff3870, type: 3}
-  - {fileID: 2775731209932646854, guid: 50100ccb47c504a73a7c8e65b95b9285, type: 3}
+  maxStageCount: 20
   isStageClear: 0
 --- !u!1 &187153451
 GameObject:
@@ -1190,7 +1164,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &267564637
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2210,9 +2184,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 149521958}
-        m_TargetAssemblyTypeName: Script.GameManager, Assembly-CSharp
-        m_MethodName: RetryGame
+      - m_Target: {fileID: 841622522}
+        m_TargetAssemblyTypeName: Script.UIManager.PauseManager, Assembly-CSharp
+        m_MethodName: Resume
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3015,9 +2989,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 149521958}
-        m_TargetAssemblyTypeName: Script.GameManager, Assembly-CSharp
-        m_MethodName: RetryGame
+      - m_Target: {fileID: 841622522}
+        m_TargetAssemblyTypeName: Script.UIManager.PauseManager, Assembly-CSharp
+        m_MethodName: ReturnRobby
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3283,19 +3257,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 602232941}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 149521958}
-        m_TargetAssemblyTypeName: Script.GameManager, Assembly-CSharp
-        m_MethodName: RetryGame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &602232941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6578,10 +6540,10 @@ RectTransform:
   m_Father: {fileID: 267564639}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 540, y: -960}
+  m_SizeDelta: {x: 620, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1409829356
 MonoBehaviour:
@@ -9219,10 +9181,10 @@ RectTransform:
   m_Father: {fileID: 267564639}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 540, y: -1260}
+  m_SizeDelta: {x: 620, y: 200}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2094416145
 MonoBehaviour:
@@ -9268,13 +9230,13 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
+      - m_Target: {fileID: 149521958}
+        m_TargetAssemblyTypeName: Script.GameManager, Assembly-CSharp
+        m_MethodName: ReturnRobby
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -9331,6 +9293,7 @@ GameObject:
   - component: {fileID: 2120144518}
   - component: {fileID: 2120144521}
   - component: {fileID: 2120144522}
+  - component: {fileID: 2120144523}
   m_Layer: 0
   m_Name: RewardManager
   m_TagString: Untagged
@@ -9448,6 +9411,30 @@ MonoBehaviour:
   gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
   playingUnit: []
+--- !u!114 &2120144523
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2120144516}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e053088db0d540a9b5276cce6994d0c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  stageClearPanel: {fileID: 1542113634}
+  goods: {fileID: 3094762634428683866, guid: dccbcae767e944a48a11b819fcc0423d, type: 3}
+  rewardBox: {fileID: 1231737032}
+  rewardUnitList:
+  - {fileID: 5992232989211166785, guid: 2ad6ee95e5ce04ceb92b97a4ecbab105, type: 3}
+  - {fileID: 9161629068888336141, guid: 739cf734236e449859707c22bb97c24a, type: 3}
+  - {fileID: 7725269076765781265, guid: b3d3d9be139574f9692f6336a789659f, type: 3}
+  - {fileID: 7739206391200044397, guid: f9115785478064dc781c0df40bd3a446, type: 3}
+  - {fileID: 2093963163649565063, guid: fd48557f732c84ffd91ce5d734746603, type: 3}
+  - {fileID: 8552942239932251840, guid: 927344b3c65004b149f23d4ee8065c8f, type: 3}
+  - {fileID: 7786321694734890730, guid: d03f023d8b2cd49cdac846c313ff3870, type: 3}
+  - {fileID: 2775731209932646854, guid: 50100ccb47c504a73a7c8e65b95b9285, type: 3}
 --- !u!1 &2143130367
 GameObject:
   m_ObjectHideFlags: 0

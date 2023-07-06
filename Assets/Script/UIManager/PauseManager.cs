@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Script.UIManager
@@ -13,7 +14,7 @@ namespace Script.UIManager
         private void Start()
         {
             pauseBtn.GetComponent<Button>().onClick.AddListener(Pause);
-            robbyBtn.GetComponent<Button>().onClick.AddListener(()=>StageManager.Instance.LoadRobby());
+            robbyBtn.GetComponent<Button>().onClick.AddListener(ReturnRobby);
             resumeBtn.GetComponent<Button>().onClick.AddListener(Resume);
         }
 
@@ -23,16 +24,16 @@ namespace Script.UIManager
             pausePanel.SetActive(true);
         }
 
-
-        private void Resume()
+        public void Resume()
         {
             pausePanel.SetActive(false);
             GameManager.Instance.GameSpeed(); 
         }
 
-        private void Retry()
+        public static void ReturnRobby()
         {
-
+            StageManager.Instance.isStageClear = false;
+            SceneManager.LoadScene("SelectScene");
         }
     }
 }
