@@ -109,7 +109,7 @@ namespace Script
             yield return StartCoroutine(KillMotion());
             yield return new WaitForSecondsRealtime(0.5f);
             _bossSpawnArea = new Vector3Int(Random.Range(2,5), 10, 0);
-            if (StageManager.Instance.currentWave % 10 == 0)
+            if (StageManager.Instance.currentWave == 9 || StageManager.Instance.currentWave == 19 || StageManager.Instance.currentWave == 29 )
             {
                 gridManager.ApplyBossSpawnColor(_bossSpawnArea);
             }

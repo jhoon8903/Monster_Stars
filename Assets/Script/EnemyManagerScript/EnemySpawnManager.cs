@@ -24,10 +24,9 @@ namespace Script.EnemyManagerScript
         [SerializeField] private EnemyPatternManager enemyPatternManager;
 
         private Dictionary<EnemyBase.SpawnZones, Transform> _spawnZones;
-        private readonly System.Random _sysRandom = new System.Random();
         public int randomX;
 
-        private void Start()
+        private void Awake()
         {
             _spawnZones = new Dictionary<EnemyBase.SpawnZones, Transform>()
             {
@@ -53,7 +52,6 @@ namespace Script.EnemyManagerScript
         {
             var bossObject = Instantiate(enemyManager.stageBoss, transform);
             var enemyBase = bossObject.GetComponent<EnemyBase>();
-            // enemyBase.Initialize();
             enemyPool.enemyBases.Clear();
             enemyPool.enemyBases.Add(enemyBase);
             enemyBase.transform.position = gridManager.bossSpawnArea;
@@ -67,7 +65,6 @@ namespace Script.EnemyManagerScript
         {
             var enemyToSpawn = enemyPool.GetPooledEnemy(enemyType);
             var enemyBase = enemyToSpawn.GetComponent<EnemyBase>();
-
             enemyBase.transform.localScale = enemyBase.EnemyType switch
             {
                 EnemyBase.EnemyTypes.Fast => Vector3.one * 0.6f,
@@ -88,26 +85,24 @@ namespace Script.EnemyManagerScript
             if (zone == EnemyBase.SpawnZones.A)
             {
                 var spawnPosY = _spawnZones[zone].position.y;
-
                 if (StageManager.Instance.currentWave is 1 or 2 or 3)
                 {
                     var characters = characterPool.UsePoolCharacterList();
-                    var xPositions = (from character in characters
-                            where character
-                                .GetComponent<CharacterBase>().Level >= 2
-                            select character.transform.position.x)
-                        .ToList();
-
+                    var xPositions = (
+                        from character in characters 
+                        let baseComponent = character.GetComponent<CharacterBase>() 
+                        where baseComponent && baseComponent.UnitInGameLevel >= 2 
+                        select character.transform.position.x).ToList();
                     if (xPositions.Count > 0)
                     {
-                        var randomIndex = _sysRandom.Next(xPositions.Count);
-                        spawnPosition = new Vector3(xPositions[randomIndex], spawnPosY + _sysRandom.Next(-1, 2), 0);
+                        var randomIndex = Random.Range(0, xPositions.Count);
+                        spawnPosition = new Vector3(xPositions[randomIndex], spawnPosY + Random.Range(-1, 2), 0);
                     }
                 }
                 else
                 {
-                    randomX = _sysRandom.Next(0, 6);
-                    spawnPosition = new Vector3(randomX, spawnPosY + _sysRandom.Next(-1, 2), 0);
+                    randomX = Random.Range(0, 6);
+                    spawnPosition = new Vector3(randomX, spawnPosY + Random.Range(-1, 2), 0);
                 }
             }
             callback?.Invoke(spawnPosition);

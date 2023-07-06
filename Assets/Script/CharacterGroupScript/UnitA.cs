@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
@@ -8,36 +9,28 @@ namespace Script.CharacterGroupScript
 {
     public class UnitA : CharacterBase
     {
-        [SerializeField] private Sprite level1Sprite; // Sprite for level 1
-        [SerializeField] private Sprite level2Sprite; // Sprite for level 2
-        [SerializeField] private Sprite level3Sprite; // Sprite for level 3
-        [SerializeField] private Sprite level4Sprite; // Sprite for level 4
-        [SerializeField] private Sprite level5Sprite; // Sprite for level 5
+        [SerializeField] private Sprite level1Sprite;
+        [SerializeField] private Sprite level2Sprite;
+        [SerializeField] private Sprite level3Sprite;
+        [SerializeField] private Sprite level4Sprite; 
+        [SerializeField] private Sprite level5Sprite;
+        private const float DetectionWidth = 1f;
+        private const float DetectionHeight = 8f;
 
-        private SpriteRenderer _spriteRenderer; // Reference to the SpriteRenderer component
-        private const float DetectionWidth = 1f; // Width of detection box
-        private const float DetectionHeight = 8f; // Height of detection box
-
+        public void Awake()
+        {
+            Initialize();
+        }
 
         public override void Initialize()
         {
+            base.Initialize();
             unitGroup = UnitGroups.A;
             UnitProperty = UnitProperties.Divine;
             UnitGrade = UnitGrades.Green;
-            UnLock = true;
-            Selected = false;
-            base.Initialize();
+            SetLevel(1);
         }
         
-        public void Awake()
-        {
-            unitGroup = UnitGroups.A;
-            UnitProperty = UnitProperties.Divine;
-            _spriteRenderer = GetComponent<SpriteRenderer>(); // Get the reference to the SpriteRenderer component attached to this object
-            Level1(); // Set initial level to level 1
-        }
-
-
         public override Sprite GetSpriteForLevel(int characterObjectLevel)
         {
             return characterObjectLevel switch
@@ -53,47 +46,32 @@ namespace Script.CharacterGroupScript
         protected override void LevelUp()
         {
             base.LevelUp();
-
-            // Update the character's properties based on the current level
-            switch (Level)
-            {
-                case 2:
-                    Level2(); // Set properties for level 2
-                    break;
-                case 3:
-                    Level3(); // Set properties for level 3
-                    break;
-                case 4:
-                    Level4(); // Set properties for level 4
-                    break;
-                case 5:
-                    Level5(); // Set properties for level 5
-                    break;
-                default:
-                    return;
-            }
+            SetLevel(UnitInGameLevel);
         }
         protected internal override void CharacterReset()
         {
-            ResetLevel(); // Reset the character's level
-            Level1(); // Set level back to 1
+            base.CharacterReset();
+            SetLevel(UnitInGameLevel);
         }
-        public override List<GameObject> DetectEnemies()
-        {
-            Vector2 detectionSize;
-            Vector2 detectionCenter;
 
+        private void GetDetectionProperties(out Vector2 size, out Vector2 center)
+        {
             if (EnforceManager.Instance.divineAtkRange)
             {
-                detectionSize = new Vector2(DetectionWidth - 0.5f, DetectionHeight * 2); // Double the detection height
-                detectionCenter = transform.position; // Center the detection box around the current position
+                size = new Vector2(DetectionWidth - 0.5f, DetectionHeight * 2);
+                center = transform.position;
             }
             else
             {
-                detectionSize = new Vector2(DetectionWidth - 0.5f, DetectionHeight);
-                detectionCenter = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
+                size = new Vector2(DetectionWidth - 0.5f, DetectionHeight);
+                center = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
             }
+        }
 
+        public override List<GameObject> DetectEnemies()
+        {
+            GetDetectionProperties(out var detectionSize, out var detectionCenter);
+            
             var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize, 0f);
             var currentlyDetectedEnemies = new List<GameObject>();
             foreach (var enemyObject in colliders)
@@ -102,101 +80,49 @@ namespace Script.CharacterGroupScript
                 var enemyBase = enemyObject.GetComponent<EnemyBase>();
                 currentlyDetectedEnemies.Add(enemyBase.gameObject);
             }
+
             detectedEnemies = currentlyDetectedEnemies;
             return detectedEnemies;
         }
+
         public void OnDrawGizmos()
-{
-    // Draw a wire cube to visualize the detection box in the Scene view
-    Vector2 detectionSize;
-    Vector2 detectionCenter;
+        {
+            GetDetectionProperties(out var detectionSize, out var detectionCenter);
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireCube(detectionCenter, detectionSize);
+        }
 
-    if (EnforceManager.Instance.divineAtkRange)
-    {
-        detectionSize = new Vector2(DetectionWidth - 0.5f, DetectionHeight * 2); // Double the detection height
-        detectionCenter = transform.position; // Center the detection box around the current position
-    }
-    else
-    {
-        detectionSize = new Vector2(DetectionWidth - 0.5f, DetectionHeight);
-        detectionCenter = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
-    }
-
-    Gizmos.color = Color.yellow;
-    Gizmos.DrawWireCube(detectionCenter, detectionSize);
-}
-
-        private void Level1()
+        protected override Sprite GetSprite(int level)
         {
-            CharacterName = "Unit_A_00";
-            UnitLevel = 1;
-            unitGroup = UnitGroups.A;
-            Type = Types.Character;
-            DefaultDamage = 0;
-            defaultAtkRate = 0;
-            defaultAtkDistance = 0;
-            UnitProperty = UnitProperties.Divine;
-            _spriteRenderer.sprite = level1Sprite;
+            return level switch
+            {
+                1 => level1Sprite,
+                2 => level2Sprite,
+                3 => level3Sprite,
+                4 => level4Sprite,
+                _ => level5Sprite
+            };
         }
-        private void Level2()
+        private void SetLevel(int level)
         {
-            CharacterName = "Unit_A_01";
-            UnitLevel = 2;
+            CharacterName = $"Unit_A_0{level - 1}";
+            UnitInGameLevel = level;
             Type = Types.Character;
             unitGroup = UnitGroups.A;
-            DefaultDamage = 150f;
+            DefaultDamage = 150f * level switch
+            {
+                <=  2 => 1f,
+                3 => 1.7f,
+                4 => 2f,
+                _ => 2.3f
+            };
             defaultAtkRate = 1f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
-            _spriteRenderer.sprite = level2Sprite;
             UnitAtkType = UnitAtkTypes.Projectile;
             UnitProperty = UnitProperties.Divine;
             UnitEffect = UnitEffects.Restraint;
-        }
-        private void Level3()
-        {
-            CharacterName = "Unit_A_02";
-            UnitLevel = 3;
-            Type = Types.Character;
-            unitGroup = UnitGroups.A;
-            DefaultDamage *= 1.7f;
-            defaultAtkRate = 1f;
-            defaultAtkDistance = 9f;
-            projectileSpeed = 1f;
-            _spriteRenderer.sprite = level3Sprite;
-            UnitAtkType = UnitAtkTypes.Projectile;
-            UnitProperty = UnitProperties.Divine;
-            UnitEffect = UnitEffects.Restraint;
-        }
-        private void Level4()
-        {
-            CharacterName = "Unit_A_03";
-            UnitLevel = 4;
-            Type = Types.Character;
-            unitGroup = UnitGroups.A;
-            DefaultDamage *= 2f;
-            defaultAtkRate = 1f;
-            defaultAtkDistance = 9f;
-            projectileSpeed = 1f;
-            _spriteRenderer.sprite = level4Sprite;
-            UnitAtkType = UnitAtkTypes.Projectile;
-            UnitProperty = UnitProperties.Divine;
-            UnitEffect = UnitEffects.Restraint;
-        }
-        private void Level5()
-        {
-            CharacterName = "Unit_A_04";
-            UnitLevel = 5;
-            Type = Types.Character;
-            unitGroup = UnitGroups.A;
-            DefaultDamage *= 2.3f;
-            defaultAtkRate = 1f;
-            defaultAtkDistance = 9f;
-            projectileSpeed = 1f;
-            _spriteRenderer.sprite = level5Sprite;
-            UnitAtkType = UnitAtkTypes.Projectile;
-            UnitProperty = UnitProperties.Divine;
-            UnitEffect = UnitEffects.Restraint;
+            spriteRenderer.sprite = GetSprite(level);
         }
     }
 }

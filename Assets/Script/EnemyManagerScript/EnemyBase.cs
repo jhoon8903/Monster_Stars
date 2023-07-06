@@ -11,14 +11,20 @@ namespace Script.EnemyManagerScript
 {
     public class EnemyBase : MonoBehaviour
     {
+        private VenomSac _venomSac;
+        private FireBall _fireBall;
+        private Dart _dart;
+        private WaveManager _waveManager;
+        private CharacterBase _characterBase;
+        private EnemyPool _enemyPool;
         private Slider _hpSlider;
-
-        protected internal float CrushDamage; // 충돌시 데미지
-        protected internal float MoveSpeed; // 적 오브젝트의 이동속도, 1f 는 1초에 1Grid를 가는 속도 숫자가 커질수록 느려져야 함
+        private bool _updateSlider;
+        protected internal float CrushDamage; 
+        protected internal float MoveSpeed;
         public enum EnemyTypes { Boss, BasicA, BasicD, Slow, Fast }
-        protected internal EnemyTypes EnemyType; // 적 타입 빠른적, 느린적, 보통적, 보스
+        protected internal EnemyTypes EnemyType;
         public enum RegistryTypes { Physics, Divine, Poison, Burn, Water, Darkness,  None }
-        protected internal RegistryTypes RegistryType; // 저항타입, 만약 공격하는 적이 해당 타입과 일치하면 20%의 데미지를 덜 입게 됨
+        protected internal RegistryTypes RegistryType; 
         protected internal SpawnZones SpawnZone;
         protected internal bool isDead;
         protected internal int CurrentPoisonStacks { get; set; }
@@ -34,6 +40,9 @@ namespace Script.EnemyManagerScript
         public enum SpawnZones { A, B, C, D, E }
         public bool isRestraint;
         public bool isSlow;
+
+
+
         public bool isPoison;
         public bool IsPoison
         {
@@ -42,16 +51,14 @@ namespace Script.EnemyManagerScript
             {
                 isPoison = value;
                 if (!isPoison) return;
-                var venomSac = FindObjectOfType<VenomSac>();
-                if (venomSac != null && gameObject.activeInHierarchy)
+                if (_venomSac != null && gameObject.activeInHierarchy)
                 {
-                    StartCoroutine(venomSac.PoisonEffect(this));
+                    StartCoroutine(_venomSac.PoisonEffect(this));
                 }
             }
         }
 
         public bool isBurn;
-
         public bool IsBurn
         {
             get => isBurn;
@@ -59,16 +66,14 @@ namespace Script.EnemyManagerScript
             {
                 isBurn = value;
                 if (!isBurn) return;
-                var fireBall = FindObjectOfType<FireBall>();
-                if (fireBall != null && gameObject.activeInHierarchy)
+                if (_fireBall != null && gameObject.activeInHierarchy)
                 {
-                    StartCoroutine(fireBall.BurningEffect(this));
+                    StartCoroutine(_fireBall.BurningEffect(this));
                 }
             }
         }
 
         public bool isBleed;
-
         public bool IsBleed
         {
             get => isBleed;
@@ -76,18 +81,19 @@ namespace Script.EnemyManagerScript
             {
                 isBleed = value;
                 if(!isBleed) return;
-                var dart = FindObjectOfType<Dart>();
-                if (dart != null && gameObject.activeInHierarchy)
+                if (_dart != null && gameObject.activeInHierarchy)
                 {
-                    StartCoroutine(dart.BleedEffect(this));
+                    StartCoroutine(_dart.BleedEffect(this));
                 }
 
             }
         }
-
         public void Awake()
         {
             EnforceManager.Instance.OnAddRow += ResetEnemyHealthPoint;
+            _venomSac = FindObjectOfType<VenomSac>();
+            _fireBall = FindObjectOfType<FireBall>();
+            _dart = FindObjectOfType<Dart>();
         }
 
         public virtual void Initialize()
@@ -102,6 +108,7 @@ namespace Script.EnemyManagerScript
             _hpSlider.value = currentHealth;
             StartCoroutine(UpdateHpSlider());
         }
+
         public void ReceiveDamage(EnemyBase detectEnemy, float damage, KillReasons reason = KillReasons.ByPlayer)
         {
             lock (Lock)
@@ -109,8 +116,8 @@ namespace Script.EnemyManagerScript
                 if (isDead) return;
                 currentHealth -= damage;
                 if (gameObject == null || !gameObject.activeInHierarchy) return;
-                StartCoroutine(UpdateHpSlider());
-                if (currentHealth > 0f ||  isDead) return;
+                _updateSlider = true;
+                if (currentHealth > 0f || isDead) return;
                 isDead = true;
                 ExpManager.Instance.HandleEnemyKilled(reason);
                 if (EnforceManager.Instance.physicIncreaseDamage) EnforceManager.Instance.PhysicIncreaseDamage();
@@ -130,7 +137,16 @@ namespace Script.EnemyManagerScript
 
         private IEnumerator UpdateHpSlider()
         {
-            yield return _hpSlider.DOValue(currentHealth, 0.1f);
+            while (true)
+            {
+                if (_updateSlider)
+                {
+                    yield return _hpSlider.DOValue(currentHealth, 0.1f);
+                    _updateSlider = false;
+                }
+                yield return null;
+            }
+            // ReSharper disable once IteratorNeverReturns
         }
 
         private void ResetEnemyHealthPoint()
@@ -141,6 +157,11 @@ namespace Script.EnemyManagerScript
            currentHealth = maxHealthPoint;
            _hpSlider.value = currentHealth;
            _hpSlider.maxValue = maxHealthPoint;
+        }
+
+        public void Start()
+        {
+            StartCoroutine(UpdateHpSlider());
         }
 
         private void OnDestroy()

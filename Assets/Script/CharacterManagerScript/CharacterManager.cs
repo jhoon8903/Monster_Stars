@@ -31,7 +31,7 @@ namespace Script.CharacterManagerScript
             var levelUpCount = 0;
     
             var eligibleCharacters = activeCharacters.Where(character => 
-                character.GetComponent<CharacterBase>()?.UnitLevel < 5 && character.GetComponent<CharacterBase>().Type != CharacterBase.Types.Treasure).ToList();
+                character.GetComponent<CharacterBase>()?.UnitInGameLevel < 5 && character.GetComponent<CharacterBase>().Type != CharacterBase.Types.Treasure).ToList();
             if (eligibleCharacters.Count == 0) return;
     
             while (levelUpCount < characterCount && eligibleCharacters.Count > 0)
@@ -42,7 +42,7 @@ namespace Script.CharacterManagerScript
                 levelUpCount++;
         
                 eligibleCharacters = eligibleCharacters.Where(character => 
-                    character.GetComponent<CharacterBase>()?.UnitLevel < 5).ToList();
+                    character.GetComponent<CharacterBase>()?.UnitInGameLevel < 5).ToList();
             }
         }
         public void CharacterGroupLevelUp(int characterListIndex)
@@ -53,7 +53,7 @@ namespace Script.CharacterManagerScript
             foreach (var character in  activeCharacterGroup)
             {
                 var characterObj = character.GetComponent<CharacterBase>();
-                if (group == characterObj.unitGroup && characterObj.UnitLevel == 1)
+                if (group == characterObj.unitGroup && characterObj.UnitInGameLevel == 1)
                 {
                     characterObj.LevelUpScale(character);
                 }
@@ -65,7 +65,7 @@ namespace Script.CharacterManagerScript
             var pooledCharacters = characterPool.pooledCharacters;
             foreach (var character in pooledCharacters
                          .Select(characterObject => characterObject.GetComponent<CharacterBase>())
-                         .Where(character => character.unitGroup == levelUpGroup && character.UnitLevel == 1))
+                         .Where(character => character.unitGroup == levelUpGroup && character.UnitInGameLevel == 1))
             {
                 character.PermanentLevelUp = true;
             }

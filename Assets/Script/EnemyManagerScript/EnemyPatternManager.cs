@@ -14,9 +14,15 @@ namespace Script.EnemyManagerScript
         private readonly System.Random _random = new System.Random();
         private bool _alreadySlow;
         private bool _alreadyRestrain;
+        private Rigidbody2D _rb;
+
+        private bool Chance(int percent)
+        {
+            return _random.Next(100) < percent;
+        }
+
         public IEnumerator Zone_Move(EnemyBase enemyBase)
         {
-            
             var slowCount = EnforceManager.Instance.SlowCount();
             var speedReductionFactor = 1f + slowCount * 0.15f;
             _velocity = enemyBase.MoveSpeed * speedReductionFactor * moveSpeedOffset ;
@@ -43,11 +49,9 @@ namespace Script.EnemyManagerScript
 
         private IEnumerator PatternACoroutine(EnemyBase enemyBase, float velocity)
         {
-            
-            var rb = enemyBase.GetComponent<Rigidbody2D>();
-            _enemyRigidbodies[enemyBase] = rb;
-            rb.velocity = new Vector2(0, -velocity);
-
+            _rb = enemyBase.GetComponent<Rigidbody2D>();
+            _enemyRigidbodies[enemyBase] = _rb;
+            _rb.velocity = new Vector2(0, -velocity);
             while (gameManager.IsBattle)
             {
                yield return StartCoroutine(gameManager.WaitForPanelToClose());
@@ -91,7 +95,7 @@ namespace Script.EnemyManagerScript
             if (_alreadySlow) yield break;
             _alreadySlow = true;
             enemyBase.GetComponent<SpriteRenderer>().color = slowColor;
-            if (EnforceManager.Instance.water2BleedAdditionalRestraint && _random.Next(100)<20 && enemyBase.isBleed)
+            if (EnforceManager.Instance.water2BleedAdditionalRestraint && Chance(20) && enemyBase.isBleed)
             { 
                 _enemyRigidbodies[enemyBase].velocity = Vector2.zero; 
                 yield return new WaitForSeconds(1f);
@@ -110,7 +114,7 @@ namespace Script.EnemyManagerScript
         private IEnumerator PoisonEffect(EnemyBase enemyBase)
         {
             const float overtime = 1f;
-            if (EnforceManager.Instance.firePoisonAdditionalStun && _random.Next(100)<20)
+            if (EnforceManager.Instance.firePoisonAdditionalStun && Chance(20))
             {
                 _enemyRigidbodies[enemyBase].velocity = Vector2.zero;
                 yield return new WaitForSeconds(overtime);

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
@@ -8,31 +9,26 @@ namespace Script.CharacterGroupScript
 {
     public class UnitF : CharacterBase
     {
-        [SerializeField] private Sprite level1Sprite; // Sprite for level 1
-        [SerializeField] private Sprite level2Sprite; // Sprite for level 2
-        [SerializeField] private Sprite level3Sprite; // Sprite for level 3
-        [SerializeField] private Sprite level4Sprite; // Sprite for level 4
-        [SerializeField] private Sprite level5Sprite; // Sprite for level 5
-        private SpriteRenderer _spriteRenderer; // Reference to the SpriteRenderer component
-        private float _detectionSize = 1.5f; // Size of the detection circle
+        [SerializeField] private Sprite level1Sprite;
+        [SerializeField] private Sprite level2Sprite;
+        [SerializeField] private Sprite level3Sprite;
+        [SerializeField] private Sprite level4Sprite;
+        [SerializeField] private Sprite level5Sprite;
 
+        public void Awake()
+        {
+            Initialize();
+        }
 
         public override void Initialize()
         {
+            base.Initialize();
             unitGroup = UnitGroups.F;
             UnitProperty = UnitProperties.Poison;
             UnitGrade = UnitGrades.Green;
-            UnLock = true;
-            Selected = false;
-            base.Initialize();
+            SetLevel(1);
         }
-        public void Awake()
-        {
-            unitGroup = UnitGroups.F;
-            _spriteRenderer = GetComponent<SpriteRenderer>(); // Get the reference to the SpriteRenderer component attached to this object
-            Level1(); // Set initial level to level 1
-        }
-
+        
         public override Sprite GetSpriteForLevel(int characterObjectLevel)
         {
             return characterObjectLevel switch
@@ -47,144 +43,75 @@ namespace Script.CharacterGroupScript
 
         protected override void LevelUp()
         {
-            base.LevelUp(); // Increment the level
-
-            // Update the character's properties based on the current level
-            switch (Level)
-            {
-                case 2:
-                    Level2(); // Set properties for level 2
-                    break;
-                case 3:
-                    Level3(); // Set properties for level 3
-                    break;
-                case 4:
-                    Level4(); // Set properties for level 4
-                    break;
-                case 5:
-                    Level5(); // Set properties for level 5
-                    break;
-                default:
-                    return;
-            }
+            base.LevelUp();
+            SetLevel(UnitInGameLevel);
         }
-
         protected internal override void CharacterReset()
         {
-            ResetLevel(); // Reset the character's level
-            Level1(); // Set level back to 1
+            base.CharacterReset();
+            SetLevel(UnitInGameLevel);
         }
 
-        // Detects enemies within a detection circle and returns a list of their GameObjects
+        private void GetDetectionProperties(out float size, out Vector2 center)
+        {
+            size = EnforceManager.Instance.poisonIncreaseAtkRange ? 2.5f : 1.5f;
+            center = transform.position;
+        }
+
         public override List<GameObject> DetectEnemies()
         {
-            var detectionCenter = (Vector2)transform.position;
-            if (EnforceManager.Instance.poisonIncreaseAtkRange)
-            {
-                _detectionSize = 2.5f;
-            }
-            var colliders = Physics2D.OverlapCircleAll(detectionCenter, _detectionSize);
-            var currentlyDetectedEnemies = new List<GameObject>();
-            foreach (var enemyObject in colliders)
-            {
-                if (!enemyObject.gameObject.CompareTag("Enemy") || !enemyObject.gameObject.activeInHierarchy) continue;
-                var enemyBase = enemyObject.GetComponent<EnemyBase>();
-                currentlyDetectedEnemies.Add(enemyBase.gameObject);
-            }
+            GetDetectionProperties(out var size, out var center);
+
+            var colliders = Physics2D.OverlapCircleAll(center, size);
+            var currentlyDetectedEnemies = (
+                from enemyObject in colliders 
+                where enemyObject.gameObject.CompareTag("Enemy") && enemyObject.gameObject.activeInHierarchy 
+                select enemyObject.GetComponent<EnemyBase>() 
+                into enemyBase 
+                select enemyBase.gameObject).ToList();
             detectedEnemies = currentlyDetectedEnemies;
             return detectedEnemies;
         }
 
-        // Draws a wire sphere in the Scene view to visualize the detection circle
         public void OnDrawGizmos()
         {
-            var detectionCenter = transform.position;
+            GetDetectionProperties(out var size, out var center);
             Gizmos.color = Color.green;
-            Gizmos.DrawWireSphere(detectionCenter, _detectionSize);
+            Gizmos.DrawWireSphere(center, size);
         }
 
-        // Sets the properties for level 1 of the character
-        private void Level1()
+        protected override Sprite GetSprite(int level)
         {
-            CharacterName = "Unit_F_00";
-            UnitLevel = 1;
-            Type = Types.Character;
-            unitGroup = UnitGroups.F;
-            DefaultDamage = 0f;
-            defaultAtkRate = 0f;
-            defaultAtkDistance = 0f;
-            _spriteRenderer.sprite = level1Sprite;
-            UnitAtkType = UnitAtkTypes.Gas;
-            UnitProperty = UnitProperties.Poison;
-            UnitEffect = UnitEffects.Poison;
+            return level switch
+            {
+                1 => level1Sprite,
+                2 => level2Sprite,
+                3 => level3Sprite,
+                4 => level4Sprite,
+                _ => level5Sprite
+            };
         }
 
-        // Sets the properties for level 2 of the character
-        private void Level2()
+        private void SetLevel(int level)
         {
-            CharacterName = "Unit_F_01";
-            UnitLevel = 2;
+            CharacterName = $"Unit_F_0{level - 1}";
+            UnitInGameLevel = level;
             Type = Types.Character;
             unitGroup = UnitGroups.F;
-            DefaultDamage = 120f;
+            DefaultDamage = 120f * level switch
+            {
+                <=  2 => 1f,
+                3 => 1.7f,
+                4 => 2f,
+                _ => 2.3f
+            };
             defaultAtkRate = 1.2f;
             defaultAtkDistance = 1f;
-            projectileSpeed = 1.0f;
-            _spriteRenderer.sprite = level2Sprite;
+            projectileSpeed = 1f;
             UnitAtkType = UnitAtkTypes.Gas;
             UnitProperty = UnitProperties.Poison;
             UnitEffect = UnitEffects.Poison;
-        }
-
-        // Sets the properties for level 3 of the character
-        private void Level3()
-        {
-            CharacterName = "Unit_F_02";
-            UnitLevel = 3;
-            Type = Types.Character;
-            unitGroup = UnitGroups.F;
-            DefaultDamage *= 1.7f;
-            defaultAtkRate = 1.2f;
-            defaultAtkDistance = 1f;
-            projectileSpeed = 1.0f;
-            _spriteRenderer.sprite = level3Sprite;
-            UnitAtkType = UnitAtkTypes.Gas;
-            UnitProperty = UnitProperties.Poison;
-            UnitEffect = UnitEffects.Poison;
-        }
-
-        // Sets the properties for level 4 of the character
-        private void Level4()
-        {
-            CharacterName = "Unit_F_03";
-            UnitLevel = 4;
-            Type = Types.Character;
-            unitGroup = UnitGroups.F;
-            DefaultDamage *= 2.0f;
-            defaultAtkRate = 1.2f;
-            defaultAtkDistance = 1f;
-            projectileSpeed = 1.0f;
-            _spriteRenderer.sprite = level4Sprite;
-            UnitAtkType = UnitAtkTypes.Gas;
-            UnitProperty = UnitProperties.Poison;
-            UnitEffect = UnitEffects.Poison;
-        }
-
-        // Sets the properties for level 5 of the character
-        private void Level5()
-        {
-            CharacterName = "Unit_F_04";
-            UnitLevel = 5;
-            Type = Types.Character;
-            unitGroup = UnitGroups.F;
-            DefaultDamage *= 2.3f;
-            defaultAtkRate = 1.2f;
-            defaultAtkDistance = 1f;
-            projectileSpeed = 1.0f;
-            _spriteRenderer.sprite = level5Sprite;
-            UnitAtkType = UnitAtkTypes.Gas;
-            UnitProperty = UnitProperties.Poison;
-            UnitEffect = UnitEffects.Poison;
+            spriteRenderer.sprite = GetSprite(level);
         }
     }
 }

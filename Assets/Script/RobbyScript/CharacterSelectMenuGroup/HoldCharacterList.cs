@@ -128,7 +128,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 _ => throw new ArgumentOutOfRangeException(nameof(character.UnitProperty))
             };
             
-            unitInstance.unit.GetComponent<Image>().sprite = character.GetSpriteForLevel(character.CharacterObjectLevel);
+            unitInstance.unit.GetComponent<Image>().sprite = character.GetSpriteForLevel(character.UnitGameLevel);
             
             unitInstance.levelBack.color = character.UnitProperty switch
             {
@@ -141,7 +141,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 CharacterBase.UnitProperties.None => new Color(1f, 1f, 1f, 1f),
                 _ => throw new ArgumentOutOfRangeException(nameof(character.UnitProperty))
             };
-            unitInstance.unitLevelText.text = $"레벨 {character.CharacterObjectLevel}";
+            unitInstance.unitLevelText.text = $"레벨 {character.UnitGameLevel}";
             unitInstance.unitPieceSlider.maxValue = character.CharacterMaxPiece;
             unitInstance.unitPieceSlider.value = character.CharacterPieceCount;
             unitInstance.unitPieceText.text = $"{character.CharacterPieceCount}/{unitInstance.unitPieceSlider.maxValue}";

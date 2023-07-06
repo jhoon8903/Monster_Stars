@@ -15,6 +15,6 @@ namespace Script.EnemyManagerScript
     {
         [SerializeField] public List<EnemySettings> enemyList;
         [Header("Boss Prefabs")]
-        [SerializeField] public GameObject stageBoss;  // Stage 10 Boss Prefab
+        [SerializeField] public GameObject stageBoss;
     }
 }

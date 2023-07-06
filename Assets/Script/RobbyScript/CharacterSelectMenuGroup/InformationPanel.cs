@@ -32,8 +32,8 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         private void Information(Component unitInstance, CharacterBase characterBase)
         {
             nameText.text = characterBase.name;
-            unit.GetComponent<Image>().sprite = characterBase.GetSpriteForLevel(characterBase.CharacterObjectLevel);
-            unitLevel.text = $"LV.{characterBase.CharacterObjectLevel}";
+            unit.GetComponent<Image>().sprite = characterBase.GetSpriteForLevel(characterBase.UnitGameLevel);
+            unitLevel.text = $"LV.{characterBase.UnitGameLevel}";
             unitProperty.text = UnitPropertyText(characterBase);
             // // unitNoticeText.text = "UnitNotice.csv";
             // // foreach (var unitInfo in unitInformationNotice)
@@ -46,7 +46,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             // // {
             // //     unitSkillList = skill;
             // // }
-            var unitLevelUpPrice = characterBase.CharacterObjectLevel * 500;
+            var unitLevelUpPrice = characterBase.UnitGameLevel * 500;
             levelUpCoinText.text = unitLevelUpPrice.ToString();
         }
 

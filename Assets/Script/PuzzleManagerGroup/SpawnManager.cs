@@ -158,7 +158,7 @@ namespace Script.PuzzleManagerGroup
             var newCharacter = notUsePoolCharacterList[randomIndex];
             newCharacter.transform.position = position;
             var characterBase = newCharacter.GetComponent<CharacterBase>();
-            if (characterBase.PermanentLevelUp && characterBase.UnitLevel == 1)
+            if (characterBase.PermanentLevelUp && characterBase.UnitInGameLevel == 1)
             {
                 characterBase.LevelUpScale(newCharacter);
             }
@@ -172,7 +172,7 @@ namespace Script.PuzzleManagerGroup
             yield return StartCoroutine(gameManager.WaitForPanelToClose());
             var saveCharacterList = characterPool.UsePoolCharacterList();
             var highLevelCharacters = saveCharacterList
-                .OrderByDescending(character => character.GetComponent<CharacterBase>().UnitLevel)
+                .OrderByDescending(character => character.GetComponent<CharacterBase>().UnitInGameLevel)
                 .Take(enforceManager.highLevelCharacterCount)
                 .ToList();
             foreach (var character in saveCharacterList

@@ -18,9 +18,9 @@ namespace Script.WeaponScriptGroup
             if (!EnforceManager.Instance.physicAdditionalWeapon) yield break;
             secondSword.SetActive(true);
             secondSword.GetComponent<WeaponBase>().InitializeWeapon(CharacterBase);
-            StartCoroutine(secondSword.GetComponent<WeaponBase>().UseWeapon());
+            if(secondSword.activeInHierarchy) StartCoroutine(secondSword.GetComponent<WeaponBase>().UseWeapon());
             var weaponPool = FindObjectOfType<WeaponsPool>();
-            weaponPool.SetSprite(WeaponsPool.WeaponType.Sword, CharacterBase.UnitLevel, secondSword);
+            weaponPool.SetSprite(WeaponsPool.WeaponType.Sword, CharacterBase.UnitInGameLevel, secondSword);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)

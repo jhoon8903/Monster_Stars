@@ -8,19 +8,21 @@ namespace Script.RewardScript
     {
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private GridManager gridManager;
-
+        [RuntimeInitializeOnLoadMethod]
+        private static void InitializeOnLoad()
+        {
+            var existingInstance = FindObjectOfType<EnforceManager>();
+            if (existingInstance == null)
+            {
+                new GameObject("EnforceManager").AddComponent<EnforceManager>();
+            }
+        }
+        
         public static EnforceManager Instance { get; private set; }
-
+        
         private void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            Instance = this;
         }
 
 
@@ -36,20 +38,18 @@ namespace Script.RewardScript
         [Header("백 어택")] public bool divineAtkRange;
         [Header("중독 시 데미지증가")] public bool divinePoisonAdditionalDamage; public int divinePoisonAdditionalDamageCount = 1;
 
-
         [Header("\n\n Unit_B 어둠 속성\n\n")] 
         [Header("둔화상태 적 추가 데미지")]  public bool darkSlowAdditionalDamage;
         [Header("출혈상태 적 추가 데미지")] public bool darkBleedAdditionalDamage;
         [Header("공격속도 17% 상승 ")] public int darkIncreaseAtkSpeed; protected internal void DarkIncreaseAtkSpeed()
         {
             darkIncreaseAtkSpeed ++;
-        } 
-        [Header("관통 효과")] public bool darkProjectilePenetration ;
-        // [Header("공격방향 추가")] public bool darkAdditionalFrontAttack;
-
+        }
+        [Header("관통 효과")] public bool darkProjectilePenetration;
 
         [Header("\n\nUnit_C 물 속성2\n\n")] 
-        [Header("공격력 증가")] public int water2IncreaseDamage; protected internal void Water2IncreaseDamage()
+        [Header("공격력 증가")] public int water2IncreaseDamage;
+        protected internal void Water2IncreaseDamage()
         {
             water2IncreaseDamage++;
         }
@@ -75,8 +75,6 @@ namespace Script.RewardScript
             increasePhysicsDamage += 0.05f;
         }
 
-
-
         [Header("\n\nUnit_E 물 속성\n")] 
         [Header("화상상태 적 추가데미지")] public bool waterBurnAdditionalDamage;
         [Header("속박상태 적 추가데미지")] public bool waterRestraintIncreaseDamage;
@@ -86,7 +84,6 @@ namespace Script.RewardScript
             IncreaseWaterDamage *= 1.2f;
         }
         [Header("좌/우 동시 공격")] public bool waterSideAttack;
-
 
         [Header("\n\nUnit_F 독 속성\n")]
         [Header("더블어택")] public bool poisonDoubleAtk;
@@ -99,8 +96,6 @@ namespace Script.RewardScript
             poisonOverlapping += 1;
         }
 
-
-
         [Header("\n\nUnit_G 불 속성\n\n")] 
         [Header("출혈상태 적 추가 데미지")] public bool fireBleedingAdditionalDamage;
         [Header("공격력 증가")] public int fireIncreaseDamage; protected internal void FireIncreaseDamage()
@@ -110,8 +105,6 @@ namespace Script.RewardScript
         [Header("중독상태 적 기절")] public bool firePoisonAdditionalStun;
         [Header("공격사거리 1 증가")] public bool fireIncreaseAtkRange;
         [Header("화상효과 비활성화 => 추가 데미지")] public bool fireDeleteBurnIncreaseDamage;
-
-
 
         [Header("\n\nUnit_H 물리 속성\n\n")] 
         [Header("출혈중첩 증가")] public int physics2AdditionalBleedingLayer = 1; protected internal void Physics2AdditionalBleedingLayer()
@@ -125,10 +118,7 @@ namespace Script.RewardScript
             physics2AdditionalAtkSpeed++;
         }
         [Header("투사체 추가")] public bool physics2AdditionalProjectile;
-        [Header("관통 효과")] public bool physics2ProjectilePenetration;                                                                                                 
-
-
-
+        [Header("관통 효과")] public bool physics2ProjectilePenetration;
 
         [Header("\n\n공통강화\n")] 
         [Header("가로줄 추가")]
