@@ -14,7 +14,6 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level3Sprite;
         [SerializeField] private Sprite level4Sprite; 
         [SerializeField] private Sprite level5Sprite;
-
         private const float DetectionWidth = 1f;
         private const float DetectionHeight = 8f;
 

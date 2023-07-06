@@ -98,7 +98,7 @@ namespace Script.CharacterGroupScript
             CharacterName = $"Unit_H_0{level - 1}";
             UnitInGameLevel = level;
             Type = Types.Character;
-            unitGroup = UnitGroups.G;
+            unitGroup = UnitGroups.H;
             DefaultDamage = 120f * level switch
             {
                 <= 2 => 1f,

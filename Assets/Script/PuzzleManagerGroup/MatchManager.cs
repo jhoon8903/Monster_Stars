@@ -164,7 +164,6 @@ namespace Script.PuzzleManagerGroup
                 ReturnObject(matchedCharacters[2]); 
                 ReturnObject(matchedCharacters[3]);
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                // commonRewardManager.EnqueueTreasure(matchedCharacters[1]);
                 commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[1]);
             }
             else
@@ -185,7 +184,6 @@ namespace Script.PuzzleManagerGroup
                     ReturnObject(matchedCharacters[2]);
                     ReturnObject(matchedCharacters[3]);
                     matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    // commonRewardManager.EnqueueTreasure(matchedCharacters[1]);
                     commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[1]);
                 }
                 else
@@ -204,7 +202,6 @@ namespace Script.PuzzleManagerGroup
                     ReturnObject(matchedCharacters[1]); 
                     ReturnObject(matchedCharacters[3]);
                     matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    // commonRewardManager.EnqueueTreasure(matchedCharacters[2]);
                     commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[2]);
                 }
                 else
@@ -223,7 +220,6 @@ namespace Script.PuzzleManagerGroup
                     ReturnObject(matchedCharacters[1]);
                     ReturnObject(matchedCharacters[2]);
                     matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                    // commonRewardManager.EnqueueTreasure(matchedCharacters[3]);
                     commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[3]);
                 }
                 else
@@ -243,7 +239,6 @@ namespace Script.PuzzleManagerGroup
                 ReturnObject(matchedCharacters[3]); 
                 ReturnObject(matchedCharacters[4]);
                 matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                // commonRewardManager.EnqueueTreasure(matchedCharacters[2]);
                 commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[2]);
             }
             else
@@ -261,7 +256,6 @@ namespace Script.PuzzleManagerGroup
                 ReturnObject(matchedCharacters[1]);
                 ReturnObject(matchedCharacters[2]);
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                // commonRewardManager.EnqueueTreasure(matchedCharacters[3]);
                 commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[3]);
             }
             else
@@ -284,7 +278,6 @@ namespace Script.PuzzleManagerGroup
                     ReturnObject(matchedCharacters[3]);
                     matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
                     matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    // commonRewardManager.EnqueueTreasure(matchedCharacters[1]);
                     commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[1]);
                 }
                 else
@@ -307,7 +300,6 @@ namespace Script.PuzzleManagerGroup
                     ReturnObject(matchedCharacters[1]);
                     matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
                     matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    // commonRewardManager.EnqueueTreasure(matchedCharacters[2]);
                     commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[2]);
                 }
                 else
@@ -332,7 +324,6 @@ namespace Script.PuzzleManagerGroup
                     ReturnObject(matchedCharacters[2]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    // commonRewardManager.EnqueueTreasure(matchedCharacters[4]);
                     commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[4]);
                 }
                 else
@@ -352,7 +343,6 @@ namespace Script.PuzzleManagerGroup
                     ReturnObject(matchedCharacters[1]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    // commonRewardManager.EnqueueTreasure(matchedCharacters[4]);
                     commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[4]);
                 }
                 else
@@ -376,7 +366,6 @@ namespace Script.PuzzleManagerGroup
                     ReturnObject(matchedCharacters[3]);
                     matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
                     matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    // commonRewardManager.EnqueueTreasure(matchedCharacters[2]);
                     commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[2]);
                 }
                 else
@@ -396,7 +385,6 @@ namespace Script.PuzzleManagerGroup
                     ReturnObject(matchedCharacters[4]);
                     matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
                     matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    // commonRewardManager.EnqueueTreasure(matchedCharacters[2]);
                     commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[2]);
                 }
                 else
@@ -421,7 +409,6 @@ namespace Script.PuzzleManagerGroup
                     ReturnObject(matchedCharacters[2]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    // commonRewardManager.EnqueueTreasure(matchedCharacters[4]);
                     commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[4]);
                 }
                 else
@@ -441,7 +428,6 @@ namespace Script.PuzzleManagerGroup
                     ReturnObject(matchedCharacters[2]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    // commonRewardManager.EnqueueTreasure(matchedCharacters[4]);
                     commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[4]);
                 }
                 else
@@ -493,7 +479,6 @@ namespace Script.PuzzleManagerGroup
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                // commonRewardManager.EnqueueTreasure(matchedCharacters[5]);
                 commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[5]);
             }
             else
@@ -521,7 +506,6 @@ namespace Script.PuzzleManagerGroup
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                // commonRewardManager.EnqueueTreasure(matchedCharacters[5]);
                 commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[5]);
             }
             else
@@ -550,7 +534,6 @@ namespace Script.PuzzleManagerGroup
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                // commonRewardManager.EnqueueTreasure(matchedCharacters[5]);
                 commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[5]);
             }
             else
@@ -575,10 +558,8 @@ namespace Script.PuzzleManagerGroup
                 ReturnObject(matchedCharacters[1]);
                 ReturnObject(matchedCharacters[5]);
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                // commonRewardManager.EnqueueTreasure(matchedCharacters[3]);
                 commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[3]);
                 matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                // commonRewardManager.EnqueueTreasure(matchedCharacters[1]);
                 commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[4]);
             }
             else
@@ -602,11 +583,9 @@ namespace Script.PuzzleManagerGroup
                     ReturnObject(matchedCharacters[5]);
                     ReturnObject(matchedCharacters[3]);
                     matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    // commonRewardManager.EnqueueTreasure(matchedCharacters[1]);
                     commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[1]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
                     matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    // commonRewardManager.EnqueueTreasure(matchedCharacters[4]);
                     commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[4]);
                 }
                 ReturnObject(matchedCharacters[2]);
@@ -625,11 +604,9 @@ namespace Script.PuzzleManagerGroup
                     ReturnObject(matchedCharacters[4]);
                     ReturnObject(matchedCharacters[3]);
                     matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    // commonRewardManager.EnqueueTreasure(matchedCharacters[1]);
                     commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[1]);
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                    // commonRewardManager.EnqueueTreasure(matchedCharacters[5]);
                     commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[5]);
                 }
                 else
@@ -655,11 +632,9 @@ namespace Script.PuzzleManagerGroup
                     ReturnObject(matchedCharacters[4]);
                     ReturnObject(matchedCharacters[6]);
                     matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    // commonRewardManager.EnqueueTreasure(matchedCharacters[1]);
                     commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[1]);
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                    // commonRewardManager.EnqueueTreasure(matchedCharacters[5]);
                     commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[5]);
                 }
                 else
@@ -681,11 +656,9 @@ namespace Script.PuzzleManagerGroup
                     ReturnObject(matchedCharacters[6]);
                     ReturnObject(matchedCharacters[4]);
                     matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    // commonRewardManager.EnqueueTreasure(matchedCharacters[2]);
                     commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[2]);
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                    // commonRewardManager.EnqueueTreasure(matchedCharacters[5]);
                     commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[5]);
                 }
                 else
@@ -710,12 +683,10 @@ namespace Script.PuzzleManagerGroup
                 ReturnObject(matchedCharacters[6]);
                 ReturnObject(matchedCharacters[4]);
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                // commonRewardManager.EnqueueTreasure(matchedCharacters[1]);
                 commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[1]);
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                // commonRewardManager.EnqueueTreasure(matchedCharacters[3]);
                 commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[3]);
             }
             else
@@ -744,12 +715,10 @@ namespace Script.PuzzleManagerGroup
                 ReturnObject(matchedCharacters[1]);
                 ReturnObject(matchedCharacters[3]);
                 matchedCharacters[6].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[6]);
-                // commonRewardManager.EnqueueTreasure(matchedCharacters[6]);
                 commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[6]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                // commonRewardManager.EnqueueTreasure(matchedCharacters[5]);
                 commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[5]);
             }
             else
@@ -780,7 +749,8 @@ namespace Script.PuzzleManagerGroup
             {
                 if(i == characters.Count - 1)
                 {
-                    if (tempLevel == characters[i].GetComponent<CharacterBase>().UnitInGameLevel && tempUnitGroup == characters[i].GetComponent<CharacterBase>().unitGroup)
+                    if (tempLevel == characters[i].GetComponent<CharacterBase>().UnitInGameLevel 
+                        && tempUnitGroup == characters[i].GetComponent<CharacterBase>().unitGroup)
                     {
                         sameCount++;
                         var currentList = new List<GameObject>();
@@ -803,7 +773,8 @@ namespace Script.PuzzleManagerGroup
                 if ((i / 6) < currentFloor) // "6/6이 되기 전까진 1층 보다 낮다"꼴 의 흐름입니다.
                 {
                     // 이전 인덱스의 정보와 동일하다?
-                    if (tempLevel == characters[i].GetComponent<CharacterBase>().UnitInGameLevel && tempUnitGroup == characters[i].GetComponent<CharacterBase>().unitGroup)
+                    if (tempLevel == characters[i].GetComponent<CharacterBase>().UnitInGameLevel 
+                        && tempUnitGroup == characters[i].GetComponent<CharacterBase>().unitGroup)
                     {
                         sameCount++;
                     }
@@ -953,9 +924,8 @@ namespace Script.PuzzleManagerGroup
                         .Any(columnObject =>
                         {
                             Vector3 position;
-                            var position1 = rowObject.transform.position;
-                            return position1.x == (position = columnObject.transform.position).x &&
-                                   position1.y == position.y;
+                            return rowObject.transform.position.x == (position = columnObject.transform.position).x &&
+                                   rowObject.transform.position.y == position.y;
                         }) 
                         select new MatchedPair { gameObject = rowObject, rowList = rowList, columnList = columnList });
                 }
@@ -1000,8 +970,7 @@ namespace Script.PuzzleManagerGroup
             // For each value, find the consecutive tiles
                 var rowsResult = FindConsecutiveTilesInRow(characters);
                 var colsResult = FindConsecutiveTilesInColumn(characters);
-
-            return FindMatchingGameObjects(rowsResult, colsResult);
+                return FindMatchingGameObjects(rowsResult, colsResult);
         }
     }
 }
