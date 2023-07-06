@@ -14,4 +14,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/StageScene.unity
     guid: 99873703d80014376a73bc8576b37d50
-  m_configObjects: {}
+  m_configObjects:
+    com.unity.adaptiveperformance.loader_settings: {fileID: 11400000, guid: de0a70d2bf86d4b289af5d55726945f5, type: 2}
+    com.unity.adaptiveperformance.simulator.provider_settings: {fileID: 11400000, guid: ff0d6bca2b4444513a55b05b8b0fa698, type: 2}
+    com.unity.xr.management.loader_settings: {fileID: 11400000, guid: c3d011ae54d1847478b222a3aa5193af, type: 2}
+    xr.sdk.mock-hmd.settings: {fileID: 11400000, guid: aa4f4cf9e40474ad2a98767ef47c7184, type: 2}
