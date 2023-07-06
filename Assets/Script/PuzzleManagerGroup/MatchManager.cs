@@ -780,7 +780,7 @@ namespace Script.PuzzleManagerGroup
             {
                 if(i == characters.Count - 1)
                 {
-                    if (tempLevel == characters[i].GetComponent<CharacterBase>().Level && tempUnitGroup == characters[i].GetComponent<CharacterBase>().unitGroup)
+                    if (tempLevel == characters[i].GetComponent<CharacterBase>().UnitInGameLevel && tempUnitGroup == characters[i].GetComponent<CharacterBase>().unitGroup)
                     {
                         sameCount++;
                         var currentList = new List<GameObject>();
@@ -803,7 +803,7 @@ namespace Script.PuzzleManagerGroup
                 if ((i / 6) < currentFloor) // "6/6이 되기 전까진 1층 보다 낮다"꼴 의 흐름입니다.
                 {
                     // 이전 인덱스의 정보와 동일하다?
-                    if (tempLevel == characters[i].GetComponent<CharacterBase>().Level && tempUnitGroup == characters[i].GetComponent<CharacterBase>().unitGroup)
+                    if (tempLevel == characters[i].GetComponent<CharacterBase>().UnitInGameLevel && tempUnitGroup == characters[i].GetComponent<CharacterBase>().unitGroup)
                     {
                         sameCount++;
                     }
@@ -819,7 +819,7 @@ namespace Script.PuzzleManagerGroup
                             result.Add(currentList);// 후보에 추가합니다
                         }
                         // 다른 식별인자를 가진 캐릭터의 시작임으로 무조건 캐릭터 식별인자 갱신이 필요합니다
-                        tempLevel = characters[i].GetComponent<CharacterBase>().Level;
+                        tempLevel = characters[i].GetComponent<CharacterBase>().UnitInGameLevel;
                         // 새로운 층의 시작임으로 무조건 캐릭터 식별인자 갱신이 필요합니다
                         tempUnitGroup = characters[i].GetComponent<CharacterBase>().unitGroup;
                         sameCount = 1; // 동일 캐릭터의 배열길이는 1부터 시작
@@ -838,7 +838,7 @@ namespace Script.PuzzleManagerGroup
                     }
                     currentFloor++;// 층수가 바뀜을 적용합니다. 대상들의 y좌표 값이 +1 증가하는 시기임을 반영한 값입니다.
                     // 새로운 층의 시작임으로 무조건 캐릭터 식별인자 갱신이 필요합니다
-                    tempLevel = characters[i].GetComponent<CharacterBase>().Level;
+                    tempLevel = characters[i].GetComponent<CharacterBase>().UnitInGameLevel;
                     // 새로운 층의 시작임으로 무조건 캐릭터 식별인자 갱신이 필요합니다
                     tempUnitGroup = characters[i].GetComponent<CharacterBase>().unitGroup;
                     sameCount = 1;
@@ -866,7 +866,7 @@ namespace Script.PuzzleManagerGroup
                     //가장 마지막 인덱스인 경우 예외처리를 해줍니다
                     if(index == characters.Count - 1)
                     {
-                        if (tempLevel == characters[index].GetComponent<CharacterBase>().Level && tempUnitGroup == characters[index].GetComponent<CharacterBase>().unitGroup)
+                        if (tempLevel == characters[index].GetComponent<CharacterBase>().UnitInGameLevel && tempUnitGroup == characters[index].GetComponent<CharacterBase>().unitGroup)
                         {
                             sameCount++;
                             if (sameCount >= 3) // 방금 위에서 ++한 값을 포함해서 이번 열까지 누적된 동일 캐릭터의 연결이 3개 이상인지 확인합니다
@@ -908,14 +908,14 @@ namespace Script.PuzzleManagerGroup
                             }
                             result.Add(currentList);
                         }
-                        tempLevel = characters[index].GetComponent<CharacterBase>().Level;
+                        tempLevel = characters[index].GetComponent<CharacterBase>().UnitInGameLevel;
                         tempUnitGroup = characters[index].GetComponent<CharacterBase>().unitGroup;
                         sameCount = 1; // 새로운 열로 이동한 후, 동일한 캐릭터의 수를 다시 1로 초기화합니다
                     }
                     else
                     {
                         // 이전 인덱스의 정보와 동일하다 (첫 번째 행 제외)
-                        if (tempLevel == characters[index].GetComponent<CharacterBase>().Level && tempUnitGroup == characters[index].GetComponent<CharacterBase>().unitGroup)
+                        if (tempLevel == characters[index].GetComponent<CharacterBase>().UnitInGameLevel && tempUnitGroup == characters[index].GetComponent<CharacterBase>().unitGroup)
                         {
                             sameCount++;
                         }
@@ -931,7 +931,7 @@ namespace Script.PuzzleManagerGroup
                                 }
                                 result.Add(currentList);
                             }
-                            tempLevel = characters[index].GetComponent<CharacterBase>().Level;
+                            tempLevel = characters[index].GetComponent<CharacterBase>().UnitInGameLevel;
                             tempUnitGroup = characters[index].GetComponent<CharacterBase>().unitGroup;
                             sameCount = 1; // 동일 캐릭터 배열 길이는 1부터 시작
                         }

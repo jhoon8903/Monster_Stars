@@ -6,9 +6,9 @@ namespace Script.CharacterManagerScript
 {
     public sealed class CharacterPool : MonoBehaviour
     {
-        [SerializeField] private CharacterManager characterManager; // Reference to the character manager
-        [SerializeField] private int poolSize; // Size of the character pool
-        internal List<GameObject> pooledCharacters; // List of character objects in the pool
+        [SerializeField] private CharacterManager characterManager;
+        [SerializeField] private int poolSize;
+        internal List<GameObject> pooledCharacters;
 
         public void Awake()
         {
