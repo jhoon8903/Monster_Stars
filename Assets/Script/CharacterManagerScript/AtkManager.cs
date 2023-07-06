@@ -177,6 +177,7 @@ namespace Script.CharacterManagerScript
             var weaponType = attackData.WeaponType; 
             var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.transform.position, unit.transform.rotation);
             var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
+            if (weaponBase == null) return null;
             weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
             weaponsList.Add(weaponBase.gameObject);
             StartCoroutine(weaponBase.UseWeapon());

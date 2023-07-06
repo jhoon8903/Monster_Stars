@@ -48,7 +48,8 @@ namespace Script.RewardScript
         [Header("관통 효과")] public bool darkProjectilePenetration;
 
         [Header("\n\nUnit_C 물 속성2\n\n")] 
-        [Header("공격력 증가")] public int water2IncreaseDamage; protected internal void Water2IncreaseDamage()
+        [Header("공격력 증가")] public int water2IncreaseDamage;
+        protected internal void Water2IncreaseDamage()
         {
             water2IncreaseDamage++;
         }

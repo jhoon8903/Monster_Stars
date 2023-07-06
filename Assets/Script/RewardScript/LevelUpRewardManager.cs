@@ -391,6 +391,7 @@ namespace Script.RewardScript
                     break;
                 case ExpData.Types.WaterBurnAdditionalDamage:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
                     if (EnforceManager.Instance.waterBurnAdditionalDamage) return false;
                     if (EnforceManager.Instance.fireDeleteBurnIncreaseDamage) return false;
                     break;
@@ -402,7 +403,8 @@ namespace Script.RewardScript
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
                     break;
                 case ExpData.Types.WaterRestraintIncreaseDamage:
-                    if (!(HasUnitInGroup(CharacterBase.UnitGroups.A) && HasUnitInGroup(CharacterBase.UnitGroups.E))) return false;
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
                     if (!EnforceManager.Instance.activeRestraint) return false;
                     if (EnforceManager.Instance.waterRestraintIncreaseDamage) return false;
                     break;
@@ -411,9 +413,13 @@ namespace Script.RewardScript
                     if (EnforceManager.Instance.waterSideAttack) return false;
                     break;
                 case ExpData.Types.Water2BleedAdditionalRestraint:
-                    if (!(HasUnitInGroup(CharacterBase.UnitGroups.C) && HasUnitInGroup(CharacterBase.UnitGroups.H))) return false;
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
                     if (!EnforceManager.Instance.activeRestraint) return false;
                     if ( EnforceManager.Instance.water2BleedAdditionalRestraint) return false;
+                    break;
+                case ExpData.Types.Water2IncreaseDamage:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
                     break;
                 case ExpData.Types.Water2IncreaseSlowTime:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
@@ -428,7 +434,8 @@ namespace Script.RewardScript
                     if ( EnforceManager.Instance.water2AdditionalProjectile) return false;
                     break;
                 case ExpData.Types.FireBleedingAdditionalDamage:
-                    if (!(HasUnitInGroup(CharacterBase.UnitGroups.G) && HasUnitInGroup(CharacterBase.UnitGroups.H))) return false;
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
                     if (!EnforceManager.Instance.physics2ActivateBleed) return false;
                     if ( EnforceManager.Instance.fireBleedingAdditionalDamage) return false;
                     break;
@@ -437,7 +444,8 @@ namespace Script.RewardScript
                     if (EnforceManager.Instance.fireIncreaseDamage >= 15) return false;
                     break;
                 case ExpData.Types.FirePoisonAdditionalStun:
-                    if (!(HasUnitInGroup(CharacterBase.UnitGroups.F) && HasUnitInGroup(CharacterBase.UnitGroups.G))) return false;
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
                     if (!EnforceManager.Instance.activatePoison) return false;
                     if (EnforceManager.Instance.firePoisonAdditionalStun) return false;
                     break;
@@ -455,7 +463,8 @@ namespace Script.RewardScript
                     if ( EnforceManager.Instance.darkSlowAdditionalDamage ) return false;
                     break;
                 case ExpData.Types.DarkBleedAdditionalDamage:
-                    if (!(HasUnitInGroup(CharacterBase.UnitGroups.B)&& HasUnitInGroup(CharacterBase.UnitGroups.H))) return false;
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
                     if (!EnforceManager.Instance.physics2ActivateBleed) return false;
                     if (EnforceManager.Instance.darkBleedAdditionalDamage ) return false;
                     break;
@@ -463,9 +472,6 @@ namespace Script.RewardScript
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
                     if (EnforceManager.Instance.darkProjectilePenetration) return false;
                     break;
-                // case ExpData.Types.DarkAdditionalFrontAttack:
-                //     if (EnforceManager.Instance.darkAdditionalFrontAttack ) return false;
-                //     break;
                 case ExpData.Types.DarkIncreaseAtkSpeed:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
                     if (EnforceManager.Instance.darkIncreaseAtkSpeed >= 15) return false;
@@ -548,14 +554,11 @@ namespace Script.RewardScript
                 case ExpData.Types.DarkProjectilePenetration:
                     powerText.text = "[B그룹(어둠)] 관통 효과 적용";
                     break;
-                // case ExpData.Types.DarkAdditionalFrontAttack:
-                //     powerText.text = "[B그룹 - 미정] 공격시 위쪽으로 추가 공격";
-                //     break;
                 case ExpData.Types.DarkIncreaseAtkSpeed:
                     powerText.text = "[B그룹(어둠)] 공격속도 17% 증가 (최대 255%)";
                     break;
                 case ExpData.Types.Water2IncreaseDamage:
-                    powerText.text = "[C그룹(어둠)] 공격력 9% 증가";
+                    powerText.text = "[C그룹(물)] 공격력 9% 증가";
                     break;
                 case ExpData.Types.Water2BleedAdditionalRestraint:
                     powerText.text = "[C그룹(물)] 출혈상태의 적에게 20% 확률로 속박 시킴";

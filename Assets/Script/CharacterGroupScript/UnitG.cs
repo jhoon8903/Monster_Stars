@@ -10,11 +10,11 @@ namespace Script.CharacterGroupScript
 {
     public class UnitG : CharacterBase
     {
-        [SerializeField] private Sprite level1Sprite; // Sprite for level 1
-        [SerializeField] private Sprite level2Sprite; // Sprite for level 2
-        [SerializeField] private Sprite level3Sprite; // Sprite for level 3
-        [SerializeField] private Sprite level4Sprite; // Sprite for level 4
-        [SerializeField] private Sprite level5Sprite; // Sprite for level 5
+        [SerializeField] private Sprite level1Sprite;
+        [SerializeField] private Sprite level2Sprite;
+        [SerializeField] private Sprite level3Sprite; 
+        [SerializeField] private Sprite level4Sprite;
+        [SerializeField] private Sprite level5Sprite; 
         private float _currentDamage;
 
         public void Awake()
