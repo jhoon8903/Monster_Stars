@@ -724,10 +724,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 174e5bb825a1e45ef8b861bf9c2fd4a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterPool: {fileID: 1097818334}
   treasureBox: {fileID: 1053235717240956053, guid: b3c344a1ee72a45e3aef34b9e39575c5, type: 3}
   characterList: []
-  goldGetMore: 0
 --- !u!114 &149521964
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7302,6 +7300,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   castleManager: {fileID: 1177777546}
   gridManager: {fileID: 8808150501734532426}
+  characterPool: {fileID: 1097818334}
+  characterList: []
   activeRestraint: 0
   increaseRestraintTime: 0
   divinePenetrate: 0
@@ -7326,6 +7326,7 @@ MonoBehaviour:
   waterBurnAdditionalDamage: 0
   waterRestraintIncreaseDamage: 0
   waterIncreaseSlowPower: 0
+  increaseWaterDamage: 1
   waterSideAttack: 0
   poisonDoubleAtk: 0
   poisonRestraintAdditionalDamage: 0
@@ -7349,12 +7350,15 @@ MonoBehaviour:
   recoveryCastle: 0
   castleMaxHp: 0
   highLevelCharacterCount: 6
+  selectedCount: 0
   expPercentage: 0
   permanentIncreaseMovementCount: 0
   match5Upgrade: 0
   increaseAtkDamage: 0
   increaseAtkRate: 0
   rewardMoveCount: 0
+  addGold: 0
+  addGoldCount: 0
 --- !u!4 &1595735487
 Transform:
   m_ObjectHideFlags: 0

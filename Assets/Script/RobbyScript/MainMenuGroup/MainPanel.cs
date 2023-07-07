@@ -26,6 +26,9 @@ namespace Script.RobbyScript.MainMenuGroup
         [SerializeField] private Slider stageProgress;
         [SerializeField] private TextMeshProUGUI stageProgressText;
         [SerializeField] private GameObject optionsPanel;
+        [SerializeField] private GameObject continuePanel;
+        [SerializeField] private GameObject confirmBtn;
+        [SerializeField] private GameObject cancelBtn;
         private int Stage { get; set; }
         private const string ClearedStageKey = "ClearedStage";
 
@@ -38,6 +41,13 @@ namespace Script.RobbyScript.MainMenuGroup
             startBtn.GetComponent<Button>().onClick.AddListener(StartGame); 
             nextStageBtn.GetComponent<Button>().onClick.AddListener(NextStage);
             previousStageBtn.GetComponent<Button>().onClick.AddListener(PreviousStage);
+            confirmBtn.GetComponent<Button>().onClick.AddListener(ContinueGame);
+            cancelBtn.GetComponent<Button>().onClick.AddListener(CancelContinue);
+
+            if (PlayerPrefs.HasKey("unitState"))
+            {
+                continuePanel.SetActive(true);
+            }
         }
 
         private void Update()
@@ -48,6 +58,18 @@ namespace Script.RobbyScript.MainMenuGroup
            }
         }
 
+        private static void ContinueGame()
+        {
+            SceneManager.LoadScene("StageScene");
+        }
+
+        private void CancelContinue()
+        {
+            PlayerPrefs.DeleteKey("unitState");
+            PlayerPrefs.DeleteKey("EnforceData");
+            PlayerPrefs.SetInt(StageManager.Instance.currentWaveKey,1);
+            continuePanel.SetActive(false);
+        }
 
         private void StartGame()
         {

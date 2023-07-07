@@ -2613,6 +2613,9 @@ MonoBehaviour:
   stageProgress: {fileID: 545131046}
   stageProgressText: {fileID: 892367576}
   optionsPanel: {fileID: 1998623565}
+  continuePanel: {fileID: 1335037080}
+  confirmBtn: {fileID: 1151959964}
+  cancelBtn: {fileID: 663559007}
 --- !u!114 &337770384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6240,19 +6243,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 663559010}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 768037}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &663559010
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -9759,19 +9750,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1151959967}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 768037}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1151959967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11771,7 +11750,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1335037081
 RectTransform:
   m_ObjectHideFlags: 0
