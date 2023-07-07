@@ -1,17 +1,11 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Script;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.PuzzleManagerGroup;
 using Script.RewardScript;
-using Script.RobbyScript.TopMenuGroup;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 
 namespace Script.UIManager
 {
@@ -132,12 +126,14 @@ namespace Script.UIManager
             {
                 yield return StartCoroutine(GameManager.Instance.ContinueOrLose());
             }
+            EnforceManager.Instance.addGold = false;
         }
         private void StageClear()
         {
             isStageClear = true;
             var clearStage = currentStage;
-            ClearRewardManager.Instance.ClearReward(clearStage);
+            var clearWaveCount = currentWave;
+            ClearRewardManager.Instance.ClearReward(clearStage, clearWaveCount);
             currentStage++;
             if (currentStage == maxStageCount+1)
             {
@@ -150,6 +146,7 @@ namespace Script.UIManager
                 PlayerPrefs.SetInt(clearedWaveKey, currentWave);
                 PlayerPrefs.Save();
             }
+            EnforceManager.Instance.addGold = false;
             continueBtn.GetComponent<Button>().onClick.AddListener(PauseManager.ReturnRobby);
         }
         public void UpdateWaveText()

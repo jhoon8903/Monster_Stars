@@ -142,6 +142,9 @@ namespace Script.RewardScript
                 if (selectedCodes.Contains(powerUp.Code)) return false; // Do not select already selected reward codes again
                 switch (powerUp.Type)
                 {
+                    case CommonData.Types.Gold:
+                        if (EnforceManager.Instance.addGold) return false;
+                        break;
                     case CommonData.Types.CastleMaxHp:
                         if (EnforceManager.Instance.castleMaxHp >= 1000) return false; // Make sure the max HP of the castle does not exceed 2000
                         break;
@@ -157,7 +160,7 @@ namespace Script.RewardScript
                         if (EnforceManager.Instance.slowCount <= 3) return false; // Displays the enemy movement speed reduction effect up to 3 times
                         break;
                     case CommonData.Types.NextStage:
-                        if (EnforceManager.Instance.SelectedCount > 3) return false; // Only use up to 3 next stage character upgrades
+                        if (EnforceManager.Instance.selectedCount > 3) return false; // Only use up to 3 next stage character upgrades
                         break;
                     case CommonData.Types.StepDirection:
                         if (EnforceManager.Instance.diagonalMovement)return false;
@@ -174,10 +177,7 @@ namespace Script.RewardScript
                         if (EnforceManager.Instance.recoveryCastle) return false; // Castle recovery can only be used once
                         break;
                     case CommonData.Types.GroupLevelUp:
-                        if (characterManager.CharacterGroupLevelUpIndexes.Contains(powerUp.Property[0])) return false; // Do not display GroupLevelUp options for groups where LevelUpPattern is executed
-                        break;
-                    case CommonData.Types.Gold:
-                        if (characterManager.goldGetMore) return false;
+                        if (EnforceManager.Instance.characterGroupLevelUpIndexes.Contains(powerUp.Property[0])) return false; // Do not display GroupLevelUp options for groups where LevelUpPattern is executed
                         break;
                 }
                 return true;
@@ -360,14 +360,14 @@ namespace Script.RewardScript
                     EnforceManager.Instance.diagonalMovement = true; 
                     break;    // 대각선 이동
                 case CommonData.Types.RandomLevelUp: 
-                    characterManager.RandomCharacterLevelUp(selectedCommonReward.Property[0]); 
+                    EnforceManager.Instance.RandomCharacterLevelUp(selectedCommonReward.Property[0]); 
                     break;// 랜덤 케릭터 레벨업
                 case CommonData.Types.GroupLevelUp: 
-                    characterManager.CharacterGroupLevelUp(selectedCommonReward.Property[0]); 
+                    EnforceManager.Instance.CharacterGroupLevelUp(selectedCommonReward.Property[0]); 
                     break;  // 케릭터 그룹 레벨업
                 case CommonData.Types.LevelUpPattern: 
-                    characterManager.PermanentIncreaseCharacter(selectedCommonReward.Property[0]); 
-                    characterManager.CharacterGroupLevelUpIndexes.Add(selectedCommonReward.Property[0]); 
+                    EnforceManager.Instance.PermanentIncreaseCharacter(selectedCommonReward.Property[0]); 
+                    EnforceManager.Instance.characterGroupLevelUpIndexes.Add(selectedCommonReward.Property[0]); 
                     break; // 기본 2레벨 케릭터 생성
                 case CommonData.Types.Exp: 
                     EnforceManager.Instance.IncreaseExpBuff(selectedCommonReward.Property[0]);
@@ -388,8 +388,7 @@ namespace Script.RewardScript
                     EnforceManager.Instance.NextCharacterUpgrade(selectedCommonReward.Property[0]);
                     break; // 보드 초기화 시 케릭터 상속되는 케릭터 Count 증가
                 case CommonData.Types.Gold: 
-                    characterManager.goldGetMore = true; 
-                    Debug.LogWarning($"Unhandled reward type: {selectedCommonReward.Type}"); 
+                    EnforceManager.Instance.addGold = true;
                     break;
              // 성 최대 체력 증가
                 default: Debug.LogWarning($"Unhandled reward type: {selectedCommonReward.Type}"); 

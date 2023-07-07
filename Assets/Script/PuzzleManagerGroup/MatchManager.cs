@@ -452,7 +452,10 @@ namespace Script.PuzzleManagerGroup
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
                 commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[1]);
-  
+                if (EnforceManager.Instance.addGold)
+                {
+                    EnforceManager.Instance.AddGold();
+                }
             }
             else
             {
@@ -465,6 +468,10 @@ namespace Script.PuzzleManagerGroup
                 { 
                     matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
                 }
+            }
+            if (EnforceManager.Instance.addGold)
+            {
+                EnforceManager.Instance.AddGold();
             }
             return true;
         }
@@ -493,6 +500,10 @@ namespace Script.PuzzleManagerGroup
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 }
             }
+            if (EnforceManager.Instance.addGold)
+            {
+                EnforceManager.Instance.AddGold();
+            }
             return true;
         }
         private bool Matches2X5Case(IReadOnlyList<GameObject> matchedCharacters)
@@ -519,6 +530,10 @@ namespace Script.PuzzleManagerGroup
                 {
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 }
+            }
+            if (EnforceManager.Instance.addGold)
+            {
+                EnforceManager.Instance.AddGold();
             }
             return true;
         }
@@ -548,6 +563,10 @@ namespace Script.PuzzleManagerGroup
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 }
             }
+            if (EnforceManager.Instance.addGold)
+            {
+                EnforceManager.Instance.AddGold();
+            }
             return true;
         }
         private bool Matches3X3Case(IReadOnlyList<GameObject> matchedCharacters)
@@ -570,6 +589,7 @@ namespace Script.PuzzleManagerGroup
                 matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
                 matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]); 
             }
+
             return true;
         }
         private bool Matches3X4Case(IReadOnlyList<GameObject> matchedCharacters)
@@ -703,6 +723,10 @@ namespace Script.PuzzleManagerGroup
                     matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
                 }
             }
+            if (EnforceManager.Instance.addGold)
+            {
+                EnforceManager.Instance.AddGold();
+            }
             return true;
         }
         private bool Matches5X3Case(IReadOnlyList<GameObject> matchedCharacters)
@@ -734,6 +758,10 @@ namespace Script.PuzzleManagerGroup
                 {
                     matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
                 }
+            }
+            if (EnforceManager.Instance.addGold)
+            {
+                EnforceManager.Instance.AddGold();
             }
             return true;
         }

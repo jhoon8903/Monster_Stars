@@ -27,11 +27,11 @@ namespace Script.RewardScript
                 Destroy(gameObject);
             }
         }
-        public void ClearReward(int stage)
+        public void ClearReward(int stage, int wave)
         {
             stageClearPanel.SetActive(true);
             RewardUnitPiece(stage);
-            GetCoin(stage, 30);
+            GetCoin(stage, wave);
         }
         public void GetCoin(int stage, int wave)
         {
@@ -43,13 +43,15 @@ namespace Script.RewardScript
                 <= 40 => 30 + 7 * wave,
                 _ => 40 + 7 * wave
             };
-            CoinsScript.Instance.Coin += coin;
+            var getCoin = coin + EnforceManager.Instance.addGoldCount;
+            CoinsScript.Instance.Coin += getCoin;
             CoinsScript.Instance.UpdateCoin();
-            goods.goodsValue.text = $"{coin}";
+            goods.goodsValue.text = $"{getCoin}";
             if (!StageManager.Instance.isStageClear) return;
             Instantiate(goods, rewardBox.transform);
             goods.goodsBack.GetComponent<Image>().color = Color.cyan;
-            goods.goodsValue.text = $"{coin}";
+            goods.goodsValue.text = $"{getCoin}";
+            EnforceManager.Instance.addGoldCount = 0;
         }
         private void RewardUnitPiece(int stage)
         {

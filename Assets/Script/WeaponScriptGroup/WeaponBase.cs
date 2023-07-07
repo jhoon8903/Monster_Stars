@@ -305,7 +305,7 @@ namespace Script.WeaponScriptGroup
                                 damage *= 0.8f;
                             }
 
-                            return damage * EnforceManager.Instance.IncreaseWaterDamage;
+                            return damage * EnforceManager.Instance.increaseWaterDamage;
                         }
                     }
                     break;

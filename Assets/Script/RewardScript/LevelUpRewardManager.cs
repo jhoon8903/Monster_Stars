@@ -76,8 +76,7 @@ namespace Script.RewardScript
                     EnforceManager.Instance.NextCharacterUpgrade(selectedReward.Property[0]);
                     break;
                 case ExpData.Types.Gold:
-                    characterManager.goldGetMore = true; 
-                    Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}");
+                    EnforceManager.Instance.addGold = true;
                     break;
                 case ExpData.Types.DivineActiveRestraint:
                     EnforceManager.Instance.activeRestraint = true;
@@ -278,6 +277,9 @@ namespace Script.RewardScript
             if (selectedCodes.Contains(powerUp.Code)) return false;
             switch (powerUp.Type)
             {
+                case ExpData.Types.Gold:
+                    if (EnforceManager.Instance.addGold) return false;
+                    break;
                 case ExpData.Types.Slow:
                     if(EnforceManager.Instance.slowCount > 3) return false;
                     break;
@@ -288,7 +290,7 @@ namespace Script.RewardScript
                     if (EnforceManager.Instance.recoveryCastle) return false;
                     break;
                 case ExpData.Types.NextStage:
-                    if (EnforceManager.Instance.SelectedCount > 3) return false;
+                    if (EnforceManager.Instance.selectedCount > 3) return false;
                     break;
                 case ExpData.Types.StepDirection:
                     if (EnforceManager.Instance.diagonalMovement) return false;
@@ -528,7 +530,7 @@ namespace Script.RewardScript
                     powerText.text = $"보스 스테이지 이후 {p} 개의\n케릭터 추가 이동 (현재 {EnforceManager.Instance.highLevelCharacterCount})";
                     break;
                 case ExpData.Types.Gold:
-                    powerText.text = $"5 매치시 골드 {p} 추가 획득";
+                    powerText.text = "5 매치시 골드 1추가 획득";
                     break;
                 case ExpData.Types.DivineActiveRestraint:
                     powerText.text = "[A그룹(신성)] 적중된 적은 20% 확률로 속박 1초";

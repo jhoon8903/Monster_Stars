@@ -51,8 +51,8 @@ namespace Script
             gridManager.GenerateInitialGrid();
             if (PlayerPrefs.HasKey("unitState"))
             {
-
                 countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
+                EnforceManager.Instance.LoadEnforceData();
                 StartCoroutine(spawnManager.LoadGameState());
             }
             else
@@ -123,6 +123,7 @@ namespace Script
         private IEnumerator NextWave()
         {
             spawnManager.SaveUnitState();
+            EnforceManager.Instance.SaveEnforceData();
             Time.timeScale = 1;
             yield return StartCoroutine(KillMotion());
             yield return new WaitForSecondsRealtime(0.5f);
@@ -188,6 +189,7 @@ namespace Script
         public void ReturnRobby()
         {
             PlayerPrefs.DeleteKey("unitState");
+            PlayerPrefs.DeleteKey("EnforceData");
             PlayerPrefs.SetInt(StageManager.Instance.currentWaveKey,1);
             SceneManager.LoadScene("SelectScene");
         }
