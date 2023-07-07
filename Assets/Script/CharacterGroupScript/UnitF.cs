@@ -80,7 +80,7 @@ namespace Script.CharacterGroupScript
             Gizmos.DrawWireSphere(center, size);
         }
 
-        protected override Sprite GetSprite(int level)
+        protected internal override Sprite GetSprite(int level)
         {
             return level switch
             {

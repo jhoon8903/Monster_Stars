@@ -104,7 +104,7 @@ namespace Script.CharacterGroupScript
             spriteRenderer.sprite = GetSprite(level);
         }
 
-        protected override Sprite GetSprite(int level)
+        protected internal override Sprite GetSprite(int level)
         {
             return level switch
             {

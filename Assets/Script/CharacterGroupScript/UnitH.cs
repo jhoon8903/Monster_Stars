@@ -81,7 +81,7 @@ namespace Script.CharacterGroupScript
             Gizmos.DrawWireCube(center, size);
         }
 
-        protected override Sprite GetSprite(int level)
+        protected internal override Sprite GetSprite(int level)
         {
             return level switch
             {

@@ -38,13 +38,6 @@ namespace Script
 
         private void Start()
         {
-            swipeManager.isBusy = true;
-            StageManager.Instance.UpdateWaveText();
-            countManager.Initialize(moveCount);
-            gridManager.GenerateInitialGrid(); 
-            speedUp = true;
-            GameSpeedSelect();
-            StartCoroutine(spawnManager.PositionUpCharacterObject());
             if (Instance == null)
             {
                 Instance = this;
@@ -53,8 +46,24 @@ namespace Script
             {
                 Destroy(gameObject);
             }
-            swipeManager.isBusy = false;
+            swipeManager.isBusy = true;
+            StageManager.Instance.UpdateWaveText();
+            gridManager.GenerateInitialGrid();
+            if (PlayerPrefs.HasKey("unitState"))
+            {
 
+                countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
+                StartCoroutine(spawnManager.LoadGameState());
+            }
+            else
+            {
+
+                countManager.Initialize(moveCount);
+                StartCoroutine(spawnManager.PositionUpCharacterObject());
+            }
+            speedUp = true;
+            GameSpeedSelect();
+            swipeManager.isBusy = false;
         }
         public IEnumerator Count0Call()
         {
@@ -113,13 +122,12 @@ namespace Script
         }
         private IEnumerator NextWave()
         {
-            PlayerPrefs.DeleteKey("unitState");
             spawnManager.SaveUnitState();
             Time.timeScale = 1;
             yield return StartCoroutine(KillMotion());
             yield return new WaitForSecondsRealtime(0.5f);
             _bossSpawnArea = new Vector3Int(Random.Range(2,5), 10, 0);
-            if (StageManager.Instance.currentWave == 9 || StageManager.Instance.currentWave == 19 || StageManager.Instance.currentWave == 29 )
+            if (StageManager.Instance.currentWave % 10 == 0)
             {
                 gridManager.ApplyBossSpawnColor(_bossSpawnArea);
             }
@@ -129,7 +137,8 @@ namespace Script
             }
             castleManager.TookDamageLastWave = false;
             moveCount = 7 + EnforceManager.Instance.rewardMoveCount;
-            countManager.Initialize(moveCount);
+            PlayerPrefs.SetInt("moveCount",moveCount);
+            countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
             yield return StartCoroutine(backgroundManager.ChangePuzzleSize());
             yield return StartCoroutine(cameraManager.CameraPuzzleSizeChange());
             enemyPool.ClearList();
@@ -137,6 +146,7 @@ namespace Script
         }
         private void LoseGame()
         {
+            Time.timeScale = 0;
             StartCoroutine(KillMotion());
             gamePanel.SetActive(true);
         }
@@ -172,10 +182,8 @@ namespace Script
         }
         public void RetryGame()
         {
-            StartCoroutine(KillMotion());
             gamePanel.SetActive(false);
-            StartCoroutine(spawnManager.LoadGameState());
-            Time.timeScale = 1;
+            SceneManager.LoadScene("StageScene");
         }
         public void ReturnRobby()
         {

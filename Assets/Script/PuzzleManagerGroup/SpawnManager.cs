@@ -227,7 +227,7 @@ namespace Script.PuzzleManagerGroup
 
         public void SaveUnitState()
         {
-            if (PlayerPrefs.GetString("unitState").Length > 1)
+            if (PlayerPrefs.HasKey("unitState")) 
             {
                 PlayerPrefs.DeleteKey("unitState");
                 Debug.Log("Unit PlayerPrefs 삭제");
@@ -259,7 +259,9 @@ namespace Script.PuzzleManagerGroup
             yield return new WaitForSecondsRealtime(1f);
 
             var unitState = PlayerPrefs.GetString("unitState", "");
+            Debug.Log(unitState);
             var pieceData = unitState.Split(';');
+
             var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
 
             foreach (var data in pieceData)
@@ -268,34 +270,33 @@ namespace Script.PuzzleManagerGroup
 
                 var unit = data.Split('|');
                 if (unit.Length < 3) continue;
-        
                 var group = unit[0];
+                var unitGroups = CharacterBase.UnitGroups.None;
+                if (Enum.TryParse(group, true, out CharacterBase.UnitGroups parsedGroup))
+                {
+                    unitGroups = parsedGroup;
+                }
                 var level = unit[1];
                 var unitLevel = int.Parse(level);
                 var position = Vector3Int.zero;
                 var positionValue = unit[2].Split(',');
-
-                if (positionValue.Length < 3) continue; 
-
+                if (positionValue.Length < 3) continue;
                 position.x = int.Parse(positionValue[0]);
                 position.y = int.Parse(positionValue[1]);
                 position.z = int.Parse(positionValue[2]);
 
-                var setUnit = notUsePoolCharacterList.Find(character =>
-                    character.GetComponent<CharacterBase>().unitGroup.ToString() == group);
-            
+                var setUnit = notUsePoolCharacterList
+                    .FirstOrDefault(t => t.GetComponent<CharacterBase>().unitGroup == unitGroups && t.activeSelf == false);
+
                 if (setUnit == null) continue;
-        
                 var setUnitBase = setUnit.GetComponent<CharacterBase>();
                 setUnitBase.Initialize();
+                setUnitBase.unitGroup = unitGroups;
                 setUnitBase.UnitInGameLevel = unitLevel;
-                setUnitBase.GetComponent<SpriteRenderer>().sprite = setUnitBase.GetSpriteForLevel(unitLevel);
+                setUnitBase.GetComponent<SpriteRenderer>().sprite = setUnitBase.GetSprite(unitLevel);
                 setUnitBase.transform.position = position;
                 setUnitBase.gameObject.SetActive(true);
-                Debug.Log(setUnitBase.gameObject);
-
             }
         }
-
     }
 }

@@ -24,7 +24,7 @@ namespace Script.CharacterGroupScript
             SetLevel(1);
         }
 
-        protected override Sprite GetSprite(int level)
+        protected internal override Sprite GetSprite(int level)
         {
             return level switch
             {

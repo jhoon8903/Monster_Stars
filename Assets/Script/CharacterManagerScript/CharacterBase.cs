@@ -95,7 +95,7 @@ namespace Script.CharacterManagerScript
             yield return null;
         }
 
-        protected virtual Sprite GetSprite(int level)
+        protected internal virtual Sprite GetSprite(int level)
         {
             return null;
         }
