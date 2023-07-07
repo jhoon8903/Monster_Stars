@@ -89,6 +89,15 @@ namespace Script
             if (castleManager.HpPoint != 0)
             {
                 IsClear = true;
+                ClearRewardManager.Instance.GetCoin(StageManager.Instance.currentStage, StageManager.Instance.currentWave);
+                StageManager.Instance.currentWave++;
+                if (StageManager.Instance.currentWave > StageManager.Instance.clearWave )
+                {
+                    StageManager.Instance.clearWave++;
+                }
+                PlayerPrefs.SetInt(StageManager.Instance.clearedWaveKey, StageManager.Instance.clearWave);
+                PlayerPrefs.SetInt(StageManager.Instance.currentWaveKey, StageManager.Instance.currentWave);
+                StageManager.Instance.UpdateWaveText();
                 yield return StartCoroutine(NextWave());
                 if (levelUpRewardManager.HasUnitInGroup(CharacterBase.UnitGroups.D) && 
                     EnforceManager.Instance.physicIncreaseDamage)  
@@ -104,6 +113,8 @@ namespace Script
         }
         private IEnumerator NextWave()
         {
+            PlayerPrefs.DeleteKey("unitState");
+            spawnManager.SaveUnitState();
             Time.timeScale = 1;
             yield return StartCoroutine(KillMotion());
             yield return new WaitForSecondsRealtime(0.5f);
@@ -122,11 +133,11 @@ namespace Script
             yield return StartCoroutine(backgroundManager.ChangePuzzleSize());
             yield return StartCoroutine(cameraManager.CameraPuzzleSizeChange());
             enemyPool.ClearList();
+
         }
         private void LoseGame()
         {
             StartCoroutine(KillMotion());
-            Time.timeScale = 0;
             gamePanel.SetActive(true);
         }
         private static IEnumerator KillMotion()
@@ -159,15 +170,17 @@ namespace Script
                 Time.timeScale = 1;
             }
         }
-
         public void RetryGame()
         {
-            Time.timeScale = 1;
             StartCoroutine(KillMotion());
+            gamePanel.SetActive(false);
+            StartCoroutine(spawnManager.LoadGameState());
+            Time.timeScale = 1;
         }
-
         public void ReturnRobby()
         {
+            PlayerPrefs.DeleteKey("unitState");
+            PlayerPrefs.SetInt(StageManager.Instance.currentWaveKey,1);
             SceneManager.LoadScene("SelectScene");
         }
     }

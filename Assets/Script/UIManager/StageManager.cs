@@ -11,6 +11,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 
 namespace Script.UIManager
 {
@@ -25,11 +26,13 @@ namespace Script.UIManager
         public static StageManager Instance;
         public int currentStage;
         public int currentWave;
-        public int maxWaveCount = 30;
-        public int maxStageCount = 50;
+        public int maxWaveCount;
+        public int maxStageCount;
         public bool ClearBoss { get; set; }
-        private const string ClearedStageKey = "ClearedStage";
-        private const string ClearedWaveKey = "ClearedWave";
+        public string clearedStageKey = "ClearedStage";
+        public string clearedWaveKey = "ClearedWave";
+        public string currentWaveKey = "CurrentWave";
+        public int clearWave;
         public bool isStageClear;
 
         private void Awake()
@@ -42,8 +45,9 @@ namespace Script.UIManager
             {
                 Destroy(gameObject);
             }
-            currentStage = PlayerPrefs.GetInt(ClearedStageKey, 1);
-            currentWave = PlayerPrefs.GetInt(ClearedWaveKey, 1);
+            currentStage = PlayerPrefs.GetInt(clearedStageKey, 1);
+            currentWave = PlayerPrefs.GetInt(currentWaveKey, 1);
+            clearWave = PlayerPrefs.GetInt(clearedWaveKey, 1);
         }
         private void Update()
         {
@@ -56,22 +60,10 @@ namespace Script.UIManager
                 PlayerPrefs.DeleteAll();
             }
         }
-        private static (int normal, int slow, int fast, int sets) GetSpawnCountForWave(int wave)
+        public void StartWave()
         {
-            if (wave is 10 or 20) 
-            {
-                return (0, 0, 0, 0);
-            }
-            var baseCount = wave;
-            if (wave > 10)
-            {
-                baseCount = wave - 10;
-            }
-            var normalCount = baseCount + 3;
-            var slowCount = baseCount - 1;
-            var fastCount = baseCount - 1;
-            var sets = wave <= 10 ? 2 : 3;
-            return (normalCount, slowCount, fastCount, sets);
+            StartCoroutine(WaveController(currentWave));
+            StartCoroutine(AtkManager.Instance.CheckForAttack());
         }
         private IEnumerator WaveController(int wave)
         {
@@ -100,22 +92,35 @@ namespace Script.UIManager
                 }
             }
         }
+        private static (int normal, int slow, int fast, int sets) GetSpawnCountForWave(int wave)
+        {
+            if (wave is 10 or 20) 
+            {
+                return (0, 0, 0, 0);
+            }
+            var baseCount = wave;
+            if (wave > 10)
+            {
+                baseCount = wave - 10;
+            }
+            var normalCount = baseCount + 3;
+            var slowCount = baseCount - 1;
+            var fastCount = baseCount - 1;
+            var sets = wave <= 10 ? 2 : 3;
+            return (normalCount, slowCount, fastCount, sets);
+        }
         public void EnemyDestroyEvent(EnemyBase enemyBase)
         {
             enemyPool.enemyBases.Remove(enemyBase);
             if (enemyPool.enemyBases.Count != 0) return;
-            StartCoroutine(StageManager.Instance.WaveClear());
-        }
-        public void StartWave()
-        {
-            StartCoroutine(WaveController(currentWave));
-            StartCoroutine(AtkManager.Instance.CheckForAttack());
+            StartCoroutine(WaveClear());
         }
         private IEnumerator WaveClear()
         {
             if (currentWave % 10 == 0)
             {
                 ClearBoss = true;
+
                 yield return StartCoroutine(commonRewardManager.WaveReward());
                 yield return StartCoroutine(spawnManager.BossStageClearRule());
             }
@@ -127,11 +132,6 @@ namespace Script.UIManager
             {
                 yield return StartCoroutine(GameManager.Instance.ContinueOrLose());
             }
-
-            ClearRewardManager.Instance.GetCoin(currentStage, currentWave);
-            currentWave++;
-            PlayerPrefs.SetInt(ClearedWaveKey, currentWave);
-            UpdateWaveText();
         }
         private void StageClear()
         {
@@ -139,15 +139,27 @@ namespace Script.UIManager
             var clearStage = currentStage;
             ClearRewardManager.Instance.ClearReward(clearStage);
             currentStage++;
-            currentWave = 1;
-            PlayerPrefs.SetInt(ClearedStageKey, currentStage);
-            PlayerPrefs.SetInt(ClearedWaveKey, currentWave);
-            PlayerPrefs.Save();
+            if (currentStage == maxStageCount+1)
+            {
+                GameClear();
+            }
+            else
+            {
+                currentWave = 1;
+                PlayerPrefs.SetInt(clearedStageKey, currentStage);
+                PlayerPrefs.SetInt(clearedWaveKey, currentWave);
+                PlayerPrefs.Save();
+            }
             continueBtn.GetComponent<Button>().onClick.AddListener(PauseManager.ReturnRobby);
         }
         public void UpdateWaveText()
         {
             waveText.text = $"{currentWave}";
+        }
+
+        private void GameClear()
+        {
+            
         }
     }
 }

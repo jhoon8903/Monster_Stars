@@ -10,18 +10,26 @@ namespace Script.UIManager
         [SerializeField] private GameObject pauseBtn;
         [SerializeField] private GameObject robbyBtn;
         [SerializeField] private GameObject resumeBtn;
-
+        [SerializeField] private GameObject retryBtn;
+          
         private void Start()
         {
             pauseBtn.GetComponent<Button>().onClick.AddListener(Pause);
             robbyBtn.GetComponent<Button>().onClick.AddListener(ReturnRobby);
             resumeBtn.GetComponent<Button>().onClick.AddListener(Resume);
+            retryBtn.GetComponent<Button>().onClick.AddListener(Retry);
         }
 
         private void Pause()
         {
             Time.timeScale = 0f;
             pausePanel.SetActive(true);
+        }
+
+        public void Retry()
+        {
+            pausePanel.SetActive(false);
+
         }
 
         public void Resume()
@@ -33,6 +41,7 @@ namespace Script.UIManager
         public static void ReturnRobby()
         {
             StageManager.Instance.isStageClear = false;
+            PlayerPrefs.SetInt(StageManager.Instance.currentWaveKey,1);
             SceneManager.LoadScene("SelectScene");
         }
     }

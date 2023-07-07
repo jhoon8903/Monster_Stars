@@ -75,10 +75,11 @@ namespace Script.RobbyScript.MainMenuGroup
 
         private void UpdateProgress(int stage)
         {
+            var value = StageManager.Instance.clearWave;
             Stage = stage;
             stageText.text = $"스테이지 {Stage}";
             stageProgress.maxValue = StageManager.Instance.maxWaveCount;
-            stageProgress.value = StageManager.Instance.currentWave;
+            stageProgress.value = value;
             stageProgressText.text = $"{stageProgress.value} / {stageProgress.maxValue}";
         }
 

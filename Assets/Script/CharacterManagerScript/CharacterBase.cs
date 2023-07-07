@@ -15,7 +15,7 @@ namespace Script.CharacterManagerScript
         protected internal UnitGrades UnitGrade;
         protected internal bool UnLock { get; private set; }
         protected internal bool Selected { get; set; }
-        protected internal int UnitInGameLevel { get; protected set; } 
+        protected internal int UnitInGameLevel { get; set; } 
         protected internal string CharacterName;
         public enum Types { Character, Treasure }
         protected internal Types Type; 

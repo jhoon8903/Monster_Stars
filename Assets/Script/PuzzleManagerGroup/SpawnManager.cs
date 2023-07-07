@@ -215,6 +215,7 @@ namespace Script.PuzzleManagerGroup
             }
             yield return StartCoroutine(matchManager.CheckMatches());
             isWave10Spawning = false;
+            yield return StartCoroutine(GameManager.Instance.ContinueOrLose());
         }
         private IEnumerator PerformMovesSequentially(List<(GameObject, Vector3Int)> moves)
         {
@@ -223,5 +224,78 @@ namespace Script.PuzzleManagerGroup
                 yield return StartCoroutine(MoveCharacter(o, targetPosition));
             }
         }
+
+        public void SaveUnitState()
+        {
+            if (PlayerPrefs.GetString("unitState").Length > 1)
+            {
+                PlayerPrefs.DeleteKey("unitState");
+                Debug.Log("Unit PlayerPrefs 삭제");
+            }
+          
+            var poolCharacterList = characterPool.UsePoolCharacterList();
+            var unitState = "";
+            foreach (var character in poolCharacterList)
+            {
+                var characterBase = character.GetComponent<CharacterBase>();
+                var group = characterBase.unitGroup.ToString();
+                var level = characterBase.UnitInGameLevel;
+                var position = Vector3Int.FloorToInt(character.transform.position);
+                unitState += group + "|" + level + "|" + position.x + "," + position.y + "," + position.z + ";";
+            }
+            Debug.Log(unitState);
+            PlayerPrefs.SetString("unitState", unitState);
+            PlayerPrefs.Save();
+        }
+
+        public IEnumerator LoadGameState()
+        {
+            var useList = characterPool.UsePoolCharacterList();
+            foreach (var useUnit in useList)
+            {
+                CharacterPool.ReturnToPool(useUnit);
+            }
+
+            yield return new WaitForSecondsRealtime(1f);
+
+            var unitState = PlayerPrefs.GetString("unitState", "");
+            var pieceData = unitState.Split(';');
+            var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
+
+            foreach (var data in pieceData)
+            {
+                if (string.IsNullOrEmpty(data)) continue;
+
+                var unit = data.Split('|');
+                if (unit.Length < 3) continue;
+        
+                var group = unit[0];
+                var level = unit[1];
+                var unitLevel = int.Parse(level);
+                var position = Vector3Int.zero;
+                var positionValue = unit[2].Split(',');
+
+                if (positionValue.Length < 3) continue; 
+
+                position.x = int.Parse(positionValue[0]);
+                position.y = int.Parse(positionValue[1]);
+                position.z = int.Parse(positionValue[2]);
+
+                var setUnit = notUsePoolCharacterList.Find(character =>
+                    character.GetComponent<CharacterBase>().unitGroup.ToString() == group);
+            
+                if (setUnit == null) continue;
+        
+                var setUnitBase = setUnit.GetComponent<CharacterBase>();
+                setUnitBase.Initialize();
+                setUnitBase.UnitInGameLevel = unitLevel;
+                setUnitBase.GetComponent<SpriteRenderer>().sprite = setUnitBase.GetSpriteForLevel(unitLevel);
+                setUnitBase.transform.position = position;
+                setUnitBase.gameObject.SetActive(true);
+                Debug.Log(setUnitBase.gameObject);
+
+            }
+        }
+
     }
 }
