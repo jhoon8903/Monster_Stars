@@ -215,7 +215,6 @@ namespace Script.PuzzleManagerGroup
             }
             yield return StartCoroutine(matchManager.CheckMatches());
             isWave10Spawning = false;
-            yield return StartCoroutine(GameManager.Instance.ContinueOrLose());
         }
         private IEnumerator PerformMovesSequentially(List<(GameObject, Vector3Int)> moves)
         {

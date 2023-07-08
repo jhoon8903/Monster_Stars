@@ -105,24 +105,26 @@ namespace Script
         {
             IsBattle = false;
             AtkManager.Instance.ClearWeapons();
-            if (castleManager.HpPoint != 0)
-            {           
-                if (StageManager.Instance.currentWave % 10 == 0)
-                {
-                    // yield return StartCoroutine(commonRewardManager.WaveReward());
-                    yield return StartCoroutine(spawnManager.BossStageClearRule());
-                }
+            if (castleManager.HpPoint > 0)
+            {          
                 IsClear = true;
                 ClearRewardManager.Instance.GetCoin(StageManager.Instance.currentStage, StageManager.Instance.currentWave);
                 StageManager.Instance.currentWave++;
-                if (StageManager.Instance.currentWave > StageManager.Instance.clearWave )
-                {
-                    StageManager.Instance.clearWave++;
-                }
                 PlayerPrefs.SetInt(StageManager.Instance.clearedWaveKey, StageManager.Instance.clearWave);
                 PlayerPrefs.SetInt(StageManager.Instance.currentWaveKey, StageManager.Instance.currentWave);
                 StageManager.Instance.UpdateWaveText();
                 yield return StartCoroutine(NextWave());
+                if (StageManager.Instance.currentWave > StageManager.Instance.clearWave )
+                {
+                    StageManager.Instance.clearWave++;
+                }
+                if (StageManager.Instance.currentWave % 10 == 0)
+                {
+                    StageManager.Instance.ClearBoss = true;
+                    yield return StartCoroutine(commonRewardManager.WaveReward());
+                    yield return StartCoroutine(spawnManager.BossStageClearRule());
+                    StageManager.Instance.ClearBoss = false;
+                }
                 if (levelUpRewardManager.HasUnitInGroup(CharacterBase.UnitGroups.D) && 
                     EnforceManager.Instance.physicIncreaseDamage)  
                     FindObjectOfType<UnitD>().ResetDamage();

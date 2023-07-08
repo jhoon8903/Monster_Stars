@@ -30,8 +30,6 @@ namespace Script.UIManager
 
         private void UpdateHpText()
         {
-            Debug.Log($"{HpPoint}/{MaxHpPoint}");
-
             hpText.text = $"{HpPoint} / {MaxHpPoint}";
         }
 
@@ -81,11 +79,8 @@ namespace Script.UIManager
         public void LoadCastleHp()
         {
             HpPoint = PlayerPrefs.GetFloat("castleHP");
-            Debug.Log(HpPoint);
             _increaseHp = EnforceManager.Instance.castleMaxHp;
-            Debug.Log(_increaseHp);
             MaxHpPoint = baseCastleHp + _increaseHp;
-            Debug.Log(MaxHpPoint);
             hpBar.maxValue = MaxHpPoint;
             hpBar.value = HpPoint;
             UpdateHpText();

@@ -6,7 +6,7 @@ namespace Script.EnemyScript
     {
         public override void Initialize()
         {
-            healthPoint = 200000;
+            healthPoint = 10000;
             CrushDamage = 10000;
             MoveSpeed = 1.5f;
             EnemyType = EnemyTypes.Boss;

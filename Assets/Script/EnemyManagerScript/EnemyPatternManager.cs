@@ -31,10 +31,6 @@ namespace Script.EnemyManagerScript
             if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
             {
                 enemyBase.Initialize();
-                if (StageManager.Instance.currentWave == 10)
-                {
-                    enemyBase.healthPoint = 100000;
-                }
                 StartCoroutine(PatternACoroutine(enemyBase, _velocity * 0.8f));
             }
             switch (enemyBase.SpawnZone)
