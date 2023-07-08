@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Script.RewardScript;
+using Script.UIManager;
 using UnityEngine;
 
 namespace Script.EnemyManagerScript
@@ -27,6 +28,15 @@ namespace Script.EnemyManagerScript
             var speedReductionFactor = 1f + slowCount * 0.15f;
             _velocity = enemyBase.MoveSpeed * speedReductionFactor * moveSpeedOffset ;
 
+            if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
+            {
+                enemyBase.Initialize();
+                if (StageManager.Instance.currentWave == 10)
+                {
+                    enemyBase.healthPoint = 100000;
+                }
+                StartCoroutine(PatternACoroutine(enemyBase, _velocity * 0.8f));
+            }
             switch (enemyBase.SpawnZone)
             {
                 case EnemyBase.SpawnZones.A:
@@ -36,14 +46,6 @@ namespace Script.EnemyManagerScript
                     Debug.Log("어디에도 속하지 않음");
                     break;
             }
-            yield return null;
-        }
-
-        public IEnumerator Boss_Move(GameObject boss)
-        {
-            var bossObject = boss.GetComponent<EnemyBase>();
-            bossObject.Initialize();
-            StartCoroutine(PatternACoroutine(bossObject, _velocity * 0.8f));
             yield return null;
         }
 

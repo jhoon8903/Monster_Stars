@@ -44,7 +44,7 @@ namespace Script.RewardScript
             }
         }
 
-        private void ProcessExpReward(ExpData selectedReward)
+        private static void ProcessExpReward(ExpData selectedReward)
         {
             switch (selectedReward.Type)
             {

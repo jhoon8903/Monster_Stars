@@ -36,20 +36,19 @@ namespace Script.CharacterGroupScript
         }
         private void SetLevel(int level)
         {
-            CharacterName = $"Unit_Treasure0{level - 1}";
-            UnitInGameLevel = level;
+            unitPuzzleLevel = level;
             Type = Types.Treasure;
             _spriteRenderer.sprite = GetSprite(level);
         }
         protected override void LevelUp()
         {
             base.LevelUp();
-            SetLevel(UnitInGameLevel);
+            SetLevel(unitPuzzleLevel);
         }
         protected internal override void CharacterReset()
         {
             base.CharacterReset();
-            SetLevel(UnitInGameLevel);
+            SetLevel(unitPuzzleLevel);
         }
     }
 }

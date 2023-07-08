@@ -70,9 +70,25 @@ namespace Script.UIManager
             expText.text = $"{expPoint} / {levelUpPoint}";
         }
 
-        private void UpdateLevelText(int text)
+        private void UpdateLevelText(int inGameLevel)
         {
-            levelText.text = $"LV {text}";
+            levelText.text = $"LV {inGameLevel}";
+        }
+
+        public void SaveExp()
+        {
+            PlayerPrefs.SetInt("inGameLevel", level);
+            PlayerPrefs.SetInt("levelUpPoint", levelUpPoint);
+            PlayerPrefs.SetFloat("expPoint", expPoint);
+        }
+
+        public void LoadExp()
+        {
+            level = PlayerPrefs.GetInt("inGameLevel");
+            levelUpPoint = PlayerPrefs.GetInt("levelUpPoint");
+            expPoint = PlayerPrefs.GetFloat("expPoint");
+            UpdateExpText();
+            UpdateLevelText(level);
         }
     }
 }

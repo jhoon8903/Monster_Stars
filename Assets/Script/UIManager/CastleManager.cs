@@ -15,10 +15,10 @@ namespace Script.UIManager
         public float HpPoint { get; private set; }
         private float MaxHpPoint { get; set; }
         public float baseCastleHp = 1000;
-        private float _increaseHp;
+        private float _increaseHp;                   
         public bool TookDamageLastWave { get; set; }
 
-        private void Start()
+        private void Awake()
         {
             _increaseHp = EnforceManager.Instance.castleMaxHp;
             HpPoint = baseCastleHp;
@@ -30,6 +30,8 @@ namespace Script.UIManager
 
         private void UpdateHpText()
         {
+            Debug.Log($"{HpPoint}/{MaxHpPoint}");
+
             hpText.text = $"{HpPoint} / {MaxHpPoint}";
         }
 
@@ -69,6 +71,24 @@ namespace Script.UIManager
             {
                 HpPoint = MaxHpPoint;
             }
+        }
+
+        public void SaveCastleHp()
+        {
+             PlayerPrefs.SetFloat("castleHP", HpPoint);
+        }
+
+        public void LoadCastleHp()
+        {
+            HpPoint = PlayerPrefs.GetFloat("castleHP");
+            Debug.Log(HpPoint);
+            _increaseHp = EnforceManager.Instance.castleMaxHp;
+            Debug.Log(_increaseHp);
+            MaxHpPoint = baseCastleHp + _increaseHp;
+            Debug.Log(MaxHpPoint);
+            hpBar.maxValue = MaxHpPoint;
+            hpBar.value = HpPoint;
+            UpdateHpText();
         }
     }
 }

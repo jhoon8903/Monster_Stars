@@ -4,6 +4,7 @@ using DG.Tweening;
 using Script.CharacterGroupScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Script.WeaponScriptGroup
@@ -26,6 +27,7 @@ namespace Script.WeaponScriptGroup
             _distance = Vector3.Distance(transform.position, _enemyTransform);
             var adjustedSpeed = Speed * _distance;
             var timeToMove = _distance / adjustedSpeed;
+            if (_enemyTransform == Vector3.zero) yield return null;
             transform.DOMove(_enemyTransform, timeToMove).SetEase(Ease.Linear).OnComplete(() => StopUseWeapon(gameObject));
         }
 

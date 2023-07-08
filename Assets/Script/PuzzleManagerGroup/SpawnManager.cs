@@ -158,7 +158,7 @@ namespace Script.PuzzleManagerGroup
             var newCharacter = notUsePoolCharacterList[randomIndex];
             newCharacter.transform.position = position;
             var characterBase = newCharacter.GetComponent<CharacterBase>();
-            if (characterBase.PermanentLevelUp && characterBase.UnitInGameLevel == 1)
+            if (characterBase.PermanentLevelUp && characterBase.unitPuzzleLevel == 1)
             {
                 characterBase.LevelUpScale(newCharacter);
             }
@@ -172,7 +172,7 @@ namespace Script.PuzzleManagerGroup
             yield return StartCoroutine(gameManager.WaitForPanelToClose());
             var saveCharacterList = characterPool.UsePoolCharacterList();
             var highLevelCharacters = saveCharacterList
-                .OrderByDescending(character => character.GetComponent<CharacterBase>().UnitInGameLevel)
+                .OrderByDescending(character => character.GetComponent<CharacterBase>().unitPuzzleLevel)
                 .Take(enforceManager.highLevelCharacterCount)
                 .ToList();
             foreach (var character in saveCharacterList
@@ -239,11 +239,10 @@ namespace Script.PuzzleManagerGroup
             {
                 var characterBase = character.GetComponent<CharacterBase>();
                 var group = characterBase.unitGroup.ToString();
-                var level = characterBase.UnitInGameLevel;
+                var level = characterBase.unitPuzzleLevel;
                 var position = Vector3Int.FloorToInt(character.transform.position);
                 unitState += group + "|" + level + "|" + position.x + "," + position.y + "," + position.z + ";";
             }
-            Debug.Log(unitState);
             PlayerPrefs.SetString("unitState", unitState);
             PlayerPrefs.Save();
         }
@@ -255,11 +254,7 @@ namespace Script.PuzzleManagerGroup
             {
                 CharacterPool.ReturnToPool(useUnit);
             }
-
-            yield return new WaitForSecondsRealtime(1f);
-
             var unitState = PlayerPrefs.GetString("unitState", "");
-            Debug.Log(unitState);
             var pieceData = unitState.Split(';');
 
             var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
@@ -292,11 +287,12 @@ namespace Script.PuzzleManagerGroup
                 var setUnitBase = setUnit.GetComponent<CharacterBase>();
                 setUnitBase.Initialize();
                 setUnitBase.unitGroup = unitGroups;
-                setUnitBase.UnitInGameLevel = unitLevel;
+                setUnitBase.unitPuzzleLevel = unitLevel;
                 setUnitBase.GetComponent<SpriteRenderer>().sprite = setUnitBase.GetSprite(unitLevel);
                 setUnitBase.transform.position = position;
                 setUnitBase.gameObject.SetActive(true);
             }
+            yield return null;
         }
     }
 }

@@ -28,6 +28,8 @@ namespace Script
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private EnemyPool enemyPool;
         [SerializeField] private LevelUpRewardManager levelUpRewardManager;
+        [SerializeField] private ExpManager expManager;
+        [SerializeField] private CommonRewardManager commonRewardManager;
         public static GameManager Instance { get; private set; }
         private readonly WaitForSecondsRealtime _waitOneSecRealtime = new WaitForSecondsRealtime(1f);
         private readonly WaitForSecondsRealtime _waitTwoSecRealtime = new WaitForSecondsRealtime(2f);
@@ -51,9 +53,17 @@ namespace Script
             gridManager.GenerateInitialGrid();
             if (PlayerPrefs.HasKey("unitState"))
             {
-                countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
+              
                 EnforceManager.Instance.LoadEnforceData();
+                countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
+                expManager.LoadExp();
+                castleManager.LoadCastleHp();
                 StartCoroutine(spawnManager.LoadGameState());
+                if (StageManager.Instance.currentWave % 10 == 0)
+                {
+                    _bossSpawnArea = new Vector3Int(Random.Range(1,5), 10, 0);
+                    gridManager.ApplyBossSpawnColor(_bossSpawnArea);
+                }
             }
             else
             {
@@ -96,7 +106,12 @@ namespace Script
             IsBattle = false;
             AtkManager.Instance.ClearWeapons();
             if (castleManager.HpPoint != 0)
-            {
+            {           
+                if (StageManager.Instance.currentWave % 10 == 0)
+                {
+                    // yield return StartCoroutine(commonRewardManager.WaveReward());
+                    yield return StartCoroutine(spawnManager.BossStageClearRule());
+                }
                 IsClear = true;
                 ClearRewardManager.Instance.GetCoin(StageManager.Instance.currentStage, StageManager.Instance.currentWave);
                 StageManager.Instance.currentWave++;
@@ -123,11 +138,13 @@ namespace Script
         private IEnumerator NextWave()
         {
             spawnManager.SaveUnitState();
+            expManager.SaveExp();
+            castleManager.SaveCastleHp();
             EnforceManager.Instance.SaveEnforceData();
             Time.timeScale = 1;
             yield return StartCoroutine(KillMotion());
             yield return new WaitForSecondsRealtime(0.5f);
-            _bossSpawnArea = new Vector3Int(Random.Range(2,5), 10, 0);
+            _bossSpawnArea = new Vector3Int(Random.Range(1,5), 10, 0);
             if (StageManager.Instance.currentWave % 10 == 0)
             {
                 gridManager.ApplyBossSpawnColor(_bossSpawnArea);

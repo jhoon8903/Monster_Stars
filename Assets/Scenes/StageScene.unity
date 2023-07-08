@@ -696,6 +696,8 @@ MonoBehaviour:
   castleManager: {fileID: 1177777546}
   enemyPool: {fileID: 2016604888}
   levelUpRewardManager: {fileID: 2120144522}
+  expManager: {fileID: 841622521}
+  commonRewardManager: {fileID: 2120144519}
   speedUp: 0
 --- !u!4 &149521959
 Transform:
@@ -821,8 +823,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26fe702f15d614c23b22736d2c5787c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  commonRewardManager: {fileID: 2120144519}
-  spawnManager: {fileID: 149521964}
   continueBtn: {fileID: 1952921046}
   waveText: {fileID: 651631795}
   enemySpawnManager: {fileID: 329010038}

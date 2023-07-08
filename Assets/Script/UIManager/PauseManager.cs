@@ -26,10 +26,9 @@ namespace Script.UIManager
             pausePanel.SetActive(true);
         }
 
-        public void Retry()
+        private void Retry()
         {
             pausePanel.SetActive(false);
-
         }
 
         public void Resume()

@@ -3,20 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Script.RewardScript;
+using UnityEngine.Serialization;
 
 namespace Script.CharacterManagerScript
 {
     public class CharacterBase : MonoBehaviour
     {
-        protected internal int UnitGameLevel { get; private set; } = 1;
+        protected internal int UnitPieceLevel { get; private set; } = 1;
         protected internal int CharacterPieceCount { get; set; }
-        protected internal int CharacterMaxPiece => UnitGameLevel * 5;
+        protected internal int CharacterMaxPiece => UnitPieceLevel * 5;
         public enum UnitGrades { Green, Blue, Purple }
         protected internal UnitGrades UnitGrade;
         protected internal bool UnLock { get; private set; }
         protected internal bool Selected { get; set; }
-        protected internal int UnitInGameLevel { get; set; } 
-        protected internal string CharacterName;
+        public int unitPuzzleLevel;
         public enum Types { Character, Treasure }
         protected internal Types Type; 
         public enum UnitGroups { A,B,C,D,E,F,G,H,None }
@@ -51,9 +51,9 @@ namespace Script.CharacterManagerScript
 
         public void OnEnable()
         {
-            if (PermanentLevelUp && UnitInGameLevel == 1)
+            if (PermanentLevelUp && unitPuzzleLevel == 1)
             {
-                UnitInGameLevel = 2;
+                unitPuzzleLevel = 2;
             }
         }
         public virtual void Initialize()
@@ -74,11 +74,11 @@ namespace Script.CharacterManagerScript
 
         protected virtual void LevelUp()
         {
-            UnitInGameLevel++;
+            unitPuzzleLevel++;
         }
         protected internal virtual void CharacterReset()
         {
-            UnitInGameLevel = 1;
+            unitPuzzleLevel = 1;
         }
         public virtual List<GameObject> DetectEnemies()
         {
@@ -91,7 +91,7 @@ namespace Script.CharacterManagerScript
         public IEnumerator UnitLevelUp()
         {
             CharacterPieceCount -= CharacterMaxPiece;
-            UnitGameLevel++;
+            UnitPieceLevel++;
             yield return null;
         }
 

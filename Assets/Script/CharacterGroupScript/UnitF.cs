@@ -44,12 +44,12 @@ namespace Script.CharacterGroupScript
         protected override void LevelUp()
         {
             base.LevelUp();
-            SetLevel(UnitInGameLevel);
+            SetLevel(unitPuzzleLevel);
         }
         protected internal override void CharacterReset()
         {
             base.CharacterReset();
-            SetLevel(UnitInGameLevel);
+            SetLevel(unitPuzzleLevel);
         }
 
         private void GetDetectionProperties(out float size, out Vector2 center)
@@ -94,8 +94,7 @@ namespace Script.CharacterGroupScript
 
         private void SetLevel(int level)
         {
-            CharacterName = $"Unit_F_0{level - 1}";
-            UnitInGameLevel = level;
+            unitPuzzleLevel = level;
             Type = Types.Character;
             unitGroup = UnitGroups.F;
             DefaultDamage = 120f * level switch

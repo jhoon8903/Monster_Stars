@@ -48,7 +48,7 @@ namespace Script.CharacterManagerScript
             var characters = characterPool.UsePoolCharacterList();
             foreach (var atkUnit in characters
                          .Select(character => character.GetComponent<CharacterBase>())
-                         .Where(atkUnit => atkUnit.UnitInGameLevel >= 2))
+                         .Where(atkUnit => atkUnit.unitPuzzleLevel >= 2))
             {
                 StartCoroutine(AtkMotion(atkUnit));
             }
@@ -181,7 +181,7 @@ namespace Script.CharacterManagerScript
             weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
             weaponsList.Add(weaponBase.gameObject);
             StartCoroutine(weaponBase.UseWeapon());
-            weaponsPool.SetSprite(weaponType, attackData.Unit.GetComponent<CharacterBase>().UnitInGameLevel, weaponObject);
+            weaponsPool.SetSprite(weaponType, attackData.Unit.GetComponent<CharacterBase>().unitPuzzleLevel, weaponObject);
             return weaponObject;
         }
 
@@ -211,7 +211,7 @@ namespace Script.CharacterManagerScript
                 weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
                 weaponsList.Add(weaponBase.gameObject);
                 StartCoroutine(weaponBase.UseWeapon());
-                weaponsPool.SetSprite(weaponType, unit.GetComponent<CharacterBase>().UnitInGameLevel, weaponObject);
+                weaponsPool.SetSprite(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, weaponObject);
             }
             yield return null;
         }

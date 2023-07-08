@@ -58,7 +58,7 @@ namespace Script.EnemyManagerScript
             enemyBase.gameObject.SetActive(true);
             enemyBase.Initialize();
             enemyBase.healthPoint *= 1f + wave * 0.2f;
-            yield return StartCoroutine(enemyPatternManager.Boss_Move(enemyBase.gameObject));
+            yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyBase));
         }
 
         private IEnumerator SpawnEnemy(EnemyBase.EnemyTypes enemyType)
@@ -91,7 +91,7 @@ namespace Script.EnemyManagerScript
                     var xPositions = (
                         from character in characters 
                         let baseComponent = character.GetComponent<CharacterBase>() 
-                        where baseComponent && baseComponent.UnitInGameLevel >= 2 
+                        where baseComponent && baseComponent.unitPuzzleLevel >= 2 
                         select character.transform.position.x).ToList();
                     if (xPositions.Count > 0)
                     {

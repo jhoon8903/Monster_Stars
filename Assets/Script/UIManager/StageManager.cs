@@ -11,8 +11,6 @@ namespace Script.UIManager
 {
     public class StageManager : MonoBehaviour
     {
-        [SerializeField] private CommonRewardManager commonRewardManager;
-        [SerializeField] private SpawnManager spawnManager;
         [SerializeField] private GameObject continueBtn;
         [SerializeField] private TextMeshProUGUI waveText;
         [SerializeField] private EnemySpawnManager enemySpawnManager;
@@ -106,19 +104,12 @@ namespace Script.UIManager
         public void EnemyDestroyEvent(EnemyBase enemyBase)
         {
             enemyPool.enemyBases.Remove(enemyBase);
-            if (enemyPool.enemyBases.Count != 0) return;
+            if (enemyPool.enemyBases.Count != 0 ) return;
             StartCoroutine(WaveClear());
         }
         private IEnumerator WaveClear()
         {
-            if (currentWave % 10 == 0)
-            {
-                ClearBoss = true;
-
-                yield return StartCoroutine(commonRewardManager.WaveReward());
-                yield return StartCoroutine(spawnManager.BossStageClearRule());
-            }
-            else if (currentWave == maxWaveCount)
+            if (currentWave == maxWaveCount)
             {
                 StageClear();
             }

@@ -275,19 +275,19 @@ namespace Script.RewardScript
             _waveRewards = false;
             Time.timeScale = 0; // 게임 일시 정지
             commonRewardPanel.SetActive(true); // 보물 패널 활성화
-            var treasureChestName = treasure.GetComponent<CharacterBase>().CharacterName; // 보물 상자 이름
+            var treasureChestLevel = treasure.GetComponent<CharacterBase>().unitPuzzleLevel; // 보물 상자 이름
 
-            switch(treasureChestName)
+            switch(treasureChestLevel)
             {
-                case "Unit_Treasure00":
+                case 1:
                     break;
-                case "Unit_Treasure01":
+                case 2:
                     yield return StartCoroutine(CommonChance(80, 17, 3, null));
                     break;
-                case "Unit_Treasure02":
+                case 3:
                     yield return StartCoroutine(CommonChance(60, 35, 5, "blue"));
                     break;
-                case "Unit_Treasure03":
+                case 4:
                     yield return StartCoroutine(CommonChance(0, 80, 20, "purple"));
                     break;
             }
