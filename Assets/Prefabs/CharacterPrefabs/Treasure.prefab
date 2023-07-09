@@ -46,7 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1b4c2758a8054caeab6a19fc9e60a8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitGroup: 6
+  unitPuzzleLevel: 0
+  unitGroup: 8
   baseDamage: 0
   defaultAtkRate: 0
   projectileSpeed: 0

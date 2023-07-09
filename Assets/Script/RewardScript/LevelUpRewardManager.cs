@@ -33,16 +33,8 @@ namespace Script.RewardScript
         [SerializeField] private ExpManager expManager;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private CharacterManager characterManager;
-        public List<CharacterBase> playingUnit = new List<CharacterBase>();
         private ExpData _selectedPowerUp;
 
-        private void Start()
-        {
-            foreach (var unit in characterManager.characterList)
-            {
-                playingUnit.Add(unit);
-            }
-        }
 
         private static void ProcessExpReward(ExpData selectedReward)
         {
@@ -266,12 +258,10 @@ namespace Script.RewardScript
             var validOptions = powerUpsData.Where(p => IsValidOption(p, selectedCodes));
             return SelectRandom(validOptions);
         }
-
         public bool HasUnitInGroup(CharacterBase.UnitGroups group)
         {
-            return playingUnit.Any(unit => unit.unitGroup == group);
+            return characterManager.characterList.Any(unit => unit.unitGroup == group);
         }
-
         private bool IsValidOption (ExpData powerUp, ICollection<int> selectedCodes)
         {
             if (selectedCodes.Contains(powerUp.Code)) return false;
@@ -364,7 +354,6 @@ namespace Script.RewardScript
                     if (EnforceManager.Instance.physics2ProjectilePenetration) return false;
                     break;
                 case ExpData.Types.PoisonDoubleAtk:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
                     if (EnforceManager.Instance.poisonDoubleAtk) return false;
                     break;

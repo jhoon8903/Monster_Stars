@@ -8119,7 +8119,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC77C\uC77C\n\uBBF8\uC158"
+  m_text: "\uC77C\uC77C\n\uD018\uC2A4\uD2B8"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ab47b3ea1bc084bb58890a488dedabf8, type: 2}
   m_sharedMaterial: {fileID: -8956775509540403330, guid: ab47b3ea1bc084bb58890a488dedabf8, type: 2}
@@ -8146,8 +8146,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 150
-  m_fontSizeBase: 150
+  m_fontSize: 130
+  m_fontSizeBase: 130
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -12538,8 +12538,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 26fe702f15d614c23b22736d2c5787c1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  commonRewardManager: {fileID: 0}
-  spawnManager: {fileID: 0}
   continueBtn: {fileID: 0}
   waveText: {fileID: 0}
   enemySpawnManager: {fileID: 0}
