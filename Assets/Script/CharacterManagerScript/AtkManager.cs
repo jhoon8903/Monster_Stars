@@ -240,6 +240,7 @@ namespace Script.CharacterManagerScript
                 var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
                 weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
                 weaponsList.Add(weaponBase.gameObject);
+                weaponBase.Direction = weapon.Direction;
                 StartCoroutine(weaponBase.UseWeapon());
                 weaponsPool.SetSprite(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, weaponObject);
             }

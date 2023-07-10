@@ -23,7 +23,7 @@ namespace Script.WeaponScriptGroup
         private readonly System.Random _random = new System.Random();
         private EnemyBase _poisonedEnemy;
         protected readonly List<EnemyBase> HitEnemy = new List<EnemyBase>();
-
+        public Vector2 Direction { get; set; } = Vector2.up;
         public void InitializeWeapon(CharacterBase characterBase)
         {
             CharacterBase = characterBase;

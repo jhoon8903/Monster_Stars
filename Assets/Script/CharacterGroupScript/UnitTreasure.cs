@@ -34,11 +34,11 @@ namespace Script.CharacterGroupScript
                 _ => level4Sprite
             };
         }
-        private void SetLevel(int level)
+
+        protected internal override void SetLevel(int level)
         {
-            unitPuzzleLevel = level;
+            base.SetLevel(level);
             Type = Types.Treasure;
-            _spriteRenderer.sprite = GetSprite(level);
         }
         protected override void LevelUp()
         {

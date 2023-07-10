@@ -177,7 +177,7 @@ namespace Script.RewardScript
                         if (EnforceManager.Instance.recoveryCastle) return false; // Castle recovery can only be used once
                         break;
                     case CommonData.Types.GroupLevelUp:
-                        if (EnforceManager.Instance.characterGroupLevelUpIndexes.Contains(powerUp.Property[0])) return false; // Do not display GroupLevelUp options for groups where LevelUpPattern is executed
+                        if (EnforceManager.Instance.permanentGroupIndex.Contains(powerUp.Property[0])) return false; // Do not display GroupLevelUp options for groups where LevelUpPattern is executed
                         break;
                 }
                 return true;
@@ -367,7 +367,7 @@ namespace Script.RewardScript
                     break;  // 케릭터 그룹 레벨업
                 case CommonData.Types.LevelUpPattern: 
                     EnforceManager.Instance.PermanentIncreaseCharacter(selectedCommonReward.Property[0]); 
-                    EnforceManager.Instance.characterGroupLevelUpIndexes.Add(selectedCommonReward.Property[0]); 
+                    EnforceManager.Instance.permanentGroupIndex.Add(selectedCommonReward.Property[0]); 
                     break; // 기본 2레벨 케릭터 생성
                 case CommonData.Types.Exp: 
                     EnforceManager.Instance.IncreaseExpBuff(selectedCommonReward.Property[0]);

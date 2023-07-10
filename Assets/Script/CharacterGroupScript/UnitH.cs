@@ -93,9 +93,9 @@ namespace Script.CharacterGroupScript
             };
         }
 
-        private void SetLevel(int level)
+        protected internal override void SetLevel(int level)
         {
-            unitPuzzleLevel = level;
+            base.SetLevel(level);
             Type = Types.Character;
             unitGroup = UnitGroups.H;
             DefaultDamage = 120f * level switch
@@ -111,7 +111,6 @@ namespace Script.CharacterGroupScript
             UnitAtkType = UnitAtkTypes.Projectile;
             UnitProperty = UnitProperties.Physics;
             UnitEffect = UnitEffects.Bleed;
-            spriteRenderer.sprite = GetSprite(level);
         }
     }
 }

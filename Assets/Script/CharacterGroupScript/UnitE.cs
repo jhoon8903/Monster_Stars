@@ -91,9 +91,9 @@ namespace Script.CharacterGroupScript
             };
         }
 
-        private void SetLevel(int level)
-        {
-            unitPuzzleLevel = level;
+        protected internal override void SetLevel(int level)
+        { 
+            base.SetLevel(level);
             Type = Types.Character;
             unitGroup = UnitGroups.E;
             DefaultDamage = 100f * level switch
@@ -109,7 +109,6 @@ namespace Script.CharacterGroupScript
             UnitAtkType = UnitAtkTypes.Projectile;
             UnitProperty = UnitProperties.Water;
             UnitEffect = UnitEffects.Slow;
-            spriteRenderer.sprite = GetSprite(level);
         }
     }
 }

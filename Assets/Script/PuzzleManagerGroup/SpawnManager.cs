@@ -157,10 +157,21 @@ namespace Script.PuzzleManagerGroup
             var randomIndex = Random.Range(0, notUsePoolCharacterList.Count);
             var newCharacter = notUsePoolCharacterList[randomIndex];
             newCharacter.transform.position = position;
-            var characterBase = newCharacter.GetComponent<CharacterBase>();
-            if (characterBase.PermanentLevelUp && characterBase.unitPuzzleLevel == 1)
+            if (EnforceManager.Instance.permanentGroupIndex.Count > 1)
             {
-                characterBase.LevelUpScale(newCharacter);
+                foreach (var index in EnforceManager.Instance.permanentGroupIndex)
+                {
+                    var unitGroup = EnforceManager.Instance.characterList[index].unitGroup;
+                    if (unitGroup == newCharacter.GetComponent<CharacterBase>().unitGroup)
+                    {
+                        newCharacter.GetComponent<CharacterBase>().SetLevel(2);
+        
+                    }
+                }
+            }
+            else
+            {
+                newCharacter.GetComponent<CharacterBase>().Initialize();
             }
             newCharacter.SetActive(true);
             notUsePoolCharacterList.RemoveAt(randomIndex);

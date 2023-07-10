@@ -42,26 +42,18 @@ namespace Script.CharacterManagerScript
         public float projectileSpeed; 
         public float swingSpeed;
         public float defaultAtkDistance;
-        public bool PermanentLevelUp { get; set; } 
         private readonly Vector3 _initialScale = Vector3.one; 
         private readonly Vector3 _levelUpScale = new Vector3(1.3f, 1.3f, 0); 
         public GameObject CurrentWeapon { get; set; }
         protected internal bool IsClicked { get; set; }
         protected static List<GameObject> detectedEnemies = new List<GameObject>();
-        protected SpriteRenderer spriteRenderer;
+        private SpriteRenderer _spriteRenderer;
 
-        public void OnEnable()
-        {
-            if (PermanentLevelUp && unitPuzzleLevel == 1)
-            {
-                unitPuzzleLevel = 2;
-            }
-        }
         public virtual void Initialize()
         {
             UnLock = true;
             Selected = false;
-            spriteRenderer = GetComponent<SpriteRenderer>();
+            _spriteRenderer = GetComponent<SpriteRenderer>();
         }
         public void LevelUpScale(GameObject levelUpObject)
         {
@@ -100,6 +92,12 @@ namespace Script.CharacterManagerScript
         protected internal virtual Sprite GetSprite(int level)
         {
             return null;
+        }
+
+        protected internal virtual void SetLevel(int level)
+        {
+            unitPuzzleLevel = level;
+            _spriteRenderer.sprite = GetSprite(level);
         }
     }
 }

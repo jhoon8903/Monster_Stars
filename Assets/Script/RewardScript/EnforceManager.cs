@@ -69,7 +69,7 @@ namespace Script.RewardScript
         public int rewardMoveCount;
         public bool addGold; 
         public int addGoldCount;
-        public List<int> characterGroupLevelUpIndexes;
+        public List<int> permanentGroupIndex;
 
     }
 
@@ -322,7 +322,6 @@ namespace Script.RewardScript
             addGoldCount++;
         }
         
-        public HashSet<int> characterGroupLevelUpIndexes = new HashSet<int>();
         public void RandomCharacterLevelUp(int characterCount)
         {
             var activeCharacters = characterPool.UsePoolCharacterList();
@@ -345,6 +344,7 @@ namespace Script.RewardScript
                     character.GetComponent<CharacterBase>()?.unitPuzzleLevel < 5).ToList();
             }
         }
+
         public void CharacterGroupLevelUp(int characterListIndex)
         {
             var group = characterList[characterListIndex].unitGroup;
@@ -359,16 +359,11 @@ namespace Script.RewardScript
                 }
             }
         }
+
+        public List<int> permanentGroupIndex = new List<int>();
         public void PermanentIncreaseCharacter(int characterListIndex)
         {
-            var levelUpGroup = characterList[characterListIndex].unitGroup;
-            var pooledCharacters = characterPool.pooledCharacters;
-            foreach (var character in pooledCharacters
-                         .Select(characterObject => characterObject.GetComponent<CharacterBase>())
-                         .Where(character => character.unitGroup == levelUpGroup && character.unitPuzzleLevel == 1))
-            {
-                character.PermanentLevelUp = true;
-            }
+            permanentGroupIndex.Add(characterListIndex);
         }
 
         public void SaveEnforceData()
@@ -432,7 +427,7 @@ namespace Script.RewardScript
                 rewardMoveCount = rewardMoveCount,
                 addGold = addGold, 
                 addGoldCount = addGoldCount,
-                characterGroupLevelUpIndexes = characterGroupLevelUpIndexes.ToList()
+                permanentGroupIndex = permanentGroupIndex
             };
             var json = JsonUtility.ToJson(data);
             PlayerPrefs.SetString("EnforceData", json);
@@ -500,7 +495,7 @@ namespace Script.RewardScript
             rewardMoveCount = data.rewardMoveCount;
             addGold = data.addGold;
             addGoldCount = data.addGoldCount;
-            characterGroupLevelUpIndexes = new HashSet<int>(data.characterGroupLevelUpIndexes);
+            permanentGroupIndex = new List<int>(data.permanentGroupIndex);
         }                                  
     }
 }

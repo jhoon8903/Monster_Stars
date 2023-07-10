@@ -94,9 +94,9 @@ namespace Script.CharacterGroupScript
             };
         }
 
-        private void SetLevel(int level)
+        protected internal override void SetLevel(int level)
         {
-            unitPuzzleLevel = level;
+            base.SetLevel(level);
             Type = Types.Character;
             unitGroup = UnitGroups.G;
             DefaultDamage = 180f * level switch
@@ -112,7 +112,6 @@ namespace Script.CharacterGroupScript
             UnitAtkType = UnitAtkTypes.Gas;
             UnitProperty = UnitProperties.Fire;
             UnitEffect = UnitEffects.Burn;
-            spriteRenderer.sprite = GetSprite(level);
         }
     }
 }

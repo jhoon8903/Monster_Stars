@@ -35,7 +35,7 @@ namespace Script.WeaponScriptGroup
                 _rigidbody2D.velocity = new Vector2(0, Speed * velocityDirection);
                 transform.rotation = Quaternion.Euler(0, 0, _enemyTransformC.y > transform.position.y ? 0 : 180);
             }
-            _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, Speed);
+            _rigidbody2D.velocity = Direction * Speed;
             yield return new WaitForSeconds(useTime);
             StopUseWeapon(gameObject);
         }

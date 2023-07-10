@@ -82,9 +82,9 @@ namespace Script.CharacterGroupScript
             EnforceManager.Instance.increasePhysicsDamage = 1f;
         }
 
-        private void SetLevel(int level)
+        protected internal override void SetLevel(int level)
         {
-            unitPuzzleLevel = level;
+            base.SetLevel(level);
             Type = Types.Character;
             unitGroup = UnitGroups.D;
             DefaultDamage = 250f  * level switch
@@ -100,7 +100,6 @@ namespace Script.CharacterGroupScript
             UnitAtkType = UnitAtkTypes.Circle;
             UnitProperty = UnitProperties.Physics;
             UnitEffect = UnitEffects.None;
-            spriteRenderer.sprite = GetSprite(level);
         }
 
         protected internal override Sprite GetSprite(int level)
