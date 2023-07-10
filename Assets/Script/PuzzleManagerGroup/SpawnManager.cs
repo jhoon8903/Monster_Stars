@@ -178,8 +178,7 @@ namespace Script.PuzzleManagerGroup
             foreach (var character in saveCharacterList
                          .Where(character => !highLevelCharacters.Contains(character)))
             {
-                character.GetComponent<CharacterBase>().CharacterReset();
-                character.SetActive(false);
+                CharacterPool.ReturnToPool(character);
             }
             var highestY = gridManager.gridHeight - 1;
             var moves = new List<(GameObject, Vector3Int)>();
