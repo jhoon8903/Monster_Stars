@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using Script.RewardScript;
 using UnityEngine.Serialization;
+using Script.RobbyScript.TopMenuGroup;
 
 namespace Script.CharacterManagerScript
 {
@@ -91,6 +92,7 @@ namespace Script.CharacterManagerScript
         public IEnumerator UnitLevelUp()
         {
             CharacterPieceCount -= CharacterMaxPiece;
+            CoinsScript.Instance.Coin -= UnitPieceLevel * 500;
             UnitPieceLevel++;
             yield return null;
         }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
+using Script.RobbyScript.TopMenuGroup;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -183,7 +184,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 case true when characterBase.Selected:
                 {
                     unitInstance.infoBtn.gameObject.SetActive(true);
-                    if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece)
+                    if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece && CoinsScript.Instance.Coin >= characterBase.UnitPieceLevel * 500)
                     {
                         unitInstance.levelUpBtn.gameObject.SetActive(true);
                         unitInstance.removeBtn.gameObject.SetActive(false);
@@ -200,7 +201,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 case true when !characterBase.Selected:
                 {
                     unitInstance.infoBtn.gameObject.SetActive(true);
-                    if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece)
+                    if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece && CoinsScript.Instance.Coin >= characterBase.UnitPieceLevel * 500)
                     {
                         unitInstance.levelUpBtn.gameObject.SetActive(true);
                         unitInstance.removeBtn.gameObject.SetActive(false);

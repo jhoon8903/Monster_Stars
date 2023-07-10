@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Script.CharacterManagerScript;
+using Script.RobbyScript.TopMenuGroup;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -70,7 +71,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         private IEnumerator CheckForLevelUp(UnitIcon unitInstance, CharacterBase characterBase)
         {
             levelUpBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece)
+            if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece && CoinsScript.Instance.Coin >= characterBase.UnitPieceLevel * 500)
             {
                 levelUpBtn.GetComponent<Button>().interactable = true;
 
