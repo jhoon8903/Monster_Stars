@@ -1,7 +1,7 @@
 using System;
+using System.Collections.Generic;
 using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
-using Script.UIManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -28,6 +28,7 @@ namespace Script.RobbyScript.MainMenuGroup
         [SerializeField] private GameObject cancelBtn;
         public int Stage { get; private set; }
         public static MainPanel Instance { get; private set; }
+        public List<int> clearStageList = new List<int>();
 
         public void Awake()
         {
@@ -98,19 +99,26 @@ namespace Script.RobbyScript.MainMenuGroup
 
         private void UpdateProgress(int stage)
         {
-            var value = PlayerPrefs.GetInt("ClearWave", 1);
-            Stage = stage;
-            stageText.text = $"스테이지 {Stage}";
             var waveMaxValue = Stage switch
             {
                 >= 1 and < 5 => 10,
                 >= 5 and < 10 => 20,
                 _ => 30
             };
+            var listString = PlayerPrefs.GetString("ClearStageList", "");
+            if (!string.IsNullOrEmpty(listString))
+            {
+                clearStageList = new List<int>(Array.ConvertAll(listString.Split(','), int.Parse));
+            }
+            var value = new int();
+            value = clearStageList.Contains(value) ? waveMaxValue : PlayerPrefs.GetInt("ClearWave", 1);
+            Stage = stage;
+            stageText.text = $"스테이지 {Stage}";
             stageProgress.maxValue = waveMaxValue;
             stageProgress.value = value;
             stageProgressText.text = $"{stageProgress.value} / {stageProgress.maxValue}";
         }
+
 
         private void NextStage()
         {

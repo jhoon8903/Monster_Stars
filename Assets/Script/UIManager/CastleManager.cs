@@ -69,6 +69,7 @@ namespace Script.UIManager
             {
                 HpPoint = MaxHpPoint;
             }
+            UpdateHpText();
         }
 
         public void SaveCastleHp()

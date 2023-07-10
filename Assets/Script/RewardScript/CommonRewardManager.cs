@@ -177,6 +177,7 @@ namespace Script.RewardScript
                         if (EnforceManager.Instance.recoveryCastle) return false; // Castle recovery can only be used once
                         break;
                     case CommonData.Types.GroupLevelUp:
+                        Debug.Log(EnforceManager.Instance.permanentGroupIndex.Contains(powerUp.Property[0]));
                         if (EnforceManager.Instance.permanentGroupIndex.Contains(powerUp.Property[0])) return false; // Do not display GroupLevelUp options for groups where LevelUpPattern is executed
                         break;
                 }
@@ -390,7 +391,6 @@ namespace Script.RewardScript
                 case CommonData.Types.Gold: 
                     EnforceManager.Instance.addGold = true;
                     break;
-             // 성 최대 체력 증가
                 default: Debug.LogWarning($"Unhandled reward type: {selectedCommonReward.Type}"); 
                     break;
             }

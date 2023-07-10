@@ -111,21 +111,22 @@ namespace Script
                 IsClear = true;
                 ClearRewardManager.Instance.GetCoin(StageManager.Instance.currentStage, StageManager.Instance.currentWave);
                 StageManager.Instance.clearWave = StageManager.Instance.currentWave;
-                if (StageManager.Instance.clearWave % 10 == 0)
-                {
-                    StageManager.Instance.ClearBoss = true;
-                    yield return StartCoroutine(commonRewardManager.WaveReward());
-                    yield return StartCoroutine(spawnManager.BossStageClearRule());
-                    StageManager.Instance.ClearBoss = false;
-                }
+                StageManager.Instance.SaveClearWave();
 
-                if (StageManager.Instance.clearWave == StageManager.Instance.maxWaveCount)
+                if (StageManager.Instance.clearWave == StageManager.Instance.MaxWave())
                 {
                     StageManager.Instance.StageClear();
                 }
+                else if (StageManager.Instance.clearWave % 10 == 0)
+                {
+                    StageManager.Instance.ClearBoss = true;
+                    moveCount = 15 + EnforceManager.Instance.rewardMoveCount;
+                    yield return StartCoroutine(commonRewardManager.WaveReward());
+                    yield return StartCoroutine(spawnManager.BossStageClearRule());
+                    yield return StartCoroutine(InitializeWave());
+                }
                 else
                 {
-                    StageManager.Instance.SaveClearWave();
                     yield return StartCoroutine(InitializeWave());
                 }
             }
@@ -142,10 +143,13 @@ namespace Script
             expManager.SaveExp();
             castleManager.SaveCastleHp();
             EnforceManager.Instance.SaveEnforceData();
-            moveCount = 7 + EnforceManager.Instance.rewardMoveCount;
+            if (!StageManager.Instance.ClearBoss)
+            {
+                moveCount = 7 + EnforceManager.Instance.rewardMoveCount;
+            }
             PlayerPrefs.SetInt("moveCount",moveCount);
             countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
-
+            
             Time.timeScale = 1;
 
             if (EnforceManager.Instance.recoveryCastle)
@@ -168,6 +172,7 @@ namespace Script
                 FindObjectOfType<UnitD>().ResetDamage();
           
             enemyPool.ClearList();
+            StageManager.Instance.ClearBoss = false;
         }
         private void LoseGame()
         {
