@@ -422,7 +422,7 @@ namespace Script.RewardScript
                     break;
                 case ExpData.Types.Water2AdditionalProjectile:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
-                    if ( EnforceManager.Instance.water2AdditionalProjectile) return false;
+                    if (EnforceManager.Instance.water2AdditionalProjectile) return false;
                     break;
                 case ExpData.Types.FireBleedingAdditionalDamage:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;

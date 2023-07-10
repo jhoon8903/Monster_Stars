@@ -29,6 +29,7 @@ namespace Script.UIManager
         private void Retry()
         {
             pausePanel.SetActive(false);
+            SceneManager.LoadScene("StageScene");
         }
 
         public void Resume()

@@ -107,7 +107,14 @@ namespace Script.CharacterManagerScript
                     }
                     break;
                 case CharacterBase.UnitGroups.E:
-                    Attack(new AttackData(unit, WeaponsPool.WeaponType.IceCrystal)); 
+                    if (EnforceManager.Instance.waterSideAttack)
+                    {
+                        StartCoroutine(SideAttack(new AttackData(unit, WeaponsPool.WeaponType.IceCrystal)));
+                    }
+                    else
+                    {
+                        Attack(new AttackData(unit, WeaponsPool.WeaponType.IceCrystal)); 
+                    }
                     break;
                 case CharacterBase.UnitGroups.H:
                     if (EnforceManager.Instance.physics2AdditionalProjectile)
@@ -215,6 +222,30 @@ namespace Script.CharacterManagerScript
             }
             yield return null;
         }
+
+        private IEnumerator SideAttack(AttackData attackData)
+        {
+            var unit = attackData.Unit;
+            var weaponType = attackData.WeaponType;
+            var unitPosition = unit.transform.position;
+            var weaponDirections = new[]
+            {
+                new {Direction = Vector2.left, Rotation = Quaternion.Euler(0, 0, 90)},
+                new {Direction = Vector2.up, Rotation = Quaternion.identity},
+                new {Direction = Vector2.right, Rotation = Quaternion.Euler(0, 0, -90)}
+            };
+            foreach (var weapon in weaponDirections)
+            {
+                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unitPosition, weapon.Rotation);
+                var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
+                weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
+                weaponsList.Add(weaponBase.gameObject);
+                StartCoroutine(weaponBase.UseWeapon());
+                weaponsPool.SetSprite(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, weaponObject);
+            }
+            yield return null;
+        }
+
 
         public void ClearWeapons()
         {

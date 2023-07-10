@@ -1,7 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using Script.CharacterManagerScript;
 using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
 using Script.UIManager;
@@ -29,25 +26,29 @@ namespace Script.RobbyScript.MainMenuGroup
         [SerializeField] private GameObject continuePanel;
         [SerializeField] private GameObject confirmBtn;
         [SerializeField] private GameObject cancelBtn;
-        private int Stage { get; set; }
-        private const string ClearedStageKey = "ClearedStage";
+        public int Stage { get; private set; }
+        public static MainPanel Instance { get; private set; }
 
-
-        private void Start()
+        public void Awake()
         {
-            var stage = StageManager.Instance.currentStage;
-            UpdateProgress(stage);
+            Instance = this;
+        }
+
+        public void Start()
+        {
             holdCharacterList.InstanceUnit();
+            if (PlayerPrefs.HasKey("unitState"))
+            {
+                continuePanel.SetActive(true);
+            }
+
+            var stage = PlayerPrefs.GetInt("ClearStage", 1);
+            UpdateProgress(stage);
             startBtn.GetComponent<Button>().onClick.AddListener(StartGame); 
             nextStageBtn.GetComponent<Button>().onClick.AddListener(NextStage);
             previousStageBtn.GetComponent<Button>().onClick.AddListener(PreviousStage);
             confirmBtn.GetComponent<Button>().onClick.AddListener(ContinueGame);
             cancelBtn.GetComponent<Button>().onClick.AddListener(CancelContinue);
-
-            if (PlayerPrefs.HasKey("unitState"))
-            {
-                continuePanel.SetActive(true);
-            }
         }
 
         private void Update()
@@ -67,7 +68,7 @@ namespace Script.RobbyScript.MainMenuGroup
         {
             PlayerPrefs.DeleteKey("unitState");
             PlayerPrefs.DeleteKey("EnforceData");
-            PlayerPrefs.SetInt(StageManager.Instance.currentWaveKey,1);
+            PlayerPrefs.SetInt("CurrentWave",1);
             continuePanel.SetActive(false);
         }
 
@@ -97,17 +98,23 @@ namespace Script.RobbyScript.MainMenuGroup
 
         private void UpdateProgress(int stage)
         {
-            var value = StageManager.Instance.clearWave;
+            var value = PlayerPrefs.GetInt("ClearWave", 1);
             Stage = stage;
             stageText.text = $"스테이지 {Stage}";
-            stageProgress.maxValue = StageManager.Instance.maxWaveCount;
+            var waveMaxValue = Stage switch
+            {
+                >= 1 and < 5 => 10,
+                >= 5 and < 10 => 20,
+                _ => 30
+            };
+            stageProgress.maxValue = waveMaxValue;
             stageProgress.value = value;
             stageProgressText.text = $"{stageProgress.value} / {stageProgress.maxValue}";
         }
 
         private void NextStage()
         {
-            var clearedStage = PlayerPrefs.GetInt(ClearedStageKey, 1);
+            var clearedStage = PlayerPrefs.GetInt("ClearStage", 1);
             if (Stage < clearedStage)
             {
                 Stage++;

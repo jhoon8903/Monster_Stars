@@ -12429,7 +12429,6 @@ GameObject:
   - component: {fileID: 1502907847}
   - component: {fileID: 1502907846}
   - component: {fileID: 1502907845}
-  - component: {fileID: 1502907849}
   m_Layer: 5
   m_Name: GamePanel
   m_TagString: Untagged
@@ -12526,31 +12525,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &1502907849
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1502907844}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 26fe702f15d614c23b22736d2c5787c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  continueBtn: {fileID: 0}
-  waveText: {fileID: 0}
-  enemySpawnManager: {fileID: 0}
-  enemyPool: {fileID: 0}
-  currentStage: 1
-  currentWave: 1
-  maxWaveCount: 30
-  maxStageCount: 50
-  clearedStageKey: ClearedStage
-  clearedWaveKey: ClearedWave
-  currentWaveKey: CurrentWave
-  clearWave: 0
-  isStageClear: 0
 --- !u!1 &1533431433
 GameObject:
   m_ObjectHideFlags: 0
@@ -15252,6 +15226,7 @@ MonoBehaviour:
   informationPanel: {fileID: 637520265}
   warningPanel: {fileID: 130396536}
   messageText: {fileID: 709860252}
+  mainPanel: {fileID: 337770383}
 --- !u!114 &2064254569
 MonoBehaviour:
   m_ObjectHideFlags: 0

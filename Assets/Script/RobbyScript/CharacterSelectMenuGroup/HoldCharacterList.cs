@@ -25,6 +25,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         private GameObject _activeStatusPanel;
         private readonly Dictionary<UnitIcon, UnitIcon> _unitIconMapping = new Dictionary<UnitIcon, UnitIcon>();
 
+
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.R))

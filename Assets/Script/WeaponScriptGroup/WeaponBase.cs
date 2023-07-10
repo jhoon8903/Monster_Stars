@@ -14,7 +14,7 @@ namespace Script.WeaponScriptGroup
         public bool isInUse;
         protected float Speed { get; set; }
         protected float Damage { get; private set; }
-        protected float Distance { get; private set; }
+        protected float Distance { get; set; }
         private CharacterBase.UnitProperties UnitProperty { get; set; }
         private CharacterBase.UnitEffects UnitEffect { get; set; }
         private CharacterBase.UnitGroups UnitGroup { get; set; }

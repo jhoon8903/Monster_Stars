@@ -1,8 +1,8 @@
 using System.Collections;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
-using Script.PuzzleManagerGroup;
 using Script.RewardScript;
+using Script.RobbyScript.MainMenuGroup;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -16,30 +16,40 @@ namespace Script.UIManager
         [SerializeField] private EnemySpawnManager enemySpawnManager;
         [SerializeField] private EnemyPool enemyPool;
         public static StageManager Instance;
-        public int currentStage;
-        public int currentWave;
         public int maxWaveCount;
         public int maxStageCount;
         public bool ClearBoss { get; set; }
-        public string clearedStageKey = "ClearedStage";
-        public string clearedWaveKey = "ClearedWave";
+        public int currentStage;
+        public string currentStageKey = "CurrentStage";
+        public int clearStage;
+        public string clearStageKey = "ClearStage";
+        public int currentWave;
         public string currentWaveKey = "CurrentWave";
         public int clearWave;
+        public string clearedWaveKey = "ClearWave";
+        public string maxWaveCountKey = "MaxWaves";
         public bool isStageClear;
+        private int SelectedStage { get; set; }
 
         private void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-            currentStage = PlayerPrefs.GetInt(clearedStageKey, 1);
+            Instance = this;
+            currentStage = PlayerPrefs.GetInt(currentStageKey, 1);
+            clearStage = PlayerPrefs.GetInt(clearStageKey, 1);
             currentWave = PlayerPrefs.GetInt(currentWaveKey, 1);
             clearWave = PlayerPrefs.GetInt(clearedWaveKey, 1);
+            SelectedStage = MainPanel.Instance.Stage;
+        }
+
+        private void MaxWave()
+        {
+            maxWaveCount = currentStage switch
+            {
+                >= 1 and < 5 => 10,
+                >= 5 and < 10 => 20,
+                _ => 30
+            };
+            PlayerPrefs.SetInt(maxWaveCountKey, maxWaveCount);
         }
         private void Update()
         {
@@ -52,18 +62,23 @@ namespace Script.UIManager
                 PlayerPrefs.DeleteAll();
             }
         }
+
+        public void SelectedStages()
+        {
+            currentStage = SelectedStage;
+        }
         public void StartWave()
         {
             StartCoroutine(WaveController(currentWave));
             StartCoroutine(AtkManager.Instance.CheckForAttack());
         }
-        private IEnumerator WaveController(int wave)
+        private IEnumerator WaveController(int currentWaves)
         {
-            var (normalCount, slowCount, fastCount, sets) = GetSpawnCountForWave(wave);
+            var (normalCount, slowCount, fastCount, sets) = GetSpawnCountForWave(currentWaves);
 
-            if (wave % 10 == 0)
+            if (currentWaves % 10 == 0)
             {
-                yield return StartCoroutine(enemySpawnManager.SpawnBoss(wave));
+                yield return StartCoroutine(enemySpawnManager.SpawnBoss(currentWaves));
             }
             else
             {
@@ -84,57 +99,48 @@ namespace Script.UIManager
                 }
             }
         }
-        private static (int normal, int slow, int fast, int sets) GetSpawnCountForWave(int wave)
+        private static (int normal, int slow, int fast, int sets) GetSpawnCountForWave(int currentWaves)
         {
-            if (wave is 10 or 20) 
+            if (currentWaves is 10 or 20) 
             {
                 return (0, 0, 0, 0);
             }
-            var baseCount = wave;
-            if (wave > 10)
+            var baseCount = currentWaves;
+            if (currentWaves > 10)
             {
-                baseCount = wave - 10;
+                baseCount = currentWaves - 10;
             }
             var normalCount = baseCount + 3;
             var slowCount = baseCount - 1;
             var fastCount = baseCount - 1;
-            var sets = wave <= 10 ? 2 : 3;
+            var sets = currentWaves <= 10 ? 2 : 3;
             return (normalCount, slowCount, fastCount, sets);
         }
         public void EnemyDestroyEvent(EnemyBase enemyBase)
         {
             enemyPool.enemyBases.Remove(enemyBase);
             if (enemyPool.enemyBases.Count != 0 ) return;
-            StartCoroutine(WaveClear());
+            StartCoroutine(GameManager.Instance.ContinueOrLose());
         }
-        private IEnumerator WaveClear()
-        {
-            if (currentWave == maxWaveCount)
-            {
-                StageClear();
-            }
-            else
-            {
-                yield return StartCoroutine(GameManager.Instance.ContinueOrLose());
-            }
-            EnforceManager.Instance.addGold = false;
-        }
-        private void StageClear()
+        public void StageClear()
         {
             isStageClear = true;
-            var clearStage = currentStage;
-            var clearWaveCount = currentWave;
-            ClearRewardManager.Instance.ClearReward(clearStage, clearWaveCount);
+            ClearRewardManager.Instance.ClearReward(currentStage, maxWaveCount);
             currentStage++;
-            if (currentStage == maxStageCount+1)
+            PlayerPrefs.SetInt(currentStageKey, currentStage);
+            if (currentStage > maxStageCount)
             {
                 GameClear();
             }
-            else
+            else if (currentStage > clearStage)
             {
+                clearStage = currentStage;
+                PlayerPrefs.SetInt(clearStageKey, clearStage);
+                MaxWave();
                 currentWave = 1;
-                PlayerPrefs.SetInt(clearedStageKey, currentStage);
-                PlayerPrefs.SetInt(clearedWaveKey, currentWave);
+                clearWave = currentWave;
+                PlayerPrefs.SetInt(currentWaveKey, currentWave);
+                PlayerPrefs.SetInt(clearedWaveKey, clearWave);
                 PlayerPrefs.Save();
             }
             EnforceManager.Instance.addGold = false;
@@ -148,6 +154,14 @@ namespace Script.UIManager
         private void GameClear()
         {
             
+        }
+
+        public void SaveClearWave()
+        {
+            PlayerPrefs.SetInt(clearedWaveKey, clearWave);
+            currentWave++;
+            PlayerPrefs.SetInt(currentWaveKey, currentWave);
+            UpdateWaveText();
         }
     }
 }

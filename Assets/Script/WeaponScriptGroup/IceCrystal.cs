@@ -1,4 +1,6 @@
 using System.Collections;
+using System.Collections.Generic;
+using Script.CharacterGroupScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
 using UnityEngine;
@@ -8,7 +10,9 @@ namespace Script.WeaponScriptGroup
     public class IceCrystal : WeaponBase
     {
         private Rigidbody2D _rigidbody2D;
-        
+        private Vector3 _enemyTransformC;
+        private List<GameObject> _enemyTransformsC = new List<GameObject>();
+        private List<GameObject> _enemyTransformsB = new List<GameObject>();
         private void Awake()
         {
             _rigidbody2D = GetComponent<Rigidbody2D>();
@@ -18,18 +22,20 @@ namespace Script.WeaponScriptGroup
         {
             yield return base.UseWeapon();
             var useTime = Distance / Speed;
-            if (EnforceManager.Instance.waterSideAttack)
-            {
-                _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x - 1, Speed);
-                _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x + 1, Speed);
-            }
-
             if (EnforceManager.Instance.water2BackAttack)
             {
-                _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, -Speed);
+                _enemyTransformsC = CharacterBase.GetComponent<UnitC>().DetectEnemies();
+                foreach (var enemy in _enemyTransformsC)
+                {
+                    _enemyTransformC = enemy.transform.position;
+                }
+                var position = transform.position;
+                Distance = Vector3.Distance(position, _enemyTransformC);
+                var velocityDirection = (_enemyTransformC.y > position.y) ? 1 : -1;
+                _rigidbody2D.velocity = new Vector2(0, Speed * velocityDirection);
+                transform.rotation = Quaternion.Euler(0, 0, _enemyTransformC.y > transform.position.y ? 0 : 180);
             }
             _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, Speed);
-            
             yield return new WaitForSeconds(useTime);
             StopUseWeapon(gameObject);
         }
