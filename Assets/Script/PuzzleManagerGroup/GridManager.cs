@@ -1,12 +1,14 @@
+using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Script.PuzzleManagerGroup
 {
     public sealed class GridManager : MonoBehaviour
     {
-        public int gridHeight = 6; 
-        public int gridWidth = 6; 
+        public int gridHeight;
+        public int gridWidth = 6;
         public GameObject grid1Sprite; 
         public GameObject grid2Sprite; 
         private const int CurrentRowType = 1; 
@@ -15,8 +17,9 @@ namespace Script.PuzzleManagerGroup
         private GameObject[,] _gridCells;
         private SpriteRenderer[,] _gridCellRenderers;
 
-        public void GenerateInitialGrid()
+        public void GenerateInitialGrid(int height)
         {
+            gridHeight = height;
             _gridCells = new GameObject[gridWidth, gridHeight];
             _gridCellRenderers = new SpriteRenderer[gridWidth, gridHeight];
             for (var y = 0; y < gridHeight; y++)
@@ -29,6 +32,7 @@ namespace Script.PuzzleManagerGroup
                     _gridCellRenderers[x, y] = newCell.GetComponent<SpriteRenderer>();
                 }
             }
+            PlayerPrefs.SetInt("GridHeight", gridHeight);
         }
 
         public void AddRow()
@@ -43,7 +47,6 @@ namespace Script.PuzzleManagerGroup
                 }
             }
             gridHeight++;
-
             foreach (Transform child in transform)
             {
                 var newPosition = child.position;
@@ -57,6 +60,7 @@ namespace Script.PuzzleManagerGroup
                 newGridCells[x, 0] = newCell; 
             }
             _gridCells = newGridCells;
+            PlayerPrefs.SetInt("GridHeight", gridHeight);
         }
         public void ApplyBossSpawnColor(Vector3Int bossArea)
         {
@@ -75,21 +79,21 @@ namespace Script.PuzzleManagerGroup
             }
         }
 
-        public void ResetBossSpawnColor()
+        public IEnumerator ResetBossSpawnColor()
         {
             var backgroundColor = new Color32(22, 101, 123, 255);
             Camera.main.DOColor(backgroundColor, 2.0f);
-            var color1 = new Color32(206, 82, 206, 255);
-            var color2 = new Color32(250, 157, 65, 255);
+            var color = new Color(1, 1, 1, 1);
 
             for (var y = 0; y < gridHeight; y++)
             {
                 for (var x = 0; x < gridWidth; x++)
                 {
                     var cellRenderer = _gridCellRenderers[x, y];
-                    cellRenderer.DOColor((x + y) % 2 == 0 ? color2 : color1, 2.0f);
+                    cellRenderer.DOColor(color, 2.0f);
                 }
             }
+            yield return null;
         }
     }
 }

@@ -30,6 +30,8 @@ namespace Script.UIManager
 
         private void UpdateHpText()
         {
+            hpBar.maxValue = MaxHpPoint;
+            hpBar.value = HpPoint;
             hpText.text = $"{HpPoint} / {MaxHpPoint}";
         }
 

@@ -20,7 +20,6 @@ namespace Script.UIManager
         public static StageManager Instance;
         public int maxWaveCount;
         public int maxStageCount;
-        public bool ClearBoss { get; set; }
         public int currentStage;
         public string currentStageKey = "CurrentStage";
         public int clearStage;
@@ -32,6 +31,7 @@ namespace Script.UIManager
         public string maxWaveCountKey = "MaxWaves";
         public bool isStageClear;
         private int SelectedStage { get; set; }
+        public bool isBossClear;
 
         private void Awake()
         {
@@ -47,8 +47,10 @@ namespace Script.UIManager
         {
             maxWaveCount = currentStage switch
             {
-                >= 1 and < 5 => 10,
-                >= 5 and < 10 => 20,
+                // >= 1 and < 5 => 10,
+                // >= 5 and < 10 => 20,
+                // _ => 30
+                >=1 and <20 => 20,
                 _ => 30
             };
             PlayerPrefs.SetInt(maxWaveCountKey, maxWaveCount);
@@ -123,6 +125,7 @@ namespace Script.UIManager
         {
             enemyPool.enemyBases.Remove(enemyBase);
             if (enemyPool.enemyBases.Count != 0 ) return;
+            isBossClear = enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss;
             StartCoroutine(GameManager.Instance.ContinueOrLose());
         }
         public void StageClear()

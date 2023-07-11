@@ -49,8 +49,7 @@ namespace Script
                 Destroy(gameObject);
             }
             swipeManager.isBusy = true;
-            gridManager.GenerateInitialGrid();
-           
+            gridManager.GenerateInitialGrid(PlayerPrefs.GetInt("GridHeight", 6));
             if (PlayerPrefs.HasKey("unitState"))
             {
                 EnforceManager.Instance.LoadEnforceData();
@@ -63,6 +62,7 @@ namespace Script
                     _bossSpawnArea = new Vector3Int(Random.Range(1,5), 10, 0);
                     gridManager.ApplyBossSpawnColor(_bossSpawnArea);
                 }
+
             }
             else
             {
@@ -117,11 +117,10 @@ namespace Script
                 {
                     StageManager.Instance.StageClear();
                 }
-                else if (StageManager.Instance.clearWave % 10 == 0)
+                else if (StageManager.Instance.isBossClear)
                 {
-                    StageManager.Instance.ClearBoss = true;
                     moveCount = 15 + EnforceManager.Instance.rewardMoveCount;
-                    yield return StartCoroutine(commonRewardManager.WaveReward());
+                    yield return StartCoroutine(commonRewardManager.WaveRewardChance());
                     yield return StartCoroutine(spawnManager.BossStageClearRule());
                     yield return StartCoroutine(InitializeWave());
                 }
@@ -143,9 +142,13 @@ namespace Script
             expManager.SaveExp();
             castleManager.SaveCastleHp();
             EnforceManager.Instance.SaveEnforceData();
-            if (!StageManager.Instance.ClearBoss)
+            if (!StageManager.Instance.isBossClear)
             {
                 moveCount = 7 + EnforceManager.Instance.rewardMoveCount;
+            }
+            else
+            {
+                yield return StartCoroutine(gridManager.ResetBossSpawnColor());
             }
             PlayerPrefs.SetInt("moveCount",moveCount);
             countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
@@ -170,9 +173,8 @@ namespace Script
             if (levelUpRewardManager.HasUnitInGroup(CharacterBase.UnitGroups.D) && 
                 EnforceManager.Instance.physicIncreaseDamage)  
                 FindObjectOfType<UnitD>().ResetDamage();
-          
             enemyPool.ClearList();
-            StageManager.Instance.ClearBoss = false;
+            StageManager.Instance.isBossClear = false;
         }
         private void LoseGame()
         {

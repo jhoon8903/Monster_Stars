@@ -106,8 +106,10 @@ namespace Script.RobbyScript.MainMenuGroup
             Stage = stage;
             var waveMaxValue = Stage switch
             {
-                >= 1 and < 5 => 10,
-                >= 5 and < 10 => 20,
+                // >= 1 and < 5 => 10,
+                // >= 5 and < 10 => 20,
+                // _ => 30
+                >=1 and <20 => 20,
                 _ => 30
             };
             var value = clearStageList.Contains(Stage) ? waveMaxValue : PlayerPrefs.GetInt("ClearWave", 1);

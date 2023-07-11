@@ -36,17 +36,15 @@ namespace Script.RewardScript
         [SerializeField] private CountManager countManager;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private CharacterManager characterManager;
-        [SerializeField] private GridManager gridManager;
 
         public readonly Queue<GameObject> PendingTreasure = new Queue<GameObject>(); // 보류 중인 보물 큐
         private GameObject _currentTreasure; // 현재 보물
         public bool openBoxing = true;
-        private bool _waveRewards;
         private List<CommonData> _powerUps;
         private string _groupName;
         private int _bossRewardSelected;
-
         public bool isOpenBox;
+        
         // 1. 상자가 매치 되면 상자를 큐에 추가
         public void EnqueueTreasure()
         {
@@ -62,7 +60,6 @@ namespace Script.RewardScript
                 StartCoroutine(OpenBox(_currentTreasure));
             });
         }
-
 
         // 2. 상자마다의 확률 분배
         private IEnumerator CommonChance(int greenChance, int blueChance, int purpleChance, string forcedColor)
@@ -91,7 +88,7 @@ namespace Script.RewardScript
             var selectedCodes = new HashSet<int>();
             for (var i = 0; i < 3; i++)
             {
-                if (StageManager.Instance.ClearBoss)
+                if (StageManager.Instance.isBossClear)
                 {
                     var firstDesiredPowerUp = new CommonPurpleData(purpleSprite, 16, CommonData.Types.AddRow, new[] { 1 });
                     commonPowerUps.Add(firstDesiredPowerUp); 
@@ -124,20 +121,19 @@ namespace Script.RewardScript
                     commonPowerUps.Add(selectedPowerUp);
                     selectedCodes.Add(selectedPowerUp.Code);
                 }
-                StageManager.Instance.ClearBoss = false;
             }
             return commonPowerUps;
         }
 
         // 4. 코드 중복검사
-        private CommonData CommonUnique(IEnumerable<CommonData> powerUpsData, ICollection<int> selectedCodes)
+        private static CommonData CommonUnique(IEnumerable<CommonData> powerUpsData, ICollection<int> selectedCodes)
         {
             var validOptions = powerUpsData.Where(p => IsValidOption(p, selectedCodes));
             return SelectRandom(validOptions);
         }
 
         // 5. case별 예외처리
-       private bool IsValidOption(CommonData powerUp, ICollection<int> selectedCodes)
+       private static bool IsValidOption(CommonData powerUp, ICollection<int> selectedCodes)
             {
                 if (selectedCodes.Contains(powerUp.Code)) return false; // Do not select already selected reward codes again
                 switch (powerUp.Type)
@@ -153,9 +149,9 @@ namespace Script.RewardScript
                         break;
                     case CommonData.Types.AddRow:
                         if (EnforceManager.Instance.addRowCount > 2) return false;
-                        if (!StageManager.Instance.ClearBoss) return false;
-                        if (StageManager.Instance.currentWave % 10 != 0 ) return false;
-                        break;// Show row extra reward only after boss stage, up to 2 times
+                        if (!StageManager.Instance.isBossClear) return false;
+                        if (StageManager.Instance.currentWave % 10 != 0 ) return false;// Show row extra reward only after boss stage, up to 2 times
+                        break;
                     case CommonData.Types.Slow:
                         if (EnforceManager.Instance.slowCount <= 3) return false; // Displays the enemy movement speed reduction effect up to 3 times
                         break;
@@ -164,7 +160,7 @@ namespace Script.RewardScript
                         break;
                     case CommonData.Types.StepDirection:
                         if (EnforceManager.Instance.diagonalMovement)return false;
-                        if (!StageManager.Instance.ClearBoss) return false;
+                        if (!StageManager.Instance.isBossClear) return false;
                         if (StageManager.Instance.currentWave % 10 != 0 ) return false;
                         break;
                     case CommonData.Types.Match5Upgrade:
@@ -272,7 +268,6 @@ namespace Script.RewardScript
         // 9. 상자 오픈
         private IEnumerator OpenBox(GameObject treasure)
         {
-            _waveRewards = false;
             Time.timeScale = 0; // 게임 일시 정지
             commonRewardPanel.SetActive(true); // 보물 패널 활성화
             var treasureChestLevel = treasure.GetComponent<CharacterBase>().unitPuzzleLevel; // 보물 상자 이름
@@ -331,9 +326,6 @@ namespace Script.RewardScript
                 _currentTreasure = null; // 현재 보물 없음
             }
             ProcessCommonReward(selectedReward);
-            if (!_waveRewards) return;
-            gridManager.ResetBossSpawnColor();
-            _waveRewards = false;
         }
 
         // 12. 선택된 버프 적용 
@@ -395,12 +387,11 @@ namespace Script.RewardScript
             selectedCommonReward.chosenProperty = null;
         }
         
-        // # 보스 웨이브 클리어 변도 보상
-        public IEnumerator WaveReward()
+        // # 보스 웨이브 클리어 별도 보상
+        public IEnumerator WaveRewardChance()
         {
             Time.timeScale = 0;
             commonRewardPanel.SetActive(true);
-            _waveRewards = true;
             yield return StartCoroutine(CommonChance(30, 55, 15, null));
         }
     }

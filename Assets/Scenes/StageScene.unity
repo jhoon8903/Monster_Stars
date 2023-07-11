@@ -839,6 +839,7 @@ MonoBehaviour:
   clearedWaveKey: ClearedWave
   maxWaveCountKey: MaxWaves
   isStageClear: 0
+  isBossClear: 0
 --- !u!1 &187153451
 GameObject:
   m_ObjectHideFlags: 0
@@ -7362,7 +7363,7 @@ MonoBehaviour:
   rewardMoveCount: 0
   addGold: 0
   addGoldCount: 0
-  permanentGroupIndex: 00000000
+  permanentGroupIndex: 
 --- !u!4 &1595735487
 Transform:
   m_ObjectHideFlags: 0
@@ -9348,7 +9349,6 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
-  gridManager: {fileID: 8808150501734532426}
   openBoxing: 0
   isOpenBox: 0
 --- !u!4 &2120144520
