@@ -157,16 +157,13 @@ namespace Script.PuzzleManagerGroup
             var randomIndex = Random.Range(0, notUsePoolCharacterList.Count);
             var newCharacter = notUsePoolCharacterList[randomIndex];
             newCharacter.transform.position = position;
-            if (EnforceManager.Instance.permanentGroupIndex.Count > 1)
+            if (EnforceManager.Instance.permanentGroupIndex.Count > 0)
             {
-                foreach (var index in EnforceManager.Instance.permanentGroupIndex)
+                foreach (var unitGroup in EnforceManager.Instance.permanentGroupIndex
+                             .Select(index => EnforceManager.Instance.characterList[index].unitGroup)
+                             .Where(unitGroup => unitGroup == newCharacter.GetComponent<CharacterBase>().unitGroup))
                 {
-                    var unitGroup = EnforceManager.Instance.characterList[index].unitGroup;
-                    if (unitGroup == newCharacter.GetComponent<CharacterBase>().unitGroup)
-                    {
-                        newCharacter.GetComponent<CharacterBase>().SetLevel(2);
-        
-                    }
+                    newCharacter.GetComponent<CharacterBase>().SetLevel(2);
                 }
             }
             else

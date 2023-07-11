@@ -9,7 +9,6 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level2Sprite;
         [SerializeField] private Sprite level3Sprite;
         [SerializeField] private Sprite level4Sprite;
-        private SpriteRenderer _spriteRenderer;
 
         public void Awake()
         {
@@ -20,7 +19,6 @@ namespace Script.CharacterGroupScript
         {
             base.Initialize();
             unitGroup = UnitGroups.None;
-            _spriteRenderer = GetComponent<SpriteRenderer>();
             SetLevel(1);
         }
 
@@ -48,6 +46,7 @@ namespace Script.CharacterGroupScript
         protected internal override void CharacterReset()
         {
             base.CharacterReset();
+            unitGroup = UnitGroups.None;
             SetLevel(unitPuzzleLevel);
         }
     }

@@ -827,14 +827,17 @@ MonoBehaviour:
   waveText: {fileID: 651631795}
   enemySpawnManager: {fileID: 329010038}
   enemyPool: {fileID: 2016604888}
-  currentStage: 1
-  currentWave: 1
   maxWaveCount: 30
   maxStageCount: 20
-  clearedStageKey: ClearedStage
-  clearedWaveKey: ClearedWave
+  currentStage: 1
+  currentStageKey: CurrentStage
+  clearStage: 0
+  clearStageKey: ClearStage
+  currentWave: 1
   currentWaveKey: CurrentWave
   clearWave: 0
+  clearedWaveKey: ClearedWave
+  maxWaveCountKey: MaxWaves
   isStageClear: 0
 --- !u!1 &187153451
 GameObject:
@@ -7359,6 +7362,7 @@ MonoBehaviour:
   rewardMoveCount: 0
   addGold: 0
   addGoldCount: 0
+  permanentGroupIndex: 00000000
 --- !u!4 &1595735487
 Transform:
   m_ObjectHideFlags: 0
