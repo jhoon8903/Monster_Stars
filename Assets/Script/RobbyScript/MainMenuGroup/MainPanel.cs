@@ -74,6 +74,7 @@ namespace Script.RobbyScript.MainMenuGroup
             PlayerPrefs.DeleteKey("unitState");
             PlayerPrefs.DeleteKey("EnforceData");
             PlayerPrefs.SetInt("CurrentWave",1);
+            PlayerPrefs.DeleteKey("GridHeight");
             continuePanel.SetActive(false);
         }
 

@@ -43,6 +43,7 @@ namespace Script.UIManager
             StageManager.Instance.isStageClear = false;
             PlayerPrefs.SetInt(StageManager.Instance.currentWaveKey,1);
             PlayerPrefs.DeleteKey("unitState");
+            PlayerPrefs.DeleteKey("GridHeight");
             SceneManager.LoadScene("SelectScene");
         }
     }
