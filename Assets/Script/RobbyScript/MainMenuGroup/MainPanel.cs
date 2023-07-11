@@ -33,6 +33,7 @@ namespace Script.RobbyScript.MainMenuGroup
         public void Awake()
         {
             Instance = this;
+
         }
 
         public void Start()
@@ -74,7 +75,7 @@ namespace Script.RobbyScript.MainMenuGroup
             PlayerPrefs.DeleteKey("unitState");
             PlayerPrefs.DeleteKey("EnforceData");
             PlayerPrefs.SetInt("CurrentWave",1);
-            PlayerPrefs.DeleteKey("GridHeight");
+            PlayerPrefs.SetInt("GridHeight", 6);
             continuePanel.SetActive(false);
         }
 

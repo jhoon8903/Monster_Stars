@@ -53,22 +53,21 @@ namespace Script.WeaponScriptGroup
                 switch (UnitEffect)
             {
                 case CharacterBase.UnitEffects.Restraint:
-                    RestraintAttribution(enemyObject);
+                    IsRestraint(enemyObject);
                     break;
                 case CharacterBase.UnitEffects.Poison:
-                    PoisonAttribution(enemyObject);
+                    IsPoison(enemyObject);
                     break;
                 case CharacterBase.UnitEffects.Slow:
-                    SlowAttribution(enemyObject);
+                    IsSlow(enemyObject);
                     break;
                 case CharacterBase.UnitEffects.None:
-                    PhysicsAttribution(enemyObject);
                     break;
                 case CharacterBase.UnitEffects.Burn:
-                    BurnAttribution(enemyObject);
+                    IsBurn(enemyObject);
                     break;
                 case CharacterBase.UnitEffects.Bleed:
-                     BleedAttribution(enemyObject);
+                    IsBleed(enemyObject);
                      break;
                 case CharacterBase.UnitEffects.Stun:
                 case CharacterBase.UnitEffects.Strike:
@@ -78,115 +77,7 @@ namespace Script.WeaponScriptGroup
                     return;
             }
         }
-        private void RestraintAttribution(EnemyBase enemyStatus)
-        {
-            switch (enemyStatus.RegistryType)
-            {
-                case EnemyBase.RegistryTypes.Burn:
-                case EnemyBase.RegistryTypes.Water:
-                case EnemyBase.RegistryTypes.Darkness:
-                case EnemyBase.RegistryTypes.Physics:
-                case EnemyBase.RegistryTypes.Poison:
-                case EnemyBase.RegistryTypes.None:
-                case EnemyBase.RegistryTypes.Divine:
-                    IsRestraint(enemyStatus);
-                    break;
-                default:
-                    Debug.Log("UnKnown Registries");
-                    break;
-            }
-        }
-        private static void PoisonAttribution(EnemyBase enemyStatus)
-        {
-            switch (enemyStatus.RegistryType)
-            {
-                case EnemyBase.RegistryTypes.Divine:
-                case EnemyBase.RegistryTypes.Physics:
-                case EnemyBase.RegistryTypes.None:
-                case EnemyBase.RegistryTypes.Poison:
-                case EnemyBase.RegistryTypes.Burn:
-                case EnemyBase.RegistryTypes.Water:
-                case EnemyBase.RegistryTypes.Darkness:
-                    IsPoison(enemyStatus);
-                    break;
-                default:
-                    Debug.Log("UnKnown Registries");
-                    break;
-            }
-        }
-        private static void SlowAttribution(EnemyBase enemyStatus)
-        {
-            switch (enemyStatus.RegistryType)
-            {
-                case EnemyBase.RegistryTypes.Divine:
-                case EnemyBase.RegistryTypes.Physics:
-                case EnemyBase.RegistryTypes.Poison:
-                case EnemyBase.RegistryTypes.None:
-                case EnemyBase.RegistryTypes.Burn:
-                case EnemyBase.RegistryTypes.Water:
-                case EnemyBase.RegistryTypes.Darkness:
-                    IsSlow(enemyStatus);
-                    break;
-                default:
-                    Debug.Log("UnKnown Registries");
-                    break;
-            }
-        }
-        private static void PhysicsAttribution(EnemyBase enemyStatus)
-        {
-            switch (enemyStatus.RegistryType)
-            {
-                case EnemyBase.RegistryTypes.Divine:
-                case EnemyBase.RegistryTypes.Physics:
-                case EnemyBase.RegistryTypes.None:
-                case EnemyBase.RegistryTypes.Poison:
-                case EnemyBase.RegistryTypes.Burn:
-                case EnemyBase.RegistryTypes.Water:
-                case EnemyBase.RegistryTypes.Darkness:
-                    break;
-                default:
-                    Debug.Log("UnKnown Registries");
-                    break;
-            }
-        }
 
-        private static void BurnAttribution(EnemyBase enemyStatus)
-        {
-            switch (enemyStatus.RegistryType)
-            {
-                case EnemyBase.RegistryTypes.Divine:
-                case EnemyBase.RegistryTypes.Physics:
-                case EnemyBase.RegistryTypes.Poison:
-                case EnemyBase.RegistryTypes.None:
-                case EnemyBase.RegistryTypes.Burn:
-                case EnemyBase.RegistryTypes.Water:
-                case EnemyBase.RegistryTypes.Darkness:
-                    IsBurn(enemyStatus);
-                    break;
-                default:
-                    Debug.Log("UnKnown Registries");
-                    break;
-            }
-        }
-
-        private static void BleedAttribution(EnemyBase enemyStatus)
-        {
-            switch (enemyStatus.RegistryType)
-            {
-                case EnemyBase.RegistryTypes.Divine:
-                case EnemyBase.RegistryTypes.Physics:
-                case EnemyBase.RegistryTypes.Poison:
-                case EnemyBase.RegistryTypes.None:
-                case EnemyBase.RegistryTypes.Burn:
-                case EnemyBase.RegistryTypes.Water:
-                case EnemyBase.RegistryTypes.Darkness:
-                    IsBleed(enemyStatus);
-                    break;
-                default:
-                    Debug.Log("UnKnown Registries");
-                    break;
-            }
-        }
         private void IsRestraint(EnemyBase enemyStatus)
         {
             if (!EnforceManager.Instance.activeRestraint) return;

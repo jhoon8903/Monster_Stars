@@ -11,9 +11,6 @@ namespace Script.EnemyManagerScript
 {
     public class EnemyBase : MonoBehaviour
     {
-        private VenomSac _venomSac;
-        private FireBall _fireBall;
-        private Dart _dart;
         private CharacterBase _characterBase;
         private EnemyPool _enemyPool;
         private Slider _hpSlider;
@@ -50,10 +47,8 @@ namespace Script.EnemyManagerScript
             {
                 isPoison = value;
                 if (!isPoison) return;
-                if (_venomSac != null && gameObject.activeInHierarchy)
-                {
-                    StartCoroutine(_venomSac.PoisonEffect(this));
-                }
+                var venomSac = FindObjectOfType<VenomSac>();
+                StartCoroutine(venomSac.PoisonEffect(this));
             }
         }
 
@@ -65,10 +60,8 @@ namespace Script.EnemyManagerScript
             {
                 isBurn = value;
                 if (!isBurn) return;
-                if (_fireBall != null && gameObject.activeInHierarchy)
-                {
-                    StartCoroutine(_fireBall.BurningEffect(this));
-                }
+               var fireBall = FindObjectOfType<FireBall>();
+                StartCoroutine(fireBall.BurningEffect(this));
             }
         }
 
@@ -80,19 +73,14 @@ namespace Script.EnemyManagerScript
             {
                 isBleed = value;
                 if(!isBleed) return;
-                if (_dart != null && gameObject.activeInHierarchy)
-                {
-                    StartCoroutine(_dart.BleedEffect(this));
-                }
+               var dart = FindObjectOfType<Dart>();
+                StartCoroutine(dart.BleedEffect(this));
 
             }
         }
         public void Awake()
         {
             EnforceManager.Instance.OnAddRow += ResetEnemyHealthPoint;
-            _venomSac = FindObjectOfType<VenomSac>();
-            _fireBall = FindObjectOfType<FireBall>();
-            _dart = FindObjectOfType<Dart>();
         }
 
         public virtual void Initialize()
