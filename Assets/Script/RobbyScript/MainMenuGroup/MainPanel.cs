@@ -28,7 +28,7 @@ namespace Script.RobbyScript.MainMenuGroup
         [SerializeField] private GameObject cancelBtn;
         public int Stage { get; private set; }
         public static MainPanel Instance { get; private set; }
-        public List<int> clearStageList = new List<int>();
+        public List<int> clearStageList;
 
         public void Awake()
         {
@@ -42,14 +42,18 @@ namespace Script.RobbyScript.MainMenuGroup
             {
                 continuePanel.SetActive(true);
             }
-
-            var stage = PlayerPrefs.GetInt("ClearStage", 1);
-            UpdateProgress(stage);
+            var listString = PlayerPrefs.GetString("ClearStageList", "");
+            if (!string.IsNullOrEmpty(listString))
+            {
+                clearStageList = new List<int>(Array.ConvertAll(listString.Split(','), int.Parse));
+            }
+            var stage = PlayerPrefs.GetInt("CurrentStage", 1);
             startBtn.GetComponent<Button>().onClick.AddListener(StartGame); 
             nextStageBtn.GetComponent<Button>().onClick.AddListener(NextStage);
             previousStageBtn.GetComponent<Button>().onClick.AddListener(PreviousStage);
             confirmBtn.GetComponent<Button>().onClick.AddListener(ContinueGame);
             cancelBtn.GetComponent<Button>().onClick.AddListener(CancelContinue);
+            UpdateProgress(stage);
         }
 
         private void Update()
@@ -98,32 +102,25 @@ namespace Script.RobbyScript.MainMenuGroup
         }
 
         private void UpdateProgress(int stage)
-        {
+        {  
+            Stage = stage;
             var waveMaxValue = Stage switch
             {
                 >= 1 and < 5 => 10,
                 >= 5 and < 10 => 20,
                 _ => 30
             };
-            var listString = PlayerPrefs.GetString("ClearStageList", "");
-            if (!string.IsNullOrEmpty(listString))
-            {
-                clearStageList = new List<int>(Array.ConvertAll(listString.Split(','), int.Parse));
-            }
-            var value = new int();
-            value = clearStageList.Contains(value) ? waveMaxValue : PlayerPrefs.GetInt("ClearWave", 1);
-            Stage = stage;
+            var value = clearStageList.Contains(Stage) ? waveMaxValue : PlayerPrefs.GetInt("ClearWave", 1);
             stageText.text = $"스테이지 {Stage}";
             stageProgress.maxValue = waveMaxValue;
             stageProgress.value = value;
             stageProgressText.text = $"{stageProgress.value} / {stageProgress.maxValue}";
         }
 
-
         private void NextStage()
         {
-            var clearedStage = PlayerPrefs.GetInt("ClearStage", 1);
-            if (Stage < clearedStage)
+            var currentStage = PlayerPrefs.GetInt("CurrentStage", 1);
+            if (Stage < currentStage)
             {
                 Stage++;
                 UpdateProgress(Stage);

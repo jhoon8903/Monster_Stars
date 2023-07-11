@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Script.CharacterManagerScript;
@@ -31,8 +32,6 @@ namespace Script.UIManager
         public string maxWaveCountKey = "MaxWaves";
         public bool isStageClear;
         private int SelectedStage { get; set; }
-        public string clearStageListKey = "clearStageList";
-        public List<int> clearStageList = new List<int>();
 
         private void Awake()
         {
@@ -129,20 +128,25 @@ namespace Script.UIManager
         public void StageClear()
         {
             isStageClear = true;
+            var listString = PlayerPrefs.GetString("ClearStageList", "");
+            var clearStageList = new List<int>();
+            if (!string.IsNullOrEmpty(listString))
+            {
+                clearStageList = new List<int>(Array.ConvertAll(listString.Split(','), int.Parse));
+            }
             clearStageList.Add(currentStage);
             PlayerPrefs.SetString("ClearStageList", string.Join(",", clearStageList));
-
             ClearRewardManager.Instance.ClearReward(currentStage, maxWaveCount);
+            clearStage = currentStage;
+            PlayerPrefs.SetInt(clearStageKey, clearStage);
             currentStage++;
-            PlayerPrefs.SetInt(currentStageKey, currentStage);
             if (currentStage > maxStageCount)
             {
                 GameClear();
             }
             else if (currentStage > clearStage)
             {
-                clearStage = currentStage;
-                PlayerPrefs.SetInt(clearStageKey, clearStage);
+                PlayerPrefs.SetInt(currentStageKey, currentStage);
                 MaxWave();
                 currentWave = 1;
                 clearWave = currentWave;
