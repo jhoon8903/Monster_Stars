@@ -66,6 +66,7 @@ sysinfo.txt
 crashlytics-build.properties
 
 Assets/Firebase/Plugins/x86_64/FirebaseCppApp-11_2_0.bundle
+Assets/Firebase/Plugins/x86_64/FirebaseCppApp-11_2_0.bundle.meta
 
 # Packed Addressables
 /[Aa]ssets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
