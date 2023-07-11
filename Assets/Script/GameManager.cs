@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using DG.Tweening;
 using Script.CharacterGroupScript;
@@ -9,6 +10,7 @@ using Script.UIManager;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Script
 {
@@ -38,7 +40,7 @@ namespace Script
         public bool IsBattle { get; private set; }
         private bool IsClear { get; set; }
 
-        private void Start()
+        private void Awake()
         {
             if (Instance == null)
             {
@@ -48,6 +50,9 @@ namespace Script
             {
                 Destroy(gameObject);
             }
+        }
+        private void Start()
+        {
             swipeManager.isBusy = true;
             gridManager.GenerateInitialGrid(PlayerPrefs.GetInt("GridHeight", 6));
             if (PlayerPrefs.HasKey("unitState"))
@@ -62,7 +67,6 @@ namespace Script
                     _bossSpawnArea = new Vector3Int(Random.Range(1,5), 10, 0);
                     gridManager.ApplyBossSpawnColor(_bossSpawnArea);
                 }
-
             }
             else
             {
@@ -76,6 +80,7 @@ namespace Script
             GameSpeedSelect();
             swipeManager.isBusy = false;
         }
+
         public IEnumerator Count0Call()
         {
             IsBattle = true;
@@ -86,34 +91,28 @@ namespace Script
             StageManager.Instance.StartWave();
             GameSpeed();
         }
-        public IEnumerator WaitForPanelToClose()
-        {
-            if (commonRewardPanel.activeSelf)
-            {
-                while (commonRewardPanel.activeSelf)
-                {
-                    yield return null;
-                }
-            }
 
-            if (!expRewardPanel.activeSelf) yield break;
-            while (expRewardPanel.activeSelf)
-            {
-                yield return null;
-            }
-        }
         public IEnumerator ContinueOrLose()
         {
             IsBattle = false;
+
             AtkManager.Instance.ClearWeapons();
             if (castleManager.HpPoint > 0)
-            {          
+            {
                 IsClear = true;
+                if (!StageManager.Instance.isBossClear)
+                {
+                    moveCount = 7 + EnforceManager.Instance.rewardMoveCount;
+                }
+                else
+                {
+                    yield return StartCoroutine(gridManager.ResetBossSpawnColor());
+                }
                 ClearRewardManager.Instance.GetCoin(StageManager.Instance.currentStage, StageManager.Instance.currentWave);
                 StageManager.Instance.clearWave = StageManager.Instance.currentWave;
                 StageManager.Instance.SaveClearWave();
 
-                if (StageManager.Instance.clearWave == StageManager.Instance.MaxWave())
+                if (StageManager.Instance.currentWave == StageManager.Instance.MaxWave())
                 {
                     StageManager.Instance.StageClear();
                 }
@@ -142,14 +141,7 @@ namespace Script
             expManager.SaveExp();
             castleManager.SaveCastleHp();
             EnforceManager.Instance.SaveEnforceData();
-            if (!StageManager.Instance.isBossClear)
-            {
-                moveCount = 7 + EnforceManager.Instance.rewardMoveCount;
-            }
-            else
-            {
-                yield return StartCoroutine(gridManager.ResetBossSpawnColor());
-            }
+
             PlayerPrefs.SetInt("moveCount",moveCount);
             countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
             
@@ -185,6 +177,22 @@ namespace Script
         private static IEnumerator KillMotion()
         {
            yield return DOTween.KillAll(true);
+        }
+        public IEnumerator WaitForPanelToClose()
+        {
+            if (commonRewardPanel.activeSelf)
+            {
+                while (commonRewardPanel.activeSelf)
+                {
+                    yield return null;
+                }
+            }
+
+            if (!expRewardPanel.activeSelf) yield break;
+            while (expRewardPanel.activeSelf)
+            {
+                yield return null;
+            }
         }
         public void GameSpeedSelect()
         {
