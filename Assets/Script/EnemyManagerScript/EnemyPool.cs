@@ -54,6 +54,8 @@ namespace Script.EnemyManagerScript
             enemyBase.isPoison = false;
             enemyBase.isSlow = false;
             enemyBase.isRestraint = false;
+            enemyBase.isBurn = false;
+            enemyBase.isBleed = false;
             enemyBase.transform.localScale = Vector3.one;
             enemyBase.GetComponent<SpriteRenderer>().color = Color.white;
             enemyBaseGameObject.SetActive(false);

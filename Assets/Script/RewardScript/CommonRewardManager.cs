@@ -153,7 +153,7 @@ namespace Script.RewardScript
                         if (StageManager.Instance.currentWave % 10 != 0 ) return false;// Show row extra reward only after boss stage, up to 2 times
                         break;
                     case CommonData.Types.Slow:
-                        if (EnforceManager.Instance.slowCount <= 3) return false; // Displays the enemy movement speed reduction effect up to 3 times
+                        if (EnforceManager.Instance.slowCount >= 4) return false; // Displays the enemy movement speed reduction effect up to 3 times
                         break;
                     case CommonData.Types.NextStage:
                         if (EnforceManager.Instance.selectedCount > 3) return false; // Only use up to 3 next stage character upgrades
@@ -207,8 +207,7 @@ namespace Script.RewardScript
                                      $"({EnforceManager.Instance.expPercentage}% /30%)"; 
                     break;
                 case CommonData.Types.Slow: 
-                    powerText.text = $"적 이동속도 감소 {powerUp.Property[0]}% " +
-                                     $"(최대 45%)"; 
+                    powerText.text = $"다음 웨이브 부터는 적 이동속도 {powerUp.Property[0]}% 감소\n( 현재 {15*EnforceManager.Instance.slowCount}% / 최대 60%)";
                     break;
                 case CommonData.Types.GroupDamage: 
                     powerText.text = $"전체 데미지 {powerUp.Property[0]}% 상승"; 
@@ -373,7 +372,7 @@ namespace Script.RewardScript
                     EnforceManager.Instance.match5Upgrade = true;
                     break;     // 5매치 패턴 업그레이드
                 case CommonData.Types.Slow:
-                    EnforceManager.Instance.slowCount += 1; 
+                    EnforceManager.Instance.SlowCount();
                     break; // 적 이동속도 감소 
                 case CommonData.Types.NextStage: 
                     EnforceManager.Instance.NextCharacterUpgrade(selectedCommonReward.Property[0]);
@@ -386,7 +385,6 @@ namespace Script.RewardScript
             }
             selectedCommonReward.chosenProperty = null;
         }
-        
         // # 보스 웨이브 클리어 별도 보상
         public IEnumerator WaveRewardChance()
         {

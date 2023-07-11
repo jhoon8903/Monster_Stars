@@ -24,7 +24,7 @@ namespace Script.EnemyManagerScript
 
         public IEnumerator Zone_Move(EnemyBase enemyBase)
         {
-            var slowCount = EnforceManager.Instance.SlowCount();
+            var slowCount = EnforceManager.Instance.slowCount;
             var speedReductionFactor = 1f + slowCount * 0.15f;
             _velocity = enemyBase.MoveSpeed * speedReductionFactor * moveSpeedOffset ;
 

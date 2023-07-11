@@ -95,19 +95,10 @@ namespace Script
         public IEnumerator ContinueOrLose()
         {
             IsBattle = false;
-
             AtkManager.Instance.ClearWeapons();
             if (castleManager.HpPoint > 0)
-            {
+            {          
                 IsClear = true;
-                if (!StageManager.Instance.isBossClear)
-                {
-                    moveCount = 7 + EnforceManager.Instance.rewardMoveCount;
-                }
-                else
-                {
-                    yield return StartCoroutine(gridManager.ResetBossSpawnColor());
-                }
                 ClearRewardManager.Instance.GetCoin(StageManager.Instance.currentStage, StageManager.Instance.currentWave);
                 StageManager.Instance.clearWave = StageManager.Instance.currentWave;
                 StageManager.Instance.SaveClearWave();
@@ -121,10 +112,12 @@ namespace Script
                     moveCount = 15 + EnforceManager.Instance.rewardMoveCount;
                     yield return StartCoroutine(commonRewardManager.WaveRewardChance());
                     yield return StartCoroutine(spawnManager.BossStageClearRule());
+                    yield return StartCoroutine(gridManager.ResetBossSpawnColor());
                     yield return StartCoroutine(InitializeWave());
                 }
                 else
                 {
+                    moveCount = 7 + EnforceManager.Instance.rewardMoveCount;
                     yield return StartCoroutine(InitializeWave());
                 }
             }
@@ -141,7 +134,6 @@ namespace Script
             expManager.SaveExp();
             castleManager.SaveCastleHp();
             EnforceManager.Instance.SaveEnforceData();
-
             PlayerPrefs.SetInt("moveCount",moveCount);
             countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
             

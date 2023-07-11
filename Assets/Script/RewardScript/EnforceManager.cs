@@ -251,14 +251,13 @@ namespace Script.RewardScript
 
         [Header("적 이동속도 감소 15%증가 (최대 45%)")] public int slowCount;
 
-        protected internal int SlowCount()
+        protected internal void SlowCount()
         {
-            if (slowCount >= 3)
+            slowCount++;
+            if (slowCount >= 4)
             {
-                return slowCount = 3;
+                slowCount = 4;
             }
-
-            return slowCount;
         }
 
         [Header("대각선 이동")] public bool diagonalMovement;
