@@ -2,8 +2,11 @@ fileFormatVersion: 2
 guid: 7fe75654f6364c63bae46ac68206d25f
 labels:
 - gvh
+<<<<<<< Updated upstream
 - gvh_version-11.2.0
 - gvhp_exportpath-Firebase/Plugins/x86_64/FirebaseCppApp-11_2_0.bundle
+=======
+>>>>>>> Stashed changes
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -16,6 +19,7 @@ PluginImporter:
   validateReferences: 1
   platformData:
   - first:
+<<<<<<< Updated upstream
       : Linux
     second:
       enabled: 0
@@ -59,10 +63,16 @@ PluginImporter:
       Any: 
     second:
       enabled: 0
+=======
+      Any: 
+    second:
+      enabled: 1
+>>>>>>> Stashed changes
       settings: {}
   - first:
       Editor: Editor
     second:
+<<<<<<< Updated upstream
       enabled: 1
       settings:
         CPU: AnyCPU
@@ -74,12 +84,28 @@ PluginImporter:
       enabled: 0
       settings:
         CPU: None
+=======
+      enabled: 0
+      settings:
+        CPU: x86_64
+        DefaultValueInitialized: true
+  - first:
+      Standalone: Linux64
+    second:
+      enabled: 1
+      settings:
+        CPU: AnyCPU
+>>>>>>> Stashed changes
   - first:
       Standalone: OSXUniversal
     second:
       enabled: 1
       settings:
+<<<<<<< Updated upstream
         CPU: AnyCPU
+=======
+        CPU: x86_64
+>>>>>>> Stashed changes
   - first:
       Standalone: Win
     second:
@@ -89,6 +115,7 @@ PluginImporter:
   - first:
       Standalone: Win64
     second:
+<<<<<<< Updated upstream
       enabled: 0
       settings:
         CPU: None
@@ -112,6 +139,11 @@ PluginImporter:
       settings:
         CompileFlags: 
         FrameworkDependencies: 
+=======
+      enabled: 1
+      settings:
+        CPU: x86_64
+>>>>>>> Stashed changes
   userData: 
   assetBundleName: 
   assetBundleVariant: 
