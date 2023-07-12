@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -20,7 +21,7 @@ public class RewardManager : MonoBehaviour
         }
 
         instance = this;
-        DontDestroyOnLoad(gameObject);
+        //DontDestroyOnLoad(gameObject);
     }
 
     public void RewardButtonClicked(string buttonType)
@@ -46,6 +47,14 @@ public class RewardManager : MonoBehaviour
     {
         // 코인 보상 제공 로직 추가
         Debug.Log("코인 보상을 제공합니다.");
+
+        var prefabPath = MaxSdkUtils.GetAssetPathForExportPath("MaxSdk/Prefabs/Rewarded.prefab");
+        var rewardedPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+        var stubRewardedAd = Instantiate(rewardedPrefab, Vector3.zero, Quaternion.identity);
+        Debug.Log(stubRewardedAd);
+        Destroy(stubRewardedAd);
+        Debug.Log("꺼져라 !.");
+
     }
 
     private void GiveGemReward()

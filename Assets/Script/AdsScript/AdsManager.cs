@@ -19,7 +19,9 @@ public class AdsManager : MonoBehaviour
     private void Awake()
     {
         CoinBtn.GetComponent<Button>().onClick.AddListener(Coin);
+
         StaminaBtn.GetComponent<Button>().onClick.AddListener(Stamina);
+
         GemBtn.GetComponent<Button>().onClick.AddListener(Gem);
     }
 
