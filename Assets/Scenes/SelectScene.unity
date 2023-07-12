@@ -9827,6 +9827,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1161648337}
   - component: {fileID: 1161648336}
+  - component: {fileID: 1161648338}
   m_Layer: 0
   m_Name: AdsManager
   m_TagString: Untagged
@@ -9861,6 +9862,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1161648338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1161648335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39ffc6f020d544692b2ea3cc1a4d8134, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CoinBtn: {fileID: 419428823}
+  StaminaBtn: {fileID: 2045258065}
+  GemBtn: {fileID: 760021238}
+  prabs: {fileID: 7742712311334970126, guid: a28c1544d6f094d5eafc8da2343c9119, type: 3}
 --- !u!1 &1161738751
 GameObject:
   m_ObjectHideFlags: 0

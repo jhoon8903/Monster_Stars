@@ -233,6 +233,8 @@ public class AppLovinScript : MonoBehaviour
         // Rewarded ad is hidden. Pre-load the next ad
         Debug.Log("Rewarded ad dismissed");
         Debug.Log("닫음");
+        Debug.Log(adInfo);
+        Debug.Log(adUnitId);
         LoadRewardedAd();
     }
 
