@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
 using TMPro;
@@ -28,14 +26,10 @@ namespace Script.RobbyScript.MainMenuGroup
         [SerializeField] private GameObject cancelBtn;
         public int Stage { get; private set; }
         public static MainPanel Instance { get; private set; }
-        public List<int> clearStageList;
-
         public void Awake()
         {
             Instance = this;
-
         }
-
         public void Start()
         {
             holdCharacterList.InstanceUnit();
@@ -43,20 +37,16 @@ namespace Script.RobbyScript.MainMenuGroup
             {
                 continuePanel.SetActive(true);
             }
-            var listString = PlayerPrefs.GetString("ClearStageList", "");
-            if (!string.IsNullOrEmpty(listString))
-            {
-                clearStageList = new List<int>(Array.ConvertAll(listString.Split(','), int.Parse));
-            }
+
             var stage = PlayerPrefs.GetInt("CurrentStage", 1);
+            var (maxWave, clearWave) = GetStageWave(stage);
+            UpdateProgress(stage, maxWave, clearWave);
             startBtn.GetComponent<Button>().onClick.AddListener(StartGame); 
             nextStageBtn.GetComponent<Button>().onClick.AddListener(NextStage);
             previousStageBtn.GetComponent<Button>().onClick.AddListener(PreviousStage);
             confirmBtn.GetComponent<Button>().onClick.AddListener(ContinueGame);
             cancelBtn.GetComponent<Button>().onClick.AddListener(CancelContinue);
-            UpdateProgress(stage);
         }
-
         private void Update()
         {
            if (Input.GetKeyDown(KeyCode.R))
@@ -64,12 +54,10 @@ namespace Script.RobbyScript.MainMenuGroup
                 PlayerPrefs.DeleteAll();
            }
         }
-
         private static void ContinueGame()
         {
             SceneManager.LoadScene("StageScene");
         }
-
         private void CancelContinue()
         {
             PlayerPrefs.DeleteKey("unitState");
@@ -103,22 +91,22 @@ namespace Script.RobbyScript.MainMenuGroup
             }
         }
 
-        private void UpdateProgress(int stage)
+        private void UpdateProgress(int stage, int maxWave, int clearWave)
         {  
             Stage = stage;
-            var waveMaxValue = Stage switch
-            {
-                // >= 1 and < 5 => 10,
-                // >= 5 and < 10 => 20,
-                // _ => 30
-                >=1 and <20 => 20,
-                _ => 30
-            };
-            var value = clearStageList.Contains(Stage) ? waveMaxValue : PlayerPrefs.GetInt("ClearWave", 1);
             stageText.text = $"스테이지 {Stage}";
-            stageProgress.maxValue = waveMaxValue;
-            stageProgress.value = value;
-            stageProgressText.text = $"{stageProgress.value} / {stageProgress.maxValue}";
+            stageProgress.maxValue = maxWave;
+            stageProgress.value = clearWave;
+            stageProgressText.text = $"{clearWave} / {maxWave}";
+        }
+
+        private static (int maxWave, int clearWave) GetStageWave(int stage)
+        {
+            var maxWaveKey = "MaxWave" + stage;
+            var clearWaveKey = "ClearWave" + stage;
+            var maxWave = PlayerPrefs.GetInt(maxWaveKey, 10);
+            var clearWave = PlayerPrefs.GetInt(clearWaveKey, 1);
+            return (maxWave, clearWave);
         }
 
         private void NextStage()
@@ -127,7 +115,8 @@ namespace Script.RobbyScript.MainMenuGroup
             if (Stage < currentStage)
             {
                 Stage++;
-                UpdateProgress(Stage);
+                var (maxWave, clearWave) = GetStageWave(Stage);
+                UpdateProgress(Stage, maxWave, clearWave);
             }
             else
             {
@@ -140,7 +129,8 @@ namespace Script.RobbyScript.MainMenuGroup
         {
             if (Stage <= 1) return;
             Stage--;
-            UpdateProgress(Stage);
+            var (maxWave, clearWave) = GetStageWave(Stage);
+            UpdateProgress(Stage, maxWave, clearWave);
         }
     }
 }

@@ -100,7 +100,6 @@ namespace Script
             {          
                 IsClear = true;
                 ClearRewardManager.Instance.GetCoin(StageManager.Instance.currentStage, StageManager.Instance.currentWave);
-                StageManager.Instance.clearWave = StageManager.Instance.currentWave;
                 StageManager.Instance.SaveClearWave();
 
                 if (StageManager.Instance.currentWave == StageManager.Instance.MaxWave())
@@ -221,7 +220,7 @@ namespace Script
         {
             PlayerPrefs.DeleteKey("unitState");
             PlayerPrefs.DeleteKey("EnforceData");
-            PlayerPrefs.SetInt(StageManager.Instance.currentWaveKey,1);
+            PlayerPrefs.SetInt("CurrentWave"+StageManager.Instance.currentStage,1);
             SceneManager.LoadScene("SelectScene");
         }
     }
