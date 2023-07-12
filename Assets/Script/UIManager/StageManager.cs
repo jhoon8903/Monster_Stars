@@ -1,4 +1,7 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
@@ -36,7 +39,6 @@ namespace Script.UIManager
                 PlayerPrefs.DeleteAll();
             }
         }
-
         private void Awake()
         {
             Instance = this;
@@ -45,7 +47,6 @@ namespace Script.UIManager
             currentWave = PlayerPrefs.GetInt(currentWaveKey, 1);
             SelectedStage = MainPanel.Instance.Stage;
         }
-
         public void SelectedStages()
         {
             currentStage = SelectedStage;
@@ -57,8 +58,10 @@ namespace Script.UIManager
         }
         private IEnumerator WaveController(int currentWaves)
         {
-            var (normalCount, slowCount, fastCount, sets) = GetSpawnCountForWave(currentWaves);
+            var (normalCount, slowCount, fastCount) = GetSpawnCountForWave(currentStage, currentWaves);
+            Debug.Log($"{normalCount} / {slowCount} / {fastCount}");
 
+            const int sets = 2;
             if (currentWaves % 10 == 0)
             {
                 yield return StartCoroutine(enemySpawnManager.SpawnBoss(currentWaves));
@@ -82,22 +85,53 @@ namespace Script.UIManager
                 }
             }
         }
-        private static (int normal, int slow, int fast, int sets) GetSpawnCountForWave(int currentWaves)
+        private static Dictionary<string, Dictionary<int, (int normal, int slow, int fast)>> LoadCsvData(string filename)
         {
-            if (currentWaves is 10 or 20) 
+            var data = new Dictionary<string, Dictionary<int, (int normal, int slow, int fast)>>();
+
+            var csvFile = Resources.Load<TextAsset>(filename);
+            var lines = csvFile.text.Split('\n');
+
+            for (var i = 1; i < lines.Length; i++)
             {
-                return (0, 0, 0, 0);
+                var values = lines[i].Split(',');
+                var stage = values[0];
+                var wave = int.Parse(values[1]);
+                var normal = int.Parse(values[2]);
+                var slow = int.Parse(values[3]);
+                var fast = int.Parse(values[4]);
+
+                if (stage.Contains("~"))
+                {
+                    var rangeParts = stage.Split('~');
+                    var rangeStart = int.Parse(rangeParts[0]);
+                    var rangeEnd = int.Parse(rangeParts[1]);
+
+                    for (var s = rangeStart; s <= rangeEnd; s++)
+                    {
+                        if (!data.ContainsKey(s.ToString()))
+                        {
+                            data[s.ToString()] = new Dictionary<int, (int normal, int slow, int fast)>();
+                        }
+                        data[s.ToString()][wave] = (normal, slow, fast);
+                    }
+                }
+                else
+                {
+                    if (!data.ContainsKey(stage))
+                    {
+                        data[stage] = new Dictionary<int, (int normal, int slow, int fast)>();
+                    }
+                    data[stage][wave] = (normal, slow, fast);
+                }
             }
-            var baseCount = currentWaves;
-            if (currentWaves > 10)
-            {
-                baseCount = currentWaves - 10;
-            }
-            var normalCount = baseCount + 3;
-            var slowCount = baseCount - 1;
-            var fastCount = baseCount - 1;
-            var sets = currentWaves <= 10 ? 2 : 3;
-            return (normalCount, slowCount, fastCount, sets);
+            return data;
+        }
+        private static (int normal, int slow, int fast) GetSpawnCountForWave(int stage, int wave)
+        {
+            var data = LoadCsvData("stageData");
+
+            return data[stage.ToString()][wave];
         }
         public void EnemyDestroyEvent(EnemyBase enemyBase)
         {
@@ -127,12 +161,10 @@ namespace Script.UIManager
         {
             waveText.text = $"{currentWave}";
         }
-
         private void GameClear()
         {
             
         }
-
         public void SaveClearWave()
         {      
             currentWave++;
@@ -142,7 +174,6 @@ namespace Script.UIManager
             PlayerPrefs.Save();
             UpdateWaveText();
         }
-
         public int MaxWave()
         {
             maxWaveCount = currentStage switch

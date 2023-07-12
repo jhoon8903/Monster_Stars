@@ -100,7 +100,6 @@ namespace Script.RewardScript
             return array[randomIndex];
         }
     }
-
     public class ExpGreenData : ExpData
     {
         public ExpGreenData(Sprite btnColor, int code, Types type, int[] property)
