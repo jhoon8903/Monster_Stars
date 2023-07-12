@@ -21,7 +21,6 @@ namespace Script.UIManager
         public int currentStage;
         public string currentStageKey = "CurrentStage";
         public int currentWave;
-        public string currentWaveKey = "CurrentWave";
         public bool isStageClear;
         private int SelectedStage { get; set; }
         public bool isBossClear;
@@ -135,9 +134,10 @@ namespace Script.UIManager
         }
 
         public void SaveClearWave()
-        {      currentWave++;
+        {      
+            currentWave++;
             PlayerPrefs.SetInt("ClearWave" + currentStage, currentWave);
-            Debug.Log($"ClearWave: {PlayerPrefs.GetInt("ClearWave" + currentStage, 1)}");
+            var currentWaveKey = "CurrentWave" + currentStage;
             PlayerPrefs.SetInt(currentWaveKey, currentWave);
             PlayerPrefs.Save();
             UpdateWaveText();
