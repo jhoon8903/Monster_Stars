@@ -48,25 +48,25 @@ public class AppLovinScript : MonoBehaviour
         }
     }
 
-    // public void Start()
-    // {
-    //     // AppLovinMax 초기화
-    //     MaxSdkCallbacks.OnSdkInitializedEvent += sdkConfiguration =>
-    //     {
-    //         // AppLovin SDK is initialized, configure and start loading ads.
-    //         // Debug.Log("MAX SDK Initialized");
-    //
-    //         InitializeInterstitialAds();
-    //         InitializeRewardedAds();
-    //         InitializeBannerAds();
-    //
-    //         // 배너 실행
-    //         // MaxSdk.ShowBanner(BannerAdUnitId);
-    //     };
-    //
-    //     MaxSdk.SetSdkKey(MaxSdkKey);
-    //     MaxSdk.InitializeSdk();
-    // }
+    public void Start()
+    {
+        // AppLovinMax 초기화
+        MaxSdkCallbacks.OnSdkInitializedEvent += sdkConfiguration =>
+        {
+            // AppLovin SDK is initialized, configure and start loading ads.
+            // Debug.Log("MAX SDK Initialized");
+
+            InitializeInterstitialAds();
+            InitializeRewardedAds();
+            InitializeBannerAds();
+
+            // 배너 실행
+            // MaxSdk.ShowBanner(BannerAdUnitId);
+        };
+
+        MaxSdk.SetSdkKey(MaxSdkKey);
+        MaxSdk.InitializeSdk();
+    }
 
 
     #region Interstitial Ad Methods
@@ -233,8 +233,6 @@ public class AppLovinScript : MonoBehaviour
         // Rewarded ad is hidden. Pre-load the next ad
         Debug.Log("Rewarded ad dismissed");
         Debug.Log("닫음");
-        Debug.Log(adInfo);
-        Debug.Log(adUnitId);
         LoadRewardedAd();
     }
 
