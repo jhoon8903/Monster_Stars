@@ -102,7 +102,7 @@ namespace Script
                 ClearRewardManager.Instance.GetCoin(StageManager.Instance.currentStage, StageManager.Instance.currentWave);
                 StageManager.Instance.SaveClearWave();
 
-                if (StageManager.Instance.currentWave == StageManager.Instance.MaxWave())
+                if (StageManager.Instance.currentWave >= StageManager.Instance.MaxWave())
                 {
                     StageManager.Instance.StageClear();
                 }
