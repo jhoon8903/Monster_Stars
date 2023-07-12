@@ -2573,6 +2573,7 @@ MonoBehaviour:
   confirmBtn: {fileID: 1151959964}
   cancelBtn: {fileID: 663559007}
   clearStageList: 
+  recordWave: 0
 --- !u!114 &337770384
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -41,7 +41,7 @@ namespace Script.UIManager
         public static void ReturnRobby()
         {
             StageManager.Instance.isStageClear = false;
-            PlayerPrefs.SetInt(StageManager.Instance.currentWaveKey,1);
+            PlayerPrefs.SetInt("CurrentWave",1);
             PlayerPrefs.DeleteKey("unitState");
             PlayerPrefs.SetInt("GridHeight", 6);
             SceneManager.LoadScene("SelectScene");

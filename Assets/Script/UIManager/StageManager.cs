@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
@@ -22,40 +20,12 @@ namespace Script.UIManager
         public int maxStageCount;
         public int currentStage;
         public string currentStageKey = "CurrentStage";
-        public int clearStage;
-        public string clearStageKey = "ClearStage";
         public int currentWave;
         public string currentWaveKey = "CurrentWave";
-        public int clearWave;
-        public string clearedWaveKey = "ClearWave";
-        public string maxWaveCountKey = "MaxWaves";
         public bool isStageClear;
         private int SelectedStage { get; set; }
         public bool isBossClear;
 
-        private void Awake()
-        {
-            Instance = this;
-            currentStage = PlayerPrefs.GetInt(currentStageKey, 1);
-            clearStage = PlayerPrefs.GetInt(clearStageKey, 1);
-            currentWave = PlayerPrefs.GetInt(currentWaveKey, 1);
-            clearWave = PlayerPrefs.GetInt(clearedWaveKey, 1);
-            SelectedStage = MainPanel.Instance.Stage;
-        }
-
-        public int MaxWave()
-        {
-            maxWaveCount = currentStage switch
-            {
-                // >= 1 and < 5 => 10,
-                // >= 5 and < 10 => 20,
-                // _ => 30
-                >=1 and <20 => 20,
-                _ => 30
-            };
-            PlayerPrefs.SetInt(maxWaveCountKey, maxWaveCount);
-            return maxWaveCount;
-        }
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.A))
@@ -66,6 +36,15 @@ namespace Script.UIManager
             {
                 PlayerPrefs.DeleteAll();
             }
+        }
+
+        private void Awake()
+        {
+            Instance = this;
+            currentStage = PlayerPrefs.GetInt(currentStageKey, 1);
+            var currentWaveKey = "CurrentWave" + currentStage;
+            currentWave = PlayerPrefs.GetInt(currentWaveKey, 1);
+            SelectedStage = MainPanel.Instance.Stage;
         }
 
         public void SelectedStages()
@@ -131,33 +110,18 @@ namespace Script.UIManager
         public void StageClear()
         {
             isStageClear = true;
-            var listString = PlayerPrefs.GetString("ClearStageList", "");
-            var clearStageList = new List<int>();
-            if (!string.IsNullOrEmpty(listString))
-            {
-                clearStageList = new List<int>(Array.ConvertAll(listString.Split(','), int.Parse));
-            }
-            clearStageList.Add(currentStage);
-            PlayerPrefs.SetString("ClearStageList", string.Join(",", clearStageList));
             ClearRewardManager.Instance.ClearReward(currentStage, maxWaveCount);
-            clearStage = currentStage;
-            PlayerPrefs.SetInt(clearStageKey, clearStage);
+            PlayerPrefs.SetInt("ClearWave"+ currentStage, MaxWave());
             currentStage++;
+            PlayerPrefs.SetInt(currentStageKey, currentStage);
+            PlayerPrefs.SetInt("MaxWave"+currentStage,MaxWave());
+            PlayerPrefs.Save();
             if (currentStage > maxStageCount)
             {
                 GameClear();
             }
-            else if (currentStage > clearStage)
-            {
-                PlayerPrefs.SetInt(currentStageKey, currentStage);
-                MaxWave();
-                currentWave = 1;
-                clearWave = currentWave;
-                PlayerPrefs.SetInt(currentWaveKey, currentWave);
-                PlayerPrefs.SetInt(clearedWaveKey, clearWave);
-                PlayerPrefs.Save();
-            }
             EnforceManager.Instance.addGold = false;
+            EnforceManager.Instance.addGoldCount = 0;
             continueBtn.GetComponent<Button>().onClick.AddListener(PauseManager.ReturnRobby);
         }
         public void UpdateWaveText()
@@ -171,11 +135,24 @@ namespace Script.UIManager
         }
 
         public void SaveClearWave()
-        {
-            PlayerPrefs.SetInt(clearedWaveKey, clearWave);
-            currentWave++;
+        {      currentWave++;
+            PlayerPrefs.SetInt("ClearWave" + currentStage, currentWave);
+            Debug.Log($"ClearWave: {PlayerPrefs.GetInt("ClearWave" + currentStage, 1)}");
             PlayerPrefs.SetInt(currentWaveKey, currentWave);
+            PlayerPrefs.Save();
             UpdateWaveText();
+        }
+
+        public int MaxWave()
+        {
+            maxWaveCount = currentStage switch
+            {
+                1 => 10,
+                >= 2 and <= 9 => 20,
+                >= 9 and <= 20 => 30,
+                _ => maxWaveCount
+            };
+            return maxWaveCount;
         }
     }
 }
