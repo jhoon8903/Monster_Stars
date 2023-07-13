@@ -33,7 +33,7 @@ namespace Script.EnemyManagerScript
         public float maxHealthPoint;
         public float currentHealth;
         public float lastIncreaseHealthPoint;
-        public enum SpawnZones { A, B, C, D, E }
+        public enum SpawnZones { A, B, C, D, E, F }
         public bool isRestraint;
         public bool isSlow;
 

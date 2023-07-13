@@ -2174,17 +2174,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyPool: {fileID: 2016604888}
-  spawnZoneA: {fileID: 0}
+  spawnZoneA: {fileID: 1299288130}
   spawnZoneB: {fileID: 0}
   spawnZoneC: {fileID: 0}
   spawnZoneD: {fileID: 0}
   spawnZoneE: {fileID: 0}
+  spawnZoneF: {fileID: 0}
   enemyManager: {fileID: 329010036}
   gameManager: {fileID: 149521958}
   characterPool: {fileID: 1097818334}
   gridManager: {fileID: 8808150501734532426}
   enemyPatternManager: {fileID: 329010039}
   randomX: 0
+  randomY: 0
 --- !u!114 &329010039
 MonoBehaviour:
   m_ObjectHideFlags: 0
