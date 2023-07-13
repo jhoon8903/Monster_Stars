@@ -1,5 +1,6 @@
 using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
+using Script.UIManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -62,7 +63,8 @@ namespace Script.RobbyScript.MainMenuGroup
         {
             PlayerPrefs.DeleteKey("unitState");
             PlayerPrefs.DeleteKey("EnforceData");
-            PlayerPrefs.SetInt("CurrentWave",1);
+            Debug.Log(StageManager.Instance.currentStage);
+            PlayerPrefs.SetInt("CurrentWave" + StageManager.Instance.currentStage, 1);
             PlayerPrefs.SetInt("GridHeight", 6);
             continuePanel.SetActive(false);
         }

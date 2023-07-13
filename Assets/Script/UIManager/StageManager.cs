@@ -26,6 +26,15 @@ namespace Script.UIManager
         private int SelectedStage { get; set; }
         public bool isBossClear;
 
+
+        private void Awake()
+        {
+            Instance = this;
+            currentStage = PlayerPrefs.GetInt(currentStageKey, 1);
+            var currentWaveKey = "CurrentWave" + currentStage;
+            currentWave = PlayerPrefs.GetInt(currentWaveKey, 1);
+            SelectedStage = MainPanel.Instance.Stage;
+        }
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.A))
@@ -36,14 +45,6 @@ namespace Script.UIManager
             {
                 PlayerPrefs.DeleteAll();
             }
-        }
-        private void Awake()
-        {
-            Instance = this;
-            currentStage = PlayerPrefs.GetInt(currentStageKey, 1);
-            var currentWaveKey = "CurrentWave" + currentStage;
-            currentWave = PlayerPrefs.GetInt(currentWaveKey, 1);
-            SelectedStage = MainPanel.Instance.Stage;
         }
         public void SelectedStages()
         {
@@ -66,12 +67,9 @@ namespace Script.UIManager
             {
                 for (var i = 0; i < sets; i++)
                 {
-                    yield return StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group1, group1));
-                    yield return new WaitForSeconds(0.2f);
-                    yield return StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group2, group2));
-                    yield return new WaitForSeconds(0.2f);
-                    yield return StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group3, group3));
-                    yield return new WaitForSeconds(0.2f);
+                    StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group1, group1));
+                    StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group2, group2));
+                    StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group3, group3));
                     yield return new WaitForSeconds(3f);
                 }
             }

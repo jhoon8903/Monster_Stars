@@ -109,7 +109,7 @@ namespace Script.EnemyManagerScript
                     else
                     {
                         randomX = Random.Range(0, 6);
-                        spawnPosition = new Vector3(randomX, spawnPosY + Random.Range(-1, 2), 0);
+                        spawnPosition = new Vector3(randomX, spawnPosY, 0);
                     }
                     break;
                 }
