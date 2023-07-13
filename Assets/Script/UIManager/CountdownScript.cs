@@ -6,15 +6,29 @@ using TMPro;
 
 public class CountdownScript : MonoBehaviour
 {
+    public static CountdownScript Instance { get; private set; }
+
     [SerializeField] private TextMeshProUGUI countdownText;
     [SerializeField] private GameObject countdownBtn;
     [SerializeField] private GameObject adsCountinueBtn;
 
     private float totalTime = 10f; // 총 카운트다운 시간
     private float currentCountdown; // 현재 카운트다운 시간
-    private bool retry;
+    public bool retry;
 
-    private const string RetryKey = "Retry";
+    public const string RetryKey = "Retry";
+
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
 
     private void Start()
     {
@@ -29,7 +43,7 @@ public class CountdownScript : MonoBehaviour
         StartCountdown();
     }
 
-    void Update()
+    private void Update()
     {
         if (retry)
         {
@@ -52,7 +66,7 @@ public class CountdownScript : MonoBehaviour
         }
     }
 
-    void StartCountdown()
+    private void StartCountdown()
     {
         currentCountdown = totalTime;
     }
