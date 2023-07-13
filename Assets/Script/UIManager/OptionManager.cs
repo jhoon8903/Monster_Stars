@@ -6,7 +6,6 @@ using UnityEngine.UIElements;
 
 public class OptionManager : MonoBehaviour
 {
-
     [SerializeField] private UnityEngine.UI.Button PrivacyPolicyBtn;
     [SerializeField] private UnityEngine.UI.Button TermsOfServiceBtn;
     [SerializeField] private string PrivacyPolicy;
@@ -24,6 +23,9 @@ public class OptionManager : MonoBehaviour
     private bool BGM = true;
     private bool Sound = true;
 
+    private const string BGMKey = "BGMState";
+    private const string SoundKey = "SoundState";
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,6 +36,19 @@ public class OptionManager : MonoBehaviour
         BGMBtn.onClick.AddListener(BgmONOff);
         UnityEngine.UI.Button SoundEffectBtn = SoundEffectBG.GetComponent<UnityEngine.UI.Button>();
         SoundEffectBtn.onClick.AddListener(SoundOnOff);
+
+        // 저장된 상태 확인
+        if (PlayerPrefs.HasKey(BGMKey))
+        {
+            BGM = PlayerPrefs.GetInt(BGMKey) == 1;
+            SetBGMButtonState(BGM);
+        }
+
+        if (PlayerPrefs.HasKey(SoundKey))
+        {
+            Sound = PlayerPrefs.GetInt(SoundKey) == 1;
+            SetSoundButtonState(Sound);
+        }
     }
 
     public void PrivacyPolicyURL()
@@ -48,37 +63,29 @@ public class OptionManager : MonoBehaviour
 
     private void BgmONOff()
     {
-        if (BGM)
-        {
-            BGMRenderer.color = Color.gray;
-            BGMToggleRenderer.color = Color.black;
-            BGMToggleRenderer.transform.position += new Vector3(-0.3f, 0f, 0f); // 현재 위치에서 x 좌표에 -10을 더하여 이동 
-            BGM = false;
-        }
-        else
-        {
-            BGMRenderer.color = Color.yellow;
-            BGMToggleRenderer.color = Color.white;
-            BGMToggleRenderer.transform.position += new Vector3(0.3f, 0f, 0f); // 현재 위치에서 x 좌표에 -10을 더하여 이동 
-            BGM = true;
-        }
+        BGM = !BGM;
+        SetBGMButtonState(BGM);
+        PlayerPrefs.SetInt(BGMKey, BGM ? 1 : 0);
     }
 
     private void SoundOnOff()
     {
-        if (Sound)
-        {
-            SoundEffectRenderer.color = Color.gray;
-            SoundEffectToggleRenderer.color = Color.black;
-            SoundEffectToggleRenderer.transform.position += new Vector3(-0.3f, 0f, 0f); // 현재 위치에서 x 좌표에 -10을 더하여 이동 
-            Sound = false;
-        }
-        else
-        {
-            SoundEffectRenderer.color = Color.yellow;
-            SoundEffectToggleRenderer.color = Color.white;
-            SoundEffectToggleRenderer.transform.position += new Vector3(0.3f, 0f, 0f); // 현재 위치에서 x 좌표에 -10을 더하여 이동 
-            Sound = true;
-        }
+        Sound = !Sound;
+        SetSoundButtonState(Sound);
+        PlayerPrefs.SetInt(SoundKey, Sound ? 1 : 0);
+    }
+
+    private void SetBGMButtonState(bool state)
+    {
+        BGMRenderer.color = state ? Color.yellow : Color.gray;
+        BGMToggleRenderer.color = state ? Color.white : Color.black;
+        BGMToggleRenderer.transform.position += new Vector3(state ? 0.3f : -0.3f, 0f, 0f);
+    }
+
+    private void SetSoundButtonState(bool state)
+    {
+        SoundEffectRenderer.color = state ? Color.yellow : Color.gray;
+        SoundEffectToggleRenderer.color = state ? Color.white : Color.black;
+        SoundEffectToggleRenderer.transform.position += new Vector3(state ? 0.3f : -0.3f, 0f, 0f);
     }
 }
