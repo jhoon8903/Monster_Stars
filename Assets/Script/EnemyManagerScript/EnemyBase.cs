@@ -17,9 +17,9 @@ namespace Script.EnemyManagerScript
         private bool _updateSlider;
         protected internal float CrushDamage; 
         protected internal float MoveSpeed;
-        public enum EnemyTypes { Boss, BasicA, BasicD, Slow, Fast }
+        public enum EnemyTypes { Boss, Group1, Group2, Group3 }
         protected internal EnemyTypes EnemyType;
-        public enum RegistryTypes { Physics, Divine, Poison, Burn, Water, Darkness,  None }
+        public enum RegistryTypes { Physics, Divine, Poison, Burn, Water, Darkness, None }
         protected internal RegistryTypes RegistryType; 
         protected internal SpawnZones SpawnZone;
         protected internal bool isDead;

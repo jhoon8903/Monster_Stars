@@ -56,9 +56,7 @@ namespace Script.UIManager
         }
         private IEnumerator WaveController(int currentWaves)
         {
-            var (normalCount, slowCount, fastCount) = GetSpawnCountForWave(currentStage, currentWaves);
-            Debug.Log($"{normalCount} / {slowCount} / {fastCount}");
-
+            var (group1, group2, group3) = GetSpawnCountForWave(currentStage, currentWaves);
             const int sets = 2;
             if (currentWaves % 10 == 0)
             {
@@ -68,24 +66,19 @@ namespace Script.UIManager
             {
                 for (var i = 0; i < sets; i++)
                 {
-                    var normalCountA = normalCount / 2;
-                    var normalCountB = normalCount / 2;
-
-                    if (normalCount % 2 == 1)
-                    {
-                        normalCountA += 1; 
-                    }
-                    yield return StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.BasicA, normalCountA));
-                    yield return StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.BasicD, normalCountB));
-                    yield return StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Slow, slowCount));
-                    yield return StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Fast, fastCount)); 
+                    yield return StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group1, group1));
+                    yield return new WaitForSeconds(0.2f);
+                    yield return StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group2, group2));
+                    yield return new WaitForSeconds(0.2f);
+                    yield return StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group3, group3));
+                    yield return new WaitForSeconds(0.2f);
                     yield return new WaitForSeconds(3f);
                 }
             }
         }
-        private static Dictionary<string, Dictionary<int, (int normal, int slow, int fast)>> LoadCsvData(string filename)
+        private static Dictionary<string, Dictionary<int, (int group1, int group2, int group3)>> LoadCsvData(string filename)
         {
-            var data = new Dictionary<string, Dictionary<int, (int normal, int slow, int fast)>>();
+            var data = new Dictionary<string, Dictionary<int, (int group1, int group2, int group3)>>();
 
             var csvFile = Resources.Load<TextAsset>(filename);
             var lines = csvFile.text.Split('\n');
@@ -95,9 +88,9 @@ namespace Script.UIManager
                 var values = lines[i].Split(',');
                 var stage = values[0];
                 var wave = int.Parse(values[1]);
-                var normal = int.Parse(values[2]);
-                var slow = int.Parse(values[3]);
-                var fast = int.Parse(values[4]);
+                var group1 = int.Parse(values[2]);
+                var group2 = int.Parse(values[3]);
+                var group3 = int.Parse(values[4]);
 
                 if (stage.Contains("~"))
                 {
@@ -109,23 +102,23 @@ namespace Script.UIManager
                     {
                         if (!data.ContainsKey(s.ToString()))
                         {
-                            data[s.ToString()] = new Dictionary<int, (int normal, int slow, int fast)>();
+                            data[s.ToString()] = new Dictionary<int, (int group1, int group2, int group3)>();
                         }
-                        data[s.ToString()][wave] = (normal, slow, fast);
+                        data[s.ToString()][wave] = (group1, group2, group3);
                     }
                 }
                 else
                 {
                     if (!data.ContainsKey(stage))
                     {
-                        data[stage] = new Dictionary<int, (int normal, int slow, int fast)>();
+                        data[stage] = new Dictionary<int, (int group1, int group2, int group3)>();
                     }
-                    data[stage][wave] = (normal, slow, fast);
+                    data[stage][wave] = (group1, group2, group3);
                 }
             }
             return data;
         }
-        private static (int normal, int slow, int fast) GetSpawnCountForWave(int stage, int wave)
+        private static (int group1, int group2, int group3) GetSpawnCountForWave(int stage, int wave)
         {
             var data = LoadCsvData("stageData");
 

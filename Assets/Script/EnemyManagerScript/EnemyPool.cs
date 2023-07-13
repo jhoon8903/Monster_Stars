@@ -31,11 +31,26 @@ namespace Script.EnemyManagerScript
         public GameObject GetPooledEnemy(EnemyBase.EnemyTypes enemyType)
         {
             var spawnEnemy = pooledEnemy.FirstOrDefault(t => !t.activeInHierarchy && t.GetComponent<EnemyBase>().EnemyType == enemyType);
+
+            if (spawnEnemy == null)
+            {
+                var enemySettings = enemyManager.enemyList.FirstOrDefault(es => es.enemyPrefab.GetComponent<EnemyBase>().EnemyType == enemyType);
+                if (enemySettings != null)
+                {
+                    spawnEnemy = Instantiate(enemySettings.enemyPrefab, transform);
+                    spawnEnemy.GetComponent<EnemyBase>().number = pooledDefaultEnemy.Count + 1;
+                    spawnEnemy.GetComponent<EnemyBase>().Initialize();
+                    spawnEnemy.SetActive(false);
+                    pooledDefaultEnemy.Add(spawnEnemy);
+                    pooledEnemy.Add(spawnEnemy);
+                }
+            }
+            if (spawnEnemy == null) return spawnEnemy;
             pooledEnemy.Remove(spawnEnemy);
-            if (spawnEnemy == null) return null;
             enemyBases.Add(spawnEnemy.GetComponent<EnemyBase>());
             return spawnEnemy;
         }
+
 
         public void ClearList()
         {

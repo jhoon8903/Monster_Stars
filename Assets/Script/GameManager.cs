@@ -70,7 +70,6 @@ namespace Script
             }
             else
             {
-
                 countManager.Initialize(moveCount);
                 StartCoroutine(spawnManager.PositionUpCharacterObject());
             }
@@ -109,6 +108,8 @@ namespace Script
                 else if (StageManager.Instance.isBossClear)
                 {
                     moveCount = 15 + EnforceManager.Instance.rewardMoveCount;
+                    PlayerPrefs.SetInt("moveCount",moveCount);
+                    countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
                     yield return StartCoroutine(commonRewardManager.WaveRewardChance());
                     yield return StartCoroutine(spawnManager.BossStageClearRule());
                     yield return StartCoroutine(gridManager.ResetBossSpawnColor());
@@ -117,6 +118,8 @@ namespace Script
                 else
                 {
                     moveCount = 7 + EnforceManager.Instance.rewardMoveCount;
+                    PlayerPrefs.SetInt("moveCount",moveCount);
+                    countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
                     yield return StartCoroutine(InitializeWave());
                 }
             }
@@ -133,9 +136,6 @@ namespace Script
             expManager.SaveExp();
             castleManager.SaveCastleHp();
             EnforceManager.Instance.SaveEnforceData();
-            PlayerPrefs.SetInt("moveCount",moveCount);
-            countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
-            
             Time.timeScale = 1;
 
             if (EnforceManager.Instance.recoveryCastle)

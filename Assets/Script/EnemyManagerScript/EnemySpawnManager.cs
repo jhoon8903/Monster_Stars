@@ -54,6 +54,24 @@ namespace Script.EnemyManagerScript
             }
         }
 
+        private IEnumerator SpawnEnemy(EnemyBase.EnemyTypes enemyType)
+        {
+            var enemyToSpawn = enemyPool.GetPooledEnemy(enemyType);
+            var enemyBase = enemyToSpawn.GetComponent<EnemyBase>();
+            // enemyBase.transform.localScale = enemyBase.EnemyType switch
+            // {
+            //     EnemyBase.EnemyTypes.Fast => Vector3.one * 0.6f,
+            //     EnemyBase.EnemyTypes.Slow => Vector3.one * 1f,
+            //     _ => Vector3.one * 0.8f
+            // };
+            var spawnPosition = Vector3.zero;
+            yield return StartCoroutine(GetRandomPointInBounds(enemyBase.SpawnZone, pos => spawnPosition = pos));
+            enemyBase.transform.position = spawnPosition;
+            enemyBase.gameObject.SetActive(true);
+            enemyBase.Initialize();
+            yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyBase));
+        }
+
         public IEnumerator SpawnBoss(int wave)
         {
             var bossObject = Instantiate(enemyManager.stageBoss, transform);
@@ -66,26 +84,7 @@ namespace Script.EnemyManagerScript
             enemyBase.healthPoint *= 1f + wave * 0.2f;
             yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyBase));
         }
-
-        private IEnumerator SpawnEnemy(EnemyBase.EnemyTypes enemyType)
-        {
-            var enemyToSpawn = enemyPool.GetPooledEnemy(enemyType);
-            var enemyBase = enemyToSpawn.GetComponent<EnemyBase>();
-            enemyBase.transform.localScale = enemyBase.EnemyType switch
-            {
-                EnemyBase.EnemyTypes.Fast => Vector3.one * 0.6f,
-                EnemyBase.EnemyTypes.Slow => Vector3.one * 1f,
-                _ => Vector3.one * 0.8f
-            };
-            var spawnPosition = Vector3.zero;
-            yield return StartCoroutine(GetRandomPointInBounds(enemyBase.SpawnZone, pos => spawnPosition = pos));
-            enemyBase.transform.position = spawnPosition;
-            enemyBase.gameObject.SetActive(true);
-            enemyBase.Initialize();
-            yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyBase));
-        }
-
-        private IEnumerator GetRandomPointInBounds(EnemyBase.SpawnZones zone, System.Action<Vector3> callback)
+        private IEnumerator GetRandomPointInBounds(EnemyBase.SpawnZones zone, Action<Vector3> callback)
         {
             var spawnPosition = Vector3.zero;
             switch (zone)
