@@ -75,6 +75,10 @@ namespace Script.RobbyScript.MainMenuGroup
             {
                 if (staminaScript.currentStamina >= 5)
                 {
+                    if (PlayerPrefs.HasKey("Retry"))
+                    {
+                        PlayerPrefs.SetInt("Retry", 1);
+                    }
                     staminaScript.currentStamina -= 5;
                     staminaScript.StaminaUpdate();
                     staminaScript.SaveStaminaState();
