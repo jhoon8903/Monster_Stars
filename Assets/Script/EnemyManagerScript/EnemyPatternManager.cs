@@ -14,10 +14,12 @@ namespace Script.EnemyManagerScript
         private float _moveSpeed;
         public float moveSpeedOffset;
         private readonly System.Random _random = new System.Random();
-        private bool _alreadyRestrain;
-        private Dictionary<EnemyBase, bool> _alreadySlow = new Dictionary<EnemyBase, bool>();
+        private readonly Dictionary<EnemyBase, bool> _alreadySlow = new Dictionary<EnemyBase, bool>();
+        private readonly Dictionary<EnemyBase, bool> _alreadyRestrain = new Dictionary<EnemyBase, bool>();
         private Rigidbody2D _rb;
         private float _endY;
+        private int _slowCount;
+        private float _speedReductionFactor;
 
         private void Awake()
         {
@@ -31,19 +33,16 @@ namespace Script.EnemyManagerScript
 
         public IEnumerator Zone_Move(EnemyBase enemyBase)
         {
-            var slowCount = EnforceManager.Instance.slowCount;
-            var speedReductionFactor = 1f + slowCount * 0.15f;
-            _moveSpeed = enemyBase.MoveSpeed * speedReductionFactor * moveSpeedOffset * Time.deltaTime;
-
             if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
             {
                 enemyBase.Initialize();
-                StartCoroutine(Rain(enemyBase, _moveSpeed * 0.8f));
+                StartCoroutine(Rain(enemyBase));
             }
+
             switch (enemyBase.SpawnZone)
             {
                 case EnemyBase.SpawnZones.A:
-                    StartCoroutine(Rain(enemyBase, _moveSpeed));
+                    StartCoroutine(Rain(enemyBase));
                     break;
                 case EnemyBase.SpawnZones.B:
                 case EnemyBase.SpawnZones.C:
@@ -65,23 +64,29 @@ namespace Script.EnemyManagerScript
             yield return null;
         }
 
-        private IEnumerator Rain(EnemyBase enemyBase, float moveToSpeed)
+        private IEnumerator Rain(EnemyBase enemyBase)
         {
             _rb = enemyBase.GetComponent<Rigidbody2D>();
             _enemyRigidbodies[enemyBase] = _rb;
+            
             var targetPosition = new Vector2(_enemyRigidbodies[enemyBase].transform.position.x, _endY);
 
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
-                _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, moveToSpeed);
+                _slowCount = EnforceManager.Instance.slowCount;
+                _speedReductionFactor = 1f + _slowCount * 0.15f;
+                _moveSpeed = enemyBase.MoveSpeed * _speedReductionFactor;
+                Debug.Log(_moveSpeed);
+                _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed);
+               
                 if (enemyBase.isRestraint)
                 { 
-                   StartCoroutine(RestrainEffect(enemyBase, _enemyRigidbodies[enemyBase], targetPosition, moveToSpeed));
+                  StartCoroutine(RestrainEffect(_enemyRigidbodies[enemyBase], targetPosition));
                 }
                 if (enemyBase.isSlow)
                 { 
-                   StartCoroutine(SlowEffect(enemyBase, _enemyRigidbodies[enemyBase], targetPosition, moveToSpeed));
+                   StartCoroutine(SlowEffect(_enemyRigidbodies[enemyBase], targetPosition, _moveSpeed));
                 }
             }
         }
@@ -105,11 +110,11 @@ namespace Script.EnemyManagerScript
  
                 if (enemyBase.isRestraint)
                 {
-                    yield return    StartCoroutine(RestrainEffect(enemyBase, enemyObject, targetPosition, step));
+                    yield return    StartCoroutine(RestrainEffect(enemyObject, targetPosition));
                 }
                 if (enemyBase.isSlow)
                 {
-                    yield return    StartCoroutine(SlowEffect(enemyBase, enemyObject, targetPosition, step));
+                    yield return    StartCoroutine(SlowEffect(enemyObject, targetPosition, step));
                 }
                 else
                 {
@@ -143,11 +148,11 @@ namespace Script.EnemyManagerScript
                 var step = moveToSpeed * Time.deltaTime;
                 if (enemyBase.isRestraint)
                 {
-                    yield return    StartCoroutine(RestrainEffect(enemyBase, enemyObject, targetPosition, step));
+                    yield return    StartCoroutine(RestrainEffect(enemyObject, targetPosition));
                 }
                 if (enemyBase.isSlow)
                 {
-                    yield return    StartCoroutine(SlowEffect(enemyBase, enemyObject, targetPosition, step));
+                    yield return    StartCoroutine(SlowEffect(enemyObject, targetPosition, step));
                 }
                 else
                 {
@@ -176,11 +181,11 @@ namespace Script.EnemyManagerScript
                 var step = moveToSpeed * Time.deltaTime;
                 if (enemyBase.isRestraint)
                 {
-                    yield return    StartCoroutine(RestrainEffect(enemyBase, enemyObject, targetPosition, step));
+                    yield return    StartCoroutine(RestrainEffect(enemyObject, targetPosition));
                 }
                 if (enemyBase.isSlow)
                 {
-                    yield return    StartCoroutine(SlowEffect(enemyBase, enemyObject, targetPosition, step));
+                    yield return    StartCoroutine(SlowEffect(enemyObject, targetPosition, step));
                 }
                 else
                 {
@@ -214,11 +219,11 @@ namespace Script.EnemyManagerScript
                
                 if (enemyBase.isRestraint)
                 {
-                    yield return    StartCoroutine(RestrainEffect(enemyBase, enemyObject, targetPosition, step));
+                    yield return    StartCoroutine(RestrainEffect(enemyObject, targetPosition));
                 }
                 if (enemyBase.isSlow)
                 {
-                    yield return    StartCoroutine(SlowEffect(enemyBase, enemyObject, targetPosition, step));
+                    yield return    StartCoroutine(SlowEffect(enemyObject, targetPosition, step));
                 }
                 else
                 {
@@ -231,61 +236,67 @@ namespace Script.EnemyManagerScript
                 }
             }
         }
-        private IEnumerator RestrainEffect(EnemyBase enemyBase, Component enemyObject, Vector2 targetPosition, float step)
+        private IEnumerator RestrainEffect(Component enemyObject, Vector2 targetPosition)
         {
             var restrainColor = new Color(1, 0.5f, 0);
             var originColor = new Color(1, 1, 1);
-            if (_alreadyRestrain) yield break;
-            _alreadyRestrain = true;
+            var enemyBase = enemyObject.GetComponent<EnemyBase>();
+            if (!_alreadyRestrain.TryGetValue(enemyBase, out enemyBase.isRestraint))
+            {
+                enemyBase.isRestraint= false;
+                _alreadyRestrain[enemyBase] = false;
+            }
+
             enemyBase.GetComponent<SpriteRenderer>().color = restrainColor;
-            step = 0;
             var restrainTime = EnforceManager.Instance.firePoisonAdditionalStun && Chance(20) && enemyBase.isBleed
                 ? 1f : 1f + 1f * EnforceManager.Instance.IncreaseRestraintTime();
+           
             while (gameManager.IsBattle)
             { 
                 yield return StartCoroutine(gameManager.WaitForPanelToClose()); ;
-                enemyObject.transform.position = Vector2.MoveTowards(enemyObject.transform.position, targetPosition, step);
+                enemyBase.transform.position = Vector2.MoveTowards(enemyBase.transform.position, targetPosition, 0);
                 restrainTime -= Time.deltaTime;
-                if (restrainTime <= 0) yield break;
-                yield return null;
+                if (restrainTime <= 0) break;
             }
-            enemyBase.isRestraint = false;
-            _alreadyRestrain = false;
             enemyBase.GetComponent<SpriteRenderer>().color = originColor;
+            enemyBase.isRestraint = false;
+            _alreadyRestrain[enemyBase] = false;
+
         }
-
-
-        private IEnumerator SlowEffect(EnemyBase enemyBase , Component enemyObject, Vector2 targetPosition, float step)
+        private IEnumerator SlowEffect(Component enemyObject, Vector2 targetPosition, float step)
         {
+            var enemyBase = enemyObject.GetComponent<EnemyBase>();
             var slowColor = new Color(0f, 0.74f, 1);
             var originColor = new Color(1, 1, 1);
-            var slowTime = EnforceManager.Instance.water2BleedAdditionalRestraint && Chance(20) && enemyObject.GetComponent<EnemyBase>().isBleed 
+            var slowTime = EnforceManager.Instance.water2BleedAdditionalRestraint && Chance(20) && enemyBase.isBleed 
                 ? 1f : 2f + 1f * EnforceManager.Instance.water2IncreaseSlowTime;
-            var moveSpeedMultiplier = EnforceManager.Instance.waterIncreaseSlowPower ? 0.04f : 0.06f;
+            var moveSpeedMultiplier = EnforceManager.Instance.waterIncreaseSlowPower ? 0.4f : 0.6f;
 
-            if (!_alreadySlow.TryGetValue(enemyBase, out enemyObject.GetComponent<EnemyBase>().isSlow))
+            if (!_alreadySlow.TryGetValue(enemyBase, out enemyBase.isSlow))
             {
-                enemyObject.GetComponent<EnemyBase>().isSlow= false;
+                enemyBase.isSlow= false;
                 _alreadySlow[enemyBase] = false;
             }
 
-            if (enemyObject.GetComponent<EnemyBase>().isSlow) yield break;
+            if (enemyBase.isSlow) yield break;
 
             _alreadySlow[enemyBase] = true;
-            enemyObject.GetComponent<SpriteRenderer>().color = slowColor;
+            
+            enemyBase.GetComponent<SpriteRenderer>().color = slowColor;
+           
             var adjustedStep = step * moveSpeedMultiplier;
 
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
-                enemyObject.transform.position =
-                    Vector3.MoveTowards(enemyObject.transform.position, targetPosition, adjustedStep);
+
+                enemyBase.transform.position = Vector3.MoveTowards(enemyBase.transform.position, targetPosition, adjustedStep);
                 slowTime -= Time.deltaTime;
 
-                if (slowTime <= 0) yield break;
+                if (slowTime <= 0) break;
             }
-            enemyObject.GetComponent<SpriteRenderer>().color = originColor;
-            enemyObject.GetComponent<EnemyBase>().isSlow = false;
+            enemyBase.GetComponent<SpriteRenderer>().color = originColor;
+            enemyBase.isSlow = false;
             _alreadySlow[enemyBase] = false;
         }
     }
