@@ -55,14 +55,14 @@ namespace Script.CharacterGroupScript
         {
             if (EnforceManager.Instance.water2BackAttack)
             {
-                _detectionWidth = 0.8f;
+                _detectionWidth = 1f;
                 _detectionHeight = 18f;
                 size = new Vector2(_detectionWidth, _detectionHeight);
                 center = transform.position;
             }
             else
             {
-                _detectionWidth = 0.8f;
+                _detectionWidth = 1f;
                 _detectionHeight = 9f;
                 size = new Vector2(_detectionWidth, _detectionHeight);
                 center = (Vector2)transform.position + Vector2.up * _detectionHeight / 2f;
@@ -91,7 +91,7 @@ namespace Script.CharacterGroupScript
         public void OnDrawGizmos()
         {
             GetDetectionProperties(out var detectionSize, out var detectionCenter);
-            Gizmos.color = Color.blue;
+            Gizmos.color = Color.green;
             Gizmos.DrawWireCube(detectionCenter, detectionSize);
         }
 

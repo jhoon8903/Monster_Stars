@@ -87,7 +87,8 @@ namespace Script
             StartCoroutine(cameraManager.CameraBattleSizeChange());
             StartCoroutine(backgroundManager.ChangeBattleSize());
             yield return _waitTwoSecRealtime;
-            StageManager.Instance.StartWave();
+            StartCoroutine(AtkManager.Instance.CheckForAttack());
+            StartCoroutine(StageManager.Instance.WaveController(StageManager.Instance.currentWave));
             GameSpeed();
         }
 

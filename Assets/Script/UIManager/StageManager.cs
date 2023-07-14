@@ -51,12 +51,7 @@ namespace Script.UIManager
         {
             currentStage = SelectedStage;
         }
-        public void StartWave()
-        {
-            StartCoroutine(WaveController(currentWave));
-            StartCoroutine(AtkManager.Instance.CheckForAttack());
-        }
-        private IEnumerator WaveController(int currentWaves)
+        public IEnumerator WaveController(int currentWaves)
         {
             var (group1,group1Zone, group2, group2Zone,group3,group3Zone) = GetSpawnCountForWave(currentStage, currentWaves);
             const int sets = 2;

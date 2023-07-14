@@ -261,22 +261,20 @@ namespace Script.EnemyManagerScript
             var originColor = new Color(1, 1, 1);
             var slowTime = EnforceManager.Instance.water2BleedAdditionalRestraint && Chance(20) && enemyObject.GetComponent<EnemyBase>().isBleed 
                 ? 1f : 2f + 1f * EnforceManager.Instance.water2IncreaseSlowTime;
-            var moveSpeedMultiplier = EnforceManager.Instance.waterIncreaseSlowPower ? 0.4f : 0.6f;
+            var moveSpeedMultiplier = EnforceManager.Instance.waterIncreaseSlowPower ? 0.04f : 0.06f;
 
-            if (!_alreadySlow.TryGetValue(enemyBase, out var isSlow))
+            if (!_alreadySlow.TryGetValue(enemyBase, out enemyObject.GetComponent<EnemyBase>().isSlow))
             {
-                isSlow = false;
+                enemyObject.GetComponent<EnemyBase>().isSlow= false;
                 _alreadySlow[enemyBase] = false;
             }
 
-            if (isSlow) yield break;
+            if (enemyObject.GetComponent<EnemyBase>().isSlow) yield break;
 
             _alreadySlow[enemyBase] = true;
-            enemyObject.GetComponent<SpriteRenderer>().color = slowColor; 
-            Debug.Log("먼저 스텝 "+step);
+            enemyObject.GetComponent<SpriteRenderer>().color = slowColor;
             var adjustedStep = step * moveSpeedMultiplier;
-            Debug.Log("보정 스텝 " + adjustedStep);
-            
+
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
@@ -290,6 +288,5 @@ namespace Script.EnemyManagerScript
             enemyObject.GetComponent<EnemyBase>().isSlow = false;
             _alreadySlow[enemyBase] = false;
         }
-
     }
 }

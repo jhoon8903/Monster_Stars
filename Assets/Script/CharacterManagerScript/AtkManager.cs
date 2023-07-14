@@ -62,28 +62,26 @@ namespace Script.CharacterManagerScript
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 enemyList = unit.DetectEnemies();
 
-                if (enemyList.Count > 0)
+                if (enemyList.Count <= 0) continue;
+                var atkUnit = unit.gameObject; 
+                var unitAtkType = unit.UnitAtkType;
+                var unitGroup = unit.unitGroup; 
+                switch (unitAtkType)
                 {
-                    var atkUnit = unit.gameObject; 
-                    var unitAtkType = unit.UnitAtkType;
-                    var unitGroup = unit.unitGroup; 
-                    switch (unitAtkType)
-                    {
-                        case CharacterBase.UnitAtkTypes.Projectile:
-                            ProjectileAttack(atkUnit, unitGroup);
-                            break;
-                        case CharacterBase.UnitAtkTypes.Gas:
-                            GasAttack(atkUnit, unitGroup);
-                            break;
-                        case CharacterBase.UnitAtkTypes.Circle:
-                            CircleAttack(atkUnit, unitGroup);
-                            break;
-                        case CharacterBase.UnitAtkTypes.GuideProjectile:
-                            GuideProjectileAttack(atkUnit, unitGroup);
-                            break;
-                        default:
-                            throw new ArgumentOutOfRangeException();
-                    }
+                    case CharacterBase.UnitAtkTypes.Projectile:
+                        ProjectileAttack(atkUnit, unitGroup);
+                        break;
+                    case CharacterBase.UnitAtkTypes.Gas:
+                        GasAttack(atkUnit, unitGroup);
+                        break;
+                    case CharacterBase.UnitAtkTypes.Circle:
+                        CircleAttack(atkUnit, unitGroup);
+                        break;
+                    case CharacterBase.UnitAtkTypes.GuideProjectile:
+                        GuideProjectileAttack(atkUnit, unitGroup);
+                        break;
+                    default:
+                        throw new ArgumentOutOfRangeException();
                 }
                 yield return new WaitForSeconds(atkRate);
             }

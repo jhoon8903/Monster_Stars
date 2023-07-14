@@ -54,7 +54,7 @@ namespace Script.CharacterGroupScript
 
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
-            size = new Vector2(DetectionWidth - 0.5f, DetectionHeight);
+            size = new Vector2(DetectionWidth, DetectionHeight);
             center = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
         }
 

@@ -58,12 +58,12 @@ namespace Script.CharacterGroupScript
         {
             if (EnforceManager.Instance.divineAtkRange)
             {
-                size = new Vector2(DetectionWidth - 0.5f, DetectionHeight * 2);
+                size = new Vector2(DetectionWidth, DetectionHeight * 2);
                 center = transform.position;
             }
             else
             {
-                size = new Vector2(DetectionWidth - 0.5f, DetectionHeight);
+                size = new Vector2(DetectionWidth, DetectionHeight);
                 center = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
             }
         }
@@ -80,7 +80,6 @@ namespace Script.CharacterGroupScript
                 var enemyBase = enemyObject.GetComponent<EnemyBase>();
                 currentlyDetectedEnemies.Add(enemyBase.gameObject);
             }
-
             detectedEnemies = currentlyDetectedEnemies;
             return detectedEnemies;
         }
