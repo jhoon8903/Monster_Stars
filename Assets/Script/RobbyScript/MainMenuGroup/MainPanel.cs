@@ -40,6 +40,7 @@ namespace Script.RobbyScript.MainMenuGroup
             }
 
             var stage = PlayerPrefs.GetInt("CurrentStage", 1);
+            Stage = stage;
             var (maxWave, clearWave) = GetStageWave(stage);
             UpdateProgress(stage, maxWave, clearWave);
             startBtn.GetComponent<Button>().onClick.AddListener(StartGame); 
@@ -63,8 +64,8 @@ namespace Script.RobbyScript.MainMenuGroup
         {
             PlayerPrefs.DeleteKey("unitState");
             PlayerPrefs.DeleteKey("EnforceData");
-            Debug.Log(StageManager.Instance.currentStage);
-            PlayerPrefs.SetInt("CurrentWave" + StageManager.Instance.currentStage, 1);
+            Debug.Log(Stage);
+            PlayerPrefs.SetInt("CurrentWave" + Stage, 1);
             PlayerPrefs.SetInt("GridHeight", 6);
             continuePanel.SetActive(false);
         }

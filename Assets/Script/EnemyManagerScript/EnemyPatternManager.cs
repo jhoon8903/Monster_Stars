@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Script.RewardScript;
@@ -158,13 +157,13 @@ namespace Script.EnemyManagerScript
             _rb = enemyBase.GetComponent<Rigidbody2D>();
             _enemyRigidbodies[enemyBase] = _rb;
             var enemyObject = _enemyRigidbodies[enemyBase];
-            var startPos = enemyObject.transform.position;
-            var targetPosition = startPos.x <= 2 ? new Vector2(-1, startPos.y) : new Vector2(6, startPos.y);
+            var targetPosition = enemyObject.transform.position.x <= 2 ? new Vector2(-1, enemyObject.transform.position.y) : new Vector2(6, enemyObject.transform.position.y);
 
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
-                var journeyLength = Vector2.Distance(startPos, targetPosition);
+               
+                var journeyLength = Vector2.Distance(enemyObject.transform.position, targetPosition);
 
                 if (journeyLength <= 0.01f)
                 {
@@ -172,7 +171,7 @@ namespace Script.EnemyManagerScript
                 }
 
                 var step = moveToSpeed * Time.deltaTime;
-                startPos = Vector2.MoveTowards(startPos, targetPosition, step);
+                enemyObject.transform.position = Vector2.MoveTowards(enemyObject.transform.position, targetPosition, step);
                 if (enemyBase.isRestraint)
                 {
                     StartCoroutine(RestrainEffect(enemyBase, enemyObject, targetPosition, step));
@@ -188,34 +187,25 @@ namespace Script.EnemyManagerScript
             _rb = enemyBase.GetComponent<Rigidbody2D>();
             _enemyRigidbodies[enemyBase] = _rb;
             var enemyObject = _enemyRigidbodies[enemyBase];
-            var startPos = enemyObject.transform.position;
-            Vector2 targetPosition;
+            Vector3 targetPosition;
 
-            if (startPos.x <= -1) 
+            if (enemyObject.transform.position.x <= -1) 
             {
                 var randomX = Random.Range(3, 6);
-                targetPosition = new Vector2(randomX, startPos.y);
+                targetPosition = new Vector3(randomX, enemyObject.transform.position.y);
             }
             else 
             {
                 var randomX = Random.Range(0, 3);
-                targetPosition = new Vector2(randomX, startPos.y);
+                targetPosition = new Vector3(randomX, enemyObject.transform.position.y);
             }
 
             while (gameManager.IsBattle)
             {
-                var journeyLength = Vector2.Distance(startPos, targetPosition);
-
-                if (journeyLength <= 0.01f)
-                {
-                    targetPosition = new Vector2(targetPosition.x, _endY);
-                }
-
-                var step = moveToSpeed * Time.deltaTime;
-                startPos = Vector2.MoveTowards(startPos, targetPosition, step);
-
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
-
+                
+                var step = moveToSpeed * Time.deltaTime;
+               
                 if (enemyBase.isRestraint)
                 {
                     StartCoroutine(RestrainEffect(enemyBase, enemyObject, targetPosition, step));
@@ -223,6 +213,15 @@ namespace Script.EnemyManagerScript
                 if (enemyBase.isSlow)
                 {
                     StartCoroutine(SlowEffect(enemyBase, enemyObject, targetPosition, step));
+                }
+                else
+                {
+                    enemyObject.transform.position = Vector2.MoveTowards(enemyObject.transform.position, targetPosition, step);
+                }
+                
+                if (enemyObject.transform.position.x.Equals(targetPosition.x))
+                {
+                    targetPosition = new Vector3(targetPosition.x, _endY);
                 }
             }
         }
@@ -260,6 +259,7 @@ namespace Script.EnemyManagerScript
             var moveSpeedMultiplier = EnforceManager.Instance.waterIncreaseSlowPower ? 0.4f : 0.6f;
             step *= moveSpeedMultiplier;
             yield return new WaitForSeconds(slowTime);
+           
             while (gameManager.IsBattle)
             {
                 enemyObject.transform.position =

@@ -44,26 +44,21 @@ namespace Script.EnemyManagerScript
             };
         }
 
-        public IEnumerator SpawnEnemies(EnemyBase.EnemyTypes enemyType, int count)
+        public IEnumerator SpawnEnemies(EnemyBase.EnemyTypes enemyType, int count, List<EnemyBase.SpawnZones> groupZone)
         {
             for (var i = 0; i < count; i++)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
-                StartCoroutine(SpawnEnemy(enemyType));
-                yield return new WaitForSeconds(0.1f);
+                var spawnZone = groupZone[i % groupZone.Count];
+                StartCoroutine(SpawnEnemy(enemyType, spawnZone));
             }
         }
 
-        private IEnumerator SpawnEnemy(EnemyBase.EnemyTypes enemyType)
+        private IEnumerator SpawnEnemy(EnemyBase.EnemyTypes enemyType, EnemyBase.SpawnZones spawnZone)
         {
-            var enemyToSpawn = enemyPool.GetPooledEnemy(enemyType);
+            var enemyToSpawn = enemyPool.GetPooledEnemy(enemyType, spawnZone);
+            if (enemyToSpawn == null) yield break;
             var enemyBase = enemyToSpawn.GetComponent<EnemyBase>();
-            // enemyBase.transform.localScale = enemyBase.EnemyType switch
-            // {
-            //     EnemyBase.EnemyTypes.Fast => Vector3.one * 0.6f,
-            //     EnemyBase.EnemyTypes.Slow => Vector3.one * 1f,
-            //     _ => Vector3.one * 0.8f
-            // };
             var spawnPosition = Vector3.zero;
             yield return StartCoroutine(GetRandomPointInBounds(enemyBase.SpawnZone, pos => spawnPosition = pos));
             enemyBase.transform.position = spawnPosition;
@@ -103,7 +98,7 @@ namespace Script.EnemyManagerScript
                         if (xPositions.Count > 0)
                         {
                             var randomIndex = Random.Range(0, xPositions.Count);
-                            spawnPosition = new Vector3(xPositions[randomIndex], spawnPosY + Random.Range(-1, 2), 0);
+                            spawnPosition = new Vector3(xPositions[randomIndex], spawnPosY, 0);
                         }
                     }
                     else

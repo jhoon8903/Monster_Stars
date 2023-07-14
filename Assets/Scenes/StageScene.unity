@@ -3069,6 +3069,7 @@ MonoBehaviour:
   countdownText: {fileID: 837923551}
   countdownBtn: {fileID: 558477391}
   adsCountinueBtn: {fileID: 1409829354}
+  retry: 0
 --- !u!1 &571828594
 GameObject:
   m_ObjectHideFlags: 0

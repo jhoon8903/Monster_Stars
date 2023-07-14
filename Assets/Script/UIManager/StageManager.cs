@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Script.CharacterManagerScript;
@@ -57,7 +58,7 @@ namespace Script.UIManager
         }
         private IEnumerator WaveController(int currentWaves)
         {
-            var (group1, group2, group3) = GetSpawnCountForWave(currentStage, currentWaves);
+            var (group1,group1Zone, group2, group2Zone,group3,group3Zone) = GetSpawnCountForWave(currentStage, currentWaves);
             const int sets = 2;
             if (currentWaves % 10 == 0)
             {
@@ -67,28 +68,35 @@ namespace Script.UIManager
             {
                 for (var i = 0; i < sets; i++)
                 {
-                    StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group1, group1));
-                    StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group2, group2));
-                    StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group3, group3));
+                    StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group1, group1, group1Zone));
+                    StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group2, group2, group2Zone));
+                    StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group3, group3, group3Zone));
                     yield return new WaitForSeconds(3f);
                 }
             }
         }
-        private static Dictionary<string, Dictionary<int, (int group1, int group2, int group3)>> LoadCsvData(string filename)
+        private static Dictionary<string, Dictionary<int, (int group1, List<EnemyBase.SpawnZones> group1Zone, int group2, List<EnemyBase.SpawnZones> group2Zone, int group3, List<EnemyBase.SpawnZones> group3Zone)>> LoadCsvData(string filename)
         {
-            var data = new Dictionary<string, Dictionary<int, (int group1, int group2, int group3)>>();
+            var data = new Dictionary<string, Dictionary<int, (int group1, List<EnemyBase.SpawnZones> group1Zone, int group2, List<EnemyBase.SpawnZones> group2Zone, int group3, List<EnemyBase.SpawnZones> group3Zone)>>();
 
             var csvFile = Resources.Load<TextAsset>(filename);
             var lines = csvFile.text.Split('\n');
 
             for (var i = 1; i < lines.Length; i++)
             {
-                var values = lines[i].Split(',');
+                var values = lines[i].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                for (var j = 0; j < values.Length; j++)
+                {
+                    values[j] = values[j].Trim('"');
+                }
                 var stage = values[0];
                 var wave = int.Parse(values[1]);
                 var group1 = int.Parse(values[2]);
-                var group2 = int.Parse(values[3]);
-                var group3 = int.Parse(values[4]);
+                var group1Zone = ParseSpawnZones(values[3]);
+                var group2 = int.Parse(values[4]);
+                var group2Zone = ParseSpawnZones(values[5]);
+                var group3 = int.Parse(values[6]);
+                var group3Zone = ParseSpawnZones(values[7]);
 
                 if (stage.Contains("~"))
                 {
@@ -100,23 +108,39 @@ namespace Script.UIManager
                     {
                         if (!data.ContainsKey(s.ToString()))
                         {
-                            data[s.ToString()] = new Dictionary<int, (int group1, int group2, int group3)>();
+                            data[s.ToString()] = new Dictionary<int, (int group1, List<EnemyBase.SpawnZones> group1Zone, int group2, List<EnemyBase.SpawnZones> group2Zone, int group3, List<EnemyBase.SpawnZones> group3Zone)>();
                         }
-                        data[s.ToString()][wave] = (group1, group2, group3);
+                        data[s.ToString()][wave] = (group1,group1Zone, group2, group2Zone,group3,group3Zone);
                     }
                 }
                 else
                 {
                     if (!data.ContainsKey(stage))
                     {
-                        data[stage] = new Dictionary<int, (int group1, int group2, int group3)>();
+                        data[stage] = new Dictionary<int, (int group1, List<EnemyBase.SpawnZones> group1Zone, int group2, List<EnemyBase.SpawnZones> group2Zone, int group3, List<EnemyBase.SpawnZones> group3Zone)>();
                     }
-                    data[stage][wave] = (group1, group2, group3);
+                    data[stage][wave] = (group1,group1Zone, group2, group2Zone,group3,group3Zone);
                 }
             }
             return data;
         }
-        private static (int group1, int group2, int group3) GetSpawnCountForWave(int stage, int wave)
+
+        private static List<EnemyBase.SpawnZones> ParseSpawnZones(string zoneString)
+        {
+            var zones = new List<EnemyBase.SpawnZones>();
+            var cleanedZoneString = zoneString.Replace("\"", "");
+            var zoneStrings = cleanedZoneString.Split(' '); // 공백으로 구분
+            foreach (var zone in zoneStrings)
+            {
+                if (Enum.TryParse(typeof(EnemyBase.SpawnZones), zone, out var parsedZone))
+                {
+                    zones.Add((EnemyBase.SpawnZones)parsedZone);
+                }
+            }
+            return zones;
+        }
+
+        private static (int group1, List<EnemyBase.SpawnZones> group1Zone, int group2, List<EnemyBase.SpawnZones> group2Zone, int group3, List<EnemyBase.SpawnZones> group3Zone) GetSpawnCountForWave(int stage, int wave)
         {
             var data = LoadCsvData("stageData");
 

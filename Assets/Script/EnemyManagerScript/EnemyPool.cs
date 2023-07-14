@@ -28,13 +28,13 @@ namespace Script.EnemyManagerScript
             pooledEnemy = pooledDefaultEnemy.ToList();
         }
 
-        public GameObject GetPooledEnemy(EnemyBase.EnemyTypes enemyType)
+        public GameObject GetPooledEnemy(EnemyBase.EnemyTypes enemyType, EnemyBase.SpawnZones spawnZones)
         {
-            var spawnEnemy = pooledEnemy.FirstOrDefault(t => !t.activeInHierarchy && t.GetComponent<EnemyBase>().EnemyType == enemyType);
+            var spawnEnemy = pooledEnemy.FirstOrDefault(t => !t.activeInHierarchy && t.GetComponent<EnemyBase>().EnemyType == enemyType && t.GetComponent<EnemyBase>().SpawnZone == spawnZones);
 
             if (spawnEnemy == null)
             {
-                var enemySettings = enemyManager.enemyList.FirstOrDefault(es => es.enemyPrefab.GetComponent<EnemyBase>().EnemyType == enemyType);
+                var enemySettings = enemyManager.enemyList.FirstOrDefault(es => es.enemyPrefab.GetComponent<EnemyBase>().EnemyType == enemyType && es.enemyPrefab.GetComponent<EnemyBase>().SpawnZone == spawnZones);
                 if (enemySettings != null)
                 {
                     spawnEnemy = Instantiate(enemySettings.enemyPrefab, transform);
@@ -65,12 +65,12 @@ namespace Script.EnemyManagerScript
             {
                 pooledEnemy.Remove(enemyBaseGameObject);
             }
-            enemyBase.isDead = false;
             enemyBase.isPoison = false;
             enemyBase.isSlow = false;
             enemyBase.isRestraint = false;
             enemyBase.isBurn = false;
             enemyBase.isBleed = false;
+            enemyBase.isDead = false;
             enemyBase.transform.localScale = Vector3.one;
             enemyBase.GetComponent<SpriteRenderer>().color = Color.white;
             enemyBaseGameObject.SetActive(false);
