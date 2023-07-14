@@ -5,6 +5,7 @@ using Script.RewardScript;
 using Script.UIManager;
 using Script.WeaponScriptGroup;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.EnemyManagerScript
@@ -16,7 +17,7 @@ namespace Script.EnemyManagerScript
         private Slider _hpSlider;
         private bool _updateSlider;
         protected internal float CrushDamage; 
-        protected internal float MoveSpeed;
+        public float moveSpeed;
         public enum EnemyTypes { Boss, Group1, Group2, Group3 }
         protected internal EnemyTypes EnemyType;
         public enum RegistryTypes { Physics, Divine, Poison, Burn, Water, Darkness, None }

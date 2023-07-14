@@ -8,7 +8,7 @@ namespace Script.EnemyScript
         {
             healthPoint = 400;
             CrushDamage = 160;
-            MoveSpeed = 1f;
+            moveSpeed = 1f;
             EnemyType = EnemyTypes.Group2;
             SpawnZone = SpawnZones.D;
             RegistryType = RegistryTypes.Poison;
