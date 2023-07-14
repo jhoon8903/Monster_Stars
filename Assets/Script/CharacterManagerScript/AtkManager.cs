@@ -70,10 +70,10 @@ namespace Script.CharacterManagerScript
                     switch (unitAtkType)
                     {
                         case CharacterBase.UnitAtkTypes.Projectile:
-                           ProjectileAttack(atkUnit, unitGroup);
+                            ProjectileAttack(atkUnit, unitGroup);
                             break;
                         case CharacterBase.UnitAtkTypes.Gas:
-                           GasAttack(atkUnit, unitGroup);
+                            GasAttack(atkUnit, unitGroup);
                             break;
                         case CharacterBase.UnitAtkTypes.Circle:
                             CircleAttack(atkUnit, unitGroup);
