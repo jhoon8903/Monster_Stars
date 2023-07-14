@@ -60,11 +60,15 @@ namespace Script.EnemyManagerScript
             set
             {
                 isBurn = value;
-                if (!isBurn) return;
-               var fireBall = FindObjectOfType<FireBall>();
-                StartCoroutine(fireBall.BurningEffect(this));
+                var fireBall = FindObjectOfType<FireBall>();
+                if (fireBall == null) return;
+                if (isBurn && gameObject.activeInHierarchy)
+                {
+                    StartCoroutine(fireBall.BurningEffect(this));
+                }
             }
         }
+
 
         public bool isBleed;
         public bool IsBleed

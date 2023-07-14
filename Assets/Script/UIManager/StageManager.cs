@@ -119,7 +119,6 @@ namespace Script.UIManager
             }
             return data;
         }
-
         private static List<EnemyBase.SpawnZones> ParseSpawnZones(string zoneString)
         {
             var zones = new List<EnemyBase.SpawnZones>();
@@ -134,7 +133,6 @@ namespace Script.UIManager
             }
             return zones;
         }
-
         private static (int group1, List<EnemyBase.SpawnZones> group1Zone, int group2, List<EnemyBase.SpawnZones> group2Zone, int group3, List<EnemyBase.SpawnZones> group3Zone) GetSpawnCountForWave(int stage, int wave)
         {
             var data = LoadCsvData("stageData");

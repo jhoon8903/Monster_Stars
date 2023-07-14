@@ -121,27 +121,28 @@ namespace Script.EnemyManagerScript
             _enemyRigidbodies[enemyBase] = _rb;
 
             var direction = Random.Range(0, 2) == 0 ? -1 : 1;
-            
             var waypoints = new Vector2[5];
-            
+
             for (var i = 0; i < waypoints.Length; i++)
             {
-                waypoints[i] = new Vector2(_enemyRigidbodies[enemyBase].transform.position.x + (i % 2 == 0 ? direction * 2 : 0), _enemyRigidbodies[enemyBase].transform.position.y - (i * 2));
+                waypoints[i] = new Vector2(_enemyRigidbodies[enemyBase].transform.position.x + direction, _enemyRigidbodies[enemyBase].transform.position.y - (2 * (i + 1)));
+                direction *= -1;
             }
-            
+
             var waypointIndex = 0;
-           
+
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 var targetPosition = waypoints[waypointIndex];
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
-                
+
                 _slowCount = EnforceManager.Instance.slowCount;
                 _speedReductionFactor = 1f + _slowCount * 0.15f;
                 _moveSpeed = enemyBase.moveSpeed * _speedReductionFactor * moveSpeedOffset * Time.deltaTime;
+
                 _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed);
-                
+
                 if (journeyLength <= 0.01f)
                 {
                     waypointIndex++;
@@ -155,10 +156,11 @@ namespace Script.EnemyManagerScript
                 }
                 if (enemyBase.isSlow)
                 {
-                   StartCoroutine(SlowEffect(enemyBase));
+                    StartCoroutine(SlowEffect(enemyBase));
                 }
             }
         }
+
         private IEnumerator OutSide(EnemyBase enemyBase)
         {
             _rb = enemyBase.GetComponent<Rigidbody2D>();

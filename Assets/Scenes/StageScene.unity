@@ -1978,7 +1978,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 149521958}
   castle: {fileID: 1177777540}
-  moveSpeedOffset: 0.5
+  moveSpeedOffset: 0.7
 --- !u!1 &362582815
 GameObject:
   m_ObjectHideFlags: 0
