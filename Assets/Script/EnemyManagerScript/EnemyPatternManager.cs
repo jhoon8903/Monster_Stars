@@ -89,7 +89,6 @@ namespace Script.EnemyManagerScript
                 }
             }
         }
-
         private IEnumerator Diagonal(EnemyBase enemyBase)
         {
             _rb = enemyBase.GetComponent<Rigidbody2D>();
