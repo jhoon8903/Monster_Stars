@@ -88,12 +88,12 @@ namespace Script.CharacterGroupScript
             return detectedEnemies;
         }
 
-        public void OnDrawGizmos()
-        {
-            GetDetectionProperties(out var detectionSize, out var detectionCenter);
-            Gizmos.color = Color.green;
-            Gizmos.DrawWireCube(detectionCenter, detectionSize);
-        }
+        // public void OnDrawGizmos()
+        // {
+        //     GetDetectionProperties(out var detectionSize, out var detectionCenter);
+        //     Gizmos.color = Color.green;
+        //     Gizmos.DrawWireCube(detectionCenter, detectionSize);
+        // }
 
         protected internal override Sprite GetSprite(int level)
         {

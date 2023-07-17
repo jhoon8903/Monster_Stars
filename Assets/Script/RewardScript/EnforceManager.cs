@@ -21,7 +21,8 @@ namespace Script.RewardScript
         public bool darkSlowAdditionalDamage;
         public bool darkBleedAdditionalDamage;
         public int darkIncreaseAtkSpeed;
-        public bool darkProjectilePenetration;
+        public bool darkProjectileBounce;
+        public int darkProjectileBounceCount;
         public int water2IncreaseDamage;
         public bool water2BleedAdditionalRestraint;
         public int water2IncreaseSlowTime;
@@ -132,7 +133,14 @@ namespace Script.RewardScript
             darkIncreaseAtkSpeed++;
         }
 
-        [Header("관통 효과")] public bool darkProjectilePenetration;
+        [Header("바운스 효과")] public bool darkProjectileBounce;
+
+        [Header("바운스 추가")] public int darkProjectileBounceCount = 1;
+
+        protected internal void AddBounceCount()
+        {
+            darkProjectileBounceCount++;
+        }
 
         [Header("\n\nUnit_C 물 속성2\n\n")] [Header("공격력 증가")]
         public int water2IncreaseDamage;
@@ -378,7 +386,8 @@ namespace Script.RewardScript
                 darkSlowAdditionalDamage = darkSlowAdditionalDamage,
                 darkBleedAdditionalDamage = darkBleedAdditionalDamage,
                 darkIncreaseAtkSpeed = darkIncreaseAtkSpeed,
-                darkProjectilePenetration = darkProjectilePenetration,
+                darkProjectileBounce = darkProjectileBounce,
+                darkProjectileBounceCount =  darkProjectileBounceCount,
                 water2IncreaseDamage = water2IncreaseDamage,
                 water2BleedAdditionalRestraint = water2BleedAdditionalRestraint,
                 water2IncreaseSlowTime = water2IncreaseSlowTime,
@@ -446,7 +455,8 @@ namespace Script.RewardScript
             darkSlowAdditionalDamage = data.darkSlowAdditionalDamage;
             darkBleedAdditionalDamage = data.darkBleedAdditionalDamage;
             darkIncreaseAtkSpeed = data.darkIncreaseAtkSpeed;
-            darkProjectilePenetration = data.darkProjectilePenetration;
+            darkProjectileBounce = data.darkProjectileBounce;
+            darkProjectileBounceCount = data.darkProjectileBounceCount;
             water2IncreaseDamage = data.water2IncreaseDamage;
             water2BleedAdditionalRestraint = data.water2BleedAdditionalRestraint;
             water2IncreaseSlowTime = data.water2IncreaseSlowTime;

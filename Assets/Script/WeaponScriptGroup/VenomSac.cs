@@ -78,7 +78,6 @@ namespace Script.WeaponScriptGroup
                 {
     
                     hitEnemy.ReceiveDamage(hitEnemy,poisonDotDamage);
-                    Debug.Log($"중첩{i}도트데미지: {poisonDotDamage}");
                     yield return new WaitForSeconds(1f);
                     elapsedTime += Time.deltaTime;
                 }

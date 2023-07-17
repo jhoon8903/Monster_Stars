@@ -53,7 +53,7 @@ Purple,500,FireIncreaseAtkRange,1
 Purple,500,FireDeleteBurnIncreaseDamage,200
 Purple,600,Physics2AdditionalProjectile,1
 Purple,600,Physics2ProjectilePenetration,1
-Purple,700,DarkProjectilePenetration,1
-Purple,700,DarkAdditionalFrontAttack,1
+Purple,700,DarkProjectileBounce,1
+Purple,700,DarkAdditionalBounce,1
 Purple,800,Water2BackAttack,1
 Purple,800,Water2AdditionalProjectile,1

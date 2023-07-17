@@ -64,7 +64,6 @@ namespace Script.RobbyScript.MainMenuGroup
         {
             PlayerPrefs.DeleteKey("unitState");
             PlayerPrefs.DeleteKey("EnforceData");
-            Debug.Log(Stage);
             PlayerPrefs.SetInt("CurrentWave" + Stage, 1);
             PlayerPrefs.SetInt("GridHeight", 6);
             continuePanel.SetActive(false);
@@ -103,18 +102,28 @@ namespace Script.RobbyScript.MainMenuGroup
             Stage = stage;
             stageText.text = $"스테이지 {Stage}";
             stageProgress.maxValue = maxWave;
-            stageProgress.value = clearWave;
-            stageProgressText.text = $"{clearWave} / {maxWave}";
+            stageProgress.value = clearWave -1 ;
+            stageProgressText.text = $"{clearWave -1 } / {maxWave}";
         }
 
         private static (int maxWave, int clearWave) GetStageWave(int stage)
         {
             var maxWaveKey = "MaxWave" + stage;
-            var clearWaveKey = "ClearWave" + stage;
+            var currentWaveKey = "CurrentWave" + stage;
+            var isStageClearedKey = "IsStageCleared" + stage;
+
             var maxWave = PlayerPrefs.GetInt(maxWaveKey, 10);
-            var clearWave = PlayerPrefs.GetInt(clearWaveKey, 1);
+            var clearWave = PlayerPrefs.GetInt(currentWaveKey, 1);
+            var isStageCleared = PlayerPrefs.GetInt(isStageClearedKey, 0);
+
+            if (isStageCleared == 0 && clearWave > 1)
+            {
+                clearWave--;
+            }
+
             return (maxWave, clearWave);
         }
+
 
         private void NextStage()
         {

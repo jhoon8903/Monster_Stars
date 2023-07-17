@@ -18,6 +18,7 @@ namespace Script.EnemyManagerScript
         private bool _updateSlider;
         protected internal float CrushDamage; 
         public float moveSpeed;
+        public float originSpeed;
         public enum EnemyTypes { Boss, Group1, Group2, Group3 }
         protected internal EnemyTypes EnemyType;
         public enum RegistryTypes { Physics, Divine, Poison, Burn, Water, Darkness, None }
@@ -49,7 +50,11 @@ namespace Script.EnemyManagerScript
                 isPoison = value;
                 if (!isPoison) return;
                 var venomSac = FindObjectOfType<VenomSac>();
-                StartCoroutine(venomSac.PoisonEffect(this));
+                if (venomSac == null) return;
+                if (isPoison && gameObject.activeInHierarchy)
+                {
+                    StartCoroutine(venomSac.PoisonEffect(this));
+                }
             }
         }
 

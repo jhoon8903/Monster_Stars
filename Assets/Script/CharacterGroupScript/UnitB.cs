@@ -73,12 +73,12 @@ namespace Script.CharacterGroupScript
             return detectedEnemies;
         }
 
-        public void OnDrawGizmos()
-        {
-            GetDetectionProperties(out var detectionSize, out var detectionCenter);
-            Gizmos.color = new Color(0.184f, 0.286f, 0.482f);
-            Gizmos.DrawWireCube(detectionCenter,detectionSize);
-        }
+        // public void OnDrawGizmos()
+        // {
+        //     GetDetectionProperties(out var detectionSize, out var detectionCenter);
+        //     Gizmos.color = new Color(0.184f, 0.286f, 0.482f);
+        //     Gizmos.DrawWireCube(detectionCenter,detectionSize);
+        // }
 
 
         protected internal override Sprite GetSprite(int level)
@@ -107,7 +107,7 @@ namespace Script.CharacterGroupScript
             };
             defaultAtkRate = 0.8f + 1f * 0.17f * EnforceManager.Instance.darkIncreaseAtkSpeed;
             defaultAtkDistance = 12f;
-            projectileSpeed = 1f;
+            projectileSpeed = 1.5f;
             UnitAtkType = UnitAtkTypes.GuideProjectile;
             UnitProperty = UnitProperties.Darkness;
             UnitEffect = UnitEffects.None;

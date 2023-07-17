@@ -149,6 +149,7 @@ namespace Script.UIManager
         public void StageClear()
         {
             isStageClear = true;
+            PlayerPrefs.SetInt("IsStageCleared" + currentStage, 1);
             ClearRewardManager.Instance.ClearReward(currentStage, maxWaveCount);
             PlayerPrefs.SetInt("ClearWave"+ currentStage, MaxWave());
             currentStage++;

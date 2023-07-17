@@ -184,12 +184,12 @@ namespace Script.RewardScript
                 case ExpData.Types.DarkBleedAdditionalDamage:
                     EnforceManager.Instance.darkBleedAdditionalDamage = true;
                     break;
-                case ExpData.Types.DarkProjectilePenetration:
-                    EnforceManager.Instance.darkProjectilePenetration = true;
+                case ExpData.Types.DarkProjectileBounce:
+                    EnforceManager.Instance.darkProjectileBounce = true;
                     break;
-                // case ExpData.Types.DarkAdditionalFrontAttack:
-                //     EnforceManager.Instance.darkAdditionalFrontAttack = true;
-                //     break;
+                case ExpData.Types.DarkAdditionalBounce:
+                    EnforceManager.Instance.AddBounceCount();
+                    break;
                 case ExpData.Types.DarkIncreaseAtkSpeed:
                     EnforceManager.Instance.DarkIncreaseAtkSpeed();
                     break;
@@ -459,13 +459,17 @@ namespace Script.RewardScript
                     if (!EnforceManager.Instance.physics2ActivateBleed) return false;
                     if (EnforceManager.Instance.darkBleedAdditionalDamage ) return false;
                     break;
-                case ExpData.Types.DarkProjectilePenetration:
+                case ExpData.Types.DarkProjectileBounce:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
-                    if (EnforceManager.Instance.darkProjectilePenetration) return false;
+                    if (EnforceManager.Instance.darkProjectileBounce) return false;
                     break;
                 case ExpData.Types.DarkIncreaseAtkSpeed:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
                     if (EnforceManager.Instance.darkIncreaseAtkSpeed >= 15) return false;
+                    break;
+                case ExpData.Types.DarkAdditionalBounce:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
+                    if (!EnforceManager.Instance.darkProjectileBounce) return false;
                     break;
                 default:
                     return true;
@@ -542,8 +546,11 @@ namespace Script.RewardScript
                 case ExpData.Types.DarkBleedAdditionalDamage:
                     powerText.text = "[B그룹(어둠)] 출혈상태의 적에게 추가 데미지 200%";
                     break;
-                case ExpData.Types.DarkProjectilePenetration:
-                    powerText.text = "[B그룹(어둠)] 관통 효과 적용";
+                case ExpData.Types.DarkProjectileBounce:
+                    powerText.text = "[B그룹(어둠)] 투사체가 튕겨 적을 타격합니다.";
+                    break;
+                case ExpData.Types.DarkAdditionalBounce:
+                    powerText.text = "[B그룹(어둠)] 투사체가 튕기는 횟수가 1증가합니다.";
                     break;
                 case ExpData.Types.DarkIncreaseAtkSpeed:
                     powerText.text = "[B그룹(어둠)] 공격속도 17% 증가 (최대 255%)";

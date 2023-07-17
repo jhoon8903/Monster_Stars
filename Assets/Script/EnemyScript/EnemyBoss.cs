@@ -9,6 +9,7 @@ namespace Script.EnemyScript
             healthPoint = 100000f;
             CrushDamage = 100000;
             moveSpeed = 0.5f;
+            originSpeed = 0.5f;
             EnemyType = EnemyTypes.Boss;
             SpawnZone = SpawnZones.A;
             RegistryType = RegistryTypes.None;

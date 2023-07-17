@@ -13,6 +13,7 @@ namespace Script.WeaponScriptGroup
         private Vector3 _enemyTransform;
         private List<GameObject> _enemyTransforms = new List<GameObject>();
         private Rigidbody2D _rigidbody2D;
+        private int _bounceCount; 
 
         private void Awake()
         {
@@ -22,31 +23,23 @@ namespace Script.WeaponScriptGroup
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
-            EnemyBase currentEnemy = null;
             while (isInUse)
             {
                 _enemyTransforms = CharacterBase.GetComponent<UnitB>().DetectEnemies();
-                if (_enemyTransforms.Count > 0)
-                {
-                    _enemyTransforms.Sort((enemy1, enemy2) => Vector3.Distance(transform.position, enemy1.transform.position)
-                        .CompareTo(Vector3.Distance(transform.position, enemy2.transform.position)));
-                    if (currentEnemy == null || !currentEnemy.gameObject.activeInHierarchy || 
-                        Vector3.Distance(transform.position, currentEnemy.transform.position) > 
-                        Vector3.Distance(transform.position, _enemyTransforms[0].transform.position))
-                    {
-                        currentEnemy = _enemyTransforms[0].GetComponent<EnemyBase>();
-                    }
-                }
-                else
+                _enemyTransforms.Sort((enemy1, enemy2) => Vector3.Distance(transform.position, enemy1.transform.position)
+                    .CompareTo(Vector3.Distance(transform.position, enemy2.transform.position)));
+                _enemyTransforms.RemoveAll(e => HitEnemy.Contains(e.GetComponent<EnemyBase>()));
+
+                if (_enemyTransforms.Count == 0)
                 {
                     StopUseWeapon(gameObject);
-                    yield break;
+                    break;
                 }
+                var currentEnemy = _enemyTransforms[0].GetComponent<EnemyBase>();
                 var direction = (currentEnemy.transform.position - transform.position).normalized;
                 _rigidbody2D.velocity = direction * Speed;
                 yield return null;
             }
-
             StopUseWeapon(gameObject);
         }
 
@@ -54,38 +47,20 @@ namespace Script.WeaponScriptGroup
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
-            if (enemy == null || HitEnemy.Contains(enemy)) return; // Skip if it's already hit
+            if (enemy == null || HitEnemy.Contains(enemy)) return;
+
             HitEnemy.Add(enemy);
             AtkEffect(enemy);
             var damage = DamageCalculator(Damage, enemy);
-            enemy.ReceiveDamage(enemy,damage);
+            enemy.ReceiveDamage(enemy, damage);
 
-            if (EnforceManager.Instance.darkProjectilePenetration)
-            {
-                BounceToNewEnemy();
-            }
-            else
-            {
-                StopUseWeapon(gameObject);
-                HitEnemy.Clear();
-            }
-        }
+            Debug.Log(EnforceManager.Instance.darkProjectileBounce);
 
-        private void BounceToNewEnemy()
-        {
-            var bounceRadius = 0.5f;
-            var hitColliders = Physics2D.OverlapCircleAll(transform.position, bounceRadius);
-            foreach (var hitCollider in hitColliders)
-            {
-                if (!hitCollider.gameObject.CompareTag("Enemy")) continue;
-                var enemy = hitCollider.gameObject.GetComponent<EnemyBase>();
-                if (HitEnemy.Contains(enemy)) continue;
-                HitEnemy.Add(enemy);
-                AtkEffect(enemy);
-                var damage = DamageCalculator(Damage, enemy);
-                enemy.ReceiveDamage(enemy,damage);
-                break;
-            }
+            if (!EnforceManager.Instance.darkProjectileBounce ||
+                _bounceCount >= EnforceManager.Instance.darkProjectileBounceCount) return;
+            _bounceCount++;
+            StopCoroutine(UseWeapon());
+            StartCoroutine(UseWeapon());
         }
     }
 }

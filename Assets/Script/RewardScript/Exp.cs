@@ -65,8 +65,8 @@ namespace Script.RewardScript
              DarkSlowAdditionalDamage,
              DarkBleedAdditionalDamage,
              DarkIncreaseAtkSpeed,
-             DarkProjectilePenetration,
-             DarkAdditionalFrontAttack,
+             DarkProjectileBounce,
+             DarkAdditionalBounce,
 
              // Fire Property
              FireBleedingAdditionalDamage,

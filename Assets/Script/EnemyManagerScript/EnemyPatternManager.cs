@@ -160,7 +160,6 @@ namespace Script.EnemyManagerScript
                 }
             }
         }
-
         private IEnumerator OutSide(EnemyBase enemyBase)
         {
             _rb = enemyBase.GetComponent<Rigidbody2D>();
@@ -240,9 +239,8 @@ namespace Script.EnemyManagerScript
         {
             var restrainColor = new Color(1, 0.5f, 0);
             var originColor = new Color(1, 1, 1);
-            var restrainTime = EnforceManager.Instance.firePoisonAdditionalStun && Chance(20) && enemyBase.isBleed ? 1f : 1f + 1f * EnforceManager.Instance.IncreaseRestraintTime();
-            var originalSpeed = enemyBase.moveSpeed;
-            
+            var restrainTime = EnforceManager.Instance.firePoisonAdditionalStun && Chance(20) && enemyBase.isBleed ? 1f : 1f * EnforceManager.Instance.IncreaseRestraintTime();
+
             if (!_alreadyRestrain.TryGetValue(enemyBase, out var isAlreadyRestraint))
             {
                 isAlreadyRestraint = false;
@@ -254,7 +252,7 @@ namespace Script.EnemyManagerScript
             enemyBase.GetComponent<SpriteRenderer>().color = restrainColor;
             enemyBase.moveSpeed = 0;
             yield return new WaitForSeconds(restrainTime);
-            enemyBase.moveSpeed = originalSpeed;
+            enemyBase.moveSpeed = enemyBase.originSpeed;
             enemyBase.GetComponent<SpriteRenderer>().color = originColor;
             _alreadyRestrain[enemyBase] = false;
             enemyBase.isRestraint = false;
@@ -265,7 +263,6 @@ namespace Script.EnemyManagerScript
             var originColor = new Color(1, 1, 1);
             var slowTime = EnforceManager.Instance.water2BleedAdditionalRestraint && Chance(20) && enemyBase.isBleed ? 1f : 2f + 1f * EnforceManager.Instance.water2IncreaseSlowTime;
             var moveSpeedMultiplier = EnforceManager.Instance.waterIncreaseSlowPower ? 0.4f : 0.6f;
-            var originalSpeed = enemyBase.moveSpeed;
 
             if (!_alreadySlow.TryGetValue(enemyBase, out var isAlreadySlow))
             {
@@ -278,7 +275,7 @@ namespace Script.EnemyManagerScript
             enemyBase.GetComponent<SpriteRenderer>().color = slowColor;
             enemyBase.moveSpeed *= moveSpeedMultiplier;
             yield return new WaitForSeconds(slowTime);
-            enemyBase.moveSpeed = originalSpeed;
+            enemyBase.moveSpeed = enemyBase.originSpeed;
             enemyBase.GetComponent<SpriteRenderer>().color = originColor;
             _alreadySlow[enemyBase] = false;
             enemyBase.isSlow = false;
