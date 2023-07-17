@@ -96,7 +96,7 @@ namespace Script.EnemyManagerScript
         public virtual void Initialize()
         {
             _hpSlider = GetComponentInChildren<Slider>(true);
-            var stage = StageManager.Instance.currentStage;
+            var stage = StageManager.Instance.latestStage;
             var wave = StageManager.Instance.currentWave;
             if (EnemyType != EnemyTypes.Boss)
             {

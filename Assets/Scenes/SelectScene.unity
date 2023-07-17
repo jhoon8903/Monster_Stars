@@ -3185,7 +3185,6 @@ MonoBehaviour:
   stageImage: {fileID: 877251576}
   stageProgress: {fileID: 545131046}
   stageProgressText: {fileID: 892367576}
-  optionsPanel: {fileID: 1998623565}
   continuePanel: {fileID: 1335037080}
   confirmBtn: {fileID: 1151959964}
   cancelBtn: {fileID: 663559007}

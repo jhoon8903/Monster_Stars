@@ -236,7 +236,6 @@ namespace Script.PuzzleManagerGroup
             if (PlayerPrefs.HasKey("unitState")) 
             {
                 PlayerPrefs.DeleteKey("unitState");
-                Debug.Log("Unit PlayerPrefs 삭제");
             }
           
             var poolCharacterList = characterPool.UsePoolCharacterList();

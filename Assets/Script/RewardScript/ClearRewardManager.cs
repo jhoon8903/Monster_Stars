@@ -27,14 +27,16 @@ namespace Script.RewardScript
                 Destroy(gameObject);
             }
         }
-        public void ClearReward(int stage, int wave)
+        public void ClearReward(int stage)
         {
             stageClearPanel.SetActive(true);
             RewardUnitPiece(stage);
-            GetCoin(stage, wave);
+            GetCoin();
         }
-        public void GetCoin(int stage, int wave)
+        public void GetCoin()
         {
+            var stage = StageManager.Instance.selectStage;
+            var wave = StageManager.Instance.currentWave;
             var coin = stage switch
             {
                 >= 1 and <= 10 => 7 * wave,

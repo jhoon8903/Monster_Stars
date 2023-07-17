@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
 using Script.RobbyScript.MainMenuGroup;
@@ -18,23 +17,20 @@ namespace Script.UIManager
         [SerializeField] private EnemySpawnManager enemySpawnManager;
         [SerializeField] private EnemyPool enemyPool;
         public static StageManager Instance;
+        
         public int maxWaveCount;
         public int maxStageCount;
-        public int currentStage;
-        public string currentStageKey = "CurrentStage";
+        public int latestStage;
         public int currentWave;
         public bool isStageClear;
-        private int SelectedStage { get; set; }
         public bool isBossClear;
-
-
+        public int selectStage;
         private void Awake()
         {
             Instance = this;
-            currentStage = PlayerPrefs.GetInt(currentStageKey, 1);
-            var currentWaveKey = "CurrentWave" + currentStage;
-            currentWave = PlayerPrefs.GetInt(currentWaveKey, 1);
-            SelectedStage = MainPanel.Instance.Stage;
+            SelectedStages();
+            latestStage = selectStage;
+            currentWave = PlayerPrefs.GetInt($"{selectStage}Stage_ProgressWave",1);
         }
         private void Update()
         {
@@ -49,15 +45,15 @@ namespace Script.UIManager
         }
         public void SelectedStages()
         {
-            currentStage = SelectedStage;
+            selectStage = MainPanel.Instance.SelectStage;
         }
-        public IEnumerator WaveController(int currentWaves)
+        public IEnumerator WaveController()
         {
-            var (group1,group1Zone, group2, group2Zone,group3,group3Zone) = GetSpawnCountForWave(currentStage, currentWaves);
+            var (group1,group1Zone, group2, group2Zone,group3,group3Zone) = GetSpawnCountForWave(selectStage, currentWave);
             const int sets = 2;
-            if (currentWaves % 10 == 0)
+            if (currentWave % 10 == 0)
             {
-                yield return StartCoroutine(enemySpawnManager.SpawnBoss(currentWaves));
+                yield return StartCoroutine(enemySpawnManager.SpawnBoss(currentWave));
             }
             else
             {
@@ -79,7 +75,7 @@ namespace Script.UIManager
 
             for (var i = 1; i < lines.Length; i++)
             {
-                var values = lines[i].Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                var values = lines[i].Split(new [] { ',' }, StringSplitOptions.RemoveEmptyEntries);
                 for (var j = 0; j < values.Length; j++)
                 {
                     values[j] = values[j].Trim('"');
@@ -149,20 +145,21 @@ namespace Script.UIManager
         public void StageClear()
         {
             isStageClear = true;
-            PlayerPrefs.SetInt("IsStageCleared" + currentStage, 1);
-            ClearRewardManager.Instance.ClearReward(currentStage, maxWaveCount);
-            PlayerPrefs.SetInt("ClearWave"+ currentStage, MaxWave());
-            currentStage++;
-            PlayerPrefs.SetInt(currentStageKey, currentStage);
-            PlayerPrefs.SetInt("MaxWave"+currentStage,MaxWave());
-            PlayerPrefs.Save();
-            if (currentStage > maxStageCount)
+            ClearRewardManager.Instance.ClearReward(latestStage);
+            EnforceManager.Instance.addGold = false;
+            EnforceManager.Instance.addGoldCount = 0;
+            
+            PlayerPrefs.SetInt($"{latestStage}Stage_ClearWave", MaxWave());
+            
+            latestStage++;
+            
+            if (latestStage > maxStageCount)
             {
                 GameClear();
             }
-            EnforceManager.Instance.addGold = false;
-            EnforceManager.Instance.addGoldCount = 0;
-            continueBtn.GetComponent<Button>().onClick.AddListener(PauseManager.ReturnRobby);
+            PlayerPrefs.SetInt("LatestStage",latestStage);
+            PlayerPrefs.Save();
+            continueBtn.GetComponent<Button>().onClick.AddListener(GameManager.Instance.ReturnRobby);
         }
         public void UpdateWaveText()
         {
@@ -174,16 +171,15 @@ namespace Script.UIManager
         }
         public void SaveClearWave()
         {      
+            PlayerPrefs.SetInt($"{latestStage}Stage_ClearWave",currentWave);
             currentWave++;
-            PlayerPrefs.SetInt("ClearWave" + currentStage, currentWave);
-            var currentWaveKey = "CurrentWave" + currentStage;
-            PlayerPrefs.SetInt(currentWaveKey, currentWave);
+            PlayerPrefs.SetInt($"{latestStage}Stage_ProgressWave", currentWave);
             PlayerPrefs.Save();
             UpdateWaveText();
         }
         public int MaxWave()
         {
-            maxWaveCount = currentStage switch
+            maxWaveCount = latestStage switch
             {
                 1 => 10,
                 >= 2 and <= 9 => 20,

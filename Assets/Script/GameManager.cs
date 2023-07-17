@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using DG.Tweening;
 using Script.CharacterGroupScript;
@@ -32,13 +31,13 @@ namespace Script
         [SerializeField] private LevelUpRewardManager levelUpRewardManager;
         [SerializeField] private ExpManager expManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
+        [SerializeField] private TextMeshProUGUI stageText;
         public static GameManager Instance { get; private set; }
         private readonly WaitForSecondsRealtime _waitOneSecRealtime = new WaitForSecondsRealtime(1f);
         private readonly WaitForSecondsRealtime _waitTwoSecRealtime = new WaitForSecondsRealtime(2f);
         public bool speedUp;
         private Vector3Int _bossSpawnArea;
         public bool IsBattle { get; private set; }
-        private bool IsClear { get; set; }
 
         private void Awake()
         {
@@ -54,6 +53,7 @@ namespace Script
         private void Start()
         {
             swipeManager.isBusy = true;
+        
             gridManager.GenerateInitialGrid(PlayerPrefs.GetInt("GridHeight", 6));
             if (PlayerPrefs.HasKey("unitState"))
             {
@@ -77,6 +77,7 @@ namespace Script
             StageManager.Instance.UpdateWaveText();
             speedUp = true;
             GameSpeedSelect();
+            stageText.text = $"{StageManager.Instance.selectStage} STAGE";
             swipeManager.isBusy = false;
         }
 
@@ -88,7 +89,7 @@ namespace Script
             StartCoroutine(backgroundManager.ChangeBattleSize());
             yield return _waitTwoSecRealtime;
             StartCoroutine(AtkManager.Instance.CheckForAttack());
-            StartCoroutine(StageManager.Instance.WaveController(StageManager.Instance.currentWave));
+            StartCoroutine(StageManager.Instance.WaveController());
             GameSpeed();
         }
 
@@ -97,9 +98,8 @@ namespace Script
             IsBattle = false;
             AtkManager.Instance.ClearWeapons();
             if (castleManager.HpPoint > 0)
-            {          
-                IsClear = true;
-                ClearRewardManager.Instance.GetCoin(StageManager.Instance.currentStage, StageManager.Instance.currentWave);
+            {
+                ClearRewardManager.Instance.GetCoin();
                 StageManager.Instance.SaveClearWave();
 
                 if (StageManager.Instance.currentWave > StageManager.Instance.MaxWave())
@@ -126,7 +126,6 @@ namespace Script
             }
             else
             {
-                IsClear = false;
                 LoseGame();
             }
             AtkManager.Instance.weaponsList.Clear();
@@ -219,9 +218,12 @@ namespace Script
         }
         public void ReturnRobby()
         {
+            StageManager.Instance.isStageClear = false;
             PlayerPrefs.DeleteKey("unitState");
             PlayerPrefs.DeleteKey("EnforceData");
-            PlayerPrefs.SetInt("CurrentWave"+StageManager.Instance.currentStage,1);
+            PlayerPrefs.SetInt($"{StageManager.Instance.latestStage}Stage_ProgressWave",1);
+            PlayerPrefs.SetInt("GridHeight", 6);
+            PlayerPrefs.Save();
             SceneManager.LoadScene("SelectScene");
         }
     }

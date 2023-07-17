@@ -4,6 +4,7 @@ using Script.UIManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.RobbyScript.MainMenuGroup
@@ -21,11 +22,12 @@ namespace Script.RobbyScript.MainMenuGroup
         [SerializeField] private GameObject stageImage;
         [SerializeField] private Slider stageProgress;
         [SerializeField] private TextMeshProUGUI stageProgressText;
-        [SerializeField] private GameObject optionsPanel;
         [SerializeField] private GameObject continuePanel;
         [SerializeField] private GameObject confirmBtn;
         [SerializeField] private GameObject cancelBtn;
-        public int Stage { get; private set; }
+        private int LatestStage { get; set; }
+        public int SelectStage { get; private set; }
+        public int recordWave;
         public static MainPanel Instance { get; private set; }
         public void Awake()
         {
@@ -38,11 +40,10 @@ namespace Script.RobbyScript.MainMenuGroup
             {
                 continuePanel.SetActive(true);
             }
-
-            var stage = PlayerPrefs.GetInt("CurrentStage", 1);
-            Stage = stage;
-            var (maxWave, clearWave) = GetStageWave(stage);
-            UpdateProgress(stage, maxWave, clearWave);
+            LatestStage = PlayerPrefs.GetInt("LatestStage", 1);
+            SelectStage = LatestStage;
+            var (maxWave, clearWave) = GetStageWave(LatestStage);
+            UpdateProgress(LatestStage, maxWave, clearWave);
             startBtn.GetComponent<Button>().onClick.AddListener(StartGame); 
             nextStageBtn.GetComponent<Button>().onClick.AddListener(NextStage);
             previousStageBtn.GetComponent<Button>().onClick.AddListener(PreviousStage);
@@ -62,13 +63,9 @@ namespace Script.RobbyScript.MainMenuGroup
         }
         private void CancelContinue()
         {
-            PlayerPrefs.DeleteKey("unitState");
-            PlayerPrefs.DeleteKey("EnforceData");
-            PlayerPrefs.SetInt("CurrentWave" + Stage, 1);
-            PlayerPrefs.SetInt("GridHeight", 6);
+            GameManager.Instance.ReturnRobby();
             continuePanel.SetActive(false);
         }
-
         private void StartGame()
         {
             if ( SelectedUnitHolder.Instance.selectedUnit.Count == 4)
@@ -78,7 +75,8 @@ namespace Script.RobbyScript.MainMenuGroup
                     if (PlayerPrefs.HasKey("Retry"))
                     {
                         PlayerPrefs.SetInt("Retry", 1);
-                    }
+                    } 
+
                     staminaScript.currentStamina -= 5;
                     staminaScript.StaminaUpdate();
                     staminaScript.SaveStaminaState();
@@ -96,57 +94,55 @@ namespace Script.RobbyScript.MainMenuGroup
                 messageText.text = "유닛배치를 확인해주세요";
             }
         }
-
         private void UpdateProgress(int stage, int maxWave, int clearWave)
-        {  
-            Stage = stage;
-            stageText.text = $"스테이지 {Stage}";
+        {
+            stageText.text = $"스테이지 {stage}";
             stageProgress.maxValue = maxWave;
-            stageProgress.value = clearWave -1 ;
-            stageProgressText.text = $"{clearWave -1 } / {maxWave}";
+            stageProgress.value = clearWave ;
+            stageProgressText.text = $"{clearWave} / {maxWave}";
         }
 
-        private static (int maxWave, int clearWave) GetStageWave(int stage)
+        private (int maxWave, int clearWave) GetStageWave(int selectStage)
         {
-            var maxWaveKey = "MaxWave" + stage;
-            var currentWaveKey = "CurrentWave" + stage;
-            var isStageClearedKey = "IsStageCleared" + stage;
-
+            var maxWaveKey = $"{selectStage}Stage_MaxWave";
+            var clearWaveKey = $"{selectStage}Stage_ClearWave";
             var maxWave = PlayerPrefs.GetInt(maxWaveKey, 10);
-            var clearWave = PlayerPrefs.GetInt(currentWaveKey, 1);
-            var isStageCleared = PlayerPrefs.GetInt(isStageClearedKey, 0);
-
-            if (isStageCleared == 0 && clearWave > 1)
+            var clearWave = PlayerPrefs.GetInt(clearWaveKey, 0);
+            recordWave = PlayerPrefs.GetInt($"{SelectStage}Stage_RecordWave", 0);
+            if (clearWave < recordWave)
             {
-                clearWave--;
+                clearWave = recordWave;
             }
-
+            else
+            {
+                recordWave = clearWave;
+                PlayerPrefs.SetInt($"{SelectStage}Stage_RecordWave", recordWave);
+            }
             return (maxWave, clearWave);
         }
 
 
         private void NextStage()
         {
-            var currentStage = PlayerPrefs.GetInt("CurrentStage", 1);
-            if (Stage < currentStage)
+            if (SelectStage < LatestStage)
             {
-                Stage++;
-                var (maxWave, clearWave) = GetStageWave(Stage);
-                UpdateProgress(Stage, maxWave, clearWave);
+                SelectStage++;
+                var (maxWave, clearWave) = GetStageWave(SelectStage);
+                UpdateProgress(SelectStage, maxWave, clearWave);
             }
             else
             {
                 warningPanel.SetActive(true);
-                messageText.text = $"먼저 스테이지 {Stage}을/를 클리어 하셔야 합니다.";
+                messageText.text = $"먼저 스테이지 {SelectStage}을/를 클리어 하셔야 합니다.";
             }
         }
 
         private void PreviousStage()
         {
-            if (Stage <= 1) return;
-            Stage--;
-            var (maxWave, clearWave) = GetStageWave(Stage);
-            UpdateProgress(Stage, maxWave, clearWave);
+            if (SelectStage <= 1) return;
+            SelectStage--;
+            var (maxWave, clearWave) = GetStageWave(SelectStage);
+            UpdateProgress(SelectStage, maxWave, clearWave);
         }
     }
 }
