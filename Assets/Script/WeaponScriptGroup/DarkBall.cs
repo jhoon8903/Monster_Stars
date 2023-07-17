@@ -23,12 +23,30 @@ namespace Script.WeaponScriptGroup
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
+
             while (isInUse)
             {
-                _enemyTransforms = CharacterBase.GetComponent<UnitB>().DetectEnemies();
-                _enemyTransforms.Sort((enemy1, enemy2) => Vector3.Distance(transform.position, enemy1.transform.position)
-                    .CompareTo(Vector3.Distance(transform.position, enemy2.transform.position)));
-                _enemyTransforms.RemoveAll(e => HitEnemy.Contains(e.GetComponent<EnemyBase>()));
+                if (_bounceCount == 0)
+                {
+                    _enemyTransforms = CharacterBase.GetComponent<UnitB>().DetectEnemies();
+                }
+                else
+                {
+                    var nearbyEnemies = Physics2D.OverlapCircleAll(transform.position, 1f);
+                    _enemyTransforms = new List<GameObject>();
+                    foreach (var enemyCollider in nearbyEnemies)
+                    {
+                        var enemy = enemyCollider.gameObject;
+                        if (enemy.CompareTag("Enemy") && !HitEnemy.Contains(enemy.GetComponent<EnemyBase>()))
+                        {
+                            _enemyTransforms.Add(enemy);
+                        }
+                    }
+                }
+
+                _enemyTransforms.Sort((enemy1, enemy2) =>
+                    Vector3.Distance(transform.position, enemy1.transform.position)
+                        .CompareTo(Vector3.Distance(transform.position, enemy2.transform.position)));
 
                 if (_enemyTransforms.Count == 0)
                 {
@@ -43,6 +61,8 @@ namespace Script.WeaponScriptGroup
             StopUseWeapon(gameObject);
         }
 
+
+
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
@@ -54,13 +74,17 @@ namespace Script.WeaponScriptGroup
             var damage = DamageCalculator(Damage, enemy);
             enemy.ReceiveDamage(enemy, damage);
 
-            Debug.Log(EnforceManager.Instance.darkProjectileBounce);
-
-            if (!EnforceManager.Instance.darkProjectileBounce ||
-                _bounceCount >= EnforceManager.Instance.darkProjectileBounceCount) return;
-            _bounceCount++;
-            StopCoroutine(UseWeapon());
-            StartCoroutine(UseWeapon());
+            if (EnforceManager.Instance.darkProjectileBounce &&
+                _bounceCount <= EnforceManager.Instance.darkProjectileBounceCount)
+            {
+                _bounceCount++;
+                StopCoroutine(UseWeapon());
+                StartCoroutine(UseWeapon());
+            }
+            else
+            {
+                StopUseWeapon(gameObject);
+            }
         }
     }
 }

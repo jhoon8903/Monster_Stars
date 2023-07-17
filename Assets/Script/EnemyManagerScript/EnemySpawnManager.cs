@@ -75,7 +75,6 @@ namespace Script.EnemyManagerScript
             enemyBase.transform.position = gridManager.bossSpawnArea;
             enemyBase.gameObject.SetActive(true);
             enemyBase.Initialize();
-            Debug.Log(enemyBase.healthPoint);
             yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyBase));
         }
         private IEnumerator GetRandomPointInBounds(EnemyBase.SpawnZones zone, Action<Vector3> callback)

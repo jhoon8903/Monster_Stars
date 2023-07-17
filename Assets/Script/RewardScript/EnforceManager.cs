@@ -122,9 +122,8 @@ namespace Script.RewardScript
         [Header("중독 시 데미지증가")] public bool divinePoisonAdditionalDamage;
         public int divinePoisonAdditionalDamageCount = 1;
 
-        [Header("\n\n Unit_B 어둠 속성\n\n")] [Header("둔화상태 적 추가 데미지")]
-        public bool darkSlowAdditionalDamage;
-
+        [Header("\n\n Unit_B 어둠 속성\n\n")] 
+        [Header("둔화상태 적 추가 데미지")] public bool darkSlowAdditionalDamage;
         [Header("출혈상태 적 추가 데미지")] public bool darkBleedAdditionalDamage;
         [Header("공격속도 17% 상승 ")] public int darkIncreaseAtkSpeed;
 
@@ -133,9 +132,9 @@ namespace Script.RewardScript
             darkIncreaseAtkSpeed++;
         }
 
-        [Header("바운스 효과")] public bool darkProjectileBounce;
+        [Header("쿠션 효과")] public bool darkProjectileBounce;
 
-        [Header("바운스 추가")] public int darkProjectileBounceCount = 1;
+        [Header("쿠션 추가")] public int darkProjectileBounceCount = 1;
 
         protected internal void AddBounceCount()
         {

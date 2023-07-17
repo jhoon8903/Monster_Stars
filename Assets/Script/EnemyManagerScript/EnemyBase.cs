@@ -121,6 +121,7 @@ namespace Script.EnemyManagerScript
             _hpSlider.maxValue = maxHealthPoint;
             _hpSlider.value = currentHealth;
             StartCoroutine(UpdateHpSlider());
+            moveSpeed = originSpeed;
         }
 
         public void ReceiveDamage(EnemyBase detectEnemy, float damage, KillReasons reason = KillReasons.ByPlayer)
