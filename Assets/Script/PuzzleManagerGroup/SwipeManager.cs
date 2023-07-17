@@ -229,7 +229,7 @@ namespace Script.PuzzleManagerGroup
             if (startObject == null || endObject == null) yield break;
             var startObjectPosition = startObject.transform.position;
             var endObjectPosition = endObject.transform.position;
-            Tween switch1 = startObject.transform.DOMove(endObjectPosition, 0.1f);
+            startObject.transform.DOMove(endObjectPosition, 0.1f);
             Tween switch2 = endObject.transform.DOMove(startObjectPosition, 0.1f);
             yield return switch2.WaitForCompletion();
             countManager.IsSwapOccurred = true;

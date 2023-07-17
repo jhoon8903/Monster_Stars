@@ -87,7 +87,7 @@ namespace Script.PuzzleManagerGroup
             var maxRows = characterPool.UsePoolCharacterList().Count / 6;
             var maxCount = maxRows * (maxRows - 1) * 3;
             _totalPos = characterPool.UsePoolCharacterList().Sum(t=> t.transform.position.y);
-            while (_totalPos != maxCount)
+            while (_totalPos < maxCount)
             {
                 while(characterPool.SortPoolCharacterList().Count < characterPool.UsePoolCharacterList().Count)
                 {
@@ -159,7 +159,7 @@ namespace Script.PuzzleManagerGroup
             newCharacter.transform.position = position;
             if (EnforceManager.Instance.permanentGroupIndex.Count > 0)
             {
-                foreach (var unitGroup in EnforceManager.Instance.permanentGroupIndex
+                foreach (var dummy in EnforceManager.Instance.permanentGroupIndex
                              .Select(index => EnforceManager.Instance.characterList[index].unitGroup)
                              .Where(unitGroup => unitGroup == newCharacter.GetComponent<CharacterBase>().unitGroup))
                 {

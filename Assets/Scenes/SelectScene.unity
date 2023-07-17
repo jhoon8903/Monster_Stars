@@ -3188,6 +3188,7 @@ MonoBehaviour:
   continuePanel: {fileID: 1335037080}
   confirmBtn: {fileID: 1151959964}
   cancelBtn: {fileID: 663559007}
+  recordWave: 0
 --- !u!114 &337770384
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11379,9 +11380,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 39ffc6f020d544692b2ea3cc1a4d8134, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CoinBtn: {fileID: 419428823}
-  StaminaBtn: {fileID: 2045258065}
-  GemBtn: {fileID: 760021238}
+  coinBtn: {fileID: 419428823}
+  staminaBtn: {fileID: 2045258065}
+  gemBtn: {fileID: 760021238}
 --- !u!1 &1161738751
 GameObject:
   m_ObjectHideFlags: 0

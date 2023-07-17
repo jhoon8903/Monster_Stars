@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Script.RewardScript;
-using UnityEngine.Serialization;
 using Script.RobbyScript.TopMenuGroup;
 
 namespace Script.CharacterManagerScript

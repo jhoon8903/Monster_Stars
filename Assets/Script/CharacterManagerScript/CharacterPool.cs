@@ -8,30 +8,30 @@ namespace Script.CharacterManagerScript
     {
         [SerializeField] private CharacterManager characterManager;
         [SerializeField] private int poolSize;
-        internal List<GameObject> pooledCharacters;
+        private List<GameObject> _pooledCharacters;
 
         public void Awake()
         {
-            pooledCharacters = new List<GameObject>();
+            _pooledCharacters = new List<GameObject>();
             foreach (var character in characterManager.characterList)
             {
                 for (var i = 0; i < poolSize; i++)
                 {
                     var obj = Instantiate(character.gameObject, transform, true);
                     obj.SetActive(false);
-                    pooledCharacters.Add(obj);
+                    _pooledCharacters.Add(obj);
                 }
             }
         }
 
         public List<GameObject> NotUsePoolCharacterList()
         {
-            return pooledCharacters.Where(t => !t.activeSelf).ToList();
+            return _pooledCharacters.Where(t => !t.activeSelf).ToList();
         }
 
         public List<GameObject> UsePoolCharacterList()
         {
-            return pooledCharacters.Where(t => t.activeSelf).ToList();
+            return _pooledCharacters.Where(t => t.activeSelf).ToList();
         }
 
         public List<GameObject> SortPoolCharacterList()

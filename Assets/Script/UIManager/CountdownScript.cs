@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Script.AdsScript;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
@@ -82,7 +83,7 @@ public class CountdownScript : MonoBehaviour
     {
         retry = false;
         SaveRetryStatus(false); // retry 상태 저장
-        AppLovinScript.Instance.ShowRewardedAd();
+        AppLovinScript.ShowRewardedAd();
     }
 
     public void YesRetry()

@@ -5,7 +5,6 @@ using Script.RewardScript;
 using Script.UIManager;
 using Script.WeaponScriptGroup;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.EnemyManagerScript

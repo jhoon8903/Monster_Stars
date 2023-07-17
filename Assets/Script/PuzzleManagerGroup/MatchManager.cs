@@ -954,8 +954,9 @@ namespace Script.PuzzleManagerGroup
                         .Any(columnObject =>
                         {
                             Vector3 position;
-                            return rowObject.transform.position.x == (position = columnObject.transform.position).x &&
-                                   rowObject.transform.position.y == position.y;
+                            var position1 = rowObject.transform.position;
+                            return position1.x.Equals((position = columnObject.transform.position).x ) &&
+                                   position1.y.Equals(position.y);
                         }) 
                         select new MatchedPair { gameObject = rowObject, rowList = rowList, columnList = columnList });
                 }

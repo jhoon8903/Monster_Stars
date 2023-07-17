@@ -1,4 +1,3 @@
-using Script.CharacterManagerScript;
 using TMPro;
 using UnityEngine;
 

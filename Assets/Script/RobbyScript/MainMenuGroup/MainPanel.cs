@@ -1,10 +1,8 @@
 using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
-using Script.UIManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.RobbyScript.MainMenuGroup

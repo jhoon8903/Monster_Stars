@@ -6,35 +6,31 @@ namespace Script.AdsScript
     public class AdsManager : MonoBehaviour
     {
  
-        [SerializeField] private GameObject CoinBtn;
-        [SerializeField] private GameObject StaminaBtn;
-        [SerializeField] private GameObject GemBtn;
-
-
+        [SerializeField] private GameObject coinBtn;
+        [SerializeField] private GameObject staminaBtn;
+        [SerializeField] private GameObject gemBtn;
         private void Awake()
         {
-            CoinBtn.GetComponent<Button>().onClick.AddListener(Coin);
-
-            StaminaBtn.GetComponent<Button>().onClick.AddListener(Stamina);
-
-            GemBtn.GetComponent<Button>().onClick.AddListener(Gem);
+            coinBtn.GetComponent<Button>().onClick.AddListener(Coin);
+            staminaBtn.GetComponent<Button>().onClick.AddListener(Stamina);
+            gemBtn.GetComponent<Button>().onClick.AddListener(Gem);
         }
 
-        private void Coin()
+        private static void Coin()
         {
-            AppLovinScript.Instance.ShowRewardedAd();
+            AppLovinScript.ShowRewardedAd();
             RewardManager.Instance.RewardButtonClicked("Coin");
         }
 
-        private void Stamina()
+        private static void Stamina()
         {
-            AppLovinScript.Instance.ShowRewardedAd();
+            AppLovinScript.ShowRewardedAd();
             RewardManager.Instance.RewardButtonClicked("Stamina");
         }
 
-        private void Gem()
+        private static void Gem()
         {
-            AppLovinScript.Instance.ShowRewardedAd();
+            AppLovinScript.ShowRewardedAd();
             RewardManager.Instance.RewardButtonClicked("Gem");
         }
     }
