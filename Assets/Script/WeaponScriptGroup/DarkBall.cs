@@ -59,16 +59,32 @@ namespace Script.WeaponScriptGroup
             AtkEffect(enemy);
             var damage = DamageCalculator(Damage, enemy);
             enemy.ReceiveDamage(enemy,damage);
-            switch (EnforceManager.Instance.darkProjectilePenetration)
+
+            if (EnforceManager.Instance.darkProjectilePenetration)
             {
-                case true when HitEnemy.Count == 2:
-                    StopUseWeapon(gameObject);
-                    HitEnemy.Clear(); // Only clear when the weapon stops
-                    break;
-                case false:
-                    StopUseWeapon(gameObject);
-                    HitEnemy.Clear();
-                    break;
+                BounceToNewEnemy();
+            }
+            else
+            {
+                StopUseWeapon(gameObject);
+                HitEnemy.Clear();
+            }
+        }
+
+        private void BounceToNewEnemy()
+        {
+            var bounceRadius = 0.5f;
+            var hitColliders = Physics2D.OverlapCircleAll(transform.position, bounceRadius);
+            foreach (var hitCollider in hitColliders)
+            {
+                if (!hitCollider.gameObject.CompareTag("Enemy")) continue;
+                var enemy = hitCollider.gameObject.GetComponent<EnemyBase>();
+                if (HitEnemy.Contains(enemy)) continue;
+                HitEnemy.Add(enemy);
+                AtkEffect(enemy);
+                var damage = DamageCalculator(Damage, enemy);
+                enemy.ReceiveDamage(enemy,damage);
+                break;
             }
         }
     }

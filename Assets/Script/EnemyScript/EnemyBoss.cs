@@ -2,13 +2,13 @@ using Script.EnemyManagerScript;
 
 namespace Script.EnemyScript
 {
-    public class Enemy_Boss_A : EnemyBase
+    public class EnemyBoss : EnemyBase
     {
         public override void Initialize()
         {
-            healthPoint = 100000;
+            healthPoint = 100000f;
             CrushDamage = 100000;
-            moveSpeed = 1.5f;
+            moveSpeed = 0.5f;
             EnemyType = EnemyTypes.Boss;
             SpawnZone = SpawnZones.A;
             RegistryType = RegistryTypes.None;

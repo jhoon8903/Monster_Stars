@@ -68,14 +68,14 @@ namespace Script.EnemyManagerScript
 
         public IEnumerator SpawnBoss(int wave)
         {
+            enemyPool.enemyBases.Clear();
             var bossObject = Instantiate(enemyManager.stageBoss, transform);
             var enemyBase = bossObject.GetComponent<EnemyBase>();
-            enemyPool.enemyBases.Clear();
             enemyPool.enemyBases.Add(enemyBase);
             enemyBase.transform.position = gridManager.bossSpawnArea;
             enemyBase.gameObject.SetActive(true);
             enemyBase.Initialize();
-            enemyBase.healthPoint *= 1f + wave * 0.2f;
+            Debug.Log(enemyBase.healthPoint);
             yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyBase));
         }
         private IEnumerator GetRandomPointInBounds(EnemyBase.SpawnZones zone, Action<Vector3> callback)

@@ -106,6 +106,11 @@ namespace Script.EnemyManagerScript
                     maxHealthPoint = healthPoint * Mathf.Pow(1.1f, wave - 1) + (stage - 1) * 10;
                 }
             }
+            else
+            {
+                // healthPoint *= 1f + wave * 0.2f;
+                maxHealthPoint = healthPoint;
+            }
             healthPoint = maxHealthPoint;
             currentHealth = maxHealthPoint;
             _hpSlider.maxValue = maxHealthPoint;
