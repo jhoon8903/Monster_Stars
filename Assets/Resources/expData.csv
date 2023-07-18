@@ -17,19 +17,19 @@ Blue,3,Step,9 10 11
 Blue,7,Gold,1
 Blue,8,CastleMaxHp,200
 Blue,9,CastleRecovery,200
-Blue,11, Slow,15
+Blue,11,Slow,15
 Blue,100,DivineAtkRange,1
 Blue,200,PhysicSlowAdditionalDamage,100
 Blue,300,PoisonDoubleAtk,1
 Blue,300,PoisonOverlapping,1
 Blue,400,WaterSideAttack,1
 Blue,400,WaterIncreaseDamage,20
-Blue,500, FireIncreaseDamage,15
+Blue,500,FireIncreaseDamage,15
 Blue,500,FirePoisonAdditionalStun,1
 Blue,600,Physics2ActivateBleed,1
 Blue,600,Physics2AdditionalAtkSpeed,17
-Blue,700, DarkBleedAdditionalDamage,200
-Blue,700, DarkIncreaseAtkSpeed,17
+Blue,700,DarkBleedAdditionalDamage,200
+Blue,700,DarkIncreaseAtkSpeed,17
 Blue,800,Water2BleedAdditionalRestraint,1
 Blue,800,Water2IncreaseSlowTime,1
 Purple,1,GroupDamage,18
@@ -52,7 +52,6 @@ Purple,500,FireIncreaseAtkRange,1
 Purple,500,FireDeleteBurnIncreaseDamage,200
 Purple,600,Physics2AdditionalProjectile,1
 Purple,600,Physics2ProjectilePenetration,1
-Purple,700,DarkProjectilePenetration,1
-Purple,700,DarkAdditionalFrontAttack,1
+Purple,700,DarkProjectileBounce,1
+Purple,700,DarkAdditionalBounce,1
 Purple,800,Water2BackAttack,1
-Purple,800,Water2AdditionalProjectile,1
