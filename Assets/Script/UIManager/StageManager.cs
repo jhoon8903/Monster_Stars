@@ -172,7 +172,14 @@ namespace Script.UIManager
         public void SaveClearWave()
         {      
             PlayerPrefs.SetInt($"{latestStage}Stage_ClearWave",currentWave);
-            currentWave++;
+            if (currentWave > MaxWave())
+            {
+                currentWave = MaxWave();
+            }
+            else
+            {
+                currentWave++;
+            }
             PlayerPrefs.SetInt($"{latestStage}Stage_ProgressWave", currentWave);
             PlayerPrefs.Save();
             UpdateWaveText();
