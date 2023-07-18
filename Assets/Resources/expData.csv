@@ -4,8 +4,7 @@ Green,2,GroupAtkSpeed,3 4 5
 Green,3,Step,3 4 5
 Green,6,Exp,5
 Green,100,DivinePoisonAdditionalDamage,100
-Green,200,PhysicAdditionalWeapon,1
-Green,200,PhysicAdditionalWeapon,1
+Blue,200,PhysicAdditionalWeapon,1
 Green,300,PoisonRestraintAdditionalDamage,200
 Green,400,WaterBurnAdditionalDamage,200
 Green,500,FireBleedingAdditionalDamage,150
@@ -53,7 +52,7 @@ Purple,500,FireIncreaseAtkRange,1
 Purple,500,FireDeleteBurnIncreaseDamage,200
 Purple,600,Physics2AdditionalProjectile,1
 Purple,600,Physics2ProjectilePenetration,1
-Purple,700,DarkProjectileBounce,1
-Purple,700,DarkAdditionalBounce,1
+Purple,700,DarkProjectilePenetration,1
+Purple,700,DarkAdditionalFrontAttack,1
 Purple,800,Water2BackAttack,1
 Purple,800,Water2AdditionalProjectile,1
