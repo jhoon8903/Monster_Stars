@@ -3,7 +3,7 @@ Green,1,GroupDamage,4
 Green,2,GroupAtkSpeed,4
 Green,3,Step,2 3 4
 Green,4,RandomLevelUp,2 3
-Green,5,GroupLevelUp,0 1 2 3
+Blue,5,GroupLevelUp,0 1 2 3
 Green,6,Exp,5
 Blue,1,GroupDamage,8
 Blue,2,GroupAtkSpeed,6 7 8 9 10
