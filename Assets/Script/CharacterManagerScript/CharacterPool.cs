@@ -9,6 +9,7 @@ namespace Script.CharacterManagerScript
         [SerializeField] private CharacterManager characterManager;
         [SerializeField] private int poolSize;
         private List<GameObject> _pooledCharacters;
+        public static bool theFirst;
 
         public void Awake()
         {
@@ -26,7 +27,15 @@ namespace Script.CharacterManagerScript
 
         public List<GameObject> NotUsePoolCharacterList()
         {
-            return _pooledCharacters.Where(t => !t.activeSelf).ToList();
+            var notUsedPoolList = _pooledCharacters.Where(t => !t.activeSelf).ToList();
+            if(theFirst)
+            {
+                var noneGroupList = notUsedPoolList.Where(t => t.GetComponent<CharacterBase>().unitGroup == CharacterBase.UnitGroups.None && Random.value < 0.08f);
+                var nonNoneGroupList = notUsedPoolList.Where(t => t.GetComponent<CharacterBase>().unitGroup != CharacterBase.UnitGroups.None && Random.value < 0.23f);
+                notUsedPoolList = noneGroupList.Concat(nonNoneGroupList).ToList();
+            }
+            theFirst = true;
+            return notUsedPoolList;
         }
 
         public List<GameObject> UsePoolCharacterList()

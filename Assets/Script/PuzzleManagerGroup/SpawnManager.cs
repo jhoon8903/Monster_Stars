@@ -123,8 +123,6 @@ namespace Script.PuzzleManagerGroup
         private IEnumerator SpawnAndMoveNewCharacters()
         {
             var moveCoroutines = new List<Coroutine>();
-            var moves = new List<(GameObject, Vector3Int)>();
-            if (moves == null) throw new ArgumentNullException(nameof(moves));
             for (var x = 0; x < gridManager.gridWidth; x++)
             {
                 var emptyCellCount = 0;
@@ -139,7 +137,6 @@ namespace Script.PuzzleManagerGroup
                     if (emptyCellCount <= 0) continue;
                     var spawnPosition = new Vector3Int(currentPosition.x, -2-emptyCellCount, 0);
                     var newCharacter = SpawnNewCharacter(spawnPosition);
-                    moves.Add((newCharacter, spawnPosition));
                     if (newCharacter == null) continue;
                     var coroutine = StartCoroutine(MoveCharacter(newCharacter, currentPosition));
                     moveCoroutines.Add(coroutine);

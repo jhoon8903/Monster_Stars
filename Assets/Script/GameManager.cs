@@ -46,7 +46,7 @@ namespace Script
         private void Start()
         {
             swipeManager.isBusy = true;
-        
+            
             gridManager.GenerateInitialGrid(PlayerPrefs.GetInt("GridHeight", 6));
             if (PlayerPrefs.HasKey("unitState"))
             {

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
 using Script.RobbyScript.MainMenuGroup;
@@ -162,6 +163,7 @@ namespace Script.UIManager
         private void StageClear()
         {
             isStageClear = true;
+            CharacterPool.theFirst = false;
             ClearRewardManager.Instance.ClearReward(latestStage);
             EnforceManager.Instance.addGold = false;
             EnforceManager.Instance.addGoldCount = 0;

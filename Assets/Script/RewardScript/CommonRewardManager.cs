@@ -294,7 +294,6 @@ namespace Script.RewardScript
             {
                 EnqueueTreasure();
             }
-
             isOpenBox = false;
         }
 

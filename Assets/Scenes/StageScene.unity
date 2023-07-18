@@ -8116,7 +8116,7 @@ MonoBehaviour:
   castleManager: {fileID: 1177777546}
   gridManager: {fileID: 8808150501734532426}
   characterPool: {fileID: 1097818334}
-  spawnManager: {fileID: 149521964}
+  matchManager: {fileID: 149521966}
   characterList: []
   activeRestraint: 0
   increaseRestraintTime: 0

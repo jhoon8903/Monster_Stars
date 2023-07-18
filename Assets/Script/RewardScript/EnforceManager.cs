@@ -79,7 +79,7 @@ namespace Script.RewardScript
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private GridManager gridManager;
         [SerializeField] private CharacterPool characterPool;
-        [SerializeField] private SpawnManager spawnManager;
+        [SerializeField] private MatchManager matchManager;
         [RuntimeInitializeOnLoadMethod]
         private static void InitializeOnLoad()
         {
