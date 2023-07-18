@@ -92,12 +92,7 @@ namespace Script
             {
                 ClearRewardManager.Instance.GetCoin();
                 StageManager.Instance.SaveClearWave();
-
-                if (StageManager.Instance.currentWave > StageManager.Instance.MaxWave())
-                {
-                    StageManager.Instance.StageClear();
-                }
-                else if (StageManager.Instance.isBossClear)
+                if (StageManager.Instance.isBossClear)
                 {
                     moveCount = 15 + EnforceManager.Instance.rewardMoveCount;
                     PlayerPrefs.SetInt("moveCount",moveCount);

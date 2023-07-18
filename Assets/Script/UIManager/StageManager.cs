@@ -30,7 +30,7 @@ namespace Script.UIManager
             Instance = this;
             SelectedStages();
             latestStage = selectStage;
-            currentWave = PlayerPrefs.GetInt($"{selectStage}Stage_ProgressWave",1);
+            currentWave = PlayerPrefs.GetInt($"{latestStage}Stage_ProgressWave",1);
         }
         private void Update()
         {
@@ -140,23 +140,29 @@ namespace Script.UIManager
             enemyPool.enemyBases.Remove(enemyBase);
             if (enemyPool.enemyBases.Count != 0 ) return;
             isBossClear = enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss;
-            StartCoroutine(GameManager.Instance.ContinueOrLose());
+            if (currentWave == MaxWave())
+            {
+                StageClear();
+            }
+            else
+            {
+                StartCoroutine(GameManager.Instance.ContinueOrLose());
+            }
         }
-        public void StageClear()
+
+        private void StageClear()
         {
             isStageClear = true;
             ClearRewardManager.Instance.ClearReward(latestStage);
             EnforceManager.Instance.addGold = false;
             EnforceManager.Instance.addGoldCount = 0;
-            
-            PlayerPrefs.SetInt($"{latestStage}Stage_ClearWave", MaxWave());
-            
+            PlayerPrefs.SetInt($"{latestStage}Stage_ProgressWave", 1);
             latestStage++;
-            
             if (latestStage > maxStageCount)
             {
                 GameClear();
             }
+
             PlayerPrefs.SetInt("LatestStage",latestStage);
             PlayerPrefs.Save();
             continueBtn.GetComponent<Button>().onClick.AddListener(GameManager.Instance.ReturnRobby);
@@ -172,19 +178,13 @@ namespace Script.UIManager
         public void SaveClearWave()
         {      
             PlayerPrefs.SetInt($"{latestStage}Stage_ClearWave",currentWave);
-            if (currentWave > MaxWave())
-            {
-                currentWave = MaxWave();
-            }
-            else
-            {
-                currentWave++;
-            }
+            currentWave++;
             PlayerPrefs.SetInt($"{latestStage}Stage_ProgressWave", currentWave);
             PlayerPrefs.Save();
             UpdateWaveText();
         }
-        public int MaxWave()
+
+        private int MaxWave()
         {
             maxWaveCount = latestStage switch
             {

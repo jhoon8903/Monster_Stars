@@ -6,6 +6,7 @@ using Script.CharacterManagerScript;
 using Script.PuzzleManagerGroup;
 using Script.UIManager;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -388,6 +389,7 @@ namespace Script.RewardScript
         // # 보스 웨이브 클리어 별도 보상
         public IEnumerator WaveRewardChance()
         {
+            if (StageManager.Instance.latestStage == 1) yield break;
             Time.timeScale = 0;
             commonRewardPanel.SetActive(true);
             yield return StartCoroutine(CommonChance(30, 55, 15, null));
