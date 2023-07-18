@@ -80,7 +80,7 @@ namespace Script.PuzzleManagerGroup
                 yield return StartCoroutine(gameManager.Count0Call());
             }
         }
-        private IEnumerator CheckPosition()
+        public IEnumerator CheckPosition()
         {
             if (isMatched) yield break;
             var wait = new WaitForSeconds(0.1f);
