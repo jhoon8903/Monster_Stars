@@ -142,6 +142,7 @@ namespace Script.UIManager
             isBossClear = enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss;
             if (currentWave == MaxWave())
             {
+                SaveClearWave();
                 StageClear();
             }
             else
@@ -157,6 +158,7 @@ namespace Script.UIManager
             EnforceManager.Instance.addGold = false;
             EnforceManager.Instance.addGoldCount = 0;
             PlayerPrefs.SetInt($"{latestStage}Stage_ProgressWave", 1);
+            PlayerPrefs.SetInt($"{latestStage}Stage_ClearWave", MaxWave());
             latestStage++;
             if (latestStage > maxStageCount)
             {
@@ -177,7 +179,7 @@ namespace Script.UIManager
         }
         public void SaveClearWave()
         {      
-            PlayerPrefs.SetInt($"{latestStage}Stage_ClearWave",currentWave);
+            PlayerPrefs.SetInt($"{latestStage}Stage_ClearWave", currentWave);
             currentWave++;
             PlayerPrefs.SetInt($"{latestStage}Stage_ProgressWave", currentWave);
             PlayerPrefs.Save();
