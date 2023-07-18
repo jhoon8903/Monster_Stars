@@ -6,7 +6,6 @@ namespace Script.EnemyScript
     { 
         public override void Initialize()
         {
-            healthPoint = 280;
             CrushDamage = 130;
             originSpeed = 1f;
             EnemyType = EnemyTypes.Group1;

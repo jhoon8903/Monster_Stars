@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
@@ -95,33 +97,35 @@ namespace Script.EnemyManagerScript
         public virtual void Initialize()
         {
             _hpSlider = GetComponentInChildren<Slider>(true);
-            var stage = StageManager.Instance.latestStage;
-            var wave = StageManager.Instance.currentWave;
-            if (EnemyType != EnemyTypes.Boss)
-            {
-                if (wave % 10 == 1 && wave != 1)
-                {
-                    var previousWave = wave - 1;
-                    var previousWaveIncrease = healthPoint * Mathf.Pow(1.1f, previousWave - 1) + (stage - 1) * 10;
-                    maxHealthPoint = previousWaveIncrease * 0.6f;
-                }
-                else
-                {
-                    maxHealthPoint = healthPoint * Mathf.Pow(1.1f, wave - 1) + (stage - 1) * 10;
-                }
-            }
-            else
-            {
-                // healthPoint *= 1f + wave * 0.2f;
-                maxHealthPoint = healthPoint;
-            }
-            healthPoint = maxHealthPoint;
+            LoadEnemyHealthData();
+
+            maxHealthPoint = healthPoint;
             currentHealth = maxHealthPoint;
             _hpSlider.maxValue = maxHealthPoint;
             _hpSlider.value = currentHealth;
             StartCoroutine(UpdateHpSlider());
             moveSpeed = originSpeed;
         }
+
+        private void LoadEnemyHealthData()
+        {
+            var enemyHPs = Resources.Load<TextAsset>("EnemyHpData");
+            var data = enemyHPs.text.Split(new[] { '\n' });
+            var stageData = data[StageManager.Instance.latestStage].Split(",");
+            var healthPointData = stageData[1].Split(" ");
+            var baseHealthPoint = int.Parse(healthPointData[StageManager.Instance.currentWave - 1]);
+            var tempHealthPoint = StageManager.Instance.currentWave switch
+            {
+                1 => baseHealthPoint * 1.0f,
+                <= 9 => baseHealthPoint * 1.5f,
+                10 or 20 or 30 => baseHealthPoint * 2.5f,
+                11 or 21 => baseHealthPoint * 0.035f,
+                <= 29 => baseHealthPoint * 1.4f,
+                _ => baseHealthPoint
+            };
+            healthPoint = (int)tempHealthPoint; 
+        }
+
 
         public void ReceiveDamage(EnemyBase detectEnemy, float damage, KillReasons reason = KillReasons.ByPlayer)
         {
@@ -138,7 +142,6 @@ namespace Script.EnemyManagerScript
                 EnemyKilledEvents(detectEnemy);
             }
         }
-
         public void EnemyKilledEvents(EnemyBase detectedEnemy)
         {
             var characterBase = FindObjectOfType<CharacterBase>();
@@ -147,7 +150,6 @@ namespace Script.EnemyManagerScript
             StageManager.Instance.EnemyDestroyEvent(detectedEnemy);
             enemyPool.ReturnToPool(detectedEnemy);
         }
-
         private IEnumerator UpdateHpSlider()
         {
             while (true)
@@ -161,7 +163,6 @@ namespace Script.EnemyManagerScript
             }
             // ReSharper disable once IteratorNeverReturns
         }
-
         private void ResetEnemyHealthPoint()
         { 
             lastIncreaseHealthPoint *= 0.4f;
@@ -171,12 +172,10 @@ namespace Script.EnemyManagerScript
            _hpSlider.value = currentHealth;
            _hpSlider.maxValue = maxHealthPoint;
         }
-
         public void Start()
         {
             StartCoroutine(UpdateHpSlider());
         }
-
         private void OnDestroy()
         {
             EnforceManager.Instance.OnAddRow -= ResetEnemyHealthPoint;
