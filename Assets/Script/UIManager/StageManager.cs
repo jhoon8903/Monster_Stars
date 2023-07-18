@@ -19,6 +19,7 @@ namespace Script.UIManager
         [SerializeField] private EnemyPool enemyPool;
         [SerializeField] private CastleManager castleManager;
         public static StageManager Instance;
+        private int _setCount;
         
         public int maxWaveCount;
         public int maxStageCount;
@@ -64,6 +65,7 @@ namespace Script.UIManager
                     StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group1, group1, group1Zone));
                     StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group2, group2, group2Zone));
                     StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group3, group3, group3Zone));
+                    _setCount++;
                     yield return new WaitForSeconds(2f);
                 }
             }
@@ -140,8 +142,8 @@ namespace Script.UIManager
         public void EnemyDestroyEvent(EnemyBase enemyBase)
         {
             enemyPool.enemyBases.Remove(enemyBase);
-            if (enemyPool.enemyBases.Count != 0 ) return;
-           
+            if (enemyPool.enemyBases.Count != 0 && _setCount == 2) return;
+            _setCount = 0;
             if (castleManager.HpPoint > 0)
             {
                 if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
@@ -149,7 +151,6 @@ namespace Script.UIManager
                     isBossClear = true;
                 }
             }
-
             if (currentWave == MaxWave() && isBossClear )
             {
                 PlayerPrefs.SetInt($"{latestStage}Stage_ClearWave", MaxWave());
