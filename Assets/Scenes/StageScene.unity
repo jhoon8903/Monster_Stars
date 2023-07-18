@@ -912,13 +912,14 @@ MonoBehaviour:
   waveText: {fileID: 651631795}
   enemySpawnManager: {fileID: 329010038}
   enemyPool: {fileID: 2016604888}
+  castleManager: {fileID: 1177777546}
   maxWaveCount: 30
   maxStageCount: 20
-  currentStage: 1
-  currentStageKey: CurrentStage
+  latestStage: 0
   currentWave: 1
   isStageClear: 0
   isBossClear: 0
+  selectStage: 0
 --- !u!1 &192398160
 GameObject:
   m_ObjectHideFlags: 0

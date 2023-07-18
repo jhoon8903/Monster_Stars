@@ -139,7 +139,6 @@ namespace Script.RobbyScript.MainMenuGroup
             var (maxWave, clearWave) = GetStageWave(SelectStage);
             UpdateProgress(SelectStage, maxWave, clearWave);
         }
-
         private void ReturnRobby()
         {
             PlayerPrefs.DeleteKey("unitState");

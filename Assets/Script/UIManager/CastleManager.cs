@@ -49,7 +49,6 @@ namespace Script.UIManager
             HpPoint = 0;
             hpBar.value = HpPoint;
             UpdateHpText();
-            StartCoroutine(gameManager.ContinueOrLose());
         }
 
         public void IncreaseMaxHp()

@@ -27,7 +27,7 @@ namespace Script.CharacterManagerScript
         protected internal UnitAtkTypes UnitAtkType = UnitAtkTypes.None;
         protected internal UnitProperties UnitProperty = UnitProperties.None;
         protected internal UnitEffects UnitEffect = UnitEffects.None;
-        public float baseDamage;
+        public int baseDamage;
         public float DefaultDamage
         {
             get
@@ -35,7 +35,7 @@ namespace Script.CharacterManagerScript
                 var increaseDamageAmount = EnforceManager.Instance.increaseAtkDamage;
                 return baseDamage * (1.0f + (increaseDamageAmount / 100f));
             }
-            protected set => baseDamage = value;
+            protected set => baseDamage = (int)value;
         }
         public float defaultAtkRate;
         public float projectileSpeed; 

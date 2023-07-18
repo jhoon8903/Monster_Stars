@@ -16,6 +16,7 @@ namespace Script.UIManager
         [SerializeField] private TextMeshProUGUI waveText;
         [SerializeField] private EnemySpawnManager enemySpawnManager;
         [SerializeField] private EnemyPool enemyPool;
+        [SerializeField] private CastleManager castleManager;
         public static StageManager Instance;
         
         public int maxWaveCount;
@@ -62,7 +63,7 @@ namespace Script.UIManager
                     StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group1, group1, group1Zone));
                     StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group2, group2, group2Zone));
                     StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group3, group3, group3Zone));
-                    yield return new WaitForSeconds(3f);
+                    yield return new WaitForSeconds(2f);
                 }
             }
         }
@@ -139,10 +140,18 @@ namespace Script.UIManager
         {
             enemyPool.enemyBases.Remove(enemyBase);
             if (enemyPool.enemyBases.Count != 0 ) return;
-            isBossClear = enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss;
-            if (currentWave == MaxWave())
+           
+            if (castleManager.HpPoint > 0)
             {
-                SaveClearWave();
+                if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
+                {
+                    isBossClear = true;
+                }
+            }
+
+            if (currentWave == MaxWave() && isBossClear )
+            {
+                PlayerPrefs.SetInt($"{latestStage}Stage_ClearWave", MaxWave());
                 StageClear();
             }
             else
@@ -150,7 +159,6 @@ namespace Script.UIManager
                 StartCoroutine(GameManager.Instance.ContinueOrLose());
             }
         }
-
         private void StageClear()
         {
             isStageClear = true;
@@ -160,12 +168,14 @@ namespace Script.UIManager
             PlayerPrefs.SetInt($"{latestStage}Stage_ProgressWave", 1);
             PlayerPrefs.SetInt($"{latestStage}Stage_ClearWave", MaxWave());
             latestStage++;
+
             if (latestStage > maxStageCount)
             {
                 GameClear();
             }
 
             PlayerPrefs.SetInt("LatestStage",latestStage);
+            PlayerPrefs.SetInt($"{latestStage}Stage_MaxWave", MaxWave());
             PlayerPrefs.Save();
             continueBtn.GetComponent<Button>().onClick.AddListener(GameManager.Instance.ReturnRobby);
         }
@@ -185,7 +195,6 @@ namespace Script.UIManager
             PlayerPrefs.Save();
             UpdateWaveText();
         }
-
         private int MaxWave()
         {
             maxWaveCount = latestStage switch

@@ -98,7 +98,6 @@ namespace Script.EnemyManagerScript
         {
             _hpSlider = GetComponentInChildren<Slider>(true);
             LoadEnemyHealthData();
-
             maxHealthPoint = healthPoint;
             currentHealth = maxHealthPoint;
             _hpSlider.maxValue = maxHealthPoint;
@@ -114,16 +113,7 @@ namespace Script.EnemyManagerScript
             var stageData = data[StageManager.Instance.latestStage].Split(",");
             var healthPointData = stageData[1].Split(" ");
             var baseHealthPoint = int.Parse(healthPointData[StageManager.Instance.currentWave - 1]);
-            var tempHealthPoint = StageManager.Instance.currentWave switch
-            {
-                1 => baseHealthPoint * 1.0f,
-                <= 9 => baseHealthPoint * 1.5f,
-                10 or 20 or 30 => baseHealthPoint * 2.5f,
-                11 or 21 => baseHealthPoint * 0.035f,
-                <= 29 => baseHealthPoint * 1.4f,
-                _ => baseHealthPoint
-            };
-            healthPoint = (int)tempHealthPoint; 
+            healthPoint = baseHealthPoint;
         }
 
 
