@@ -350,7 +350,6 @@ namespace Script.RewardScript
                 eligibleCharacters = eligibleCharacters.Where(character => 
                     character.GetComponent<CharacterBase>()?.unitPuzzleLevel < 5).ToList();
             }
-            StartCoroutine(spawnManager.CheckPosition());
         }
 
         public void CharacterGroupLevelUp(int characterListIndex)
@@ -366,7 +365,6 @@ namespace Script.RewardScript
                     characterObj.LevelUpScale(character);
                 }
             }
-            StartCoroutine(spawnManager.CheckPosition());
         }
 
         public List<int> permanentGroupIndex = new List<int>();

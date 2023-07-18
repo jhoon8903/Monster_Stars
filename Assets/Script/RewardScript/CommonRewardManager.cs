@@ -325,7 +325,6 @@ namespace Script.RewardScript
             {
                 _currentTreasure = null; // 현재 보물 없음
             }
-            StartCoroutine(spawnManager.CheckPosition());
             ProcessCommonReward(selectedReward);
         }
 
