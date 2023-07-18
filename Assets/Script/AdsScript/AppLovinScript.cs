@@ -47,8 +47,8 @@ namespace Script.AdsScript
                 InitializeRewardedAds();
                 InitializeBannerAds();
             };
-            MaxSdkUnityEditor.SetSdkKey(MaxSdkKey);
-            MaxSdkUnityEditor.InitializeSdk();
+            MaxSdk.SetSdkKey(MaxSdkKey);
+            MaxSdk.InitializeSdk();
         }
 
         #region Interstitial Ad Methods
@@ -65,13 +65,13 @@ namespace Script.AdsScript
 
         private void LoadInterstitial()
         {
-            MaxSdkUnityEditor.LoadInterstitial(InterstitialAdUnitId);
+            MaxSdk.LoadInterstitial(InterstitialAdUnitId);
         }
         public static void ShowInterstitial()
         {
-            if (MaxSdkUnityEditor.IsInterstitialReady(InterstitialAdUnitId))
+            if (MaxSdk.IsInterstitialReady(InterstitialAdUnitId))
             {
-                MaxSdkUnityEditor.ShowInterstitial(InterstitialAdUnitId);
+                MaxSdk.ShowInterstitial(InterstitialAdUnitId);
             }
             else
             {
@@ -108,7 +108,7 @@ namespace Script.AdsScript
         {
             Debug.Log("Interstitial revenue paid");
             var revenue = adInfo.Revenue;
-            var countryCode = MaxSdkUnityEditor.GetSdkConfiguration().CountryCode; // "US" for the United States, etc - Note: Do not confuse this with currency code which is "USD" in most cases!
+            var countryCode = MaxSdk.GetSdkConfiguration().CountryCode; // "US" for the United States, etc - Note: Do not confuse this with currency code which is "USD" in most cases!
             var networkName = adInfo.NetworkName; // Display name of the network that showed the ad (e.g. "AdColony")
             var adUnitIdentifier = adInfo.AdUnitIdentifier; // The MAX Ad Unit ID
             var placement = adInfo.Placement; // The placement this ad's postbacks are tied to
@@ -138,15 +138,15 @@ namespace Script.AdsScript
         private void LoadRewardedAd()
         {
             // Debug.Log("Loading...");
-            MaxSdkUnityEditor.LoadRewardedAd(RewardedAdUnitId);
+            MaxSdk.LoadRewardedAd(RewardedAdUnitId);
         }
 
         public static void ShowRewardedAd()
         {
-            if (MaxSdkUnityEditor.IsRewardedAdReady(RewardedAdUnitId))
+            if (MaxSdk.IsRewardedAdReady(RewardedAdUnitId))
             {
                 Debug.Log("Showing");
-                MaxSdkUnityEditor.ShowRewardedAd(RewardedAdUnitId);
+                MaxSdk.ShowRewardedAd(RewardedAdUnitId);
             }
             else
             {
@@ -215,7 +215,7 @@ namespace Script.AdsScript
             var revenue = adInfo.Revenue;
 
             // Miscellaneous data
-            var countryCode = MaxSdkUnityEditor.GetSdkConfiguration().CountryCode; // "US" for the United States, etc - Note: Do not confuse this with currency code which is "USD" in most cases!
+            var countryCode = MaxSdk.GetSdkConfiguration().CountryCode; // "US" for the United States, etc - Note: Do not confuse this with currency code which is "USD" in most cases!
             var networkName = adInfo.NetworkName; // Display name of the network that showed the ad (e.g. "AdColony")
             var adUnitIdentifier = adInfo.AdUnitIdentifier; // The MAX Ad Unit ID
             var placement = adInfo.Placement; // The placement this ad's postbacks are tied to
@@ -236,10 +236,10 @@ namespace Script.AdsScript
 
             // Banners are automatically sized to 320x50 on phones and 728x90 on tablets.
             // You may use the utility method `MaxSdkUtils.isTablet()` to help with view sizing adjustments.
-            MaxSdkUnityEditor.CreateBanner(BannerAdUnitId, MaxSdkBase.BannerPosition.BottomCenter);
+            MaxSdk.CreateBanner(BannerAdUnitId, MaxSdkBase.BannerPosition.BottomCenter);
 
             // Set background or background color for banners to be fully functional.
-            MaxSdkUnityEditor.SetBannerBackgroundColor(BannerAdUnitId, Color.white);
+            MaxSdk.SetBannerBackgroundColor(BannerAdUnitId, Color.white);
         }
 
         private static void OnBannerAdLoadedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
@@ -269,7 +269,7 @@ namespace Script.AdsScript
             var revenue = adInfo.Revenue;
 
             // Miscellaneous data
-            var countryCode = MaxSdkUnityEditor.GetSdkConfiguration().CountryCode; // "US" for the United States, etc - Note: Do not confuse this with currency code which is "USD" in most cases!
+            var countryCode = MaxSdk.GetSdkConfiguration().CountryCode; // "US" for the United States, etc - Note: Do not confuse this with currency code which is "USD" in most cases!
             var networkName = adInfo.NetworkName; // Display name of the network that showed the ad (e.g. "AdColony")
             var adUnitIdentifier = adInfo.AdUnitIdentifier; // The MAX Ad Unit ID
             var placement = adInfo.Placement; // The placement this ad's postbacks are tied to

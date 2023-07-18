@@ -41,14 +41,7 @@ namespace Script
 
         private void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            Instance = this;
         }
         private void Start()
         {
@@ -80,7 +73,6 @@ namespace Script
             stageText.text = $"{StageManager.Instance.selectStage} STAGE";
             swipeManager.isBusy = false;
         }
-
         public IEnumerator Count0Call()
         {
             IsBattle = true;
@@ -92,7 +84,6 @@ namespace Script
             StartCoroutine(StageManager.Instance.WaveController());
             GameSpeed();
         }
-
         public IEnumerator ContinueOrLose()
         {
             IsBattle = false;

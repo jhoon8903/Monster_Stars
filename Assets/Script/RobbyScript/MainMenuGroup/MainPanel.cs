@@ -1,5 +1,6 @@
 using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
+using Script.UIManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -61,7 +62,7 @@ namespace Script.RobbyScript.MainMenuGroup
         }
         private void CancelContinue()
         {
-            GameManager.Instance.ReturnRobby();
+            ReturnRobby();
             continuePanel.SetActive(false);
         }
         private void StartGame()
@@ -99,7 +100,6 @@ namespace Script.RobbyScript.MainMenuGroup
             stageProgress.value = clearWave ;
             stageProgressText.text = $"{clearWave} / {maxWave}";
         }
-
         private (int maxWave, int clearWave) GetStageWave(int selectStage)
         {
             var maxWaveKey = $"{selectStage}Stage_MaxWave";
@@ -118,8 +118,6 @@ namespace Script.RobbyScript.MainMenuGroup
             }
             return (maxWave, clearWave);
         }
-
-
         private void NextStage()
         {
             if (SelectStage < LatestStage)
@@ -134,13 +132,22 @@ namespace Script.RobbyScript.MainMenuGroup
                 messageText.text = $"먼저 스테이지 {SelectStage}을/를 클리어 하셔야 합니다.";
             }
         }
-
         private void PreviousStage()
         {
             if (SelectStage <= 1) return;
             SelectStage--;
             var (maxWave, clearWave) = GetStageWave(SelectStage);
             UpdateProgress(SelectStage, maxWave, clearWave);
+        }
+
+        private void ReturnRobby()
+        {
+            PlayerPrefs.DeleteKey("unitState");
+            PlayerPrefs.DeleteKey("EnforceData");
+            PlayerPrefs.SetInt($"{LatestStage}Stage_ProgressWave",1);
+            PlayerPrefs.SetInt("GridHeight", 6);
+            PlayerPrefs.Save();
+            SceneManager.LoadScene("SelectScene");
         }
     }
 }
