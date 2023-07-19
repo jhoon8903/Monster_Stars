@@ -79,9 +79,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'Grant Reward
-
-    (5 coins)'
+  m_Text: 
 --- !u!1 &2620135977249264498
 GameObject:
   m_ObjectHideFlags: 0
@@ -283,31 +281,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 3757577222601629632}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: AdsManager, Assembly-CSharp
-        m_MethodName: RewardCoin
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 3875284294285096199}
-        m_TargetAssemblyTypeName: RewardManager, Assembly-CSharp
-        m_MethodName: OnDestroy
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &3149432657757030138
 GameObject:
   m_ObjectHideFlags: 0

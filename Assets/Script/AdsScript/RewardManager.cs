@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Script.AdsScript
@@ -26,36 +27,44 @@ namespace Script.AdsScript
             switch (buttonType)
             {
                 case "Coin":
+                    rewardText.text = " Coin 5 Get";
                     rewardBtn.GetComponent<Button>().onClick.AddListener(GiveCoinReward);
                     break;
                 case "Gem":
+                    rewardText.text = " Gem 5 Get";
                     rewardBtn.GetComponent<Button>().onClick.AddListener(GiveGemReward);
                     break;
                 case "Stamina":
+                    rewardText.text = " Stamina 5 Get";
                     rewardBtn.GetComponent<Button>().onClick.AddListener(GiveStaminaReward);
                     break;
                 default:
-                    Debug.LogWarning("Unknown button type: " + buttonType);
+                    rewardText.text = " Retry ";
+                    rewardBtn.GetComponent<Button>().onClick.AddListener(RetryGameReward);
                     break;
             }
         }
 
-        private void GiveCoinReward()
+        private static void GiveCoinReward()
         {
-            // 코인 보상 제공 로직 추가
+            
             Debug.Log("코인 보상을 제공합니다.");
         }
 
-        private void GiveGemReward()
+        private static void GiveGemReward()
         {
-            // 재화 보상 제공 로직 추가
+           
             Debug.Log("재화 보상을 제공합니다.");
         }
 
-        private void GiveStaminaReward()
+        private static void GiveStaminaReward()
         {
-            // 스테미너 보상 제공 로직 추가
             Debug.Log("스테미너 보상을 제공합니다.");
+        }
+
+        private static void RetryGameReward()
+        {
+            SceneManager.LoadScene("StageScene");
         }
     }
 }

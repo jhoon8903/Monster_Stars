@@ -11383,6 +11383,7 @@ MonoBehaviour:
   coinBtn: {fileID: 419428823}
   staminaBtn: {fileID: 2045258065}
   gemBtn: {fileID: 760021238}
+  retryBtn: {fileID: 0}
 --- !u!1 &1161738751
 GameObject:
   m_ObjectHideFlags: 0

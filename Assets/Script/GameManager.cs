@@ -50,11 +50,12 @@ namespace Script
             gridManager.GenerateInitialGrid(PlayerPrefs.GetInt("GridHeight", 6));
             if (PlayerPrefs.HasKey("unitState"))
             {
+                StartCoroutine(spawnManager.LoadGameState());
                 EnforceManager.Instance.LoadEnforceData();
                 countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
                 expManager.LoadExp();
                 castleManager.LoadCastleHp();
-                StartCoroutine(spawnManager.LoadGameState());
+      
                 if (StageManager.Instance.currentWave % 10 == 0)
                 {
                     _bossSpawnArea = new Vector3Int(Random.Range(1,5), 10, 0);
@@ -200,7 +201,7 @@ namespace Script
         public void RetryGame()
         {
             gamePanel.SetActive(false);
-            SceneManager.LoadScene("StageScene");
+            // SceneManager.LoadScene("StageScene");
         }
         public void ReturnRobby()
         {
