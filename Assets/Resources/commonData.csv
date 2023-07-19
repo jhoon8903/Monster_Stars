@@ -11,7 +11,7 @@ Blue,3,Step,7 8 9 10
 Blue,7,Gold,1
 Blue,8,CastleMaxHp,200
 Blue,9,CastleRecovery,200
-Blue,11,Slow,15
+Purple,11,Slow,15
 Purple,1,GroupDamage,18
 Purple,2,GroupAtkSpeed,19
 Purple,3,Step,14 15 16 17

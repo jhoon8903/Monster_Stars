@@ -17,7 +17,7 @@ Blue,3,Step,9 10 11
 Blue,7,Gold,1
 Blue,8,CastleMaxHp,200
 Blue,9,CastleRecovery,200
-Blue,11,Slow,15
+Purple,11,Slow,15
 Blue,100,DivineAtkRange,1
 Blue,200,PhysicSlowAdditionalDamage,100
 Blue,300,PoisonDoubleAtk,1
