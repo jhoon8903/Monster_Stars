@@ -55,10 +55,17 @@ namespace Script
                 countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
                 expManager.LoadExp();
                 castleManager.LoadCastleHp();
-      
+
                 if (StageManager.Instance.currentWave % 10 == 0)
                 {
-                    _bossSpawnArea = new Vector3Int(Random.Range(1,5), 10, 0);
+                    if (EnforceManager.Instance.addRowCount > 1)
+                    {
+                        _bossSpawnArea = new Vector3Int(Random.Range(1, 6), 10, 0);
+                    }
+                    else
+                    {
+                        _bossSpawnArea = new Vector3Int(Random.Range(1, 5), 10, 0);
+                    }
                     gridManager.ApplyBossSpawnColor(_bossSpawnArea);
                 }
             }
@@ -133,7 +140,14 @@ namespace Script
 
             if (StageManager.Instance.currentWave % 10 == 0)
             {
-                _bossSpawnArea = new Vector3Int(Random.Range(1,5), 10, 0);
+                if (EnforceManager.Instance.addRowCount > 1)
+                {
+                    _bossSpawnArea = new Vector3Int(Random.Range(1, 6), 10, 0);
+                }
+                else
+                {
+                    _bossSpawnArea = new Vector3Int(Random.Range(1, 5), 10, 0);
+                }
                 gridManager.ApplyBossSpawnColor(_bossSpawnArea);
             }
 

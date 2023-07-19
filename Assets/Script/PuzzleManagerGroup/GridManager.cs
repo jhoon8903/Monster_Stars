@@ -72,6 +72,7 @@ namespace Script.PuzzleManagerGroup
                 for (var y = 0; y < gridHeight; y++)
                 {
                     if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) continue;
+                    Debug.Log($"[{x},{y}]");
                     var cellRenderer = _gridCellRenderers[x, y];
                     cellRenderer.DOColor((x + y) % 2 == 0 ? orangeColor : brownColor, 1.0f);
                 }
