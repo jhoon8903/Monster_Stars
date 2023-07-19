@@ -4,14 +4,17 @@ using Script.AdsScript;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using Script;
+using UnityEngine.SceneManagement;
 
 public class CountdownScript : MonoBehaviour
 {
     public static CountdownScript Instance { get; private set; }
 
     [SerializeField] private TextMeshProUGUI countdownText;
-    [SerializeField] private GameObject countdownBtn;
+    [SerializeField] private GameObject countdown;
     [SerializeField] private GameObject adsCountinueBtn;
+    [SerializeField] private GameObject robbyBtn;
 
     private float totalTime = 10f; // 총 카운트다운 시간
     private float currentCountdown; // 현재 카운트다운 시간
@@ -40,7 +43,8 @@ public class CountdownScript : MonoBehaviour
             retry = true;
             SaveRetryStatus(true); // 최초 실행 시 retry 상태를 true로 설정
         }
-        adsCountinueBtn.GetComponent<Button>().onClick.AddListener(NoRetry);
+        adsCountinueBtn.GetComponent<Button>().onClick.AddListener(YesRetry);
+        robbyBtn.GetComponent<Button>().onClick.AddListener(NoRetry);
         StartCountdown();
     }
 
@@ -74,22 +78,23 @@ public class CountdownScript : MonoBehaviour
 
     private void CountdownOver()
     {
-        countdownBtn.SetActive(false);
+        countdown.SetActive(false);
         adsCountinueBtn.SetActive(false);
         SaveRetryStatus(false); // retry 상태 저장
     }
 
-    public void NoRetry()
+    public void YesRetry()
     {
         retry = false;
         SaveRetryStatus(false); // retry 상태 저장
         AppLovinScript.ShowRewardedAd();
     }
 
-    public void YesRetry()
+    public void NoRetry()
     {
         retry = true;
         SaveRetryStatus(true); // retry 상태 저장
+        GameManager.Instance.ReturnRobby();
     }
 
     private void SaveRetryStatus(bool value)
@@ -106,5 +111,11 @@ public class CountdownScript : MonoBehaviour
     private bool IsFirstLaunch()
     {
         return !PlayerPrefs.HasKey(RetryKey);
+    }
+
+    public void Retry()
+    {
+        Debug.Log("Click"); 
+        SceneManager.LoadScene("StageScene");
     }
 }

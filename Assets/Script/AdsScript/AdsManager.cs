@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -6,11 +7,10 @@ namespace Script.AdsScript
 {
     public class AdsManager : MonoBehaviour
     {
- 
         [SerializeField] private GameObject coinBtn;
         [SerializeField] private GameObject staminaBtn;
         [SerializeField] private GameObject gemBtn;
-        [SerializeField] private GameObject retryBtn;
+
         private void Awake()
         {
             coinBtn.GetComponent<Button>().onClick.AddListener(Coin);

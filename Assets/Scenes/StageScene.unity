@@ -3204,8 +3204,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   countdownText: {fileID: 837923551}
-  countdownBtn: {fileID: 558477391}
+  countdown: {fileID: 558477391}
   adsCountinueBtn: {fileID: 1409829354}
+  robbyBtn: {fileID: 2094416143}
   retry: 1
 --- !u!1 &571828594
 GameObject:
