@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using static UnityEngine.EventSystems.EventTrigger;
 
 namespace Script.AdsScript
 {
@@ -67,6 +68,8 @@ namespace Script.AdsScript
 
         private static void Retry()
         {
+            CountdownScript.Instance.retry = false;
+            CountdownScript.Instance.SaveRetryStatus(false); // retry 상태 저장
             SceneManager.LoadScene("StageScene");
         }
     }

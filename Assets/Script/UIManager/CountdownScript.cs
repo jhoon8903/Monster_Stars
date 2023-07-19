@@ -85,8 +85,6 @@ public class CountdownScript : MonoBehaviour
 
     public void YesRetry()
     {
-        retry = false;
-        SaveRetryStatus(false); // retry 상태 저장
         AppLovinScript.ShowRewardedAd();
         RewardManager.Instance.RewardButtonClicked("Retry");
     }
@@ -98,7 +96,7 @@ public class CountdownScript : MonoBehaviour
         GameManager.Instance.ReturnRobby();
     }
 
-    private void SaveRetryStatus(bool value)
+    public void SaveRetryStatus(bool value)
     {
         PlayerPrefs.SetInt(RetryKey, value ? 1 : 0);
         PlayerPrefs.Save();
