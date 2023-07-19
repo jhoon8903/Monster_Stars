@@ -6,7 +6,6 @@ using Script.CharacterManagerScript;
 using Script.PuzzleManagerGroup;
 using Script.UIManager;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;

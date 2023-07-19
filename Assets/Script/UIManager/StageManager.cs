@@ -142,8 +142,12 @@ namespace Script.UIManager
         public void EnemyDestroyEvent(EnemyBase enemyBase)
         {
             enemyPool.enemyBases.Remove(enemyBase);
-            if (enemyPool.enemyBases.Count != 0 && _setCount == 2) return;
-            _setCount = 0;
+            if (enemyPool.enemyBases.Count != 0) return;
+            if (enemyBase.EnemyType != EnemyBase.EnemyTypes.Boss)
+            {
+                if (_setCount != 2) return;
+                _setCount = 0;
+            }
             if (castleManager.HpPoint > 0)
             {
                 if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
