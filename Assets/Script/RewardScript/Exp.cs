@@ -21,59 +21,71 @@ namespace Script.RewardScript
              Slow,
              NextStage,
              Gold,
-            
-             // Divine Property
-             DivineActiveRestraint,
-             DivineRestraintTime,
-             DivinePenetrate,
-             DivineAtkRange,
-             DivinePoisonAdditionalDamage,
-             
-             // Physic Property
-             PhysicAdditionalWeapon,
-             PhysicIncreaseWeaponScale,
-             PhysicSlowAdditionalDamage,
-             PhysicAtkSpeed,
-             PhysicIncreaseDamage,
-             Physics2AdditionalBleedingLayer,
-             Physics2ActivateBleed,
-             Physics2AdditionalAtkSpeed,
-             Physics2AdditionalProjectile,
-             Physics2ProjectilePenetration,
-             
-             // Poison Property
-             PoisonDoubleAtk,
-             PoisonRestraintAdditionalDamage,
-             PoisonActivate,
-             PoisonInstantKill,
-             PoisonIncreaseAtkRange,
-             PoisonOverlapping,
-             
-             // Water Property
-             WaterBurnAdditionalDamage,
-             WaterSideAttack,
-             WaterIncreaseSlowPower,
-             WaterRestraintIncreaseDamage,
-             WaterIncreaseDamage,
-             Water2IncreaseDamage,
-             Water2BleedAdditionalRestraint,
-             Water2IncreaseSlowTime,
-             Water2BackAttack,
-             Water2AdditionalProjectile,
-             
-             //Darkness
-             DarkSlowAdditionalDamage,
-             DarkBleedAdditionalDamage,
-             DarkIncreaseAtkSpeed,
-             DarkProjectileBounce,
-             DarkAdditionalBounce,
 
-             // Fire Property
-             FireBleedingAdditionalDamage,
-             FireIncreaseDamage,
-             FirePoisonAdditionalStun,
-             FireIncreaseAtkRange,
-             FireDeleteBurnIncreaseDamage,
+             //Divine
+             DivinePoisonDamageBoost,
+             DivineBindDurationBoost,
+             DivineShackledExplosion,
+             DivineFifthAttackBoost,
+             DivineUnitOneAttackBoost,
+             DivineBindChanceBoost,
+             DivineUnitOneDualAttack,
+             DivineProjectilePierce,
+             //Physical
+             PhysicalAttackSpeedBoost,
+             PhysicalDamage100Boost,
+             PhysicalDamage9Boost,
+             PhysicalBleedingChance,
+             PhysicalSwordAddition,
+             PhysicalSlowEnemyDamageBoost,
+             PhysicalSwordScaleIncrease,
+             PhysicalDamage24Boost,
+             //Poison
+             PoisonAilmentStun,
+             PoisonMaxStackIncrease,
+             PoisonDamageAttackPowerIncrease,
+             PoisonProjectileIncrease,
+             PoisonRangeIncrease,
+             PoisonBleedingEnemyDamageBoost,
+             PoisonBleedingEnemyInstantKill,
+             PoisonPerHitEffect,
+             //Fire1
+             FireImageOverlapIncrease,
+             FireUnitSixAttackSpeedBoost,
+             FireSlowEnemyDamageBoost,
+             FireProjectileSpeedIncrease,
+             FireBurnedEnemyExplosion,
+             FireProjectileBounceDamage,
+             FireBurnPerAttackEffect,
+             FireProjectileBounceIncrease,
+             //Water1
+             WaterUnitEightAttackSpeedBoost,
+             WaterAllyDamageBoost,
+             WaterProjectileIncrease,
+             WaterUnitEightAttackBoost,
+             WaterSlowEnemyDamageBoost,
+             WaterGlobalSlowEffect,
+             WaterSlowEnemyStunChance,
+             WaterDamageIncreaseDebuff,
+             //Fire2
+             FirePoisonDamageIncrease,
+             Fire2AttackSpeedIncrease,
+             Fire2BleedingDamageIncrease,
+             Fire2AttackPowerIncrease,
+             Fire2StunChance,
+             Fire2SwordSizeIncrease,
+             Fire2RangeIncrease,
+             Fire2NoBurnDamageIncrease,
+             //Water2
+             Water2DebuffDurationIncrease,
+             Water2AttackSpeedIncrease,
+             Water2StunChanceAgainstBleeding,
+             Water2IceSpikeProjectile,
+             Water2AttackPowerIncrease,
+             Water2ProjectileSpeedIncrease,
+             Water2DebuffStrengthIncrease,
+             Water2AttackSpeedBuffToAdjacentAllies,
+             //Darkness
          }
         public Types Type { get; set; }
         private readonly int[] _property;

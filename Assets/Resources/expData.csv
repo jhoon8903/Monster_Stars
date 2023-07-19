@@ -64,10 +64,10 @@ Blue,700,Fire2SwordSizeIncrease,100
 Purple,700,Fire2RangeIncrease,1
 Purple,700,Fire2NoBurnDamageIncrease,100
 Green,500,Water2DebuffDurationIncrease,2
-Green,500,Water2AttackSpeedIncreaseUnit4,6
+Green,500,Water2AttackSpeedIncrease,6
 Green,500,Water2StunChanceAgainstBleeding,10
 Blue,500,Water2IceSpikeProjectile,1
-Blue,500,Water2AttackPowerIncreaseUnit4,18
+Blue,500,Water2AttackPowerIncrease,18
 Blue,500,Water2ProjectileSpeedIncrease,100
 Purple,500,Water2DebuffStrengthIncrease,50
 Purple,500,Water2AttackSpeedBuffToAdjacentAllies,15

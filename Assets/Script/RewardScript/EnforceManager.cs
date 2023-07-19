@@ -106,23 +106,18 @@ namespace Script.RewardScript
             }
         }
 
-        [Header("\n\nUnit_A 신성 속성\n")] [Header("속박 활성화")]
-        public bool activeRestraint;
-
+        [Header("\n\nUnit_A 신성 속성\n")] 
+        [Header("속박 활성화")] public bool activeRestraint;
         [Header("속박시간 증가")] public float increaseRestraintTime = 0.1f;
-
         protected internal float IncreaseRestraintTime()
         {
             var restraintTime = 1f;
             restraintTime += increaseRestraintTime;
             return restraintTime;
         }
-
         [Header("관통 효과")] public bool divinePenetrate;
         [Header("백 어택")] public bool divineAtkRange;
-        [Header("중독 시 데미지증가")] public bool divinePoisonAdditionalDamage;
-        public int divinePoisonAdditionalDamageCount = 1;
-
+        [Header("중독 시 데미지증가")] public bool divinePoisonAdditionalDamage; public int divinePoisonAdditionalDamageCount = 1;
         [Header("\n\n Unit_B 어둠 속성\n\n")] 
         [Header("둔화상태 적 추가 데미지")] public bool darkSlowAdditionalDamage;
         [Header("출혈상태 적 추가 데미지")] public bool darkBleedAdditionalDamage;
