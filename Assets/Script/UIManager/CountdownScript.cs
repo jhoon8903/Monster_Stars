@@ -88,6 +88,7 @@ public class CountdownScript : MonoBehaviour
         retry = false;
         SaveRetryStatus(false); // retry 상태 저장
         AppLovinScript.ShowRewardedAd();
+        RewardManager.Instance.RewardButtonClicked("Retry");
     }
 
     public void NoRetry()
@@ -111,11 +112,5 @@ public class CountdownScript : MonoBehaviour
     private bool IsFirstLaunch()
     {
         return !PlayerPrefs.HasKey(RetryKey);
-    }
-
-    public void Retry()
-    {
-        Debug.Log("Click"); 
-        SceneManager.LoadScene("StageScene");
     }
 }

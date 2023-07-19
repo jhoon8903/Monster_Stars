@@ -38,6 +38,10 @@ namespace Script.AdsScript
                     rewardText.text = " Stamina 5 Get";
                     rewardBtn.GetComponent<Button>().onClick.AddListener(GiveStaminaReward);
                     break;
+                case "Retry":
+                    rewardText.text = " Retry ";
+                    rewardBtn.GetComponent<Button>().onClick.AddListener(Retry);
+                    break;
                 default:
 
                     break;
@@ -59,6 +63,11 @@ namespace Script.AdsScript
         private static void GiveStaminaReward()
         {
             Debug.Log("스테미너 보상을 제공합니다.");
+        }
+
+        private static void Retry()
+        {
+            SceneManager.LoadScene("StageScene");
         }
     }
 }
