@@ -9,11 +9,14 @@ namespace Script.PuzzleManagerGroup
         public int gridHeight;
         public int gridWidth = 6;
         public GameObject grid1Sprite; 
-        public GameObject grid2Sprite; 
+        public GameObject grid2Sprite;
+        public GameObject bossGrid1Sprite;
+        public GameObject bossGrid2Sprite;
         private const int CurrentRowType = 1; 
         private const int MaxRows = 8;  
         public Vector3Int bossSpawnArea;
         private GameObject[,] _gridCells;
+        private GameObject[,] _bossGridCells;
         private SpriteRenderer[,] _gridCellRenderers;
 
         public void GenerateInitialGrid(int height)
@@ -37,7 +40,11 @@ namespace Script.PuzzleManagerGroup
         public void AddRow()
         {
             if (gridHeight >= MaxRows) return;
-            var newGridCells = new GameObject[gridWidth, gridHeight+1];
+
+            if (gridHeight >= MaxRows) return;
+
+            var newGridHeight = gridHeight + 1;
+            var newGridCells = new GameObject[gridWidth, newGridHeight];
             for (var x = 0; x < gridWidth; x++)
             {
                 for (var y = 0; y < gridHeight; y++)
@@ -58,39 +65,54 @@ namespace Script.PuzzleManagerGroup
                 var newCell = Instantiate(spritePrefab, new Vector3(x, 0, 0), Quaternion.identity, transform);
                 newGridCells[x, 0] = newCell; 
             }
+            if (_bossGridCells != null) // If the boss grid exists
+            {
+                var newBossGridCells = new GameObject[gridWidth, gridHeight+1];
+                for (var x = 0; x < gridWidth; x++)
+                {
+                    for (var y = 0; y < gridHeight; y++)
+                    {
+                        newBossGridCells[x, y] = _bossGridCells[x, y];
+                    }
+                }
+                for (var x = 0; x < gridWidth; x++)
+                {
+                    newBossGridCells[x, gridHeight] = null;  // Add new row to boss grid
+                }
+                _bossGridCells = newBossGridCells; // Assign the new array to _bossGridCells
+            }
             _gridCells = newGridCells;
+            gridHeight = newGridHeight;
             PlayerPrefs.SetInt("GridHeight", gridHeight);
         }
         public void ApplyBossSpawnColor(Vector3Int bossArea)
         {
             bossSpawnArea = bossArea;
-            var orangeColor = new Color32(255,147, 0, 255); 
-            var brownColor = new Color32(217, 191, 156, 255); 
+            _bossGridCells = new GameObject[gridWidth, gridHeight];
 
             for (var x = bossSpawnArea.x - 1; x <= bossSpawnArea.x + 1; x++)
             {
                 for (var y = 0; y < gridHeight; y++)
                 {
                     if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) continue;
-                    Debug.Log($"[{x},{y}]");
-                    var cellRenderer = _gridCellRenderers[x, y];
-                    cellRenderer.DOColor((x + y) % 2 == 0 ? orangeColor : brownColor, 1.0f);
+
+                    var spritePrefab = (x + y) % 2 == 0 ? bossGrid1Sprite : bossGrid2Sprite;
+                    var newCell = Instantiate(spritePrefab, new Vector3(x, y, 0), Quaternion.identity, transform);
+                    _bossGridCells[x, y] = newCell;
+                    _gridCells[x, y].SetActive(false);
                 }
             }
         }
 
         public IEnumerator ResetBossSpawnColor()
         {
-            var backgroundColor = new Color32(22, 101, 123, 255);
-            Camera.main.DOColor(backgroundColor, 2.0f);
-            var color = new Color(1, 1, 1, 1);
-
-            for (var y = 0; y < gridHeight; y++)
+            for (var x = 0; x < gridWidth; x++)
             {
-                for (var x = 0; x < gridWidth; x++)
+                for (var y = 0; y < _bossGridCells.GetLength(1); y++) // Use actual array height here
                 {
-                    var cellRenderer = _gridCellRenderers[x, y];
-                    cellRenderer.DOColor(color, 2.0f);
+                    if (_bossGridCells[x, y] == null) continue;
+                    Destroy(_bossGridCells[x, y]);
+                    _gridCells[x, y].SetActive(true);
                 }
             }
             yield return null;

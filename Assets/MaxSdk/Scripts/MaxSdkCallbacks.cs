@@ -8,11 +8,13 @@ using System.Globalization;
 using UnityEngine;
 using AppLovinMax.Internal.API;
 using AppLovinMax.ThirdParty.MiniJson;
+using UnityEngine.SceneManagement;
 
 public class MaxSdkCallbacks : MonoBehaviour
 {
 #if UNITY_EDITOR
     private static MaxSdkCallbacks instance;
+    public bool retryGame;
 #endif
 
     public static MaxSdkCallbacks Instance

@@ -1,26 +1,25 @@
+using Script.UIManager;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
-using static UnityEngine.EventSystems.EventTrigger;
 
 namespace Script.AdsScript
 {
     public class RewardManager : MonoBehaviour
     {
-        public static RewardManager Instance { get; private set; }
 
         [SerializeField] private Text rewardText;
         [SerializeField] private GameObject rewardBtn;
-
+        public static RewardManager Instance { get; private set; }
         private void Awake()
         {
             if (Instance != null && Instance != this)
             {
                 Destroy(gameObject);
-                return;
             }
-
-            Instance = this;
+            else
+            {
+                Instance = this;
+            }
         }
 
         public void RewardButtonClicked(string buttonType)
@@ -43,21 +42,16 @@ namespace Script.AdsScript
                     rewardText.text = " Retry ";
                     rewardBtn.GetComponent<Button>().onClick.AddListener(Retry);
                     break;
-                default:
-
-                    break;
             }
         }
 
         private static void GiveCoinReward()
         {
-            
             Debug.Log("코인 보상을 제공합니다.");
         }
 
         private static void GiveGemReward()
         {
-           
             Debug.Log("재화 보상을 제공합니다.");
         }
 
@@ -66,11 +60,9 @@ namespace Script.AdsScript
             Debug.Log("스테미너 보상을 제공합니다.");
         }
 
-        private static void Retry()
+        private void Retry()
         {
-            CountdownScript.Instance.retry = false;
-            CountdownScript.Instance.SaveRetryStatus(false); // retry 상태 저장
-            SceneManager.LoadScene("StageScene");
+            StartCoroutine(CountdownScript.Retry());
         }
     }
 }

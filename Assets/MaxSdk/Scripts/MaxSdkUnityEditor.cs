@@ -5,12 +5,12 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using AppLovinMax.ThirdParty.MiniJson;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
@@ -1060,10 +1060,10 @@ public class MaxSdkUnityEditor : MaxSdkBase
         ValidateAdUnitIdentifier(adUnitIdentifier, "load rewarded ad");
         RequestAdUnit(adUnitIdentifier);
 
-        ExecuteWithDelay(1f, () =>
-        {
-            AddReadyAdUnit(adUnitIdentifier);
-            var eventProps = Json.Serialize(CreateBaseEventPropsDictionary("OnRewardedAdLoadedEvent", adUnitIdentifier));
+        ExecuteWithDelay(0, () => 
+        { 
+            AddReadyAdUnit(adUnitIdentifier); 
+            var eventProps = Json.Serialize(CreateBaseEventPropsDictionary("OnRewardedAdLoadedEvent", adUnitIdentifier)); 
             MaxSdkCallbacks.Instance.ForwardEvent(eventProps);
         });
     }
@@ -1147,12 +1147,14 @@ public class MaxSdkUnityEditor : MaxSdkBase
             MaxSdkCallbacks.Instance.ForwardEvent(adHiddenEventProps);
             Object.Destroy(stubRewardedAd);
         });
+
         rewardButton.onClick.AddListener(() =>
         {
             var adHiddenEventProps = Json.Serialize(CreateBaseEventPropsDictionary("OnRewardedAdHiddenEvent", adUnitIdentifier));
             MaxSdkCallbacks.Instance.ForwardEvent(adHiddenEventProps);
             Object.Destroy(stubRewardedAd);
         });
+
         var adDisplayedEventProps = Json.Serialize(CreateBaseEventPropsDictionary("OnRewardedAdDisplayedEvent", adUnitIdentifier));
         MaxSdkCallbacks.Instance.ForwardEvent(adDisplayedEventProps);
 #endif

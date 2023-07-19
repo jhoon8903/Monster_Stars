@@ -1,114 +1,105 @@
 using System.Collections;
-using System.Collections.Generic;
 using Script.AdsScript;
-using UnityEngine;
-using UnityEngine.UI;
 using TMPro;
-using Script;
+using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class CountdownScript : MonoBehaviour
+namespace Script.UIManager
 {
-    public static CountdownScript Instance { get; private set; }
-
-    [SerializeField] private TextMeshProUGUI countdownText;
-    [SerializeField] private GameObject countdown;
-    [SerializeField] private GameObject adsCountinueBtn;
-    [SerializeField] private GameObject robbyBtn;
-
-    private float totalTime = 10f; // 총 카운트다운 시간
-    private float currentCountdown; // 현재 카운트다운 시간
-    public bool retry;
-
-    public const string RetryKey = "Retry";
-
-    private void Awake()
+    public class CountdownScript : MonoBehaviour
     {
-        if (Instance == null)
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
+        [SerializeField] private TextMeshProUGUI countdownText;
+        [SerializeField] private GameObject countdown;
+        [SerializeField] private GameObject adsContinueBtn;
+        [SerializeField] private GameObject robbyBtn;
 
-    private void Start()
-    {
-        LoadRetryStatus(); // retry 상태 로드
+        private const float TotalTime = 10f; // 총 카운트다운 시간
+        private float _currentCountdown; // 현재 카운트다운 시간
+        public bool retry;
+        private const string RetryKey = "Retry";
 
-        if (IsFirstLaunch()) // 최초 실행 여부 확인
+        private void Start()
         {
-            retry = true;
-            SaveRetryStatus(true); // 최초 실행 시 retry 상태를 true로 설정
-        }
-        adsCountinueBtn.GetComponent<Button>().onClick.AddListener(YesRetry);
-        robbyBtn.GetComponent<Button>().onClick.AddListener(NoRetry);
-        StartCountdown();
-    }
+            LoadRetryStatus(); // retry 상태 로드
 
-    private void Update()
-    {
-        if (retry)
-        {
-            if (currentCountdown > 0)
+            if (IsFirstLaunch()) // 최초 실행 여부 확인
             {
-                currentCountdown -= Time.unscaledDeltaTime;
-                countdownText.text = Mathf.Ceil(currentCountdown).ToString(); // 올림으로 반올림
+                retry = true;
+                SaveRetryStatus(true); // 최초 실행 시 retry 상태를 true로 설정
             }
+            adsContinueBtn.GetComponent<Button>().onClick.AddListener(YesRetry);
+            robbyBtn.GetComponent<Button>().onClick.AddListener(NoRetry);
+            StartCountdown();
+        }
 
-            if (currentCountdown <= 0)
+        private void Update()
+        {
+            if (retry)
             {
+                if (_currentCountdown > 0)
+                {
+                    _currentCountdown -= Time.unscaledDeltaTime;
+                    countdownText.text = Mathf.Ceil(_currentCountdown).ToString(); // 올림으로 반올림
+                }
+
+                if (!(_currentCountdown <= 0)) return;
                 // 카운트다운 종료 처리
                 countdownText.text = "0";
                 CountdownOver();
             }
+            else
+            {
+                CountdownOver();
+            }
         }
-        else
+
+        private void StartCountdown()
         {
-            CountdownOver();
+            _currentCountdown = TotalTime;
         }
-    }
 
-    private void StartCountdown()
-    {
-        currentCountdown = totalTime;
-    }
+        private void CountdownOver()
+        {
+            countdown.SetActive(false);
+            adsContinueBtn.SetActive(false); // retry 상태 저장
+        }
 
-    private void CountdownOver()
-    {
-        countdown.SetActive(false);
-        adsCountinueBtn.SetActive(false);
-        SaveRetryStatus(false); // retry 상태 저장
-    }
+        private static void YesRetry()
+        {
+            AppLovinScript.ShowRewardedAd();
+            RewardManager.Instance.RewardButtonClicked("Retry");
+        }
 
-    public void YesRetry()
-    {
-        AppLovinScript.ShowRewardedAd();
-        RewardManager.Instance.RewardButtonClicked("Retry");
-    }
+        private void NoRetry()
+        {
+            retry = true;
+            SaveRetryStatus(true); // retry 상태 저장
+            GameManager.ReturnRobby();
+        }
 
-    public void NoRetry()
-    {
-        retry = true;
-        SaveRetryStatus(true); // retry 상태 저장
-        GameManager.Instance.ReturnRobby();
-    }
+        private static void SaveRetryStatus(bool value)
+        {
+            PlayerPrefs.SetInt(RetryKey, value ? 1 : 0);
+            PlayerPrefs.Save();
+        }
 
-    public void SaveRetryStatus(bool value)
-    {
-        PlayerPrefs.SetInt(RetryKey, value ? 1 : 0);
-        PlayerPrefs.Save();
-    }
+        private void LoadRetryStatus()
+        {
+            retry = PlayerPrefs.GetInt(RetryKey, 1) == 1;
+        }
 
-    private void LoadRetryStatus()
-    {
-        retry = PlayerPrefs.GetInt(RetryKey, 0) == 1;
-    }
+        private static bool IsFirstLaunch()
+        {
+            return !PlayerPrefs.HasKey(RetryKey);
+        }
 
-    private bool IsFirstLaunch()
-    {
-        return !PlayerPrefs.HasKey(RetryKey);
+        public static IEnumerator Retry()
+        {
+            // retry = false; 
+            // SaveRetryStatus(retry); // retry 상태 저장
+            SceneManager.LoadScene("StageScene");
+            yield return null;
+        }
     }
 }

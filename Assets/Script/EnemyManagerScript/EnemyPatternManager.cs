@@ -75,7 +75,11 @@ namespace Script.EnemyManagerScript
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 _slowCount = EnforceManager.Instance.slowCount;
-                _speedReductionFactor = 1f + _slowCount * 0.15f;
+                _speedReductionFactor = _slowCount * 0.15f;
+                if (_speedReductionFactor == 0)
+                {
+                    _speedReductionFactor = 1f;
+                }
                 _moveSpeed = enemyBase.moveSpeed * _speedReductionFactor * moveSpeedOffset * Time.deltaTime;
                 _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed );
                
@@ -101,7 +105,11 @@ namespace Script.EnemyManagerScript
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 _slowCount = EnforceManager.Instance.slowCount;
-                _speedReductionFactor = 1f + _slowCount * 0.15f;
+                _speedReductionFactor = _slowCount * 0.15f;
+                if (_speedReductionFactor == 0)
+                {
+                    _speedReductionFactor = 1f;
+                }
                 _moveSpeed = enemyBase.moveSpeed * _speedReductionFactor * moveSpeedOffset * Time.deltaTime;
                 _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed);
                 
@@ -138,7 +146,11 @@ namespace Script.EnemyManagerScript
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
 
                 _slowCount = EnforceManager.Instance.slowCount;
-                _speedReductionFactor = 1f + _slowCount * 0.15f;
+                _speedReductionFactor = _slowCount * 0.15f;
+                if (_speedReductionFactor == 0)
+                {
+                    _speedReductionFactor = 1f;
+                }
                 _moveSpeed = enemyBase.moveSpeed * _speedReductionFactor * moveSpeedOffset * Time.deltaTime;
 
                 _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed);
@@ -174,7 +186,11 @@ namespace Script.EnemyManagerScript
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
                 _slowCount = EnforceManager.Instance.slowCount;
-                _speedReductionFactor = 1f + _slowCount * 0.15f;
+                _speedReductionFactor = _slowCount * 0.15f;
+                if (_speedReductionFactor == 0)
+                {
+                    _speedReductionFactor = 1f;
+                }
                 _moveSpeed = enemyBase.moveSpeed * _speedReductionFactor * moveSpeedOffset * Time.deltaTime;
                 _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed);
                
@@ -216,7 +232,11 @@ namespace Script.EnemyManagerScript
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
                 
                 _slowCount = EnforceManager.Instance.slowCount;
-                _speedReductionFactor = 1f + _slowCount * 0.15f;
+                _speedReductionFactor = _slowCount * 0.15f;
+                if (_speedReductionFactor == 0)
+                {
+                    _speedReductionFactor = 1f;
+                }
                 _moveSpeed = enemyBase.moveSpeed * _speedReductionFactor * moveSpeedOffset * Time.deltaTime;
                 _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed);
                 

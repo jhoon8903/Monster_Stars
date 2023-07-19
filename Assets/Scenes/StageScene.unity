@@ -3205,7 +3205,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   countdownText: {fileID: 837923551}
   countdown: {fileID: 558477391}
-  adsCountinueBtn: {fileID: 1409829354}
+  adsContinueBtn: {fileID: 1409829354}
   robbyBtn: {fileID: 2094416143}
   retry: 1
 --- !u!1 &571828594
@@ -10290,6 +10290,8 @@ MonoBehaviour:
   gridWidth: 6
   grid1Sprite: {fileID: 5878419415431634990, guid: 9cb9c040a9abd43d0b20b1828f4cbc7e, type: 3}
   grid2Sprite: {fileID: 2861231161325905373, guid: 366ac8b27ec804d8aa934708a02a4c3b, type: 3}
+  bossGrid1Sprite: {fileID: 134127099790928461, guid: 6a66f6a373dfe451b84ce376d2dedf6e, type: 3}
+  bossGrid2Sprite: {fileID: 4511424885666801294, guid: ab70b90fef6d447a6b66ce9c4afaa0bb, type: 3}
   bossSpawnArea: {x: 0, y: 0, z: 0}
 --- !u!4 &8808150501734532427
 Transform:

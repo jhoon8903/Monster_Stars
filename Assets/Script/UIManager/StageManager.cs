@@ -20,7 +20,6 @@ namespace Script.UIManager
         [SerializeField] private CastleManager castleManager;
         public static StageManager Instance;
         private int _setCount;
-        
         public int maxWaveCount;
         public int maxStageCount;
         public int latestStage;
@@ -184,13 +183,13 @@ namespace Script.UIManager
             PlayerPrefs.SetInt("LatestStage",latestStage);
             PlayerPrefs.SetInt($"{latestStage}Stage_MaxWave", MaxWave());
             PlayerPrefs.Save();
-            continueBtn.GetComponent<Button>().onClick.AddListener(GameManager.Instance.ReturnRobby);
+            continueBtn.GetComponent<Button>().onClick.AddListener(GameManager.ReturnRobby);
         }
         public void UpdateWaveText()
         {
             waveText.text = $"{currentWave}";
         }
-        private void GameClear()
+        private static void GameClear()
         {
             
         }

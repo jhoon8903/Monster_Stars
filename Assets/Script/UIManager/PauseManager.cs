@@ -15,7 +15,7 @@ namespace Script.UIManager
         private void Start()
         {
             pauseBtn.GetComponent<Button>().onClick.AddListener(Pause);
-            robbyBtn.GetComponent<Button>().onClick.AddListener(GameManager.Instance.ReturnRobby);
+            robbyBtn.GetComponent<Button>().onClick.AddListener(GameManager.ReturnRobby);
             resumeBtn.GetComponent<Button>().onClick.AddListener(Resume);
             retryBtn.GetComponent<Button>().onClick.AddListener(Retry);
         }

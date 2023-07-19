@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using DG.Tweening;
 using Script.CharacterGroupScript;
@@ -43,43 +44,49 @@ namespace Script
         {
             Instance = this;
         }
+
         private void Start()
         {
-            swipeManager.isBusy = true;
-            
-            gridManager.GenerateInitialGrid(PlayerPrefs.GetInt("GridHeight", 6));
-            if (PlayerPrefs.HasKey("unitState"))
-            {
-                StartCoroutine(spawnManager.LoadGameState());
-                EnforceManager.Instance.LoadEnforceData();
-                countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
-                expManager.LoadExp();
-                castleManager.LoadCastleHp();
+            StartCoroutine(LoadGame());
+        }
 
-                if (StageManager.Instance.currentWave % 10 == 0)
-                {
-                    if (EnforceManager.Instance.addRowCount > 1)
-                    {
-                        _bossSpawnArea = new Vector3Int(Random.Range(1, 6), 10, 0);
-                    }
-                    else
-                    {
-                        _bossSpawnArea = new Vector3Int(Random.Range(1, 5), 10, 0);
-                    }
-                    gridManager.ApplyBossSpawnColor(_bossSpawnArea);
-                }
-            }
-            else
+        private IEnumerator LoadGame()
+        {
+            try
             {
-                countManager.Initialize(moveCount);
-                StartCoroutine(spawnManager.PositionUpCharacterObject());
+                swipeManager.isBusy = true; 
+                gridManager.GenerateInitialGrid(PlayerPrefs.GetInt("GridHeight", 6));
+                if (PlayerPrefs.HasKey("unitState"))
+                {
+                    StartCoroutine(spawnManager.LoadGameState());
+                    EnforceManager.Instance.LoadEnforceData();
+                    countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
+                    expManager.LoadExp();
+                    castleManager.LoadCastleHp();
+                    if (StageManager.Instance.currentWave % 10 == 0)
+                    {
+                        _bossSpawnArea = new Vector3Int(Random.Range(1, 5), 9, 0);
+                        gridManager.ApplyBossSpawnColor(_bossSpawnArea);
+                    }
+                }
+                else
+                {
+                    countManager.Initialize(moveCount);
+                    StartCoroutine(spawnManager.PositionUpCharacterObject());
+                }
+
+                StageManager.Instance.SelectedStages();
+                StageManager.Instance.UpdateWaveText();
+                speedUp = true;
+                GameSpeedSelect();
+                stageText.text = $"{StageManager.Instance.selectStage} STAGE";
+                swipeManager.isBusy = false;
             }
-            StageManager.Instance.SelectedStages();
-            StageManager.Instance.UpdateWaveText();
-            speedUp = true;
-            GameSpeedSelect();
-            stageText.text = $"{StageManager.Instance.selectStage} STAGE";
-            swipeManager.isBusy = false;
+            catch (Exception e)
+            {
+                Debug.LogError("Exception in LoadGame: " + e);
+            }
+            yield return null;
         }
         public IEnumerator Count0Call()
         {
@@ -126,6 +133,7 @@ namespace Script
         }
         private IEnumerator InitializeWave()
         {
+            yield return StartCoroutine(KillMotion());
             spawnManager.SaveUnitState();
             expManager.SaveExp();
             castleManager.SaveCastleHp();
@@ -140,14 +148,7 @@ namespace Script
 
             if (StageManager.Instance.currentWave % 10 == 0)
             {
-                if (EnforceManager.Instance.addRowCount > 1)
-                {
-                    _bossSpawnArea = new Vector3Int(Random.Range(1, 6), 10, 0);
-                }
-                else
-                {
-                    _bossSpawnArea = new Vector3Int(Random.Range(1, 5), 10, 0);
-                }
+                _bossSpawnArea =  new Vector3Int(Random.Range(1, 5), 9, 0);
                 gridManager.ApplyBossSpawnColor(_bossSpawnArea);
             }
 
@@ -212,12 +213,7 @@ namespace Script
                 Time.timeScale = 1;
             }
         }
-        public void RetryGame()
-        {
-            gamePanel.SetActive(false);
-            //SceneManager.LoadScene("StageScene");
-        }
-        public void ReturnRobby()
+        public static void ReturnRobby()
         {
             StageManager.Instance.isStageClear = false;
             PlayerPrefs.DeleteKey("unitState");
