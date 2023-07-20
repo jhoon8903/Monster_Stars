@@ -55,10 +55,6 @@ namespace Script.CharacterGroupScript
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
             center = transform.position;
-            if (!)
-            {
-
-            }
             size = new Vector2(DetectionWidth, DetectionHeight);
         }
 
