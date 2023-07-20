@@ -229,7 +229,7 @@ namespace Script.RewardScript
                     break;
                 case CommonData.Types.GroupLevelUp:
                     _groupName = characterManager.characterList[powerUp.Property[0]].name;
-                    powerText.text = $" 퍼즐상의 {_groupName} 그룹의 0레벨 케릭터 전체 레벨 1 증가"; 
+                    powerText.text = $"퍼즐상의 {_groupName} 그룹의 0레벨 케릭터 전체 레벨 1 증가"; 
                     break;
                 case CommonData.Types.LevelUpPattern:
                     _groupName = characterManager.characterList[powerUp.Property[0]].name;

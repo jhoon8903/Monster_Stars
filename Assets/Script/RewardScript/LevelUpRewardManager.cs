@@ -45,7 +45,7 @@ namespace Script.RewardScript
                 case ExpData.Types.GroupAtkSpeed:
                     EnforceManager.Instance.IncreaseGroupRate(selectedReward.Property[0]);
                     break;
-                case ExpData.Types.Step:
+                case ExpData.Types.LevelUpStep:
                     EnforceManager.Instance.RewardMoveCount(selectedReward.Property[0]);
                     break;
                 case ExpData.Types.StepDirection:
@@ -503,7 +503,7 @@ namespace Script.RewardScript
                 case ExpData.Types.StepDirection:
                     powerText.text = "대각선 이동 가능"; 
                     break;
-                case ExpData.Types.Step:
+                case ExpData.Types.LevelUpStep:
                     powerText.text = $"다음 Wave 이동횟수 {p} 증가";
                     break;
                 case ExpData.Types.Exp:
