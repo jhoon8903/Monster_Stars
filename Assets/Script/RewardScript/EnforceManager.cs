@@ -33,24 +33,24 @@ namespace Script.RewardScript
         public float physicalDamage24Boost;
 
         //Poison 유닛 3
-        public bool PoisonAilmentStun;
-        public int PoisonMaxStackIncrease;
-        public int PoisonDamageAttackPowerIncrease;
-        public bool PoisonProjectileIncrease;
-        public bool PoisonRangeIncrease;
-        public bool PoisonBleedingEnemyDamageBoost;
-        public bool PoisonBleedingEnemyInstantKill;
-        public bool PoisonPerHitEffect;
+        public bool poisonAilmentStun;
+        public int poisonMaxStackIncrease;
+        public int poisonDamageAttackPowerIncrease;
+        public bool poisonProjectileIncrease;
+        public bool poisonRangeIncrease;
+        public bool poisonBleedingEnemyDamageBoost;
+        public bool poisonBleedingEnemyInstantKill;
+        public bool poisonPerHitEffect;
 
         //Fire1 유닛 6
-        public int FireImageOverlapIncrease;
-        public int FireAttackSpeedBoost;
-        public bool FireSlowEnemyDamageBoost;
-        public bool FireProjectileSpeedIncrease;
-        public bool FireBurnedEnemyExplosion;
-        public bool FireProjectileBounceDamage;
-        public float FireBurnPerAttackEffect;
-        public bool FireProjectileBounceIncrease;
+        public int fireImageOverlapIncrease;
+        public int fireAttackSpeedBoost;
+        public bool fireSlowEnemyDamageBoost;
+        public bool fireProjectileSpeedIncrease;
+        public bool fireBurnedEnemyExplosion;
+        public bool fireProjectileBounceDamage;
+        public float fireBurnPerAttackEffect;
+        public bool fireProjectileBounceIncrease;
 
         //Water1 유닛 8
         public int WaterAttackSpeedBoost;
@@ -111,7 +111,7 @@ namespace Script.RewardScript
         public List<int> permanentGroupIndex;
 
     }
-}
+
 
     public class EnforceManager : MonoBehaviour
     {
@@ -402,6 +402,7 @@ namespace Script.RewardScript
         }
 
         public List<int> permanentGroupIndex = new List<int>();
+
         public void PermanentIncreaseCharacter(int characterListIndex)
         {
             permanentGroupIndex.Add(characterListIndex);
@@ -411,49 +412,79 @@ namespace Script.RewardScript
         {
             var data = new EnforceData
             {
-                activeRestraint = activeRestraint,
-                increaseRestraintTime = increaseRestraintTime,
-                divinePenetrate = divinePenetrate,
-                divineAtkRange = divineAtkRange,
-                divinePoisonAdditionalDamage = divinePoisonAdditionalDamage,
-                divinePoisonAdditionalDamageCount = divinePoisonAdditionalDamageCount,
-                darkSlowAdditionalDamage = darkSlowAdditionalDamage,
-                darkBleedAdditionalDamage = darkBleedAdditionalDamage,
-                darkIncreaseAtkSpeed = darkIncreaseAtkSpeed,
-                darkProjectileBounce = darkProjectileBounce,
-                darkProjectileBounceCount =  darkProjectileBounceCount,
-                water2IncreaseDamage = water2IncreaseDamage,
-                water2BleedAdditionalRestraint = water2BleedAdditionalRestraint,
-                water2IncreaseSlowTime = water2IncreaseSlowTime,
-                water2BackAttack = water2BackAttack,
-                water2AdditionalProjectile = water2AdditionalProjectile,
-                physicAdditionalWeapon = physicAdditionalWeapon,
-                physicIncreaseWeaponScale = physicIncreaseWeaponScale,
-                physicSlowAdditionalDamage = physicSlowAdditionalDamage,
-                increasePhysicAtkSpeed = increasePhysicAtkSpeed,
-                physicIncreaseDamage = physicIncreaseDamage,
-                increasePhysicsDamage = increasePhysicsDamage,
-                waterBurnAdditionalDamage = waterBurnAdditionalDamage,
-                waterRestraintIncreaseDamage = waterRestraintIncreaseDamage,
-                waterIncreaseSlowPower = waterIncreaseSlowPower,
-                increaseWaterDamage = increaseWaterDamage,
-                waterSideAttack = waterSideAttack,
-                poisonDoubleAtk = poisonDoubleAtk,
-                poisonRestraintAdditionalDamage = poisonRestraintAdditionalDamage,
-                poisonInstantKill = poisonInstantKill,
-                poisonIncreaseAtkRange = poisonIncreaseAtkRange,
-                activatePoison = activatePoison,
-                poisonOverlapping = poisonOverlapping,
-                fireBleedingAdditionalDamage = fireBleedingAdditionalDamage,
-                fireIncreaseDamage = fireIncreaseDamage,
-                firePoisonAdditionalStun = firePoisonAdditionalStun,
-                fireIncreaseAtkRange = fireIncreaseAtkRange,
-                fireDeleteBurnIncreaseDamage = fireDeleteBurnIncreaseDamage,
-                physics2AdditionalBleedingLayer = physics2AdditionalBleedingLayer,
-                physics2ActivateBleed = physics2ActivateBleed,
-                physics2AdditionalAtkSpeed = physics2AdditionalAtkSpeed,
-                physics2AdditionalProjectile = physics2AdditionalProjectile,
-                physics2ProjectilePenetration = physics2ProjectilePenetration,
+                //Divine
+                divinePoisonDamageBoost = divinePoisonDamageBoost,
+                divineBindDurationBoost = divineBindDurationBoost,
+                divineShackledExplosion,
+                divineFifthAttackBoost,
+                divineAttackBoost,
+                divineBindChanceBoost,
+                divineDualAttack,
+                divineProjectilePierce,
+                //Physical
+                PhysicalAttackSpeedBoost,
+                PhysicalDamage100Boost,
+                PhysicalDamage9Boost,
+                PhysicalBleedingChance,
+                PhysicalSwordAddition,
+                PhysicalSlowEnemyDamageBoost,
+                PhysicalSwordScaleIncrease,
+                PhysicalDamage24Boost,
+                //Poison
+                PoisonAilmentStun,
+                PoisonMaxStackIncrease,
+                PoisonDamageAttackPowerIncrease,
+                PoisonProjectileIncrease,
+                PoisonRangeIncrease,
+                PoisonBleedingEnemyDamageBoost,
+                PoisonBleedingEnemyInstantKill,
+                PoisonPerHitEffect,
+                //Fire1
+                FireImageOverlapIncrease,
+                FireAttackSpeedBoost,
+                FireSlowEnemyDamageBoost,
+                FireProjectileSpeedIncrease,
+                FireBurnedEnemyExplosion,
+                FireProjectileBounceDamage,
+                FireBurnPerAttackEffect,
+                FireProjectileBounceIncrease,
+                //Water1
+                WaterAttackSpeedBoost,
+                WaterAllyDamageBoost,
+                WaterProjectileIncrease,
+                WaterAttackBoost,
+                WaterSlowEnemyDamageBoost,
+                WaterGlobalSlowEffect,
+                WaterSlowEnemyStunChance,
+                WaterDamageIncreaseDebuff,
+                //Fire2
+                Fire2PoisonDamageIncrease,
+                Fire2AttackSpeedIncrease,
+                Fire2BleedingDamageIncrease,
+                Fire2AttackPowerIncrease,
+                Fire2StunChance,
+                Fire2SwordSizeIncrease,
+                Fire2RangeIncrease,
+                Fire2NoBurnDamageIncrease,
+                //Water2
+                Water2DebuffDurationIncrease,
+                Water2AttackSpeedIncrease,
+                Water2StunChanceAgainstBleeding,
+                Water2IceSpikeProjectile,
+                Water2AttackPowerIncrease,
+                Water2ProjectileSpeedIncrease,
+                Water2DebuffStrengthIncrease,
+                Water2AttackSpeedBuffToAdjacentAllies,
+                //Darkness
+                DarkTenthAttackDoubleDamage,
+                DarkAttackSpeedBoost,
+                DarkAttackPowerBoost,
+                DarkStatusAilmentDamageChance,
+                DarkKnockBackChance,
+                DarkStatusAilmentDamageBoost,
+                DarkRangeIncrease,
+                DarkStatusAilmentSlowEffect,
+
                 addRowCount = addRowCount,
                 slowCount = slowCount,
                 diagonalMovement = diagonalMovement,
@@ -480,49 +511,7 @@ namespace Script.RewardScript
             if (!PlayerPrefs.HasKey("EnforceData")) return;
             var json = PlayerPrefs.GetString("EnforceData");
             var data = JsonUtility.FromJson<EnforceData>(json);
-            activeRestraint = data.activeRestraint;
-            increaseRestraintTime = data.increaseRestraintTime;
-            divinePenetrate = data.divinePenetrate;
-            divineAtkRange = data.divineAtkRange;
-            divinePoisonAdditionalDamage = data.divinePoisonAdditionalDamage;
-            divinePoisonAdditionalDamageCount = data.divinePoisonAdditionalDamageCount;
-            darkSlowAdditionalDamage = data.darkSlowAdditionalDamage;
-            darkBleedAdditionalDamage = data.darkBleedAdditionalDamage;
-            darkIncreaseAtkSpeed = data.darkIncreaseAtkSpeed;
-            darkProjectileBounce = data.darkProjectileBounce;
-            darkProjectileBounceCount = data.darkProjectileBounceCount;
-            water2IncreaseDamage = data.water2IncreaseDamage;
-            water2BleedAdditionalRestraint = data.water2BleedAdditionalRestraint;
-            water2IncreaseSlowTime = data.water2IncreaseSlowTime;
-            water2BackAttack = data.water2BackAttack;
-            water2AdditionalProjectile = data.water2AdditionalProjectile;
-            physicAdditionalWeapon = data.physicAdditionalWeapon;
-            physicIncreaseWeaponScale = data.physicIncreaseWeaponScale;
-            physicSlowAdditionalDamage = data.physicSlowAdditionalDamage;
-            increasePhysicAtkSpeed = data.increasePhysicAtkSpeed;
-            physicIncreaseDamage = data.physicIncreaseDamage;
-            increasePhysicsDamage = data.increasePhysicsDamage;
-            waterBurnAdditionalDamage = data.waterBurnAdditionalDamage;
-            waterRestraintIncreaseDamage = data.waterRestraintIncreaseDamage;
-            waterIncreaseSlowPower = data.waterIncreaseSlowPower;
-            increaseWaterDamage = data.increaseWaterDamage;
-            waterSideAttack = data.waterSideAttack;
-            poisonDoubleAtk = data.poisonDoubleAtk;
-            poisonRestraintAdditionalDamage = data.poisonRestraintAdditionalDamage;
-            poisonInstantKill = data.poisonInstantKill;
-            poisonIncreaseAtkRange = data.poisonIncreaseAtkRange;
-            activatePoison = data.activatePoison;
-            poisonOverlapping = data.poisonOverlapping;
-            fireBleedingAdditionalDamage = data.fireBleedingAdditionalDamage;
-            fireIncreaseDamage = data.fireIncreaseDamage;
-            firePoisonAdditionalStun = data.firePoisonAdditionalStun;
-            fireIncreaseAtkRange = data.fireIncreaseAtkRange;
-            fireDeleteBurnIncreaseDamage = data.fireDeleteBurnIncreaseDamage;
-            physics2AdditionalBleedingLayer = data.physics2AdditionalBleedingLayer;
-            physics2ActivateBleed = data.physics2ActivateBleed;
-            physics2AdditionalAtkSpeed = data.physics2AdditionalAtkSpeed;
-            physics2AdditionalProjectile = data.physics2AdditionalProjectile;
-            physics2ProjectilePenetration = data.physics2ProjectilePenetration;
+            
             addRowCount = data.addRowCount;
             slowCount = data.slowCount;
             diagonalMovement = data.diagonalMovement;
