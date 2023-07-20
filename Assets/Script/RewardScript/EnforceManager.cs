@@ -12,49 +12,87 @@ namespace Script.RewardScript
     [Serializable]
     public class EnforceData
     {
-        public bool activeRestraint;
-        public float increaseRestraintTime;
-        public bool divinePenetrate;
-        public bool divineAtkRange;
-        public bool divinePoisonAdditionalDamage;
-        public int divinePoisonAdditionalDamageCount;
-        public bool darkSlowAdditionalDamage;
-        public bool darkBleedAdditionalDamage;
-        public int darkIncreaseAtkSpeed;
-        public bool darkProjectileBounce;
-        public int darkProjectileBounceCount;
-        public int water2IncreaseDamage;
-        public bool water2BleedAdditionalRestraint;
-        public int water2IncreaseSlowTime;
-        public bool water2BackAttack;
-        public bool water2AdditionalProjectile;
-        public bool physicAdditionalWeapon;
-        public bool physicIncreaseWeaponScale;
-        public bool physicSlowAdditionalDamage;
-        public float increasePhysicAtkSpeed;
-        public bool physicIncreaseDamage;
-        public float increasePhysicsDamage;
-        public bool waterBurnAdditionalDamage;
-        public bool waterRestraintIncreaseDamage;
-        public bool waterIncreaseSlowPower;
-        public float increaseWaterDamage;
-        public bool waterSideAttack;
-        public bool poisonDoubleAtk;
-        public bool poisonRestraintAdditionalDamage;
-        public bool poisonInstantKill;
-        public bool poisonIncreaseAtkRange;
-        public bool activatePoison;
-        public int poisonOverlapping;
-        public bool fireBleedingAdditionalDamage;
-        public int fireIncreaseDamage;
-        public bool firePoisonAdditionalStun;
-        public bool fireIncreaseAtkRange;
-        public bool fireDeleteBurnIncreaseDamage;
-        public int physics2AdditionalBleedingLayer;
-        public bool physics2ActivateBleed;
-        public int physics2AdditionalAtkSpeed;
-        public bool physics2AdditionalProjectile;
-        public bool physics2ProjectilePenetration;
+        //Divine 유닛 1
+        public bool divinePoisonDamageBoost;
+        public float divineBindDurationBoost;
+        public bool divineShackledExplosion;
+        public int divineFifthAttackBoost;
+        public int divineAttackBoost;
+        public float divineBindChanceBoost;
+        public bool divineDualAttack;
+        public bool divineProjectilePierce;
+
+        //Physical 유닛 2
+        public int physicalAttackSpeedBoost;
+        public bool physicalDamage100Boost;
+        public float physicalDamage9Boost;
+        public float physicalBleedingChance;
+        public bool physicalSwordAddition;
+        public bool physicalSlowEnemyDamageBoost;
+        public bool physicalSwordScaleIncrease;
+        public float physicalDamage24Boost;
+
+        //Poison 유닛 3
+        public bool PoisonAilmentStun;
+        public int PoisonMaxStackIncrease;
+        public int PoisonDamageAttackPowerIncrease;
+        public bool PoisonProjectileIncrease;
+        public bool PoisonRangeIncrease;
+        public bool PoisonBleedingEnemyDamageBoost;
+        public bool PoisonBleedingEnemyInstantKill;
+        public bool PoisonPerHitEffect;
+
+        //Fire1 유닛 6
+        public int FireImageOverlapIncrease;
+        public int FireAttackSpeedBoost;
+        public bool FireSlowEnemyDamageBoost;
+        public bool FireProjectileSpeedIncrease;
+        public bool FireBurnedEnemyExplosion;
+        public bool FireProjectileBounceDamage;
+        public float FireBurnPerAttackEffect;
+        public bool FireProjectileBounceIncrease;
+
+        //Water1 유닛 8
+        public int WaterAttackSpeedBoost;
+        public bool WaterAllyDamageBoost;
+        public bool WaterProjectileIncrease;
+        public int WaterAttackBoost;
+        public bool WaterSlowEnemyDamageBoost;
+        public int WaterGlobalSlowEffect;
+        public bool WaterSlowEnemyStunChance;
+        public bool WaterDamageIncreaseDebuff;
+
+        //Fire2 유닛 5
+        public bool Fire2PoisonDamageIncrease;
+        public int Fire2AttackSpeedIncrease;
+        public bool Fire2BleedingDamageIncrease;
+        public int Fire2AttackPowerIncrease;
+        public bool Fire2StunChance;
+        public bool Fire2SwordSizeIncrease;
+        public bool Fire2RangeIncrease;
+        public bool Fire2NoBurnDamageIncrease;
+
+        //Water2 유닛 4
+        public int Water2DebuffDurationIncrease;
+        public int Water2AttackSpeedIncrease;
+        public bool Water2StunChanceAgainstBleeding;
+        public bool Water2IceSpikeProjectile;
+        public int Water2AttackPowerIncrease;
+        public bool Water2ProjectileSpeedIncrease;
+        public float Water2DebuffStrengthIncrease;
+        public bool Water2AttackSpeedBuffToAdjacentAllies;
+
+        //Darkness 유닛  7
+        public int DarkTenthAttackDoubleDamage;
+        public int DarkAttackSpeedBoost;
+        public int DarkAttackPowerBoost;
+        public bool DarkStatusAilmentDamageChance;
+        public float DarkKnockBackChance;
+        public bool DarkStatusAilmentDamageBoost;
+        public bool DarkRangeIncrease;
+        public bool DarkStatusAilmentSlowEffect;
+
+        //common
         public int addRowCount;
         public int slowCount;
         public bool diagonalMovement;
@@ -68,11 +106,12 @@ namespace Script.RewardScript
         public float increaseAtkDamage;
         public float increaseAtkRate;
         public int rewardMoveCount;
-        public bool addGold; 
+        public bool addGold;
         public int addGoldCount;
         public List<int> permanentGroupIndex;
 
     }
+}
 
     public class EnforceManager : MonoBehaviour
     {
