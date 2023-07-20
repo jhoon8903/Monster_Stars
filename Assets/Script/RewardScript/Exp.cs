@@ -86,6 +86,14 @@ namespace Script.RewardScript
              Water2DebuffStrengthIncrease,
              Water2AttackSpeedBuffToAdjacentAllies,
              //Darkness
+             DarkTenthAttackDoubleDamage,
+             DarkAttackSpeedBoost,
+             DarkAttackPowerBoost,
+             DarkStatusAilmentDamageChance,
+             DarkKnockBackChance,
+             DarkStatusAilmentDamageBoost,
+             DarkRangeIncrease,
+             DarkStatusAilmentSlowEffect,
          }
         public Types Type { get; set; }
         private readonly int[] _property;

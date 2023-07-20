@@ -20,7 +20,7 @@ namespace Script.CharacterManagerScript
         public enum Types { Character, Treasure }
         protected internal Types Type; 
         public enum UnitGroups { A,B,C,D,E,F,G,H,None }
-        public enum UnitAtkTypes {None,  Projectile, GuideProjectile, Gas, Circle, Vibrate, Boomerang }
+        public enum UnitAtkTypes {None, Projectile, GuideProjectile, Gas, Circle, Vibrate, Boomerang }
         public enum UnitProperties { Divine, Darkness, Physics, Water, Poison, Fire, None }
         public enum UnitEffects { Slow, Bleed, Poison, Burn, Stun, Strike, Restraint, Darkness, None } 
         public UnitGroups unitGroup = UnitGroups.None; 
@@ -59,7 +59,7 @@ namespace Script.CharacterManagerScript
             var sequence = DOTween.Sequence(); 
             Tween scaleUp = sequence.Append(levelUpObject.transform.DOScale(_levelUpScale, 0.3f)); 
             scaleUp.WaitForCompletion();
-            LevelUp(); // Level up the character
+            LevelUp();
             Tween scaleDown = sequence.Append(levelUpObject.transform.DOScale(_initialScale, 0.3f)); 
             scaleDown.WaitForCompletion();
         }

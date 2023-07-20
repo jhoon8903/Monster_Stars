@@ -55,6 +55,10 @@ namespace Script.CharacterGroupScript
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
             center = transform.position;
+            if (!)
+            {
+
+            }
             size = new Vector2(DetectionWidth, DetectionHeight);
         }
 
@@ -106,7 +110,6 @@ namespace Script.CharacterGroupScript
                 _ => 2.3f
             };
             defaultAtkRate = 0.8f + 1f * 0.17f * EnforceManager.Instance.darkIncreaseAtkSpeed;
-            defaultAtkDistance = 12f;
             projectileSpeed = 1.5f;
             UnitAtkType = UnitAtkTypes.GuideProjectile;
             UnitProperty = UnitProperties.Darkness;

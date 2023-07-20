@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
@@ -14,8 +13,9 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level3Sprite;
         [SerializeField] private Sprite level4Sprite; 
         [SerializeField] private Sprite level5Sprite;
-        private const float DetectionWidth = 1f;
-        private const float DetectionHeight = 8f;
+        private const float DetectionWidth = 0.5f;
+        private float _detectionHeight;
+
 
         public void Awake()
         {
@@ -27,7 +27,7 @@ namespace Script.CharacterGroupScript
             base.Initialize();
             unitGroup = UnitGroups.A;
             UnitProperty = UnitProperties.Divine;
-            UnitGrade = UnitGrades.Green;
+            UnitGrade = UnitGrades.Blue;
             SetLevel(1);
         }
         
@@ -56,15 +56,16 @@ namespace Script.CharacterGroupScript
 
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
+            _detectionHeight = defaultAtkDistance;
             if (EnforceManager.Instance.divineAtkRange)
             {
-                size = new Vector2(DetectionWidth, DetectionHeight * 2);
+                size = new Vector2(DetectionWidth, _detectionHeight * 2);
                 center = transform.position;
             }
             else
             {
-                size = new Vector2(DetectionWidth, DetectionHeight);
-                center = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
+                size = new Vector2(DetectionWidth, _detectionHeight);
+                center = (Vector2)transform.position + Vector2.up * _detectionHeight / 2f;
             }
         }
 
@@ -105,9 +106,10 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
+            var unitLevelDamage = UnitPieceLevel * 20f;
             Type = Types.Character;
             unitGroup = UnitGroups.A;
-            DefaultDamage = 150f * level switch
+            DefaultDamage = unitLevelDamage + 100f * level switch
             {
                 <=  2 => 1f,
                 3 => 1.7f,
@@ -120,7 +122,6 @@ namespace Script.CharacterGroupScript
             UnitAtkType = UnitAtkTypes.Projectile;
             UnitProperty = UnitProperties.Divine;
             UnitEffect = UnitEffects.Restraint;
-            
         }
     }
 }
