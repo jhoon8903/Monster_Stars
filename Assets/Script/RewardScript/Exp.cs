@@ -13,7 +13,7 @@ namespace Script.RewardScript
              // Common Property
              GroupDamage,
              GroupAtkSpeed,
-             Step,
+             LevelUpStep,
              StepDirection,
              Exp,
              CastleRecovery,

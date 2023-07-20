@@ -5,9 +5,9 @@ Purple,1,GroupDamage,18
 Green,2,GroupAtkSpeed,3 4 5
 Blue,2,GroupAtkSpeed,10 11 12
 Purple,2,GroupAtkSpeed,19
-Green,3,Step,3 4 5
-Blue,3,Step,9 10 11
-Purple,3,Step,14 15 16 17
+Green,3,LevelUpStep,3 4 5
+Blue,3,LevelUpStep,9 10 11
+Purple,3,LevelUpStep,14 15 16 17
 Green,6,Exp,5
 Blue,7,Gold,1
 Blue,8,CastleMaxHp,200
