@@ -118,32 +118,24 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
 
         public static void UpdateUnit(UnitIcon unitInstance, CharacterBase character)
         {
-            unitInstance.unitBackGround.GetComponent<Image>().color = character.UnitProperty switch
+            unitInstance.unitBackGround.GetComponent<Image>().color = character.UnitGrade switch
             {
-                CharacterBase.UnitProperties.Divine => new Color(0.9725f, 1f, 0f, 1f),
-                CharacterBase.UnitProperties.Darkness => new Color(0.2402f, 0f, 1f, 1f),
-                CharacterBase.UnitProperties.Fire => new Color(1f, 0.0319f, 0f, 1f),
-                CharacterBase.UnitProperties.Physics => new Color(0.6509f, 0.6509f, 0.6509f, 1f),
-                CharacterBase.UnitProperties.Poison => new Color(0f, 1f, 0.2585f, 1f),
-                CharacterBase.UnitProperties.Water => new Color(0f, 0.6099f, 1f, 1f),
-                CharacterBase.UnitProperties.None => new Color(1f, 1f, 1f, 1f),
-                _ => throw new ArgumentOutOfRangeException(nameof(character.UnitProperty))
+                CharacterBase.UnitGrades.Green => Color.green,
+                CharacterBase.UnitGrades.Blue => Color.blue,
+                CharacterBase.UnitGrades.Purple => Color.magenta,
+                _ => throw new ArgumentOutOfRangeException(nameof(character.UnitGrade))
             };
             
-            unitInstance.unit.GetComponent<Image>().sprite = character.GetSpriteForLevel(character.UnitPieceLevel);
+            unitInstance.unit.GetComponent<Image>().sprite = character.GetSpriteForLevel(character.unitPieceLevel);
             
-            unitInstance.levelBack.color = character.UnitProperty switch
+            unitInstance.levelBack.color = character.UnitGrade switch
             {
-                CharacterBase.UnitProperties.Divine => new Color(0.7064f, 0.7264f, 0f, 1f),
-                CharacterBase.UnitProperties.Darkness => new Color(0.1489f, 0f, 0.6226f, 1f),
-                CharacterBase.UnitProperties.Fire => new Color(0.5188f, 0.06162f, 0f, 1f),
-                CharacterBase.UnitProperties.Physics => new Color(0.4433f, 0.4433f, 0.4433f, 1f),
-                CharacterBase.UnitProperties.Poison => new Color(0f, 0.5566f, 0.1430f, 1f),
-                CharacterBase.UnitProperties.Water => new Color(0f, 0.3231f, 0.5183f, 1f),
-                CharacterBase.UnitProperties.None => new Color(1f, 1f, 1f, 1f),
+                CharacterBase.UnitGrades.Blue => new Color(0.1489f, 0f, 0.6226f, 1f),
+                CharacterBase.UnitGrades.Purple => new Color(0.5188f, 0.06162f, 0f, 1f),
+                CharacterBase.UnitGrades.Green => new Color(0f, 0.5566f, 0.1430f, 1f),
                 _ => throw new ArgumentOutOfRangeException(nameof(character.UnitProperty))
             };
-            unitInstance.unitLevelText.text = $"레벨 {character.UnitPieceLevel}";
+            unitInstance.unitLevelText.text = $"레벨 {character.unitPieceLevel}";
             unitInstance.unitPieceSlider.maxValue = character.CharacterMaxPiece;
             unitInstance.unitPieceSlider.value = character.CharacterPieceCount;
             unitInstance.unitPieceText.text = $"{character.CharacterPieceCount}/{unitInstance.unitPieceSlider.maxValue}";
@@ -185,7 +177,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 case true when characterBase.Selected:
                 {
                     unitInstance.infoBtn.gameObject.SetActive(true);
-                    if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece && CoinsScript.Instance.Coin >= characterBase.UnitPieceLevel * 500)
+                    if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece && CoinsScript.Instance.Coin >= characterBase.unitPieceLevel * 500)
                     {
                         unitInstance.levelUpBtn.gameObject.SetActive(true);
                         unitInstance.removeBtn.gameObject.SetActive(false);
@@ -202,7 +194,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 case true when !characterBase.Selected:
                 {
                     unitInstance.infoBtn.gameObject.SetActive(true);
-                    if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece && CoinsScript.Instance.Coin >= characterBase.UnitPieceLevel * 500)
+                    if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece && CoinsScript.Instance.Coin >= characterBase.unitPieceLevel * 500)
                     {
                         unitInstance.levelUpBtn.gameObject.SetActive(true);
                         unitInstance.removeBtn.gameObject.SetActive(false);

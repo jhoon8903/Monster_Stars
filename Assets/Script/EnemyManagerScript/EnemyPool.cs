@@ -67,7 +67,7 @@ namespace Script.EnemyManagerScript
             }
             enemyBase.isPoison = false;
             enemyBase.isSlow = false;
-            enemyBase.isRestraint = false;
+            enemyBase.isBind = false;
             enemyBase.isBurn = false;
             enemyBase.isBleed = false;
             enemyBase.isDead = false;

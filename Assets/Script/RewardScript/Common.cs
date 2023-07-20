@@ -8,8 +8,26 @@ namespace Script.RewardScript
     {
         private static readonly System.Random Random = new System.Random();
         public int? chosenProperty;
-        public enum Types 
-        { GroupDamage, GroupAtkSpeed, Step, StepLimit, StepDirection , RandomLevelUp, GroupLevelUp, LevelUpPattern, Exp, CastleRecovery, CastleMaxHp, Match5Upgrade, Slow, NextStage, Gold, AddRow}
+
+        public enum Types
+        {
+            GroupDamage, 
+            GroupAtkSpeed, 
+            Step, 
+            StepLimit, 
+            StepDirection , 
+            RandomLevelUp, 
+            GroupLevelUp, 
+            LevelUpPattern, 
+            Exp, 
+            CastleRecovery, 
+            CastleMaxHp, 
+            Match5Upgrade, 
+            Slow,
+            NextStage, 
+            Gold, 
+            AddRow
+        }
         public Types Type { get; private set; }
         private readonly int[] _property;
         public int[] Property 

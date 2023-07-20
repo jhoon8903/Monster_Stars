@@ -44,13 +44,13 @@ namespace Script.RewardScript
 
         //Physical Unit D
         public int physicalAttackSpeedBoost;
-        public bool physicalDamage100Boost;
-        public int physicalDamage9Boost;
+        public bool physicalDamage35Boost;
+        public int physicalDamage6Boost;
         public bool physicalBleedingChance;
         public bool physicalSwordAddition;
         public bool physicalSlowEnemyDamageBoost;
         public bool physicalSwordScaleIncrease;
-        public bool physicalDamage24Boost;
+        public bool physicalDamage18Boost;
 
         //Water2 Unit E
         public int water2DebuffDurationIncrease;
@@ -63,19 +63,19 @@ namespace Script.RewardScript
         public bool water2AttackSpeedBuffToAdjacentAllies;
 
         //Poison Unit F
-        public bool poisonAilmentStun;
+        public int poisonAttackSpeedIncrease;
         public int poisonMaxStackIncrease;
         public int poisonDamageAttackPowerIncrease;
         public bool poisonProjectileIncrease;
         public bool poisonRangeIncrease;
         public bool poisonBleedingEnemyDamageBoost;
-        public bool poisonBleedingEnemyInstantKill;
+        public bool poisonEnemyInstantKill;
         public bool poisonPerHitEffect;
 
         //Fire2 Unit G
         public bool fire2PoisonDamageIncrease;
         public int fire2AttackSpeedIncrease;
-        public bool fire2BleedingDamageIncrease;
+        public bool fire2BurnStackIncrease;
         public int fire2AttackPowerIncrease;
         public bool fire2StunChance;
         public bool fire2SwordSizeIncrease;
@@ -111,14 +111,11 @@ namespace Script.RewardScript
         public List<int> permanentGroupIndex;
 
     }
-
-
     public class EnforceManager : MonoBehaviour
     {
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private GridManager gridManager;
         [SerializeField] private CharacterPool characterPool;
-        [SerializeField] private MatchManager matchManager;
         [RuntimeInitializeOnLoadMethod]
         private static void InitializeOnLoad()
         {
@@ -143,153 +140,270 @@ namespace Script.RewardScript
             }
         }
 
-        [Header("\n\nA 신성: Blue\n")] 
-        [Header("Green / Default: 중독된 적 추가데미지 50%")] public bool divinePoisonDamageBoost;
-        [Header("Green / 7Lv: 속박지속시간 0.1초씩 증가 (최대 0.5초 / 5회)")] public float divineBindDurationBoost; protected internal void DivineBindDurationIncrease()
+        [Header("\n\nA 신성: Blue\n")]
+        // 완료
+        [Header("Green / Default: 중독된 적 추가데미지 25%")] 
+        public bool divinePoisonDamageBoost;
+        // 완료
+        [Header("Green / 7Lv: 속박지속시간 0.1초씩 증가 (최대 0.5초 / 5회)")] 
+        public float divineBindDurationBoost; 
+        protected internal void DivineBindDurationIncrease()
         {
             if (divineBindDurationBoost >= 0.5f) return;
             divineBindDurationBoost += 0.1f;
         }
-        [Header("Green / 3Lv: 속박된 적 공격시 적 제거시 주변 1칸 범위의 100% 폭발데미지 추가")] public bool divineShackledExplosion;
-        [Header("Blue / Default: 5회 공격마다 100% 추가데미지 (투사체 컬러 변경)")] public bool divineFifthAttackBoost;
-        [Header("Blue / 13Lv: 공격력 16% 증가 (최대 6회)")] public int divineAttackBoost; protected internal void DivineAttackDamageIncrease()
+        // 완료
+        [Header("Green / 3Lv: 적 제거시 주변 1칸 범위의 100% 폭발데미지 추가")] 
+        public bool divineShackledExplosion;
+        // 완료
+        [Header("Blue / Default: 5회 공격마다 200% 추가데미지 (투사체 컬러 변경)")] 
+        public bool divineFifthAttackBoost;
+        // 완료
+        [Header("Blue / 13Lv: 공격력 12% 증가 (최대 4회)")] 
+        public int divineAttackBoost; 
+        protected internal void DivineAttackDamageIncrease()
         {   
-            if (divineAttackBoost >=6) return;
+            if (divineAttackBoost >= 4) return;
             divineAttackBoost++;
         }
-        [Header("Purple / Lv5: 속박확률 20% 증가 (20% > 40%)")] public bool divineBindChanceBoost;
-        [Header("Purple / 11Lv: 백어텍 가능")] public bool divineDualAttack;
-        [Header("Purple / 9Lv: 관통 가능 (1회)")] public bool divineProjectilePierce;
+        // 완료
+        [Header("Purple / Lv5: 속박확률 20% 증가 (20% > 40%)")] 
+        public bool divineBindChanceBoost;
+        // 완료
+        [Header("Purple / 11Lv: 백어텍 가능")]
+        public bool divineDualAttack;
+        // 완료
+        [Header("Purple / 9Lv: 관통 가능 (1회)")] 
+        public bool divineProjectilePierce;
         
 
         [Header("\n\nB 어둠: Green\n")]
-        [Header("Green / 5Lv: 10회 공격마다 100% 추가 데미지 (투사체 컬러 변경)")] public bool darkTenthAttackDoubleDamage;
-        [Header("Green / Default: 공격속도 9% 증가 (최대 8회)")] public int darkAttackSpeedBoost; protected internal void DarkAttackSpeedIncrease()
+        [Header("Green / 5Lv: 10회 공격마다 200% 추가 데미지 (투사체 컬러 변경)")] 
+        public bool darkTenthAttackDoubleDamage;
+        [Header("Green / Default: 공격속도 6% 증가 (최대 4회)")] 
+        public int darkAttackSpeedBoost;
+        protected internal void DarkAttackSpeedIncrease()
         {
-            if(darkAttackSpeedBoost >= 8) return;
+            if(darkAttackSpeedBoost >= 4) return;
             darkAttackSpeedBoost++;
         }
-        [Header("Green / 9Lv: 공격력 9% 증가 (최대 6회)")] public int darkAttackPowerBoost; protected internal void DarkAttackDamageIncrease()
+        [Header("Green / 9Lv: 공격력 6% 증가 (최대 4회)")] 
+        public int darkAttackPowerBoost; 
+        protected internal void DarkAttackDamageIncrease()
         {
-            if (darkAttackPowerBoost >= 6) return;
+            if (darkAttackPowerBoost >= 4) return;
             darkAttackPowerBoost++;
         }
-        [Header("Blue / 11Lv: 상태이상 적 공격시 5% 확률로 1000% 추가데미지")] public bool darkStatusAilmentDamageChance;
-        [Header("Blue / 3Lv: 10% 확률로 적 밀침 (1칸)")] public bool darkKnockBackChance;
-        [Header("Blue / Default: 상태이상 적 공격시 20% 추가데미지")] public bool darkStatusAilmentDamageBoost;
-        [Header("Purple / 7Lv: 사거리 1 증가")] public bool darkRangeIncrease;
-        [Header("Purple / 13Lv: 상태이상 적 공격시 1초 이동속도 20% 감소")] public bool darkStatusAilmentSlowEffect;
+        [Header("Blue / 11Lv: 상태이상 적 공격시 10% 확률로 500% 추가데미지")] 
+        public bool darkStatusAilmentDamageChance;
+        [Header("Blue / 3Lv: 10% 확률로 적 밀침 (1칸)")] 
+        public bool darkKnockBackChance;
+        [Header("Blue / Default: 상태이상 적 공격시 15% 추가데미지")] 
+        public bool darkStatusAilmentDamageBoost;
+        [Header("Purple / 7Lv: 사거리 1 증가")] 
+        public bool darkRangeIncrease;
+        [Header("Purple / 13Lv: 상태이상 적 공격시 1초 이동속도 20% 감소")] 
+        public bool darkStatusAilmentSlowEffect;
+
 
         [Header("\n\nC 물: Purple\n")]
-        [Header("Green / 5Lv: 공격속도 7% 증가 (최대 8회)")] public int waterAttackSpeedBoost; protected internal void WaterAttackSpeedIncrease()
+        [Header("Green / 5Lv: 공격속도 6% 증가 (최대 4회)")] 
+        public int waterAttackSpeedBoost; 
+        protected internal void WaterAttackSpeedIncrease()
         {
-            if (waterAttackSpeedBoost >= 8) return;
+            if (waterAttackSpeedBoost >= 4) return;
             waterAttackSpeedBoost++;
         }
-        [Header("Green / Default: 같은 속성(물) 유닛 존재시 둔화 비활성화 500% 추가데미지")] public bool waterAllyDamageBoost;
-        [Header("Blue / 11Lv: 발사체의 갯수가 3개로 변화합니다.")] public bool waterProjectileIncrease;
-        [Header("Blue / 13Lv: 공격력 13% 증가 (최대 6회)")] public int waterAttackBoost; protected internal void WaterAttackDamageIncrease()
+        [Header("Green / Default: 같은 속성(물) 유닛 존재시 둔화 비활성화 200% 추가데미지")] 
+        public bool waterAllyDamageBoost;
+        [Header("Blue / 11Lv: 발사체의 갯수가 2개로 변화합니다.")] 
+        public bool waterProjectileIncrease;
+        [Header("Blue / 13Lv: 공격력 12% 증가 (최대 4회)")] 
+        public int waterAttackBoost; 
+        protected internal void WaterAttackDamageIncrease()
         {
-            if (waterAttackBoost >= 6) return;
+            if (waterAttackBoost >= 4) return;
             waterAttackBoost++;
         }
-        [Header("Blue / 7Lv: 둔화 적 공격 시 20% 추가데미지")] public bool waterSlowEnemyDamageBoost;
-        [Header("Purple / Default: 80회 공격시 모든적 20% 둔화 1초 (웨이브마다 초기화)")] public bool waterGlobalSlowEffect;
-        [Header("Purple / 3Lv: 둔화상태의 적 공격시 20% 확률로 0.5초간 기절")] public bool waterSlowEnemyStunChance;
-        [Header("Purple / 9Lv: 피격당한 적은 5초간 받는데미지 20% 증가")] public bool waterDamageIncreaseDebuff;
+        [Header("Blue / 7Lv: 둔화 적 공격 시 20% 추가데미지")] 
+        public bool waterSlowEnemyDamageBoost;
+        [Header("Purple / Default: 100회 공격시 모든적 20% 둔화 1초 (웨이브마다 초기화)")] 
+        public bool waterGlobalSlowEffect;
+        [Header("Purple / 3Lv: 둔화상태의 적 공격시 40% 확률로 0.1초간 기절")] 
+        public bool waterSlowEnemyStunChance;
+        [Header("Purple / 9Lv: 피격당한 적은 5초간 받는데미지 15% 증가")] 
+        public bool waterDamageIncreaseDebuff;
 
 
         [Header("\n\nD 물리: Green\n")]
-        [Header("Green / 9Lv: 공격속도 9% 증가 (최대 8회)")] public int physicalAttackSpeedBoost; protected internal void PhysicalAttackSpeedIncrease()
+        [Header("Green / 9Lv: 공격속도 7% 증가 (최대 4회)")] 
+        public int physicalAttackSpeedBoost; 
+        protected internal void PhysicalAttackSpeedIncrease()
         {
-            if (physicalAttackSpeedBoost >= 8) return;
+            if (physicalAttackSpeedBoost >= 4) return;
             physicalAttackSpeedBoost++;
         }
-        [Header("Green / Default: 다른 물리 속성 유닛이 존재시 데미지 100% 증가")] public bool physicalDamage100Boost;
-        [Header("Green / 5Lv: 공격력 9% 증가 (최대 8회)")] public int physicalDamage9Boost; protected internal void PhysicalAttackDamageIncrease()
+        [Header("Green / Default: 다른 물리 속성 유닛이 존재시 데미지 35% 증가")] 
+        public bool physicalDamage35Boost;
+        [Header("Green / 5Lv: 공격력 6% 증가 (최대 4회)")] 
+        public int physicalDamage6Boost; 
+        protected internal void PhysicalAttackDamageIncrease()
         {
-            if (physicalDamage9Boost >= 8) return;
-            physicalDamage9Boost++;
+            if (physicalDamage6Boost >= 4) return;
+            physicalDamage6Boost++;
         }
-        [Header("Blue / 11Lv: 공격 시 10% 확률로 2초간 출혈")] public bool physicalBleedingChance;
-        [Header("Blue / Default: 공격 시 검 한자루 추가")] public bool physicalSwordAddition;
-        [Header("BLue / 7Lv: 둔화된 적을 공격할 시 데미지가 20% 증가")] public bool physicalSlowEnemyDamageBoost;
-        [Header("Purple / 3Lv: 검의 크기가 100% 증가")] public bool physicalSwordScaleIncrease;
-        [Header("Purple / 13Lv: 공격력 24% 증가")] public bool physicalDamage24Boost;
+        [Header("Blue / 11Lv: 공격 시 10% 확률로 2초간 출혈")] 
+        public bool physicalBleedingChance;
+        [Header("Blue / Default: 공격 시 검 한자루 추가")] 
+        public bool physicalSwordAddition;
+        [Header("BLue / 7Lv: 둔화된 적을 공격할 시 데미지가 15% 증가")] 
+        public bool physicalSlowEnemyDamageBoost;
+        [Header("Purple / 3Lv: 검의 크기가 100% 증가")] 
+        public bool physicalSwordScaleIncrease;
+        [Header("Purple / 13Lv: 공격력 18% 증가")] 
+        public bool physicalDamage18Boost;
 
 
         [Header("\n\nE 물: Green\n")]
-        [Header("Green / Default: 둔화지속시간 0.2초씩 증가 ( 최대 1초 / 최대 5회)")] public int water2DebuffDurationIncrease;
-        [Header("Green / 7Lv: 공격속도 6% 증가 (최대 8)")] public int water2AttackSpeedIncrease; protected internal void Water2AttackSpeedIncrease()
+        [Header("Green / Default: 둔화지속시간 0.1초씩 증가 (최대 0.5초 / 5회)")] 
+        public int water2DebuffDurationIncrease; 
+        protected internal void Water2DebuffDurationIncrease()
         {
-            if (water2AttackSpeedIncrease >= 8) return;
+            if (water2DebuffDurationIncrease >= 5) return;
+            water2DebuffDurationIncrease++;
+        }
+        [Header("Green / 7Lv: 공격속도 6% 증가 (최대 4회)")] 
+        public int water2AttackSpeedIncrease; 
+        protected internal void Water2AttackSpeedIncrease()
+        {
+            if (water2AttackSpeedIncrease >= 4) return;
             water2AttackSpeedIncrease++;
         }
-        [Header("Green / 9Lv: 출혈 중인 적을 공격 시 10% 확률로 적 기절")] public bool water2StunChanceAgainstBleeding;
-        [Header("Blue / 3Lv: E 유닛이 적을 죽이면 그 위치에서 좌우로 고드름 발사")] public bool water2IceSpikeProjectile;
-        [Header("Blue / 5Lv: 공격력 18% 증가 (최대 6회)")] public int water2AttackPowerIncrease; protected internal void Water2AttackPowerIncrease()
+        [Header("Green / 11Lv: 출혈 중인 적을 공격 시 10% 확률로 0.5초 기절")] 
+        public bool water2StunChanceAgainstBleeding;
+        [Header("Blue / 9Lv: 적을 죽이면 그 위치에서 좌우로 고드름 발사")] 
+        public bool water2IceSpikeProjectile;
+        [Header("Blue / 5Lv: 공격력 12% 증가 (최대 4회)")] 
+        public int water2AttackPowerIncrease; 
+        protected internal void Water2AttackPowerIncrease()
         {
-            if (water2AttackPowerIncrease >= 6) return;
+            if (water2AttackPowerIncrease >= 4) return;
             water2AttackPowerIncrease++;
         }
-        [Header("BLue / 11Lv: 투사체 속도 100% 증가")] public bool water2ProjectileSpeedIncrease;
-        [Header("Purple / Default:둔화 강도 20% 증가 (30% > 50%)")] public bool water2DebuffStrengthIncrease;
-        [Header("Purple / 13Lv: 주위의 아군 공격속도 15% 증가")] public bool water2AttackSpeedBuffToAdjacentAllies;
+        [Header("BLue / 3Lv: 투사체 속도 50% 증가")] 
+        public bool water2ProjectileSpeedIncrease;
+        [Header("Purple / Default: 둔화 강도 10% 증가 (30% => 40%)")] 
+        public bool water2DebuffStrengthIncrease;
+        [Header("Purple / 13Lv: 주위의 아군 공격속도 10% 증가")] 
+        public bool water2AttackSpeedBuffToAdjacentAllies;
 
 
         [Header("\n\nF 독: Green\n")]
-        [Header("Green / Default: 상태이상에 걸린 적 공격시 0.2초 기절")] public bool poisonAilmentStun;
-        [Header("Green / 3Lv: 중독최대중첩 수 1회 증가 (최대 5)")] public int poisonMaxStackIncrease;
-        [Header("Green / 11Lv: 중독 데미지 10% 증가 (최대 50% / 최대 5회)")] public int poisonDamageAttackPowerIncrease;
-        [Header("Blue / 5Lv: 투사체 1개 증가")] public bool poisonProjectileIncrease;
-        [Header("Blue / 9Lv: 사거리 1칸 증가")] public bool poisonRangeIncrease;
-        [Header("Blue / 13Lv: 출혈중인 적 공격시 50% 데미지 증가")] public bool poisonBleedingEnemyDamageBoost;
-        [Header("Purple / Default: 출혈중인 적의 체력이 10% 미만이면 즉사")] public bool poisonBleedingEnemyInstantKill;
-        [Header("Purple / 7Lv: F유닛 적 타격6 2초 중독")] public bool poisonPerHitEffect;
+        [Header("Green / Default: 공격속도 6% 증가 (최대4회)")] 
+        public int poisonAttackSpeedIncrease; 
+        protected internal void PoisonAttackSpeedIncrease()
+        {
+            if(poisonAttackSpeedIncrease >= 4) return;
+            poisonAttackSpeedIncrease++;
+        }
+        [Header("Green / 3Lv: 중독최대중첩 수 1회 증가 (최대 5)")] 
+        public int poisonMaxStackIncrease; 
+        protected internal void PoisonMaxStackIncrease()
+        {
+            if (poisonMaxStackIncrease >= 5) return;
+            poisonMaxStackIncrease++;
+        }
+        [Header("Green / 11Lv: 중독 데미지 10% 증가 (최대 40% / 최대 3회)")] 
+        public int poisonDamageAttackPowerIncrease; 
+        protected internal void PoisonDamageAttackPowerIncrease()
+        {
+            if (poisonDamageAttackPowerIncrease >= 3) return;
+            poisonDamageAttackPowerIncrease++;
+        }
+        [Header("Blue / 5Lv: 투사체 1개 증가")] 
+        public bool poisonProjectileIncrease;
+        [Header("Blue / 9Lv: 사거리 1칸 증가")] 
+        public bool poisonRangeIncrease;
+        [Header("Blue / 13Lv: 출혈중인 적 공격시 50% 데미지 증가")] 
+        public bool poisonBleedingEnemyDamageBoost;
+        [Header("Purple / Default: 중독 된 적의 체력이 7% 미만이면 즉사")] 
+        public bool poisonEnemyInstantKill;
+        [Header("Purple / 7Lv: 초당 10% 데미지를 가하는 중족을 4초간 발생")] 
+        public bool poisonPerHitEffect;
 
 
         [Header("\n\nG 불: Blue\n")]
-        [Header(" Green/ 3Lv: 독에 걸린 적 공격시 25% 데미지 추가")] public bool fire2PoisonDamageIncrease;
-        [Header(" Green/ 9Lv: 공격속도 7% 증가 (최대 8회)")] public int fire2AttackSpeedIncrease; protected internal void Fire2AttackSpeedIncrease()
+        [Header("Green/ 3Lv: 독에 걸린 적 공격시 15% 데미지 추가")] 
+        public bool fire2PoisonDamageIncrease;
+        [Header("Green/ 9Lv: 공격속도 6% 증가 (최대 4회)")] 
+        public int fire2AttackSpeedIncrease; 
+        protected internal void Fire2AttackSpeedIncrease()
         {
-            if (fire2AttackSpeedIncrease >= 8) return;
+            if (fire2AttackSpeedIncrease >= 4) return;
             fire2AttackSpeedIncrease++;
         }
-        [Header(" Green/ 11Lv: 출혈중인 적 공격시 25% 데미지 추가")] public bool fire2BleedingDamageIncrease;
-        [Header(" Blue/ Default: 공격력 12% 증가 (최대 6회)")] public int fire2AttackPowerIncrease; protected internal void Fire2AttackPowerIncrease()
+        [Header("Green/ 11Lv: 화상 최대 중첩 3회 증가")] 
+        public bool fire2BurnStackIncrease;
+        [Header("Blue/ Default: 공격력 12% 증가 (최대 4회)")] 
+        public int fire2AttackPowerIncrease; 
+        protected internal void Fire2AttackPowerIncrease()
         {
-            if (fire2AttackPowerIncrease >= 6) return;
+            if (fire2AttackPowerIncrease >= 4) return;
             fire2AttackPowerIncrease++;
         }
-        [Header(" Blue/ 13Lv: 독에 걸린 적 공격시 20% 확률로 0.5초 기절")] public bool fire2StunChance;
-        [Header(" Blue/ 5Lv: 검의 크기가 100% 증가")] public bool fire2SwordSizeIncrease;
-        [Header(" Purple/ Default: 사거리가 1칸 증가")] public bool fire2RangeIncrease;
-        [Header(" Purple/ 7Lv: 더이상 화상을 발새시키지 않는 대신 100% 데미지 추가")] public bool fire2NoBurnDamageIncrease;
+        [Header("Blue/ 13Lv: 독에 걸린 적 공격시 20% 확률로 0.5초 기절")] 
+        public bool fire2StunChance;
+        [Header("Blue/ 5Lv: 검의 크기가 100% 증가")] 
+        public bool fire2SwordSizeIncrease;
+        [Header("Purple/ Default: 사거리가 1칸 증가")] 
+        public bool fire2RangeIncrease;
+        [Header("Purple/ 7Lv: 더이상 화상을 발새시키지 않는 대신 150% 데미지 추가")] 
+        public bool fire2NoBurnDamageIncrease;
 
 
         [Header("\n\nH 불: Blue\n")]
-        [Header(" Green/ Default: 화상 중첩수 증가 (최대 3회)")] public int fireImageOverlapIncrease;
-        [Header(" Green/ 9Lv: 공격속도 9% 증가 (최대 8회)")] public int fireAttackSpeedBoost; protected internal void FireAttackSpeedBoost()
+        [Header("Green/ Default: 화상 중첩수 증가 (최대 5회)")] 
+        public int fireImageOverlapIncrease; 
+        protected internal void FireOverLapIncrease()
         {
-            if (fireAttackSpeedBoost >= 8) return;
+            if (fireImageOverlapIncrease >= 5) return;
+            fireImageOverlapIncrease++;
+        }
+        [Header("Green/ 9Lv: 공격속도 6% 증가 (최대 4회)")] 
+        public int fireAttackSpeedBoost; 
+        protected internal void FireAttackSpeedBoost()
+        {
+            if (fireAttackSpeedBoost >= 4) return;
             fireAttackSpeedBoost++;
         }
-        [Header(" Green/ 11Lv: 둔화중인 적을 공격시 15% 데미지 추가")] public bool fireSlowEnemyDamageBoost;
-        [Header(" Blue/ 3Lv: 투사체 속도가 100% 증가, 반드시 명중")] public bool fireProjectileSpeedIncrease;
-        [Header(" Blue/ 7Lv: 화상에 걸린 적 제거시 주변 1칸 범위의 100% 폭발데미지 추가")] public bool fireBurnedEnemyExplosion;
-        [Header(" Purple/ 5Lv: 적 적중시 가장 가까운적에게 투사체 튕김")] public bool fireProjectileBounceDamage;
-        [Header(" Purple/ Default: 적을 공격하면 5초간 화상 초당 20% 데미지")] public bool fireBurnPerAttackEffect;
-        [Header(" Purple/ 13Lv: 투사체가 튕기는 횟수 증가")] public bool fireProjectileBounceIncrease;
+        [Header("Green/ 11Lv: 둔화중인 적을 공격시 10% 데미지 추가")]
+        public bool fireSlowEnemyDamageBoost;
+        [Header("Blue/ 3Lv: 투사체 속도가 100% 증가, 반드시 명중")] 
+        public bool fireProjectileSpeedIncrease;
+        [Header("Blue/ 7Lv: 화상에 걸린 적 제거시 주변 1칸 범위의 200% 폭발데미지 추가")] 
+        public bool fireBurnedEnemyExplosion;
+        [Header("Purple/ 5Lv: 적 적중시 가장 가까운적에게 투사체 튕김")] 
+        public bool fireProjectileBounceDamage;
+        [Header("Purple/ Default: 적을 공격하면 5초간 화상 초당 10% 데미지")] 
+        public bool fireBurnPerAttackEffect;
+        [Header("Purple/ 13Lv: 투사체가 튕기는 횟수 증가")] 
+        public bool fireProjectileBounceIncrease;
        
-       
+        
         [Header("\n\n공통강화\n")] 
-        [Header("가로줄 추가")] public int addRowCount; public delegate void AddRowDelegate(); public event AddRowDelegate OnAddRow; protected internal void AddRow()
+        [Header("가로줄 추가")] 
+        public int addRowCount; 
+        public delegate void AddRowDelegate(); 
+        public event AddRowDelegate OnAddRow; 
+        protected internal void AddRow()
         {
             addRowCount += 1;
             gridManager.AddRow();
             OnAddRow?.Invoke();
         }
-        [Header("적 이동속도 감소 15%증가 (최대 45%)")] public int slowCount; protected internal void SlowCount()
+        [Header("적 이동속도 감소 15%증가 (최대 45%)")] 
+        public int slowCount; 
+        protected internal void SlowCount()
         {
             slowCount++;
             if (slowCount >= 4)
@@ -297,40 +411,61 @@ namespace Script.RewardScript
                 slowCount = 4;
             }
         }
-        [Header("대각선 이동")] public bool diagonalMovement;
-        [Header("Castle 체력회복 200")] public bool recoveryCastle;
-        [Header("Castle 최대체력 증가 (최대 2000)")] public float castleMaxHp; protected internal void IncreaseCastleMaxHp()
+        [Header("대각선 이동")] 
+        public bool diagonalMovement;
+        [Header("Castle 체력회복 200")] 
+        public bool recoveryCastle;
+        [Header("Castle 최대체력 증가 (최대 2000)")] 
+        public float castleMaxHp; 
+        protected internal void IncreaseCastleMaxHp()
         {
             castleMaxHp += 200f;
             castleManager.IncreaseMaxHp();
         }
-        [Header("보드 초기화 케릭터")] public int highLevelCharacterCount = 6; public int selectedCount; protected internal void NextCharacterUpgrade(int moveCharacterCount)
+        [Header("보드 초기화 케릭터")] 
+        public int highLevelCharacterCount = 6; 
+        public int selectedCount; 
+        protected internal void NextCharacterUpgrade(int moveCharacterCount)
         {
             highLevelCharacterCount += moveCharacterCount;
             selectedCount += 1;
         }
-        [Header("경험치 증가량")] public int expPercentage; protected internal void IncreaseExpBuff(int increaseAmount)
+        [Header("경험치 증가량")] 
+        public int expPercentage; 
+        protected internal void IncreaseExpBuff(int increaseAmount)
         {
             expPercentage += increaseAmount;
         }
-        [Header("최대 이동횟수 증가")] public int permanentIncreaseMovementCount; protected internal void PermanentIncreaseMoveCount(int increaseStepAmount)
+        [Header("최대 이동횟수 증가")] 
+        public int permanentIncreaseMovementCount; 
+        protected internal void PermanentIncreaseMoveCount(int increaseStepAmount)
         {
             permanentIncreaseMovementCount += increaseStepAmount;
         }
-        [Header("5매치 가운데 유닛 추가 레벨증가")] public bool match5Upgrade;
-        [Header("전체 공격력 증가 (%)")] public float increaseAtkDamage = 1f; protected internal void IncreaseGroupDamage(int increaseAmount)
+        [Header("5매치 가운데 유닛 추가 레벨증가")] 
+        public bool match5Upgrade;
+        [Header("전체 공격력 증가 (%)")] 
+        public float increaseAtkDamage = 1f; 
+        protected internal void IncreaseGroupDamage(int increaseAmount)
         {
             increaseAtkDamage += increaseAmount;
         }
-        [Header("전체 공격속도 증가 (%)")] public float increaseAtkRate = 1f; protected internal void IncreaseGroupRate(float increaseRateAmount)
+        [Header("전체 공격속도 증가 (%)")] 
+        public float increaseAtkRate = 1f; 
+        protected internal void IncreaseGroupRate(float increaseRateAmount)
         {
             increaseAtkRate += increaseRateAmount;
         }
-        [Header("이동횟수 추가")] public int rewardMoveCount; protected internal void RewardMoveCount(int moveCount)
+        [Header("이동횟수 추가")] 
+        public int rewardMoveCount; 
+        protected internal void RewardMoveCount(int moveCount)
         {
             rewardMoveCount += moveCount;
         }
-        [Header("추가코인")] public bool addGold; public int addGoldCount; protected internal void AddGold()
+        [Header("추가코인")] 
+        public bool addGold; 
+        public int addGoldCount; 
+        protected internal void AddGold()
         {
             addGoldCount++;
         }
@@ -411,13 +546,13 @@ namespace Script.RewardScript
                 waterDamageIncreaseDebuff = waterDamageIncreaseDebuff,
                 //Physical Unit D
                 physicalAttackSpeedBoost = physicalAttackSpeedBoost,
-                physicalDamage100Boost = physicalDamage100Boost,
-                physicalDamage9Boost = physicalDamage9Boost,
+                physicalDamage35Boost = physicalDamage35Boost,
+                physicalDamage6Boost = physicalDamage6Boost,
                 physicalBleedingChance = physicalBleedingChance,
                 physicalSwordAddition = physicalSwordAddition,
                 physicalSlowEnemyDamageBoost = physicalSlowEnemyDamageBoost,
                 physicalSwordScaleIncrease = physicalSwordScaleIncrease,
-                physicalDamage24Boost = physicalDamage24Boost,
+                physicalDamage18Boost = physicalDamage18Boost,
                 //Water2 Unit E
                 water2DebuffDurationIncrease = water2DebuffDurationIncrease,
                 water2AttackSpeedIncrease = water2AttackSpeedIncrease,
@@ -428,18 +563,18 @@ namespace Script.RewardScript
                 water2DebuffStrengthIncrease = water2DebuffStrengthIncrease,
                 water2AttackSpeedBuffToAdjacentAllies = water2AttackSpeedBuffToAdjacentAllies,
                 //Poison Unit F
-                poisonAilmentStun = poisonAilmentStun,
+                poisonAttackSpeedIncrease = poisonAttackSpeedIncrease,
                 poisonMaxStackIncrease = poisonMaxStackIncrease,
                 poisonDamageAttackPowerIncrease = poisonDamageAttackPowerIncrease,
                 poisonProjectileIncrease = poisonProjectileIncrease,
                 poisonRangeIncrease = poisonRangeIncrease,
                 poisonBleedingEnemyDamageBoost = poisonBleedingEnemyDamageBoost,
-                poisonBleedingEnemyInstantKill = poisonBleedingEnemyInstantKill,
+                poisonEnemyInstantKill = poisonEnemyInstantKill,
                 poisonPerHitEffect = poisonPerHitEffect,
                 //Fire2 Unit G
                 fire2PoisonDamageIncrease = fire2PoisonDamageIncrease,
                 fire2AttackSpeedIncrease = fire2AttackSpeedIncrease,
-                fire2BleedingDamageIncrease = fire2BleedingDamageIncrease,
+                fire2BurnStackIncrease = fire2BurnStackIncrease,
                 fire2AttackPowerIncrease = fire2AttackPowerIncrease,
                 fire2StunChance = fire2StunChance,
                 fire2SwordSizeIncrease = fire2SwordSizeIncrease,
@@ -511,13 +646,13 @@ namespace Script.RewardScript
             waterDamageIncreaseDebuff = data.waterDamageIncreaseDebuff;
             //Physical Unit D
             physicalAttackSpeedBoost = data.physicalAttackSpeedBoost;
-            physicalDamage100Boost = data.physicalDamage100Boost;
-            physicalDamage9Boost = data.physicalDamage9Boost;
+            physicalDamage35Boost = data.physicalDamage35Boost;
+            physicalDamage6Boost = data.physicalDamage6Boost;
             physicalBleedingChance = data.physicalBleedingChance;
             physicalSwordAddition = data.physicalSwordAddition;
             physicalSlowEnemyDamageBoost = data.physicalSlowEnemyDamageBoost;
             physicalSwordScaleIncrease = data.physicalSwordScaleIncrease;
-            physicalDamage24Boost = data.physicalDamage24Boost;
+            physicalDamage18Boost = data.physicalDamage18Boost;
             //Water2 Unit E
             water2DebuffDurationIncrease = data.water2DebuffDurationIncrease;
             water2AttackSpeedIncrease = data.water2AttackSpeedIncrease;
@@ -528,18 +663,18 @@ namespace Script.RewardScript
             water2DebuffStrengthIncrease = data.water2DebuffStrengthIncrease;
             water2AttackSpeedBuffToAdjacentAllies = data.water2AttackSpeedBuffToAdjacentAllies;
             //Poison Unit F
-            poisonAilmentStun = data.poisonAilmentStun;
+            poisonAttackSpeedIncrease = data.poisonAttackSpeedIncrease;
             poisonMaxStackIncrease = data.poisonMaxStackIncrease;
             poisonDamageAttackPowerIncrease = data.poisonDamageAttackPowerIncrease;
             poisonProjectileIncrease = data.poisonProjectileIncrease;
             poisonRangeIncrease = data.poisonRangeIncrease;
             poisonBleedingEnemyDamageBoost = data.poisonBleedingEnemyDamageBoost;
-            poisonBleedingEnemyInstantKill = data.poisonBleedingEnemyInstantKill;
+            poisonEnemyInstantKill = data.poisonEnemyInstantKill;
             poisonPerHitEffect = data.poisonPerHitEffect;
             //Fire2 Unit G
             fire2PoisonDamageIncrease = data.fire2PoisonDamageIncrease;
             fire2AttackSpeedIncrease = data.fire2AttackSpeedIncrease;
-            fire2BleedingDamageIncrease = data.fire2BleedingDamageIncrease;
+            fire2BurnStackIncrease = data.fire2BurnStackIncrease;
             fire2AttackPowerIncrease = data.fire2AttackPowerIncrease;
             fire2StunChance = data.fire2StunChance;
             fire2SwordSizeIncrease = data.fire2SwordSizeIncrease;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Script.CharacterGroupScript;
+using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
 using UnityEngine;
@@ -25,13 +26,16 @@ namespace Script.WeaponScriptGroup
             {
                 _enemyTransform = enemy.transform.position;
             }
-
             var position = transform.position;
             _distance = Vector3.Distance(position, _enemyTransform);
-            var velocityDirection = (_enemyTransform.y > position.y) ? 1 : -1;
-            _rigidbody2D.velocity = new Vector2(0, Speed * velocityDirection);
+            _rigidbody2D.velocity = new Vector2(0, Speed);
 
-            transform.rotation = Quaternion.Euler(0, 0, _enemyTransform.y > transform.position.y ? 0 : 180);
+            if (EnforceManager.Instance.divineFifthAttackBoost && CharacterBase.GetComponent<UnitA>().atkCount == 5)
+            {
+                transform.GetComponent<SpriteRenderer>().color = Color.cyan;
+                Damage *= 2f;
+                CharacterBase.GetComponent<UnitA>().atkCount = 0;
+            }
 
             yield return new WaitForSeconds(_distance / Speed);
             StopUseWeapon(gameObject);
@@ -44,8 +48,8 @@ namespace Script.WeaponScriptGroup
             HitEnemy.Add(enemy);
             AtkEffect(enemy);
             var damage = DamageCalculator(Damage, enemy);
-            enemy.ReceiveDamage(enemy,damage);
-            switch (EnforceManager.Instance.divinePenetrate)
+            enemy.ReceiveDamage(enemy,damage,CharacterBase.UnitGroups.A);
+            switch (EnforceManager.Instance.divineProjectilePierce)
             {
                 case true when HitEnemy.Count == 2:
                     StopUseWeapon(gameObject);

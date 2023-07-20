@@ -9,9 +9,9 @@ namespace Script.CharacterManagerScript
 {
     public class CharacterBase : MonoBehaviour
     {
-        protected internal int UnitPieceLevel { get; private set; } = 1;
+        public int unitPieceLevel = 1;
         protected internal int CharacterPieceCount { get; set; }
-        protected internal int CharacterMaxPiece => UnitPieceLevel * 5;
+        protected internal int CharacterMaxPiece => unitPieceLevel * 5;
         public enum UnitGrades { Green, Blue, Purple }
         protected internal UnitGrades UnitGrade;
         protected internal bool UnLock { get; private set; }
@@ -83,8 +83,8 @@ namespace Script.CharacterManagerScript
         public IEnumerator UnitLevelUp()
         {
             CharacterPieceCount -= CharacterMaxPiece;
-            CoinsScript.Instance.Coin -= UnitPieceLevel * 500;
-            UnitPieceLevel++;
+            CoinsScript.Instance.Coin -= unitPieceLevel * 500;
+            unitPieceLevel++;
             yield return null;
         }
 

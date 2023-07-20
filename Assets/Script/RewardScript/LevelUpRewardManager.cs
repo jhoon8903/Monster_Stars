@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,7 +35,6 @@ namespace Script.RewardScript
         [SerializeField] private CharacterManager characterManager;
         private ExpData _selectedPowerUp;
 
-
         private static void ProcessExpReward(ExpData selectedReward)
         {
             switch (selectedReward.Type)
@@ -45,7 +45,7 @@ namespace Script.RewardScript
                 case ExpData.Types.GroupAtkSpeed:
                     EnforceManager.Instance.IncreaseGroupRate(selectedReward.Property[0]);
                     break;
-                case ExpData.Types.Step:
+                case ExpData.Types.LevelUpStep:
                     EnforceManager.Instance.RewardMoveCount(selectedReward.Property[0]);
                     break;
                 case ExpData.Types.StepDirection:
@@ -69,132 +69,200 @@ namespace Script.RewardScript
                 case ExpData.Types.Gold:
                     EnforceManager.Instance.addGold = true;
                     break;
-                case ExpData.Types.DivineActiveRestraint:
-                    EnforceManager.Instance.activeRestraint = true;
+               case ExpData.Types.DivinePoisonDamageBoost:
+                   EnforceManager.Instance.divinePoisonDamageBoost = true;
+                   break;
+                case ExpData.Types.DivineBindDurationBoost:
+                    EnforceManager.Instance.DivineBindDurationIncrease();
                     break;
-                case ExpData.Types.DivineRestraintTime:
-                    EnforceManager.Instance.increaseRestraintTime += 0.1f;
+                case ExpData.Types.DivineShackledExplosion:
+                    EnforceManager.Instance.divineShackledExplosion = true;
                     break;
-                case ExpData.Types.DivinePenetrate:
-                    EnforceManager.Instance.divinePenetrate = true;
+                case ExpData.Types.DivineFifthAttackBoost:
+                    EnforceManager.Instance.divineFifthAttackBoost = true;
                     break;
-                case ExpData.Types.DivineAtkRange:
-                    EnforceManager.Instance.divineAtkRange = true;
+                case ExpData.Types.DivineAttackBoost:
+                    EnforceManager.Instance.DivineAttackDamageIncrease();
                     break;
-                case ExpData.Types.DivinePoisonAdditionalDamage:
-                    EnforceManager.Instance.divinePoisonAdditionalDamage = true;
+                case ExpData.Types.DivineBindChanceBoost:
+                    EnforceManager.Instance.divineBindChanceBoost = true;
                     break;
-                case ExpData.Types.PhysicAdditionalWeapon:
-                    EnforceManager.Instance.physicAdditionalWeapon = true;
+                case ExpData.Types.DivineDualAttack:
+                    EnforceManager.Instance.divineDualAttack = true;
                     break;
-                case ExpData.Types.PhysicIncreaseWeaponScale:
-                    EnforceManager.Instance.physicIncreaseWeaponScale = true;
+                case ExpData.Types.DivineProjectilePierce:
+                    EnforceManager.Instance.divineProjectilePierce = true;
                     break;
-                case ExpData.Types.PhysicSlowAdditionalDamage:
-                    EnforceManager.Instance.physicSlowAdditionalDamage = true;
+                case ExpData.Types.DarkTenthAttackDoubleDamage:
+                    EnforceManager.Instance.darkTenthAttackDoubleDamage = true;
                     break;
-                case ExpData.Types.PhysicAtkSpeed:
-                    EnforceManager.Instance.IncreasePhysicAtkSpeed();
+                case ExpData.Types.DarkAttackSpeedBoost:
+                    EnforceManager.Instance.DarkAttackSpeedIncrease();
                     break;
-                case ExpData.Types.PhysicIncreaseDamage:
-                    EnforceManager.Instance.PhysicIncreaseDamage();
+                case ExpData.Types.DarkAttackPowerBoost:
+                    EnforceManager.Instance.DarkAttackDamageIncrease();
                     break;
-                case ExpData.Types.Physics2AdditionalBleedingLayer:
-                    EnforceManager.Instance.Physics2AdditionalBleedingLayer();
+                case ExpData.Types.DarkStatusAilmentDamageChance:
+                    EnforceManager.Instance.darkStatusAilmentDamageChance = true;
                     break;
-                case ExpData.Types.Physics2ActivateBleed:
-                    EnforceManager.Instance.physics2ActivateBleed = true;
+                case ExpData.Types.DarkKnockBackChance:
+                    EnforceManager.Instance.darkKnockBackChance = true;
                     break;
-                case ExpData.Types.Physics2AdditionalAtkSpeed:
-                    EnforceManager.Instance.Physics2AdditionalAtkSpeed();
+                case ExpData.Types.DarkStatusAilmentDamageBoost:
+                    EnforceManager.Instance.darkStatusAilmentDamageBoost = true;
                     break;
-                case ExpData.Types.Physics2AdditionalProjectile:
-                    EnforceManager.Instance.physics2AdditionalProjectile = true; 
+                case ExpData.Types.DarkRangeIncrease:
+                    EnforceManager.Instance.darkRangeIncrease = true;
                     break;
-                case ExpData.Types.Physics2ProjectilePenetration:
-                    EnforceManager.Instance.physics2ProjectilePenetration = true;
+                case ExpData.Types.DarkStatusAilmentSlowEffect:
+                    EnforceManager.Instance.darkStatusAilmentSlowEffect = true;
                     break;
-                case ExpData.Types.PoisonDoubleAtk:
-                    EnforceManager.Instance.poisonDoubleAtk = true;
+                case ExpData.Types.WaterAttackSpeedBoost:
+                    EnforceManager.Instance.WaterAttackSpeedIncrease();
                     break;
-                case ExpData.Types.PoisonRestraintAdditionalDamage:
-                    EnforceManager.Instance.poisonRestraintAdditionalDamage = true;
+                case ExpData.Types.WaterAllyDamageBoost:
+                    EnforceManager.Instance.waterAllyDamageBoost = true;
                     break;
-                case ExpData.Types.PoisonActivate:
-                    EnforceManager.Instance.activatePoison = true;
+                case ExpData.Types.WaterProjectileIncrease:
+                    EnforceManager.Instance.waterProjectileIncrease = true;
                     break;
-                case ExpData.Types.PoisonInstantKill:
-                    EnforceManager.Instance.poisonInstantKill = true;
+                case ExpData.Types.WaterAttackBoost:
+                    EnforceManager.Instance.WaterAttackDamageIncrease();
                     break;
-                case ExpData.Types.PoisonIncreaseAtkRange:
-                    EnforceManager.Instance.poisonIncreaseAtkRange = true;
+                case ExpData.Types.WaterSlowEnemyDamageBoost:
+                    EnforceManager.Instance.waterSlowEnemyDamageBoost = true;
                     break;
-                case ExpData.Types.PoisonOverlapping:
-                    EnforceManager.Instance.AddPoisonOverlapping();
+                case ExpData.Types.WaterGlobalSlowEffect:
+                    EnforceManager.Instance.waterGlobalSlowEffect = true;
                     break;
-                case ExpData.Types.WaterBurnAdditionalDamage:
-                    EnforceManager.Instance.waterBurnAdditionalDamage = true;
+                case ExpData.Types.WaterSlowEnemyStunChance:
+                    EnforceManager.Instance.waterSlowEnemyStunChance = true;
                     break;
-                case ExpData.Types.WaterIncreaseSlowPower:
-                    EnforceManager.Instance.waterIncreaseSlowPower = true;
+                case ExpData.Types.WaterDamageIncreaseDebuff:
+                    EnforceManager.Instance.waterDamageIncreaseDebuff = true;
                     break;
-                case ExpData.Types.WaterRestraintIncreaseDamage:
-                    EnforceManager.Instance.waterRestraintIncreaseDamage = true;
+                case ExpData.Types.PhysicalAttackSpeedBoost:
+                    EnforceManager.Instance.PhysicalAttackSpeedIncrease();
                     break;
-                case ExpData.Types.WaterIncreaseDamage:
-                    EnforceManager.Instance.WaterIncreaseDamage();
+                case ExpData.Types.PhysicalDamage35Boost:
+                    EnforceManager.Instance.physicalDamage35Boost = true;
                     break;
-                case ExpData.Types.WaterSideAttack:
-                    EnforceManager.Instance.waterSideAttack = true;
+                case ExpData.Types.PhysicalDamage6Boost:
+                    EnforceManager.Instance.PhysicalAttackDamageIncrease();
                     break;
-                case ExpData.Types.Water2IncreaseDamage:
-                    EnforceManager.Instance.Water2IncreaseDamage();
+                case ExpData.Types.PhysicalBleedingChance:
+                    EnforceManager.Instance.physicalBleedingChance = true;
                     break;
-                case ExpData.Types.Water2BleedAdditionalRestraint:
-                    EnforceManager.Instance.water2BleedAdditionalRestraint = true;
+                case ExpData.Types.PhysicalSwordAddition:
+                    EnforceManager.Instance.physicalSwordAddition = true;
                     break;
-                case ExpData.Types.Water2IncreaseSlowTime:
-                    EnforceManager.Instance.Water2IncreaseSlowTime();
+                case ExpData.Types.PhysicalSlowEnemyDamageBoost:
+                    EnforceManager.Instance.physicalSlowEnemyDamageBoost = true;
                     break;
-                case ExpData.Types.Water2BackAttack:
-                    EnforceManager.Instance.water2BackAttack = true;
+                case ExpData.Types.PhysicalSwordScaleIncrease:
+                    EnforceManager.Instance.physicalSwordScaleIncrease = true;
                     break;
-                case ExpData.Types.Water2AdditionalProjectile:
-                    EnforceManager.Instance.water2AdditionalProjectile = true;
+                case ExpData.Types.PhysicalDamage18Boost:
+                    EnforceManager.Instance.physicalDamage18Boost = true;
                     break;
-                case ExpData.Types.FireBleedingAdditionalDamage:
-                    EnforceManager.Instance.fireBleedingAdditionalDamage = true;
+                case ExpData.Types.Water2DebuffDurationIncrease:
+                    EnforceManager.Instance.Water2DebuffDurationIncrease();
                     break;
-                case ExpData.Types.FireIncreaseDamage:
-                    EnforceManager.Instance.FireIncreaseDamage();
+                case ExpData.Types.Water2AttackSpeedIncrease:
+                    EnforceManager.Instance.Water2AttackSpeedIncrease();
                     break;
-                case ExpData.Types.FirePoisonAdditionalStun:
-                    EnforceManager.Instance.firePoisonAdditionalStun = true;
+                case ExpData.Types.Water2StunChanceAgainstBleeding:
+                    EnforceManager.Instance.water2StunChanceAgainstBleeding = true;
                     break;
-                case ExpData.Types.FireIncreaseAtkRange:
-                    EnforceManager.Instance.fireIncreaseAtkRange = true;
+                case ExpData.Types.Water2IceSpikeProjectile:
+                    EnforceManager.Instance.water2IceSpikeProjectile = true;
                     break;
-                case ExpData.Types.FireDeleteBurnIncreaseDamage:
-                    EnforceManager.Instance.fireDeleteBurnIncreaseDamage = true;
+                case ExpData.Types.Water2AttackPowerIncrease:
+                    EnforceManager.Instance.Water2AttackPowerIncrease();
                     break;
-                case ExpData.Types.DarkSlowAdditionalDamage:
-                    EnforceManager.Instance.darkSlowAdditionalDamage = true;
+                case ExpData.Types.Water2ProjectileSpeedIncrease:
+                    EnforceManager.Instance.water2ProjectileSpeedIncrease = true;
                     break;
-                case ExpData.Types.DarkBleedAdditionalDamage:
-                    EnforceManager.Instance.darkBleedAdditionalDamage = true;
+                case ExpData.Types.Water2DebuffStrengthIncrease:
+                    EnforceManager.Instance.water2DebuffStrengthIncrease = true;
                     break;
-                case ExpData.Types.DarkProjectileBounce:
-                    EnforceManager.Instance.darkProjectileBounce = true;
+                case ExpData.Types.Water2AttackSpeedBuffToAdjacentAllies:
+                    EnforceManager.Instance.water2AttackSpeedBuffToAdjacentAllies = true;
                     break;
-                case ExpData.Types.DarkAdditionalBounce:
-                    EnforceManager.Instance.AddBounceCount();
+                case ExpData.Types.PoisonAttackSpeedIncrease:
+                    EnforceManager.Instance.PoisonAttackSpeedIncrease();
                     break;
-                case ExpData.Types.DarkIncreaseAtkSpeed:
-                    EnforceManager.Instance.DarkIncreaseAtkSpeed();
+                case ExpData.Types.PoisonMaxStackIncrease:
+                    EnforceManager.Instance.PoisonMaxStackIncrease();
                     break;
-                default: 
-                    Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}"); 
+                case ExpData.Types.PoisonDamageAttackPowerIncrease:
+                    EnforceManager.Instance.PoisonDamageAttackPowerIncrease();
                     break;
+                case ExpData.Types.PoisonProjectileIncrease:
+                    EnforceManager.Instance.poisonProjectileIncrease = true;
+                    break;
+                case ExpData.Types.PoisonRangeIncrease:
+                    EnforceManager.Instance.poisonRangeIncrease = true;
+                    break;
+                case ExpData.Types.PoisonBleedingEnemyDamageBoost:
+                    EnforceManager.Instance.poisonBleedingEnemyDamageBoost = true;
+                    break;
+                case ExpData.Types.PoisonEnemyInstantKill:
+                    EnforceManager.Instance.poisonEnemyInstantKill = true;
+                    break;
+                case ExpData.Types.PoisonPerHitEffect:
+                    EnforceManager.Instance.poisonPerHitEffect = true;
+                    break;
+                case ExpData.Types.Fire2PoisonDamageIncrease:
+                    EnforceManager.Instance.fire2PoisonDamageIncrease = true;
+                    break;
+                case ExpData.Types.Fire2AttackSpeedIncrease:
+                    EnforceManager.Instance.Fire2AttackSpeedIncrease();
+                    break;
+                case ExpData.Types.Fire2BurnStackIncrease:
+                    EnforceManager.Instance.fire2BurnStackIncrease = true;
+                    break;
+                case ExpData.Types.Fire2AttackPowerIncrease:
+                    EnforceManager.Instance.Fire2AttackPowerIncrease();
+                    break;
+                case ExpData.Types.Fire2StunChance:
+                    EnforceManager.Instance.fire2StunChance = true;
+                    break;
+                case ExpData.Types.Fire2SwordSizeIncrease:
+                    EnforceManager.Instance.fire2SwordSizeIncrease = true;
+                    break;
+                case ExpData.Types.Fire2RangeIncrease:
+                    EnforceManager.Instance.fire2RangeIncrease = true;
+                    break;
+                case ExpData.Types.Fire2NoBurnDamageIncrease:
+                    EnforceManager.Instance.fire2NoBurnDamageIncrease = true;
+                    break;
+                case ExpData.Types.FireImageOverlapIncrease:
+                    EnforceManager.Instance.FireOverLapIncrease();
+                    break;
+                case ExpData.Types.FireAttackSpeedBoost:
+                    EnforceManager.Instance.FireAttackSpeedBoost();
+                    break;
+                case ExpData.Types.FireSlowEnemyDamageBoost:
+                    EnforceManager.Instance.fireSlowEnemyDamageBoost = true;
+                    break;
+                case ExpData.Types.FireProjectileSpeedIncrease:
+                    EnforceManager.Instance.fireProjectileSpeedIncrease = true;
+                    break;
+                case ExpData.Types.FireBurnedEnemyExplosion:
+                    EnforceManager.Instance.fireBurnedEnemyExplosion = true;
+                    break;
+                case ExpData.Types.FireProjectileBounceDamage:
+                    EnforceManager.Instance.fireProjectileBounceDamage = true;
+                    break;
+                case ExpData.Types.FireBurnPerAttackEffect:
+                    EnforceManager.Instance.fireBurnPerAttackEffect = true;
+                    break;
+                case ExpData.Types.FireProjectileBounceIncrease:
+                    EnforceManager.Instance.fireProjectileBounceIncrease = true;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
             selectedReward.ChosenProperty = null;
         }
@@ -261,6 +329,15 @@ namespace Script.RewardScript
         {
             return characterManager.characterList.Any(unit => unit.unitGroup == group);
         }
+        private int UnitPieceLevel(CharacterBase.UnitGroups group)
+        {
+            var unitLevel = new int();
+            foreach (var unit in characterManager.characterList.Where(unit => unit.unitGroup == group))
+            {
+                unitLevel = unit.unitPieceLevel;
+            }
+            return unitLevel;
+        }
         private bool IsValidOption (ExpData powerUp, ICollection<int> selectedCodes)
         {
             if (selectedCodes.Contains(powerUp.Code)) return false;
@@ -289,189 +366,317 @@ namespace Script.RewardScript
                 case ExpData.Types.CastleMaxHp:
                     if (EnforceManager.Instance.castleMaxHp >= 1000) return false;
                     break;
-               case ExpData.Types.DivineActiveRestraint:
-                   if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
-                   if (EnforceManager.Instance.activeRestraint) return false;
-                   break;
-                case ExpData.Types.DivineRestraintTime:
+                // Unit A
+                case ExpData.Types.DivinePoisonDamageBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
-                    if (!EnforceManager.Instance.activeRestraint) return false;
+                    if (EnforceManager.Instance.divinePoisonDamageBoost) return false;
                     break;
-                case ExpData.Types.DivinePenetrate:
+                case ExpData.Types.DivineBindDurationBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
-                    if (EnforceManager.Instance.divinePenetrate) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 7) return false;
+                    if (EnforceManager.Instance.divineBindDurationBoost >= 0.5) return false;
                     break;
-                case ExpData.Types.DivineAtkRange:
+                case ExpData.Types.DivineShackledExplosion:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
-                    if (EnforceManager.Instance.divineAtkRange) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 3) return false;
+                    if (EnforceManager.Instance.divineShackledExplosion) return false;
                     break;
-                case ExpData.Types.DivinePoisonAdditionalDamage:
+                case ExpData.Types.DivineFifthAttackBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
-                    if (!EnforceManager.Instance.activatePoison) return false;
-                    if (EnforceManager.Instance.divinePoisonAdditionalDamage) return false;
+                    if (EnforceManager.Instance.divineFifthAttackBoost) return false;
                     break;
-                case ExpData.Types.PhysicAdditionalWeapon:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
-                    if (EnforceManager.Instance.physicAdditionalWeapon) return false;
-                    break;
-                case ExpData.Types.PhysicIncreaseWeaponScale:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
-                    if (EnforceManager.Instance.physicIncreaseWeaponScale) return false;
-                    break;
-                case ExpData.Types.PhysicSlowAdditionalDamage:
-                    if (!(HasUnitInGroup(CharacterBase.UnitGroups.D) && HasUnitInGroup(CharacterBase.UnitGroups.E)) ||
-                        HasUnitInGroup(CharacterBase.UnitGroups.D) && HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
-                    if (EnforceManager.Instance.physicSlowAdditionalDamage) return false;
-                    break;
-                case ExpData.Types.PhysicAtkSpeed:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
-                    if (EnforceManager.Instance.increasePhysicAtkSpeed >= 15) return false;
-                    break;
-                case ExpData.Types.PhysicIncreaseDamage:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
-                    if (EnforceManager.Instance.physicIncreaseDamage) return false;
-                    break;
-                case ExpData.Types.Physics2AdditionalBleedingLayer:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
-                    if (!EnforceManager.Instance.physics2ActivateBleed) return false;
-                    if (EnforceManager.Instance.physics2AdditionalBleedingLayer >= 5) return false;
-                    break;
-                case ExpData.Types.Physics2ActivateBleed:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
-                    if (EnforceManager.Instance.physics2ActivateBleed) return false;
-                    break;
-                case ExpData.Types.Physics2AdditionalAtkSpeed:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
-                    if (EnforceManager.Instance.physics2AdditionalAtkSpeed >= 15) return false;
-                    break;
-                case ExpData.Types.Physics2AdditionalProjectile:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
-                    if (EnforceManager.Instance.physics2AdditionalProjectile) return false;
-                    break;
-                case ExpData.Types.Physics2ProjectilePenetration:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
-                    if (EnforceManager.Instance.physics2ProjectilePenetration) return false;
-                    break;
-                case ExpData.Types.PoisonDoubleAtk:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
-                    if (EnforceManager.Instance.poisonDoubleAtk) return false;
-                    break;
-                case ExpData.Types.PoisonRestraintAdditionalDamage:
-                    if (!((HasUnitInGroup(CharacterBase.UnitGroups.C) && HasUnitInGroup(CharacterBase.UnitGroups.H) && HasUnitInGroup(CharacterBase.UnitGroups.F) && EnforceManager.Instance.water2BleedAdditionalRestraint) 
-                          || (HasUnitInGroup(CharacterBase.UnitGroups.A) && HasUnitInGroup(CharacterBase.UnitGroups.F)))) return false;
-                    if (!EnforceManager.Instance.activeRestraint) return false;
-                    if (EnforceManager.Instance.poisonRestraintAdditionalDamage) return false;
-                    break;
-                case ExpData.Types.PoisonActivate:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
-                    if (EnforceManager.Instance.activatePoison) return false;
-                    break;
-                case ExpData.Types.PoisonInstantKill:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
-                    if (!EnforceManager.Instance.activatePoison) return false;
-                    if (EnforceManager.Instance.poisonInstantKill) return false;
-                    break;
-                case ExpData.Types.PoisonIncreaseAtkRange:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
-                    if (EnforceManager.Instance.poisonIncreaseAtkRange) return false;
-                    break;
-                case ExpData.Types.PoisonOverlapping:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
-                    if (!EnforceManager.Instance.activatePoison) return false;
-                    break;
-                case ExpData.Types.WaterBurnAdditionalDamage:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
-                    if (EnforceManager.Instance.waterBurnAdditionalDamage) return false;
-                    if (EnforceManager.Instance.fireDeleteBurnIncreaseDamage) return false;
-                    break;
-                case ExpData.Types.WaterIncreaseSlowPower:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
-                    if (EnforceManager.Instance.waterIncreaseSlowPower) return false;
-                    break;
-                case ExpData.Types.WaterIncreaseDamage:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
-                    break;
-                case ExpData.Types.WaterRestraintIncreaseDamage:
+                case ExpData.Types.DivineAttackBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
-                    if (!EnforceManager.Instance.activeRestraint) return false;
-                    if (EnforceManager.Instance.waterRestraintIncreaseDamage) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 13) return false;
+                    if (EnforceManager.Instance.divineAttackBoost >= 4) return false;
                     break;
-                case ExpData.Types.WaterSideAttack:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
-                    if (EnforceManager.Instance.waterSideAttack) return false;
+                case ExpData.Types.DivineBindChanceBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 5) return false;
+                    if (EnforceManager.Instance.divineBindChanceBoost) return false;
                     break;
-                case ExpData.Types.Water2BleedAdditionalRestraint:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
-                    if (!EnforceManager.Instance.activeRestraint) return false;
-                    if ( EnforceManager.Instance.water2BleedAdditionalRestraint) return false;
+                case ExpData.Types.DivineDualAttack:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 11) return false;
+                    if (EnforceManager.Instance.divineDualAttack) return false;
                     break;
-                case ExpData.Types.Water2IncreaseDamage:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
+                case ExpData.Types.DivineProjectilePierce:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 9) return false;
+                    if (EnforceManager.Instance.divineProjectilePierce) return false;
                     break;
-                case ExpData.Types.Water2IncreaseSlowTime:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
-                    if (EnforceManager.Instance.water2IncreaseSlowTime >= 5) return false;
-                    break;
-                case ExpData.Types.Water2BackAttack:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
-                    if (EnforceManager.Instance.water2BackAttack) return false;
-                    break;
-                case ExpData.Types.Water2AdditionalProjectile:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
-                    if (EnforceManager.Instance.water2AdditionalProjectile) return false;
-                    break;
-                case ExpData.Types.FireBleedingAdditionalDamage:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
-                    if (!EnforceManager.Instance.physics2ActivateBleed) return false;
-                    if ( EnforceManager.Instance.fireBleedingAdditionalDamage) return false;
-                    break;
-                case ExpData.Types.FireIncreaseDamage:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
-                    if (EnforceManager.Instance.fireIncreaseDamage >= 15) return false;
-                    break;
-                case ExpData.Types.FirePoisonAdditionalStun:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
-                    if (!EnforceManager.Instance.activatePoison) return false;
-                    if (EnforceManager.Instance.firePoisonAdditionalStun) return false;
-                    break;
-                case ExpData.Types.FireIncreaseAtkRange:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
-                    if (EnforceManager.Instance.fireIncreaseAtkRange) return false;
-                    break;
-                case ExpData.Types.FireDeleteBurnIncreaseDamage:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
-                    if (EnforceManager.Instance.fireDeleteBurnIncreaseDamage)  return false;
-                    break;
-                case ExpData.Types.DarkSlowAdditionalDamage:
-                    if (!((HasUnitInGroup(CharacterBase.UnitGroups.B) && HasUnitInGroup(CharacterBase.UnitGroups.E)) ||
-                          HasUnitInGroup(CharacterBase.UnitGroups.B) && HasUnitInGroup(CharacterBase.UnitGroups.C))) return false;
-                    if ( EnforceManager.Instance.darkSlowAdditionalDamage ) return false;
-                    break;
-                case ExpData.Types.DarkBleedAdditionalDamage:
+                // Unit B
+                case ExpData.Types.DarkTenthAttackDoubleDamage:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.B) < 5) return false;
+                    if (EnforceManager.Instance.darkTenthAttackDoubleDamage) return false;
+                    break;
+                case ExpData.Types.DarkAttackSpeedBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
+                    if (EnforceManager.Instance.darkAttackSpeedBoost >= 4) return false;
+                    break;
+                case ExpData.Types.DarkAttackPowerBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.B) < 9) return false;
+                    if (EnforceManager.Instance.darkAttackPowerBoost >= 4) return false;
+                    break;
+                case ExpData.Types.DarkStatusAilmentDamageChance:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.B) < 11) return false;
+                    if (EnforceManager.Instance.darkStatusAilmentDamageChance) return false;
+                    break;
+                case ExpData.Types.DarkKnockBackChance:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.B) < 3) return false;
+                    if (EnforceManager.Instance.darkKnockBackChance) return false;
+                    break;
+                case ExpData.Types.DarkStatusAilmentDamageBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
+                    if (EnforceManager.Instance.darkStatusAilmentDamageBoost) return false;
+                    break;
+                case ExpData.Types.DarkRangeIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.B) < 7) return false;
+                    if (EnforceManager.Instance.darkRangeIncrease) return false;
+                    break;
+                case ExpData.Types.DarkStatusAilmentSlowEffect:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.B) < 13) return false;
+                    if (EnforceManager.Instance.darkStatusAilmentSlowEffect) return false;
+                    break;
+                // Unit C
+                case ExpData.Types.WaterAttackSpeedBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.C) < 5) return false;
+                    if (EnforceManager.Instance.waterAttackSpeedBoost >= 4) return false;
+                    break;
+                case ExpData.Types.WaterAllyDamageBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
+                    if (EnforceManager.Instance.waterAllyDamageBoost) return false;
+                    break;
+                case ExpData.Types.WaterProjectileIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.C) < 11) return false;
+                    if (EnforceManager.Instance.waterProjectileIncrease) return false;
+                    break;
+                case ExpData.Types.WaterAttackBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.C) < 13) return false;
+                    if (EnforceManager.Instance.waterAttackBoost >= 4) return false;
+                    break;
+                case ExpData.Types.WaterSlowEnemyDamageBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.C) < 7) return false;
+                    if (EnforceManager.Instance.waterSlowEnemyDamageBoost) return false;
+                    break;
+                case ExpData.Types.WaterGlobalSlowEffect:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
+                    if (EnforceManager.Instance.waterGlobalSlowEffect) return false;
+                    break;
+                case ExpData.Types.WaterSlowEnemyStunChance:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.C) < 3) return false;
+                    if (EnforceManager.Instance.waterSlowEnemyStunChance) return false;
+                    break;
+                case ExpData.Types.WaterDamageIncreaseDebuff:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.C) < 9) return false;
+                    if (EnforceManager.Instance.waterDamageIncreaseDebuff) return false;
+                    break;
+                // //Unit D
+                case ExpData.Types.PhysicalAttackSpeedBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.D) < 9) return false;
+                    if (EnforceManager.Instance.physicalAttackSpeedBoost >= 4) return false;
+                    break;
+                case ExpData.Types.PhysicalDamage35Boost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
+                    if (EnforceManager.Instance.physicalDamage35Boost) return false;
+                    break;
+                case ExpData.Types.PhysicalDamage6Boost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.D) < 5) return false;
+                    if (EnforceManager.Instance.physicalDamage6Boost >= 4) return false;
+                    break;
+                case ExpData.Types.PhysicalBleedingChance:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.D) < 11) return false;
+                    if (EnforceManager.Instance.physicalBleedingChance) return false;
+                    break;
+                case ExpData.Types.PhysicalSwordAddition:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
+                    if (EnforceManager.Instance.physicalSwordAddition) return false;
+                    break;
+                case ExpData.Types.PhysicalSlowEnemyDamageBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.D) < 7) return false;
+                    break;
+                case ExpData.Types.PhysicalSwordScaleIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.D) < 3) return false;
+                    break;
+                case ExpData.Types.PhysicalDamage18Boost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.D) < 13) return false;
+                    break;
+                // //Unit E
+                case ExpData.Types.Water2DebuffDurationIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
+                    if (EnforceManager.Instance.water2DebuffDurationIncrease >= 5) return false;
+                    break;
+                case ExpData.Types.Water2AttackSpeedIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.E) < 7) return false;
+                    if (EnforceManager.Instance.water2AttackSpeedIncrease >= 4) return false;
+                    break;
+                case ExpData.Types.Water2StunChanceAgainstBleeding:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.E) < 11) return false;
+                    if (EnforceManager.Instance.water2StunChanceAgainstBleeding) return false;
+                    break;
+                case ExpData.Types.Water2IceSpikeProjectile:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.E) < 9) return false;
+                    if (EnforceManager.Instance.water2IceSpikeProjectile) return false;
+                    break;
+                case ExpData.Types.Water2AttackPowerIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.E) < 5) return false;
+                    if (EnforceManager.Instance.water2AttackPowerIncrease >= 4) return false;
+                    break;
+                case ExpData.Types.Water2ProjectileSpeedIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.E) < 3) return false;
+                    if (EnforceManager.Instance.water2ProjectileSpeedIncrease) return false;
+                    break;
+                case ExpData.Types.Water2DebuffStrengthIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
+                    if (EnforceManager.Instance.water2DebuffStrengthIncrease) return false;
+                    break;
+                case ExpData.Types.Water2AttackSpeedBuffToAdjacentAllies:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.E) < 13) return false;
+                    if (EnforceManager.Instance.water2AttackSpeedBuffToAdjacentAllies) return false;
+                    break;
+                // //Unit F
+                case ExpData.Types.PoisonAttackSpeedIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
+                    if (EnforceManager.Instance.poisonAttackSpeedIncrease >= 4) return false;
+                    break;
+                case ExpData.Types.PoisonMaxStackIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.F) < 3) return false;
+                    if (EnforceManager.Instance.poisonMaxStackIncrease >= 5) return false;
+                    break;
+                case ExpData.Types.PoisonDamageAttackPowerIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.F) < 11) return false;
+                    if (EnforceManager.Instance.poisonDamageAttackPowerIncrease >= 3) return false;
+                    break;
+                case ExpData.Types.PoisonProjectileIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.F) < 5) return false;
+                    if (EnforceManager.Instance.poisonProjectileIncrease) return false;
+                    break;
+                case ExpData.Types.PoisonRangeIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.F) < 9) return false;
+                    if (EnforceManager.Instance.poisonRangeIncrease) return false;
+                    break;
+                case ExpData.Types.PoisonBleedingEnemyDamageBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.F) < 13) return false;
+                    if (EnforceManager.Instance.poisonBleedingEnemyDamageBoost) return false;
+                    break;
+                case ExpData.Types.PoisonEnemyInstantKill:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
+                    if (EnforceManager.Instance.poisonEnemyInstantKill) return false;
+                    break;
+                case ExpData.Types.PoisonPerHitEffect:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.F) < 7) return false;
+                    if (EnforceManager.Instance.poisonPerHitEffect) return false;
+                    break;
+                // //Unit G
+                case ExpData.Types.Fire2PoisonDamageIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.G) < 3) return false;
+                    if (EnforceManager.Instance.fire2PoisonDamageIncrease) return false;
+                    break;
+                case ExpData.Types.Fire2AttackSpeedIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.G) < 9) return false;
+                    if (EnforceManager.Instance.fire2AttackSpeedIncrease >= 4) return false;
+                    break;
+                case ExpData.Types.Fire2BurnStackIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.G) < 11) return false;
+                    if (EnforceManager.Instance.fire2BurnStackIncrease) return false;
+                    break;
+                case ExpData.Types.Fire2AttackPowerIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
+                    if (EnforceManager.Instance.fire2AttackPowerIncrease >= 4) return false;
+                    break;
+                case ExpData.Types.Fire2StunChance:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.G) < 13) return false;
+                    if (EnforceManager.Instance.fire2StunChance) return false;
+                    break;
+                case ExpData.Types.Fire2SwordSizeIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.G) < 5) return false;
+                    if (EnforceManager.Instance.fire2SwordSizeIncrease) return false;
+                    break;
+                case ExpData.Types.Fire2RangeIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
+                    if (EnforceManager.Instance.fire2RangeIncrease) return false;
+                    break;
+                case ExpData.Types.Fire2NoBurnDamageIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.G) < 7) return false;
+                    if (EnforceManager.Instance.fire2NoBurnDamageIncrease) return false;
+                    break;
+                // //Unit H
+                case ExpData.Types.FireImageOverlapIncrease:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
-                    if (!EnforceManager.Instance.physics2ActivateBleed) return false;
-                    if (EnforceManager.Instance.darkBleedAdditionalDamage ) return false;
+                    if (EnforceManager.Instance.fireImageOverlapIncrease >= 5) return false;
                     break;
-                case ExpData.Types.DarkProjectileBounce:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
-                    if (EnforceManager.Instance.darkProjectileBounce) return false;
+                case ExpData.Types.FireAttackSpeedBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.H) < 9) return false;
+                    if (EnforceManager.Instance.fireAttackSpeedBoost >= 4) return false;
                     break;
-                case ExpData.Types.DarkIncreaseAtkSpeed:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
-                    if (EnforceManager.Instance.darkIncreaseAtkSpeed >= 15) return false;
+                case ExpData.Types.FireSlowEnemyDamageBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.H) < 11) return false;
+                    if (EnforceManager.Instance.fireSlowEnemyDamageBoost) return false;
                     break;
-                case ExpData.Types.DarkAdditionalBounce:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
-                    if (!EnforceManager.Instance.darkProjectileBounce) return false;
+                case ExpData.Types.FireProjectileSpeedIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.H) < 3) return false;
+                    if (EnforceManager.Instance.fireProjectileSpeedIncrease) return false;
+                    break;
+                case ExpData.Types.FireBurnedEnemyExplosion:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.H) < 7) return false;
+                    if (EnforceManager.Instance.fireBurnedEnemyExplosion) return false;
+                    break;
+                case ExpData.Types.FireProjectileBounceDamage:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.H) < 5) return false;
+                    if (EnforceManager.Instance.fireProjectileBounceDamage) return false;
+                    break;
+                case ExpData.Types.FireBurnPerAttackEffect:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
+                    if (EnforceManager.Instance.fireBurnPerAttackEffect) return false;
+                    break;
+                case ExpData.Types.FireProjectileBounceIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.H) < 13) return false;
+                    if (EnforceManager.Instance.fireProjectileBounceIncrease) return false;
                     break;
                 default:
-                    return true;
+                    throw new ArgumentOutOfRangeException();
             }
             return true;
         }
@@ -503,7 +708,7 @@ namespace Script.RewardScript
                 case ExpData.Types.StepDirection:
                     powerText.text = "대각선 이동 가능"; 
                     break;
-                case ExpData.Types.Step:
+                case ExpData.Types.LevelUpStep:
                     powerText.text = $"다음 Wave 이동횟수 {p} 증가";
                     break;
                 case ExpData.Types.Exp:
@@ -524,129 +729,142 @@ namespace Script.RewardScript
                 case ExpData.Types.Gold:
                     powerText.text = "5 매치시 골드 1추가 획득";
                     break;
-                case ExpData.Types.DivineActiveRestraint:
-                    powerText.text = "[A그룹(신성)] 적중된 적은 20% 확률로 속박 1초";
+                case ExpData.Types.DivinePoisonDamageBoost:
+                    powerText.text = "중독상태의 적을 공격 시 50% 추가데미지";
                     break;
-                case ExpData.Types.DivineRestraintTime:
-                    powerText.text = "[A그룹(신성)] 속박 지속시간이 0.1 초 증가";
+                case ExpData.Types.DivineBindDurationBoost:
+                    powerText.text = $"속박 지속시간 0.1초 증가 (현재: 0.{EnforceManager.Instance.divineBindDurationBoost}초 / 최대 0.5초)";
                     break;
-                case ExpData.Types.DivinePenetrate:
-                    powerText.text = "[A그룹(신성)] 투사체가 적을 1회 관통합니다."; 
+                case ExpData.Types.DivineShackledExplosion:
+                    powerText.text = "속박중인 적이 제거되면 1칸 범위의 100%의 폭발 데미지를 입힘";
                     break;
-                case ExpData.Types.DivineAtkRange:
-                    powerText.text = "[A그룹(신성)] 뒤쪽 방향 공격이 가능";
+                case ExpData.Types.DivineFifthAttackBoost:
+                    powerText.text = "공격 5회마다 추가 데미지 100% 발사체 등장";
                     break;
-                case ExpData.Types.DivinePoisonAdditionalDamage:
-                    powerText.text = "[A그룹(신성)] 중독상태의 적에게 30% 공격력이 증가";
+                case ExpData.Types.DivineAttackBoost:
+                    powerText.text =
+                        $"데미지 16% 증가 (현재: {16 * EnforceManager.Instance.divineAttackBoost}% 증가 {EnforceManager.Instance.divineAttackBoost}회 / 최대 96% (8회))";
                     break;
-                case ExpData.Types.DarkSlowAdditionalDamage:
-                    powerText.text = "[B그룹(어둠)] 둔화상태의 적에게 추가 데미지 50%";
+                case ExpData.Types.DivineBindChanceBoost:
                     break;
-                case ExpData.Types.DarkBleedAdditionalDamage:
-                    powerText.text = "[B그룹(어둠)] 출혈상태의 적에게 추가 데미지 200%";
+                case ExpData.Types.DivineDualAttack:
                     break;
-                case ExpData.Types.DarkProjectileBounce:
-                    powerText.text = "[B그룹(어둠)] 투사체가 튕겨 적을 타격합니다.";
+                case ExpData.Types.DivineProjectilePierce:
                     break;
-                case ExpData.Types.DarkAdditionalBounce:
-                    powerText.text = "[B그룹(어둠)] 투사체가 튕기는 횟수가 1증가합니다.";
+                case ExpData.Types.DarkTenthAttackDoubleDamage:
                     break;
-                case ExpData.Types.DarkIncreaseAtkSpeed:
-                    powerText.text = "[B그룹(어둠)] 공격속도 17% 증가 (최대 255%)";
+                case ExpData.Types.DarkAttackSpeedBoost:
                     break;
-                case ExpData.Types.Water2IncreaseDamage:
-                    powerText.text = "[C그룹(물)] 공격력 9% 증가";
+                case ExpData.Types.DarkAttackPowerBoost:
                     break;
-                case ExpData.Types.Water2BleedAdditionalRestraint:
-                    powerText.text = "[C그룹(물)] 출혈상태의 적에게 20% 확률로 속박 시킴";
+                case ExpData.Types.DarkStatusAilmentDamageChance:
                     break;
-                case ExpData.Types.Water2IncreaseSlowTime:
-                    powerText.text = "[C그룹(물)] 둔화 지속시간 1초 증가 (최대 6초)";
+                case ExpData.Types.DarkKnockBackChance:
                     break;
-                case ExpData.Types.Water2BackAttack:
-                    powerText.text = "[C그룹(물)] 뒤쪽으로 공격이 가능해짐";
+                case ExpData.Types.DarkStatusAilmentDamageBoost:
                     break;
-                case ExpData.Types.Water2AdditionalProjectile:
-                    powerText.text = "[C그룹(물)] 발사체 1개 추가";
+                case ExpData.Types.DarkRangeIncrease:
                     break;
-                case ExpData.Types.PhysicAdditionalWeapon:
-                    powerText.text = "[D그룹(물리)] 검 1개 추가";
+                case ExpData.Types.DarkStatusAilmentSlowEffect:
                     break;
-                case ExpData.Types.PhysicIncreaseWeaponScale:
-                    powerText.text = "[D그룹(물리)] 검의 크기가 100% 증가합니다.";
+                case ExpData.Types.WaterAttackSpeedBoost:
                     break;
-                case ExpData.Types.PhysicSlowAdditionalDamage:
-                    powerText.text = "[D그룹(물리)] 둔화된 적에게 데비지 100% 증가";
+                case ExpData.Types.WaterAllyDamageBoost:
                     break;
-                case ExpData.Types.PhysicAtkSpeed:
-                    powerText.text = "[D그룹(물리)] 공격속도가 20% 증가";
+                case ExpData.Types.WaterProjectileIncrease:
                     break;
-                case ExpData.Types.PhysicIncreaseDamage:
-                    powerText.text = "[D그룹(물리)] 적을 죽이면 적 1기당\n모든 D그룹의 데미지가 5% 증가 (해당 웨이브만 적용)";
+                case ExpData.Types.WaterAttackBoost:
                     break;
-                case ExpData.Types.WaterIncreaseSlowPower:
-                    powerText.text = "[E그룹(물)] 둔화강도 50% 증가";
+                case ExpData.Types.WaterSlowEnemyDamageBoost:
                     break;
-                case ExpData.Types.WaterRestraintIncreaseDamage:
-                    powerText.text = "[E그룹(물)] 속박된 적을 공격시 100% 추가데미지";
+                case ExpData.Types.WaterGlobalSlowEffect:
                     break;
-                case ExpData.Types.WaterIncreaseDamage:
-                    powerText.text = "[E그룹(물)] 공격력 20%씩 증가";
+                case ExpData.Types.WaterSlowEnemyStunChance:
                     break;
-                case ExpData.Types.WaterBurnAdditionalDamage:
-                    powerText.text = "[E그룹(물)] 화상상태의 적에게 추가 데미지 200%";
+                case ExpData.Types.WaterDamageIncreaseDebuff:
                     break;
-                case ExpData.Types.WaterSideAttack:
-                    powerText.text = "[E그룹(물)] 공격시, 투사체가 좌우 동시 발사";
+                case ExpData.Types.PhysicalAttackSpeedBoost:
                     break;
-                case ExpData.Types.PoisonActivate:
-                    powerText.text = "[F그룹(독)] 중독 효과부여";
+                case ExpData.Types.PhysicalDamage35Boost:
                     break;
-                case ExpData.Types.PoisonOverlapping:
-                    powerText.text = "[F그룹(독)] 중독 중첩 1 증가";
+                case ExpData.Types.PhysicalDamage6Boost:
                     break;
-                case ExpData.Types.PoisonDoubleAtk:
-                    powerText.text = "[F그룹(독)] 공격이 더블어택으로 변경";
+                case ExpData.Types.PhysicalBleedingChance:
                     break;
-                case ExpData.Types.PoisonRestraintAdditionalDamage:
-                    powerText.text = "[F그룹(독)] 속박된 적에게 가하는 데미지 200% 증가";
+                case ExpData.Types.PhysicalSwordAddition:
                     break;
-                case ExpData.Types.PoisonInstantKill:
-                    powerText.text = "[F그룹(독)] 체력 15% 미만의 적은 15% 확률로 즉사";
+                case ExpData.Types.PhysicalSlowEnemyDamageBoost:
                     break;
-                case ExpData.Types.PoisonIncreaseAtkRange:
-                    powerText.text = "[F그룹(독)] 사거리 1칸 증가";
+                case ExpData.Types.PhysicalSwordScaleIncrease:
                     break;
-                case ExpData.Types.FireBleedingAdditionalDamage:
-                    powerText.text = "[G그룹(불)] 출혈상태의 적에게 추가 데미지 150%";
+                case ExpData.Types.PhysicalDamage18Boost:
                     break;
-                case ExpData.Types.FireIncreaseDamage:
-                    powerText.text = "[G그룹(불)] 데미지 15% 증가 (최대 225%)";
+                case ExpData.Types.Water2DebuffDurationIncrease:
                     break;
-                case ExpData.Types.FirePoisonAdditionalStun:
-                    powerText.text = "[G그룹(불)] 중독상태의 적을 공격시 20% 확률로 기절";
+                case ExpData.Types.Water2AttackSpeedIncrease:
                     break;
-                case ExpData.Types.FireIncreaseAtkRange:
-                    powerText.text = "[G그룹(불)] 사거리 1칸 증가";
+                case ExpData.Types.Water2StunChanceAgainstBleeding:
                     break;
-                case ExpData.Types.FireDeleteBurnIncreaseDamage:
-                    powerText.text = "[G그룹(불)] 화상효과를 비활성화 하고, 추가 데미지 200% 증가";
+                case ExpData.Types.Water2IceSpikeProjectile:
                     break;
-                case ExpData.Types.Physics2ActivateBleed:
-                    powerText.text = "[H그룹(물리)] 출혈 효과 적용 (초당 Damage의 10%)";
+                case ExpData.Types.Water2AttackPowerIncrease:
                     break;
-                case ExpData.Types.Physics2AdditionalBleedingLayer:
-                    powerText.text = "[H그룹(물리)] 출혈 중첩 1 증가";
+                case ExpData.Types.Water2ProjectileSpeedIncrease:
                     break;
-                case ExpData.Types.Physics2AdditionalAtkSpeed:
-                    powerText.text = "[H그룹(물리)] 공격속도 17% 증가 (최대 255% / 15회)";
+                case ExpData.Types.Water2DebuffStrengthIncrease:
                     break;
-                case ExpData.Types.Physics2AdditionalProjectile:
-                    powerText.text = "[그룹H(물리)] 발사체 1개 추가"; 
+                case ExpData.Types.Water2AttackSpeedBuffToAdjacentAllies:
                     break;
-                case ExpData.Types.Physics2ProjectilePenetration:
-                    powerText.text = "[그룹H(물리)] 관통 1회 증가"; 
+                case ExpData.Types.PoisonAttackSpeedIncrease:
                     break;
+                case ExpData.Types.PoisonMaxStackIncrease:
+                    break;
+                case ExpData.Types.PoisonDamageAttackPowerIncrease:
+                    break;
+                case ExpData.Types.PoisonProjectileIncrease:
+                    break;
+                case ExpData.Types.PoisonRangeIncrease:
+                    break;
+                case ExpData.Types.PoisonBleedingEnemyDamageBoost:
+                    break;
+                case ExpData.Types.PoisonEnemyInstantKill:
+                    break;
+                case ExpData.Types.PoisonPerHitEffect:
+                    break;
+                case ExpData.Types.Fire2PoisonDamageIncrease:
+                    break;
+                case ExpData.Types.Fire2AttackSpeedIncrease:
+                    break;
+                case ExpData.Types.Fire2BurnStackIncrease:
+                    break;
+                case ExpData.Types.Fire2AttackPowerIncrease:
+                    break;
+                case ExpData.Types.Fire2StunChance:
+                    break;
+                case ExpData.Types.Fire2SwordSizeIncrease:
+                    break;
+                case ExpData.Types.Fire2RangeIncrease:
+                    break;
+                case ExpData.Types.Fire2NoBurnDamageIncrease:
+                    break;
+                case ExpData.Types.FireImageOverlapIncrease:
+                    break;
+                case ExpData.Types.FireAttackSpeedBoost:
+                    break;
+                case ExpData.Types.FireSlowEnemyDamageBoost:
+                    break;
+                case ExpData.Types.FireProjectileSpeedIncrease:
+                    break;
+                case ExpData.Types.FireBurnedEnemyExplosion:
+                    break;
+                case ExpData.Types.FireProjectileBounceDamage:
+                    break;
+                case ExpData.Types.FireBurnPerAttackEffect:
+                    break;
+                case ExpData.Types.FireProjectileBounceIncrease:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
             powerCode.text = $"{powerUp.Code}";
             btnBadge.sprite = powerUp.BtnColor;

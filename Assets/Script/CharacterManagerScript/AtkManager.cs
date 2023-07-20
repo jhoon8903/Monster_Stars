@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Script.CharacterGroupScript;
 using Script.RewardScript;
 using Script.WeaponScriptGroup;
 using UnityEngine;
@@ -92,7 +93,14 @@ namespace Script.CharacterManagerScript
             switch (unitGroup)
             {
                 case CharacterBase.UnitGroups.A:
-                    Attack(new AttackData(unit, WeaponsPool.WeaponType.Spear));
+                    if (EnforceManager.Instance.divineDualAttack)
+                    {
+                        StartCoroutine(DualAttack(new AttackData(unit, WeaponsPool.WeaponType.Spear)));
+                    }
+                    else
+                    {
+                        Attack(new AttackData(unit, WeaponsPool.WeaponType.Spear));
+                    }
                     break;
                 case CharacterBase.UnitGroups.C:
                     if (EnforceManager.Instance.water2AdditionalProjectile)
@@ -179,6 +187,10 @@ namespace Script.CharacterManagerScript
         private GameObject Attack(AttackData attackData)
         {
             var unit = attackData.Unit;
+            if (unit.GetComponent<CharacterBase>().unitGroup == CharacterBase.UnitGroups.A)
+            {
+                unit.GetComponent<UnitA>().atkCount++;
+            }
             var weaponType = attackData.WeaponType; 
             var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.transform.position, unit.transform.rotation);
             var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
@@ -245,6 +257,28 @@ namespace Script.CharacterManagerScript
             yield return null;
         }
 
+        private IEnumerator DualAttack(AttackData attackData)
+        {
+            var unit = attackData.Unit;
+            var weaponType = attackData.WeaponType;
+            var unitPosition = unit.transform.position;
+            var weaponDirections = new[]
+            {
+                new {Direction = Vector2.up, Rotation = Quaternion.identity},
+                new {Direction = Vector2.down, Rotation = Quaternion.Euler(0, 0, 180)}
+            };
+            foreach (var weapon in weaponDirections)
+            {
+                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unitPosition, weapon.Rotation);
+                var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
+                weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
+                weaponsList.Add(weaponBase.gameObject);
+                weaponBase.Direction = weapon.Direction;
+                StartCoroutine(weaponBase.UseWeapon());
+                weaponsPool.SetSprite(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, weaponObject);
+            }
+            yield return null;
+        }
 
         public void ClearWeapons()
         {

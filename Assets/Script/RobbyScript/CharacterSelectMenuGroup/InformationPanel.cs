@@ -33,8 +33,8 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         private void Information(Component unitInstance, CharacterBase characterBase)
         {
             nameText.text = characterBase.name;
-            unit.GetComponent<Image>().sprite = characterBase.GetSpriteForLevel(characterBase.UnitPieceLevel);
-            unitLevel.text = $"LV.{characterBase.UnitPieceLevel}";
+            unit.GetComponent<Image>().sprite = characterBase.GetSpriteForLevel(characterBase.unitPieceLevel);
+            unitLevel.text = $"LV.{characterBase.unitPieceLevel}";
             unitProperty.text = UnitPropertyText(characterBase);
             // // unitNoticeText.text = "UnitNotice.csv";
             // // foreach (var unitInfo in unitInformationNotice)
@@ -47,7 +47,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             // // {
             // //     unitSkillList = skill;
             // // }
-            var unitLevelUpPrice = characterBase.UnitPieceLevel * 500;
+            var unitLevelUpPrice = characterBase.unitPieceLevel * 500;
             levelUpCoinText.text = unitLevelUpPrice.ToString();
         }
 
@@ -71,7 +71,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         private IEnumerator CheckForLevelUp(UnitIcon unitInstance, CharacterBase characterBase)
         {
             levelUpBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece && CoinsScript.Instance.Coin >= characterBase.UnitPieceLevel * 500)
+            if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece && CoinsScript.Instance.Coin >= characterBase.unitPieceLevel * 500)
             {
                 levelUpBtn.GetComponent<Button>().interactable = true;
 

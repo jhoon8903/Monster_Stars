@@ -15,6 +15,7 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level5Sprite;
         private const float DetectionWidth = 0.5f;
         private float _detectionHeight;
+        public int atkCount;
 
 
         public void Awake()
@@ -57,7 +58,7 @@ namespace Script.CharacterGroupScript
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
             _detectionHeight = defaultAtkDistance;
-            if (EnforceManager.Instance.divineAtkRange)
+            if (EnforceManager.Instance.divineDualAttack)
             {
                 size = new Vector2(DetectionWidth, _detectionHeight * 2);
                 center = transform.position;
@@ -99,10 +100,10 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            var unitLevelDamage = UnitPieceLevel * 20f;
+            var unitLevelDamage = unitPieceLevel * 20f;
             Type = Types.Character;
             unitGroup = UnitGroups.A;
-            DefaultDamage = unitLevelDamage + 100f * level switch
+            DefaultDamage = unitLevelDamage + 100f * (1f + 12 * EnforceManager.Instance.divineAttackBoost / 100f) * level switch
             {
                 <=  2 => 1f,
                 3 => 1.7f,

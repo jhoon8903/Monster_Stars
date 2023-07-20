@@ -39,6 +39,7 @@ namespace Script
         public bool speedUp;
         private Vector3Int _bossSpawnArea;
         public bool IsBattle { get; private set; }
+        public bool globalSlow;
 
         private void Awake()
         {
@@ -74,7 +75,6 @@ namespace Script
                     countManager.Initialize(moveCount);
                     StartCoroutine(spawnManager.PositionUpCharacterObject());
                 }
-
                 StageManager.Instance.SelectedStages();
                 StageManager.Instance.UpdateWaveText();
                 speedUp = true;
@@ -139,26 +139,20 @@ namespace Script
             castleManager.SaveCastleHp();
             EnforceManager.Instance.SaveEnforceData();
             Time.timeScale = 1;
-
             if (EnforceManager.Instance.recoveryCastle)
             {
                 castleManager.RecoverCastleHp();
             }
             castleManager.TookDamageLastWave = false;
-
             if (StageManager.Instance.currentWave % 10 == 0)
             {
                 gridManager.ApplyBossSpawnColor(_bossSpawnArea);
             }
-
             yield return StartCoroutine(backgroundManager.ChangePuzzleSize());
             yield return StartCoroutine(cameraManager.CameraPuzzleSizeChange());
-            
-            if (levelUpRewardManager.HasUnitInGroup(CharacterBase.UnitGroups.D) && 
-                EnforceManager.Instance.physicIncreaseDamage)  
-                FindObjectOfType<UnitD>().ResetDamage();
             enemyPool.ClearList();
             StageManager.Instance.isBossClear = false;
+            if (EnforceManager.Instance.waterGlobalSlowEffect) globalSlow = false;
         }
         private void LoseGame()
         {

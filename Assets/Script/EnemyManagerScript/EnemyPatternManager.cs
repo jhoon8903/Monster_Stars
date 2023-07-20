@@ -83,9 +83,9 @@ namespace Script.EnemyManagerScript
                 _moveSpeed = enemyBase.moveSpeed * _speedReductionFactor * moveSpeedOffset * Time.deltaTime;
                 _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed );
                
-                if (enemyBase.isRestraint)
+                if (enemyBase.isBind)
                 {
-                   StartCoroutine(RestrainEffect(enemyBase));
+                   StartCoroutine(BindEffect(enemyBase));
                 }
                 if (enemyBase.isSlow)
                 { 
@@ -113,9 +113,9 @@ namespace Script.EnemyManagerScript
                 _moveSpeed = enemyBase.moveSpeed * _speedReductionFactor * moveSpeedOffset * Time.deltaTime;
                 _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed);
                 
-                if (enemyBase.isRestraint)
+                if (enemyBase.isBind)
                 { 
-                    StartCoroutine(RestrainEffect(enemyBase));
+                    StartCoroutine(BindEffect(enemyBase));
                 }
                 if (enemyBase.isSlow)
                 {
@@ -162,9 +162,9 @@ namespace Script.EnemyManagerScript
                     continue;
                 }
 
-                if (enemyBase.isRestraint)
+                if (enemyBase.isBind)
                 {
-                    StartCoroutine(RestrainEffect(enemyBase));
+                    StartCoroutine(BindEffect(enemyBase));
                 }
                 if (enemyBase.isSlow)
                 {
@@ -199,9 +199,9 @@ namespace Script.EnemyManagerScript
                     targetPosition = new Vector2(targetPosition.x, _endY);
                 }
 
-                if (enemyBase.isRestraint)
+                if (enemyBase.isBind)
                 { 
-                    StartCoroutine(RestrainEffect(enemyBase));
+                    StartCoroutine(BindEffect(enemyBase));
                 }
                 if (enemyBase.isSlow)
                 { 
@@ -245,9 +245,9 @@ namespace Script.EnemyManagerScript
                     targetPosition = new Vector3(targetPosition.x, _endY);
                 }
                 
-                if (enemyBase.isRestraint)
+                if (enemyBase.isBind)
                 { 
-                    StartCoroutine(RestrainEffect(enemyBase));
+                    StartCoroutine(BindEffect(enemyBase));
                 }
                 if (enemyBase.isSlow)
                 { 
@@ -255,12 +255,11 @@ namespace Script.EnemyManagerScript
                 }
             }
         }
-        private IEnumerator RestrainEffect(EnemyBase enemyBase)
+        private IEnumerator BindEffect(EnemyBase enemyBase)
         {
             var restrainColor = new Color(1, 0.5f, 0);
             var originColor = new Color(1, 1, 1);
-            var restrainTime = EnforceManager.Instance.firePoisonAdditionalStun && Chance(20) && enemyBase.isBleed ? 1f : 1f * EnforceManager.Instance.IncreaseRestraintTime();
-
+            var restrainTime = 1f + EnforceManager.Instance.divineBindDurationBoost;
             if (!_alreadyRestrain.TryGetValue(enemyBase, out var isAlreadyRestraint))
             {
                 isAlreadyRestraint = false;
@@ -275,14 +274,14 @@ namespace Script.EnemyManagerScript
             enemyBase.moveSpeed = enemyBase.originSpeed;
             enemyBase.GetComponent<SpriteRenderer>().color = originColor;
             _alreadyRestrain[enemyBase] = false;
-            enemyBase.isRestraint = false;
+            enemyBase.isBind = false;
         }
         private IEnumerator SlowEffect(EnemyBase enemyBase)
         {
             var slowColor = new Color(0f, 0.74f, 1);
             var originColor = new Color(1, 1, 1);
-            var slowTime = EnforceManager.Instance.water2BleedAdditionalRestraint && Chance(20) && enemyBase.isBleed ? 1f : 2f + 1f * EnforceManager.Instance.water2IncreaseSlowTime;
-            var moveSpeedMultiplier = EnforceManager.Instance.waterIncreaseSlowPower ? 0.4f : 0.6f;
+            var slowTime = 1f;
+            var moveSpeedMultiplier = 0.4f;
 
             if (!_alreadySlow.TryGetValue(enemyBase, out var isAlreadySlow))
             {

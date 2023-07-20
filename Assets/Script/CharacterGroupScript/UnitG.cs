@@ -97,10 +97,10 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            var unitLevelDamage = UnitPieceLevel * 40f;
+            var unitLevelDamage = unitPieceLevel * 40f;
             Type = Types.Character;
             unitGroup = UnitGroups.G;
-            DefaultDamage = unitLevelDamage + 160f * level switch
+            DefaultDamage = unitLevelDamage + 180f * level switch
             {
                 <= 2 => 1f,
                 3 => 1.7f,

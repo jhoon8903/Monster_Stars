@@ -100,7 +100,7 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            var unitLevelDamage = UnitPieceLevel * 12f;
+            var unitLevelDamage = unitPieceLevel * 12f;
             Type = Types.Character;
             unitGroup = UnitGroups.C;
             DefaultDamage = unitLevelDamage + 60f * level switch
@@ -110,7 +110,7 @@ namespace Script.CharacterGroupScript
                 4 => 2f,
                 _ => 2.3f
             };
-            defaultAtkRate = 1.4f;
+            defaultAtkRate = 0.8f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             UnitAtkType = UnitAtkTypes.Projectile;

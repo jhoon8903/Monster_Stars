@@ -13,7 +13,7 @@ namespace Script.WeaponScriptGroup
     {
         public bool isInUse;
         protected float Speed { get; set; }
-        protected float Damage { get; private set; }
+        protected float Damage { get; set; }
         protected float Distance { get; set; }
         private CharacterBase.UnitProperties UnitProperty { get; set; }
         private CharacterBase.UnitEffects UnitEffect { get; set; }
@@ -80,10 +80,10 @@ namespace Script.WeaponScriptGroup
 
         private void IsRestraint(EnemyBase enemyStatus)
         {
-            if (!EnforceManager.Instance.activeRestraint) return;
-            if (_random.Next(100) < 20)
+            var bindChance = EnforceManager.Instance.divineBindChanceBoost ? 40 : 20;
+            if (_random.Next(100) < bindChance)
             {
-                enemyStatus.isRestraint = true;
+                enemyStatus.isBind = true;
             }
         }
         private static void IsSlow(EnemyBase enemyStatus)
@@ -107,16 +107,16 @@ namespace Script.WeaponScriptGroup
             if (!EnforceManager.Instance.physics2ActivateBleed) return;
             enemyStatus.IsBleed = true;
         }
-        protected float DamageCalculator(float damage,EnemyBase enemyBase)
+        protected int DamageCalculator(float damage,EnemyBase enemyBase)
         {
             switch (UnitProperty)
             {
                 case CharacterBase.UnitProperties.Divine:
                     if (enemyBase.RegistryType != EnemyBase.RegistryTypes.Divine)
                     {
-                        if (EnforceManager.Instance.divinePoisonAdditionalDamage && enemyBase.isPoison)
+                        if (EnforceManager.Instance.divinePoisonDamageBoost && enemyBase.isPoison)
                         {
-                            var increaseDamage = 1f + (1f * EnforceManager.Instance.divinePoisonAdditionalDamageCount );
+                            const float increaseDamage = 1.25f;
                             damage *= increaseDamage;
                         }
                     } 
@@ -125,7 +125,7 @@ namespace Script.WeaponScriptGroup
                     {
                         damage *= 0.8f;
                     }
-                    return damage;
+                    return (int)damage;
 
                 case CharacterBase.UnitProperties.Physics:
                     if (enemyBase.RegistryType != EnemyBase.RegistryTypes.Physics)
@@ -145,12 +145,12 @@ namespace Script.WeaponScriptGroup
                     {
                         damage *= 0.8f;
                     }
-                    return damage;
+                    return (int)damage;
 
                 case CharacterBase.UnitProperties.Poison:
                     if (enemyBase.RegistryType != EnemyBase.RegistryTypes.Poison)
                     {
-                        if (EnforceManager.Instance.poisonRestraintAdditionalDamage && enemyBase.isRestraint)
+                        if (EnforceManager.Instance.poisonRestraintAdditionalDamage && enemyBase.isBind)
                         {
                             damage *= 3.0f;
                         }
@@ -160,7 +160,7 @@ namespace Script.WeaponScriptGroup
                     {
                         damage *= 0.8f;
                     }
-                    return damage;
+                    return (int)damage;
 
                 case CharacterBase.UnitProperties.Water:
                     switch (UnitGroup)
@@ -176,12 +176,12 @@ namespace Script.WeaponScriptGroup
                             {
                                 damage *= 0.8f;
                             }
-                            return damage;
+                            return (int)damage;
                         }
 
                         case CharacterBase.UnitGroups.E:
                         {
-                            if (enemyBase.isRestraint && EnforceManager.Instance.waterRestraintIncreaseDamage)
+                            if (enemyBase.isBind && EnforceManager.Instance.waterRestraintIncreaseDamage)
                             {
                                 damage *= 2.0f;
                             }
@@ -196,7 +196,7 @@ namespace Script.WeaponScriptGroup
                                 damage *= 0.8f;
                             }
 
-                            return damage * EnforceManager.Instance.increaseWaterDamage;
+                            return (int)damage * EnforceManager.Instance.increaseWaterDamage;
                         }
                     }
                     break;
@@ -215,7 +215,7 @@ namespace Script.WeaponScriptGroup
                     {
                         damage *= 0.8f;
                     }
-                    return damage * (1f + 0.15f * EnforceManager.Instance.fireIncreaseDamage);
+                    return (int)damage * (1f + 0.15f * EnforceManager.Instance.fireIncreaseDamage);
                 
                 case CharacterBase.UnitProperties.Darkness:
                     if (enemyBase.isSlow && EnforceManager.Instance.darkSlowAdditionalDamage)
@@ -231,13 +231,13 @@ namespace Script.WeaponScriptGroup
                     {
                         damage *= 0.8f;
                     }
-                    return damage;
+                    return (int)damage;
                 case CharacterBase.UnitProperties.None:
-                    return damage;
+                    return (int)damage;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            return damage;
+            return (int)damage;
         }
         protected static void InstantKill(EnemyBase target)
         {

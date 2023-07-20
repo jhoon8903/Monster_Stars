@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -7,6 +6,7 @@ using Script.RewardScript;
 using Script.UIManager;
 using Script.WeaponScriptGroup;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.EnemyManagerScript
@@ -37,10 +37,8 @@ namespace Script.EnemyManagerScript
         public float currentHealth;
         public float lastIncreaseHealthPoint;
         public enum SpawnZones { A, B, C, D, E, F }
-        public bool isRestraint;
+        public bool isBind;
         public bool isSlow;
-
-
 
         public bool isPoison;
         public bool IsPoison
@@ -74,7 +72,6 @@ namespace Script.EnemyManagerScript
                 }
             }
         }
-
 
         public bool isBleed;
         public bool IsBleed
@@ -116,8 +113,7 @@ namespace Script.EnemyManagerScript
             healthPoint = baseHealthPoint;
         }
 
-
-        public void ReceiveDamage(EnemyBase detectEnemy, float damage, KillReasons reason = KillReasons.ByPlayer)
+        public void ReceiveDamage(EnemyBase detectEnemy, int damage, CharacterBase.UnitGroups atkUnit, KillReasons reason = KillReasons.ByPlayer)
         {
             lock (Lock)
             {
@@ -128,10 +124,20 @@ namespace Script.EnemyManagerScript
                 if (currentHealth > 0f || isDead) return;
                 isDead = true;
                 ExpManager.Instance.HandleEnemyKilled(reason);
-                if (EnforceManager.Instance.physicIncreaseDamage) EnforceManager.Instance.PhysicIncreaseDamage();
                 EnemyKilledEvents(detectEnemy);
+                if (!EnforceManager.Instance.divineShackledExplosion || atkUnit != CharacterBase.UnitGroups.A) return;
+                var enemyPosition = detectEnemy.transform.position;
+                var explosionSize = new Vector2(3, 3);
+                var colliders = Physics2D.OverlapBoxAll(enemyPosition, explosionSize, 0f);
+                foreach (var enemyObject in colliders)
+                {
+                    if (!enemyObject.gameObject.CompareTag("Enemy") || !enemyObject.gameObject.activeInHierarchy) continue;
+                    var nearEnemy = enemyObject.GetComponent<EnemyBase>();
+                    ReceiveDamage(nearEnemy, damage, CharacterBase.UnitGroups.A);
+                }
             }
         }
+
         public void EnemyKilledEvents(EnemyBase detectedEnemy)
         {
             var characterBase = FindObjectOfType<CharacterBase>();
