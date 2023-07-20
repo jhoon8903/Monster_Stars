@@ -19,9 +19,9 @@ Green,100,DivinePoisonDamageBoost,50
 Green,100,DivineBindDurationBoost,1
 Green,100,DivineShackledExplosion,1
 Blue,100,DivineFifthAttackBoost,5
-Blue,100,DivineUnitOneAttackBoost,16
+Blue,100,DivineAttackBoost,16
 Purple,100,DivineBindChanceBoost,40
-Purple,100,DivineUnitOneDualAttack,1
+Purple,100,DivineDualAttack,1
 Purple,100,DivineProjectilePierce,1
 Green,200,DarkTenthAttackDoubleDamage,10
 Green,200,DarkAttackSpeedBoost,9
@@ -31,10 +31,10 @@ Blue,200,DarkKnockBackChance,10
 Blue,200,DarkStatusAilmentDamageBoost,20
 Purple,200,DarkRangeIncrease,1
 Purple,200,DarkStatusAilmentSlowEffect,20
-Green,300,WaterUnitEightAttackSpeedBoost,7
+Green,300,WaterAttackSpeedBoost,7
 Green,300,WaterAllyDamageBoost,500
 Blue,300,WaterProjectileIncrease,2
-Blue,300,WaterUnitEightAttackBoost,13
+Blue,300,WaterAttackBoost,13
 Blue,300,WaterSlowEnemyDamageBoost,20
 Purple,300,WaterGlobalSlowEffect,20
 Purple,300,WaterSlowEnemyStunChance,20
@@ -63,7 +63,7 @@ Blue,600,PoisonRangeIncrease,1
 Blue,600,PoisonBleedingEnemyDamageBoost,50
 Purple,600,PoisonBleedingEnemyInstantKill,10
 Purple,600,PoisonPerHitEffect,2
-Green,700,FirePoisonDamageIncrease,25
+Green,700,Fire2PoisonDamageIncrease,25
 Green,700,Fire2AttackSpeedIncrease,7
 Green,700,Fire2BleedingDamageIncrease,25
 Blue,700,Fire2AttackPowerIncrease,12
@@ -72,7 +72,7 @@ Blue,700,Fire2SwordSizeIncrease,100
 Purple,700,Fire2RangeIncrease,1
 Purple,700,Fire2NoBurnDamageIncrease,100
 Green,800,FireImageOverlapIncrease,1
-Green,800,FireUnitSixAttackSpeedBoost,6
+Green,800,FireAttackSpeedBoost,6
 Green,800,FireSlowEnemyDamageBoost,10
 Blue,800,FireProjectileSpeedIncrease,100
 Blue,800,FireBurnedEnemyExplosion,1
