@@ -14,6 +14,8 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level3Sprite;
         [SerializeField] private Sprite level4Sprite;
         [SerializeField] private Sprite level5Sprite;
+        private const float DetectionWidth = 3f;
+        private const float DetectionHeight = 3f;
 
         public void Awake()
         {
@@ -52,33 +54,26 @@ namespace Script.CharacterGroupScript
             SetLevel(unitPuzzleLevel);
         }
 
-        private void GetDetectionProperties(out float size, out Vector2 center)
+        private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
-            size = EnforceManager.Instance.poisonIncreaseAtkRange ? 2.5f : 1.5f;
             center = transform.position;
+            size = new Vector2(DetectionWidth, DetectionHeight);
         }
+
 
         public override List<GameObject> DetectEnemies()
         {
-            GetDetectionProperties(out var size, out var center);
-
-            var colliders = Physics2D.OverlapCircleAll(center, size);
+            GetDetectionProperties(out var detectionSize, out var detectionCenter);
+            var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize,0f);
             var currentlyDetectedEnemies = (
                 from enemyObject in colliders 
                 where enemyObject.gameObject.CompareTag("Enemy") && enemyObject.gameObject.activeInHierarchy 
-                select enemyObject.GetComponent<EnemyBase>() 
+                select enemyObject.GetComponent<EnemyBase>()
                 into enemyBase 
                 select enemyBase.gameObject).ToList();
             detectedEnemies = currentlyDetectedEnemies;
             return detectedEnemies;
         }
-
-        // public void OnDrawGizmos()
-        // {
-        //     GetDetectionProperties(out var size, out var center);
-        //     Gizmos.color = Color.green;
-        //     Gizmos.DrawWireSphere(center, size);
-        // }
 
         protected internal override Sprite GetSprite(int level)
         {
@@ -95,19 +90,19 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
+            var unitLevelDamage = UnitPieceLevel * 25f;
             Type = Types.Character;
             unitGroup = UnitGroups.F;
-            DefaultDamage = 120f * level switch
+            DefaultDamage = unitLevelDamage + 100f * level switch
             {
                 <=  2 => 1f,
                 3 => 1.7f,
                 4 => 2f,
                 _ => 2.3f
             };
-            defaultAtkRate = 1.2f;
-            defaultAtkDistance = 1f;
+            defaultAtkRate = 0.8f;
             projectileSpeed = 1f;
-            UnitAtkType = UnitAtkTypes.Gas;
+            UnitAtkType = UnitAtkTypes.GuideProjectile;
             UnitProperty = UnitProperties.Poison;
             UnitEffect = UnitEffects.Poison;
         }

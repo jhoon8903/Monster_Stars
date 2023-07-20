@@ -55,10 +55,6 @@ namespace Script.CharacterGroupScript
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
             center = transform.position;
-            if (!)
-            {
-
-            }
             size = new Vector2(DetectionWidth, DetectionHeight);
         }
 
@@ -77,14 +73,6 @@ namespace Script.CharacterGroupScript
             return detectedEnemies;
         }
 
-        // public void OnDrawGizmos()
-        // {
-        //     GetDetectionProperties(out var detectionSize, out var detectionCenter);
-        //     Gizmos.color = new Color(0.184f, 0.286f, 0.482f);
-        //     Gizmos.DrawWireCube(detectionCenter,detectionSize);
-        // }
-
-
         protected internal override Sprite GetSprite(int level)
         {
             return level switch
@@ -100,18 +88,19 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
+            var unitLevelDamage = UnitPieceLevel * 25;
             Type = Types.Character;
             unitGroup = UnitGroups.B;
-            DefaultDamage = 100f * level switch
+            DefaultDamage = unitLevelDamage + 100f * level switch
             {
                <= 2 => 1f,
                 3 => 1.7f,
                 4 => 2f,
                 _ => 2.3f
             };
-            defaultAtkRate = 0.8f + 1f * 0.17f * EnforceManager.Instance.darkIncreaseAtkSpeed;
+            defaultAtkRate = 0.8f;
             projectileSpeed = 1.5f;
-            UnitAtkType = UnitAtkTypes.GuideProjectile;
+            UnitAtkType = UnitAtkTypes.Projectile;
             UnitProperty = UnitProperties.Darkness;
             UnitEffect = UnitEffects.None;
         }

@@ -14,7 +14,7 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level4Sprite; 
         [SerializeField] private Sprite level5Sprite;
         private const float DetectionWidth = 1f;
-        private const float DetectionHeight = 9f;
+        private float _detectionHeight;
 
         public void Awake()
         {
@@ -54,8 +54,9 @@ namespace Script.CharacterGroupScript
 
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
-            size = new Vector2(DetectionWidth, DetectionHeight);
-            center = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
+            _detectionHeight = defaultAtkDistance;
+            size = new Vector2(DetectionWidth, _detectionHeight);
+            center = (Vector2)transform.position + Vector2.up * _detectionHeight / 2f;
         }
 
         public override List<GameObject> DetectEnemies()
@@ -72,13 +73,6 @@ namespace Script.CharacterGroupScript
             return detectedEnemies;
         }
 
-        // public void OnDrawGizmos()
-        // {
-        //     GetDetectionProperties(out var size, out var center);
-        //     Gizmos.color = Color.blue;
-        //     Gizmos.DrawWireCube(center, size);
-        // }
-
         protected internal override Sprite GetSprite(int level)
         {
             return level switch
@@ -94,9 +88,10 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         { 
             base.SetLevel(level);
+            var unitLevelDamage = UnitPieceLevel * 16f;
             Type = Types.Character;
             unitGroup = UnitGroups.E;
-            DefaultDamage = 100f * level switch
+            DefaultDamage = unitLevelDamage + 80f * level switch
             {
                 <=  2 => 1f,
                 3 => 1.7f,

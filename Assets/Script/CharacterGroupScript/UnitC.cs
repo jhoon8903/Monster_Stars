@@ -26,7 +26,7 @@ namespace Script.CharacterGroupScript
             base.Initialize();
             unitGroup = UnitGroups.C;
             UnitProperty = UnitProperties.Water;
-            UnitGrade = UnitGrades.Green;
+            UnitGrade = UnitGrades.Purple;
             SetLevel(1);
         }
         public override Sprite GetSpriteForLevel(int characterObjectLevel)
@@ -53,17 +53,14 @@ namespace Script.CharacterGroupScript
 
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
+            _detectionHeight = defaultAtkDistance;
             if (EnforceManager.Instance.water2BackAttack)
             {
-                _detectionWidth = 1f;
-                _detectionHeight = 18f;
-                size = new Vector2(_detectionWidth, _detectionHeight);
+                size = new Vector2(_detectionWidth, _detectionHeight*2f);
                 center = transform.position;
             }
             else
             {
-                _detectionWidth = 1f;
-                _detectionHeight = 9f;
                 size = new Vector2(_detectionWidth, _detectionHeight);
                 center = (Vector2)transform.position + Vector2.up * _detectionHeight / 2f;
             }
@@ -88,13 +85,6 @@ namespace Script.CharacterGroupScript
             return detectedEnemies;
         }
 
-        // public void OnDrawGizmos()
-        // {
-        //     GetDetectionProperties(out var detectionSize, out var detectionCenter);
-        //     Gizmos.color = Color.green;
-        //     Gizmos.DrawWireCube(detectionCenter, detectionSize);
-        // }
-
         protected internal override Sprite GetSprite(int level)
         {
             return level switch
@@ -110,16 +100,17 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
+            var unitLevelDamage = UnitPieceLevel * 12f;
             Type = Types.Character;
             unitGroup = UnitGroups.C;
-            DefaultDamage = 60f * level switch
+            DefaultDamage = unitLevelDamage + 60f * level switch
             {
                 <=  2 => 1f,
                 3 => 1.7f,
                 4 => 2f,
                 _ => 2.3f
             };
-            defaultAtkRate = 1.2f;
+            defaultAtkRate = 1.4f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             UnitAtkType = UnitAtkTypes.Projectile;

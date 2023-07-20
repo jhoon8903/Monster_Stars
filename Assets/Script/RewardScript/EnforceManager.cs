@@ -12,17 +12,37 @@ namespace Script.RewardScript
     [Serializable]
     public class EnforceData
     {
-        //Divine 유닛 1
+        //Divine Unit A
         public bool divinePoisonDamageBoost;
         public float divineBindDurationBoost;
         public bool divineShackledExplosion;
-        public int divineFifthAttackBoost;
+        public bool divineFifthAttackBoost;
         public int divineAttackBoost;
-        public float divineBindChanceBoost;
+        public bool divineBindChanceBoost;
         public bool divineDualAttack;
         public bool divineProjectilePierce;
 
-        //Physical 유닛 2
+        //Darkness Unit B
+        public bool darkTenthAttackDoubleDamage;
+        public int darkAttackSpeedBoost;
+        public int darkAttackPowerBoost;
+        public bool darkStatusAilmentDamageChance;
+        public bool darkKnockBackChance;
+        public bool darkStatusAilmentDamageBoost;
+        public bool darkRangeIncrease;
+        public bool darkStatusAilmentSlowEffect;
+
+        //Water1 Unit C
+        public int waterAttackSpeedBoost;
+        public bool waterAllyDamageBoost;
+        public bool waterProjectileIncrease;
+        public int waterAttackBoost;
+        public bool waterSlowEnemyDamageBoost;
+        public bool waterGlobalSlowEffect;
+        public bool waterSlowEnemyStunChance;
+        public bool waterDamageIncreaseDebuff;
+
+        //Physical Unit D
         public int physicalAttackSpeedBoost;
         public bool physicalDamage100Boost;
         public int physicalDamage9Boost;
@@ -32,17 +52,6 @@ namespace Script.RewardScript
         public bool physicalSwordScaleIncrease;
         public bool physicalDamage24Boost;
 
-<<<<<<< Updated upstream
-        //Poison 유닛 3
-        public bool PoisonAilmentStun;
-        public int PoisonMaxStackIncrease;
-        public int PoisonDamageAttackPowerIncrease;
-        public bool PoisonProjectileIncrease;
-        public bool PoisonRangeIncrease;
-        public bool PoisonBleedingEnemyDamageBoost;
-        public bool PoisonBleedingEnemyInstantKill;
-        public bool PoisonPerHitEffect;
-=======
         //Water2 Unit E
         public int water2DebuffDurationIncrease;
         public int water2AttackSpeedIncrease;
@@ -52,59 +61,17 @@ namespace Script.RewardScript
         public bool water2ProjectileSpeedIncrease;
         public bool water2DebuffStrengthIncrease;
         public bool water2AttackSpeedBuffToAdjacentAllies;
->>>>>>> Stashed changes
 
-        //Fire1 유닛 6
-        public int FireImageOverlapIncrease;
-        public int FireAttackSpeedBoost;
-        public bool FireSlowEnemyDamageBoost;
-        public bool FireProjectileSpeedIncrease;
-        public bool FireBurnedEnemyExplosion;
-        public bool FireProjectileBounceDamage;
-        public float FireBurnPerAttackEffect;
-        public bool FireProjectileBounceIncrease;
+        //Poison Unit F
+        public bool poisonAilmentStun;
+        public int poisonMaxStackIncrease;
+        public int poisonDamageAttackPowerIncrease;
+        public bool poisonProjectileIncrease;
+        public bool poisonRangeIncrease;
+        public bool poisonBleedingEnemyDamageBoost;
+        public bool poisonBleedingEnemyInstantKill;
+        public bool poisonPerHitEffect;
 
-<<<<<<< Updated upstream
-        //Water1 유닛 8
-        public int WaterAttackSpeedBoost;
-        public bool WaterAllyDamageBoost;
-        public bool WaterProjectileIncrease;
-        public int WaterAttackBoost;
-        public bool WaterSlowEnemyDamageBoost;
-        public int WaterGlobalSlowEffect;
-        public bool WaterSlowEnemyStunChance;
-        public bool WaterDamageIncreaseDebuff;
-
-        //Fire2 유닛 5
-        public bool Fire2PoisonDamageIncrease;
-        public int Fire2AttackSpeedIncrease;
-        public bool Fire2BleedingDamageIncrease;
-        public int Fire2AttackPowerIncrease;
-        public bool Fire2StunChance;
-        public bool Fire2SwordSizeIncrease;
-        public bool Fire2RangeIncrease;
-        public bool Fire2NoBurnDamageIncrease;
-
-        //Water2 유닛 4
-        public int Water2DebuffDurationIncrease;
-        public int Water2AttackSpeedIncrease;
-        public bool Water2StunChanceAgainstBleeding;
-        public bool Water2IceSpikeProjectile;
-        public int Water2AttackPowerIncrease;
-        public bool Water2ProjectileSpeedIncrease;
-        public float Water2DebuffStrengthIncrease;
-        public bool Water2AttackSpeedBuffToAdjacentAllies;
-
-        //Darkness 유닛  7
-        public int DarkTenthAttackDoubleDamage;
-        public int DarkAttackSpeedBoost;
-        public int DarkAttackPowerBoost;
-        public bool DarkStatusAilmentDamageChance;
-        public float DarkKnockBackChance;
-        public bool DarkStatusAilmentDamageBoost;
-        public bool DarkRangeIncrease;
-        public bool DarkStatusAilmentSlowEffect;
-=======
         //Fire2 Unit G
         public bool fire2PoisonDamageIncrease;
         public int fire2AttackSpeedIncrease;
@@ -124,8 +91,7 @@ namespace Script.RewardScript
         public bool fireProjectileBounceDamage;
         public bool fireBurnPerAttackEffect;
         public bool fireProjectileBounceIncrease;
->>>>>>> Stashed changes
-
+      
         //common
         public int addRowCount;
         public int slowCount;
@@ -145,7 +111,7 @@ namespace Script.RewardScript
         public List<int> permanentGroupIndex;
 
     }
-}
+
 
     public class EnforceManager : MonoBehaviour
     {
@@ -164,12 +130,10 @@ namespace Script.RewardScript
         }
         public static EnforceManager Instance { get; private set; }
         public List<CharacterBase> characterList = new List<CharacterBase>();
-
         private void Awake()
         {
             Instance = this;
         }
-
         private void Start()
         {
             var selectUnitList = SelectedUnitHolder.Instance.selectedUnit;
@@ -179,57 +143,62 @@ namespace Script.RewardScript
             }
         }
 
-        [Header("\n\nUnit_A 신성 속성\n")] 
-        [Header("속박 활성화")] public bool activeRestraint;
-        [Header("속박시간 증가")] public float increaseRestraintTime = 0.1f;
-        protected internal float IncreaseRestraintTime()
+        [Header("\n\nA 신성: Blue\n")] 
+        [Header("Green / Default: 중독된 적 추가데미지 50%")] public bool divinePoisonDamageBoost;
+        [Header("Green / 7Lv: 속박지속시간 0.1초씩 증가 (최대 0.5초 / 5회)")] public float divineBindDurationBoost; protected internal void DivineBindDurationIncrease()
         {
-            var restraintTime = 1f;
-            restraintTime += increaseRestraintTime;
-            return restraintTime;
+            if (divineBindDurationBoost >= 0.5f) return;
+            divineBindDurationBoost += 0.1f;
         }
-        [Header("관통 효과")] public bool divinePenetrate;
-        [Header("백 어택")] public bool divineAtkRange;
-        [Header("중독 시 데미지증가")] public bool divinePoisonAdditionalDamage; public int divinePoisonAdditionalDamageCount = 1;
-        [Header("\n\n Unit_B 어둠 속성\n\n")] 
-        [Header("둔화상태 적 추가 데미지")] public bool darkSlowAdditionalDamage;
-        [Header("출혈상태 적 추가 데미지")] public bool darkBleedAdditionalDamage;
-        [Header("공격속도 17% 상승 ")] public int darkIncreaseAtkSpeed;
+        [Header("Green / 3Lv: 속박된 적 공격시 적 제거시 주변 1칸 범위의 100% 폭발데미지 추가")] public bool divineShackledExplosion;
+        [Header("Blue / Default: 5회 공격마다 100% 추가데미지 (투사체 컬러 변경)")] public bool divineFifthAttackBoost;
+        [Header("Blue / 13Lv: 공격력 16% 증가 (최대 6회)")] public int divineAttackBoost; protected internal void DivineAttackDamageIncrease()
+        {   
+            if (divineAttackBoost >=6) return;
+            divineAttackBoost++;
+        }
+        [Header("Purple / Lv5: 속박확률 20% 증가 (20% > 40%)")] public bool divineBindChanceBoost;
+        [Header("Purple / 11Lv: 백어텍 가능")] public bool divineDualAttack;
+        [Header("Purple / 9Lv: 관통 가능 (1회)")] public bool divineProjectilePierce;
+        
 
-        protected internal void DarkIncreaseAtkSpeed()
+        [Header("\n\nB 어둠: Green\n")]
+        [Header("Green / 5Lv: 10회 공격마다 100% 추가 데미지 (투사체 컬러 변경)")] public bool darkTenthAttackDoubleDamage;
+        [Header("Green / Default: 공격속도 9% 증가 (최대 8회)")] public int darkAttackSpeedBoost; protected internal void DarkAttackSpeedIncrease()
         {
-            darkIncreaseAtkSpeed++;
+            if(darkAttackSpeedBoost >= 8) return;
+            darkAttackSpeedBoost++;
         }
-
-        [Header("쿠션 효과")] public bool darkProjectileBounce;
-
-        [Header("쿠션 추가")] public int darkProjectileBounceCount = 1;
-
-        protected internal void AddBounceCount()
+        [Header("Green / 9Lv: 공격력 9% 증가 (최대 6회)")] public int darkAttackPowerBoost; protected internal void DarkAttackDamageIncrease()
         {
-            darkProjectileBounceCount++;
+            if (darkAttackPowerBoost >= 6) return;
+            darkAttackPowerBoost++;
         }
+        [Header("Blue / 11Lv: 상태이상 적 공격시 5% 확률로 1000% 추가데미지")] public bool darkStatusAilmentDamageChance;
+        [Header("Blue / 3Lv: 10% 확률로 적 밀침 (1칸)")] public bool darkKnockBackChance;
+        [Header("Blue / Default: 상태이상 적 공격시 20% 추가데미지")] public bool darkStatusAilmentDamageBoost;
+        [Header("Purple / 7Lv: 사거리 1 증가")] public bool darkRangeIncrease;
+        [Header("Purple / 13Lv: 상태이상 적 공격시 1초 이동속도 20% 감소")] public bool darkStatusAilmentSlowEffect;
 
-        [Header("\n\nUnit_C 물 속성2\n\n")] [Header("공격력 증가")]
-        public int water2IncreaseDamage;
-
-        protected internal void Water2IncreaseDamage()
+        [Header("\n\nC 물: Purple\n")]
+        [Header("Green / 5Lv: 공격속도 7% 증가 (최대 8회)")] public int waterAttackSpeedBoost; protected internal void WaterAttackSpeedIncrease()
         {
-            water2IncreaseDamage++;
+            if (waterAttackSpeedBoost >= 8) return;
+            waterAttackSpeedBoost++;
         }
-
-        [Header("출혈상태 적 공격시 속박")] public bool water2BleedAdditionalRestraint;
-        [Header("둔화지속시간 증가")] public int water2IncreaseSlowTime;
-
-        protected internal void Water2IncreaseSlowTime()
+        [Header("Green / Default: 같은 속성(물) 유닛 존재시 둔화 비활성화 500% 추가데미지")] public bool waterAllyDamageBoost;
+        [Header("Blue / 11Lv: 발사체의 갯수가 3개로 변화합니다.")] public bool waterProjectileIncrease;
+        [Header("Blue / 13Lv: 공격력 13% 증가 (최대 6회)")] public int waterAttackBoost; protected internal void WaterAttackDamageIncrease()
         {
-            water2IncreaseSlowTime++;
+            if (waterAttackBoost >= 6) return;
+            waterAttackBoost++;
         }
+        [Header("Blue / 7Lv: 둔화 적 공격 시 20% 추가데미지")] public bool waterSlowEnemyDamageBoost;
+        [Header("Purple / Default: 80회 공격시 모든적 20% 둔화 1초 (웨이브마다 초기화)")] public bool waterGlobalSlowEffect;
+        [Header("Purple / 3Lv: 둔화상태의 적 공격시 20% 확률로 0.5초간 기절")] public bool waterSlowEnemyStunChance;
+        [Header("Purple / 9Lv: 피격당한 적은 5초간 받는데미지 20% 증가")] public bool waterDamageIncreaseDebuff;
 
-<<<<<<< Updated upstream
-        [Header("백 어택")] public bool water2BackAttack;
-        [Header("투사체 추가")] public bool water2AdditionalProjectile;
-=======
+
         [Header("\n\nD 물리: Green\n")]
         [Header("Green / 9Lv: 공격속도 9% 증가 (최대 8회)")] public int physicalAttackSpeedBoost; protected internal void PhysicalAttackSpeedIncrease()
         {
@@ -247,6 +216,7 @@ namespace Script.RewardScript
         [Header("BLue / 7Lv: 둔화된 적을 공격할 시 데미지가 20% 증가")] public bool physicalSlowEnemyDamageBoost;
         [Header("Purple / 3Lv: 검의 크기가 100% 증가")] public bool physicalSwordScaleIncrease;
         [Header("Purple / 13Lv: 공격력 24% 증가")] public bool physicalDamage24Boost;
+
 
         [Header("\n\nE 물: Green\n")]
         [Header("Green / Default: 둔화지속시간 0.2초씩 증가 ( 최대 1초 / 최대 5회)")] public int water2DebuffDurationIncrease;
@@ -266,6 +236,7 @@ namespace Script.RewardScript
         [Header("Purple / Default:둔화 강도 20% 증가 (30% > 50%)")] public bool water2DebuffStrengthIncrease;
         [Header("Purple / 13Lv: 주위의 아군 공격속도 15% 증가")] public bool water2AttackSpeedBuffToAdjacentAllies;
 
+
         [Header("\n\nF 독: Green\n")]
         [Header("Green / Default: 상태이상에 걸린 적 공격시 0.2초 기절")] public bool poisonAilmentStun;
         [Header("Green / 3Lv: 중독최대중첩 수 1회 증가 (최대 5)")] public int poisonMaxStackIncrease;
@@ -275,6 +246,7 @@ namespace Script.RewardScript
         [Header("Blue / 13Lv: 출혈중인 적 공격시 50% 데미지 증가")] public bool poisonBleedingEnemyDamageBoost;
         [Header("Purple / Default: 출혈중인 적의 체력이 10% 미만이면 즉사")] public bool poisonBleedingEnemyInstantKill;
         [Header("Purple / 7Lv: F유닛 적 타격6 2초 중독")] public bool poisonPerHitEffect;
+
 
         [Header("\n\nG 불: Blue\n")]
         [Header(" Green/ 3Lv: 독에 걸린 적 공격시 25% 데미지 추가")] public bool fire2PoisonDamageIncrease;
@@ -294,6 +266,7 @@ namespace Script.RewardScript
         [Header(" Purple/ Default: 사거리가 1칸 증가")] public bool fire2RangeIncrease;
         [Header(" Purple/ 7Lv: 더이상 화상을 발새시키지 않는 대신 100% 데미지 추가")] public bool fire2NoBurnDamageIncrease;
 
+
         [Header("\n\nH 불: Blue\n")]
         [Header(" Green/ Default: 화상 중첩수 증가 (최대 3회)")] public int fireImageOverlapIncrease;
         [Header(" Green/ 9Lv: 공격속도 9% 증가 (최대 8회)")] public int fireAttackSpeedBoost; protected internal void FireAttackSpeedBoost()
@@ -307,108 +280,16 @@ namespace Script.RewardScript
         [Header(" Purple/ 5Lv: 적 적중시 가장 가까운적에게 투사체 튕김")] public bool fireProjectileBounceDamage;
         [Header(" Purple/ Default: 적을 공격하면 5초간 화상 초당 20% 데미지")] public bool fireBurnPerAttackEffect;
         [Header(" Purple/ 13Lv: 투사체가 튕기는 횟수 증가")] public bool fireProjectileBounceIncrease;
-
->>>>>>> Stashed changes
-
-        [Header("\n\nUnit_D 물리 속성\n")] [Header("Sword 추가")]
-        public bool physicAdditionalWeapon;
-
-        [Header("Sword 크기 2배")] public bool physicIncreaseWeaponScale;
-        [Header("둔화 시 데미지추가")] public bool physicSlowAdditionalDamage;
-        [Header("공격속도 증가")] public float increasePhysicAtkSpeed = 1f;
-
-        protected internal void IncreasePhysicAtkSpeed()
-        {
-            increasePhysicAtkSpeed += 0.2f;
-        }
-
-        [Header("데미지 증가")] public bool physicIncreaseDamage;
-        public float increasePhysicsDamage = 1f;
-
-        protected internal void PhysicIncreaseDamage()
-        {
-            increasePhysicsDamage += 0.05f;
-        }
-
-        [Header("\n\nUnit_E 물 속성\n")] [Header("화상상태 적 추가데미지")]
-        public bool waterBurnAdditionalDamage;
-
-        [Header("속박상태 적 추가데미지")] public bool waterRestraintIncreaseDamage;
-        [Header("둔화강도 증가")] public bool waterIncreaseSlowPower;
-        [Header("공격력증가")] public float increaseWaterDamage = 1f;
-
-        protected internal void WaterIncreaseDamage()
-        {
-            increaseWaterDamage *= 1.2f;
-        }
-
-        [Header("좌/우 동시 공격")] public bool waterSideAttack;
-
-        [Header("\n\nUnit_F 독 속성\n")] [Header("더블어택")]
-        public bool poisonDoubleAtk;
-
-        [Header("속박된 적 추가데미지")] public bool poisonRestraintAdditionalDamage;
-        [Header("15% 확률 즉사")] public bool poisonInstantKill;
-        [Header("공격사거리 1 증가")] public bool poisonIncreaseAtkRange;
-        [Header("중독활성화")] public bool activatePoison;
-        [Header("중족최대 중첩수 증가")] public int poisonOverlapping = 1;
-
-        protected internal void AddPoisonOverlapping()
-        {
-            poisonOverlapping += 1;
-        }
-
-        [Header("\n\nUnit_G 불 속성\n\n")] [Header("출혈상태 적 추가 데미지")]
-        public bool fireBleedingAdditionalDamage;
-
-        [Header("공격력 증가")] public int fireIncreaseDamage;
-
-        protected internal void FireIncreaseDamage()
-        {
-            fireIncreaseDamage++;
-        }
-
-        [Header("중독상태 적 기절")] public bool firePoisonAdditionalStun;
-        [Header("공격사거리 1 증가")] public bool fireIncreaseAtkRange;
-        [Header("화상효과 비활성화 => 추가 데미지")] public bool fireDeleteBurnIncreaseDamage;
-
-        [Header("\n\nUnit_H 물리 속성\n\n")] [Header("출혈중첩 증가")]
-        public int physics2AdditionalBleedingLayer = 1;
-
-        protected internal void Physics2AdditionalBleedingLayer()
-        {
-            physics2AdditionalBleedingLayer++;
-
-        }
-
-        [Header("출혈 활성화")] public bool physics2ActivateBleed;
-        [Header("공격속도 증가")] public int physics2AdditionalAtkSpeed;
-
-        protected internal void Physics2AdditionalAtkSpeed()
-        {
-            physics2AdditionalAtkSpeed++;
-        }
-
-        [Header("투사체 추가")] public bool physics2AdditionalProjectile;
-        [Header("관통 효과")] public bool physics2ProjectilePenetration;
-
-        [Header("\n\n공통강화\n")] [Header("가로줄 추가")]
-        public int addRowCount;
-
-        public delegate void AddRowDelegate();
-
-        public event AddRowDelegate OnAddRow;
-
-        protected internal void AddRow()
+       
+       
+        [Header("\n\n공통강화\n")] 
+        [Header("가로줄 추가")] public int addRowCount; public delegate void AddRowDelegate(); public event AddRowDelegate OnAddRow; protected internal void AddRow()
         {
             addRowCount += 1;
             gridManager.AddRow();
             OnAddRow?.Invoke();
         }
-
-        [Header("적 이동속도 감소 15%증가 (최대 45%)")] public int slowCount;
-
-        protected internal void SlowCount()
+        [Header("적 이동속도 감소 15%증가 (최대 45%)")] public int slowCount; protected internal void SlowCount()
         {
             slowCount++;
             if (slowCount >= 4)
@@ -416,68 +297,44 @@ namespace Script.RewardScript
                 slowCount = 4;
             }
         }
-
         [Header("대각선 이동")] public bool diagonalMovement;
         [Header("Castle 체력회복 200")] public bool recoveryCastle;
-        [Header("Castle 최대체력 증가 (최대 2000)")] public float castleMaxHp;
-
-        protected internal void IncreaseCastleMaxHp()
+        [Header("Castle 최대체력 증가 (최대 2000)")] public float castleMaxHp; protected internal void IncreaseCastleMaxHp()
         {
             castleMaxHp += 200f;
             castleManager.IncreaseMaxHp();
         }
-
-        [Header("보드 초기화 케릭터")] public int highLevelCharacterCount = 6;
-        public int selectedCount;
-
-        protected internal void NextCharacterUpgrade(int moveCharacterCount)
+        [Header("보드 초기화 케릭터")] public int highLevelCharacterCount = 6; public int selectedCount; protected internal void NextCharacterUpgrade(int moveCharacterCount)
         {
             highLevelCharacterCount += moveCharacterCount;
             selectedCount += 1;
         }
-
-        [Header("경험치 증가량")] public int expPercentage;
-
-        protected internal void IncreaseExpBuff(int increaseAmount)
+        [Header("경험치 증가량")] public int expPercentage; protected internal void IncreaseExpBuff(int increaseAmount)
         {
             expPercentage += increaseAmount;
         }
-
-        [Header("최대 이동횟수 증가")] public int permanentIncreaseMovementCount;
-
-        protected internal void PermanentIncreaseMoveCount(int increaseStepAmount)
+        [Header("최대 이동횟수 증가")] public int permanentIncreaseMovementCount; protected internal void PermanentIncreaseMoveCount(int increaseStepAmount)
         {
             permanentIncreaseMovementCount += increaseStepAmount;
         }
-
         [Header("5매치 가운데 유닛 추가 레벨증가")] public bool match5Upgrade;
-        [Header("전체 공격력 증가 (%)")] public float increaseAtkDamage = 1f;
-
-        protected internal void IncreaseGroupDamage(int increaseAmount)
+        [Header("전체 공격력 증가 (%)")] public float increaseAtkDamage = 1f; protected internal void IncreaseGroupDamage(int increaseAmount)
         {
             increaseAtkDamage += increaseAmount;
         }
-
-        [Header("전체 공격속도 증가 (%)")] public float increaseAtkRate = 1f;
-
-        protected internal void IncreaseGroupRate(float increaseRateAmount)
+        [Header("전체 공격속도 증가 (%)")] public float increaseAtkRate = 1f; protected internal void IncreaseGroupRate(float increaseRateAmount)
         {
             increaseAtkRate += increaseRateAmount;
         }
-
-        [Header("이동횟수 추가")] public int rewardMoveCount;
-
-        protected internal void RewardMoveCount(int moveCount)
+        [Header("이동횟수 추가")] public int rewardMoveCount; protected internal void RewardMoveCount(int moveCount)
         {
             rewardMoveCount += moveCount;
         }
-
-        [Header("추가코인")] public bool addGold; public int addGoldCount;
-        protected internal void AddGold()
+        [Header("추가코인")] public bool addGold; public int addGoldCount; protected internal void AddGold()
         {
             addGoldCount++;
         }
-        
+        // RandomUnitLevelUp
         public void RandomCharacterLevelUp(int characterCount)
         {
             var activeCharacters = characterPool.UsePoolCharacterList();
@@ -500,7 +357,7 @@ namespace Script.RewardScript
                     character.GetComponent<CharacterBase>()?.unitPuzzleLevel < 5).ToList();
             }
         }
-
+        // Unit Group LevelUp
         public void CharacterGroupLevelUp(int characterListIndex)
         {
             var group = characterList[characterListIndex].unitGroup;
@@ -515,9 +372,8 @@ namespace Script.RewardScript
                 }
             }
         }
-
-        public List<int> permanentGroupIndex = new List<int>();
-        public void PermanentIncreaseCharacter(int characterListIndex)
+        // Unit Group PermanentLevelUp
+        public List<int> permanentGroupIndex = new List<int>(); public void PermanentIncreaseCharacter(int characterListIndex)
         {
             permanentGroupIndex.Add(characterListIndex);
         }
@@ -526,51 +382,6 @@ namespace Script.RewardScript
         {
             var data = new EnforceData
             {
-<<<<<<< Updated upstream
-                activeRestraint = activeRestraint,
-                increaseRestraintTime = increaseRestraintTime,
-                divinePenetrate = divinePenetrate,
-                divineAtkRange = divineAtkRange,
-                divinePoisonAdditionalDamage = divinePoisonAdditionalDamage,
-                divinePoisonAdditionalDamageCount = divinePoisonAdditionalDamageCount,
-                darkSlowAdditionalDamage = darkSlowAdditionalDamage,
-                darkBleedAdditionalDamage = darkBleedAdditionalDamage,
-                darkIncreaseAtkSpeed = darkIncreaseAtkSpeed,
-                darkProjectileBounce = darkProjectileBounce,
-                darkProjectileBounceCount =  darkProjectileBounceCount,
-                water2IncreaseDamage = water2IncreaseDamage,
-                water2BleedAdditionalRestraint = water2BleedAdditionalRestraint,
-                water2IncreaseSlowTime = water2IncreaseSlowTime,
-                water2BackAttack = water2BackAttack,
-                water2AdditionalProjectile = water2AdditionalProjectile,
-                physicAdditionalWeapon = physicAdditionalWeapon,
-                physicIncreaseWeaponScale = physicIncreaseWeaponScale,
-                physicSlowAdditionalDamage = physicSlowAdditionalDamage,
-                increasePhysicAtkSpeed = increasePhysicAtkSpeed,
-                physicIncreaseDamage = physicIncreaseDamage,
-                increasePhysicsDamage = increasePhysicsDamage,
-                waterBurnAdditionalDamage = waterBurnAdditionalDamage,
-                waterRestraintIncreaseDamage = waterRestraintIncreaseDamage,
-                waterIncreaseSlowPower = waterIncreaseSlowPower,
-                increaseWaterDamage = increaseWaterDamage,
-                waterSideAttack = waterSideAttack,
-                poisonDoubleAtk = poisonDoubleAtk,
-                poisonRestraintAdditionalDamage = poisonRestraintAdditionalDamage,
-                poisonInstantKill = poisonInstantKill,
-                poisonIncreaseAtkRange = poisonIncreaseAtkRange,
-                activatePoison = activatePoison,
-                poisonOverlapping = poisonOverlapping,
-                fireBleedingAdditionalDamage = fireBleedingAdditionalDamage,
-                fireIncreaseDamage = fireIncreaseDamage,
-                firePoisonAdditionalStun = firePoisonAdditionalStun,
-                fireIncreaseAtkRange = fireIncreaseAtkRange,
-                fireDeleteBurnIncreaseDamage = fireDeleteBurnIncreaseDamage,
-                physics2AdditionalBleedingLayer = physics2AdditionalBleedingLayer,
-                physics2ActivateBleed = physics2ActivateBleed,
-                physics2AdditionalAtkSpeed = physics2AdditionalAtkSpeed,
-                physics2AdditionalProjectile = physics2AdditionalProjectile,
-                physics2ProjectilePenetration = physics2ProjectilePenetration,
-=======
                 //Divine
                 divinePoisonDamageBoost = divinePoisonDamageBoost,
                 divineBindDurationBoost = divineBindDurationBoost,
@@ -644,7 +455,6 @@ namespace Script.RewardScript
                 fireBurnPerAttackEffect = fireBurnPerAttackEffect,
                 fireProjectileBounceIncrease = fireProjectileBounceIncrease,
 
->>>>>>> Stashed changes
                 addRowCount = addRowCount,
                 slowCount = slowCount,
                 diagonalMovement = diagonalMovement,
@@ -671,53 +481,8 @@ namespace Script.RewardScript
             if (!PlayerPrefs.HasKey("EnforceData")) return;
             var json = PlayerPrefs.GetString("EnforceData");
             var data = JsonUtility.FromJson<EnforceData>(json);
-<<<<<<< Updated upstream
-            activeRestraint = data.activeRestraint;
-            increaseRestraintTime = data.increaseRestraintTime;
-            divinePenetrate = data.divinePenetrate;
-            divineAtkRange = data.divineAtkRange;
-            divinePoisonAdditionalDamage = data.divinePoisonAdditionalDamage;
-            divinePoisonAdditionalDamageCount = data.divinePoisonAdditionalDamageCount;
-            darkSlowAdditionalDamage = data.darkSlowAdditionalDamage;
-            darkBleedAdditionalDamage = data.darkBleedAdditionalDamage;
-            darkIncreaseAtkSpeed = data.darkIncreaseAtkSpeed;
-            darkProjectileBounce = data.darkProjectileBounce;
-            darkProjectileBounceCount = data.darkProjectileBounceCount;
-            water2IncreaseDamage = data.water2IncreaseDamage;
-            water2BleedAdditionalRestraint = data.water2BleedAdditionalRestraint;
-            water2IncreaseSlowTime = data.water2IncreaseSlowTime;
-            water2BackAttack = data.water2BackAttack;
-            water2AdditionalProjectile = data.water2AdditionalProjectile;
-            physicAdditionalWeapon = data.physicAdditionalWeapon;
-            physicIncreaseWeaponScale = data.physicIncreaseWeaponScale;
-            physicSlowAdditionalDamage = data.physicSlowAdditionalDamage;
-            increasePhysicAtkSpeed = data.increasePhysicAtkSpeed;
-            physicIncreaseDamage = data.physicIncreaseDamage;
-            increasePhysicsDamage = data.increasePhysicsDamage;
-            waterBurnAdditionalDamage = data.waterBurnAdditionalDamage;
-            waterRestraintIncreaseDamage = data.waterRestraintIncreaseDamage;
-            waterIncreaseSlowPower = data.waterIncreaseSlowPower;
-            increaseWaterDamage = data.increaseWaterDamage;
-            waterSideAttack = data.waterSideAttack;
-            poisonDoubleAtk = data.poisonDoubleAtk;
-            poisonRestraintAdditionalDamage = data.poisonRestraintAdditionalDamage;
-            poisonInstantKill = data.poisonInstantKill;
-            poisonIncreaseAtkRange = data.poisonIncreaseAtkRange;
-            activatePoison = data.activatePoison;
-            poisonOverlapping = data.poisonOverlapping;
-            fireBleedingAdditionalDamage = data.fireBleedingAdditionalDamage;
-            fireIncreaseDamage = data.fireIncreaseDamage;
-            firePoisonAdditionalStun = data.firePoisonAdditionalStun;
-            fireIncreaseAtkRange = data.fireIncreaseAtkRange;
-            fireDeleteBurnIncreaseDamage = data.fireDeleteBurnIncreaseDamage;
-            physics2AdditionalBleedingLayer = data.physics2AdditionalBleedingLayer;
-            physics2ActivateBleed = data.physics2ActivateBleed;
-            physics2AdditionalAtkSpeed = data.physics2AdditionalAtkSpeed;
-            physics2AdditionalProjectile = data.physics2AdditionalProjectile;
-            physics2ProjectilePenetration = data.physics2ProjectilePenetration;
-=======
             
-            // Divine
+            // Divine Unit A
             divinePoisonDamageBoost = data.divinePoisonDamageBoost;
             divineBindDurationBoost = data.divineBindDurationBoost;
             divineShackledExplosion = data.divineShackledExplosion;
@@ -790,7 +555,6 @@ namespace Script.RewardScript
             fireBurnPerAttackEffect = data.fireBurnPerAttackEffect;
             fireProjectileBounceIncrease = data.fireProjectileBounceIncrease;
 
->>>>>>> Stashed changes
             addRowCount = data.addRowCount;
             slowCount = data.slowCount;
             diagonalMovement = data.diagonalMovement;
