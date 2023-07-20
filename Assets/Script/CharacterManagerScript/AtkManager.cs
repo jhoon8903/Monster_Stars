@@ -56,7 +56,7 @@ namespace Script.CharacterManagerScript
         }
         private IEnumerator AtkMotion(CharacterBase unit)
         {
-            var atkRate = unit.defaultAtkRate * (AttackRate - EnforceManager.Instance.increaseAtkRate / 100f);
+            var atkRate = unit.defaultAtkRate / (AttackRate + EnforceManager.Instance.increaseAtkRate / 100f);
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());

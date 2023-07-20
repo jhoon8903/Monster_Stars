@@ -25,8 +25,8 @@ namespace Script.CharacterGroupScript
         {
             base.Initialize();
             unitGroup = UnitGroups.H;
-            UnitProperty = UnitProperties.Physics;
-            UnitGrade = UnitGrades.Green;
+            UnitProperty = UnitProperties.Fire;
+            UnitGrade = UnitGrades.Blue;
             SetLevel(1);
         }
 
@@ -96,9 +96,10 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
+            var unitLevelDamage = UnitPieceLevel * 20f;
             Type = Types.Character;
             unitGroup = UnitGroups.H;
-            DefaultDamage = 120f * level switch
+            DefaultDamage = unitLevelDamage + 100f * level switch
             {
                 <= 2 => 1f,
                 3 => 1.7f,
@@ -109,8 +110,8 @@ namespace Script.CharacterGroupScript
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             UnitAtkType = UnitAtkTypes.Projectile;
-            UnitProperty = UnitProperties.Physics;
-            UnitEffect = UnitEffects.Bleed;
+            UnitProperty = UnitProperties.Fire;
+            UnitEffect = UnitEffects.Burn;
         }
     }
 }

@@ -70,13 +70,6 @@ namespace Script.CharacterGroupScript
             return detectedEnemies;
         }
 
-        // public void OnDrawGizmos()
-        // {
-        //     GetDetectionProperties(out var size, out var center);
-        //     Gizmos.color = Color.cyan;
-        //     Gizmos.DrawWireSphere(center, size);
-        // }
-
         public void ResetDamage()
         {
             EnforceManager.Instance.increasePhysicsDamage = 1f;
@@ -85,9 +78,10 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
+            var unitLevelDamage = UnitPieceLevel * 55f;
             Type = Types.Character;
             unitGroup = UnitGroups.D;
-            DefaultDamage = 250f  * level switch
+            DefaultDamage = unitLevelDamage + 220f  * level switch
             {
                 <=  2 => 1f,
                 3 => 1.7f,
@@ -96,10 +90,9 @@ namespace Script.CharacterGroupScript
             } * EnforceManager.Instance.increasePhysicsDamage;
             defaultAtkRate = 1f * EnforceManager.Instance.increasePhysicAtkSpeed ;
             swingSpeed = 1f * EnforceManager.Instance.increasePhysicAtkSpeed;
-            defaultAtkDistance = 1f;
             UnitAtkType = UnitAtkTypes.Circle;
             UnitProperty = UnitProperties.Physics;
-            UnitEffect = UnitEffects.None;
+            UnitEffect = UnitEffects.Bleed;
         }
 
         protected internal override Sprite GetSprite(int level)
