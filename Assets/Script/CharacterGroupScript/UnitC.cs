@@ -54,21 +54,8 @@ namespace Script.CharacterGroupScript
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
             _detectionHeight = defaultAtkDistance;
-            if (EnforceManager.Instance.water2BackAttack)
-            {
-                size = new Vector2(_detectionWidth, _detectionHeight*2f);
-                center = transform.position;
-            }
-            else
-            {
-                size = new Vector2(_detectionWidth, _detectionHeight);
-                center = (Vector2)transform.position + Vector2.up * _detectionHeight / 2f;
-            }
-
-            if (EnforceManager.Instance.water2AdditionalProjectile)
-            {
-                _detectionWidth = 2.8f;
-            }
+            size = new Vector2(_detectionWidth, _detectionHeight);
+            center = (Vector2)transform.position + Vector2.up * _detectionHeight / 2f;
         }
 
         public override List<GameObject> DetectEnemies()
@@ -103,19 +90,20 @@ namespace Script.CharacterGroupScript
             var unitLevelDamage = unitPieceLevel * 12f;
             Type = Types.Character;
             unitGroup = UnitGroups.C;
-            DefaultDamage = unitLevelDamage + 60f * level switch
+            defaultAtkRate = 0.8f / (1f + 6 * EnforceManager.Instance.darkAttackSpeedBoost / 100f);
+            defaultAtkDistance = 9f;
+            projectileSpeed = 1f;
+            UnitAtkType = UnitAtkTypes.Projectile;
+            UnitProperty = UnitProperties.Water;
+            var increaseDamage = 1f + EnforceManager.Instance.waterAttackBoost * 12 / 100f;
+            DefaultDamage = unitLevelDamage + 60f * increaseDamage * level switch
             {
                 <=  2 => 1f,
                 3 => 1.7f,
                 4 => 2f,
                 _ => 2.3f
             };
-            defaultAtkRate = 0.8f;
-            defaultAtkDistance = 9f;
-            projectileSpeed = 1f;
-            UnitAtkType = UnitAtkTypes.Projectile;
-            UnitProperty = UnitProperties.Water;
-            UnitEffect = UnitEffects.Slow;
+            UnitEffect = EnforceManager.Instance.waterAllyDamageBoost ? UnitEffects.None : UnitEffects.Slow;
         }
     }
 }

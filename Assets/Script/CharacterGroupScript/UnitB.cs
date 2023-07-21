@@ -14,8 +14,9 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level3Sprite;
         [SerializeField] private Sprite level4Sprite; 
         [SerializeField] private Sprite level5Sprite;
-        private const float DetectionWidth = 3f;
-        private const float DetectionHeight = 3f;
+        private float _detectionWidth;
+        private float _detectionHeight;
+        public int atkCount;
        
         public void Awake()
         {
@@ -54,8 +55,18 @@ namespace Script.CharacterGroupScript
 
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
+            if (EnforceManager.Instance.darkRangeIncrease)
+            {
+                _detectionWidth = 5f;
+                _detectionHeight = 5f;
+            }
+            else
+            {
+                _detectionWidth = 3f;
+                _detectionHeight = 3f;
+            }
             center = transform.position;
-            size = new Vector2(DetectionWidth, DetectionHeight);
+            size = new Vector2(_detectionWidth, _detectionHeight);
         }
 
 
@@ -88,18 +99,18 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            var unitLevelDamage = unitPieceLevel * 30;
+            var unitLevelDamage = unitPieceLevel * 16;
             Type = Types.Character;
             unitGroup = UnitGroups.B;
-            DefaultDamage = unitLevelDamage + 120f * level switch
+            DefaultDamage = unitLevelDamage + 120f * (1f + 6 * EnforceManager.Instance.divineAttackBoost / 100f) * level switch
             {
                <= 2 => 1f,
                 3 => 1.7f,
                 4 => 2f,
                 _ => 2.3f
             };
-            defaultAtkRate = 1.4f;
-            projectileSpeed = 1.5f;
+            defaultAtkRate = 1.4f / (1f + 6 * EnforceManager.Instance.darkAttackSpeedBoost / 100f);
+            projectileSpeed = 1f;
             UnitAtkType = UnitAtkTypes.Projectile;
             UnitProperty = UnitProperties.Darkness;
             UnitEffect = UnitEffects.None;

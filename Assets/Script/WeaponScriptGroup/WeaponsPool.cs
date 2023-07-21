@@ -6,7 +6,7 @@ namespace Script.WeaponScriptGroup
 {
     public class WeaponsPool : MonoBehaviour
     {
-        public enum WeaponType { None ,Spear, Sword, Dart, IceCrystal, VenomSac, FireBall,Dark }
+        public enum WeaponType { None ,A, B, C, D, E, F,G,H }
         [System.Serializable]
         public class Weapon
         {
@@ -18,7 +18,8 @@ namespace Script.WeaponScriptGroup
         [SerializeField] private int weaponPoolCapacity = 20;
         private Dictionary<WeaponType, Queue<GameObject>> _poolDictionary;
         private static readonly Vector3 InitLocalScale = new Vector3(1f, 1f , 1f);
-        private GameObject _pivotSword;
+        private GameObject _pivotDSword;
+        private GameObject _pivotGSword;
         private void Start()
         {
             _poolDictionary = new Dictionary<WeaponType, Queue<GameObject>>();
@@ -44,20 +45,27 @@ namespace Script.WeaponScriptGroup
             var objectToSpawn = _poolDictionary[weaponType].Dequeue();
             objectToSpawn.transform.position = position;
             objectToSpawn.transform.rotation = rotation;
-    
-            _pivotSword = FindInChildren(objectToSpawn, "Sword(Clone)");
-            if (EnforceManager.Instance.physicIncreaseWeaponScale)
+            _pivotDSword = FindInChildren(objectToSpawn, "D(Clone)");
+            _pivotGSword = FindInChildren(objectToSpawn, "G(Clone)");
+            if (EnforceManager.Instance.physicalSwordScaleIncrease)
             {
-                if (_pivotSword != null)
+                if (_pivotDSword != null)
                 {
-                    _pivotSword.transform.localScale = new Vector3(1.5f,2f,1f);
+                    _pivotDSword.transform.localScale = new Vector3(1.5f,2f,1f);
+                }
+            }
+
+            if (EnforceManager.Instance.fire2SwordSizeIncrease)
+            {
+                if (_pivotDSword != null)
+                {
+                    _pivotGSword.transform.localScale = new Vector3(1.5f,2f,1f);
                 }
             }
             _poolDictionary[weaponType].Enqueue(objectToSpawn);
             objectToSpawn.SetActive(true);
             return objectToSpawn;
         }
-
 
         public void SetSprite(WeaponType weaponType, int level, GameObject weaponObject)
         {

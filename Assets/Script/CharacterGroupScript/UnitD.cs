@@ -53,7 +53,7 @@ namespace Script.CharacterGroupScript
         private void GetDetectionProperties(out float size, out Vector2 center)
         {
             center = transform.position;
-            size = EnforceManager.Instance.physicIncreaseWeaponScale ? 2.5f : 1.5f;
+            size = EnforceManager.Instance.physicalSwordScaleIncrease ? 2.5f : 1.5f;
         }
 
         public override List<GameObject> DetectEnemies()
@@ -70,10 +70,6 @@ namespace Script.CharacterGroupScript
             return detectedEnemies;
         }
 
-        public void ResetDamage()
-        {
-            EnforceManager.Instance.increasePhysicsDamage = 1f;
-        }
 
         protected internal override void SetLevel(int level)
         {
@@ -81,15 +77,17 @@ namespace Script.CharacterGroupScript
             var unitLevelDamage = unitPieceLevel * 25f;
             Type = Types.Character;
             unitGroup = UnitGroups.D;
-            DefaultDamage = unitLevelDamage + 100f  * level switch
+            var increaseDamage = 1f + 6 * EnforceManager.Instance.physicalDamage6Boost / 100f;
+            const float damage18Boost = 1f + 0.18f;
+            DefaultDamage = unitLevelDamage + 100f * increaseDamage * damage18Boost * level switch
             {
-                <=  2 => 1f,
+                <= 2 => 1f,
                 3 => 1.7f,
                 4 => 2f,
                 _ => 2.3f
-            } * EnforceManager.Instance.increasePhysicsDamage;
-            defaultAtkRate = 1f * EnforceManager.Instance.increasePhysicAtkSpeed ;
-            swingSpeed = 1f * EnforceManager.Instance.increasePhysicAtkSpeed;
+            };
+            defaultAtkRate = 1f / (1f + EnforceManager.Instance.physicalAttackSpeedBoost * 7 / 100f);
+            swingSpeed = 1f; 
             UnitAtkType = UnitAtkTypes.Circle;
             UnitProperty = UnitProperties.Physics;
             UnitEffect = UnitEffects.Bleed;

@@ -115,7 +115,7 @@ namespace Script.CharacterGroupScript
             projectileSpeed = 1f;
             UnitAtkType = UnitAtkTypes.Projectile;
             UnitProperty = UnitProperties.Divine;
-            UnitEffect = UnitEffects.Restraint;
+            UnitEffect = UnitEffects.Bind;
         }
     }
 }

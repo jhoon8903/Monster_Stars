@@ -33,7 +33,7 @@ namespace Script.RewardScript
              DivineProjectilePierce,
 
              //Darkness B
-             DarkTenthAttackDoubleDamage,
+             DarkTenthAttackDamageBoost,
              DarkAttackSpeedBoost,
              DarkAttackPowerBoost,
              DarkStatusAilmentDamageChance,
@@ -89,7 +89,7 @@ namespace Script.RewardScript
              Fire2AttackPowerIncrease,
              Fire2StunChance,
              Fire2SwordSizeIncrease,
-             Fire2RangeIncrease,
+             Fire2BurningDamageBoost,
              Fire2NoBurnDamageIncrease,
 
              //Fire1 H

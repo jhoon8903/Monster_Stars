@@ -20,9 +20,9 @@ namespace Script.CharacterManagerScript
         public enum Types { Character, Treasure }
         protected internal Types Type; 
         public enum UnitGroups { A,B,C,D,E,F,G,H,None }
-        public enum UnitAtkTypes {None, Projectile, GuideProjectile, Gas, Circle, Vibrate, Boomerang }
+        public enum UnitAtkTypes {None, Projectile, GuideProjectile, Circle}
         public enum UnitProperties { Divine, Darkness, Physics, Water, Poison, Fire, None }
-        public enum UnitEffects { Slow, Bleed, Poison, Burn, Stun, Strike, Restraint, Darkness, None } 
+        public enum UnitEffects { Slow, Bleed, Poison, Burn, Bind, None } 
         public UnitGroups unitGroup = UnitGroups.None; 
         protected internal UnitAtkTypes UnitAtkType = UnitAtkTypes.None;
         protected internal UnitProperties UnitProperty = UnitProperties.None;
@@ -47,6 +47,7 @@ namespace Script.CharacterManagerScript
         protected internal bool IsClicked { get; set; }
         protected static List<GameObject> detectedEnemies = new List<GameObject>();
         private SpriteRenderer _spriteRenderer;
+        protected internal bool HasAttackSpeedBuff { get; set; } = false;
 
         public virtual void Initialize()
         {

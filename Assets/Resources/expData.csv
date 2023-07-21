@@ -69,7 +69,7 @@ Green,700,Fire2BurnStackIncrease,1
 Blue,700,Fire2AttackPowerIncrease,1
 Blue,700,Fire2StunChance,1
 Blue,700,Fire2SwordSizeIncrease,1
-Purple,700,Fire2RangeIncrease,1
+Purple,700,Fire2BurningDamageBoost,1
 Purple,700,Fire2NoBurnDamageIncrease,1
 Green,800,FireImageOverlapIncrease,1
 Green,800,FireAttackSpeedBoost,1

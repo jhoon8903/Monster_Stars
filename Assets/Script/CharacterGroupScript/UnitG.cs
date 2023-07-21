@@ -4,7 +4,6 @@ using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
 using UnityEngine;
-using Color = UnityEngine.Color;
 
 namespace Script.CharacterGroupScript
 {
@@ -58,7 +57,7 @@ namespace Script.CharacterGroupScript
         private void GetDetectionProperties(out float size, out Vector2 center)
         {
             center = transform.position;
-            size = EnforceManager.Instance.fireIncreaseAtkRange ? 2.5f : 1.5f;
+            size = EnforceManager.Instance.fire2SwordSizeIncrease ? 2.5f : 1.5f;
         }
 
         public override List<GameObject> DetectEnemies()
@@ -74,13 +73,6 @@ namespace Script.CharacterGroupScript
             detectedEnemies = currentlyDetectedEnemies;
             return detectedEnemies;
         }
-
-        // public void OnDrawGizmos()
-        // {
-        //     GetDetectionProperties(out var size, out var center);
-        //     Gizmos.color = Color.red;
-        //     Gizmos.DrawWireSphere(center, size);
-        // }
 
         protected internal override Sprite GetSprite(int level)
         {
@@ -100,19 +92,21 @@ namespace Script.CharacterGroupScript
             var unitLevelDamage = unitPieceLevel * 40f;
             Type = Types.Character;
             unitGroup = UnitGroups.G;
-            DefaultDamage = unitLevelDamage + 180f * level switch
+            var damageBoost = 1f + EnforceManager.Instance.fire2AttackPowerIncrease * 12 / 100f;
+            DefaultDamage = unitLevelDamage + 180f * damageBoost * level switch
             {
                 <= 2 => 1f,
                 3 => 1.7f,
                 4 => 2f,
                 _ => 2.3f
             };
-            defaultAtkRate = 1.5f;
+            var increaseRateBoost = 1f + EnforceManager.Instance.fire2AttackSpeedIncrease * 6 / 100f;
+            defaultAtkRate = 1f / increaseRateBoost;
             defaultAtkDistance = 1f;
             projectileSpeed = 1f;
             UnitAtkType = UnitAtkTypes.Circle;
             UnitProperty = UnitProperties.Fire;
-            UnitEffect = UnitEffects.Burn;
+            UnitEffect = EnforceManager.Instance.fire2NoBurnDamageIncrease ? UnitEffects.None : UnitEffects.Burn;
         }
     }
 }

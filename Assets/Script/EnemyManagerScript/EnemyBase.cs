@@ -39,6 +39,12 @@ namespace Script.EnemyManagerScript
         public enum SpawnZones { A, B, C, D, E, F }
         public bool isBind;
         public bool isSlow;
+        public bool isReceiveDamageDebuff;
+        public bool isSlowC;
+        public bool isSlowE;
+        public bool isSlowStun;
+        public bool isSlowBleedStun;
+        public bool isBurningPoison;
 
         public bool isPoison;
         public bool IsPoison
@@ -48,7 +54,7 @@ namespace Script.EnemyManagerScript
             {
                 isPoison = value;
                 if (!isPoison) return;
-                var venomSac = FindObjectOfType<VenomSac>();
+                var venomSac = FindObjectOfType<F>();
                 if (venomSac == null) return;
                 if (isPoison && gameObject.activeInHierarchy)
                 {
@@ -64,7 +70,7 @@ namespace Script.EnemyManagerScript
             set
             {
                 isBurn = value;
-                var fireBall = FindObjectOfType<FireBall>();
+                var fireBall = FindObjectOfType<G>();
                 if (fireBall == null) return;
                 if (isBurn && gameObject.activeInHierarchy)
                 {
@@ -80,10 +86,9 @@ namespace Script.EnemyManagerScript
             set
             {
                 isBleed = value;
-                if(!isBleed) return;
-               var dart = FindObjectOfType<Dart>();
-                StartCoroutine(dart.BleedEffect(this));
-
+                if(!isBleed) return; 
+                var d= FindObjectOfType<D>();
+                StartCoroutine(d.BleedEffect(this));
             }
         }
         public void Awake()
@@ -113,28 +118,48 @@ namespace Script.EnemyManagerScript
             healthPoint = baseHealthPoint;
         }
 
-        public void ReceiveDamage(EnemyBase detectEnemy, int damage, CharacterBase.UnitGroups atkUnit, KillReasons reason = KillReasons.ByPlayer)
+        public void ReceiveDamage(EnemyBase detectEnemy, float damage, CharacterBase atkUnit, KillReasons reason = KillReasons.ByPlayer)
         {
             lock (Lock)
             {
                 if (isDead) return;
-                currentHealth -= damage;
+                if (detectEnemy.isReceiveDamageDebuff) damage *= 1.15f;
+                currentHealth -= (int)damage;
                 if (gameObject == null || !gameObject.activeInHierarchy) return;
                 _updateSlider = true;
                 if (currentHealth > 0f || isDead) return;
                 isDead = true;
                 ExpManager.Instance.HandleEnemyKilled(reason);
                 EnemyKilledEvents(detectEnemy);
-                if (!EnforceManager.Instance.divineShackledExplosion || atkUnit != CharacterBase.UnitGroups.A) return;
-                var enemyPosition = detectEnemy.transform.position;
-                var explosionSize = new Vector2(3, 3);
-                var colliders = Physics2D.OverlapBoxAll(enemyPosition, explosionSize, 0f);
-                foreach (var enemyObject in colliders)
+                if (EnforceManager.Instance.divineShackledExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.A)
                 {
-                    if (!enemyObject.gameObject.CompareTag("Enemy") || !enemyObject.gameObject.activeInHierarchy) continue;
-                    var nearEnemy = enemyObject.GetComponent<EnemyBase>();
-                    ReceiveDamage(nearEnemy, damage, CharacterBase.UnitGroups.A);
+                   ExplosionDamage(detectEnemy, damage, atkUnit);
                 }
+                if (EnforceManager.Instance.fireBurnedEnemyExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.H)
+                {
+                    ExplosionDamage(detectEnemy, damage * 2, atkUnit);
+                }
+                if (EnforceManager.Instance.water2IceSpikeProjectile)
+                {
+                    if (atkUnit.unitGroup == CharacterBase.UnitGroups.E)
+                    {
+                       StartCoroutine( AtkManager.Instance.SplitAttack(new AttackData(atkUnit.gameObject,WeaponsPool.WeaponType.E),detectEnemy.transform.position));
+                    }
+                }
+            }
+        }
+
+        private void ExplosionDamage(EnemyBase detectEnemy, float damage, CharacterBase atkUnit)
+        {
+            var enemyPosition = detectEnemy.transform.position;
+            var explosionSize = new Vector2(3, 3);
+            var colliders = Physics2D.OverlapBoxAll(enemyPosition, explosionSize, 0f);
+            foreach (var enemyObject in colliders)
+            {
+                if (!enemyObject.gameObject.CompareTag("Enemy") || !enemyObject.gameObject.activeInHierarchy) continue;
+                var nearEnemy = enemyObject.GetComponent<EnemyBase>();
+                var explosionDamage = GetComponent<WeaponBase>().DamageCalculator(damage, detectEnemy, atkUnit.unitGroup);
+                ReceiveDamage(nearEnemy, (int)explosionDamage, atkUnit);
             }
         }
 

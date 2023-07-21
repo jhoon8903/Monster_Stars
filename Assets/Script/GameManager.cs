@@ -53,39 +53,32 @@ namespace Script
 
         private IEnumerator LoadGame()
         {
-            try
+            swipeManager.isBusy = true; 
+            gridManager.GenerateInitialGrid(PlayerPrefs.GetInt("GridHeight", 6));
+            if (PlayerPrefs.HasKey("unitState"))
             {
-                swipeManager.isBusy = true; 
-                gridManager.GenerateInitialGrid(PlayerPrefs.GetInt("GridHeight", 6));
-                if (PlayerPrefs.HasKey("unitState"))
+                StartCoroutine(spawnManager.LoadGameState());
+                EnforceManager.Instance.LoadEnforceData();
+                countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
+                expManager.LoadExp();
+                castleManager.LoadCastleHp();
+                if (StageManager.Instance.currentWave % 10 == 0)
                 {
-                    StartCoroutine(spawnManager.LoadGameState());
-                    EnforceManager.Instance.LoadEnforceData();
-                    countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
-                    expManager.LoadExp();
-                    castleManager.LoadCastleHp();
-                    if (StageManager.Instance.currentWave % 10 == 0)
-                    {
-                        _bossSpawnArea = new Vector3Int(Random.Range(1, 5), 9, 0);
-                        gridManager.ApplyBossSpawnColor(_bossSpawnArea);
-                    }
+                    _bossSpawnArea = new Vector3Int(Random.Range(1, 5), 9, 0);
+                    gridManager.ApplyBossSpawnColor(_bossSpawnArea);
                 }
-                else
-                {
-                    countManager.Initialize(moveCount);
-                    StartCoroutine(spawnManager.PositionUpCharacterObject());
-                }
-                StageManager.Instance.SelectedStages();
-                StageManager.Instance.UpdateWaveText();
-                speedUp = true;
-                GameSpeedSelect();
-                stageText.text = $"{StageManager.Instance.selectStage} STAGE";
-                swipeManager.isBusy = false;
             }
-            catch (Exception e)
+            else
             {
-                Debug.LogError("Exception in LoadGame: " + e);
+                countManager.Initialize(moveCount);
+                StartCoroutine(spawnManager.PositionUpCharacterObject());
             }
+            StageManager.Instance.SelectedStages();
+            StageManager.Instance.UpdateWaveText();
+            speedUp = true;
+            GameSpeedSelect();
+            stageText.text = $"{StageManager.Instance.selectStage} STAGE";
+            swipeManager.isBusy = false;
             yield return null;
         }
         public IEnumerator Count0Call()
@@ -97,12 +90,27 @@ namespace Script
             yield return _waitTwoSecRealtime;
             StartCoroutine(AtkManager.Instance.CheckForAttack());
             StartCoroutine(StageManager.Instance.WaveController());
+            var allUnits = FindObjectsOfType<CharacterBase>();
+            foreach (var unit in allUnits)
+            {
+                if (unit is UnitE unitE)
+                {
+                    unitE.ApplyAttackSpeedBuffToAllies();
+                }
+            }
             GameSpeed();
         }
         public IEnumerator ContinueOrLose()
         {
             IsBattle = false;
             AtkManager.Instance.ClearWeapons();
+            var allUnits = FindObjectsOfType<CharacterBase>();
+            foreach (var unit in allUnits)
+            {
+                if (unit is not UnitE { HasAttackSpeedBuff: true } || !EnforceManager.Instance.water2AttackSpeedBuffToAdjacentAllies) continue;
+                unit.defaultAtkRate /= 0.9f;
+                unit.HasAttackSpeedBuff = false;
+            }
             if (castleManager.HpPoint > 0)
             {
                 ClearRewardManager.Instance.GetCoin();
@@ -153,6 +161,7 @@ namespace Script
             enemyPool.ClearList();
             StageManager.Instance.isBossClear = false;
             if (EnforceManager.Instance.waterGlobalSlowEffect) globalSlow = false;
+            AtkManager.Instance.groupCAtkCount = 0;
         }
         private void LoseGame()
         {

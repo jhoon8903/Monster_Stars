@@ -14,8 +14,7 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level3Sprite;
         [SerializeField] private Sprite level4Sprite;
         [SerializeField] private Sprite level5Sprite;
-        private const float DetectionWidth = 3f;
-        private const float DetectionHeight = 3f;
+        private Vector2 _detectionSize;
 
         public void Awake()
         {
@@ -56,10 +55,10 @@ namespace Script.CharacterGroupScript
 
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
+            _detectionSize = EnforceManager.Instance.poisonRangeIncrease ? new Vector2(5, 5) : new Vector2(3, 3);
             center = transform.position;
-            size = new Vector2(DetectionWidth, DetectionHeight);
+            size = _detectionSize;
         }
-
 
         public override List<GameObject> DetectEnemies()
         {
@@ -100,7 +99,8 @@ namespace Script.CharacterGroupScript
                 4 => 2f,
                 _ => 2.3f
             };
-            defaultAtkRate = 1.2f;
+            var increaseRateBoost = 1f + EnforceManager.Instance.poisonAttackSpeedIncrease * 6 / 100f; 
+            defaultAtkRate = 1.2f / increaseRateBoost;
             projectileSpeed = 1f;
             UnitAtkType = UnitAtkTypes.GuideProjectile;
             UnitProperty = UnitProperties.Poison;

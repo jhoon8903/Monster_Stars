@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Script.CharacterManagerScript;
 using Script.RewardScript;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -10,16 +11,20 @@ namespace Script.EnemyManagerScript
     {
         [SerializeField] private GameManager gameManager;
         [SerializeField] private GameObject castle;
+        [SerializeField] private EnemyPool enemyPool;
         private readonly Dictionary<EnemyBase, Rigidbody2D> _enemyRigidbodies = new Dictionary<EnemyBase, Rigidbody2D>();
         private float _moveSpeed;
         public float moveSpeedOffset;
         private readonly System.Random _random = new System.Random();
         private readonly Dictionary<EnemyBase, bool> _alreadySlow = new Dictionary<EnemyBase, bool>();
         private readonly Dictionary<EnemyBase, bool> _alreadyRestrain = new Dictionary<EnemyBase, bool>();
+        private readonly Dictionary<EnemyBase, bool> _alreadyKnockBack = new Dictionary<EnemyBase, bool>();
+        private readonly Dictionary<EnemyBase, bool> _alreadyStatusSlow = new Dictionary<EnemyBase, bool>();
         private Rigidbody2D _rb;
         private float _endY;
         private int _slowCount;
         private float _speedReductionFactor;
+        public bool globalSlow;
 
         private void Awake()
         {
@@ -38,7 +43,6 @@ namespace Script.EnemyManagerScript
                 enemyBase.Initialize();
                 StartCoroutine(Rain(enemyBase));
             }
-
             switch (enemyBase.SpawnZone)
             {
                 case EnemyBase.SpawnZones.A:
@@ -71,7 +75,7 @@ namespace Script.EnemyManagerScript
             
             var targetPosition = new Vector2(_enemyRigidbodies[enemyBase].transform.position.x, _endY);
 
-            while (gameManager.IsBattle)
+            while (gameManager.IsBattle && _alreadyKnockBack[enemyBase])
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 _slowCount = EnforceManager.Instance.slowCount;
@@ -83,13 +87,25 @@ namespace Script.EnemyManagerScript
                 _moveSpeed = enemyBase.moveSpeed * _speedReductionFactor * moveSpeedOffset * Time.deltaTime;
                 _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed );
                
-                if (enemyBase.isBind)
-                {
-                   StartCoroutine(BindEffect(enemyBase));
+                if (enemyBase.isBind || enemyBase.isSlowStun || enemyBase.isSlowBleedStun || enemyBase.isBurningPoison)
+                { 
+                    StartCoroutine(BindEffect(enemyBase));
                 }
                 if (enemyBase.isSlow)
                 { 
                    StartCoroutine(SlowEffect(enemyBase));
+                }
+                if (EnforceManager.Instance.darkKnockBackChance && Chance(10))
+                {
+                    StartCoroutine(KnockBackEffect(enemyBase));
+                }
+                if (EnforceManager.Instance.darkStatusAilmentSlowEffect)
+                {
+                    if (enemyBase.isBind || enemyBase.isSlow || enemyBase.isBleed || enemyBase.isBurn ||
+                        enemyBase.isPoison)
+                    {
+                        StartCoroutine(StatusSlowEffect(enemyBase));
+                    }
                 }
             }
         }
@@ -101,7 +117,7 @@ namespace Script.EnemyManagerScript
             var endX = enemyBase.SpawnZone == EnemyBase.SpawnZones.B ? Random.Range(4, 7) : Random.Range(-1, 2);
             var targetPosition = new Vector2(endX, _endY);
 
-            while (gameManager.IsBattle)
+            while (gameManager.IsBattle && _alreadyKnockBack[enemyBase])
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 _slowCount = EnforceManager.Instance.slowCount;
@@ -113,13 +129,25 @@ namespace Script.EnemyManagerScript
                 _moveSpeed = enemyBase.moveSpeed * _speedReductionFactor * moveSpeedOffset * Time.deltaTime;
                 _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed);
                 
-                if (enemyBase.isBind)
+                if (enemyBase.isBind || enemyBase.isSlowStun || enemyBase.isSlowBleedStun || enemyBase.isBurningPoison)
                 { 
                     StartCoroutine(BindEffect(enemyBase));
                 }
                 if (enemyBase.isSlow)
                 {
                     StartCoroutine(SlowEffect(enemyBase));
+                }
+                if (EnforceManager.Instance.darkKnockBackChance && Chance(10))
+                {
+                    StartCoroutine(KnockBackEffect(enemyBase));
+                }
+                if (EnforceManager.Instance.darkStatusAilmentSlowEffect)
+                {
+                    if (enemyBase.isBind || enemyBase.isSlow || enemyBase.isBleed || enemyBase.isBurn ||
+                        enemyBase.isPoison)
+                    {
+                        StartCoroutine(StatusSlowEffect(enemyBase));
+                    }
                 }
             }
         }
@@ -139,7 +167,7 @@ namespace Script.EnemyManagerScript
 
             var waypointIndex = 0;
 
-            while (gameManager.IsBattle)
+            while (gameManager.IsBattle && _alreadyKnockBack[enemyBase])
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 var targetPosition = waypoints[waypointIndex];
@@ -162,13 +190,25 @@ namespace Script.EnemyManagerScript
                     continue;
                 }
 
-                if (enemyBase.isBind)
-                {
+                if (enemyBase.isBind || enemyBase.isSlowStun || enemyBase.isSlowBleedStun || enemyBase.isBurningPoison)
+                { 
                     StartCoroutine(BindEffect(enemyBase));
                 }
                 if (enemyBase.isSlow)
                 {
                     StartCoroutine(SlowEffect(enemyBase));
+                }
+                if (EnforceManager.Instance.darkKnockBackChance && Chance(10))
+                {
+                    StartCoroutine(KnockBackEffect(enemyBase));
+                }
+                if (EnforceManager.Instance.darkStatusAilmentSlowEffect)
+                {
+                    if (enemyBase.isBind || enemyBase.isSlow || enemyBase.isBleed || enemyBase.isBurn ||
+                        enemyBase.isPoison)
+                    {
+                        StartCoroutine(StatusSlowEffect(enemyBase));
+                    }
                 }
             }
         }
@@ -181,7 +221,7 @@ namespace Script.EnemyManagerScript
                 ? new Vector2(-1, _enemyRigidbodies[enemyBase].transform.position.y) 
                 : new Vector2(6, _enemyRigidbodies[enemyBase].transform.position.y);
 
-            while (gameManager.IsBattle)
+            while (gameManager.IsBattle && _alreadyKnockBack[enemyBase])
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
@@ -199,13 +239,25 @@ namespace Script.EnemyManagerScript
                     targetPosition = new Vector2(targetPosition.x, _endY);
                 }
 
-                if (enemyBase.isBind)
+                if (enemyBase.isBind || enemyBase.isSlowStun || enemyBase.isSlowBleedStun || enemyBase.isBurningPoison)
                 { 
                     StartCoroutine(BindEffect(enemyBase));
                 }
                 if (enemyBase.isSlow)
                 { 
                     StartCoroutine(SlowEffect(enemyBase));
+                }
+                if (EnforceManager.Instance.darkKnockBackChance && Chance(10))
+                {
+                    StartCoroutine(KnockBackEffect(enemyBase));
+                }
+                if (EnforceManager.Instance.darkStatusAilmentSlowEffect)
+                {
+                    if (enemyBase.isBind || enemyBase.isSlow || enemyBase.isBleed || enemyBase.isBurn ||
+                        enemyBase.isPoison)
+                    {
+                        StartCoroutine(StatusSlowEffect(enemyBase));
+                    }
                 }
             }
         }
@@ -226,7 +278,7 @@ namespace Script.EnemyManagerScript
                 targetPosition = new Vector3(randomX, _enemyRigidbodies[enemyBase].transform.position.y);
             }
 
-            while (gameManager.IsBattle)
+            while (gameManager.IsBattle && _alreadyKnockBack[enemyBase])
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
@@ -245,7 +297,7 @@ namespace Script.EnemyManagerScript
                     targetPosition = new Vector3(targetPosition.x, _endY);
                 }
                 
-                if (enemyBase.isBind)
+                if (enemyBase.isBind || enemyBase.isSlowStun || enemyBase.isSlowBleedStun || enemyBase.isBurningPoison)
                 { 
                     StartCoroutine(BindEffect(enemyBase));
                 }
@@ -253,19 +305,48 @@ namespace Script.EnemyManagerScript
                 { 
                     StartCoroutine(SlowEffect(enemyBase));
                 }
+                if (EnforceManager.Instance.darkKnockBackChance && Chance(10))
+                {
+                    StartCoroutine(KnockBackEffect(enemyBase));
+                }
+                if (EnforceManager.Instance.darkStatusAilmentSlowEffect)
+                {
+                    if (enemyBase.isBind || enemyBase.isSlow || enemyBase.isBleed || enemyBase.isBurn ||
+                        enemyBase.isPoison)
+                    {
+                        StartCoroutine(StatusSlowEffect(enemyBase));
+                    }
+                }
             }
         }
         private IEnumerator BindEffect(EnemyBase enemyBase)
         {
             var restrainColor = new Color(1, 0.5f, 0);
             var originColor = new Color(1, 1, 1);
-            var restrainTime = 1f + EnforceManager.Instance.divineBindDurationBoost;
+            float restrainTime;
+ 
+            if (enemyBase.isSlowStun)
+            {
+                restrainTime = 0.1f;
+            }
+            else if (enemyBase.isSlowBleedStun)
+            {
+                restrainTime = 0.5f;
+            }
+            else if (enemyBase.isBurningPoison)
+            {
+                restrainTime = 0.5f;
+            }
+            else
+            {
+                restrainTime = 1f + EnforceManager.Instance.divineBindDurationBoost;
+            }
+
             if (!_alreadyRestrain.TryGetValue(enemyBase, out var isAlreadyRestraint))
             {
                 isAlreadyRestraint = false;
                 _alreadyRestrain[enemyBase] = false;
             }
-
             if  (isAlreadyRestraint) yield break;
             _alreadyRestrain[enemyBase] = true;
             enemyBase.GetComponent<SpriteRenderer>().color = restrainColor;
@@ -275,20 +356,31 @@ namespace Script.EnemyManagerScript
             enemyBase.GetComponent<SpriteRenderer>().color = originColor;
             _alreadyRestrain[enemyBase] = false;
             enemyBase.isBind = false;
+            enemyBase.isSlowStun = false;
         }
         private IEnumerator SlowEffect(EnemyBase enemyBase)
         {
             var slowColor = new Color(0f, 0.74f, 1);
             var originColor = new Color(1, 1, 1);
-            var slowTime = 1f;
-            var moveSpeedMultiplier = 0.4f;
-
+            var slowTime = 0f;
+            var moveSpeedMultiplier = 0f;
+            if (enemyBase.isSlowC)
+            {
+                slowTime = 3f;
+                moveSpeedMultiplier = 0.6f;
+                enemyBase.isSlowC = false;
+            }
+            else if (enemyBase.isSlowE)
+            {
+                slowTime = 1.5f + EnforceManager.Instance.water2DebuffDurationIncrease * 0.1f;
+                moveSpeedMultiplier = EnforceManager.Instance.water2DebuffStrengthIncrease ? 0.6f : 0.7f;
+                enemyBase.isSlowE = false;
+            }
             if (!_alreadySlow.TryGetValue(enemyBase, out var isAlreadySlow))
             {
                 isAlreadySlow = false;
                 _alreadySlow[enemyBase] = false;
             }
-
             if (isAlreadySlow) yield break;
             _alreadySlow[enemyBase] = true;
             enemyBase.GetComponent<SpriteRenderer>().color = slowColor;
@@ -298,6 +390,69 @@ namespace Script.EnemyManagerScript
             enemyBase.GetComponent<SpriteRenderer>().color = originColor;
             _alreadySlow[enemyBase] = false;
             enemyBase.isSlow = false;
+        }
+        private IEnumerator KnockBackEffect(EnemyBase enemyBase)
+        {
+            if (!_alreadyKnockBack.TryGetValue(enemyBase, out var isAlreadyKnockBack))
+            {
+                isAlreadyKnockBack = false;
+                _alreadyKnockBack[enemyBase] = false;
+            }
+            if (isAlreadyKnockBack) yield break;
+            _alreadyKnockBack[enemyBase] = true;
+
+            var knockBackDirection = Vector2.up; 
+            var knockBackForce = 10.0f;
+            var rb = enemyBase.GetComponent<Rigidbody2D>();
+            rb.AddForce(knockBackDirection * knockBackForce, ForceMode2D.Impulse);
+            yield return new WaitForSeconds(0.5f);
+            while (knockBackForce > 0)
+            {
+                knockBackForce -= Time.deltaTime;
+                rb.velocity = knockBackDirection * knockBackForce;
+                yield return null;
+            }
+            rb.velocity = Vector2.zero;
+            _alreadyKnockBack[enemyBase] = false;
+        }
+
+        private IEnumerator StatusSlowEffect(EnemyBase enemyBase)
+        {
+            const float slowTime = 1f;
+            const float moveSpeedMultiplier = 0.8f;
+            var slowColor = new Color(0.2311f, 0.2593f, 1f, 1f);
+            var originColor = new Color(1f, 1f, 1f);
+
+            if (!_alreadyStatusSlow.TryGetValue(enemyBase, out var isAlreadyStatusSlow))
+            {
+                isAlreadyStatusSlow = false;
+                _alreadyStatusSlow[enemyBase] = false;
+            }
+            if(isAlreadyStatusSlow) yield break;
+            _alreadyStatusSlow[enemyBase] = true;
+            enemyBase.GetComponent<SpriteRenderer>().color = slowColor;
+            enemyBase.moveSpeed *= moveSpeedMultiplier;
+            yield return new WaitForSeconds(slowTime);
+            enemyBase.moveSpeed = enemyBase.originSpeed;
+            enemyBase.GetComponent<SpriteRenderer>().color = originColor;
+            _alreadyStatusSlow[enemyBase] = false;
+        }
+
+        public IEnumerator GlobalSlowEffect()
+        {
+            if (globalSlow) yield break;
+            globalSlow = true;
+            var enemyList = enemyPool.enemyBases;
+            foreach (var enemy in enemyList)
+            {
+                var enemyBase = enemy.GetComponent<EnemyBase>();
+                enemyBase.GetComponent<SpriteRenderer>().color = Color.cyan;
+                enemyBase.moveSpeed *= 0.8f;
+                yield return new WaitForSeconds(1f);
+                enemyBase.GetComponent<SpriteRenderer>().color = Color.white;
+                enemyBase.moveSpeed = enemyBase.originSpeed;
+            }
+            globalSlow = false;
         }
     }
 }

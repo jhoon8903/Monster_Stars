@@ -34,6 +34,11 @@ namespace Script.RewardScript
         [SerializeField] private GameManager gameManager;
         [SerializeField] private CharacterManager characterManager;
         private ExpData _selectedPowerUp;
+        public static LevelUpRewardManager Instance;
+        private void Awake()
+        {
+            Instance = this;
+        }
 
         private static void ProcessExpReward(ExpData selectedReward)
         {
@@ -93,8 +98,8 @@ namespace Script.RewardScript
                 case ExpData.Types.DivineProjectilePierce:
                     EnforceManager.Instance.divineProjectilePierce = true;
                     break;
-                case ExpData.Types.DarkTenthAttackDoubleDamage:
-                    EnforceManager.Instance.darkTenthAttackDoubleDamage = true;
+                case ExpData.Types.DarkTenthAttackDamageBoost:
+                    EnforceManager.Instance.darkTenthAttackDamageBoost = true;
                     break;
                 case ExpData.Types.DarkAttackSpeedBoost:
                     EnforceManager.Instance.DarkAttackSpeedIncrease();
@@ -231,8 +236,8 @@ namespace Script.RewardScript
                 case ExpData.Types.Fire2SwordSizeIncrease:
                     EnforceManager.Instance.fire2SwordSizeIncrease = true;
                     break;
-                case ExpData.Types.Fire2RangeIncrease:
-                    EnforceManager.Instance.fire2RangeIncrease = true;
+                case ExpData.Types.Fire2BurningDamageBoost:
+                    EnforceManager.Instance.Fire2BurningDamageBoost();
                     break;
                 case ExpData.Types.Fire2NoBurnDamageIncrease:
                     EnforceManager.Instance.fire2NoBurnDamageIncrease = true;
@@ -406,10 +411,10 @@ namespace Script.RewardScript
                     if (EnforceManager.Instance.divineProjectilePierce) return false;
                     break;
                 // Unit B
-                case ExpData.Types.DarkTenthAttackDoubleDamage:
+                case ExpData.Types.DarkTenthAttackDamageBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.B) < 5) return false;
-                    if (EnforceManager.Instance.darkTenthAttackDoubleDamage) return false;
+                    if (EnforceManager.Instance.darkTenthAttackDamageBoost) return false;
                     break;
                 case ExpData.Types.DarkAttackSpeedBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
@@ -627,9 +632,9 @@ namespace Script.RewardScript
                     if (UnitPieceLevel(CharacterBase.UnitGroups.G) < 5) return false;
                     if (EnforceManager.Instance.fire2SwordSizeIncrease) return false;
                     break;
-                case ExpData.Types.Fire2RangeIncrease:
+                case ExpData.Types.Fire2BurningDamageBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
-                    if (EnforceManager.Instance.fire2RangeIncrease) return false;
+                    if (EnforceManager.Instance.fire2BurningDamageBoost >= 3) return false;
                     break;
                 case ExpData.Types.Fire2NoBurnDamageIncrease:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
@@ -751,7 +756,7 @@ namespace Script.RewardScript
                     break;
                 case ExpData.Types.DivineProjectilePierce:
                     break;
-                case ExpData.Types.DarkTenthAttackDoubleDamage:
+                case ExpData.Types.DarkTenthAttackDamageBoost:
                     break;
                 case ExpData.Types.DarkAttackSpeedBoost:
                     break;
@@ -843,7 +848,7 @@ namespace Script.RewardScript
                     break;
                 case ExpData.Types.Fire2SwordSizeIncrease:
                     break;
-                case ExpData.Types.Fire2RangeIncrease:
+                case ExpData.Types.Fire2BurningDamageBoost:
                     break;
                 case ExpData.Types.Fire2NoBurnDamageIncrease:
                     break;

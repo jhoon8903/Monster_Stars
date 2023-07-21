@@ -14,8 +14,6 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level3Sprite; 
         [SerializeField] private Sprite level4Sprite; 
         [SerializeField] private Sprite level5Sprite;
-        private float _detectionWidth; 
-        private const float DetectionHeight = 9f; 
 
         public void Awake()
         {
@@ -55,12 +53,10 @@ namespace Script.CharacterGroupScript
         }
 
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
-        {         
-            _detectionWidth = EnforceManager.Instance.water2AdditionalProjectile ? 3f : 0.8f;
-            center = (Vector2)transform.position + Vector2.up * DetectionHeight / 2f;
-            size = new Vector2(_detectionWidth, DetectionHeight);
+        {
+            center = transform.position;
+            size = new Vector2(3, 3);
         }
-
         public override List<GameObject> DetectEnemies()
         {
             GetDetectionProperties(out var size, out var center);
@@ -74,12 +70,6 @@ namespace Script.CharacterGroupScript
             detectedEnemies = currentlyDetectedEnemies;
             return detectedEnemies;
         }
-        // public void OnDrawGizmos()
-        // {
-        //     GetDetectionProperties(out var size, out var center);
-        //     Gizmos.color = Color.magenta;
-        //     Gizmos.DrawWireCube(center, size);
-        // }
 
         protected internal override Sprite GetSprite(int level)
         {
@@ -106,9 +96,11 @@ namespace Script.CharacterGroupScript
                 4 => 2f,
                 _ => 2.3f
             };
-            defaultAtkRate = 1f * (1f + 0.17f * EnforceManager.Instance.physics2AdditionalAtkSpeed);
+            var increaseRateBoost = 1f + EnforceManager.Instance.fireAttackSpeedBoost * 6 / 100f;
+            defaultAtkRate = 1f / increaseRateBoost;
             defaultAtkDistance = 9f;
-            projectileSpeed = 1f;
+            var increaseProjectileBoost = EnforceManager.Instance.fireProjectileSpeedIncrease ? 1f : 0f;
+            projectileSpeed = 1f + increaseProjectileBoost;
             UnitAtkType = UnitAtkTypes.Projectile;
             UnitProperty = UnitProperties.Fire;
             UnitEffect = UnitEffects.Burn;

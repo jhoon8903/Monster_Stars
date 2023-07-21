@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
+using Script.RewardScript;
 using UnityEngine;
 
 namespace Script.CharacterGroupScript
@@ -73,6 +74,36 @@ namespace Script.CharacterGroupScript
             return detectedEnemies;
         }
 
+        private IEnumerable<GameObject> DetectAllies()
+        {
+            var center = transform.position;
+            const float detectWidth = 3f;
+            const float detectHeight = 3f;
+            var size = new Vector2(detectWidth, detectHeight);
+            var hitColliders = Physics2D.OverlapBoxAll(center, size, 0f);
+            var allies = hitColliders
+                .Where(x =>
+                {
+                    GameObject ally;
+                    return (ally = x.gameObject).CompareTag("Character") && ally.activeInHierarchy;
+                })
+                .Select(x => x.gameObject).ToList();
+            return allies;
+        }
+
+        public void ApplyAttackSpeedBuffToAllies()
+        {
+            if (!EnforceManager.Instance.water2AttackSpeedBuffToAdjacentAllies) return;
+            var allies = DetectAllies();
+            foreach (var characterBase in allies
+                         .Select(ally => ally.GetComponent<CharacterBase>())
+                         .Where(characterBase => characterBase != null))
+            {
+                characterBase.defaultAtkRate *= 0.9f;
+                characterBase.HasAttackSpeedBuff = true;
+            }
+        }
+
         protected internal override Sprite GetSprite(int level)
         {
             return level switch
@@ -91,19 +122,22 @@ namespace Script.CharacterGroupScript
             var unitLevelDamage = unitPieceLevel * 12f;
             Type = Types.Character;
             unitGroup = UnitGroups.E;
-            DefaultDamage = unitLevelDamage + 60f * level switch
+            var increaseDamage = 1f + EnforceManager.Instance.water2AttackPowerIncrease * 12 / 100f;
+            DefaultDamage = unitLevelDamage + 60f * increaseDamage * level switch
             {
                 <=  2 => 1f,
                 3 => 1.7f,
                 4 => 2f,
                 _ => 2.3f
             };
-            defaultAtkRate = 1f;
+            defaultAtkRate = 1f / (1f + 6f * EnforceManager.Instance.water2AttackSpeedIncrease / 100f);
             defaultAtkDistance = 9f;
-            projectileSpeed = 1f;
+            var increaseProjectileSpeed = EnforceManager.Instance.water2ProjectileSpeedIncrease ? 0.5f : 0f;
+            projectileSpeed = 1f + increaseProjectileSpeed;
             UnitAtkType = UnitAtkTypes.Projectile;
             UnitProperty = UnitProperties.Water;
             UnitEffect = UnitEffects.Slow;
+            ApplyAttackSpeedBuffToAllies();
         }
     }
 }

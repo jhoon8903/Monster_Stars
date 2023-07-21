@@ -1,17 +1,18 @@
 using System.Collections;
 using DG.Tweening;
+using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
 using UnityEngine;
 
 namespace Script.WeaponScriptGroup
 {
-    public class Sword : WeaponBase
+    public class D : WeaponBase
     {
         public GameObject pivotPoint;
         public GameObject secondSword;
-
-        private Tween _pivotTween; // Add this line to store the Tween
+        public float bleedDotDamage;
+        private Tween _pivotTween;
 
         public override IEnumerator UseWeapon()
         {
@@ -24,24 +25,21 @@ namespace Script.WeaponScriptGroup
                 _pivotTween = pivotPoint.transform.DORotate(new Vector3(0, 0, 360), Speed, RotateMode.FastBeyond360);
                 _pivotTween.OnComplete(() => {
                     StopUseWeapon(pivotPoint);
-                    _pivotTween = null; // Reset the tween so it can be recreated next time
-                }).SetAutoKill(false); // Do not kill the tween when it's complete
+                    _pivotTween = null; 
+                }).SetAutoKill(false); 
             }
             if (!_pivotTween.IsActive() || _pivotTween.IsComplete())
             {
                 _pivotTween.Restart();
             }
 
-            if (!EnforceManager.Instance.physicAdditionalWeapon) yield break;
-
+            if (!EnforceManager.Instance.physicalSwordAddition) yield break;
             secondSword.SetActive(true);
             secondSword.GetComponent<WeaponBase>().InitializeWeapon(CharacterBase);
-
             if (secondSword.activeInHierarchy) 
                 StartCoroutine(secondSword.GetComponent<WeaponBase>().UseWeapon());
-
             var weaponPool = FindObjectOfType<WeaponsPool>();
-            weaponPool.SetSprite(WeaponsPool.WeaponType.Sword, CharacterBase.unitPuzzleLevel, secondSword);
+            weaponPool.SetSprite(WeaponsPool.WeaponType.D, CharacterBase.unitPuzzleLevel, secondSword);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -51,8 +49,22 @@ namespace Script.WeaponScriptGroup
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
             AtkEffect(enemy);
 
-            var damage = DamageCalculator(Damage, enemy);
-            enemy.ReceiveDamage(enemy, damage);
+            var damage = DamageCalculator(Damage, enemy, CharacterBase.UnitGroups.D); 
+            enemy.ReceiveDamage(enemy, (int)damage, CharacterBase);
+        }
+
+        public IEnumerator BleedEffect(EnemyBase hitEnemy)
+        {
+            bleedDotDamage = DamageCalculator(Damage, hitEnemy, CharacterBase.UnitGroups.D) * 0.1f;
+            var bleedingColor = new Color(1f,0.127f,0.207f);
+            const float bleedDuration = 2f;
+            StartCoroutine(FlickerEffect(hitEnemy.GetComponent<SpriteRenderer>(), bleedingColor, bleedDuration));
+            for(var i = 0; i < bleedDuration; i++)
+            {
+                hitEnemy.ReceiveDamage(hitEnemy, (int)bleedDotDamage, CharacterBase);
+                yield return new WaitForSeconds(1f);
+            }
+            hitEnemy.isBleed = false;
         }
     }
 }
