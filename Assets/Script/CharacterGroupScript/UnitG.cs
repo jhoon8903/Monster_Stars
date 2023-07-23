@@ -70,8 +70,8 @@ namespace Script.CharacterGroupScript
                 select enemyObject.GetComponent<EnemyBase>()
                 into enemyBase
                 select enemyBase.gameObject).ToList();
-            detectedEnemies = currentlyDetectedEnemies;
-            return detectedEnemies;
+            DetectedEnemies = currentlyDetectedEnemies;
+            return DetectedEnemies;
         }
 
         protected internal override Sprite GetSprite(int level)
@@ -103,7 +103,7 @@ namespace Script.CharacterGroupScript
             var increaseRateBoost = 1f + EnforceManager.Instance.fire2AttackSpeedIncrease * 6 / 100f;
             defaultAtkRate = 1f / increaseRateBoost;
             defaultAtkDistance = 1f;
-            projectileSpeed = 1f;
+            swingSpeed = 1f;
             UnitAtkType = UnitAtkTypes.Circle;
             UnitProperty = UnitProperties.Fire;
             UnitEffect = EnforceManager.Instance.fire2NoBurnDamageIncrease ? UnitEffects.None : UnitEffects.Burn;

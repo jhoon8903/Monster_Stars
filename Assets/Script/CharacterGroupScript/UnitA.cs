@@ -82,8 +82,8 @@ namespace Script.CharacterGroupScript
                 var enemyBase = enemyObject.GetComponent<EnemyBase>();
                 currentlyDetectedEnemies.Add(enemyBase.gameObject);
             }
-            detectedEnemies = currentlyDetectedEnemies;
-            return detectedEnemies;
+            DetectedEnemies = currentlyDetectedEnemies;
+            return DetectedEnemies;
         }
 
         protected internal override Sprite GetSprite(int level)

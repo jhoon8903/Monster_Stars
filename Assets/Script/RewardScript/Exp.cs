@@ -163,34 +163,25 @@ namespace Script.RewardScript
                 Debug.LogError("File not found in Resources folder");
                 return;
             }
-
             var g = levelUpRewardManager.greenSprite;
             var b = levelUpRewardManager.blueSprite;
             var p = levelUpRewardManager.purpleSprite;
-
             ExpGreenList = new List<ExpData>();
             ExpBlueList = new List<ExpData>();
             ExpPurpleList = new List<ExpData>();
-
             var csvData = csvFile.text.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-    
             for(var i = 1; i < csvData.Length; i++)
             {
                 var data = csvData[i].Split(',');
-
                 var color = data[0] switch
                 {
                     "Green" => g,
                     "Blue" => b,
                     _ => p
                 };
-
                 var code = int.Parse(data[1]);
-
                 var type = (ExpData.Types)Enum.Parse(typeof(ExpData.Types), data[2]);
-
                 var property = data[3].Contains(" ") ? Array.ConvertAll(data[3].Split(' '), int.Parse) : new [] { int.Parse(data[3]) };
-
                 switch (data[0])
                 {
                     case "Green":

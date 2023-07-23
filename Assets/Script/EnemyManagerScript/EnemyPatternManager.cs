@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Script.CharacterManagerScript;
 using Script.RewardScript;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -43,6 +42,9 @@ namespace Script.EnemyManagerScript
                 enemyBase.Initialize();
                 StartCoroutine(Rain(enemyBase));
             }
+
+            _alreadyKnockBack.TryAdd(enemyBase, false);
+
             switch (enemyBase.SpawnZone)
             {
                 case EnemyBase.SpawnZones.A:
@@ -75,7 +77,7 @@ namespace Script.EnemyManagerScript
             
             var targetPosition = new Vector2(_enemyRigidbodies[enemyBase].transform.position.x, _endY);
 
-            while (gameManager.IsBattle && _alreadyKnockBack[enemyBase])
+            while (gameManager.IsBattle && !_alreadyKnockBack[enemyBase])
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 _slowCount = EnforceManager.Instance.slowCount;
@@ -117,7 +119,7 @@ namespace Script.EnemyManagerScript
             var endX = enemyBase.SpawnZone == EnemyBase.SpawnZones.B ? Random.Range(4, 7) : Random.Range(-1, 2);
             var targetPosition = new Vector2(endX, _endY);
 
-            while (gameManager.IsBattle && _alreadyKnockBack[enemyBase])
+            while (gameManager.IsBattle && !_alreadyKnockBack[enemyBase])
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 _slowCount = EnforceManager.Instance.slowCount;
@@ -167,7 +169,7 @@ namespace Script.EnemyManagerScript
 
             var waypointIndex = 0;
 
-            while (gameManager.IsBattle && _alreadyKnockBack[enemyBase])
+            while (gameManager.IsBattle && !_alreadyKnockBack[enemyBase])
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 var targetPosition = waypoints[waypointIndex];
@@ -221,7 +223,7 @@ namespace Script.EnemyManagerScript
                 ? new Vector2(-1, _enemyRigidbodies[enemyBase].transform.position.y) 
                 : new Vector2(6, _enemyRigidbodies[enemyBase].transform.position.y);
 
-            while (gameManager.IsBattle && _alreadyKnockBack[enemyBase])
+            while (gameManager.IsBattle && !_alreadyKnockBack[enemyBase])
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
@@ -278,7 +280,7 @@ namespace Script.EnemyManagerScript
                 targetPosition = new Vector3(randomX, _enemyRigidbodies[enemyBase].transform.position.y);
             }
 
-            while (gameManager.IsBattle && _alreadyKnockBack[enemyBase])
+            while (gameManager.IsBattle && !_alreadyKnockBack[enemyBase])
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
@@ -415,7 +417,6 @@ namespace Script.EnemyManagerScript
             rb.velocity = Vector2.zero;
             _alreadyKnockBack[enemyBase] = false;
         }
-
         private IEnumerator StatusSlowEffect(EnemyBase enemyBase)
         {
             const float slowTime = 1f;
@@ -437,7 +438,6 @@ namespace Script.EnemyManagerScript
             enemyBase.GetComponent<SpriteRenderer>().color = originColor;
             _alreadyStatusSlow[enemyBase] = false;
         }
-
         public IEnumerator GlobalSlowEffect()
         {
             if (globalSlow) yield break;

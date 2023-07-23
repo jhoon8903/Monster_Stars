@@ -68,8 +68,8 @@ namespace Script.CharacterGroupScript
                 select enemyObject.GetComponent<EnemyBase>() 
                 into enemyBase 
                 select enemyBase.gameObject).ToList();
-            detectedEnemies = currentlyDetectedEnemies;
-            return detectedEnemies;
+            DetectedEnemies = currentlyDetectedEnemies;
+            return DetectedEnemies;
         }
 
         protected internal override Sprite GetSprite(int level)

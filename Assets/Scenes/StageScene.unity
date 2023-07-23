@@ -784,6 +784,7 @@ MonoBehaviour:
   commonRewardManager: {fileID: 2120144519}
   stageText: {fileID: 553455374}
   speedUp: 0
+  globalSlow: 0
 --- !u!4 &149521959
 Transform:
   m_ObjectHideFlags: 0
@@ -892,10 +893,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterPool: {fileID: 1097818334}
   weaponsPool: {fileID: 1537456864}
-  enforceManager: {fileID: 1595735486}
   gameManager: {fileID: 149521958}
+  enemyPatternManager: {fileID: 329010039}
   enemyList: []
   weaponsList: []
+  groupCAtkCount: 0
 --- !u!114 &149521969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1980,7 +1982,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameManager: {fileID: 149521958}
   castle: {fileID: 1177777540}
+  enemyPool: {fileID: 2016604888}
   moveSpeedOffset: 0.7
+  globalSlow: 0
 --- !u!1 &362582815
 GameObject:
   m_ObjectHideFlags: 0
@@ -7716,47 +7720,53 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weapons:
   - weaponType: 1
-    weaponPrefab: {fileID: 7562509153400648891, guid: e35a13cb4286b4224b0ee4a6183f2ecd, type: 3}
-    weaponSprite:
-    - {fileID: 21300000, guid: f0ff49d2632744b1ba3888a79275003b, type: 3}
-    - {fileID: 21300000, guid: e105923690c284d77917339833fafdc1, type: 3}
-    - {fileID: 21300000, guid: 811be4170ef194535a13a43cdde4ead0, type: 3}
+    weaponPrefabs:
+    - {fileID: 1161862740241914493, guid: ea034f9b17e744cf9bd30d17fdc494d7, type: 3}
+    - {fileID: 8597722120061639763, guid: 3125acb6f51cc4098a8a44b570bde532, type: 3}
+    - {fileID: 3912560362642380481, guid: d3cb0d01a470f4ceab17d579f564e6d5, type: 3}
+    - {fileID: 5751074731027988210, guid: 421542e5546fb40ba87151ffce774d83, type: 3}
   - weaponType: 2
-    weaponPrefab: {fileID: 6977216343903192613, guid: 913efda9b1a924d8295d81f4a8e0425b, type: 3}
-    weaponSprite:
-    - {fileID: 21300000, guid: 51fba7ea733704a9ca01a6c0e771fa9c, type: 3}
-    - {fileID: 21300000, guid: 1b0ee16596d024571a96861c1a7fdb68, type: 3}
-    - {fileID: 21300000, guid: b0e6d7a59d004402e98c7c06da6242d2, type: 3}
-  - weaponType: 4
-    weaponPrefab: {fileID: 3983145824219025459, guid: a443ab3c0a89c49209a06173b80218e0, type: 3}
-    weaponSprite:
-    - {fileID: 21300000, guid: ff9139bbc52264c5f91b289c60207e67, type: 3}
-    - {fileID: 21300000, guid: e79e94a51ca334212aa1fe57f06a0085, type: 3}
-    - {fileID: 21300000, guid: 8eae3651817d64f9eb4c079f86929c02, type: 3}
-  - weaponType: 5
-    weaponPrefab: {fileID: 5641614456890173724, guid: 51e34c248059c4409a2c90e111ca73af, type: 3}
-    weaponSprite:
-    - {fileID: 21300000, guid: 4d7c6c22b8df0451185d482befa4c8db, type: 3}
-    - {fileID: 21300000, guid: f604e062448844dffaf8bd2544a41b0d, type: 3}
-    - {fileID: 21300000, guid: 1fcd99742122641d0a9bfecf3512d171, type: 3}
+    weaponPrefabs:
+    - {fileID: 3519698620554704866, guid: 99fe5547b8cc244e7b3c53ed6afa1ba9, type: 3}
+    - {fileID: 558611243723178453, guid: 78cc3c423e9de43ea88c734996689350, type: 3}
+    - {fileID: 2195351993562302487, guid: f203c0dcf5d424296940d754603ee78b, type: 3}
+    - {fileID: 7929962314203725363, guid: 6f114ab2dd5ba4c1ca8189ea92eb4da2, type: 3}
   - weaponType: 3
-    weaponPrefab: {fileID: 2083184677537458400, guid: ae0ea0905a3c64c54983db31744e4622, type: 3}
-    weaponSprite:
-    - {fileID: 21300000, guid: 4deb41924c3644b29bc24f99dac2fee8, type: 3}
-    - {fileID: 21300000, guid: caf8d3aeb0287451eb128ae60e366038, type: 3}
-    - {fileID: 21300000, guid: ea9410c3e9f4d4e88b519cda9ccf4e5d, type: 3}
+    weaponPrefabs:
+    - {fileID: 4452371772161576270, guid: e59671a578a764223bad97ede4abba5b, type: 3}
+    - {fileID: 1182850483353209071, guid: c9a852153c01c4c32bfd3a9c49f68176, type: 3}
+    - {fileID: 4586521134092140642, guid: 0696c39c1ffec4fed95760c17cff3888, type: 3}
+    - {fileID: 1243695726781179494, guid: 3404c954c16834ab28825c74e1625c93, type: 3}
+  - weaponType: 4
+    weaponPrefabs:
+    - {fileID: 2317171953232880559, guid: cbd69eec3fb174359aaadeeabcd11cef, type: 3}
+    - {fileID: 4697002679070184365, guid: 029374a2db43346528c28500b140e294, type: 3}
+    - {fileID: 2148284728193945846, guid: 94f3845a9868f4366b58d8b9a838fa00, type: 3}
+    - {fileID: 7960822608137984321, guid: 972e4994fb6544eb29f29e23c36b9074, type: 3}
+  - weaponType: 5
+    weaponPrefabs:
+    - {fileID: 4177476026361049947, guid: d3f5ed90b9bc84198ae4cc1e83433549, type: 3}
+    - {fileID: 2424532389022783000, guid: 83a5d6cbef81b4b83a4b7a934841d2df, type: 3}
+    - {fileID: 7274515466384668409, guid: b21079d1f9d5c4d4d92c199f9daecdd9, type: 3}
+    - {fileID: 3966949137319086228, guid: 6d79c2c14909149da94e4a592fe18fa5, type: 3}
   - weaponType: 6
-    weaponPrefab: {fileID: 4988187611640326199, guid: 75aec2e2b907b492e9b510def0a65e9f, type: 3}
-    weaponSprite:
-    - {fileID: 21300000, guid: 192f36c3aca97463c95b35f1c210bce8, type: 3}
-    - {fileID: 21300000, guid: f55ad512f41294265882a74cfc452a19, type: 3}
-    - {fileID: 21300000, guid: 4c9403bcd07e84de5a950f28204ea689, type: 3}
+    weaponPrefabs:
+    - {fileID: 5296404184119211864, guid: e4220338e93044b83a9341e79e3db768, type: 3}
+    - {fileID: 1254711391569269093, guid: fa7f837d2f1164311aa2c619b0c95fa2, type: 3}
+    - {fileID: 6383595654029674854, guid: 50b2efa4ae467480b96f98470da11dd9, type: 3}
+    - {fileID: 3483167949492173198, guid: 38efaa0ca628e47e7bc1898d02ee5b1f, type: 3}
   - weaponType: 7
-    weaponPrefab: {fileID: 6482642830505478264, guid: 0f67720a8ce2440c9b35e8e39c9a0c48, type: 3}
-    weaponSprite:
-    - {fileID: 21300000, guid: e23fa7a2dc595431eb19e13a639795b9, type: 3}
-    - {fileID: 21300000, guid: 2d8dd5b65758d495f94f29fd3907ebf3, type: 3}
-    - {fileID: 21300000, guid: a8ada1627ade4412089fe2a147b39656, type: 3}
+    weaponPrefabs:
+    - {fileID: 917137997013329296, guid: ed4228f868b194c0d987d1feaa53e075, type: 3}
+    - {fileID: 5961984583268978398, guid: 0a60618ceaab44675b46580239972061, type: 3}
+    - {fileID: 6803344351827666215, guid: eff4beb97cb2248a49362b8b6f1fe537, type: 3}
+    - {fileID: 7965940349638506393, guid: 4d271a111ffe543ab82b89d9e28dd75a, type: 3}
+  - weaponType: 8
+    weaponPrefabs:
+    - {fileID: 8363499375382729511, guid: e36c369107b0c40138371d6417bc66b1, type: 3}
+    - {fileID: 5457084779571031275, guid: f0e642efb12f04a6ba5e9299226fb6f8, type: 3}
+    - {fileID: 1449720510264382049, guid: a68a978a2ffba49cdbfeefcac9a497b8, type: 3}
+    - {fileID: 1525889226595552815, guid: 69e2d119eeda644549951bb0eb877ff3, type: 3}
   weaponPoolCapacity: 30
 --- !u!4 &1537456865
 Transform:
@@ -8093,51 +8103,71 @@ MonoBehaviour:
   castleManager: {fileID: 1177777546}
   gridManager: {fileID: 8808150501734532426}
   characterPool: {fileID: 1097818334}
-  matchManager: {fileID: 149521966}
   characterList: []
-  activeRestraint: 0
-  increaseRestraintTime: 0
-  divinePenetrate: 0
-  divineAtkRange: 0
-  divinePoisonAdditionalDamage: 0
-  divinePoisonAdditionalDamageCount: 1
-  darkSlowAdditionalDamage: 0
-  darkBleedAdditionalDamage: 0
-  darkIncreaseAtkSpeed: 0
-  darkProjectileBounce: 0
-  darkProjectileBounceCount: 1
-  water2IncreaseDamage: 0
-  water2BleedAdditionalRestraint: 0
-  water2IncreaseSlowTime: 0
-  water2BackAttack: 0
-  water2AdditionalProjectile: 0
-  physicAdditionalWeapon: 0
-  physicIncreaseWeaponScale: 0
-  physicSlowAdditionalDamage: 0
-  increasePhysicAtkSpeed: 1
-  physicIncreaseDamage: 0
-  increasePhysicsDamage: 1
-  waterBurnAdditionalDamage: 0
-  waterRestraintIncreaseDamage: 0
-  waterIncreaseSlowPower: 0
-  increaseWaterDamage: 1
-  waterSideAttack: 0
-  poisonDoubleAtk: 0
-  poisonRestraintAdditionalDamage: 0
-  poisonInstantKill: 0
-  poisonIncreaseAtkRange: 0
-  activatePoison: 0
-  poisonOverlapping: 1
-  fireBleedingAdditionalDamage: 0
-  fireIncreaseDamage: 0
-  firePoisonAdditionalStun: 0
-  fireIncreaseAtkRange: 0
-  fireDeleteBurnIncreaseDamage: 0
-  physics2AdditionalBleedingLayer: 1
-  physics2ActivateBleed: 0
-  physics2AdditionalAtkSpeed: 0
-  physics2AdditionalProjectile: 0
-  physics2ProjectilePenetration: 0
+  divinePoisonDamageBoost: 0
+  divineBindDurationBoost: 0
+  divineShackledExplosion: 0
+  divineFifthAttackBoost: 0
+  divineAttackBoost: 0
+  divineBindChanceBoost: 0
+  divineDualAttack: 0
+  divineProjectilePierce: 0
+  darkTenthAttackDamageBoost: 0
+  darkAttackSpeedBoost: 0
+  darkAttackPowerBoost: 0
+  darkStatusAilmentDamageChance: 0
+  darkKnockBackChance: 0
+  darkStatusAilmentDamageBoost: 0
+  darkRangeIncrease: 0
+  darkStatusAilmentSlowEffect: 0
+  waterAttackSpeedBoost: 0
+  waterAllyDamageBoost: 0
+  waterProjectileIncrease: 0
+  waterAttackBoost: 0
+  waterSlowEnemyDamageBoost: 0
+  waterGlobalSlowEffect: 0
+  waterSlowEnemyStunChance: 0
+  waterDamageIncreaseDebuff: 0
+  physicalAttackSpeedBoost: 0
+  physicalDamage35Boost: 0
+  physicalDamage6Boost: 0
+  physicalBleedingChance: 0
+  physicalSwordAddition: 0
+  physicalSlowEnemyDamageBoost: 0
+  physicalSwordScaleIncrease: 0
+  physicalDamage18Boost: 0
+  water2DebuffDurationIncrease: 0
+  water2AttackSpeedIncrease: 0
+  water2StunChanceAgainstBleeding: 0
+  water2IceSpikeProjectile: 0
+  water2AttackPowerIncrease: 0
+  water2ProjectileSpeedIncrease: 0
+  water2DebuffStrengthIncrease: 0
+  water2AttackSpeedBuffToAdjacentAllies: 0
+  poisonAttackSpeedIncrease: 0
+  poisonMaxStackIncrease: 0
+  poisonDamageAttackPowerIncrease: 0
+  poisonProjectileIncrease: 0
+  poisonRangeIncrease: 0
+  poisonBleedingEnemyDamageBoost: 0
+  poisonEnemyInstantKill: 0
+  poisonPerHitEffect: 0
+  fire2PoisonDamageIncrease: 0
+  fire2AttackSpeedIncrease: 0
+  fire2BurnStackIncrease: 0
+  fire2AttackPowerIncrease: 0
+  fire2StunChance: 0
+  fire2BurningDamageBoost: 0
+  fire2SwordSizeIncrease: 0
+  fire2NoBurnDamageIncrease: 0
+  fireImageOverlapIncrease: 1
+  fireAttackSpeedBoost: 0
+  fireSlowEnemyDamageBoost: 0
+  fireProjectileSpeedIncrease: 0
+  fireBurnedEnemyExplosion: 0
+  fireProjectileBounceDamage: 0
+  fireBurnPerAttackEffect: 0
+  fireProjectileBounceIncrease: 0
   addRowCount: 0
   slowCount: 0
   diagonalMovement: 0

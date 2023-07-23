@@ -154,6 +154,7 @@ namespace Script
             castleManager.TookDamageLastWave = false;
             if (StageManager.Instance.currentWave % 10 == 0)
             {
+                _bossSpawnArea = new Vector3Int(Random.Range(1, 5), 9, 0);
                 gridManager.ApplyBossSpawnColor(_bossSpawnArea);
             }
             yield return StartCoroutine(backgroundManager.ChangePuzzleSize());

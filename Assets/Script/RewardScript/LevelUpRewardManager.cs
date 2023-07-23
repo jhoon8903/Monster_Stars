@@ -680,8 +680,6 @@ namespace Script.RewardScript
                     if (UnitPieceLevel(CharacterBase.UnitGroups.H) < 13) return false;
                     if (EnforceManager.Instance.fireProjectileBounceIncrease) return false;
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
             return true;
         }

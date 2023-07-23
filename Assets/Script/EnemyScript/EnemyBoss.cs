@@ -7,7 +7,7 @@ namespace Script.EnemyScript
         public override void Initialize()
         {
             CrushDamage = 10000;
-            originSpeed = 0.35f;
+            originSpeed = 0.7f;
             EnemyType = EnemyTypes.Boss;
             SpawnZone = SpawnZones.A;
             RegistryType = RegistryTypes.None;

@@ -45,9 +45,9 @@ namespace Script.CharacterManagerScript
         private readonly Vector3 _levelUpScale = new Vector3(1.3f, 1.3f, 0); 
         public GameObject CurrentWeapon { get; set; }
         protected internal bool IsClicked { get; set; }
-        protected static List<GameObject> detectedEnemies = new List<GameObject>();
+        protected static List<GameObject> DetectedEnemies = new List<GameObject>();
         private SpriteRenderer _spriteRenderer;
-        protected internal bool HasAttackSpeedBuff { get; set; } = false;
+        protected internal bool HasAttackSpeedBuff { get; set; }
 
         public virtual void Initialize()
         {

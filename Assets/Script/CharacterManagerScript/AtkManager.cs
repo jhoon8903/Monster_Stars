@@ -28,7 +28,7 @@ namespace Script.CharacterManagerScript
         [SerializeField] private WeaponsPool weaponsPool;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private EnemyPatternManager enemyPatternManager;
-        private const float AttackRate = 2f;
+        private const float AttackRate = 1f;
         public List<GameObject> enemyList = new List<GameObject>();
         public List<GameObject> weaponsList = new List<GameObject>();
         public static AtkManager Instance { get; private set; }
@@ -118,6 +118,9 @@ namespace Script.CharacterManagerScript
                 case CharacterBase.UnitGroups.E:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.E));
                     break;
+                case CharacterBase.UnitGroups.H:
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.H));
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(unitGroup), unitGroup, null);
             }
@@ -180,8 +183,8 @@ namespace Script.CharacterManagerScript
                    }
                    break;
             }
-            var weaponType = attackData.WeaponType; 
-            var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.transform.position, unit.transform.rotation);
+            var weaponType = attackData.WeaponType;
+            var weaponObject = weaponsPool.SpawnFromPool(weaponType, attackData.Unit.GetComponent<CharacterBase>().unitPuzzleLevel, unit.transform.position, unit.transform.rotation);
             var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
             if (weaponBase == null) return null;
             if (target != null)
@@ -194,7 +197,6 @@ namespace Script.CharacterManagerScript
             }
             weaponsList.Add(weaponBase.gameObject);
             StartCoroutine(weaponBase.UseWeapon());
-            weaponsPool.SetSprite(weaponType, attackData.Unit.GetComponent<CharacterBase>().unitPuzzleLevel, weaponObject);
             return weaponObject;
         }
 
@@ -222,62 +224,14 @@ namespace Script.CharacterManagerScript
             };
             foreach (var position in weaponPositions)
             {
-                var weaponObject = weaponsPool.SpawnFromPool(weaponType, position, unit.transform.rotation);
+                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, position, unit.transform.rotation);
                 var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
                 weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
                 weaponsList.Add(weaponBase.gameObject);
                 StartCoroutine(weaponBase.UseWeapon());
-                weaponsPool.SetSprite(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, weaponObject);
             }
             yield return null;
         }
-        // private IEnumerator TripleAttack(AttackData attackData)
-        // {
-        //     var unit = attackData.Unit;
-        //     var weaponType = attackData.WeaponType; 
-        //     const float offset = 0.7f;
-        //     var unitPosition = unit.transform.position;
-        //     var weaponPositions = new []
-        //     {
-        //         new Vector3(unitPosition.x - offset, unitPosition.y, 0),
-        //         unitPosition,
-        //         new Vector3(unitPosition.x + offset, unitPosition.y, 0)
-        //     };
-        //     foreach (var position in weaponPositions)
-        //     {
-        //         var weaponObject = weaponsPool.SpawnFromPool(weaponType, position, unit.transform.rotation);
-        //         var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
-        //         weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
-        //         weaponsList.Add(weaponBase.gameObject);
-        //         StartCoroutine(weaponBase.UseWeapon());
-        //         weaponsPool.SetSprite(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, weaponObject);
-        //     }
-        //     yield return null;
-        // }
-
-        // private IEnumerator SideAttack(AttackData attackData)
-        // {
-        //     var unit = attackData.Unit;
-        //     var weaponType = attackData.WeaponType;
-        //     var unitPosition = unit.transform.position;
-        //     var weaponDirections = new[]
-        //     {
-        //         new {Direction = Vector2.left, Rotation = Quaternion.Euler(0, 0, 90)},
-        //         new {Direction = Vector2.up, Rotation = Quaternion.identity},
-        //         new {Direction = Vector2.right, Rotation = Quaternion.Euler(0, 0, -90)}
-        //     };
-        //     foreach (var weapon in weaponDirections)
-        //     {
-        //         var weaponObject = weaponsPool.SpawnFromPool(weaponType, unitPosition, weapon.Rotation);
-        //         var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
-        //         weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
-        //         weaponsList.Add(weaponBase.gameObject);
-        //         weaponBase.Direction = weapon.Direction;
-        //         StartCoroutine(weaponBase.UseWeapon());
-        //         weaponsPool.SetSprite(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, weaponObject);
-        //     }
-        //     yield return null;
-        // }
 
         public IEnumerator SplitAttack(AttackData attackData, Vector3 enemyPosition)
         {
@@ -290,13 +244,12 @@ namespace Script.CharacterManagerScript
             };
             foreach (var weapon in weaponDirections)
             {
-                var weaponObject = weaponsPool.SpawnFromPool(weaponType, enemyPosition, weapon.Rotation);
+                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, enemyPosition, weapon.Rotation);
                 var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
                 weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
                 weaponsList.Add(weaponBase.gameObject);
                 weaponBase.Direction = weapon.Direction;
                 StartCoroutine(weaponBase.UseWeapon());
-                weaponsPool.SetSprite(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, weaponObject);
             }
             yield return null;
         }
@@ -313,13 +266,12 @@ namespace Script.CharacterManagerScript
             };
             foreach (var weapon in weaponDirections)
             {
-                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unitPosition, weapon.Rotation);
+                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, unitPosition, weapon.Rotation);
                 var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
                 weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
                 weaponsList.Add(weaponBase.gameObject);
                 weaponBase.Direction = weapon.Direction;
                 StartCoroutine(weaponBase.UseWeapon());
-                weaponsPool.SetSprite(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, weaponObject);
             }
             yield return null;
         }

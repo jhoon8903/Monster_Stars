@@ -41,9 +41,8 @@ namespace Script.PuzzleManagerGroup
         {
             if (gridHeight >= MaxRows) return;
 
-            if (gridHeight >= MaxRows) return;
-
             var newGridHeight = gridHeight + 1;
+            PlayerPrefs.SetInt("GridHeight", newGridHeight);
             var newGridCells = new GameObject[gridWidth, newGridHeight];
             for (var x = 0; x < gridWidth; x++)
             {
@@ -83,7 +82,8 @@ namespace Script.PuzzleManagerGroup
             }
             _gridCells = newGridCells;
             gridHeight = newGridHeight;
-            PlayerPrefs.SetInt("GridHeight", gridHeight);
+            Debug.Log(gridHeight);
+           
         }
         public void ApplyBossSpawnColor(Vector3Int bossArea)
         {

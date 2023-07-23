@@ -13,6 +13,7 @@ namespace Script.WeaponScriptGroup
         public GameObject secondSword;
         public float burnDotDamage;
         private Tween _pivotTween;
+
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
@@ -21,6 +22,15 @@ namespace Script.WeaponScriptGroup
 
             if (_pivotTween == null || _pivotTween.IsComplete())
             {
+                if (EnforceManager.Instance.physicalSwordAddition)
+                {
+                    secondSword.SetActive(true);
+                    secondSword.GetComponent<WeaponBase>().InitializeWeapon(CharacterBase);
+                    if (secondSword.activeInHierarchy)
+                    {
+                        StartCoroutine(secondSword.GetComponent<WeaponBase>().UseWeapon());
+                    }
+                }
                 _pivotTween = pivotPoint.transform.DORotate(new Vector3(0, 0, 360), Speed, RotateMode.FastBeyond360);
                 _pivotTween.OnComplete(() => {
                     StopUseWeapon(pivotPoint);
@@ -31,16 +41,7 @@ namespace Script.WeaponScriptGroup
             {
                 _pivotTween.Restart();
             }
-
-            if (!EnforceManager.Instance.physicalSwordAddition) yield break;
-            secondSword.SetActive(true);
-            secondSword.GetComponent<WeaponBase>().InitializeWeapon(CharacterBase);
-            if (secondSword.activeInHierarchy) 
-                StartCoroutine(secondSword.GetComponent<WeaponBase>().UseWeapon());
-            var weaponPool = FindObjectOfType<WeaponsPool>();
-            weaponPool.SetSprite(WeaponsPool.WeaponType.D, CharacterBase.unitPuzzleLevel, secondSword);
         }
-
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
@@ -48,7 +49,6 @@ namespace Script.WeaponScriptGroup
             AtkEffect(enemy);
             var damage = DamageCalculator(Damage, enemy, CharacterBase.UnitGroups.G); 
             enemy.ReceiveDamage(enemy,damage, CharacterBase);
-            StopUseWeapon(gameObject);
         }
 
         public IEnumerator BurningEffect(EnemyBase hitEnemy)
@@ -56,8 +56,9 @@ namespace Script.WeaponScriptGroup
             burnDotDamage = CharacterBase.unitGroup switch
             {
                 CharacterBase.UnitGroups.G => Damage * (0.1f + EnforceManager.Instance.fire2BurningDamageBoost / 10f),
-                CharacterBase.UnitGroups.H => Damage * 0.1f
+                CharacterBase.UnitGroups.H => Damage * 0.1f,
             };
+
             var burningColor = new Color(1f,0,0.4f);
             var burningDuration = CharacterBase.unitGroup switch
             {
