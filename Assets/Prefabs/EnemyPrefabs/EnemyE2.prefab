@@ -243,7 +243,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: 95adc3ff6ea9747cdbbcf2c836c7e417, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6f2b56eb89194435c95ca06d2f163a2c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -271,7 +271,7 @@ PolygonCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 0.84210527, y: 0.84210527}
     newSize: {x: 1.6, y: 1.6}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -333,13 +333,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 95886cf7deaa64a35aff2da1272fad9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 0
+  originSpeed: 0
   number: 0
   healthPoint: 0
   maxHealthPoint: 0
   currentHealth: 0
   lastIncreaseHealthPoint: 0
-  isRestraint: 0
+  isBind: 0
   isSlow: 0
+  isReceiveDamageDebuff: 0
+  isSlowC: 0
+  isSlowE: 0
+  isSlowStun: 0
+  isSlowBleedStun: 0
+  isBurningPoison: 0
   isPoison: 0
   isBurn: 0
   isBleed: 0

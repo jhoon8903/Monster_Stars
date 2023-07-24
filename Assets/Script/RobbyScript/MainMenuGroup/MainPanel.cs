@@ -31,6 +31,7 @@ namespace Script.RobbyScript.MainMenuGroup
         public void Awake()
         {
             Instance = this;
+            Application.targetFrameRate = 60;
         }
         public void Start()
         {

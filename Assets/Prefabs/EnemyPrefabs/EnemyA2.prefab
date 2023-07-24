@@ -457,7 +457,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 3
-  m_Sprite: {fileID: 21300000, guid: fd7dc75683b984c9e9105ff776c7c678, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ba9d055f5682b4e3ca42a03ea1503232, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -501,13 +501,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6b23b48fe98f14ccc82f097b9e758c4a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 0
+  originSpeed: 0
   number: 0
   healthPoint: 0
   maxHealthPoint: 0
   currentHealth: 0
   lastIncreaseHealthPoint: 0
-  isRestraint: 0
+  isBind: 0
   isSlow: 0
+  isReceiveDamageDebuff: 0
+  isSlowC: 0
+  isSlowE: 0
+  isSlowStun: 0
+  isSlowBleedStun: 0
+  isBurningPoison: 0
   isPoison: 0
   isBurn: 0
   isBleed: 0
