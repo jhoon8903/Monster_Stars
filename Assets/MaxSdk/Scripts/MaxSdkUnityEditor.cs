@@ -1137,8 +1137,8 @@ public class MaxSdkUnityEditor : MaxSdkBase
             if (grantedReward)
             {
                 var rewardEventPropsDict = CreateBaseEventPropsDictionary("OnRewardedAdReceivedRewardEvent", adUnitIdentifier);
-                rewardEventPropsDict["rewardLabel"] = "coins";
-                rewardEventPropsDict["rewardAmount"] = "5";
+                //rewardEventPropsDict["rewardLabel"] = "coins";
+                //rewardEventPropsDict["rewardAmount"] = "5";
                 var rewardEventProps = Json.Serialize(rewardEventPropsDict);
                 MaxSdkCallbacks.Instance.ForwardEvent(rewardEventProps);
             }
@@ -1152,6 +1152,7 @@ public class MaxSdkUnityEditor : MaxSdkBase
         {
             grantedReward = true;
             rewardStatus.text = "Reward granted. Will send reward callback on ad close.";
+            Debug.Log("끊김");
         });
 
         var adDisplayedEventProps = Json.Serialize(CreateBaseEventPropsDictionary("OnRewardedAdDisplayedEvent", adUnitIdentifier));
