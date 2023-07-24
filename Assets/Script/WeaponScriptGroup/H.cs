@@ -25,10 +25,24 @@ namespace Script.WeaponScriptGroup
             yield return base.UseWeapon();
             if (!EnforceManager.Instance.fireProjectileSpeedIncrease)
             {
-                _rigidbody2D.velocity = new Vector2(_rigidbody2D.velocity.x, Speed);
-                var useTime = Distance / Speed;
-                yield return new WaitForSeconds(useTime);
-                StopUseWeapon(gameObject);
+                while (isInUse)
+                {
+                    _enemyTransforms = CharacterBase.GetComponent<UnitH>().DetectEnemies();
+                    if (_enemyTransforms.Count == 0)
+                    {
+                        StopUseWeapon(gameObject);
+                        break;
+                    }
+                    var currentEnemy = _enemyTransforms[0].GetComponent<EnemyBase>();
+                    var direction = (currentEnemy.transform.position - transform.position).normalized;
+
+                    transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
+                    _rigidbody2D.velocity = direction * Speed;
+                    var useTime = Distance / Speed;
+                    yield return new WaitForSeconds(useTime);
+                    StopUseWeapon(gameObject);
+                }
+
             }
             else
             {
@@ -63,6 +77,7 @@ namespace Script.WeaponScriptGroup
                     }
                     var currentEnemy = _enemyTransforms[0].GetComponent<EnemyBase>();
                     var direction = (currentEnemy.transform.position - transform.position).normalized;
+                    transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
                     _rigidbody2D.velocity = direction * Speed;
                     yield return null;
                 }

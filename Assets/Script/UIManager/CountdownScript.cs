@@ -18,6 +18,7 @@ namespace Script.UIManager
         private float _currentCountdown; // 현재 카운트다운 시간
         public bool retry;
         private const string RetryKey = "Retry";
+        public static bool ClickRetry;
 
         private void Start()
         {
@@ -65,10 +66,11 @@ namespace Script.UIManager
             adsContinueBtn.SetActive(false); // retry 상태 저장
         }
 
-        private static void YesRetry()
+        private void YesRetry()
         {
             AppLovinScript.ShowRewardedAd();
             RewardManager.Instance.RewardButtonClicked("Retry");
+            ClickRetry = true;
         }
 
         private void NoRetry()
@@ -98,7 +100,7 @@ namespace Script.UIManager
         {
             // retry = false; 
             // SaveRetryStatus(retry); // retry 상태 저장
-            SceneManager.LoadScene("StageScene");
+            // SceneManager.LoadScene("StageScene");
             yield return null;
         }
     }

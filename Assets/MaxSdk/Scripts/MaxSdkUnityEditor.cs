@@ -8,9 +8,9 @@ using System.Collections.Generic;
 using AppLovinMax.ThirdParty.MiniJson;
 #if UNITY_EDITOR
 using UnityEditor;
+using UnityEngine.SceneManagement;
 #endif
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
@@ -1141,10 +1141,12 @@ public class MaxSdkUnityEditor : MaxSdkBase
                 //rewardEventPropsDict["rewardAmount"] = "5";
                 var rewardEventProps = Json.Serialize(rewardEventPropsDict);
                 MaxSdkCallbacks.Instance.ForwardEvent(rewardEventProps);
+             
             }
 
             var adHiddenEventProps = Json.Serialize(CreateBaseEventPropsDictionary("OnRewardedAdHiddenEvent", adUnitIdentifier));
             MaxSdkCallbacks.Instance.ForwardEvent(adHiddenEventProps);
+            SceneManager.LoadSceneAsync("StageScene");
             Object.Destroy(stubRewardedAd);
         });
 

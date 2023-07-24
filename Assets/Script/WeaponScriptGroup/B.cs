@@ -13,8 +13,7 @@ namespace Script.WeaponScriptGroup
         private float _distance;
         private Vector3 _enemyTransform;
         private List<GameObject> _enemyTransforms = new List<GameObject>();
-        private int _bounceCount; 
-        private readonly System.Random _random = new System.Random();
+        private int _bounceCount;
 
         public override IEnumerator UseWeapon()
         {
@@ -33,7 +32,11 @@ namespace Script.WeaponScriptGroup
 
             while (Vector3.Distance(transform.position, _enemyTransform) > 0.1f)
             {
-                transform.position = Vector3.MoveTowards(transform.position, _enemyTransform, Speed * Time.deltaTime);
+                var position = transform.position;
+                var direction = (_enemyTransform - position).normalized;
+                transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
+                position = Vector3.MoveTowards(position, _enemyTransform, Speed * Time.deltaTime);
+                transform.position = position;
                 yield return null;
             }
 

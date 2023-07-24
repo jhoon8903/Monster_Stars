@@ -1655,6 +1655,7 @@ public class MaxSdkCallbacks : MonoBehaviour
                 MaxSdkLogger.UserWarning("Unknown MAX Ads event fired: " + eventName);
             }
         }
+        // SceneManager.LoadScene("StageScene");
     }
 
 #if UNITY_EDITOR

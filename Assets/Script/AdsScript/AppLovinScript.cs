@@ -1,5 +1,7 @@
 using System;
+using Script.UIManager;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Script.AdsScript
 {
@@ -116,6 +118,7 @@ namespace Script.AdsScript
         private void LoadRewardedAd()
         {
             MaxSdk.LoadRewardedAd(RewardedAdUnitId);
+
         }
 
         public static void ShowRewardedAd()
@@ -124,6 +127,7 @@ namespace Script.AdsScript
             {
                 Debug.Log("Showing");
                 MaxSdk.ShowRewardedAd(RewardedAdUnitId);
+         
             }
             else
             {
@@ -163,12 +167,12 @@ namespace Script.AdsScript
 
         private void OnRewardedAdDismissedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
-            Debug.Log("Rewarded ad dismissed");
             Debug.Log("닫음");
             LoadRewardedAd();
+
         }
 
-        private static void OnRewardedAdReceivedRewardEvent(string adUnitId, MaxSdkBase.Reward reward, MaxSdkBase.AdInfo adInfo)
+        private void OnRewardedAdReceivedRewardEvent(string adUnitId, MaxSdkBase.Reward reward, MaxSdkBase.AdInfo adInfo)
         {
             Debug.Log("Rewarded ad received reward");
         }

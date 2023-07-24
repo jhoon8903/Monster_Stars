@@ -2,8 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text.RegularExpressions;
 using Script.CharacterManagerScript;
 using Script.UIManager;
 using TMPro;
@@ -42,7 +40,6 @@ namespace Script.RewardScript
         {
             Instance = this;
         }
-
         private static void ProcessExpReward(ExpData selectedReward)
         {
             switch (selectedReward.Type)
@@ -706,16 +703,14 @@ namespace Script.RewardScript
             var powerTextTranslation = selectedLanguage.GetTranslation(translationKey);
             var p = powerUp.Property[0].ToString();
             var finalPowerText = powerTextTranslation.Replace("{p}", p);
-
             var placeholderValues = new Dictionary<string, Func<double>> {
-                { "{15*EnforceManager.Instance.slowCount}", () => 15*EnforceManager.Instance.slowCount },
+                { "{15*EnforceManager.Instance.slowCount}", () => 15 * EnforceManager.Instance.slowCount },
                 { "{EnforceManager.Instance.expPercentage}", () => EnforceManager.Instance.expPercentage },
                 { "{EnforceManager.Instance.highLevelCharacterCount}", () => EnforceManager.Instance.highLevelCharacterCount},
 
             };
-
-            finalPowerText = placeholderValues.Aggregate(finalPowerText, (current, placeholder) => current.Replace(placeholder.Key, placeholder.Value().ToString()));
-
+            finalPowerText = placeholderValues.Aggregate(finalPowerText, (current, placeholder) 
+                => current.Replace(placeholder.Key, placeholder.Value().ToString()));
             var finalTranslation = finalPowerText.Replace("||", "\n");
 
             powerText.text = powerUp.Type switch

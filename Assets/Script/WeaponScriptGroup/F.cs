@@ -18,6 +18,11 @@ namespace Script.WeaponScriptGroup
         private Rigidbody2D _rigidbody2D;
         private int _bounceCount; 
 
+        private void Start() 
+        {
+            _rigidbody2D = GetComponent<Rigidbody2D>();
+        }
+
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
@@ -32,6 +37,7 @@ namespace Script.WeaponScriptGroup
                 }
                 var currentEnemy = _enemyTransforms[0].GetComponent<EnemyBase>();
                 var direction = (currentEnemy.transform.position - transform.position).normalized;
+                transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
                 _rigidbody2D.velocity = direction * Speed;
                 yield return null;
             }

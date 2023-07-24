@@ -45,24 +45,28 @@ namespace Script.AdsScript
             }
         }
 
-        private static void GiveCoinReward()
+        private void GiveCoinReward()
         {
-            Debug.Log("코인 보상을 제공합니다.");
+            Debug.Log("코인 보상을 제공합니다."); 
+            rewardBtn.GetComponent<Button>().onClick.RemoveListener(GiveCoinReward);
         }
 
-        private static void GiveGemReward()
+        private void GiveGemReward()
         {
             Debug.Log("재화 보상을 제공합니다.");
+            rewardBtn.GetComponent<Button>().onClick.RemoveListener(GiveGemReward);
+
         }
 
-        private static void GiveStaminaReward()
+        private void GiveStaminaReward()
         {
             Debug.Log("스테미너 보상을 제공합니다.");
+            rewardBtn.GetComponent<Button>().onClick.RemoveListener(GiveStaminaReward);
         }
 
         private void Retry()
         {
-            StartCoroutine(CountdownScript.Retry());
+            rewardBtn.GetComponent<Button>().onClick.RemoveListener(Retry);
         }
     }
 }
