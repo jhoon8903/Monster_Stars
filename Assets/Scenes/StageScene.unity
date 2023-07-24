@@ -1985,6 +1985,51 @@ MonoBehaviour:
   enemyPool: {fileID: 2016604888}
   moveSpeedOffset: 0.7
   globalSlow: 0
+--- !u!1 &348132021
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 348132022}
+  - component: {fileID: 348132023}
+  m_Layer: 0
+  m_Name: Language
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &348132022
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348132021}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 18
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &348132023
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348132021}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f611d65ad621a4c2da26d9fbd809698b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  selectedLanguage: 0
 --- !u!1 &362582815
 GameObject:
   m_ObjectHideFlags: 0
@@ -10066,6 +10111,7 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
+  language: {fileID: 0}
   openBoxing: 0
   isOpenBox: 0
 --- !u!4 &2120144520
@@ -10128,6 +10174,7 @@ MonoBehaviour:
   expManager: {fileID: 841622521}
   gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
+  language: {fileID: 0}
 --- !u!114 &2120144523
 MonoBehaviour:
   m_ObjectHideFlags: 0

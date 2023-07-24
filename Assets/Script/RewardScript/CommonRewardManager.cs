@@ -36,6 +36,7 @@ namespace Script.RewardScript
         [SerializeField] private CountManager countManager;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private CharacterManager characterManager;
+        [SerializeField] private Language language; // 텍스트 
 
         public readonly Queue<GameObject> PendingTreasure = new Queue<GameObject>(); // 보류 중인 보물 큐
         private GameObject _currentTreasure; // 현재 보물
@@ -187,68 +188,77 @@ namespace Script.RewardScript
        // 7. 옵션값 출력
        private void CommonDisplay(IReadOnlyList<CommonData> powerUpsDisplayData)
         {
-            CommonDisplayText(common1Button,common1Text, common1Code, common1BtnBadge,powerUpsDisplayData[0]);
-            CommonDisplayText(common2Button,common2Text, common2Code, common2BtnBadge,powerUpsDisplayData[1]);
-            CommonDisplayText(common3Button,common3Text, common3Code, common3BtnBadge,powerUpsDisplayData[2]);
+            CommonDisplayText(common1Button,common1Text, common1Code, common1BtnBadge,powerUpsDisplayData[0], language);
+            CommonDisplayText(common2Button,common2Text, common2Code, common2BtnBadge,powerUpsDisplayData[1], language);
+            CommonDisplayText(common3Button,common3Text, common3Code, common3BtnBadge,powerUpsDisplayData[2], language);
         }
 
        // 8. 옵션 텍스트
-       private void CommonDisplayText(Button commonButton, TMP_Text powerText, TMP_Text powerCode, Image btnBadge ,CommonData powerUp)
+       private void CommonDisplayText(Button commonButton, TMP_Text powerText, TMP_Text powerCode, Image btnBadge ,CommonData powerUp, Language language)
        {
-           switch (powerUp.Type)
+            var p = powerUp.Property[0];
+            var translationKey = powerUp.Type.ToString();
+            var expPercentage = EnforceManager.Instance.expPercentage;
+            Debug.Log("translationKey" + translationKey);
+            // Get the translation based on the selected language (Kor or Eng)
+            string powerTextTranslation = language.GetTranslation(translationKey);
+
+            // Replace "{p}" with the actual value of p
+            string finalPowerText = powerTextTranslation.Replace("{p}", p.ToString());
+            string finalTranslation = finalPowerText.Replace("{EnforceManager.Instance.expPercentage}", expPercentage.ToString());
+            finalTranslation = finalTranslation.Replace("||", "\n");
+
+            switch (powerUp.Type)
             {
                 case CommonData.Types.Exp: 
-                    powerText.text = $"적 처치 경험치{powerUp.Property[0]}% 증가 " +
-                                     $"({EnforceManager.Instance.expPercentage}% /30%)"; 
+                    powerText.text = finalTranslation; 
                     break;
                 case CommonData.Types.Slow: 
-                    powerText.text = $"다음 웨이브 부터는 적 이동속도 {powerUp.Property[0]}% 감소\n( 현재 {15*EnforceManager.Instance.slowCount}% / 최대 60%)";
+                    powerText.text =finalTranslation;
                     break;
                 case CommonData.Types.GroupDamage: 
-                    powerText.text = $"전체 데미지 {powerUp.Property[0]}% 상승"; 
+                    powerText.text = finalTranslation; 
                     break;
                 case CommonData.Types.GroupAtkSpeed: 
-                    powerText.text = $"전체 공격속도 {powerUp.Property[0]}% 상승"; 
+                    powerText.text = finalTranslation; 
                     break;
                 case CommonData.Types.Step: 
-                    powerText.text = $"이동횟수 {powerUp.Property[0]} 증가"; 
+                    powerText.text = finalTranslation; 
                     break;
                 case CommonData.Types.StepLimit: 
-                    powerText.text = $"총 이동횟수 {powerUp.Property[0]} 증가"; 
+                    powerText.text =finalTranslation; 
                     break;
                 case CommonData.Types.StepDirection: 
-                    powerText.text = "대각선 이동가능"; 
+                    powerText.text = finalTranslation; 
                     break;
                 case CommonData.Types.RandomLevelUp: 
-                    powerText.text = $"퍼즐상의 랜덤한 {powerUp.Property[0]}개의 케릭터 1 레벨 증가"; 
+                    powerText.text = finalTranslation; 
                     break;
                 case CommonData.Types.GroupLevelUp:
                     _groupName = characterManager.characterList[powerUp.Property[0]].name;
-                    powerText.text = $"퍼즐상의 {_groupName} 그룹의 0레벨 케릭터 전체 레벨 1 증가"; 
+                    powerText.text = finalTranslation.Replace("{_groupName}", _groupName.ToString());
                     break;
                 case CommonData.Types.LevelUpPattern:
                     _groupName = characterManager.characterList[powerUp.Property[0]].name;
-                    powerText.text = $"이제부터 {_groupName} 그룹의 0레벨 케릭터는 1레벨로 등장"; 
+                    powerText.text = finalTranslation.Replace("{_groupName}", _groupName.ToString());
                     break;
                 case CommonData.Types.CastleRecovery: 
-                    powerText.text = $"웨이브가 끝날때 까지 피해가 없다면 " +
-                                     $"캐슬 체력 {powerUp.Property[0]} 회복"; 
+                    powerText.text = finalTranslation; 
                     break;
                 case CommonData.Types.CastleMaxHp: 
-                    powerText.text = $"캐슬의 최대 체력 {powerUp.Property[0]} 증가"; 
+                    powerText.text = finalTranslation; 
                     break;
                 case CommonData.Types.Match5Upgrade: 
-                    powerText.text = "5개 매치시 가운데 케릭터의 " +
-                                     "레벨이 1 더 증가"; 
+                    powerText.text = finalTranslation; 
                     break;
                 case CommonData.Types.NextStage: 
-                    powerText.text = $"보스 스테이지 이후 {powerUp.Property[0]} 개의\n케릭터 추가 이동 (현재 {EnforceManager.Instance.highLevelCharacterCount})";
+                    powerText.text = finalTranslation;
                     break;
                 case CommonData.Types.Gold: 
-                    powerText.text = $"5개 매치시 Gold가 1 증가"; 
+                    powerText.text = finalTranslation; 
                     break;
                 case CommonData.Types.AddRow: 
-                    powerText.text = $"가로줄이 {powerUp.Property[0]} 증가"; 
+                    powerText.text = finalTranslation; 
                     break;
             }
             powerCode.text = $"{powerUp.Code}";
