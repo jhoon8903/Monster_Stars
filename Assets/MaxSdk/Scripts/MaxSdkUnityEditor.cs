@@ -1150,9 +1150,8 @@ public class MaxSdkUnityEditor : MaxSdkBase
 
         rewardButton.onClick.AddListener(() =>
         {
-            var adHiddenEventProps = Json.Serialize(CreateBaseEventPropsDictionary("OnRewardedAdHiddenEvent", adUnitIdentifier));
-            MaxSdkCallbacks.Instance.ForwardEvent(adHiddenEventProps);
-            Object.Destroy(stubRewardedAd);
+            grantedReward = true;
+            rewardStatus.text = "Reward granted. Will send reward callback on ad close.";
         });
 
         var adDisplayedEventProps = Json.Serialize(CreateBaseEventPropsDictionary("OnRewardedAdDisplayedEvent", adUnitIdentifier));
