@@ -1,153 +1,146 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.UIElements;
 
-public class OptionManager : MonoBehaviour
+namespace Script.UIManager
 {
-    [SerializeField] private UnityEngine.UI.Button PrivacyPolicyBtn;
-    [SerializeField] private UnityEngine.UI.Button TermsOfServiceBtn;
-    [SerializeField] private string PrivacyPolicy;
-    [SerializeField] private string TermsOfService;
-
-    [SerializeField] private UnityEngine.UI.Image BGMBG;
-    [SerializeField] private UnityEngine.UI.Image SoundEffectBG;
-
-    [SerializeField] private GameObject KORBtn;
-    [SerializeField] private GameObject ENGBtn;
-    [SerializeField] private GameObject KorCheck;
-    [SerializeField] private GameObject EngCheck;
-
-    [SerializeField] private SpriteRenderer BGMRenderer;
-    [SerializeField] private SpriteRenderer BGMToggleRenderer;
-
-    [SerializeField] private SpriteRenderer SoundEffectRenderer;
-    [SerializeField] private SpriteRenderer SoundEffectToggleRenderer;
-
-    private bool BGM = true;
-    private bool Sound = true;
-
-    private const string BGMKey = "BGMState";
-    private const string SoundKey = "SoundState";
-
-    // Start is called before the first frame update
-    void Start()
+    public class OptionManager : MonoBehaviour
     {
-        PrivacyPolicyBtn.onClick.AddListener(PrivacyPolicyURL);
-        TermsOfServiceBtn.onClick.AddListener(TermsOfServiceURL);
+        [SerializeField] private UnityEngine.UI.Button privacyPolicyBtn;
+        [SerializeField] private UnityEngine.UI.Button termsOfServiceBtn;
+        [SerializeField] private string privacyPolicy;
+        [SerializeField] private string termsOfService;
+        [SerializeField] private UnityEngine.UI.Image bgmBackground;
+        [SerializeField] private UnityEngine.UI.Image soundEffectBg;
+        [SerializeField] private GameObject korBtn;
+        [SerializeField] private GameObject engBtn;
+        [SerializeField] private GameObject korCheck;
+        [SerializeField] private GameObject engCheck;
+        [SerializeField] private SpriteRenderer bgmRenderer;
+        [SerializeField] private SpriteRenderer bgmToggleRenderer;
+        [SerializeField] private SpriteRenderer soundEffectRenderer;
+        [SerializeField] private SpriteRenderer soundEffectToggleRenderer;
 
-        UnityEngine.UI.Button BGMBtn = BGMBG.GetComponent<UnityEngine.UI.Button>();
-        BGMBtn.onClick.AddListener(BgmONOff);
-        UnityEngine.UI.Button SoundEffectBtn = SoundEffectBG.GetComponent<UnityEngine.UI.Button>();
-        SoundEffectBtn.onClick.AddListener(SoundOnOff);
+        private bool _bgm = true;
+        private bool _sound = true;
 
-        KORBtn.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(ChangeLanguage);
-        ENGBtn.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(ChangeLanguage);
+        private const string BGMKey = "BGMState";
+        private const string SoundKey = "SoundState";
 
-        // 저장된 상태 확인
-        if (PlayerPrefs.HasKey(BGMKey))
+        private void Start()
         {
-            BGM = PlayerPrefs.GetInt(BGMKey) == 1;
-            SetBGMButtonState(BGM);
-        }
+            privacyPolicyBtn.onClick.AddListener(PrivacyPolicyURL);
+            termsOfServiceBtn.onClick.AddListener(TermsOfServiceURL);
+            var bgmBtn = bgmBackground.GetComponent<UnityEngine.UI.Button>();
+            bgmBtn.onClick.AddListener(BgmOnOff);
+            var soundEffectBtn = soundEffectBg.GetComponent<UnityEngine.UI.Button>();
+            soundEffectBtn.onClick.AddListener(SoundOnOff);
+            korBtn.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(ChangeLanguage);
+            engBtn.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(ChangeLanguage);
 
-        if (PlayerPrefs.HasKey(SoundKey))
-        {
-            Sound = PlayerPrefs.GetInt(SoundKey) == 1;
-            SetSoundButtonState(Sound);
-        }
-
-        if (PlayerPrefs.HasKey("Language"))
-        {
-            string language = PlayerPrefs.GetString("Language");
-            if (language == "KOR")
+            // 저장된 상태 확인
+            if (PlayerPrefs.HasKey(BGMKey))
             {
-                // 한국어로 설정된 경우
+                _bgm = PlayerPrefs.GetInt(BGMKey) == 1;
+                SetBGMButtonState(_bgm);
+            }
+
+            if (PlayerPrefs.HasKey(SoundKey))
+            {
+                _sound = PlayerPrefs.GetInt(SoundKey) == 1;
+                SetSoundButtonState(_sound);
+            }
+
+            if (PlayerPrefs.HasKey("Language"))
+            {
+                var language = PlayerPrefs.GetString("Language");
+                switch (language)
+                {
+                    case "KOR":
+                        // 한국어로 설정된 경우
+                        // 한국어 체크 이미지 활성화, 영어 체크 이미지 비활성화 등의 처리
+                        korCheck.SetActive(true);
+                        engCheck.SetActive(false);
+                        break;
+                    case "ENG":
+                        // 영어로 설정된 경우
+                        // 영어 체크 이미지 활성화, 한국어 체크 이미지 비활성화 등의 처리
+                        korCheck.SetActive(false);
+                        engCheck.SetActive(true);
+                        break;
+                }
+            }
+            else
+            {
+                // 저장된 언어 정보가 없는 경우 기본값으로 한국어 설정
                 // 한국어 체크 이미지 활성화, 영어 체크 이미지 비활성화 등의 처리
-                KorCheck.SetActive(true);
-                EngCheck.SetActive(false);
+                korCheck.SetActive(true);
+                engCheck.SetActive(false);
+
+                // 한국어로 언어 정보 저장 (기본값 설정)
+                PlayerPrefs.SetString("Language", "KOR");
             }
-            else if (language == "ENG")
+        }
+
+        private void PrivacyPolicyURL()
+        {
+            Application.OpenURL(privacyPolicy);
+        }
+
+        private void TermsOfServiceURL()
+        {
+            Application.OpenURL(termsOfService);
+        }
+
+        private void BgmOnOff()
+        {
+            _bgm = !_bgm;
+            SetBGMButtonState(_bgm);
+            PlayerPrefs.SetInt(BGMKey, _bgm ? 1 : 0);
+        }
+
+        private void SoundOnOff()
+        {
+            _sound = !_sound;
+            SetSoundButtonState(_sound);
+            PlayerPrefs.SetInt(SoundKey, _sound ? 1 : 0);
+        }
+
+        private void SetBGMButtonState(bool state)
+        {
+            bgmRenderer.color = state ? Color.yellow : Color.gray;
+            bgmToggleRenderer.color = state ? Color.white : Color.black;
+            bgmToggleRenderer.transform.position += new Vector3(state ? 0.3f : -0.3f, 0f, 0f);
+        }
+
+        private void SetSoundButtonState(bool state)
+        {
+            soundEffectRenderer.color = state ? Color.yellow : Color.gray;
+            soundEffectToggleRenderer.color = state ? Color.white : Color.black;
+            soundEffectToggleRenderer.transform.position += new Vector3(state ? 0.3f : -0.3f, 0f, 0f);
+        }
+
+        private void ChangeLanguage()
+        {
+            var clickedButton = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
+
+            if (clickedButton == korBtn.gameObject)
             {
-                // 영어로 설정된 경우
-                // 영어 체크 이미지 활성화, 한국어 체크 이미지 비활성화 등의 처리
-                KorCheck.SetActive(false);
-                EngCheck.SetActive(true);
+                // 한국어 버튼이 눌렸을 때 실행할 동작
+                Debug.Log("한국어 버튼이 눌렸습니다.");
+                korCheck.SetActive(true);
+                engCheck.SetActive(false);
+                // 한국어로 언어 정보 저장
+                PlayerPrefs.SetString("Language", "KOR");
+            }
+            else if (clickedButton == engBtn.gameObject)
+            {
+                // 영어 버튼이 눌렸을 때 실행할 동작
+                Debug.Log("영어 버튼이 눌렸습니다.");
+                korCheck.SetActive(false);
+                engCheck.SetActive(true);
+                // 영어로 언어 정보 저장
+                PlayerPrefs.SetString("Language", "ENG");
             }
         }
-        else
-        {
-            // 저장된 언어 정보가 없는 경우 기본값으로 한국어 설정
-            // 한국어 체크 이미지 활성화, 영어 체크 이미지 비활성화 등의 처리
-            KorCheck.SetActive(true);
-            EngCheck.SetActive(false);
 
-            // 한국어로 언어 정보 저장 (기본값 설정)
-            PlayerPrefs.SetString("Language", "KOR");
-        }
     }
-
-    public void PrivacyPolicyURL()
-    {
-        Application.OpenURL(PrivacyPolicy);
-    }
-
-    public void TermsOfServiceURL()
-    {
-        Application.OpenURL(TermsOfService);
-    }
-
-    private void BgmONOff()
-    {
-        BGM = !BGM;
-        SetBGMButtonState(BGM);
-        PlayerPrefs.SetInt(BGMKey, BGM ? 1 : 0);
-    }
-
-    private void SoundOnOff()
-    {
-        Sound = !Sound;
-        SetSoundButtonState(Sound);
-        PlayerPrefs.SetInt(SoundKey, Sound ? 1 : 0);
-    }
-
-    private void SetBGMButtonState(bool state)
-    {
-        BGMRenderer.color = state ? Color.yellow : Color.gray;
-        BGMToggleRenderer.color = state ? Color.white : Color.black;
-        BGMToggleRenderer.transform.position += new Vector3(state ? 0.3f : -0.3f, 0f, 0f);
-    }
-
-    private void SetSoundButtonState(bool state)
-    {
-        SoundEffectRenderer.color = state ? Color.yellow : Color.gray;
-        SoundEffectToggleRenderer.color = state ? Color.white : Color.black;
-        SoundEffectToggleRenderer.transform.position += new Vector3(state ? 0.3f : -0.3f, 0f, 0f);
-    }
-
-    public void ChangeLanguage()
-    {
-        GameObject clickedButton = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
-
-        if (clickedButton == KORBtn.gameObject)
-        {
-            // 한국어 버튼이 눌렸을 때 실행할 동작
-            Debug.Log("한국어 버튼이 눌렸습니다.");
-            KorCheck.SetActive(true);
-            EngCheck.SetActive(false);
-            // 한국어로 언어 정보 저장
-            PlayerPrefs.SetString("Language", "KOR");
-        }
-        else if (clickedButton == ENGBtn.gameObject)
-        {
-            // 영어 버튼이 눌렸을 때 실행할 동작
-            Debug.Log("영어 버튼이 눌렸습니다.");
-            KorCheck.SetActive(false);
-            EngCheck.SetActive(true);
-            // 영어로 언어 정보 저장
-            PlayerPrefs.SetString("Language", "ENG");
-        }
-    }
-
 }
