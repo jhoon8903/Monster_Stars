@@ -90,15 +90,10 @@ namespace Script.RewardScript
             {
                 if (StageManager.Instance.isBossClear)
                 {
+                    if (EnforceManager.Instance.addRowCount >= 1) continue;
                     var firstDesiredPowerUp = new CommonPurpleData(purpleSprite, 16, CommonData.Types.AddRow, new[] { 1 });
                     commonPowerUps.Add(firstDesiredPowerUp); 
                     selectedCodes.Add(firstDesiredPowerUp.Code);
-                    var secondDesiredPowerUp = new CommonBlueData(blueSprite, 11, CommonData.Types.Slow, new[] { 15 });
-                    commonPowerUps.Add(secondDesiredPowerUp);
-                    selectedCodes.Add(secondDesiredPowerUp.Code);
-                    var thirdDesiredPowerUp = new CommonPurpleData(purpleSprite, 13, CommonData.Types.StepDirection, new[] { 1 });
-                    selectedCodes.Add(thirdDesiredPowerUp.Code);
-                    commonPowerUps.Add(thirdDesiredPowerUp);
                 }
                 else
                 {
@@ -148,7 +143,7 @@ namespace Script.RewardScript
                         if (EnforceManager.Instance.expPercentage > 30) return false; // Make sure the EXP increment does not exceed 30%
                         break;
                     case CommonData.Types.AddRow:
-                        if (EnforceManager.Instance.addRowCount > 2) return false;
+                        if (EnforceManager.Instance.addRowCount > 1) return false;
                         if (!StageManager.Instance.isBossClear) return false;
                         if (StageManager.Instance.currentWave % 10 != 0 ) return false;// Show row extra reward only after boss stage, up to 2 times
                         break;
@@ -342,7 +337,7 @@ namespace Script.RewardScript
                     break;  // 전체 공격 속도 증가 효과
                 case CommonData.Types.Step:
                     countManager.IncreaseMoveCount(selectedCommonReward.Property[0]);
-                    break;            // 카운트 증가
+                    break; // 카운트 증가
                 case CommonData.Types.StepLimit: 
                     EnforceManager.Instance.PermanentIncreaseMoveCount(selectedCommonReward.Property[0]);
                     break; // 영구적 카운트 증가
