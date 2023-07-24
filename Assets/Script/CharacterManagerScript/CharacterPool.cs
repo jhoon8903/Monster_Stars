@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Script.CharacterManagerScript
 {
@@ -9,7 +10,7 @@ namespace Script.CharacterManagerScript
         [SerializeField] private CharacterManager characterManager;
         [SerializeField] private int poolSize;
         private List<GameObject> _pooledCharacters;
-        public static bool theFirst;
+        public bool theFirst;
 
         public void Awake()
         {
@@ -27,7 +28,7 @@ namespace Script.CharacterManagerScript
 
         public List<GameObject> NotUsePoolCharacterList()
         {
-            var notUsedPoolList = _pooledCharacters.Where(t => !t.activeSelf).ToList();
+            var notUsedPoolList = _pooledCharacters.Where(t => !t.activeInHierarchy).ToList();
             if(theFirst)
             {
                 var noneGroupList = notUsedPoolList.Where(t => t.GetComponent<CharacterBase>().unitGroup == CharacterBase.UnitGroups.None && Random.value < 0.08f);
@@ -40,7 +41,7 @@ namespace Script.CharacterManagerScript
 
         public List<GameObject> UsePoolCharacterList()
         {
-            return _pooledCharacters.Where(t => t.activeSelf).ToList();
+            return _pooledCharacters.Where(t => t.activeInHierarchy).ToList();
         }
 
         public List<GameObject> SortPoolCharacterList()

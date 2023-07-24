@@ -251,56 +251,44 @@ namespace Script.PuzzleManagerGroup
 
         public IEnumerator LoadGameState()
         {
-            try
+            characterPool.theFirst = false;
+            var useList = characterPool.UsePoolCharacterList();
+            foreach (var useUnit in useList)
             {
-                var useList = characterPool.UsePoolCharacterList();
-                foreach (var useUnit in useList)
-                {
-                    CharacterPool.ReturnToPool(useUnit);
-                }
-
-                var unitState = PlayerPrefs.GetString("unitState", "");
-                var pieceData = unitState.Split(';');
-                var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
-                var callCount = 0;
-                foreach (var data in pieceData)
-                {
-                    if (string.IsNullOrEmpty(data)) continue;
-                    var unit = data.Split('|');
-                    if (unit.Length < 3) continue;
-                    var group = unit[0];
-                    var unitGroups = CharacterBase.UnitGroups.None;
-                    if (Enum.TryParse(group, true, out CharacterBase.UnitGroups parsedGroup))
-                    {
-                        unitGroups = parsedGroup;
-                    }
-
-                    var level = unit[1];
-                    var unitLevel = int.Parse(level);
-                    var position = Vector3Int.zero;
-                    var positionValue = unit[2].Split(',');
-                    if (positionValue.Length < 3) continue;
-                    position.x = int.Parse(positionValue[0]);
-                    position.y = int.Parse(positionValue[1]);
-                    position.z = int.Parse(positionValue[2]);
-                    var setUnit = notUsePoolCharacterList
-                        .FirstOrDefault(t =>
-                            t.GetComponent<CharacterBase>().unitGroup == unitGroups && t.activeSelf == false);
-                    if (setUnit == null) continue;
-                    var setUnitBase = setUnit.GetComponent<CharacterBase>();
-                    setUnitBase.Initialize();
-                    setUnitBase.unitGroup = unitGroups;
-                    setUnitBase.unitPuzzleLevel = unitLevel;
-                    setUnitBase.GetComponent<SpriteRenderer>().sprite = setUnitBase.GetSprite(unitLevel);
-                    setUnitBase.transform.position = position;
-                    setUnitBase.gameObject.SetActive(true);
-                    callCount++;
-                    Debug.Log("Call Count: " + callCount);
-                }
+                CharacterPool.ReturnToPool(useUnit);
             }
-            catch(Exception e)
+
+            var unitState = PlayerPrefs.GetString("unitState", "");
+            var pieceData = unitState.Split(';');
+            var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
+            var callCount = 0;
+            foreach (var data in pieceData)
             {
-                Debug.LogError("Exception in LoadGameState: " + e);
+                if (string.IsNullOrEmpty(data)) continue;
+                var unit = data.Split('|');
+                if (unit.Length < 3) continue;
+                var group = unit[0];
+                var unitGroups = CharacterBase.UnitGroups.None;
+                if (Enum.TryParse(group, true, out CharacterBase.UnitGroups parsedGroup)) unitGroups = parsedGroup;
+                var level = unit[1];
+                var unitLevel = int.Parse(level);
+                var position = Vector3Int.zero;
+                var positionValue = unit[2].Split(',');
+                if (positionValue.Length < 3) continue;
+                position.x = int.Parse(positionValue[0]);
+                position.y = int.Parse(positionValue[1]);
+                position.z = int.Parse(positionValue[2]);
+                var setUnit = notUsePoolCharacterList.FirstOrDefault(t => t.GetComponent<CharacterBase>().unitGroup == unitGroups && t.activeSelf == false);
+                if (setUnit == null) continue;
+                var setUnitBase = setUnit.GetComponent<CharacterBase>();
+                setUnitBase.Initialize();
+                setUnitBase.unitGroup = unitGroups;
+                setUnitBase.unitPuzzleLevel = unitLevel;
+                setUnitBase.GetComponent<SpriteRenderer>().sprite = setUnitBase.GetSprite(unitLevel);
+                setUnitBase.transform.position = position;
+                setUnitBase.gameObject.SetActive(true);
+                callCount++;
+                Debug.Log("Call Count: " + callCount);
             }
             yield return null;
         }

@@ -18,6 +18,7 @@ namespace Script.UIManager
         [SerializeField] private EnemySpawnManager enemySpawnManager;
         [SerializeField] private EnemyPool enemyPool;
         [SerializeField] private CastleManager castleManager;
+        [SerializeField] private CharacterPool characterPool;
         public static StageManager Instance;
         private int _setCount;
         public int maxWaveCount;
@@ -167,7 +168,7 @@ namespace Script.UIManager
         private void StageClear()
         {
             isStageClear = true;
-            CharacterPool.theFirst = false;
+            characterPool.theFirst = false;
             ClearRewardManager.Instance.ClearReward(latestStage);
             EnforceManager.Instance.addGold = false;
             EnforceManager.Instance.addGoldCount = 0;

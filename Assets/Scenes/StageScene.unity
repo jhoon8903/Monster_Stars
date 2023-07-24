@@ -915,6 +915,7 @@ MonoBehaviour:
   enemySpawnManager: {fileID: 329010038}
   enemyPool: {fileID: 2016604888}
   castleManager: {fileID: 1177777546}
+  characterPool: {fileID: 1097818334}
   maxWaveCount: 30
   maxStageCount: 20
   latestStage: 0
@@ -5733,6 +5734,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterManager: {fileID: 149521963}
   poolSize: 15
+  theFirst: 0
 --- !u!4 &1097818335
 Transform:
   m_ObjectHideFlags: 0
