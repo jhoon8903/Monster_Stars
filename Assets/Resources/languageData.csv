@@ -12,7 +12,7 @@ Exp,적 처치시 경험치 획득량 {p}% 증가||(현재 {EnforceManager.Insta
 CastleRecovery,웨이브 종료까지 피해를 입지 않으면 캐슬 체력 {p} 매 웨이브 마다 증가,"If no damage is taken until the end of the wave, castle HP will increase by {p} every wave."
 CastleMaxHp,캐슬 최대체력 {p} 증가,Increase castle's maximum HP by {p}.
 Match5Upgrade,5개 매치시 가운데 케릭터의 레벨이 1 더 증가,"When matching 5 pieces, the center character's level increases by 1."
-Slow,다음 웨이브 부터는 적 이동속도 {p}% 감소||(현재 {15*EnforceManager.Instance.slowCount}% ||최대 60%),"Starting from the next wave, reduce enemy movement speed by {p}% (current: {15*EnforceManager.Instance.slowCount}%, maximum: 60%)."
+Slow,다음 웨이브 부터는 적 이동속도 {p}% 감소||(현재 {15*EnforceManager.Instance.slowCount}% 최대 60%),"Starting from the next wave, reduce enemy movement speed by {p}% (current: {15*EnforceManager.Instance.slowCount}%, maximum: 60%)."
 NextStage,보스 스테이지 이후 {p} 개의 케릭터 추가 이동 (현재 {EnforceManager.Instance.highLevelCharacterCount}),"After the boss stage, add {p} characters to the movement (current: {EnforceManager.Instance.highLevelCharacterCount})."
 Gold,5 매치시 골드 1추가 획득,Obtain 1 additional gold when matching 5 pieces.
 AddRow,가로줄이 {p} 증가,Increase the number of rows by {powerUp.Property[0]}.

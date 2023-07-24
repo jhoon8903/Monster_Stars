@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -194,24 +195,30 @@ namespace Script.RewardScript
         }
 
        // 8. 옵션 텍스트
-       private void CommonDisplayText(Button commonButton, TMP_Text powerText, TMP_Text powerCode, Image btnBadge ,CommonData powerUp, Language selectedLanguage)
+       private void CommonDisplayText(Button commonButton, TMP_Text powerText, TMP_Text powerCode, Image btnBadge, CommonData powerUp, Language selectedLanguage)
        {
-            var p = powerUp.Property[0];
-            var translationKey = powerUp.Type.ToString();
-            var expPercentage = EnforceManager.Instance.expPercentage;
-            Debug.Log("translationKey" + translationKey);
-            var powerTextTranslation = selectedLanguage.GetTranslation(translationKey);
-            var finalPowerText = powerTextTranslation.Replace("{p}", p.ToString());
-            var finalTranslation = finalPowerText.Replace("{EnforceManager.Instance.expPercentage}", expPercentage.ToString());
-            finalTranslation = finalTranslation.Replace("||", "\n");
+           var translationKey = powerUp.Type.ToString();
+           var powerTextTranslation = selectedLanguage.GetTranslation(translationKey);
+           var p = powerUp.Property[0].ToString();
+           var finalPowerText = powerTextTranslation.Replace("{p}", p);
+
+           var placeholderValues = new Dictionary<string, Func<double>> {
+               { "{15*EnforceManager.Instance.slowCount}", () => 15*EnforceManager.Instance.slowCount },
+               { "{EnforceManager.Instance.expPercentage}", () => EnforceManager.Instance.expPercentage },
+               { "{EnforceManager.Instance.highLevelCharacterCount}", () => EnforceManager.Instance.highLevelCharacterCount},
+
+           };
+           finalPowerText = placeholderValues.Aggregate(finalPowerText, (current, placeholder) => current.Replace(placeholder.Key, placeholder.Value().ToString()));
+
+           var finalTranslation = finalPowerText.Replace("||", "\n");
 
             switch (powerUp.Type)
             {
-                case CommonData.Types.Exp: 
-                    powerText.text = finalTranslation; 
+                case CommonData.Types.Exp:
+                    powerText.text = finalTranslation;
                     break;
                 case CommonData.Types.Slow: 
-                    powerText.text =finalTranslation;
+                    powerText.text = finalTranslation;
                     break;
                 case CommonData.Types.GroupDamage: 
                     powerText.text = finalTranslation; 
@@ -384,7 +391,7 @@ namespace Script.RewardScript
                 default: Debug.LogWarning($"Unhandled reward type: {selectedCommonReward.Type}"); 
                     break;
             }
-            selectedCommonReward.chosenProperty = null;
+            selectedCommonReward.ChosenProperty = null;
         }
         // # 보스 웨이브 클리어 별도 보상
         public IEnumerator WaveRewardChance()

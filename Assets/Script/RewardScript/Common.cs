@@ -7,7 +7,7 @@ namespace Script.RewardScript
     public class CommonData
     {
         private static readonly System.Random Random = new System.Random();
-        public int? chosenProperty;
+        public int? ChosenProperty;
 
         public enum Types
         {
@@ -34,8 +34,8 @@ namespace Script.RewardScript
         { 
             get
             {
-                chosenProperty ??= RandomChanceMethod(_property);
-                return new[] { chosenProperty.Value };
+                ChosenProperty ??= RandomChanceMethod(_property);
+                return new[] { ChosenProperty.Value };
             } 
         }
         public int Code { get; set; }

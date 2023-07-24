@@ -1,12 +1,10 @@
 using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
 using Script.WeaponScriptGroup;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.EnemyManagerScript
@@ -25,7 +23,7 @@ namespace Script.EnemyManagerScript
         public enum RegistryTypes { Physics, Divine, Poison, Burn, Water, Darkness, None }
         protected internal RegistryTypes RegistryType; 
         protected internal SpawnZones SpawnZone;
-        protected internal bool isDead;
+        protected internal bool IsDead;
         protected internal int CurrentPoisonStacks { get; set; }
         protected internal int BurningStack { get; set; }
         protected internal int BleedingStack { get; set; }
@@ -122,13 +120,13 @@ namespace Script.EnemyManagerScript
         {
             lock (Lock)
             {
-                if (isDead) return;
+                if (IsDead) return;
                 if (detectEnemy.isReceiveDamageDebuff) damage *= 1.15f;
                 currentHealth -= (int)damage;
                 if (gameObject == null || !gameObject.activeInHierarchy) return;
                 _updateSlider = true;
-                if (currentHealth > 0f || isDead) return;
-                isDead = true;
+                if (currentHealth > 0f || IsDead) return;
+                IsDead = true;
                 ExpManager.Instance.HandleEnemyKilled(reason);
                 EnemyKilledEvents(detectEnemy);
                 if (EnforceManager.Instance.divineShackledExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.A)
@@ -186,12 +184,12 @@ namespace Script.EnemyManagerScript
         }
         private void ResetEnemyHealthPoint()
         { 
-            lastIncreaseHealthPoint *= 0.4f;
-            healthPoint = lastIncreaseHealthPoint;
-            maxHealthPoint = lastIncreaseHealthPoint;
-           currentHealth = maxHealthPoint;
-           _hpSlider.value = currentHealth;
-           _hpSlider.maxValue = maxHealthPoint;
+            lastIncreaseHealthPoint *= 0.4f; 
+            healthPoint = lastIncreaseHealthPoint; 
+            maxHealthPoint = lastIncreaseHealthPoint; 
+            currentHealth = maxHealthPoint; 
+            _hpSlider.value = currentHealth; 
+            _hpSlider.maxValue = maxHealthPoint;
         }
         public void Start()
         {

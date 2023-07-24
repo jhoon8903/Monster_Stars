@@ -81,7 +81,7 @@ namespace Script.EnemyManagerScript
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 _slowCount = EnforceManager.Instance.slowCount;
-                _speedReductionFactor = _slowCount * 0.15f;
+                _speedReductionFactor = 1f - _slowCount * 0.15f;
                 if (_speedReductionFactor == 0)
                 {
                     _speedReductionFactor = 1f;
@@ -123,7 +123,7 @@ namespace Script.EnemyManagerScript
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 _slowCount = EnforceManager.Instance.slowCount;
-                _speedReductionFactor = _slowCount * 0.15f;
+                _speedReductionFactor = 1f - _slowCount * 0.15f;
                 if (_speedReductionFactor == 0)
                 {
                     _speedReductionFactor = 1f;
@@ -176,7 +176,7 @@ namespace Script.EnemyManagerScript
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
 
                 _slowCount = EnforceManager.Instance.slowCount;
-                _speedReductionFactor = _slowCount * 0.15f;
+                _speedReductionFactor = 1f - _slowCount * 0.15f;
                 if (_speedReductionFactor == 0)
                 {
                     _speedReductionFactor = 1f;
@@ -228,7 +228,7 @@ namespace Script.EnemyManagerScript
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
                 _slowCount = EnforceManager.Instance.slowCount;
-                _speedReductionFactor = _slowCount * 0.15f;
+                _speedReductionFactor = 1f - _slowCount * 0.15f;
                 if (_speedReductionFactor == 0)
                 {
                     _speedReductionFactor = 1f;
@@ -286,7 +286,7 @@ namespace Script.EnemyManagerScript
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
                 
                 _slowCount = EnforceManager.Instance.slowCount;
-                _speedReductionFactor = _slowCount * 0.15f;
+                _speedReductionFactor = 1f - _slowCount * 0.15f;
                 if (_speedReductionFactor == 0)
                 {
                     _speedReductionFactor = 1f;
