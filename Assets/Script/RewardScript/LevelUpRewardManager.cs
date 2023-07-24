@@ -703,17 +703,10 @@ namespace Script.RewardScript
             var p = powerUp.Property[0];
             var translationKey = powerUp.Type.ToString();
             var expPercentage = EnforceManager.Instance.expPercentage;
-            Debug.Log("p" + p);
-            Debug.Log("expPercentage" + expPercentage);
-            // Get the translation based on the selected language (Kor or Eng)
-            string powerTextTranslation = language.GetTranslation(translationKey);
-
-            // Replace "{p}" with the actual value of p
-            string finalPowerText = powerTextTranslation.Replace("{p}", p.ToString());
-            string finalTranslation = finalPowerText.Replace("{EnforceManager.Instance.expPercentage}", expPercentage.ToString());
+            var powerTextTranslation = language.GetTranslation(translationKey);
+            var finalPowerText = powerTextTranslation.Replace("{p}", p.ToString());
+            var finalTranslation = finalPowerText.Replace("{EnforceManager.Instance.expPercentage}", expPercentage.ToString());
             finalTranslation = finalTranslation.Replace("||", "\n");
-            Debug.Log("finalPowerText" + finalPowerText);
-            Debug.Log("finalTranslation" + finalTranslation);
 
             switch (powerUp.Type)
             {
@@ -733,7 +726,7 @@ namespace Script.RewardScript
                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.CastleRecovery:
-                    powerText.text =finalTranslation;
+                    powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.CastleMaxHp:
                     powerText.text = finalTranslation; 
@@ -760,7 +753,7 @@ namespace Script.RewardScript
                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.DivineAttackBoost:
-                    powerText.text =finalTranslation;
+                    powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.DivineBindChanceBoost:
                     powerText.text = finalTranslation;
@@ -769,175 +762,175 @@ namespace Script.RewardScript
                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.DivineProjectilePierce:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.DarkTenthAttackDamageBoost:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.DarkAttackSpeedBoost:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.DarkAttackPowerBoost:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.DarkStatusAilmentDamageChance:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.DarkKnockBackChance:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.DarkStatusAilmentDamageBoost:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.DarkRangeIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.DarkStatusAilmentSlowEffect:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.WaterAttackSpeedBoost:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.WaterAllyDamageBoost:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.WaterProjectileIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.WaterAttackBoost:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.WaterSlowEnemyDamageBoost:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.WaterGlobalSlowEffect:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.WaterSlowEnemyStunChance:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.WaterDamageIncreaseDebuff:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.PhysicalAttackSpeedBoost:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.PhysicalDamage35Boost:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.PhysicalDamage6Boost:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.PhysicalBleedingChance:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.PhysicalSwordAddition:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.PhysicalSlowEnemyDamageBoost:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.PhysicalSwordScaleIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.PhysicalDamage18Boost:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.Water2DebuffDurationIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.Water2AttackSpeedIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.Water2StunChanceAgainstBleeding:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.Water2IceSpikeProjectile:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.Water2AttackPowerIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.Water2ProjectileSpeedIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.Water2DebuffStrengthIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.Water2AttackSpeedBuffToAdjacentAllies:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.PoisonAttackSpeedIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.PoisonMaxStackIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.PoisonDamageAttackPowerIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.PoisonProjectileIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.PoisonRangeIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.PoisonBleedingEnemyDamageBoost:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.PoisonEnemyInstantKill:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.PoisonPerHitEffect:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.Fire2PoisonDamageIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.Fire2AttackSpeedIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.Fire2BurnStackIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.Fire2AttackPowerIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.Fire2StunChance:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.Fire2SwordSizeIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.Fire2BurningDamageBoost:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.Fire2NoBurnDamageIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.FireImageOverlapIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.FireAttackSpeedBoost:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.FireSlowEnemyDamageBoost:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.FireProjectileSpeedIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.FireBurnedEnemyExplosion:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.FireProjectileBounceDamage:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.FireBurnPerAttackEffect:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 case ExpData.Types.FireProjectileBounceIncrease:
-                     powerText.text =finalTranslation;
+                     powerText.text = finalTranslation;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

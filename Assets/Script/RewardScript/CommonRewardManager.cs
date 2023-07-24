@@ -194,18 +194,15 @@ namespace Script.RewardScript
         }
 
        // 8. 옵션 텍스트
-       private void CommonDisplayText(Button commonButton, TMP_Text powerText, TMP_Text powerCode, Image btnBadge ,CommonData powerUp, Language language)
+       private void CommonDisplayText(Button commonButton, TMP_Text powerText, TMP_Text powerCode, Image btnBadge ,CommonData powerUp, Language selectedLanguage)
        {
             var p = powerUp.Property[0];
             var translationKey = powerUp.Type.ToString();
             var expPercentage = EnforceManager.Instance.expPercentage;
             Debug.Log("translationKey" + translationKey);
-            // Get the translation based on the selected language (Kor or Eng)
-            string powerTextTranslation = language.GetTranslation(translationKey);
-
-            // Replace "{p}" with the actual value of p
-            string finalPowerText = powerTextTranslation.Replace("{p}", p.ToString());
-            string finalTranslation = finalPowerText.Replace("{EnforceManager.Instance.expPercentage}", expPercentage.ToString());
+            var powerTextTranslation = selectedLanguage.GetTranslation(translationKey);
+            var finalPowerText = powerTextTranslation.Replace("{p}", p.ToString());
+            var finalTranslation = finalPowerText.Replace("{EnforceManager.Instance.expPercentage}", expPercentage.ToString());
             finalTranslation = finalTranslation.Replace("||", "\n");
 
             switch (powerUp.Type)
@@ -236,11 +233,11 @@ namespace Script.RewardScript
                     break;
                 case CommonData.Types.GroupLevelUp:
                     _groupName = characterManager.characterList[powerUp.Property[0]].name;
-                    powerText.text = finalTranslation.Replace("{_groupName}", _groupName.ToString());
+                    powerText.text = finalTranslation.Replace("{_groupName}", _groupName);
                     break;
                 case CommonData.Types.LevelUpPattern:
                     _groupName = characterManager.characterList[powerUp.Property[0]].name;
-                    powerText.text = finalTranslation.Replace("{_groupName}", _groupName.ToString());
+                    powerText.text = finalTranslation.Replace("{_groupName}", _groupName);
                     break;
                 case CommonData.Types.CastleRecovery: 
                     powerText.text = finalTranslation; 

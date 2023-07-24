@@ -10111,7 +10111,7 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
-  language: {fileID: 0}
+  language: {fileID: 348132023}
   openBoxing: 0
   isOpenBox: 0
 --- !u!4 &2120144520
@@ -10174,7 +10174,7 @@ MonoBehaviour:
   expManager: {fileID: 841622521}
   gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
-  language: {fileID: 0}
+  language: {fileID: 348132023}
 --- !u!114 &2120144523
 MonoBehaviour:
   m_ObjectHideFlags: 0
