@@ -14,6 +14,11 @@ public class OptionManager : MonoBehaviour
     [SerializeField] private UnityEngine.UI.Image BGMBG;
     [SerializeField] private UnityEngine.UI.Image SoundEffectBG;
 
+    [SerializeField] private GameObject KORBtn;
+    [SerializeField] private GameObject ENGBtn;
+    [SerializeField] private GameObject KorCheck;
+    [SerializeField] private GameObject EngCheck;
+
     [SerializeField] private SpriteRenderer BGMRenderer;
     [SerializeField] private SpriteRenderer BGMToggleRenderer;
 
@@ -37,6 +42,9 @@ public class OptionManager : MonoBehaviour
         UnityEngine.UI.Button SoundEffectBtn = SoundEffectBG.GetComponent<UnityEngine.UI.Button>();
         SoundEffectBtn.onClick.AddListener(SoundOnOff);
 
+        KORBtn.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(ChangeLanguage);
+        ENGBtn.GetComponent<UnityEngine.UI.Button>().onClick.AddListener(ChangeLanguage);
+
         // 저장된 상태 확인
         if (PlayerPrefs.HasKey(BGMKey))
         {
@@ -48,6 +56,35 @@ public class OptionManager : MonoBehaviour
         {
             Sound = PlayerPrefs.GetInt(SoundKey) == 1;
             SetSoundButtonState(Sound);
+        }
+
+        if (PlayerPrefs.HasKey("Language"))
+        {
+            string language = PlayerPrefs.GetString("Language");
+            if (language == "KOR")
+            {
+                // 한국어로 설정된 경우
+                // 한국어 체크 이미지 활성화, 영어 체크 이미지 비활성화 등의 처리
+                KorCheck.SetActive(true);
+                EngCheck.SetActive(false);
+            }
+            else if (language == "ENG")
+            {
+                // 영어로 설정된 경우
+                // 영어 체크 이미지 활성화, 한국어 체크 이미지 비활성화 등의 처리
+                KorCheck.SetActive(false);
+                EngCheck.SetActive(true);
+            }
+        }
+        else
+        {
+            // 저장된 언어 정보가 없는 경우 기본값으로 한국어 설정
+            // 한국어 체크 이미지 활성화, 영어 체크 이미지 비활성화 등의 처리
+            KorCheck.SetActive(true);
+            EngCheck.SetActive(false);
+
+            // 한국어로 언어 정보 저장 (기본값 설정)
+            PlayerPrefs.SetString("Language", "KOR");
         }
     }
 
@@ -88,4 +125,29 @@ public class OptionManager : MonoBehaviour
         SoundEffectToggleRenderer.color = state ? Color.white : Color.black;
         SoundEffectToggleRenderer.transform.position += new Vector3(state ? 0.3f : -0.3f, 0f, 0f);
     }
+
+    public void ChangeLanguage()
+    {
+        GameObject clickedButton = UnityEngine.EventSystems.EventSystem.current.currentSelectedGameObject;
+
+        if (clickedButton == KORBtn.gameObject)
+        {
+            // 한국어 버튼이 눌렸을 때 실행할 동작
+            Debug.Log("한국어 버튼이 눌렸습니다.");
+            KorCheck.SetActive(true);
+            EngCheck.SetActive(false);
+            // 한국어로 언어 정보 저장
+            PlayerPrefs.SetString("Language", "KOR");
+        }
+        else if (clickedButton == ENGBtn.gameObject)
+        {
+            // 영어 버튼이 눌렸을 때 실행할 동작
+            Debug.Log("영어 버튼이 눌렸습니다.");
+            KorCheck.SetActive(false);
+            EngCheck.SetActive(true);
+            // 영어로 언어 정보 저장
+            PlayerPrefs.SetString("Language", "ENG");
+        }
+    }
+
 }
