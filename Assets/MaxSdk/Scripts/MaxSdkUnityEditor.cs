@@ -32,6 +32,8 @@ public class MaxSdkUnityEditor : MaxSdkBase
     private static readonly HashSet<string> ReadyAdUnits = new HashSet<string>();
     private static readonly Dictionary<string, GameObject> StubBanners = new Dictionary<string, GameObject>();
 
+    public static bool IsRetry { get; set; }
+
     public static MaxVariableServiceUnityEditor VariableService
     {
         get { return MaxVariableServiceUnityEditor.Instance; }
@@ -134,6 +136,8 @@ public class MaxSdkUnityEditor : MaxSdkBase
     {
         get { return SharedTargetingData; }
     }
+
+    
 
     #endregion
 
@@ -1146,7 +1150,11 @@ public class MaxSdkUnityEditor : MaxSdkBase
 
             var adHiddenEventProps = Json.Serialize(CreateBaseEventPropsDictionary("OnRewardedAdHiddenEvent", adUnitIdentifier));
             MaxSdkCallbacks.Instance.ForwardEvent(adHiddenEventProps);
-            SceneManager.LoadSceneAsync("StageScene");
+            
+            if (IsRetry)
+            {
+                SceneManager.LoadSceneAsync("StageScene");
+            }
             Object.Destroy(stubRewardedAd);
         });
 

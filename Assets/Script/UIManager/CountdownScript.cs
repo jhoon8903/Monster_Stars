@@ -66,7 +66,7 @@ namespace Script.UIManager
             adsContinueBtn.SetActive(false); // retry 상태 저장
         }
 
-        private void YesRetry()
+        public void YesRetry()
         {
             AppLovinScript.ShowRewardedAd();
             RewardManager.Instance.RewardButtonClicked("Retry");
