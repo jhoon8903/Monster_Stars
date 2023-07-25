@@ -355,7 +355,7 @@ namespace Script.RewardScript
                     if (EnforceManager.Instance.slowCount >= 4) return false;
                     break;
                 case ExpData.Types.Exp:
-                    if (EnforceManager.Instance.expPercentage > 30) return false;
+                    if (EnforceManager.Instance.expPercentage >= 30) return false;
                     break;
                 case ExpData.Types.CastleRecovery:
                     if (EnforceManager.Instance.recoveryCastle) return false;

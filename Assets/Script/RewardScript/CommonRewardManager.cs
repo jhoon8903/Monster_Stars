@@ -88,16 +88,19 @@ namespace Script.RewardScript
         {
             var commonPowerUps = new List<CommonData>();
             var selectedCodes = new HashSet<int>();
-            for (var i = 0; i < 3; i++)
+
+            // 보스 클리어 시 첫번째 선택지인 "addrow"를 추가
+            if (StageManager.Instance.isBossClear && EnforceManager.Instance.addRowCount < 1)
             {
-                if (StageManager.Instance.isBossClear)
-                {
-                    if (EnforceManager.Instance.addRowCount >= 1) continue;
-                    var firstDesiredPowerUp = new CommonPurpleData(purpleSprite, 16, CommonData.Types.AddRow, new[] { 1 });
-                    commonPowerUps.Add(firstDesiredPowerUp); 
-                    selectedCodes.Add(firstDesiredPowerUp.Code);
-                }
-                else
+                var firstDesiredPowerUp = new CommonPurpleData(purpleSprite, 16, CommonData.Types.AddRow, new[] { 1 });
+                commonPowerUps.Add(firstDesiredPowerUp);
+                selectedCodes.Add(firstDesiredPowerUp.Code);
+                EnforceManager.Instance.addRowCount++; // 선택지 추가 횟수 증가
+            }
+            else
+            {
+                // 랜덤 선택지 추가
+                for (var i = 0; i < 3; i++)
                 {
                     CommonData selectedPowerUp;
                     switch (forcedColor)
@@ -105,14 +108,14 @@ namespace Script.RewardScript
                         case "blue" when i == 0: selectedPowerUp = CommonUnique(common.CommonBlueList, selectedCodes); break;
                         case "purple" when i == 0: selectedPowerUp = CommonUnique(common.CommonPurpleList, selectedCodes); break;
                         default:
-                        {
-                            var total = greenChance + blueChance + purpleChance;
-                            var randomValue = Random.Range(0, total);
-                            if (randomValue < greenChance) { selectedPowerUp = CommonUnique(common.CommonGreenList, selectedCodes); }
-                            else if (randomValue < greenChance + blueChance) { selectedPowerUp = CommonUnique(common.CommonBlueList, selectedCodes); }                                                                           
-                            else { selectedPowerUp = CommonUnique(common.CommonPurpleList, selectedCodes); }
-                            break;
-                        }
+                            {
+                                var total = greenChance + blueChance + purpleChance;
+                                var randomValue = Random.Range(0, total);
+                                if (randomValue < greenChance) { selectedPowerUp = CommonUnique(common.CommonGreenList, selectedCodes); }
+                                else if (randomValue < greenChance + blueChance) { selectedPowerUp = CommonUnique(common.CommonBlueList, selectedCodes); }
+                                else { selectedPowerUp = CommonUnique(common.CommonPurpleList, selectedCodes); }
+                                break;
+                            }
                     }
                     if (selectedPowerUp == null) continue;
                     commonPowerUps.Add(selectedPowerUp);
@@ -142,7 +145,7 @@ namespace Script.RewardScript
                         if (EnforceManager.Instance.castleMaxHp >= 1000) return false; // Make sure the max HP of the castle does not exceed 2000
                         break;
                     case CommonData.Types.Exp:
-                        if (EnforceManager.Instance.expPercentage > 30) return false; // Make sure the EXP increment does not exceed 30%
+                        if (EnforceManager.Instance.expPercentage >= 30) return false; // Make sure the EXP increment does not exceed 30%
                         break;
                     case CommonData.Types.AddRow:
                         if (EnforceManager.Instance.addRowCount > 1) return false;

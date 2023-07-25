@@ -26,10 +26,6 @@ namespace Script.WeaponScriptGroup
                 {
                     secondSword.SetActive(true);
                     secondSword.GetComponent<WeaponBase>().InitializeWeapon(CharacterBase);
-                    if (secondSword.activeInHierarchy)
-                    {
-                        StartCoroutine(secondSword.GetComponent<WeaponBase>().UseWeapon());
-                    }
                 }
                 _pivotTween = pivotPoint.transform.DORotate(new Vector3(0, 0, 360), Speed, RotateMode.FastBeyond360);
                 _pivotTween.OnComplete(() => {
