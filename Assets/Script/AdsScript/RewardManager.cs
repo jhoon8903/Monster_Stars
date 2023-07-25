@@ -1,3 +1,4 @@
+using Script.RobbyScript.TopMenuGroup;
 using Script.UIManager;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +11,7 @@ namespace Script.AdsScript
         [SerializeField] private Text rewardText;
         [SerializeField] private GameObject rewardBtn;
         public static RewardManager Instance { get; private set; }
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -48,13 +50,22 @@ namespace Script.AdsScript
 
         private void GiveCoinReward()
         {
-            Debug.Log("코인 보상을 제공합니다."); 
+            Debug.Log("코인 보상을 제공합니다.");
+            if (CoinsScript.Instance != null)
+            {
+                // Access the Coin property and add the specified amount
+                CoinsScript.Instance.Coin += 1000;
+            }
             rewardBtn.GetComponent<Button>().onClick.RemoveListener(GiveCoinReward);
         }
 
         private void GiveGemReward()
         {
             Debug.Log("재화 보상을 제공합니다.");
+            if (GemScript.Instance != null)
+            {
+                GemScript.Instance.Gem += 100;
+            }
             rewardBtn.GetComponent<Button>().onClick.RemoveListener(GiveGemReward);
 
         }
@@ -62,6 +73,7 @@ namespace Script.AdsScript
         private void GiveStaminaReward()
         {
             Debug.Log("스테미너 보상을 제공합니다.");
+            StaminaScript.Instance.currentStamina += 5;
             rewardBtn.GetComponent<Button>().onClick.RemoveListener(GiveStaminaReward);
         }
 

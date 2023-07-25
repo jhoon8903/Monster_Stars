@@ -401,6 +401,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rewardText: {fileID: 8752192244113692095}
   rewardBtn: {fileID: 9022744165704841314}
+  staminaScript: {fileID: 0}
 --- !u!1 &6035480753190105363
 GameObject:
   m_ObjectHideFlags: 0

@@ -9,14 +9,35 @@ namespace Script.RobbyScript.TopMenuGroup
     {
         [SerializeField] private TextMeshProUGUI staminaText;
         [SerializeField] private TextMeshProUGUI staminaRecoveryTime;
-        public int currentStamina;
+        //public int currentStamina;
         private const int MaxStamina = 30;
         private const float RecoveryCooldown = 1200.0f;
         private float _currentCooldown;
         private const string LastTimeKey = "LastTimeKey";
+        private const string StaminaKey = "Stamina";
+
+        public int currentStamina
+        {
+            get => PlayerPrefs.GetInt(StaminaKey, 0);
+            set
+            {
+                PlayerPrefs.SetInt(StaminaKey, value);
+                StaminaUpdate();
+            }
+        }
+
+        public static StaminaScript Instance;
 
         private void Start()
         {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
             LoadStaminaState();
             StaminaUpdate();
             StartCoroutine(RecoveryStamina());
@@ -30,7 +51,6 @@ namespace Script.RobbyScript.TopMenuGroup
                 StaminaUpdate();
             }
         }
-
         private void OnApplicationQuit()
         {
             SaveStaminaState();
