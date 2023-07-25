@@ -38,7 +38,7 @@ PoisonDamageAttackPowerIncrease,"중독 데미지 자신의 공격력의 10%만�
 PoisonProjectileIncrease,투사체의 개수가 1회 증가합니다.,Number of projectiles is increased by 1.
 PoisonRangeIncrease,사거리가 1칸 증가합니다.,Attack range is increased by one tile.
 PoisonBleedingEnemyDamageBoost,출혈중인 적을 공격하면 데미지가 35% 증가합니다.,"When attacking bleeding enemies, damage is increased by 35%."
-PoisonBleedingEnemyInstantKill,타격시 중독중인 적의 체력이 7% 미만이면 즉사시킵니다.,"If the enemy with poison is below 7% health when hit, they will be instantly killed."
+PoisonEnemyInstantKill,타격시 중독중인 적의 체력이 7% 미만이면 즉사시킵니다.,"If the enemy with poison is below 7% health when hit, they will be instantly killed."
 PoisonPerHitEffect,유닛이 타격할 때마다 적에게 초당 10% 데미지를 가하는 중독을 4초간 발생시킵니다.,"The unit inflicts poison on the enemy, dealing 10% damage per second for 4 seconds with each hit."
 FireImageOverlapIncrease,화상 중첩 수가 1회 증가합니다. (최대 5회),The maximum stack of burn increases by 1 (up to a maximum of 5 stacks).
 FireAttackSpeedBoost,(유닛 6) 공격속도 +6% 증가 (최대 4회),(For unit 6) Increase attack speed by 6% (up to 4 times).

@@ -369,7 +369,7 @@ namespace Script.RewardScript
         [Header("Purple / Default: 중독 된 적의 체력이 7% 미만이면 즉사")] 
         public bool poisonEnemyInstantKill;
         // 완료
-        [Header("Purple / 7Lv: 초당 10% 데미지를 가하는 중족을 4초간 발생")] 
+        [Header("Purple / 7Lv: 초당 10% 데미지를 가하는 중독을 4초간 발생")] 
         public bool poisonPerHitEffect;
 
 
