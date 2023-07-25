@@ -120,11 +120,11 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         { 
             base.SetLevel(level);
-            var unitLevelDamage = unitPieceLevel * 12f;
+            UnitLevelDamage = unitPieceLevel * 12f;
             Type = Types.Character;
             unitGroup = UnitGroups.E;
             var increaseDamage = 1f + EnforceManager.Instance.water2AttackPowerIncrease * 12 / 100f;
-            DefaultDamage = unitLevelDamage + 60f * increaseDamage * level switch
+            DefaultDamage = UnitLevelDamage + 60f * increaseDamage * level switch
             {
                 <=  2 => 1f,
                 3 => 1.7f,

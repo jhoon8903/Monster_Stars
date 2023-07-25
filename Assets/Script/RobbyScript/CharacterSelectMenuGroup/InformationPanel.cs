@@ -47,7 +47,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             unitProperty.text = UnitPropertyText(characterBase);
             unitNoticeText.text = characterBase.UnitDesc;
             var unitDataList = UnitData(characterBase);
-            PopulateUnitInfoObject(unitDataList);
+            PopulateUnitInfoObject(unitDataList, characterBase);
             var unitSkillLists = UnitSkills(characterBase);
             PopulateUnitSkillObject(unitSkillLists, characterBase);
             var unitLevelUpPrice = characterBase.unitPieceLevel * 500;
@@ -107,7 +107,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             return skillList;
         }
 
-        private void PopulateUnitInfoObject(List<Dictionary<string, object>> unitDataList)
+        private void PopulateUnitInfoObject(List<Dictionary<string, object>> unitDataList, CharacterBase characterBase)
         {
             foreach (Transform child in unitInformationList.transform)
             {
@@ -123,7 +123,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     {
                         case "Damage":
                             instance.infoTitle.text = _selectLang == "KOR" ? "공격력" : "Damage";
-                            instance.infoDesc.text = unitData.Value as string;
+                            instance.infoDesc.text = characterBase.unitPieceLevel == 1 ? $"{unitData.Value}" : $"{unitData.Value} + {characterBase.UnitLevelDamage}";
                             break;
                         case "Range":
                             instance.infoTitle.text = _selectLang == "KOR" ? "공격범위" : "Range";

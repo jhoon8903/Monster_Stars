@@ -27,6 +27,15 @@ namespace Script.RewardScript
                 Destroy(gameObject);
             }
         }
+
+        public void Update()
+        {
+            if (!Input.GetKeyDown(KeyCode.C)) return;
+            // PlayerPrefs.SetInt(CoinKey, 10000);
+            RewardUnitPiece(50);
+            CoinsScript.Instance.Coin += 10000; 
+            CoinsScript.Instance.UpdateCoin();
+        }
         public void ClearReward(int stage)
         {
             stageClearPanel.SetActive(true);
@@ -55,7 +64,7 @@ namespace Script.RewardScript
             goods.goodsValue.text = $"{getCoin}";
             EnforceManager.Instance.addGoldCount = 0;
         }
-        private void RewardUnitPiece(int stage)
+        public void RewardUnitPiece(int stage)
         {
             var possibleIndices = Enumerable.Range(0, rewardUnitList.Count).ToList();
             var selectedUnitIndices = new List<int>();
@@ -131,7 +140,6 @@ namespace Script.RewardScript
                     _ => Color.gray
                 };
                 goodies.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(1);
-    
                 unit.CharacterPieceCount += unitPieceReward;
                 goodies.goodsValue.text = $"{unitPieceReward}";
             }

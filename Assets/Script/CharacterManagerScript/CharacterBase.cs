@@ -49,6 +49,7 @@ namespace Script.CharacterManagerScript
         private SpriteRenderer _spriteRenderer;
         protected internal bool HasAttackSpeedBuff { get; set; }
         protected internal string UnitDesc { get; protected set; }
+        protected internal float UnitLevelDamage { get; protected set; }
 
         public virtual void Initialize()
         {
@@ -87,6 +88,7 @@ namespace Script.CharacterManagerScript
             CharacterPieceCount -= CharacterMaxPiece;
             CoinsScript.Instance.Coin -= unitPieceLevel * 500;
             unitPieceLevel++;
+            SetLevel(unitPieceLevel);
             yield return null;
         }
 

@@ -90,11 +90,11 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            var unitLevelDamage = unitPieceLevel * 40f;
+            UnitLevelDamage = unitPieceLevel * 40f;
             Type = Types.Character;
             unitGroup = UnitGroups.G;
             var damageBoost = 1f + EnforceManager.Instance.fire2AttackPowerIncrease * 12 / 100f;
-            DefaultDamage = unitLevelDamage + 180f * damageBoost * level switch
+            DefaultDamage = UnitLevelDamage + 180f * damageBoost * level switch
             {
                 <= 2 => 1f,
                 3 => 1.7f,
