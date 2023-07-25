@@ -50,7 +50,6 @@ namespace Script.CharacterManagerScript
         protected internal bool HasAttackSpeedBuff { get; set; }
         protected internal string UnitDesc { get; protected set; }
         protected internal float UnitLevelDamage { get; protected set; }
-
         public virtual void Initialize()
         {
             UnLock = true;
@@ -66,7 +65,6 @@ namespace Script.CharacterManagerScript
             Tween scaleDown = sequence.Append(levelUpObject.transform.DOScale(_initialScale, 0.3f)); 
             scaleDown.WaitForCompletion();
         }
-
         protected virtual void LevelUp()
         {
             unitPuzzleLevel++;
@@ -88,15 +86,13 @@ namespace Script.CharacterManagerScript
             CharacterPieceCount -= CharacterMaxPiece;
             CoinsScript.Instance.Coin -= unitPieceLevel * 500;
             unitPieceLevel++;
-            SetLevel(unitPieceLevel);
+            Initialize();
             yield return null;
         }
-
         protected internal virtual Sprite GetSprite(int level)
         {
             return null;
         }
-
         protected internal virtual void SetLevel(int level)
         {
             unitPuzzleLevel = level;

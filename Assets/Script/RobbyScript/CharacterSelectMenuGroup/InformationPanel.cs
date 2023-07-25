@@ -210,7 +210,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece && CoinsScript.Instance.Coin >= characterBase.unitPieceLevel * 500)
             {
                 levelUpBtn.GetComponent<Button>().interactable = true;
-
                 levelUpBtn.GetComponent<Button>().onClick.AddListener(() =>
                 {
                     StartCoroutine(characterBase.UnitLevelUp());

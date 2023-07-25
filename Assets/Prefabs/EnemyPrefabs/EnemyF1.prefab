@@ -174,7 +174,7 @@ PolygonCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
@@ -295,13 +295,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb603f2801ef49d9986df6abe60c2a86, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  moveSpeed: 0
+  originSpeed: 0
   number: 0
   healthPoint: 0
   maxHealthPoint: 0
   currentHealth: 0
   lastIncreaseHealthPoint: 0
-  isRestraint: 0
+  isBind: 0
   isSlow: 0
+  isReceiveDamageDebuff: 0
+  isSlowC: 0
+  isSlowE: 0
+  isSlowStun: 0
+  isSlowBleedStun: 0
+  isBurningPoison: 0
   isPoison: 0
   isBurn: 0
   isBleed: 0

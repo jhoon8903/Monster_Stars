@@ -47,7 +47,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                         character.Selected = true;
                         SelectedUnitHolder.Instance.selectedUnit.Add(character);
                     }
-
                     if (character.Selected)
                     {
                         var selectedUnitInstance = Instantiate(unitIconPrefab, selectedContent.transform, false);
@@ -76,7 +75,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             {
                 OpenStatusPanel(unitInstance, character);
             });
-
             unitInstance.infoBtn.onClick.AddListener(() =>
             {
                 unitInstance.statusPanel.SetActive(false);
@@ -88,7 +86,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 _informationPanel.gameObject.SetActive(true);
                 _informationPanel.OpenInfoPanel(unitInstance, character);
             });
-
             unitInstance.levelUpBtn.onClick.AddListener(() =>
             {
                 unitInstance.statusPanel.SetActive(false);
@@ -140,7 +137,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             };
             
             unitInstance.unit.GetComponent<Image>().sprite = character.GetSpriteForLevel(character.unitPieceLevel);
-            
             unitInstance.levelBack.color = character.UnitGrade switch
             {
                 CharacterBase.UnitGrades.Blue => new Color(0.1489f, 0f, 0.6226f, 1f),
@@ -164,7 +160,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             unitInstance.unitPieceSlider.maxValue = 5;
             unitInstance.unitPieceSlider.value = 0;
             unitInstance.unitPieceText.text = $"{unitInstance.unitPieceSlider.value}/{unitInstance.unitPieceSlider.maxValue}";
-            
             unitInstance.GetComponent<Button>().onClick.AddListener(() =>
             {
                 OpenStatusPanel(unitInstance, character);
@@ -229,17 +224,12 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         private void UpdateMainUnitContent()
         {
             UnitIconMapping.Clear();
-
-            // 기존에 있는 정보 패널을 모두 삭제
             foreach (Transform child in mainUnitContent.transform)
             {
                 Destroy(child.gameObject);
             }
-            //
-            // mainUnitContent 안에 있는 각 유닛을 순회하며 새로운 정보 패널을 생성하고 정보 전달
             foreach (Transform child in selectedContent.transform)
             {
-                // 유닛 아이콘 프리팹으로부터 인스턴스 생성
                 var newUnitInstance = Instantiate(child.gameObject, mainUnitContent.transform, false);
                 var newUnit = newUnitInstance.GetComponent<UnitIcon>();
                 var originalUnit = child.GetComponent<UnitIcon>();
@@ -249,12 +239,10 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 newUnit.GetComponent<Button>().onClick.AddListener(() =>
                 {
                     newUnit.statusPanel.SetActive(false);
-                    // 정보 패널 열기 및 유닛 정보 전달
                     if (_informationPanel == null)
                     {
                         _informationPanel = Instantiate(informationPanelPrefab, gamePanel.transform).GetComponent<InformationPanel>();
                     }
-
                     _informationPanel.OpenInfoPanel(newUnit, newUnitBase);
                     SyncWithSelected(newUnit, newUnitBase);
                 });
@@ -267,7 +255,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     == unitIcon || pair.Value == unitIcon select (pair.Key == unitIcon) 
                     ? pair.Value 
                     : pair.Key).FirstOrDefault();
-
             if (correspondingUnit == null) return;
             correspondingUnit.CharacterBase = unitBase;
             correspondingUnit.statusPanel.SetActive(unitIcon.statusPanel.activeSelf);
