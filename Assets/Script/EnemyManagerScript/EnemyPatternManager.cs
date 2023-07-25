@@ -76,7 +76,7 @@ namespace Script.EnemyManagerScript
             _enemyRigidbodies[enemyBase] = _rb;
             
             var targetPosition = new Vector2(_enemyRigidbodies[enemyBase].transform.position.x, _endY);
-
+            _alreadyKnockBack.TryAdd(enemyBase, false);
             while (gameManager.IsBattle && !_alreadyKnockBack[enemyBase])
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
@@ -87,8 +87,12 @@ namespace Script.EnemyManagerScript
                     _speedReductionFactor = 1f;
                 }
                 _moveSpeed = enemyBase.moveSpeed * _speedReductionFactor * moveSpeedOffset * Time.deltaTime;
-                _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed );
-               
+
+                if (_rb != null)
+                {
+                    _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed);
+                }
+
                 if (enemyBase.isBind || enemyBase.isSlowStun || enemyBase.isSlowBleedStun || enemyBase.isBurningPoison)
                 { 
                     StartCoroutine(BindEffect(enemyBase));
