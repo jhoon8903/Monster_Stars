@@ -235,7 +235,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             {
                 Destroy(child.gameObject);
             }
-
+            //
             // mainUnitContent 안에 있는 각 유닛을 순회하며 새로운 정보 패널을 생성하고 정보 전달
             foreach (Transform child in selectedContent.transform)
             {
