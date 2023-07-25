@@ -101,7 +101,7 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = unitPieceLevel * 20f;
+            UnitLevelDamage = (unitPieceLevel-1) * 20f;
             Type = Types.Character;
             unitGroup = UnitGroups.A;
             DefaultDamage = UnitLevelDamage + 100f * (1f + 12 * EnforceManager.Instance.divineAttackBoost / 100f) * level switch

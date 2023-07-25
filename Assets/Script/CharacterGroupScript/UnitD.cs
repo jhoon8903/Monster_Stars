@@ -75,11 +75,15 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = unitPieceLevel * 25f;
+            UnitLevelDamage = (unitPieceLevel-1) * 25f;
             Type = Types.Character;
             unitGroup = UnitGroups.D;
             var increaseDamage = 1f + 6 * EnforceManager.Instance.physicalDamage6Boost / 100f;
-            const float damage18Boost = 1f + 0.18f;
+            var damage18Boost = 1f;
+            if (EnforceManager.Instance.physicalDamage18Boost)
+            {
+                damage18Boost += 0.18f;
+            }
             DefaultDamage = UnitLevelDamage + 100f * increaseDamage * damage18Boost * level switch
             {
                 <= 2 => 1f,

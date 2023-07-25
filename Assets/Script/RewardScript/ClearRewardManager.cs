@@ -64,7 +64,8 @@ namespace Script.RewardScript
             goods.goodsValue.text = $"{getCoin}";
             EnforceManager.Instance.addGoldCount = 0;
         }
-        public void RewardUnitPiece(int stage)
+
+        private void RewardUnitPiece(int stage)
         {
             var possibleIndices = Enumerable.Range(0, rewardUnitList.Count).ToList();
             var selectedUnitIndices = new List<int>();

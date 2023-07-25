@@ -88,7 +88,7 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = unitPieceLevel * 12f;
+            UnitLevelDamage = (unitPieceLevel-1) * 12f;
             Type = Types.Character;
             unitGroup = UnitGroups.C;
             defaultAtkRate = 0.8f / (1f + 6 * EnforceManager.Instance.darkAttackSpeedBoost / 100f);
