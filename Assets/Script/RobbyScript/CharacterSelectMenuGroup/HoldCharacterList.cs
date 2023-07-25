@@ -76,21 +76,16 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             {
                 OpenStatusPanel(unitInstance, character);
             });
+
             unitInstance.infoBtn.onClick.AddListener(() =>
             {
                 unitInstance.statusPanel.SetActive(false);
                 _activeStatusPanel = null;
-
-                // 정보 패널이 null인 경우에만 생성하도록 수정합니다.
                 if (_informationPanel == null)
                 {
                     _informationPanel = Instantiate(informationPanelPrefab, gamePanel.transform).GetComponent<InformationPanel>();
                 }
-
-                // 정보 패널을 활성화합니다.
                 _informationPanel.gameObject.SetActive(true);
-
-                // 정보 패널에 해당 캐릭터의 정보를 전달합니다.
                 _informationPanel.OpenInfoPanel(unitInstance, character);
             });
 
@@ -98,6 +93,11 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             {
                 unitInstance.statusPanel.SetActive(false);
                 _activeStatusPanel = null;
+                if (_informationPanel == null)
+                {
+                    _informationPanel = Instantiate(informationPanelPrefab, gamePanel.transform).GetComponent<InformationPanel>();
+                }
+                _informationPanel.gameObject.SetActive(true);
                 _informationPanel.OpenInfoPanel(unitInstance, character);
             });
             unitInstance.removeBtn.onClick.AddListener(() =>

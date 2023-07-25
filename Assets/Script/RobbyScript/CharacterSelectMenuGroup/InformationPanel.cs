@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using Script.CharacterManagerScript;
 using Script.RobbyScript.TopMenuGroup;
 using Script.UIManager;
-using Script.WeaponScriptGroup;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,11 +28,14 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         private TextMeshProUGUI _skillNoticeText;
         private string _selectLang;
 
+        private void Awake()
+        {
+            _selectLang = PlayerPrefs.GetString("Language","KOR");
+        }
 
         public void OpenInfoPanel(UnitIcon unitInstance, CharacterBase characterBase)
         {
             infoPanel.SetActive(true);
-            _selectLang = PlayerPrefs.GetString("Language");
             StartCoroutine(CheckForLevelUp(unitInstance, characterBase));
         }
 
@@ -107,19 +109,16 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
 
         private void PopulateUnitInfoObject(List<Dictionary<string, object>> unitDataList)
         {
-
             foreach (Transform child in unitInformationList.transform)
             {
                 Destroy(child.gameObject);
             }
-
             foreach (var unitDataDict in unitDataList)
             {
                 foreach (var unitData in unitDataDict)
                 {
                     if (unitData.Value as string == "Null" && unitData.Key is "Effect" or "Time") continue;
                     var instance = Instantiate(unitInfoObject, unitInformationList.transform);
-
                     switch (unitData.Key)
                     {
                         case "Damage":
