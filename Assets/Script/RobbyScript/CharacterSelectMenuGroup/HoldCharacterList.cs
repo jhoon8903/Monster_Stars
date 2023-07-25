@@ -21,12 +21,11 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         [SerializeField] private UnitIcon unitIconPrefab;
         [SerializeField] private GameObject gamePanel;
         [SerializeField] private GameObject informationPanelPrefab;
-        private InformationPanel informationPanel;
         [SerializeField] private GameObject warningPanel;
         [SerializeField] private TextMeshProUGUI messageText;
         private GameObject _activeStatusPanel;
-        private readonly Dictionary<UnitIcon, UnitIcon> _unitIconMapping = new Dictionary<UnitIcon, UnitIcon>();
-
+        private static readonly Dictionary<UnitIcon, UnitIcon> UnitIconMapping = new Dictionary<UnitIcon, UnitIcon>();
+        private InformationPanel _informationPanel;
 
         private void Update()
         {
@@ -34,11 +33,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             {
                 PlayerPrefs.DeleteAll();
             }
-        }
-
-        public void Start()
-        {
-          
         }
 
         public void InstanceUnit()
@@ -88,23 +82,23 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 _activeStatusPanel = null;
 
                 // 정보 패널이 null인 경우에만 생성하도록 수정합니다.
-                if (informationPanel == null)
+                if (_informationPanel == null)
                 {
-                    informationPanel = Instantiate(informationPanelPrefab, gamePanel.transform).GetComponent<InformationPanel>();
+                    _informationPanel = Instantiate(informationPanelPrefab, gamePanel.transform).GetComponent<InformationPanel>();
                 }
 
                 // 정보 패널을 활성화합니다.
-                informationPanel.gameObject.SetActive(true);
+                _informationPanel.gameObject.SetActive(true);
 
                 // 정보 패널에 해당 캐릭터의 정보를 전달합니다.
-                informationPanel.OpenInfoPanel(unitInstance, character);
+                _informationPanel.OpenInfoPanel(unitInstance, character);
             });
 
             unitInstance.levelUpBtn.onClick.AddListener(() =>
             {
                 unitInstance.statusPanel.SetActive(false);
                 _activeStatusPanel = null;
-                informationPanel.OpenInfoPanel(unitInstance, character);
+                _informationPanel.OpenInfoPanel(unitInstance, character);
             });
             unitInstance.removeBtn.onClick.AddListener(() =>
             {
@@ -228,13 +222,13 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     break;
                 }
                 case false:
-                    informationPanel.OpenInfoPanel(unitInstance, characterBase);
+                    _informationPanel.OpenInfoPanel(unitInstance, characterBase);
                     break;
             }
         }
         private void UpdateMainUnitContent()
         {
-            _unitIconMapping.Clear();
+            UnitIconMapping.Clear();
 
             // 기존에 있는 정보 패널을 모두 삭제
             foreach (Transform child in mainUnitContent.transform)
@@ -246,30 +240,30 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             foreach (Transform child in selectedContent.transform)
             {
                 // 유닛 아이콘 프리팹으로부터 인스턴스 생성
-                GameObject newUnitInstance = Instantiate(child.gameObject, mainUnitContent.transform, false);
+                var newUnitInstance = Instantiate(child.gameObject, mainUnitContent.transform, false);
                 var newUnit = newUnitInstance.GetComponent<UnitIcon>();
                 var originalUnit = child.GetComponent<UnitIcon>();
-                _unitIconMapping[originalUnit] = newUnit;
+                UnitIconMapping[originalUnit] = newUnit;
                 newUnit.CharacterBase = originalUnit.CharacterBase;
                 var newUnitBase = newUnit.CharacterBase;
                 newUnit.GetComponent<Button>().onClick.AddListener(() =>
                 {
                     newUnit.statusPanel.SetActive(false);
                     // 정보 패널 열기 및 유닛 정보 전달
-                    if (informationPanel == null)
+                    if (_informationPanel == null)
                     {
-                        informationPanel = Instantiate(informationPanelPrefab, gamePanel.transform).GetComponent<InformationPanel>();
+                        _informationPanel = Instantiate(informationPanelPrefab, gamePanel.transform).GetComponent<InformationPanel>();
                     }
 
-                    informationPanel.OpenInfoPanel(newUnit, newUnitBase);
+                    _informationPanel.OpenInfoPanel(newUnit, newUnitBase);
                     SyncWithSelected(newUnit, newUnitBase);
                 });
             }
         }
-        public void SyncWithSelected(UnitIcon unitIcon, CharacterBase unitBase)
+        public static void SyncWithSelected(UnitIcon unitIcon, CharacterBase unitBase)
         {
             var correspondingUnit 
-                = (from pair in _unitIconMapping where pair.Key 
+                = (from pair in UnitIconMapping where pair.Key 
                     == unitIcon || pair.Value == unitIcon select (pair.Key == unitIcon) 
                     ? pair.Value 
                     : pair.Key).FirstOrDefault();

@@ -28,6 +28,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.B;
             UnitProperty = UnitProperties.Darkness;
             UnitGrade = UnitGrades.Green;
+            UnitDesc = "유닛B 입니다.";
             SetLevel(1);
         }
 

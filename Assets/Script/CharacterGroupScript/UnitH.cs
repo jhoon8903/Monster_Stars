@@ -25,6 +25,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.H;
             UnitProperty = UnitProperties.Fire;
             UnitGrade = UnitGrades.Blue;
+            UnitDesc = "유닛H 입니다.";
             SetLevel(1);
         }
 
@@ -98,7 +99,7 @@ namespace Script.CharacterGroupScript
             };
             var increaseRateBoost = 1f + EnforceManager.Instance.fireAttackSpeedBoost * 6 / 100f;
             defaultAtkRate = 1f / increaseRateBoost;
-            defaultAtkDistance = 9f;
+            defaultAtkDistance = 9f; 
             var increaseProjectileBoost = EnforceManager.Instance.fireProjectileSpeedIncrease ? 1f : 0f;
             projectileSpeed = 1f + increaseProjectileBoost;
             UnitAtkType = UnitAtkTypes.Projectile;

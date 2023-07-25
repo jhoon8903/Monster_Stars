@@ -48,6 +48,7 @@ namespace Script.CharacterManagerScript
         protected static List<GameObject> DetectedEnemies = new List<GameObject>();
         private SpriteRenderer _spriteRenderer;
         protected internal bool HasAttackSpeedBuff { get; set; }
+        protected internal string UnitDesc { get; protected set; }
 
         public virtual void Initialize()
         {

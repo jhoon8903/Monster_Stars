@@ -1,0 +1,65 @@
+Group,Grade,Level,Type,Kor,Eng
+A,G,1,DivinePoisonDamageBoost,독에 걸린 적을 공격 시 데미지가 25% 증가합니다.,When attacking poisoned enemies  damage is increased by 25%.
+A,G,7,DivineBindDurationBoost,속박 지속시간 +0.1초 (최대 +5회),Increase shackle duration by +0.1 seconds (up to +5 times).
+A,G,3,DivineShackledExplosion,이 유닛의 공격으로 죽으면 1칸 범위의 폭발을 일으킵니다. (데미지 100%),When this unit's attack kills an enemy  it causes an explosion in a 1-tile range (100% damage).
+A,B,1,DivineFifthAttackBoost,5번째 공격마다 데미지가 3배로 증가한 투사체를 던집니다. (색 변경),Every 5th attack  throw a projectile that deals 3 times more damage (color changes).
+A,B,13,DivineAttackBoost,(유닛 1) 공격력 +12% (최대 4회),(For unit 1) Increase attack power by 12% (up to 4 times).
+A,P,5,DivineBindChanceBoost,속박 확률 20% 증가 (20% -> 40%),Increase shackle chance by 20% (20% -> 40%).
+A,P,11,DivineDualAttack,(유닛 1)은 앞뒤로 동시에 공격합니다.,(For unit 1) Attacks both front and back simultaneously.
+A,P,9,DivineProjectilePierce,투사체가 적을 1회 관통합니다.,Projectiles can pierce through enemies.
+B,G,9,DarkTenthAttackDamageBoost,10번째 공격마다 데미지가 3배로 증가한 투사체를 던집니다. (색 변경),Every 10th attack  throw a projectile that deals 3 times more damage (changes color).
+B,G,1,DarkAttackSpeedBoost,(유닛 7) 공격속도 +6% 증가 (최대 4회),(For unit 7) Increase attack speed by 6% (up to 4 times).
+B,G,9,DarkAttackPowerBoost,(유닛 7) 공격력 +6% 증가 (최대 4회),(For unit 7) Increase attack power by 6% (up to 4 times).
+B,B,11,DarkStatusAilmentDamageChance,상태이상에 걸린 적을 공격하면 10%확률로 500%의 데미지를 입힙니다.,When attacking enemies affected by status ailments  there is a 10% chance to deal 500% damage.
+B,B,3,DarkKnockBackChance,적을 공격 시 10% 확률로 넉백시킵니다.,When attacking enemies  there is a 10% chance to knock them back.
+B,B,1,DarkStatusAilmentDamageBoost,상태이상에 걸린 적을 공격하면 데미지가 15% 증가합니다. (상태이상 갯수는 체크하지 않음),When attacking enemies affected by status ailments  damage is increased by 15% (number of status ailments is not checked).
+B,P,7,DarkRangeIncrease,사거리가 1칸 증가합니다.,Attack range is increased by one tile.
+B,P,13,DarkStatusAilmentSlowEffect,상태이상에 걸린 적을 공격하면 1초동안 -20% 둔화를 부여합니다.,When attacking enemies affected by status ailments  apply -20% slow for 1 second.
+C,G,5,WaterAttackSpeedBoost,(유닛 8) 공격속도 +6% (최대 4회),(For unit 8) Increase attack speed by 6% (up to 4 times).
+C,G,1,WaterAllyDamageBoost,다른 물 속성 아군이 존재하면 더 이상 둔화를 걸지 않는 대신 데미지가 200% 증가합니다.,If other water attribute allies are present  no longer inflict slow  but damage is increased by 200%.
+C,B,11,WaterProjectileIncrease,발사하는 투사체 개수 1개 증가,The number of projectiles launched is increased by 1.
+C,B,13,WaterAttackBoost,(유닛 8) 공격력 +12% (최대 4회),(For unit 8) Increase attack power by 12% (up to 4 times).
+C,B,7,WaterSlowEnemyDamageBoost,둔화중인 적을 공격하면 데미지 20% 증가, When attacking slowed enemies  damage is increased by 20%. 
+C,P,1,WaterGlobalSlowEffect,(매 웨이브당 1번) 이 유닛이 100번 공격 시 화면 내에 존재하는 모든 적에게 -20% 둔화를 1초간 부여합니다. (필드 내 모든 해당 유닛의 공격 횟수 합산 웨이브마다 초기화), (Once per wave) After this unit attacks 100 times  apply -20% slow for 1 second to all enemies on the field (sum of all corresponding unit's attack count  resets each wave). 
+C,P,3,WaterSlowEnemyStunChance,둔화중인 적을 공격 시 40% 확률로 적을 0.1초간 기절 시킵니다., When attacking slowed enemies  there is a 40% chance to stun them for 0.1 seconds. 
+C,P,9,WaterDamageIncreaseDebuff,이 유닛에게 피격당한 적은 5초간 받는 데미지가 15% 증가합니다.,Enemies hit by this unit receive 15% increased damage for 5 seconds.
+D,G,9,PhysicalAttackSpeedBoost,(유닛 2) 공격속도 7% 증가 (최대 4회),(For unit 2) Increase attack speed by 7% (up to 4 times).
+D,G,1,PhysicalDamage35Boost,다른 물리 속성 유닛이 존재할 경우 데미지 35% 증가,If other physical attribute units exist  damage is increased by 35%.
+D,G,5,PhysicalDamage6Boost,(유닛 2) 공격력 +6% (최대 4회),(For unit 2) Increase attack power by 6% (up to 4 times).
+D,B,11,PhysicalBleedingChance,공격 시 10% 확률로 초당 공격력의 10% 데미지를 가하는 출혈을 2초간 발생시킵니다.,10% chance to inflict bleeding on the enemy for 10% damage per second for 2 seconds.
+D,B,1,PhysicalSwordAddition,공격 시 검 한자루가 추가됩니다.,Attacks will now have an additional sword.
+D,B,7,PhysicalSlowEnemyDamageBoost,둔화된 적을 공격할 시 데미지가 15% 증가합니다.,When attacking slowed enemies  damage is increased by 15%.
+D,P,3,PhysicalSwordScaleIncrease,검의 크기가 100% 증가합니다. (공격 사거리도 한칸 증가합니다),Sword size increases by 100% (attack range also increased by one tile).
+D,P,13,PhysicalDamage18Boost,(유닛 2) 공격력 +18%,(For unit 2) Increase attack power by 18%.
+E,G,1,Water2DebuffDurationIncrease,둔화 지속 시간 증가 +0.1초 (최대 5회),Increase the duration of slow by +0.1 seconds (up to 5 times).
+E,G,7,Water2AttackSpeedIncrease,(유닛 4) 공격속도 +6% (최대 4회),(For unit 4) Increase attack speed by 6% (up to 4 times).
+E,G,11,Water2StunChanceAgainstBleeding,출혈 중인 적을 공격 시 10% 확률로 적을 0.5초간 기절시킵니다. (이미 기절중인 경우 효과 없음),When attacking bleeding enemies  there is a 10% chance to stun them for 0.5 seconds (no effect if already stunned).
+E,B,9,Water2IceSpikeProjectile,이 유닛이 적을 죽이면죽은 적의 위치에서 좌우로 고드름이 발사됩니다. (공격력의 100% 데미지  공격과 동일한 투사체 속도),When this unit kills an enemy  ice pillars are launched left and right from the enemy's position (dealing 100% of attack damage  same projectile speed as the attack).
+E,B,5,Water2AttackPowerIncrease,(유닛 4) 공격력 +12% (최대 4회),(For unit 4) Increase attack power by 12% (up to 4 times).
+E,B,3,Water2ProjectileSpeedIncrease,투사체 속도가 +50% 증가,Projectile speed is increased by 50%.
+E,P,1,Water2DebuffStrengthIncrease,둔화 강도 10%증가 (30% -> 40%),The strength of slow is increased by 10% (from 30% to 40%).
+E,P,13,Water2AttackSpeedBuffToAdjacentAllies,자신과 인접한 아군유닛들에게 공격속도 +10%를 부여합니다. (대각선 포함),Grant adjacent allied units a 10% increase in attack speed (including diagonal directions).
+F,G,1,PoisonAttackSpeedIncrease,(유닛 3) 공격속도 +6% 증가 (최대 4회),(For unit 3) Increase attack speed by 6% (up to 4 times).
+F,G,3,PoisonMaxStackIncrease,중독 최대 중첩 수가 3회 증가합니다.,Maximum poison stack increased by 3.
+F,G,11,PoisonDamageAttackPowerIncrease,중독 데미지 자신의 공격력의 10%만큼 추가로 증가합니다. (최대 3회  10% -> 20% -> 30% -> 40%),Poison damage is increased by an additional 10% of own attack power (up to 3 times  10% -> 20% -> 30% -> 40%).
+F,B,5,PoisonProjectileIncrease,투사체의 개수가 1회 증가합니다.,Number of projectiles is increased by 1.
+F,B,9,PoisonRangeIncrease,사거리가 1칸 증가합니다.,Attack range is increased by one tile.
+F,B,13,PoisonBleedingEnemyDamageBoost,출혈중인 적을 공격하면 데미지가 35% 증가합니다.,When attacking bleeding enemies  damage is increased by 35%.
+F,P,1,PoisonEnemyInstantKill,타격시 중독중인 적의 체력이 7% 미만이면 즉사시킵니다.,If the enemy with poison is below 7% health when hit  they will be instantly killed.
+F,P,7,PoisonPerHitEffect,유닛이 타격할 때마다 적에게 초당 10% 데미지를 가하는 중독을 4초간 발생시킵니다.,The unit inflicts poison on the enemy  dealing 10% damage per second for 4 seconds with each hit.
+G,G,3,Fire2PoisonDamageIncrease,독에 걸린 적을 공격 시 데미지 15% 증가,When attacking poisoned enemies  damage is increased by 15%.
+G,G,9,Fire2AttackSpeedIncrease,(유닛 5) 공격속도 +6% 증가 (최대 4회),(For unit 5) Increase attack speed by 6% (up to 4 times).
+G,G,11,Fire2BurnStackIncrease,화상 최대 중첩 수가 3회 증가합니다.,The maximum number of burn stacks is increased by 3.
+G,B,1,Fire2AttackPowerIncrease,(유닛 5) 공격력 +12% (최대 4회),(For unit 5) Increase attack power by 12% (up to 4 times).
+G,B,13,Fire2StunChance,독에 걸린 적을 공격 시 20% 확률로 적을 0.5초간 기절시킵니다. (이미 기절중인 경우 효과 없음),When attacking poisoned enemies  there is a 20% chance to stun them for 0.5 seconds (no effect if already stunned).
+G,B,5,Fire2SwordSizeIncrease,검의 크기가 100% 증가합니다. (공격 사거리도 한칸 증가합니다),Sword size is increased by 100% (attack range is also increased by one tile).
+G,P,1,Fire2BurningDamageBoost,초당 화상 데미지 10% 증가 (10% -> 20% -> 30% -> 40%  최대 3회),Attack range is increased by one tile.
+G,P,7,Fire2NoBurnDamageIncrease,더이상 화상을 발생시키지 않는 대신 데미지 150% 증가,No longer inflicts burn  but damage is increased by 150%.
+H,G,1,FireImageOverlapIncrease,화상 중첩 수가 1회 증가합니다. (최대 5회),The maximum stack of burn increases by 1 (up to a maximum of 5 stacks).
+H,G,9,FireAttackSpeedBoost,(유닛 6) 공격속도 +6% 증가 (최대 4회),(For unit 6) Increase attack speed by 6% (up to 4 times).
+H,G,11,FireSlowEnemyDamageBoost,둔화중인 적을 공격하면 데미지가 10% 증가합니다.,When attacking slowed enemies  damage is increased by 10%.
+H,B,3,FireProjectileSpeedIncrease,투사체 속도가 100% 증가하고  반드시 명중합니다. (공격형태를 유도 투사체로 변경),Projectile speed is increased by 100% and will always hit the target (changes the attack type to homing projectile).
+H,B,7,FireBurnedEnemyExplosion,화상에 걸린 적이 죽을 시 폭발합니다. (주변 1칸에 공격력의 200% 데미지),If an enemy affected by burn dies  it explodes (dealing 200% of attack damage) in a 1-tile range around it.
+H,P,5,FireProjectileBounceDamage,적 적중 시 가장 가까운 적에게 발사체가 튕겨 데미지를 입힙니다.,Upon hitting an enemy  the projectile bounces to the nearest enemy  dealing damage.
+H,P,1,FireBurnPerAttackEffect,적을 공격하면 5초동안 화상을 입히며 초당 10%의 데미지를 줍니다.,When attacking enemies  inflict burn for 5 seconds  dealing 10% damage per second.
+H,P,13,FireProjectileBounceIncrease,발사체가 튕기는 횟수가 증가합니다.,The number of projectile bounces is increased.

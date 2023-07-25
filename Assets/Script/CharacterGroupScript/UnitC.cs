@@ -27,6 +27,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.C;
             UnitProperty = UnitProperties.Water;
             UnitGrade = UnitGrades.Purple;
+            UnitDesc = "유닛C 입니다.";
             SetLevel(1);
         }
         public override Sprite GetSpriteForLevel(int characterObjectLevel)

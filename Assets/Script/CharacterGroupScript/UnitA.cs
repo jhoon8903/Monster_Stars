@@ -29,6 +29,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.A;
             UnitProperty = UnitProperties.Divine;
             UnitGrade = UnitGrades.Blue;
+            UnitDesc = "유닛A 입니다.";
             SetLevel(1);
         }
         

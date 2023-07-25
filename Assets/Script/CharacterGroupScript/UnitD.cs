@@ -21,6 +21,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.D;
             UnitProperty = UnitProperties.Physics;
             UnitGrade = UnitGrades.Green;
+            UnitDesc = "유닛D 입니다.";
             SetLevel(1);
         }
         public void Awake()
