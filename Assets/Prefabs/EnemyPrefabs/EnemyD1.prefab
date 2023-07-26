@@ -328,6 +328,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a52a201e49c54038807231e14f26302, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  damageText: {fileID: 3584920970260779170, guid: 21d3aafccea744b7696aa042fd57c566, type: 3}
   moveSpeed: 0
   originSpeed: 0
   number: 0
@@ -344,6 +345,7 @@ MonoBehaviour:
   isSlowBleedStun: 0
   isBurningPoison: 0
   isPoison: 0
+  isKnockBack: 0
   isBurn: 0
   isBleed: 0
 --- !u!1 &7951744546095992863

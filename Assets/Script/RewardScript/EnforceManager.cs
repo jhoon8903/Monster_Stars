@@ -15,13 +15,12 @@ namespace Script.RewardScript
     {
         //Divine Unit A
         public bool divinePoisonDamageBoost;
-        public float divineBindDurationBoost;
+        public bool divineBindDurationBoost;
         public bool divineShackledExplosion;
         public bool divineFifthAttackBoost;
         public int divineAttackBoost;
         public bool divineBindChanceBoost;
         public bool divineDualAttack;
-        public bool divineProjectilePierce;
 
         //Darkness Unit B
         public bool darkTenthAttackDamageBoost;
@@ -143,21 +142,16 @@ namespace Script.RewardScript
 
         [Header("\n\nA 신성: Blue\n")]
         // 완료
-        [Header("Green / Default: 중독된 적 추가데미지 25%")] 
+        [Header("Green / 9: 중독된 적 추가데미지 25%")] 
         public bool divinePoisonDamageBoost;
         // 완료
-        [Header("Green / 7Lv: 속박지속시간 0.1초씩 증가 (최대 0.5초 / 5회)")] 
-        public float divineBindDurationBoost; 
-        protected internal void DivineBindDurationIncrease()
-        {
-            if (divineBindDurationBoost >= 0.5f) return;
-            divineBindDurationBoost += 0.1f;
-        }
+        [Header("Green / 3Lv: 속박지속시간 0.5초 증가")] 
+        public bool divineBindDurationBoost;
         // 완료
-        [Header("Green / 3Lv: 적 제거시 주변 1칸 범위의 100% 폭발데미지 추가")] 
+        [Header("Green / 7Lv: 적 제거시 주변 1칸 범위의 100% 폭발데미지 추가")] 
         public bool divineShackledExplosion;
         // 완료
-        [Header("Blue / Default: 5회 공격마다 200% 추가데미지 (투사체 컬러 변경)")] 
+        [Header("Blue / 1Lv: 5회 공격마다 100% 추가데미지 (투사체 컬러 변경)")] 
         public bool divineFifthAttackBoost;
         // 완료
         [Header("Blue / 13Lv: 공격력 12% 증가 (최대 4회)")] 
@@ -173,10 +167,7 @@ namespace Script.RewardScript
         // 완료
         [Header("Purple / 11Lv: 백어텍 가능")]
         public bool divineDualAttack;
-        // 완료
-        [Header("Purple / 9Lv: 관통 가능 (1회)")] 
-        public bool divineProjectilePierce;
-        
+
 
         [Header("\n\nB 어둠: Green\n")]
         // 완료 
@@ -586,7 +577,6 @@ namespace Script.RewardScript
                 divineAttackBoost = divineAttackBoost,
                 divineBindChanceBoost = divineBindChanceBoost,
                 divineDualAttack = divineDualAttack,
-                divineProjectilePierce = divineProjectilePierce,
                 //Darkness Unit B
                 darkTenthAttackDamageBoost = darkTenthAttackDamageBoost,
                 darkAttackSpeedBoost = darkAttackSpeedBoost,                        
@@ -686,7 +676,6 @@ namespace Script.RewardScript
             divineAttackBoost = data.divineAttackBoost;
             divineBindChanceBoost = data.divineBindChanceBoost;                                                        
             divineDualAttack = data.divineDualAttack;
-            divineProjectilePierce = data.divineProjectilePierce;
             //Darkness Unit B
             darkTenthAttackDamageBoost = data.darkTenthAttackDamageBoost;
             darkAttackSpeedBoost = data.darkAttackSpeedBoost;

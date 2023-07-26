@@ -38,17 +38,8 @@ namespace Script.WeaponScriptGroup
             AtkEffect(enemy);
             var damage = DamageCalculator(Damage, enemy, CharacterBase.UnitGroups.A); 
             enemy.ReceiveDamage(enemy,(int)damage,CharacterBase);
-            switch (EnforceManager.Instance.divineProjectilePierce)
-            {
-                case true when HitEnemy.Count == 2:
-                    StopUseWeapon(gameObject);
-                    HitEnemy.Clear();
-                    break;
-                case false:
-                    StopUseWeapon(gameObject);
-                    HitEnemy.Clear();
-                    break;
-            }
+            StopUseWeapon(gameObject);
+            HitEnemy.Clear();
         }
     }
 }

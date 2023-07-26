@@ -345,7 +345,7 @@ namespace Script.EnemyManagerScript
             }
             else
             {
-                restrainTime = 1f + EnforceManager.Instance.divineBindDurationBoost;
+                restrainTime = EnforceManager.Instance.divineBindDurationBoost? 1f : 1.5f;
             }
 
             if (!_alreadyRestrain.TryGetValue(enemyBase, out var isAlreadyRestraint))
@@ -415,7 +415,6 @@ namespace Script.EnemyManagerScript
             yield return new WaitForSeconds(0.2f);
             while (knockBackForce > 0.1)
             {
-                Debug.Log(knockBackForce);
                 knockBackForce -= Time.deltaTime;
                 rb.velocity = knockBackDirection * knockBackForce;
                 yield return null;

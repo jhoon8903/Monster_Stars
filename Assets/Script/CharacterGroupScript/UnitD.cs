@@ -84,7 +84,7 @@ namespace Script.CharacterGroupScript
             {
                 damage18Boost += 0.18f;
             }
-            DefaultDamage = UnitLevelDamage + 100f * increaseDamage * damage18Boost * level switch
+            DefaultDamage = UnitLevelDamage + 17f * increaseDamage * damage18Boost * level switch
             {
                 <= 2 => 1f,
                 3 => 1.7f,

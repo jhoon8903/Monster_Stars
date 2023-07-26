@@ -103,7 +103,7 @@ namespace Script.CharacterGroupScript
             UnitLevelDamage = (unitPieceLevel-1) * 16;
             Type = Types.Character;
             unitGroup = UnitGroups.B;
-            DefaultDamage = UnitLevelDamage + 120f * (1f + 6 * EnforceManager.Instance.divineAttackBoost / 100f) * level switch
+            DefaultDamage = UnitLevelDamage + 10f * (1f + 6 * EnforceManager.Instance.divineAttackBoost / 100f) * level switch
             {
                <= 2 => 1f,
                 3 => 1.7f,

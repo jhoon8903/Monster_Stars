@@ -109,8 +109,8 @@ namespace Script.WeaponScriptGroup
         }
         private void IsBind(EnemyBase enemyStatus)
         {
-            var bindChance = EnforceManager.Instance.divineBindChanceBoost ? 40 : 20;
-            if (_random.Next(100) < bindChance)
+            var bindChance = EnforceManager.Instance.divineBindChanceBoost ? 50 : 30;
+            if (Chance(bindChance))
             {
                 enemyStatus.isBind = true;
             }

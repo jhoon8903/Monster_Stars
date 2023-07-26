@@ -170,7 +170,10 @@ namespace Script.CharacterManagerScript
             switch (unit.GetComponent<CharacterBase>().unitGroup)
             {
                case CharacterBase.UnitGroups.A:
-                   unit.GetComponent<UnitA>().atkCount++;
+                   if (EnforceManager.Instance.divineFifthAttackBoost)
+                   {
+                       unit.GetComponent<UnitA>().atkCount++;
+                   }
                    break;
                case CharacterBase.UnitGroups.B:
                    unit.GetComponent<UnitB>().atkCount++;
@@ -210,7 +213,6 @@ namespace Script.CharacterManagerScript
             Attack(new AttackData(unit, weaponType), enemies[0]);
             Attack(new AttackData(unit, weaponType), enemies.Count > 1 ? enemies[1] : enemies[0]);
         }
-
         private IEnumerator DoubleFire(AttackData attackData)
         {
             var unit = attackData.Unit;
@@ -232,7 +234,6 @@ namespace Script.CharacterManagerScript
             }
             yield return null;
         }
-
         public IEnumerator SplitAttack(AttackData attackData, Vector3 enemyPosition)
         {
             var unit = attackData.Unit;
@@ -253,7 +254,6 @@ namespace Script.CharacterManagerScript
             }
             yield return null;
         }
-
         private IEnumerator DualAttack(AttackData attackData)
         {
             var unit = attackData.Unit;
@@ -275,7 +275,6 @@ namespace Script.CharacterManagerScript
             }
             yield return null;
         }
-
         public void ClearWeapons()
         {
             for (var i = weaponsList.Count - 1; i >= 0; i--)
@@ -287,6 +286,5 @@ namespace Script.CharacterManagerScript
                 }
             }
         }
-
     }
 }

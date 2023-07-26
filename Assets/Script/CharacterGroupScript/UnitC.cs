@@ -97,7 +97,7 @@ namespace Script.CharacterGroupScript
             UnitAtkType = UnitAtkTypes.Projectile;
             UnitProperty = UnitProperties.Water;
             var increaseDamage = 1f + EnforceManager.Instance.waterAttackBoost * 12 / 100f;
-            DefaultDamage = UnitLevelDamage + 60f * increaseDamage * level switch
+            DefaultDamage = UnitLevelDamage + 25f * increaseDamage * level switch
             {
                 <=  2 => 1f,
                 3 => 1.7f,

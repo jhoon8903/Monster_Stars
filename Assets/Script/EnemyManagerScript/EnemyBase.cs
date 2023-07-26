@@ -1,9 +1,12 @@
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
 using Script.WeaponScriptGroup;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,6 +14,8 @@ namespace Script.EnemyManagerScript
 {
     public class EnemyBase : MonoBehaviour
     {
+        [SerializeField] private GameObject damageText;
+        private readonly List<GameObject> damagePopupList = new List<GameObject>();
         private CharacterBase _characterBase;
         private EnemyPool _enemyPool;
         private Slider _hpSlider;
@@ -30,7 +35,7 @@ namespace Script.EnemyManagerScript
         private static readonly object Lock = new object();
         public enum KillReasons { ByPlayer }
         public int number;
-        public float healthPoint; // 적 오브젝트의 체력
+        public float healthPoint;
         public float maxHealthPoint;
         public float currentHealth;
         public float lastIncreaseHealthPoint;
@@ -45,6 +50,8 @@ namespace Script.EnemyManagerScript
         public bool isBurningPoison;
         public bool isPoison;
         public bool isKnockBack;
+        private GameObject damagePopup;
+        private bool pooling;
         public bool IsPoison
         {
             get => isPoison;
@@ -87,14 +94,24 @@ namespace Script.EnemyManagerScript
                 StartCoroutine(d.BleedEffect(this));
             }
         }
-        public void Awake()
-        {
-            EnforceManager.Instance.OnAddRow += ResetEnemyHealthPoint;
-        }
 
         public virtual void Initialize()
         {
             _hpSlider = GetComponentInChildren<Slider>(true);
+            if (!pooling)
+            {
+                for (var i = 0; i < 10; i++)
+                {
+                    damagePopup = Instantiate(damageText, gameObject.transform, false);
+                    damagePopupList.Add(damagePopup);
+                    damagePopup.SetActive(false);
+                    pooling = true;
+                }
+            }
+            if (EnemyType != EnemyTypes.Boss)
+            {
+                _hpSlider.gameObject.SetActive(false);
+            }
             LoadEnemyHealthData();
             maxHealthPoint = healthPoint;
             currentHealth = maxHealthPoint;
@@ -112,44 +129,96 @@ namespace Script.EnemyManagerScript
             var healthPointData = stageData[1].Split(" ");
             var baseHealthPoint = int.Parse(healthPointData[StageManager.Instance.currentWave - 1]);
             healthPoint = baseHealthPoint;
+            StartCoroutine(UpdateHpSlider());
+        }
+
+        private IEnumerator DamageTextPopup(int damage)
+        {
+            if (!gameObject.activeInHierarchy) yield break;
+
+            foreach (var popup in damagePopupList)
+            {
+                if (!popup.activeInHierarchy)
+                {
+                    var pos = gameObject.transform.position;
+                    popup.transform.position = new Vector3(pos.x,pos.y + 0.5f,0f);
+                    if (EnemyType == EnemyTypes.Boss)
+                    {
+                        popup.transform.position = new Vector3(pos.x,pos.y + 1.7f,0f);
+                    }
+                    popup.SetActive(true);
+                    if (damage == 0)
+                    {
+                        popup.SetActive(false);
+                    }
+                    else
+                    {
+                        popup.GetComponent<TextMeshPro>().text = damage.ToString();
+                    }
+                    Vector2 startPosition = popup.transform.position;
+                    var endPosition = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y + 0.2f);
+                    float t = 0;
+                    const float speed = 1f;
+                    while (t < 1)
+                    {
+                        t += Time.deltaTime * speed;
+                        popup.transform.position = Vector2.Lerp(startPosition, endPosition, t);
+                        yield return null;
+                    }
+                    yield return new WaitForSeconds(0.1f); // Adjust this time as needed
+                }
+                popup.SetActive(false);
+            }
         }
 
         public void ReceiveDamage(EnemyBase detectEnemy, float damage, CharacterBase atkUnit, KillReasons reason = KillReasons.ByPlayer)
         {
             lock (Lock)
             {
+                var receiveDamage = (int)damage;
                 if (IsDead) return;
                 if (detectEnemy.isReceiveDamageDebuff) damage *= 1.15f;
-                currentHealth -= (int)damage;
-                if (gameObject == null || !gameObject.activeInHierarchy) return;
+                currentHealth -= receiveDamage;
+                StartCoroutine(DamageTextPopup(receiveDamage));
+                if (!gameObject.activeInHierarchy) return;
                 _updateSlider = true;
+             
                 if (currentHealth > 0f || IsDead) return;
                 IsDead = true;
-                ExpManager.Instance.HandleEnemyKilled(reason);
-                EnemyKilledEvents(detectEnemy);
+                StopCoroutine(DamageTextPopup(receiveDamage));
+                foreach (var popup in damagePopupList.Where(popup => popup.activeInHierarchy))
+                {
+                    popup.SetActive(false);
+                }
                 if (EnforceManager.Instance.divineShackledExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.A)
                 {
-                   ExplosionDamage(detectEnemy, damage, atkUnit);
+                    ExplosionDamage(detectEnemy, damage, atkUnit);
                 }
-                if (EnforceManager.Instance.fireBurnedEnemyExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.H)
+                else if (EnforceManager.Instance.fireBurnedEnemyExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.H)
                 {
-                    ExplosionDamage(detectEnemy, damage * 2, atkUnit);
+                    ExplosionDamage(detectEnemy, damage, atkUnit);
                 }
                 if (EnforceManager.Instance.water2IceSpikeProjectile)
                 {
                     if (atkUnit.unitGroup == CharacterBase.UnitGroups.E)
                     {
-                       StartCoroutine( AtkManager.Instance.SplitAttack(new AttackData(atkUnit.gameObject,WeaponsPool.WeaponType.E),detectEnemy.transform.position));
+                        StartCoroutine( AtkManager.Instance.SplitAttack(new AttackData(atkUnit.gameObject,WeaponsPool.WeaponType.E),detectEnemy.transform.position));
                     }
                 }
+                ExpManager.Instance.HandleEnemyKilled(reason);
+                EnemyKilledEvents(detectEnemy);
             }
         }
 
         private void ExplosionDamage(EnemyBase detectEnemy, float damage, CharacterBase atkUnit)
         {
+            if (atkUnit.unitGroup == CharacterBase.UnitGroups.H)
+            {
+                damage *= 2f;
+            }
             var enemyPosition = detectEnemy.transform.position;
-            var explosionSize = new Vector2(3, 3);
-            var colliders = Physics2D.OverlapBoxAll(enemyPosition, explosionSize, 0f);
+            const float explosionSize = 1.5f;
+            var colliders = Physics2D.OverlapCircleAll(enemyPosition, explosionSize);
             foreach (var enemyObject in colliders)
             {
                 if (!enemyObject.gameObject.CompareTag("Enemy") || !enemyObject.gameObject.activeInHierarchy) continue;
@@ -179,23 +248,6 @@ namespace Script.EnemyManagerScript
                 yield return null;
             }
             // ReSharper disable once IteratorNeverReturns
-        }
-        private void ResetEnemyHealthPoint()
-        { 
-            lastIncreaseHealthPoint *= 0.4f; 
-            healthPoint = lastIncreaseHealthPoint; 
-            maxHealthPoint = lastIncreaseHealthPoint; 
-            currentHealth = maxHealthPoint; 
-            _hpSlider.value = currentHealth; 
-            _hpSlider.maxValue = maxHealthPoint;
-        }
-        public void Start()
-        {
-            StartCoroutine(UpdateHpSlider());
-        }
-        private void OnDestroy()
-        {
-            EnforceManager.Instance.OnAddRow -= ResetEnemyHealthPoint;
         }
     }
 }

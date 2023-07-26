@@ -30,7 +30,6 @@ namespace Script.RewardScript
              DivineAttackBoost,
              DivineBindChanceBoost,
              DivineDualAttack,
-             DivineProjectilePierce,
 
              //Darkness B
              DarkTenthAttackDamageBoost,

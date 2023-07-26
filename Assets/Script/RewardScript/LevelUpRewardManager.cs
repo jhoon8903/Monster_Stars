@@ -78,7 +78,7 @@ namespace Script.RewardScript
                    EnforceManager.Instance.divinePoisonDamageBoost = true;
                    break;
                 case ExpData.Types.DivineBindDurationBoost:
-                    EnforceManager.Instance.DivineBindDurationIncrease();
+                    EnforceManager.Instance.divineBindDurationBoost = true;
                     break;
                 case ExpData.Types.DivineShackledExplosion:
                     EnforceManager.Instance.divineShackledExplosion = true;
@@ -94,9 +94,6 @@ namespace Script.RewardScript
                     break;
                 case ExpData.Types.DivineDualAttack:
                     EnforceManager.Instance.divineDualAttack = true;
-                    break;
-                case ExpData.Types.DivineProjectilePierce:
-                    EnforceManager.Instance.divineProjectilePierce = true;
                     break;
                 case ExpData.Types.DarkTenthAttackDamageBoost:
                     EnforceManager.Instance.darkTenthAttackDamageBoost = true;
@@ -374,12 +371,13 @@ namespace Script.RewardScript
                 // Unit A
                 case ExpData.Types.DivinePoisonDamageBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 9) return false;
                     if (EnforceManager.Instance.divinePoisonDamageBoost) return false;
                     break;
                 case ExpData.Types.DivineBindDurationBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 7) return false;
-                    if (EnforceManager.Instance.divineBindDurationBoost >= 0.5) return false;
+                    if (EnforceManager.Instance.divineBindDurationBoost) return false;
                     break;
                 case ExpData.Types.DivineShackledExplosion:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
@@ -404,11 +402,6 @@ namespace Script.RewardScript
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 11) return false;
                     if (EnforceManager.Instance.divineDualAttack) return false;
-                    break;
-                case ExpData.Types.DivineProjectilePierce:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 9) return false;
-                    if (EnforceManager.Instance.divineProjectilePierce) return false;
                     break;
                 // Unit B
                 case ExpData.Types.DarkTenthAttackDamageBoost:
@@ -733,7 +726,6 @@ namespace Script.RewardScript
                 ExpData.Types.DivineAttackBoost => finalTranslation,
                 ExpData.Types.DivineBindChanceBoost => finalTranslation,
                 ExpData.Types.DivineDualAttack => finalTranslation,
-                ExpData.Types.DivineProjectilePierce => finalTranslation,
                 ExpData.Types.DarkTenthAttackDamageBoost => finalTranslation,
                 ExpData.Types.DarkAttackSpeedBoost => finalTranslation,
                 ExpData.Types.DarkAttackPowerBoost => finalTranslation,

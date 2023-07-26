@@ -90,7 +90,7 @@ namespace Script.CharacterGroupScript
             UnitLevelDamage = (unitPieceLevel-1) * 16f;
             Type = Types.Character;
             unitGroup = UnitGroups.H;
-            DefaultDamage = UnitLevelDamage + 80f * level switch
+            DefaultDamage = UnitLevelDamage + 19f * level switch
             {
                 <= 2 => 1f,
                 3 => 1.7f,

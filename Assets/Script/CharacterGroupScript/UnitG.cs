@@ -94,7 +94,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.G;
             var damageBoost = 1f + EnforceManager.Instance.fire2AttackPowerIncrease * 12 / 100f;
-            DefaultDamage = UnitLevelDamage + 180f * damageBoost * level switch
+            DefaultDamage = UnitLevelDamage + 12f * damageBoost * level switch
             {
                 <= 2 => 1f,
                 3 => 1.7f,
