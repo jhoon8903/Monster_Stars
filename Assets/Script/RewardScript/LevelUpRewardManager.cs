@@ -519,6 +519,7 @@ namespace Script.RewardScript
                 case ExpData.Types.PhysicalSwordScaleIncrease:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.D) < 3) return false;
+                    if (EnforceManager.Instance.physicalSwordScaleIncrease) return false;
                     break;
                 case ExpData.Types.PhysicalDamage18Boost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
