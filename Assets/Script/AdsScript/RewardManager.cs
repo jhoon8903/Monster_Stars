@@ -30,18 +30,22 @@ namespace Script.AdsScript
             {
                 case "Coin":
                     rewardText.text = " Coin 5 Get";
+                    MaxSdkUnityEditor.IsRetry = false;
                     rewardBtn.GetComponent<Button>().onClick.AddListener(GiveCoinReward);
                     break;
                 case "Gem":
                     rewardText.text = " Gem 5 Get";
+                    MaxSdkUnityEditor.IsRetry = false;
                     rewardBtn.GetComponent<Button>().onClick.AddListener(GiveGemReward);
                     break;
                 case "Stamina":
                     rewardText.text = " Stamina 5 Get";
+                    MaxSdkUnityEditor.IsRetry = false;
                     rewardBtn.GetComponent<Button>().onClick.AddListener(GiveStaminaReward);
                     break;
                 case "Retry":
                     rewardText.text = " Retry ";
+                    MaxSdkUnityEditor.IsRetry = true;
                     rewardBtn.GetComponent<Button>().onClick.AddListener(Retry);
                     break;
             }
