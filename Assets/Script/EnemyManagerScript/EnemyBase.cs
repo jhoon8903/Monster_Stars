@@ -146,30 +146,30 @@ namespace Script.EnemyManagerScript
                     {
                         popup.transform.position = new Vector3(pos.x,pos.y + 1.7f,0f);
                     }
-                    popup.SetActive(true);
-                    if (damage == 0)
+
+                    Vector2 startPosition = popup.transform.position;
+                    var endPosition = new Vector2(startPosition.x, startPosition.y + 0.2f);
+
+                    if (damage != 0)
                     {
+                        popup.SetActive(true);
+                        popup.GetComponent<TextMeshPro>().text = damage.ToString();
+
+                        float t = 0;
+                        const float speed = 1f;
+                        while (t < 1)
+                        {
+                            t += Time.deltaTime * speed;
+                            popup.transform.position = Vector2.Lerp(startPosition, endPosition, t);
+                            yield return null;
+                        }
+                        yield return new WaitForSeconds(0.1f); // Adjust this time as needed
                         popup.SetActive(false);
                     }
-                    else
-                    {
-                        popup.GetComponent<TextMeshPro>().text = damage.ToString();
-                    }
-                    Vector2 startPosition = popup.transform.position;
-                    var endPosition = new Vector2(gameObject.transform.position.x, gameObject.transform.position.y + 0.2f);
-                    float t = 0;
-                    const float speed = 1f;
-                    while (t < 1)
-                    {
-                        t += Time.deltaTime * speed;
-                        popup.transform.position = Vector2.Lerp(startPosition, endPosition, t);
-                        yield return null;
-                    }
-                    yield return new WaitForSeconds(0.1f); // Adjust this time as needed
                 }
-                popup.SetActive(false);
             }
         }
+
 
         public void ReceiveDamage(EnemyBase detectEnemy, float damage, CharacterBase atkUnit, KillReasons reason = KillReasons.ByPlayer)
         {
