@@ -65,29 +65,22 @@ namespace Script.WeaponScriptGroup
         {
             if (!EnforceManager.Instance.poisonPerHitEffect) yield break;
             poisonDotDamage = Damage * (0.1f + EnforceManager.Instance.poisonDamageAttackPowerIncrease / 10f);
-            var damage = DamageCalculator(poisonDotDamage, hitEnemy, CharacterBase.UnitGroups.F); 
-            var poisonColor = new Color(0.18f, 1f, 0.1f);
-            hitEnemy.GetComponent<SpriteRenderer>().DOColor(poisonColor, 0.2f);
+            var damage = DamageCalculator(poisonDotDamage, hitEnemy, CharacterBase.UnitGroups.F);
             hitEnemy.CurrentPoisonStacks++;
             if (hitEnemy.CurrentPoisonStacks >= EnforceManager.Instance.poisonMaxStackIncrease)
             {
                 hitEnemy.CurrentPoisonStacks = EnforceManager.Instance.poisonMaxStackIncrease;
             }
             const float venomDuration = 4f;
-            var elapsedTime = 0f;
-            for (var i = 0; i < hitEnemy.CurrentPoisonStacks; i++)
+            for (var i = 0; i < venomDuration; i++)
             {
-                while (elapsedTime < venomDuration)
-                {
-
-                    hitEnemy.ReceiveDamage(hitEnemy,(int)damage, CharacterBase);
-                    yield return new WaitForSeconds(1f);
-                    elapsedTime += Time.deltaTime;
-                }
+                hitEnemy.ReceiveDamage(hitEnemy,(int)damage * hitEnemy.CurrentPoisonStacks , CharacterBase);
+                yield return new WaitForSeconds(1f);
             }
             hitEnemy.GetComponent<SpriteRenderer>().DOColor(Color.white, 0.2f);
             hitEnemy.CurrentPoisonStacks--;
             hitEnemy.isPoison = false;
+            hitEnemy.IsPoison = false;
         }
     }
 }

@@ -280,20 +280,6 @@ namespace Script.WeaponScriptGroup
             ExpManager.Instance.HandleEnemyKilled(reason);
             FindObjectOfType<EnemyBase>().EnemyKilledEvents(target);
         }
-
-        protected static IEnumerator FlickerEffect(SpriteRenderer renderer, Color targetColor, float duration)
-        {
-            var originalColor = renderer.color;
-            var elapsedTime = 0f;
-            while (elapsedTime < duration)
-            {
-                var lerpValue = (Mathf.Sin(elapsedTime / duration * (2f * Mathf.PI)) + 1f) / 2f;
-                renderer.color = Color.Lerp(originalColor, targetColor, lerpValue);
-                elapsedTime += Time.deltaTime;
-                yield return null;
-            }
-            renderer.color = originalColor;
-        }
     }
 }
 

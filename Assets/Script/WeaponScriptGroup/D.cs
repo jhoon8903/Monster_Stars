@@ -50,15 +50,14 @@ namespace Script.WeaponScriptGroup
         public IEnumerator BleedEffect(EnemyBase hitEnemy)
         {
             bleedDotDamage = DamageCalculator(Damage, hitEnemy, CharacterBase.UnitGroups.D) * 0.1f;
-            var bleedingColor = new Color(1f,0.127f,0.207f);
             const float bleedDuration = 2f;
-            StartCoroutine(FlickerEffect(hitEnemy.GetComponent<SpriteRenderer>(), bleedingColor, bleedDuration));
             for(var i = 0; i < bleedDuration; i++)
             {
                 hitEnemy.ReceiveDamage(hitEnemy, (int)bleedDotDamage, CharacterBase);
                 yield return new WaitForSeconds(1f);
             }
             hitEnemy.isBleed = false;
+            hitEnemy.IsBleed = false;
         }
     }
 }

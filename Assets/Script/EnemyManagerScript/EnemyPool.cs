@@ -70,20 +70,7 @@ namespace Script.EnemyManagerScript
             {
                 Destroy(enemyBaseGameObject);
             }
-            enemyBase.isPoison = false;
-            enemyBase.isSlow = false;
-            enemyBase.isBind = false;
-            enemyBase.isBurn = false;
-            enemyBase.isBleed = false;
-            enemyBase.IsDead = false;
-            enemyBase.isReceiveDamageDebuff = false;
-            enemyBase.isSlowC = false;
-            enemyBase.isSlowE = false;
-            enemyBase.isSlowStun = false;
-            enemyBase.isSlowBleedStun = false;
-            enemyBase.isBurningPoison = false;
-            enemyBase.transform.localScale = Vector3.one;
-            enemyBase.GetComponent<SpriteRenderer>().color = Color.white;
+
             enemyBaseGameObject.SetActive(false);
         }
     }

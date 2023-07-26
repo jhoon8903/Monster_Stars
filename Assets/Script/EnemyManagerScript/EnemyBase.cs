@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
@@ -28,18 +27,18 @@ namespace Script.EnemyManagerScript
         public enum RegistryTypes { Physics, Divine, Poison, Burn, Water, Darkness, None }
         protected internal RegistryTypes RegistryType; 
         protected internal SpawnZones SpawnZone;
-        protected internal bool IsDead;
+
         protected internal int CurrentPoisonStacks { get; set; }
         protected internal int BurningStack { get; set; }
-        protected internal int BleedingStack { get; set; }
         private static readonly object Lock = new object();
         public enum KillReasons { ByPlayer }
         public int number;
         public float healthPoint;
         public float maxHealthPoint;
         public float currentHealth;
-        public float lastIncreaseHealthPoint;
         public enum SpawnZones { A, B, C, D, E, F }
+        private GameObject damagePopup;
+        public bool isDead;
         public bool isBind;
         public bool isSlow;
         public bool isReceiveDamageDebuff;
@@ -50,7 +49,6 @@ namespace Script.EnemyManagerScript
         public bool isBurningPoison;
         public bool isPoison;
         public bool isKnockBack;
-        private GameObject damagePopup;
         private bool pooling;
         public bool IsPoison
         {
@@ -60,11 +58,12 @@ namespace Script.EnemyManagerScript
                 isPoison = value;
                 if (!isPoison) return;
                 var venomSac = FindObjectOfType<F>();
+                var poisonColor = new Color(0.18f, 1f, 0.1f);
+                var originColor = gameObject.GetComponent<SpriteRenderer>();
                 if (venomSac == null) return;
-                if (isPoison && gameObject.activeInHierarchy)
-                {
-                    StartCoroutine(venomSac.PoisonEffect(this));
-                }
+                if (!isPoison || !gameObject.activeInHierarchy) return;
+                StartCoroutine(venomSac.PoisonEffect(this));
+                StartCoroutine(FlickerEffect(originColor, poisonColor));
             }
         }
         public bool isBurn;
@@ -75,11 +74,12 @@ namespace Script.EnemyManagerScript
             {
                 isBurn = value;
                 var fireBall = FindObjectOfType<G>();
+                var burningColor = new Color(1f,0,0.4f);
+                var originColor = gameObject.GetComponent<SpriteRenderer>();
                 if (fireBall == null) return;
-                if (isBurn && gameObject.activeInHierarchy)
-                {
-                    StartCoroutine(fireBall.BurningEffect(this));
-                }
+                if (!isBurn || !gameObject.activeInHierarchy) return;
+                StartCoroutine(fireBall.BurningEffect(this));
+                StartCoroutine(FlickerEffect(originColor, burningColor));
             }
         }
         public bool isBleed;
@@ -89,12 +89,14 @@ namespace Script.EnemyManagerScript
             set
             {
                 isBleed = value;
-                if(!isBleed) return; 
-                var d= FindObjectOfType<D>();
-                StartCoroutine(d.BleedEffect(this));
+                var sword = FindObjectOfType<D>();
+                var bleedingColor = new Color(1f,0.2f,0.3f);
+                var originColor = gameObject.GetComponent<SpriteRenderer>();
+                if (!isBurn || !gameObject.activeInHierarchy) return;
+                StartCoroutine(sword.BleedEffect(this));
+                StartCoroutine(FlickerEffect(originColor, bleedingColor));
             }
         }
-
         public virtual void Initialize()
         {
             _hpSlider = GetComponentInChildren<Slider>(true);
@@ -120,7 +122,6 @@ namespace Script.EnemyManagerScript
             StartCoroutine(UpdateHpSlider());
             moveSpeed = originSpeed;
         }
-
         private void LoadEnemyHealthData()
         {
             var enemyHPs = Resources.Load<TextAsset>("EnemyHpData");
@@ -131,65 +132,52 @@ namespace Script.EnemyManagerScript
             healthPoint = baseHealthPoint;
             StartCoroutine(UpdateHpSlider());
         }
-
         private IEnumerator DamageTextPopup(int damage)
         {
             if (!gameObject.activeInHierarchy) yield break;
 
             foreach (var popup in damagePopupList)
             {
-                if (!popup.activeInHierarchy)
+                if (popup.activeInHierarchy) continue;
+                var pos = gameObject.transform.position;
+                popup.transform.position = new Vector3(pos.x,pos.y + 0.5f,0f);
+                if (EnemyType == EnemyTypes.Boss)
                 {
-                    var pos = gameObject.transform.position;
-                    popup.transform.position = new Vector3(pos.x,pos.y + 0.5f,0f);
-                    if (EnemyType == EnemyTypes.Boss)
-                    {
-                        popup.transform.position = new Vector3(pos.x,pos.y + 1.7f,0f);
-                    }
-
-                    Vector2 startPosition = popup.transform.position;
-                    var endPosition = new Vector2(startPosition.x, startPosition.y + 0.2f);
-
-                    if (damage != 0)
-                    {
-                        popup.SetActive(true);
-                        popup.GetComponent<TextMeshPro>().text = damage.ToString();
-
-                        float t = 0;
-                        const float speed = 1f;
-                        while (t < 1)
-                        {
-                            t += Time.deltaTime * speed;
-                            popup.transform.position = Vector2.Lerp(startPosition, endPosition, t);
-                            yield return null;
-                        }
-                        yield return new WaitForSeconds(0.1f); // Adjust this time as needed
-                        popup.SetActive(false);
-                    }
+                    popup.transform.position = new Vector3(pos.x,pos.y + 1.7f,0f);
                 }
+                Vector2 startPosition = popup.transform.position;
+                var endPosition = new Vector2(startPosition.x, startPosition.y + 0.2f);
+                if (damage == 0) continue;
+                popup.SetActive(true);
+                popup.GetComponent<TextMeshPro>().text = damage.ToString();
+
+                float t = 0;
+                const float speed = 1f;
+                while (t < 1)
+                {
+                    t += Time.deltaTime * speed;
+                    popup.transform.position = Vector2.Lerp(startPosition, endPosition, t);
+                    yield return null;
+                }
+                yield return new WaitForSeconds(0.1f); // Adjust this time as needed
+                popup.SetActive(false);
             }
         }
-
-
         public void ReceiveDamage(EnemyBase detectEnemy, float damage, CharacterBase atkUnit, KillReasons reason = KillReasons.ByPlayer)
         {
             lock (Lock)
             {
                 var receiveDamage = (int)damage;
-                if (IsDead) return;
+                if (isDead) return;
                 if (detectEnemy.isReceiveDamageDebuff) damage *= 1.15f;
                 currentHealth -= receiveDamage;
                 StartCoroutine(DamageTextPopup(receiveDamage));
                 if (!gameObject.activeInHierarchy) return;
                 _updateSlider = true;
-             
-                if (currentHealth > 0f || IsDead) return;
-                IsDead = true;
+
+                if (currentHealth > 0f || isDead) return;
                 StopCoroutine(DamageTextPopup(receiveDamage));
-                foreach (var popup in damagePopupList.Where(popup => popup.activeInHierarchy))
-                {
-                    popup.SetActive(false);
-                }
+                isDead = true;
                 if (EnforceManager.Instance.divineShackledExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.A)
                 {
                     ExplosionDamage(detectEnemy, damage, atkUnit);
@@ -209,7 +197,6 @@ namespace Script.EnemyManagerScript
                 EnemyKilledEvents(detectEnemy);
             }
         }
-
         private void ExplosionDamage(EnemyBase detectEnemy, float damage, CharacterBase atkUnit)
         {
             if (atkUnit.unitGroup == CharacterBase.UnitGroups.H)
@@ -227,13 +214,33 @@ namespace Script.EnemyManagerScript
                 ReceiveDamage(nearEnemy, (int)explosionDamage, atkUnit);
             }
         }
-
         public void EnemyKilledEvents(EnemyBase detectedEnemy)
         {
+            foreach (var popup in detectedEnemy.damagePopupList)
+            {
+                popup.SetActive(false);
+            }
             var characterBase = FindObjectOfType<CharacterBase>();
             var enemyPool = FindObjectOfType<EnemyPool>();
             characterBase.DetectEnemies().Remove(detectedEnemy.gameObject);
             StageManager.Instance.EnemyDestroyEvent(detectedEnemy);
+            detectedEnemy.IsPoison = false;
+            detectedEnemy.isPoison = false;
+            detectedEnemy.isSlow = false;
+            detectedEnemy.isBind = false;
+            detectedEnemy.IsBurn = false;
+            detectedEnemy.isBurn = false;
+            detectedEnemy.IsBleed = false;
+            detectedEnemy.isBleed = false;
+            detectedEnemy.isDead = false;
+            detectedEnemy.isReceiveDamageDebuff = false;
+            detectedEnemy.isSlowC = false;
+            detectedEnemy.isSlowE = false;
+            detectedEnemy.isSlowStun = false;
+            detectedEnemy.isSlowBleedStun = false;
+            detectedEnemy.isBurningPoison = false;
+            detectedEnemy.transform.localScale = Vector3.one;
+            detectedEnemy.GetComponent<SpriteRenderer>().color = Color.white;
             enemyPool.ReturnToPool(detectedEnemy);
         }
         private IEnumerator UpdateHpSlider()
@@ -248,6 +255,19 @@ namespace Script.EnemyManagerScript
                 yield return null;
             }
             // ReSharper disable once IteratorNeverReturns
+        }
+        private IEnumerator FlickerEffect(SpriteRenderer render, Color targetColor)
+        {
+            var originalColor = render.color;
+            var elapsedTime = 0f;
+            while ( isBurn || isPoison || isBleed )
+            {
+                var lerpValue = Mathf.Abs(Mathf.Sin(elapsedTime / 0.5f * Mathf.PI));
+                render.color = Color.Lerp(originalColor, targetColor, lerpValue);
+                elapsedTime += Time.deltaTime;
+                yield return null;
+            }
+            render.color = originalColor;
         }
     }
 }
