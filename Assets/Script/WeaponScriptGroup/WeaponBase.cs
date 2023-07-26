@@ -83,11 +83,24 @@ namespace Script.WeaponScriptGroup
                     IsBleed(enemyObject);
                      break;
                 case CharacterBase.UnitEffects.None:
+                     IsKnockBack(enemyObject);
+                     break;
                 default:
                     return;
             }
         }
 
+        private bool Chance(int percent)
+        {
+            return _random.Next(100) < percent;
+        }
+        private void IsKnockBack(EnemyBase enemyStatus)
+        {
+            if (EnforceManager.Instance.darkKnockBackChance && Chance(99))
+            {
+                enemyStatus.isKnockBack = true;
+            }
+        }
         private static IEnumerator IsDamageDebuff(EnemyBase enemyStatus)
         {
             enemyStatus.isReceiveDamageDebuff = true;

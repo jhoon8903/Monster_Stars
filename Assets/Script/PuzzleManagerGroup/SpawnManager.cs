@@ -261,7 +261,6 @@ namespace Script.PuzzleManagerGroup
             var unitState = PlayerPrefs.GetString("unitState", "");
             var pieceData = unitState.Split(';');
             var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
-            var callCount = 0;
             foreach (var data in pieceData)
             {
                 if (string.IsNullOrEmpty(data)) continue;
@@ -287,8 +286,6 @@ namespace Script.PuzzleManagerGroup
                 setUnitBase.GetComponent<SpriteRenderer>().sprite = setUnitBase.GetSprite(unitLevel);
                 setUnitBase.transform.position = position;
                 setUnitBase.gameObject.SetActive(true);
-                callCount++;
-                Debug.Log("Call Count: " + callCount);
             }
             yield return null;
         }

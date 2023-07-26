@@ -43,8 +43,8 @@ namespace Script.EnemyManagerScript
         public bool isSlowStun;
         public bool isSlowBleedStun;
         public bool isBurningPoison;
-
         public bool isPoison;
+        public bool isKnockBack;
         public bool IsPoison
         {
             get => isPoison;
@@ -60,7 +60,6 @@ namespace Script.EnemyManagerScript
                 }
             }
         }
-
         public bool isBurn;
         public bool IsBurn
         {
@@ -76,7 +75,6 @@ namespace Script.EnemyManagerScript
                 }
             }
         }
-
         public bool isBleed;
         public bool IsBleed
         {

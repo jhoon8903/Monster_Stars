@@ -17,7 +17,7 @@ namespace Script.EnemyManagerScript
         private readonly System.Random _random = new System.Random();
         private readonly Dictionary<EnemyBase, bool> _alreadySlow = new Dictionary<EnemyBase, bool>();
         private readonly Dictionary<EnemyBase, bool> _alreadyRestrain = new Dictionary<EnemyBase, bool>();
-        private readonly Dictionary<EnemyBase, bool> _alreadyKnockBack = new Dictionary<EnemyBase, bool>();
+        public Dictionary<EnemyBase, bool> _alreadyKnockBack = new Dictionary<EnemyBase, bool>();
         private readonly Dictionary<EnemyBase, bool> _alreadyStatusSlow = new Dictionary<EnemyBase, bool>();
         private Rigidbody2D _rb;
         private float _endY;
@@ -77,7 +77,7 @@ namespace Script.EnemyManagerScript
             
             var targetPosition = new Vector2(_enemyRigidbodies[enemyBase].transform.position.x, _endY);
             _alreadyKnockBack.TryAdd(enemyBase, false);
-            while (gameManager.IsBattle && !_alreadyKnockBack[enemyBase])
+            while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 _slowCount = EnforceManager.Instance.slowCount;
@@ -101,7 +101,7 @@ namespace Script.EnemyManagerScript
                 { 
                    StartCoroutine(SlowEffect(enemyBase));
                 }
-                if (EnforceManager.Instance.darkKnockBackChance && Chance(10))
+                if ( enemyBase.isKnockBack )
                 {
                     StartCoroutine(KnockBackEffect(enemyBase));
                 }
@@ -123,7 +123,7 @@ namespace Script.EnemyManagerScript
             var endX = enemyBase.SpawnZone == EnemyBase.SpawnZones.B ? Random.Range(4, 7) : Random.Range(-1, 2);
             var targetPosition = new Vector2(endX, _endY);
 
-            while (gameManager.IsBattle && !_alreadyKnockBack[enemyBase])
+            while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 _slowCount = EnforceManager.Instance.slowCount;
@@ -143,7 +143,7 @@ namespace Script.EnemyManagerScript
                 {
                     StartCoroutine(SlowEffect(enemyBase));
                 }
-                if (EnforceManager.Instance.darkKnockBackChance && Chance(10))
+                if ( enemyBase.isKnockBack )
                 {
                     StartCoroutine(KnockBackEffect(enemyBase));
                 }
@@ -173,7 +173,7 @@ namespace Script.EnemyManagerScript
 
             var waypointIndex = 0;
 
-            while (gameManager.IsBattle && !_alreadyKnockBack[enemyBase])
+            while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 var targetPosition = waypoints[waypointIndex];
@@ -204,7 +204,7 @@ namespace Script.EnemyManagerScript
                 {
                     StartCoroutine(SlowEffect(enemyBase));
                 }
-                if (EnforceManager.Instance.darkKnockBackChance && Chance(10))
+                if ( enemyBase.isKnockBack )
                 {
                     StartCoroutine(KnockBackEffect(enemyBase));
                 }
@@ -227,7 +227,7 @@ namespace Script.EnemyManagerScript
                 ? new Vector2(-1, _enemyRigidbodies[enemyBase].transform.position.y) 
                 : new Vector2(6, _enemyRigidbodies[enemyBase].transform.position.y);
 
-            while (gameManager.IsBattle && !_alreadyKnockBack[enemyBase])
+            while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
@@ -253,7 +253,7 @@ namespace Script.EnemyManagerScript
                 { 
                     StartCoroutine(SlowEffect(enemyBase));
                 }
-                if (EnforceManager.Instance.darkKnockBackChance && Chance(10))
+                if ( enemyBase.isKnockBack )
                 {
                     StartCoroutine(KnockBackEffect(enemyBase));
                 }
@@ -284,7 +284,7 @@ namespace Script.EnemyManagerScript
                 targetPosition = new Vector3(randomX, _enemyRigidbodies[enemyBase].transform.position.y);
             }
 
-            while (gameManager.IsBattle && !_alreadyKnockBack[enemyBase])
+            while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
@@ -311,7 +311,7 @@ namespace Script.EnemyManagerScript
                 { 
                     StartCoroutine(SlowEffect(enemyBase));
                 }
-                if (EnforceManager.Instance.darkKnockBackChance && Chance(10))
+                if ( enemyBase.isKnockBack )
                 {
                     StartCoroutine(KnockBackEffect(enemyBase));
                 }
@@ -406,20 +406,24 @@ namespace Script.EnemyManagerScript
             }
             if (isAlreadyKnockBack) yield break;
             _alreadyKnockBack[enemyBase] = true;
+            enemyBase.isKnockBack = true;
 
             var knockBackDirection = Vector2.up; 
-            var knockBackForce = 10.0f;
+            var knockBackForce = 1.3f;
             var rb = enemyBase.GetComponent<Rigidbody2D>();
             rb.AddForce(knockBackDirection * knockBackForce, ForceMode2D.Impulse);
-            yield return new WaitForSeconds(0.5f);
-            while (knockBackForce > 0)
+            yield return new WaitForSeconds(0.2f);
+            while (knockBackForce > 0.1)
             {
+                Debug.Log(knockBackForce);
                 knockBackForce -= Time.deltaTime;
                 rb.velocity = knockBackDirection * knockBackForce;
                 yield return null;
             }
             rb.velocity = Vector2.zero;
+            enemyBase.moveSpeed = enemyBase.originSpeed;
             _alreadyKnockBack[enemyBase] = false;
+            enemyBase.isKnockBack = false;
         }
         private IEnumerator StatusSlowEffect(EnemyBase enemyBase)
         {
