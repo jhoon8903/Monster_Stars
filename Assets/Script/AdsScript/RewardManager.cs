@@ -42,7 +42,6 @@ namespace Script.AdsScript
                     break;
                 case "Retry":
                     rewardText.text = " Retry ";
-                    MaxSdkUnityEditor.IsRetry = true;
                     rewardBtn.GetComponent<Button>().onClick.AddListener(Retry);
                     break;
             }

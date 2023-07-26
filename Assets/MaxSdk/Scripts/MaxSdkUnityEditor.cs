@@ -5,10 +5,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using AppLovinMax.ThirdParty.MiniJson;
 #if UNITY_EDITOR
 using UnityEditor;
-using UnityEngine.SceneManagement;
 #endif
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,8 +31,6 @@ public class MaxSdkUnityEditor : MaxSdkBase
     private static readonly HashSet<string> RequestedAdUnits = new HashSet<string>();
     private static readonly HashSet<string> ReadyAdUnits = new HashSet<string>();
     private static readonly Dictionary<string, GameObject> StubBanners = new Dictionary<string, GameObject>();
-
-    public static bool IsRetry { get; set; }
 
     public static MaxVariableServiceUnityEditor VariableService
     {
@@ -136,8 +134,6 @@ public class MaxSdkUnityEditor : MaxSdkBase
     {
         get { return SharedTargetingData; }
     }
-
-    
 
     #endregion
 
@@ -1064,10 +1060,10 @@ public class MaxSdkUnityEditor : MaxSdkBase
         ValidateAdUnitIdentifier(adUnitIdentifier, "load rewarded ad");
         RequestAdUnit(adUnitIdentifier);
 
-        ExecuteWithDelay(0, () => 
-        { 
-            AddReadyAdUnit(adUnitIdentifier); 
-            var eventProps = Json.Serialize(CreateBaseEventPropsDictionary("OnRewardedAdLoadedEvent", adUnitIdentifier)); 
+        ExecuteWithDelay(1f, () =>
+        {
+            AddReadyAdUnit(adUnitIdentifier);
+            var eventProps = Json.Serialize(CreateBaseEventPropsDictionary("OnRewardedAdLoadedEvent", adUnitIdentifier));
             MaxSdkCallbacks.Instance.ForwardEvent(eventProps);
         });
     }
@@ -1141,28 +1137,20 @@ public class MaxSdkUnityEditor : MaxSdkBase
             if (grantedReward)
             {
                 var rewardEventPropsDict = CreateBaseEventPropsDictionary("OnRewardedAdReceivedRewardEvent", adUnitIdentifier);
-                //rewardEventPropsDict["rewardLabel"] = "coins";
-                //rewardEventPropsDict["rewardAmount"] = "5";
+                rewardEventPropsDict["rewardLabel"] = "coins";
+                rewardEventPropsDict["rewardAmount"] = "5";
                 var rewardEventProps = Json.Serialize(rewardEventPropsDict);
                 MaxSdkCallbacks.Instance.ForwardEvent(rewardEventProps);
-             
             }
 
             var adHiddenEventProps = Json.Serialize(CreateBaseEventPropsDictionary("OnRewardedAdHiddenEvent", adUnitIdentifier));
             MaxSdkCallbacks.Instance.ForwardEvent(adHiddenEventProps);
-            
-            if (IsRetry)
-            {
-                SceneManager.LoadSceneAsync("StageScene");
-            }
             Object.Destroy(stubRewardedAd);
         });
-
         rewardButton.onClick.AddListener(() =>
         {
             grantedReward = true;
             rewardStatus.text = "Reward granted. Will send reward callback on ad close.";
-            Debug.Log("끊김");
         });
 
         var adDisplayedEventProps = Json.Serialize(CreateBaseEventPropsDictionary("OnRewardedAdDisplayedEvent", adUnitIdentifier));
@@ -1399,7 +1387,13 @@ public class MaxSdkUnityEditor : MaxSdkBase
     /// Refer to AppLovin logs for the IDFA/GAID of your current device.
     /// </summary>
     /// <param name="advertisingIdentifiers">String list of advertising identifiers from devices to receive test ads.</param>
-    public static void SetTestDeviceAdvertisingIdentifiers(string[] advertisingIdentifiers) { }
+    public static void SetTestDeviceAdvertisingIdentifiers(string[] advertisingIdentifiers)
+    { 
+        if (IsInitialized())
+        {
+            MaxSdkLogger.UserError("Test Device Advertising Identifiers must be set before SDK initialization.");
+        }
+    }
 
     /// <summary>
     /// Whether or not the native AppLovin SDKs listen to exceptions. Defaults to <c>true</c>.
