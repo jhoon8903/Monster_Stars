@@ -117,7 +117,6 @@ namespace Script.RewardScript
                         var index = unitsOfThisGrade[i];
                         pieceCountPerUnit[index]++;
                         remainingPieces--;
-                        Debug.Log("Assigning remaining pieces: " + remainingPieces);
                     }
                 }
             }

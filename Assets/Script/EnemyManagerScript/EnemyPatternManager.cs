@@ -11,6 +11,7 @@ namespace Script.EnemyManagerScript
 {
     public class EnemyPatternManager : MonoBehaviour
     {
+
         [SerializeField] private GameManager gameManager;
         [SerializeField] private GameObject castle;
         [SerializeField] private EnemyPool enemyPool;
@@ -25,6 +26,7 @@ namespace Script.EnemyManagerScript
         private readonly Dictionary<EnemyBase, bool> _alreadyKnockBack = new Dictionary<EnemyBase, bool>();
         private readonly Dictionary<EnemyBase, bool> _alreadyStatusSlow = new Dictionary<EnemyBase, bool>();
         private readonly Dictionary<EnemyBase, bool> _alreadyFreeze = new Dictionary<EnemyBase, bool>();
+        private List<GameObject> freezeEffectPool = new List<GameObject>();
         private Rigidbody2D _rb;
         private float _endY;
         private int _slowCount;
@@ -380,6 +382,22 @@ namespace Script.EnemyManagerScript
             enemyBase.GetComponent<SpriteRenderer>().color = originColor;
             _alreadyStatusSlow[enemyBase] = false;
         }
+        
+        private GameObject GetFreezeEffectFromPool()
+        {
+            GameObject freeze;
+            if (freezeEffectPool.Count > 0)
+            {
+                freeze = freezeEffectPool[^1];
+                freezeEffectPool.RemoveAt(freezeEffectPool.Count - 1);
+            }
+            else
+            {
+                freeze = Instantiate(freezeEffect, transform, true);
+            }
+
+            return freeze;
+        }
         public IEnumerator GlobalFreezeEffect()
         {
             if (globalFreeze) yield break;
@@ -404,16 +422,20 @@ namespace Script.EnemyManagerScript
             if (!_alreadyFreeze.TryGetValue(enemyBase, out var isAlreadyFreeze))
             {
                 isAlreadyFreeze = false;
-                _alreadyFreeze[enemyBase] = false;
             }
             if  (isAlreadyFreeze) yield break;
-            _alreadyRestrain[enemyBase] = true;
-            var freeze =  Instantiate(freezeEffect, transform, true);
+            _alreadyFreeze[enemyBase] = true;
+            var freeze = GetFreezeEffectFromPool();
             freeze.transform.position = enemyBase.transform.position;
             freeze.SetActive(true);
+            if (enemyBase.isDead)
+            {
+                freeze.SetActive(false);
+            }
             enemyBase.moveSpeed = 0;
             yield return new WaitForSeconds(freezeTime);
-            Destroy(freeze);
+            freeze.SetActive(false);
+            freezeEffectPool.Add(freeze);
             enemyBase.moveSpeed = enemyBase.originSpeed;
             if (enemyBase.isFreeze)
             {

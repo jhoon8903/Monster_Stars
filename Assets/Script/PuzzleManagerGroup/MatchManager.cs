@@ -13,9 +13,9 @@ namespace Script.PuzzleManagerGroup
     {
         private struct MatchedPair
         {
-            public GameObject gameObject;
-            public List<GameObject> rowList;
-            public List<GameObject> columnList;
+            public GameObject GameObject;
+            public List<GameObject> RowList;
+            public List<GameObject> ColumnList;
         }
 
         [SerializeField] private SpawnManager spawnManager;
@@ -30,9 +30,15 @@ namespace Script.PuzzleManagerGroup
         public bool IsMatched(GameObject swapCharacter)
         {
             var matchFound = false;
-            var swapCharacterGroup = swapCharacter.GetComponent<CharacterBase>().unitGroup;
-            var swapCharPuzzleLevel = swapCharacter.GetComponent<CharacterBase>().unitPuzzleLevel;
-            var swapCharacterPosition = swapCharacter.transform.position;
+            var swapCharacterBase = swapCharacter.GetComponent<CharacterBase>();
+            if(swapCharacterBase.unitPuzzleLevel == 5)
+            {
+                // unitPuzzleLevel이 5인 캐릭터는 매치되지 않게 하기
+                return false;
+            }
+            var swapCharacterGroup = swapCharacterBase.unitGroup;
+            var swapCharPuzzleLevel = swapCharacterBase.unitPuzzleLevel;
+            var swapCharacterPosition = swapCharacterBase.transform.position;
             var directions = new[]
             {
                 (Vector3Int.left, Vector3Int.right, "Horizontal"), // Horizontal
@@ -770,10 +776,10 @@ namespace Script.PuzzleManagerGroup
         private static List<List<GameObject>> FindConsecutiveTilesInRow(IReadOnlyList<GameObject> characters)
         {
             var result = new List<List<GameObject>>();
-            var tempLevel = 0; // 캐릭터의 레벨 기준을 현재 인덱스와 비교하기위해 잠시 저장합니다
-            var tempUnitGroup = CharacterBase.UnitGroups.None; // 캐릭터의 종류를 판단하기 위해 식별 인덱스를 잠시 저장
-            var currentFloor = 1; // 현재 계산 중인 캐릭터가 몇 층인지를 판단
-            var sameCount = 1; // 현재 인덱스까지 몇 개의 캐릭터가 동일하게 연결됐는지를 "갱신"
+            var tempLevel = 0;
+            var tempUnitGroup = CharacterBase.UnitGroups.None;
+            var currentFloor = 1;
+            var sameCount = 1; 
 
             for (var i = 0; i < characters.Count; i++)
             {
@@ -788,7 +794,7 @@ namespace Script.PuzzleManagerGroup
                         {
                             currentList.Add(characters[j]);
                         }
-                        result.Add(currentList);// 후보에 추가합니다
+                        result.Add(currentList);
                     }
                     else
                     {
@@ -797,50 +803,45 @@ namespace Script.PuzzleManagerGroup
                         {
                             currentList.Add(characters[j]);
                         }
-                        result.Add(currentList);// 후보에 추가합니다
+                        result.Add(currentList);
                     }
                 }
-                if ((i / 6) < currentFloor) // "6/6이 되기 전까진 1층 보다 낮다"꼴 의 흐름입니다.
+                if ((i / 6) < currentFloor)
                 {
-                    // 이전 인덱스의 정보와 동일하다?
                     if (tempLevel == characters[i].GetComponent<CharacterBase>().unitPuzzleLevel 
                         && tempUnitGroup == characters[i].GetComponent<CharacterBase>().unitGroup)
                     {
                         sameCount++;
                     }
-                    else // 동일 식별자를 공유하는 캐릭터의 연속이 깨졌으므로 이전까지의 흐름을 저장합니다.
+                    else 
                     {
-                        if (sameCount >= 3)//이전 층수까지 누적된 동일 캐릭터의 연결이 3개 이상인지 확인합니다
+                        if (sameCount >= 3)
                         {
                             var currentList = new List<GameObject>();
                             for (var j = i - (sameCount); j <= i-1; j++)
                             {
                                 currentList.Add(characters[j]);
                             }
-                            result.Add(currentList);// 후보에 추가합니다
+                            result.Add(currentList);
                         }
-                        // 다른 식별인자를 가진 캐릭터의 시작임으로 무조건 캐릭터 식별인자 갱신이 필요합니다
                         tempLevel = characters[i].GetComponent<CharacterBase>().unitPuzzleLevel;
-                        // 새로운 층의 시작임으로 무조건 캐릭터 식별인자 갱신이 필요합니다
                         tempUnitGroup = characters[i].GetComponent<CharacterBase>().unitGroup;
-                        sameCount = 1; // 동일 캐릭터의 배열길이는 1부터 시작
+                        sameCount = 1; 
                     }
                 }
-                else // 층수가 바뀐 그 한 순간만 작동되는 코드입니다
+                else 
                 {
-                    if(sameCount >= 3)//이전 층수까지 누적된 동일 캐릭터의 연결이 3개 이상인지 확인합니다
+                    if(sameCount >= 3)
                     {
                         var currentList = new List<GameObject>();
                         for (var j = i - sameCount; j <= i-1; j++)
                         {
                             currentList.Add(characters[j]);
                         }
-                        result.Add(currentList);// 후보에 추가합니다
+                        result.Add(currentList);
                     }
-                    currentFloor++;// 층수가 바뀜을 적용합니다. 대상들의 y좌표 값이 +1 증가하는 시기임을 반영한 값입니다.
-                    // 새로운 층의 시작임으로 무조건 캐릭터 식별인자 갱신이 필요합니다
+                    currentFloor++;
                     tempLevel = characters[i].GetComponent<CharacterBase>().unitPuzzleLevel;
-                    // 새로운 층의 시작임으로 무조건 캐릭터 식별인자 갱신이 필요합니다
                     tempUnitGroup = characters[i].GetComponent<CharacterBase>().unitGroup;
                     sameCount = 1;
                 }
@@ -849,28 +850,23 @@ namespace Script.PuzzleManagerGroup
         }
         private static List<List<GameObject>> FindConsecutiveTilesInColumn(IReadOnlyList<GameObject> characters)
         {
-            // 결과를 저장할 List를 초기화합니다
             var result = new List<List<GameObject>>();
-            var tempLevel = 0; // 캐릭터의 레벨 기준을 현재 인덱스와 비교하기 위해 잠시 저장합니다
-            var tempUnitGroup = CharacterBase.UnitGroups.None; // 캐릭터의 종류를 판단하기 위해 식별 인덱스를 잠시 저장
-            var sameCount = 1; // 현재 인덱스까지 몇 개의 캐릭터가 동일하게 연결됐는지를 "갱신"
+            var tempLevel = 0;
+            var tempUnitGroup = CharacterBase.UnitGroups.None;
+            var sameCount = 1;
             var totalRows = characters.Count / 6;
             const int totalColumns = 6;
-
-            // 가로 방향으로 탐색(i가 x축이 됩니다)
             for (var i = 0; i < totalColumns; i++)
             {
-                // 세로 방향으로 탐색
                 for (var j = 0; j < totalRows; j++)
                 {
                     var index = j * totalColumns + i;
-                    //가장 마지막 인덱스인 경우 예외처리를 해줍니다
                     if(index == characters.Count - 1)
                     {
                         if (tempLevel == characters[index].GetComponent<CharacterBase>().unitPuzzleLevel && tempUnitGroup == characters[index].GetComponent<CharacterBase>().unitGroup)
                         {
                             sameCount++;
-                            if (sameCount >= 3) // 방금 위에서 ++한 값을 포함해서 이번 열까지 누적된 동일 캐릭터의 연결이 3개 이상인지 확인합니다
+                            if (sameCount >= 3)
                             {
                                 var currentList = new List<GameObject>();
                                 for (var k = i + (totalColumns * (j - sameCount)); k <= i + (totalColumns * j - 1); k += totalColumns)
@@ -882,8 +878,7 @@ namespace Script.PuzzleManagerGroup
                         }
                         else
                         {
-                            // 동일 식별자를 공유하는 캐릭터의 연속이 깨졌으므로 이전까지의 흐름을 저장합니다
-                            if (sameCount >= 3) // 이전 열까지 누적된 동일 캐릭터의 연결이 3개 이상인지 확인합니다
+                            if (sameCount >= 3)
                             {
                                 var currentList = new List<GameObject>();
                                 for (var k = i + (totalColumns * (j - sameCount)); k <= i + (totalColumns * j - 1); k += totalColumns)
@@ -893,13 +888,10 @@ namespace Script.PuzzleManagerGroup
                                 result.Add(currentList);
                             }
                         }
-                        //이전 요소에 대한 처리로 넘어가지 않도록 break로 끊어줍니다. 따라서 Log를 여기서만 따로 발생시킵니다.
                         break;
                     }
-                    // j가 0일 때는 새롭게 1층, 즉 컬럼이 전환된 시점이므로 이전 열에 대한 처리를 무조건 적으로 검토합니다
                     if (j == 0)
                     {
-                        // 이전까지의 마지막 요소 처리
                         if (sameCount >= 3)
                         {
                             var currentList = new List<GameObject>();
@@ -911,19 +903,17 @@ namespace Script.PuzzleManagerGroup
                         }
                         tempLevel = characters[index].GetComponent<CharacterBase>().unitPuzzleLevel;
                         tempUnitGroup = characters[index].GetComponent<CharacterBase>().unitGroup;
-                        sameCount = 1; // 새로운 열로 이동한 후, 동일한 캐릭터의 수를 다시 1로 초기화합니다
+                        sameCount = 1;
                     }
                     else
                     {
-                        // 이전 인덱스의 정보와 동일하다 (첫 번째 행 제외)
                         if (tempLevel == characters[index].GetComponent<CharacterBase>().unitPuzzleLevel && tempUnitGroup == characters[index].GetComponent<CharacterBase>().unitGroup)
                         {
                             sameCount++;
                         }
                         else
                         {
-                            // 동일 식별자를 공유하는 캐릭터의 연속이 깨졌으므로 이전까지의 흐름을 저장합니다
-                            if (sameCount >= 3) // 이전 열까지 누적된 동일 캐릭터의 연결이 3개 이상인지 확인합니다
+                            if (sameCount >= 3)
                             {
                                 var currentList = new List<GameObject>();
                                 for (var k = i + (totalColumns * (j - sameCount)); k <= i + (totalColumns * j-1); k += totalColumns)
@@ -934,7 +924,7 @@ namespace Script.PuzzleManagerGroup
                             }
                             tempLevel = characters[index].GetComponent<CharacterBase>().unitPuzzleLevel;
                             tempUnitGroup = characters[index].GetComponent<CharacterBase>().unitGroup;
-                            sameCount = 1; // 동일 캐릭터 배열 길이는 1부터 시작
+                            sameCount = 1;
                         }
                     }
                 }
@@ -958,13 +948,11 @@ namespace Script.PuzzleManagerGroup
                             return position1.x.Equals((position = columnObject.transform.position).x ) &&
                                    position1.y.Equals(position.y);
                         }) 
-                        select new MatchedPair { gameObject = rowObject, rowList = rowList, columnList = columnList });
+                        select new MatchedPair { GameObject = rowObject, RowList = rowList, ColumnList = columnList });
                 }
             }
-
-            // 처리하지 못한 rowList 인덱스 구함
             foreach (var gameObject in from rowList in rowResults 
-                     let foundMatchedPair = matchedPairs.Any(matchedPair => matchedPair.rowList == rowList) 
+                     let foundMatchedPair = matchedPairs.Any(matchedPair => matchedPair.RowList == rowList) 
                      where !foundMatchedPair 
                      let index = Mathf.FloorToInt(rowList.Count / 2f) 
                      select rowList[index] 
@@ -974,10 +962,8 @@ namespace Script.PuzzleManagerGroup
             {
                 matchingGameObjects.Add(gameObject);
             }
-
-            // 처리하지 못한 columnList의 인덱스 구함
             foreach (var gameObject in from columnList in columnResults 
-                     let foundMatchedPair = matchedPairs.Any(matchedPair => matchedPair.columnList == columnList) 
+                     let foundMatchedPair = matchedPairs.Any(matchedPair => matchedPair.ColumnList == columnList) 
                      where !foundMatchedPair 
                      let tempIndex = columnList.Count() 
                      let index = Mathf.FloorToInt(columnList.Count / 2f) 
@@ -988,20 +974,17 @@ namespace Script.PuzzleManagerGroup
             {
                 matchingGameObjects.Add(gameObject);
             }
-
-            // 공통 GameObject를 포함하는 matchedPairs에서 GameObject를 추가합니다.
-            foreach (var matchedPair in matchedPairs.Where(matchedPair => !matchingGameObjects.Contains(matchedPair.gameObject)))
+            foreach (var matchedPair in matchedPairs.Where(matchedPair => !matchingGameObjects.Contains(matchedPair.GameObject)))
             {
-                matchingGameObjects.Add(matchedPair.gameObject);
+                matchingGameObjects.Add(matchedPair.GameObject);
             }
             return matchingGameObjects;
         }
         private static List<GameObject> FindConsecutiveCharacters(IReadOnlyList<GameObject> characters)
         {
-            // For each value, find the consecutive tiles
-                var rowsResult = FindConsecutiveTilesInRow(characters);
-                var colsResult = FindConsecutiveTilesInColumn(characters);
-                return FindMatchingGameObjects(rowsResult, colsResult);
+            var rowsResult = FindConsecutiveTilesInRow(characters);
+            var colsResult = FindConsecutiveTilesInColumn(characters);
+            return FindMatchingGameObjects(rowsResult, colsResult);
         }
     }
 }
