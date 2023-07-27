@@ -91,27 +91,27 @@ namespace Script
             yield return _waitTwoSecRealtime;
             StartCoroutine(AtkManager.Instance.CheckForAttack());
             StartCoroutine(StageManager.Instance.WaveController());
-            var allUnits = FindObjectsOfType<CharacterBase>();
-            foreach (var unit in allUnits)
-            {
-                if (unit is UnitE unitE)
-                {
-                    unitE.ApplyAttackSpeedBuffToAllies();
-                }
-            }
+            // var allUnits = FindObjectsOfType<CharacterBase>();
+            // foreach (var unit in allUnits)
+            // {
+            //     if (unit is UnitE unitE)
+            //     {
+            //         unitE.ApplyAttackSpeedBuffToAllies();
+            //     }
+            // }
             GameSpeed();
         }
         public IEnumerator ContinueOrLose()
         {
             IsBattle = false;
             AtkManager.Instance.ClearWeapons();
-            var allUnits = FindObjectsOfType<CharacterBase>();
-            foreach (var unit in allUnits)
-            {
-                if (unit is not UnitE { HasAttackSpeedBuff: true } || !EnforceManager.Instance.water2AttackSpeedBuffToAdjacentAllies) continue;
-                unit.defaultAtkRate /= 0.9f;
-                unit.HasAttackSpeedBuff = false;
-            }
+            // var allUnits = FindObjectsOfType<CharacterBase>();
+            // foreach (var unit in allUnits)
+            // {
+            //     if (unit is not UnitE { HasAttackSpeedBuff: true } || !EnforceManager.Instance.water2AttackSpeedBuffToAdjacentAllies) continue;
+            //     unit.defaultAtkRate /= 0.9f;
+            //     unit.HasAttackSpeedBuff = false;
+            // }
             if (castleManager.HpPoint > 0)
             {
                 ClearRewardManager.Instance.GetCoin();
@@ -162,8 +162,8 @@ namespace Script
             yield return StartCoroutine(cameraManager.CameraPuzzleSizeChange());
             enemyPool.ClearList();
             StageManager.Instance.isBossClear = false;
-            if (EnforceManager.Instance.waterGlobalSlowEffect) globalSlow = false;
-            AtkManager.Instance.groupCAtkCount = 0;
+            AtkManager.Instance.groupDAtkCount = 0;
+            AtkManager.Instance.groupDAtkRate = 0f;
         }
         private void LoseGame()
         {

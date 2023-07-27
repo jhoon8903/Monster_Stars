@@ -33,6 +33,8 @@ namespace Script.CharacterManagerScript
         public List<GameObject> weaponsList = new List<GameObject>();
         public static AtkManager Instance { get; private set; }
         public int groupCAtkCount;
+        public int groupDAtkCount;
+        public float groupDAtkRate;
         public void Awake()
         {
             if (Instance == null)
@@ -95,7 +97,7 @@ namespace Script.CharacterManagerScript
                 case CharacterBase.UnitGroups.A:
                     if (EnforceManager.Instance.divineDualAttack)
                     {
-                        StartCoroutine(DualAttack(new AttackData(unit, WeaponsPool.WeaponType.A)));
+                        StartCoroutine(DivineDualAttack(new AttackData(unit, WeaponsPool.WeaponType.A)));
                     }
                     else
                     {
@@ -106,14 +108,7 @@ namespace Script.CharacterManagerScript
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.B));
                     break;
                 case CharacterBase.UnitGroups.C:
-                    if (EnforceManager.Instance.waterProjectileIncrease)
-                    {
-                        StartCoroutine(DoubleFire(new AttackData(unit, WeaponsPool.WeaponType.C)));
-                    }
-                    else
-                    {
-                        Attack(new AttackData(unit, WeaponsPool.WeaponType.C));
-                    }
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.C));
                     break;
                 case CharacterBase.UnitGroups.E:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.E));
@@ -176,13 +171,32 @@ namespace Script.CharacterManagerScript
                    }
                    break;
                case CharacterBase.UnitGroups.B:
-                   unit.GetComponent<UnitB>().atkCount++;
+                   if (EnforceManager.Instance.darkFifthAttackDamageBoost)
+                   {
+                       unit.GetComponent<UnitB>().atkCount++;
+                   }
                    break;
                case CharacterBase.UnitGroups.C:
-                   groupCAtkCount++;
-                   if (EnforceManager.Instance.waterGlobalSlowEffect && groupCAtkCount % 100 == 0)
+                   if (EnforceManager.Instance.waterGlobalFreeze)
                    {
-                       StartCoroutine(enemyPatternManager.GlobalSlowEffect());
+                       groupCAtkCount++;
+                       if (groupCAtkCount == 100)
+                       {
+                           StartCoroutine(enemyPatternManager.GlobalFreezeEffect());
+                       }
+                   }
+                   break;
+               case CharacterBase.UnitGroups.D:
+                   if (EnforceManager.Instance.physicalRatePerAttack)
+                   {
+                       groupDAtkCount++;
+                       if (groupDAtkCount % 3 == 0)
+                       {
+                           if (groupDAtkRate < 0.6f)
+                           {
+                               groupDAtkRate += 0.01f;
+                           }
+                       }
                    }
                    break;
             }
@@ -254,7 +268,7 @@ namespace Script.CharacterManagerScript
             }
             yield return null;
         }
-        private IEnumerator DualAttack(AttackData attackData)
+        private IEnumerator DivineDualAttack(AttackData attackData)
         {
             var unit = attackData.Unit;
             var weaponType = attackData.WeaponType;

@@ -88,23 +88,22 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = (unitPieceLevel-1) * 12f;
+            UnitLevelDamage = unitPieceLevel > 1 ? unitPieceLevel * 2 + 3f : 0;
             Type = Types.Character;
             unitGroup = UnitGroups.C;
-            defaultAtkRate = 0.8f / (1f + 6 * EnforceManager.Instance.darkAttackSpeedBoost / 100f);
-            defaultAtkDistance = 9f;
-            projectileSpeed = 1f;
-            UnitAtkType = UnitAtkTypes.Projectile;
-            UnitProperty = UnitProperties.Water;
-            var increaseDamage = 1f + EnforceManager.Instance.waterAttackBoost * 12 / 100f;
-            DefaultDamage = UnitLevelDamage + 25f * increaseDamage * level switch
+            DefaultDamage = UnitLevelDamage + 11f * level switch
             {
                 <=  2 => 1f,
                 3 => 1.7f,
                 4 => 2f,
                 _ => 2.3f
             };
-            UnitEffect = EnforceManager.Instance.waterAllyDamageBoost ? UnitEffects.None : UnitEffects.Slow;
+            defaultAtkRate = 0.8f * (1f - EnforceManager.Instance.waterAttackRateBoost);
+            defaultAtkDistance = 9f;
+            projectileSpeed = 1f;
+            UnitAtkType = UnitAtkTypes.Projectile;
+            UnitProperty = UnitProperties.Water;
+            UnitEffect = UnitEffects.Slow;
         }
     }
 }

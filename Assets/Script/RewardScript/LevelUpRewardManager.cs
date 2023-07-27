@@ -74,123 +74,120 @@ namespace Script.RewardScript
                 case ExpData.Types.Gold:
                     EnforceManager.Instance.addGold = true;
                     break;
-               case ExpData.Types.DivinePoisonDamageBoost:
-                   EnforceManager.Instance.divinePoisonDamageBoost = true;
-                   break;
+                // A
+                case ExpData.Types.DivineFifthAttackBoost:
+                    EnforceManager.Instance.divineFifthAttackBoost = true;
+                    break;
+                case ExpData.Types.DivineDualAttack:
+                    EnforceManager.Instance.divineDualAttack = true;
+                    break;
                 case ExpData.Types.DivineBindDurationBoost:
                     EnforceManager.Instance.divineBindDurationBoost = true;
                     break;
                 case ExpData.Types.DivineShackledExplosion:
                     EnforceManager.Instance.divineShackledExplosion = true;
                     break;
-                case ExpData.Types.DivineFifthAttackBoost:
-                    EnforceManager.Instance.divineFifthAttackBoost = true;
-                    break;
-                case ExpData.Types.DivineAttackBoost:
-                    EnforceManager.Instance.DivineAttackDamageIncrease();
-                    break;
+               case ExpData.Types.DivinePoisonDamageBoost:
+                   EnforceManager.Instance.divinePoisonDamageBoost = true;
+                   break;
                 case ExpData.Types.DivineBindChanceBoost:
                     EnforceManager.Instance.divineBindChanceBoost = true;
                     break;
-                case ExpData.Types.DivineDualAttack:
-                    EnforceManager.Instance.divineDualAttack = true;
+                case ExpData.Types.DivineRateBoost:
+                    EnforceManager.Instance.DivineRateBoost();
                     break;
-                case ExpData.Types.DarkTenthAttackDamageBoost:
-                    EnforceManager.Instance.darkTenthAttackDamageBoost = true;
-                    break;
-                case ExpData.Types.DarkAttackSpeedBoost:
-                    EnforceManager.Instance.DarkAttackSpeedIncrease();
-                    break;
-                case ExpData.Types.DarkAttackPowerBoost:
-                    EnforceManager.Instance.DarkAttackDamageIncrease();
-                    break;
-                case ExpData.Types.DarkStatusAilmentDamageChance:
-                    EnforceManager.Instance.darkStatusAilmentDamageChance = true;
-                    break;
-                case ExpData.Types.DarkKnockBackChance:
-                    EnforceManager.Instance.darkKnockBackChance = true;
-                    break;
-                case ExpData.Types.DarkStatusAilmentDamageBoost:
-                    EnforceManager.Instance.darkStatusAilmentDamageBoost = true;
-                    break;
-                case ExpData.Types.DarkRangeIncrease:
-                    EnforceManager.Instance.darkRangeIncrease = true;
+                // B
+                case ExpData.Types.DarkFifthAttackDamageBoost:
+                    EnforceManager.Instance.darkFifthAttackDamageBoost = true;
                     break;
                 case ExpData.Types.DarkStatusAilmentSlowEffect:
                     EnforceManager.Instance.darkStatusAilmentSlowEffect = true;
                     break;
-                case ExpData.Types.WaterAttackSpeedBoost:
-                    EnforceManager.Instance.WaterAttackSpeedIncrease();
+                case ExpData.Types.DarkRangeIncrease:
+                    EnforceManager.Instance.darkRangeIncrease = true;
                     break;
-                case ExpData.Types.WaterAllyDamageBoost:
-                    EnforceManager.Instance.waterAllyDamageBoost = true;
+                case ExpData.Types.DarkAttackPowerBoost:
+                    EnforceManager.Instance.DarkAttackDamageBoost();
                     break;
-                case ExpData.Types.WaterProjectileIncrease:
-                    EnforceManager.Instance.waterProjectileIncrease = true;
+                case ExpData.Types.DarkStatusAilmentDamageBoost:
+                    EnforceManager.Instance.darkStatusAilmentDamageBoost = true;
                     break;
-                case ExpData.Types.WaterAttackBoost:
-                    EnforceManager.Instance.WaterAttackDamageIncrease();
+                case ExpData.Types.DarkAttackSpeedBoost:
+                    EnforceManager.Instance.DarkAttackSpeedBoost();
                     break;
-                case ExpData.Types.WaterSlowEnemyDamageBoost:
-                    EnforceManager.Instance.waterSlowEnemyDamageBoost = true;
+                case ExpData.Types.DarkKnockBackChance:
+                    EnforceManager.Instance.darkKnockBackChance = true;
                     break;
-                case ExpData.Types.WaterGlobalSlowEffect:
-                    EnforceManager.Instance.waterGlobalSlowEffect = true;
+                // C
+                case ExpData.Types.WaterFreeze:
+                    EnforceManager.Instance.waterFreeze = true;
                     break;
-                case ExpData.Types.WaterSlowEnemyStunChance:
-                    EnforceManager.Instance.waterSlowEnemyStunChance = true;
+                case ExpData.Types.WaterFreezeChance:
+                    EnforceManager.Instance.waterFreezeChance = true;
                     break;
-                case ExpData.Types.WaterDamageIncreaseDebuff:
-                    EnforceManager.Instance.waterDamageIncreaseDebuff = true;
+                case ExpData.Types.WaterSlowDurationBoost:
+                    EnforceManager.Instance.WaterSlowDurationBoost();
                     break;
-                case ExpData.Types.PhysicalAttackSpeedBoost:
-                    EnforceManager.Instance.PhysicalAttackSpeedIncrease();
+                case ExpData.Types.WaterFreezeDamageBoost:
+                    EnforceManager.Instance.waterFreezeDamageBoost = true;
                     break;
-                case ExpData.Types.PhysicalDamage35Boost:
-                    EnforceManager.Instance.physicalDamage35Boost = true;
+                case ExpData.Types.WaterSlowCPowerBoost:
+                    EnforceManager.Instance.waterSlowCPowerBoost = true;
                     break;
-                case ExpData.Types.PhysicalDamage6Boost:
-                    EnforceManager.Instance.PhysicalAttackDamageIncrease();
+                case ExpData.Types.WaterAttackRateBoost:
+                    EnforceManager.Instance.WaterAttackRateBoost();
                     break;
-                case ExpData.Types.PhysicalBleedingChance:
-                    EnforceManager.Instance.physicalBleedingChance = true;
+                case ExpData.Types.WaterGlobalFreeze:
+                    EnforceManager.Instance.waterGlobalFreeze = true;
+                    break;
+                // D
+                case ExpData.Types.PhysicalSwordScaleIncrease:
+                    EnforceManager.Instance.physicalSwordScaleIncrease = true;
                     break;
                 case ExpData.Types.PhysicalSwordAddition:
                     EnforceManager.Instance.physicalSwordAddition = true;
                     break;
-                case ExpData.Types.PhysicalSlowEnemyDamageBoost:
-                    EnforceManager.Instance.physicalSlowEnemyDamageBoost = true;
+                case ExpData.Types.PhysicalAttackSpeedBoost:
+                    EnforceManager.Instance.PhysicalAttackSpeedIncrease();
                     break;
-                case ExpData.Types.PhysicalSwordScaleIncrease:
-                    EnforceManager.Instance.physicalSwordScaleIncrease = true;
+                case ExpData.Types.PhysicalRatePerAttack:
+                    EnforceManager.Instance.physicalRatePerAttack = true;
                     break;
-                case ExpData.Types.PhysicalDamage18Boost:
-                    EnforceManager.Instance.physicalDamage18Boost = true;
+                case ExpData.Types.PhysicalBindBleed:
+                    EnforceManager.Instance.physicalBindBleed = true;
                     break;
-                case ExpData.Types.Water2DebuffDurationIncrease:
-                    EnforceManager.Instance.Water2DebuffDurationIncrease();
+                case ExpData.Types.PhysicalDamageBoost:
+                    EnforceManager.Instance.PhysicalDamageBoost();
                     break;
-                case ExpData.Types.Water2AttackSpeedIncrease:
-                    EnforceManager.Instance.Water2AttackSpeedIncrease();
+                case ExpData.Types.PhysicalBleedDuration:
+                    EnforceManager.Instance.physicalBleedDuration = true;
                     break;
-                case ExpData.Types.Water2StunChanceAgainstBleeding:
-                    EnforceManager.Instance.water2StunChanceAgainstBleeding = true;
+                // E
+                case ExpData.Types.Water2Freeze:
+                    EnforceManager.Instance.water2Freeze = true;
                     break;
-                case ExpData.Types.Water2IceSpikeProjectile:
-                    EnforceManager.Instance.water2IceSpikeProjectile = true;
+                case ExpData.Types.Water2SlowPowerBoost:
+                    EnforceManager.Instance.water2SlowPowerBoost = true;
                     break;
-                case ExpData.Types.Water2AttackPowerIncrease:
-                    EnforceManager.Instance.Water2AttackPowerIncrease();
+                case ExpData.Types.Water2FreezeTimeBoost:
+                    EnforceManager.Instance.water2FreezeTimeBoost = true;
                     break;
-                case ExpData.Types.Water2ProjectileSpeedIncrease:
-                    EnforceManager.Instance.water2ProjectileSpeedIncrease = true;
+                case ExpData.Types.Water2DamageBoost:
+                    EnforceManager.Instance.Water2DamageBoost();
                     break;
-                case ExpData.Types.Water2DebuffStrengthIncrease:
-                    EnforceManager.Instance.water2DebuffStrengthIncrease = true;
+                case ExpData.Types.Water2FreezeChanceBoost:
+                    EnforceManager.Instance.water2FreezeChanceBoost = true;
                     break;
-                case ExpData.Types.Water2AttackSpeedBuffToAdjacentAllies:
-                    EnforceManager.Instance.water2AttackSpeedBuffToAdjacentAllies = true;
+                case ExpData.Types.Water2FreezeDamageBoost:
+                    EnforceManager.Instance.water2FreezeDamageBoost = true;
                     break;
+                case ExpData.Types.Water2SlowTimeBoost:
+                    EnforceManager.Instance.Water2SlowTimeBoost();
+                    break;
+
+
+
+
                 case ExpData.Types.PoisonAttackSpeedIncrease:
                     EnforceManager.Instance.PoisonAttackSpeedIncrease();
                     break;
@@ -345,6 +342,7 @@ namespace Script.RewardScript
             if (selectedCodes.Contains(powerUp.Code)) return false;
             switch (powerUp.Type)
             {
+                // Common
                 case ExpData.Types.Gold:
                     if (EnforceManager.Instance.addGold) return false;
                     break;
@@ -369,195 +367,187 @@ namespace Script.RewardScript
                     if (EnforceManager.Instance.castleMaxHp >= 1000) return false;
                     break;
                 // Unit A
+                case ExpData.Types.DivineFifthAttackBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
+                    if (EnforceManager.Instance.divineFifthAttackBoost) return false;
+                    break;
+                case ExpData.Types.DivineDualAttack:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 3) return false;
+                    if (EnforceManager.Instance.divineDualAttack) return false;
+                    break;
+                case ExpData.Types.DivineBindDurationBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 5) return false;
+                    if (EnforceManager.Instance.divineBindDurationBoost) return false;
+                    break;
+                case ExpData.Types.DivineShackledExplosion:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 7) return false;
+                    if (EnforceManager.Instance.divineShackledExplosion) return false;
+                    break;
                 case ExpData.Types.DivinePoisonDamageBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 9) return false;
                     if (EnforceManager.Instance.divinePoisonDamageBoost) return false;
                     break;
-                case ExpData.Types.DivineBindDurationBoost:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 7) return false;
-                    if (EnforceManager.Instance.divineBindDurationBoost) return false;
-                    break;
-                case ExpData.Types.DivineShackledExplosion:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 3) return false;
-                    if (EnforceManager.Instance.divineShackledExplosion) return false;
-                    break;
-                case ExpData.Types.DivineFifthAttackBoost:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
-                    if (EnforceManager.Instance.divineFifthAttackBoost) return false;
-                    break;
-                case ExpData.Types.DivineAttackBoost:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 13) return false;
-                    if (EnforceManager.Instance.divineAttackBoost >= 4) return false;
-                    break;
                 case ExpData.Types.DivineBindChanceBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 5) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 11) return false;
                     if (EnforceManager.Instance.divineBindChanceBoost) return false;
                     break;
-                case ExpData.Types.DivineDualAttack:
+                case ExpData.Types.DivineRateBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 11) return false;
-                    if (EnforceManager.Instance.divineDualAttack) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 13) return false;
+                    if (EnforceManager.Instance.divineRateBoost >= 0.36f) return false;
                     break;
                 // Unit B
-                case ExpData.Types.DarkTenthAttackDamageBoost:
+                case ExpData.Types.DarkFifthAttackDamageBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.B) < 5) return false;
-                    if (EnforceManager.Instance.darkTenthAttackDamageBoost) return false;
-                    break;
-                case ExpData.Types.DarkAttackSpeedBoost:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
-                    if (EnforceManager.Instance.darkAttackSpeedBoost >= 4) return false;
-                    break;
-                case ExpData.Types.DarkAttackPowerBoost:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.B) < 9) return false;
-                    if (EnforceManager.Instance.darkAttackPowerBoost >= 4) return false;
-                    break;
-                case ExpData.Types.DarkStatusAilmentDamageChance:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.B) < 11) return false;
-                    if (EnforceManager.Instance.darkStatusAilmentDamageChance) return false;
-                    break;
-                case ExpData.Types.DarkKnockBackChance:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.B) < 3) return false;
-                    if (EnforceManager.Instance.darkKnockBackChance) return false;
-                    break;
-                case ExpData.Types.DarkStatusAilmentDamageBoost:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
-                    if (EnforceManager.Instance.darkStatusAilmentDamageBoost) return false;
-                    break;
-                case ExpData.Types.DarkRangeIncrease:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.B) < 7) return false;
-                    if (EnforceManager.Instance.darkRangeIncrease) return false;
+                    if (EnforceManager.Instance.darkFifthAttackDamageBoost) return false;
                     break;
                 case ExpData.Types.DarkStatusAilmentSlowEffect:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.B) < 13) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.B) < 3) return false;
                     if (EnforceManager.Instance.darkStatusAilmentSlowEffect) return false;
                     break;
+                case ExpData.Types.DarkRangeIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.B) < 5) return false;
+                    if (EnforceManager.Instance.darkRangeIncrease) return false;
+                    break;
+                case ExpData.Types.DarkAttackPowerBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.B) < 7) return false;
+                    if (EnforceManager.Instance.darkAttackPowerBoost >= 0.24f) return false;
+                    break;
+                case ExpData.Types.DarkStatusAilmentDamageBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.B) < 9) return false;
+                    if (EnforceManager.Instance.darkStatusAilmentDamageBoost) return false;
+                    break;
+                case ExpData.Types.DarkAttackSpeedBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.B) < 11) return false;
+                    if (EnforceManager.Instance.darkAttackSpeedBoost >= 0.36f) return false;
+                    break;
+                case ExpData.Types.DarkKnockBackChance:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.B)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.B) < 13) return false;
+                    if (EnforceManager.Instance.darkKnockBackChance) return false;
+                    break;
                 // Unit C
-                case ExpData.Types.WaterAttackSpeedBoost:
+                case ExpData.Types.WaterFreeze:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.C) < 5) return false;
-                    if (EnforceManager.Instance.waterAttackSpeedBoost >= 4) return false;
+                    if (EnforceManager.Instance.waterFreeze) return false; 
                     break;
-                case ExpData.Types.WaterAllyDamageBoost:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
-                    if (EnforceManager.Instance.waterAllyDamageBoost) return false;
-                    break;
-                case ExpData.Types.WaterProjectileIncrease:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.C) < 11) return false;
-                    if (EnforceManager.Instance.waterProjectileIncrease) return false;
-                    break;
-                case ExpData.Types.WaterAttackBoost:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.C) < 13) return false;
-                    if (EnforceManager.Instance.waterAttackBoost >= 4) return false;
-                    break;
-                case ExpData.Types.WaterSlowEnemyDamageBoost:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.C) < 7) return false;
-                    if (EnforceManager.Instance.waterSlowEnemyDamageBoost) return false;
-                    break;
-                case ExpData.Types.WaterGlobalSlowEffect:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
-                    if (EnforceManager.Instance.waterGlobalSlowEffect) return false;
-                    break;
-                case ExpData.Types.WaterSlowEnemyStunChance:
+                case ExpData.Types.WaterFreezeChance:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.C) < 3) return false;
-                    if (EnforceManager.Instance.waterSlowEnemyStunChance) return false;
+                    if (!EnforceManager.Instance.waterFreeze) return false;
                     break;
-                case ExpData.Types.WaterDamageIncreaseDebuff:
+                case ExpData.Types.WaterSlowDurationBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.C) < 5) return false;
+                    if (EnforceManager.Instance.waterSlowDurationBoost >= 1f) return false;
+                    break;
+                case ExpData.Types.WaterFreezeDamageBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.C) < 7) return false;
+                    if (!EnforceManager.Instance.waterFreeze) return false;
+                    if (EnforceManager.Instance.waterFreezeDamageBoost) return false;
+                    break;
+                case ExpData.Types.WaterSlowCPowerBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.C) < 9) return false;
-                    if (EnforceManager.Instance.waterDamageIncreaseDebuff) return false;
+                    if (EnforceManager.Instance.waterSlowCPowerBoost) return false;
                     break;
-                // //Unit D
-                case ExpData.Types.PhysicalAttackSpeedBoost:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.D) < 9) return false;
-                    if (EnforceManager.Instance.physicalAttackSpeedBoost >= 4) return false;
+                case ExpData.Types.WaterAttackRateBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.C) < 11) return false;
+                    if (EnforceManager.Instance.waterAttackRateBoost >= 0.24f) return false;
                     break;
-                case ExpData.Types.PhysicalDamage35Boost:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
-                    if (EnforceManager.Instance.physicalDamage35Boost) return false;
+                case ExpData.Types.WaterGlobalFreeze:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.C) < 13) return false;
+                    if (EnforceManager.Instance.waterGlobalFreeze) return false;
                     break;
-                case ExpData.Types.PhysicalDamage6Boost:
+                // Unit D
+                case ExpData.Types.PhysicalSwordScaleIncrease:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.D) < 5) return false;
-                    if (EnforceManager.Instance.physicalDamage6Boost >= 4) return false;
-                    break;
-                case ExpData.Types.PhysicalBleedingChance:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.D) < 11) return false;
-                    if (EnforceManager.Instance.physicalBleedingChance) return false;
+                    if (EnforceManager.Instance.physicalSwordScaleIncrease) return false;
                     break;
                 case ExpData.Types.PhysicalSwordAddition:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.D) < 3) return false;
                     if (EnforceManager.Instance.physicalSwordAddition) return false;
                     break;
-                case ExpData.Types.PhysicalSlowEnemyDamageBoost:
+                case ExpData.Types.PhysicalAttackSpeedBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.D) < 5) return false;
+                    if (EnforceManager.Instance.physicalAttackSpeedBoost >= 0.36f) return false;
+                    break;
+                case ExpData.Types.PhysicalRatePerAttack:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.D) < 7) return false;
+                    if (EnforceManager.Instance.physicalRatePerAttack) return false;
                     break;
-                case ExpData.Types.PhysicalSwordScaleIncrease:
+                case ExpData.Types.PhysicalBindBleed:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.D) < 3) return false;
-                    if (EnforceManager.Instance.physicalSwordScaleIncrease) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.D) < 9) return false;
+                    if (EnforceManager.Instance.physicalBindBleed) return false;
                     break;
-                case ExpData.Types.PhysicalDamage18Boost:
+                case ExpData.Types.PhysicalDamageBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.D) < 11) return false;
+                    if (EnforceManager.Instance.physicalDamageBoost >= 0.18f) return false;
+                    break;
+                case ExpData.Types.PhysicalBleedDuration:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.D)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.D) < 13) return false;
+                    if (!EnforceManager.Instance.physicalBindBleed) return false;
+                    if (EnforceManager.Instance.physicalBleedDuration) return false;
                     break;
-                // //Unit E
-                case ExpData.Types.Water2DebuffDurationIncrease:
+                // Unit E
+                case ExpData.Types.Water2Freeze:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
-                    if (EnforceManager.Instance.water2DebuffDurationIncrease >= 5) return false;
+                    if (EnforceManager.Instance.water2Freeze) return false;
                     break;
-                case ExpData.Types.Water2AttackSpeedIncrease:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.E) < 7) return false;
-                    if (EnforceManager.Instance.water2AttackSpeedIncrease >= 4) return false;
-                    break;
-                case ExpData.Types.Water2StunChanceAgainstBleeding:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.E) < 11) return false;
-                    if (EnforceManager.Instance.water2StunChanceAgainstBleeding) return false;
-                    break;
-                case ExpData.Types.Water2IceSpikeProjectile:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.E) < 9) return false;
-                    if (EnforceManager.Instance.water2IceSpikeProjectile) return false;
-                    break;
-                case ExpData.Types.Water2AttackPowerIncrease:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.E) < 5) return false;
-                    if (EnforceManager.Instance.water2AttackPowerIncrease >= 4) return false;
-                    break;
-                case ExpData.Types.Water2ProjectileSpeedIncrease:
+                case ExpData.Types.Water2SlowPowerBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.E) < 3) return false;
-                    if (EnforceManager.Instance.water2ProjectileSpeedIncrease) return false;
+                    if (EnforceManager.Instance.water2SlowPowerBoost) return false;
                     break;
-                case ExpData.Types.Water2DebuffStrengthIncrease:
+                case ExpData.Types.Water2FreezeTimeBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
-                    if (EnforceManager.Instance.water2DebuffStrengthIncrease) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.E) < 5) return false;
+                    if (!EnforceManager.Instance.water2Freeze) return false;
+                    if (EnforceManager.Instance.water2FreezeTimeBoost) return false;
                     break;
-                case ExpData.Types.Water2AttackSpeedBuffToAdjacentAllies:
+                case ExpData.Types.Water2DamageBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.E) < 7) return false;
+                    if (EnforceManager.Instance.water2DamageBoost >= 0.24f) return false;
+                    break;
+                case ExpData.Types.Water2FreezeChanceBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.E) < 9) return false;
+                    if (!EnforceManager.Instance.water2Freeze) return false;
+                    if (EnforceManager.Instance.water2FreezeChanceBoost) return false;
+                    break;
+                case ExpData.Types.Water2FreezeDamageBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.E) < 11) return false;
+                    if (!EnforceManager.Instance.water2Freeze) return false;
+                    if (EnforceManager.Instance.water2FreezeDamageBoost) return false;
+                    break;
+                case ExpData.Types.Water2SlowTimeBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.E)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.E) < 13) return false;
-                    if (EnforceManager.Instance.water2AttackSpeedBuffToAdjacentAllies) return false;
+                    if (EnforceManager.Instance.water2SlowTimeBoost >= 0.5f) return false;
                     break;
-                // //Unit F
+
+                //Unit F
                 case ExpData.Types.PoisonAttackSpeedIncrease:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
                     if (EnforceManager.Instance.poisonAttackSpeedIncrease >= 4) return false;
@@ -596,7 +586,8 @@ namespace Script.RewardScript
                     if (UnitPieceLevel(CharacterBase.UnitGroups.F) < 7) return false;
                     if (EnforceManager.Instance.poisonPerHitEffect) return false;
                     break;
-                // //Unit G
+                
+                //Unit G
                 case ExpData.Types.Fire2PoisonDamageIncrease:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.G) < 3) return false;
@@ -723,41 +714,32 @@ namespace Script.RewardScript
                 ExpData.Types.DivineBindDurationBoost => finalTranslation,
                 ExpData.Types.DivineShackledExplosion => finalTranslation,
                 ExpData.Types.DivineFifthAttackBoost => finalTranslation,
-                ExpData.Types.DivineAttackBoost => finalTranslation,
+                ExpData.Types.DivineRateBoost => finalTranslation,
                 ExpData.Types.DivineBindChanceBoost => finalTranslation,
                 ExpData.Types.DivineDualAttack => finalTranslation,
-                ExpData.Types.DarkTenthAttackDamageBoost => finalTranslation,
+                ExpData.Types.DarkFifthAttackDamageBoost => finalTranslation,
                 ExpData.Types.DarkAttackSpeedBoost => finalTranslation,
                 ExpData.Types.DarkAttackPowerBoost => finalTranslation,
-                ExpData.Types.DarkStatusAilmentDamageChance => finalTranslation,
                 ExpData.Types.DarkKnockBackChance => finalTranslation,
                 ExpData.Types.DarkStatusAilmentDamageBoost => finalTranslation,
                 ExpData.Types.DarkRangeIncrease => finalTranslation,
                 ExpData.Types.DarkStatusAilmentSlowEffect => finalTranslation,
-                ExpData.Types.WaterAttackSpeedBoost => finalTranslation,
-                ExpData.Types.WaterAllyDamageBoost => finalTranslation,
-                ExpData.Types.WaterProjectileIncrease => finalTranslation,
-                ExpData.Types.WaterAttackBoost => finalTranslation,
-                ExpData.Types.WaterSlowEnemyDamageBoost => finalTranslation,
-                ExpData.Types.WaterGlobalSlowEffect => finalTranslation,
-                ExpData.Types.WaterSlowEnemyStunChance => finalTranslation,
-                ExpData.Types.WaterDamageIncreaseDebuff => finalTranslation,
-                ExpData.Types.PhysicalAttackSpeedBoost => finalTranslation,
-                ExpData.Types.PhysicalDamage35Boost => finalTranslation,
-                ExpData.Types.PhysicalDamage6Boost => finalTranslation,
-                ExpData.Types.PhysicalBleedingChance => finalTranslation,
-                ExpData.Types.PhysicalSwordAddition => finalTranslation,
-                ExpData.Types.PhysicalSlowEnemyDamageBoost => finalTranslation,
+                ExpData.Types.WaterFreeze => finalTranslation,
+                ExpData.Types.WaterFreezeChance => finalTranslation,
                 ExpData.Types.PhysicalSwordScaleIncrease => finalTranslation,
-                ExpData.Types.PhysicalDamage18Boost => finalTranslation,
-                ExpData.Types.Water2DebuffDurationIncrease => finalTranslation,
-                ExpData.Types.Water2AttackSpeedIncrease => finalTranslation,
-                ExpData.Types.Water2StunChanceAgainstBleeding => finalTranslation,
-                ExpData.Types.Water2IceSpikeProjectile => finalTranslation,
-                ExpData.Types.Water2AttackPowerIncrease => finalTranslation,
-                ExpData.Types.Water2ProjectileSpeedIncrease => finalTranslation,
-                ExpData.Types.Water2DebuffStrengthIncrease => finalTranslation,
-                ExpData.Types.Water2AttackSpeedBuffToAdjacentAllies => finalTranslation,
+                ExpData.Types.PhysicalSwordAddition => finalTranslation,
+                ExpData.Types.PhysicalAttackSpeedBoost => finalTranslation,
+                ExpData.Types.PhysicalRatePerAttack => finalTranslation,
+                ExpData.Types.PhysicalBindBleed => finalTranslation,
+                ExpData.Types.PhysicalDamageBoost => finalTranslation,
+                ExpData.Types.PhysicalBleedDuration => finalTranslation,
+                ExpData.Types.Water2Freeze => finalTranslation,
+                ExpData.Types.Water2SlowPowerBoost => finalTranslation,
+                ExpData.Types.Water2FreezeTimeBoost => finalTranslation,
+                ExpData.Types.Water2DamageBoost => finalTranslation,
+                ExpData.Types.Water2FreezeChanceBoost => finalTranslation,
+                ExpData.Types.Water2FreezeDamageBoost => finalTranslation,
+                ExpData.Types.Water2SlowTimeBoost => finalTranslation,
                 ExpData.Types.PoisonAttackSpeedIncrease => finalTranslation,
                 ExpData.Types.PoisonMaxStackIncrease => finalTranslation,
                 ExpData.Types.PoisonDamageAttackPowerIncrease => finalTranslation,

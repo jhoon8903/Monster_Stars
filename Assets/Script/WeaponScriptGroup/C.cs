@@ -29,7 +29,6 @@ namespace Script.WeaponScriptGroup
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
-            enemy.isSlowC = true;
             AtkEffect(enemy);
             var damage = DamageCalculator(Damage, enemy, CharacterBase.UnitGroups.C); 
             enemy.ReceiveDamage(enemy,(int)damage,CharacterBase);

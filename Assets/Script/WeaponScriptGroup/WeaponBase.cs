@@ -15,10 +15,10 @@ namespace Script.WeaponScriptGroup
         protected float Speed { get; set; }
         protected float Damage { get; set; }
         protected float Distance { get; private set; }
+        protected Color Sprite { get; set; }
         private CharacterBase.UnitProperties UnitProperty { get; set; }
         private CharacterBase.UnitEffects UnitEffect { get; set; }
         private CharacterBase.UnitGroups UnitGroup { get; set; }
-        protected Vector3 StartingPosition;
         protected CharacterBase CharacterBase;
         private readonly System.Random _random = new System.Random();
         private EnemyBase _poisonedEnemy;
@@ -27,16 +27,16 @@ namespace Script.WeaponScriptGroup
         public void InitializeWeapon(CharacterBase characterBase , GameObject target = null)
         {
             CharacterBase = characterBase;
+            UnitProperty = CharacterBase.UnitProperty;
+            UnitEffect = CharacterBase.UnitEffect;
+            Distance = CharacterBase.defaultAtkDistance;
+            Damage = CharacterBase.DefaultDamage;
+            Speed = CharacterBase.projectileSpeed * 2f;
+            Sprite = GetComponent<SpriteRenderer>().color;
         }
         public virtual IEnumerator UseWeapon()
         {
             isInUse = true;
-            UnitProperty = CharacterBase.UnitProperty;
-            UnitEffect = CharacterBase.UnitEffect;
-            StartingPosition = transform.position;
-            Distance = CharacterBase.defaultAtkDistance;
-            Damage = CharacterBase.DefaultDamage;
-            Speed = CharacterBase.projectileSpeed * 2f;
             yield return null;
         }
         public void StopUseWeapon(GameObject weapon)
@@ -49,14 +49,6 @@ namespace Script.WeaponScriptGroup
         protected void AtkEffect(EnemyBase enemyObject)
         {
             if (enemyObject == null) return;
-            if (UnitGroup == CharacterBase.UnitGroups.C && EnforceManager.Instance.waterSlowEnemyStunChance)
-            {
-                IsSlowStun(enemyObject);
-            }
-            if (UnitGroup == CharacterBase.UnitGroups.D && EnforceManager.Instance.water2StunChanceAgainstBleeding)
-            {
-                IsSlowBleedStun(enemyObject);
-            }
             switch (UnitEffect)
             {
                 case CharacterBase.UnitEffects.Bind:
@@ -66,10 +58,17 @@ namespace Script.WeaponScriptGroup
                     IsPoison(enemyObject);
                     break;
                 case CharacterBase.UnitEffects.Slow:
-                    IsSlow(enemyObject);
-                    if (EnforceManager.Instance.waterDamageIncreaseDebuff)
+                    if (EnforceManager.Instance.waterFreeze)
                     {
-                        StartCoroutine(IsDamageDebuff(enemyObject));
+                         IsFreeze(enemyObject);
+                    }
+                    else if (EnforceManager.Instance.water2Freeze && Chance(10))
+                    {
+                        IsFreezeE(enemyObject);
+                    }
+                    else
+                    {
+                        IsSlow(enemyObject);
                     }
                     break;
                 case CharacterBase.UnitEffects.Burn:
@@ -80,8 +79,11 @@ namespace Script.WeaponScriptGroup
                     }
                     break;
                 case CharacterBase.UnitEffects.Bleed:
-                    IsBleed(enemyObject);
-                     break;
+                    if (EnforceManager.Instance.physicalBindBleed && enemyObject.isBind)
+                    {
+                        IsBleed(enemyObject);
+                    }
+                    break;
                 case CharacterBase.UnitEffects.None:
                      IsKnockBack(enemyObject);
                      break;
@@ -94,9 +96,26 @@ namespace Script.WeaponScriptGroup
         {
             return _random.Next(100) < percent;
         }
+
+        private void IsFreeze(EnemyBase enemyStatus)
+        {
+            var chance = EnforceManager.Instance.waterFreezeChance ? 25 : 15;
+            if (EnforceManager.Instance.waterFreeze && Chance(chance))
+            {
+                enemyStatus.isFreeze = true;
+            }
+        }
+        private void IsFreezeE(EnemyBase enemyStatus)
+        {
+            var chance = EnforceManager.Instance.water2FreezeChanceBoost ? 20 : 10;
+            if (EnforceManager.Instance.waterFreeze && Chance(chance))
+            {
+                enemyStatus.isFreezeE = true;
+            }
+        }
         private void IsKnockBack(EnemyBase enemyStatus)
         {
-            if (EnforceManager.Instance.darkKnockBackChance && Chance(99))
+            if (EnforceManager.Instance.darkKnockBackChance && Chance(10))
             {
                 enemyStatus.isKnockBack = true;
             }
@@ -115,9 +134,17 @@ namespace Script.WeaponScriptGroup
                 enemyStatus.isBind = true;
             }
         }
-        private static void IsSlow(EnemyBase enemyStatus)
+        private void IsSlow(EnemyBase enemyStatus)
         {
-            enemyStatus.isSlow = true;
+            switch (UnitGroup)
+            {
+                case CharacterBase.UnitGroups.C:
+                    enemyStatus.isSlowC = true;
+                    break;
+                case CharacterBase.UnitGroups.E:
+                    enemyStatus.isSlowE = true;
+                    break;
+            }
         }
         private static void IsPoison(EnemyBase enemyStatus)
         { 
@@ -130,25 +157,7 @@ namespace Script.WeaponScriptGroup
         }
         private void IsBleed(EnemyBase enemyStatus)
         {
-            if (!EnforceManager.Instance.physicalBleedingChance) return;
-            if (_random.Next(100) < 10)
-            {
-                enemyStatus.IsBleed = true;
-            }
-        }
-        private void IsSlowStun(EnemyBase enemyStatus)
-        {
-            if (_random.Next(100) < 40)
-            {
-                enemyStatus.isSlowStun = true;
-            }
-        }
-        private void IsSlowBleedStun(EnemyBase enemyStatus)
-        {
-            if (_random.Next(100) < 10)
-            {
-                enemyStatus.isSlowBleedStun = true;
-            }
+            enemyStatus.IsBleed = true;
         }
         private void IsBurningPoison(EnemyBase enemyStatus)
         {
@@ -160,13 +169,22 @@ namespace Script.WeaponScriptGroup
 
         protected internal float DamageCalculator(float damage,EnemyBase enemyBase, CharacterBase.UnitGroups unitGroup)
         {
+            if (enemyBase.isFreezeE)
+            {
+                damage *= 1.5f;
+            }
+
+            if (enemyBase.isFreeze)
+            {
+                damage *= 1.15f;
+            }
+
             switch (unitGroup)
             {
                 case CharacterBase.UnitGroups.A:
                     if (EnforceManager.Instance.divinePoisonDamageBoost && enemyBase.isPoison)
                     {
-                        const float increaseDamage = 1.25f;
-                        damage *= increaseDamage;
+                        damage *= 1.25f;
                     }
                     if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Divine)
                     {
@@ -174,21 +192,15 @@ namespace Script.WeaponScriptGroup
                     }
                     return damage;
                 case CharacterBase.UnitGroups.B:
-                    if (enemyBase.isBind || enemyBase.isSlow || enemyBase.isBleed || enemyBase.isBurn || enemyBase.isPoison)
+                    if (enemyBase.isFreeze ||enemyBase.isBind || enemyBase.isSlowC || enemyBase.isSlowE || enemyBase.isBleed || enemyBase.isBurn || enemyBase.isPoison)
                     {
-                        if (EnforceManager.Instance.darkStatusAilmentDamageChance)
-                        {
-                            if (_random.Next(100) < 10)
-                            {
-                                damage *= 5f;
-                            }
-                        }
-
                         if (EnforceManager.Instance.darkStatusAilmentDamageBoost)
                         {
-                            damage *= 1.15f;
+                            if (_random.Next(100) < 50)
+                            {
+                                damage *= 1.15f;
+                            }
                         }
-
                     }
                     if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Darkness)
                     {
@@ -196,34 +208,12 @@ namespace Script.WeaponScriptGroup
                     }
                     return damage;
                 case CharacterBase.UnitGroups.C:
-                    if (!EnforceManager.Instance.waterAllyDamageBoost)
-                    {
-                        if (LevelUpRewardManager.Instance.HasUnitInGroup(CharacterBase.UnitGroups.E))
-                        {
-                            damage *= 2f;
-                        }
-                    }
-                    if (enemyBase.isSlow && EnforceManager.Instance.waterSlowEnemyDamageBoost)
-                    {
-                        damage *= 1.2f;
-                    }
                     if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Water)
                     {
                         damage *= 0.8f;
                     }
                     return damage;
                case CharacterBase.UnitGroups.D:
-                   // if (EnforceManager.Instance.physicalDamage35Boost)
-                   // {
-                   //     if(LevelUpRewardManager.Instance.HasUnitInGroup(CharacterBase.UnitGroups.C))
-                   //     {
-                   //         damage *= 1.35f;
-                   //     }
-                   // }
-                   if (EnforceManager.Instance.physicalSlowEnemyDamageBoost && enemyBase.isSlow)
-                   {
-                       damage *= 1.15f;
-                   }
                    if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Physics)
                    {
                        damage *= 0.8f;
@@ -261,10 +251,6 @@ namespace Script.WeaponScriptGroup
                     }
                     return damage; 
                 case CharacterBase.UnitGroups.H:
-                    if (EnforceManager.Instance.fireSlowEnemyDamageBoost && enemyBase.isSlow)
-                    {
-                        damage *= 1.1f;
-                    }
                     if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Burn)
                     {
                         damage *= 0.8f;

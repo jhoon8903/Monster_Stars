@@ -49,8 +49,8 @@ namespace Script.WeaponScriptGroup
 
         public IEnumerator BleedEffect(EnemyBase hitEnemy)
         {
-            bleedDotDamage = DamageCalculator(Damage, hitEnemy, CharacterBase.UnitGroups.D) * 0.1f;
-            const float bleedDuration = 2f;
+            bleedDotDamage = DamageCalculator(Damage, hitEnemy, CharacterBase.UnitGroups.D) * 0.2f;
+            var bleedDuration = EnforceManager.Instance.physicalBleedDuration ? 5 : 3;
             for(var i = 0; i < bleedDuration; i++)
             {
                 hitEnemy.ReceiveDamage(hitEnemy, (int)bleedDotDamage, CharacterBase);

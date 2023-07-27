@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Script.CharacterGroupScript;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
-using Script.RewardScript;
 using UnityEngine;
 
 namespace Script.WeaponScriptGroup
@@ -23,13 +22,11 @@ namespace Script.WeaponScriptGroup
             {
                 _enemyTransform = enemy.transform.position;
             }
-
-            if (EnforceManager.Instance.darkTenthAttackDamageBoost && CharacterBase.GetComponent<UnitB>().atkCount == 10)
+            if (CharacterBase.GetComponent<UnitB>().atkCount == 5)
             {
-                Damage *= 3f;
-                transform.GetComponent<SpriteRenderer>().color = Color.black;
+                Damage *= 2f;
+                CharacterBase.GetComponent<UnitB>().atkCount = 0;
             }
-
             while (Vector3.Distance(transform.position, _enemyTransform) > 0.1f)
             {
                 var position = transform.position;
@@ -39,7 +36,6 @@ namespace Script.WeaponScriptGroup
                 transform.position = position;
                 yield return null;
             }
-
             StopUseWeapon(gameObject);
         }
 

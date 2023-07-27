@@ -1985,8 +1985,10 @@ MonoBehaviour:
   gameManager: {fileID: 149521958}
   castle: {fileID: 1177777540}
   enemyPool: {fileID: 2016604888}
+  blizzardEffect: {fileID: 4729432521868277379}
+  freezeEffect: {fileID: 404912647575583745, guid: 30a5542377116448395fa34b7869a922, type: 3}
   moveSpeedOffset: 0.7
-  globalSlow: 0
+  globalFreeze: 0
 --- !u!114 &329010040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2006,9 +2008,8 @@ MonoBehaviour:
   healthPoint: 0
   maxHealthPoint: 0
   currentHealth: 0
-  lastIncreaseHealthPoint: 0
+  isDead: 0
   isBind: 0
-  isSlow: 0
   isReceiveDamageDebuff: 0
   isSlowC: 0
   isSlowE: 0
@@ -2017,6 +2018,7 @@ MonoBehaviour:
   isBurningPoison: 0
   isPoison: 0
   isKnockBack: 0
+  isFreeze: 0
   isBurn: 0
   isBleed: 0
 --- !u!1 &348132021
@@ -3548,6 +3550,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 602232938}
   m_CullTransparentMesh: 1
+--- !u!224 &619366674 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+  m_PrefabInstance: {fileID: 4729432521868277378}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &636227969
 GameObject:
   m_ObjectHideFlags: 0
@@ -4778,6 +4785,7 @@ RectTransform:
   - {fileID: 1331568213}
   - {fileID: 1542113635}
   - {fileID: 249244819}
+  - {fileID: 619366674}
   m_Father: {fileID: 0}
   m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -8184,29 +8192,27 @@ MonoBehaviour:
   gridManager: {fileID: 8808150501734532426}
   characterPool: {fileID: 1097818334}
   characterList: []
-  divinePoisonDamageBoost: 0
+  divineFifthAttackBoost: 0
+  divineDualAttack: 0
   divineBindDurationBoost: 0
   divineShackledExplosion: 0
-  divineFifthAttackBoost: 0
-  divineAttackBoost: 0
+  divinePoisonDamageBoost: 0
   divineBindChanceBoost: 0
-  divineDualAttack: 0
-  darkTenthAttackDamageBoost: 0
-  darkAttackSpeedBoost: 0
-  darkAttackPowerBoost: 0
-  darkStatusAilmentDamageChance: 0
-  darkKnockBackChance: 0
-  darkStatusAilmentDamageBoost: 0
-  darkRangeIncrease: 0
+  divineRateBoost: 0
+  darkFifthAttackDamageBoost: 0
   darkStatusAilmentSlowEffect: 0
-  waterAttackSpeedBoost: 0
-  waterAllyDamageBoost: 0
-  waterProjectileIncrease: 0
-  waterAttackBoost: 0
-  waterSlowEnemyDamageBoost: 0
-  waterGlobalSlowEffect: 0
-  waterSlowEnemyStunChance: 0
-  waterDamageIncreaseDebuff: 0
+  darkRangeIncrease: 0
+  darkAttackPowerBoost: 0
+  darkStatusAilmentDamageBoost: 0
+  darkAttackSpeedBoost: 0
+  darkKnockBackChance: 0
+  waterFreeze: 0
+  waterFreezeChance: 0
+  waterSlowDurationBoost: 0
+  waterFreezeDamageBoost: 0
+  waterSlowCPowerBoost: 0
+  waterAttackRateBoost: 0
+  waterGlobalFreeze: 0
   physicalAttackSpeedBoost: 0
   physicalDamage35Boost: 0
   physicalDamage6Boost: 0
@@ -10368,6 +10374,108 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2143130367}
   m_CullTransparentMesh: 1
+--- !u!1001 &4729432521868277378
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 841622519}
+    m_Modifications:
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_Pivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_Pivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_RootOrder
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_AnchorMin.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -746.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -25.26001
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195280, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4729432521275195283, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+      propertyPath: m_Name
+      value: BlizzardEffect
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+--- !u!1 &4729432521868277379 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4729432521275195283, guid: b0d31dc962bcb4d34a283069c4e8bb70, type: 3}
+  m_PrefabInstance: {fileID: 4729432521868277378}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8808150501734532425
 GameObject:
   m_ObjectHideFlags: 0

@@ -40,16 +40,16 @@ namespace Script.EnemyManagerScript
         private GameObject damagePopup;
         public bool isDead;
         public bool isBind;
-        public bool isSlow;
         public bool isReceiveDamageDebuff;
         public bool isSlowC;
         public bool isSlowE;
-        public bool isSlowStun;
-        public bool isSlowBleedStun;
         public bool isBurningPoison;
         public bool isPoison;
         public bool isKnockBack;
+        public bool isFreeze;
+        public bool isFreezeE;
         private bool pooling;
+    
         public bool IsPoison
         {
             get => isPoison;
@@ -186,13 +186,6 @@ namespace Script.EnemyManagerScript
                 {
                     ExplosionDamage(detectEnemy, damage, atkUnit);
                 }
-                if (EnforceManager.Instance.water2IceSpikeProjectile)
-                {
-                    if (atkUnit.unitGroup == CharacterBase.UnitGroups.E)
-                    {
-                        StartCoroutine( AtkManager.Instance.SplitAttack(new AttackData(atkUnit.gameObject,WeaponsPool.WeaponType.E),detectEnemy.transform.position));
-                    }
-                }
                 ExpManager.Instance.HandleEnemyKilled(reason);
                 EnemyKilledEvents(detectEnemy);
             }
@@ -226,7 +219,6 @@ namespace Script.EnemyManagerScript
             StageManager.Instance.EnemyDestroyEvent(detectedEnemy);
             detectedEnemy.IsPoison = false;
             detectedEnemy.isPoison = false;
-            detectedEnemy.isSlow = false;
             detectedEnemy.isBind = false;
             detectedEnemy.IsBurn = false;
             detectedEnemy.isBurn = false;
@@ -236,8 +228,6 @@ namespace Script.EnemyManagerScript
             detectedEnemy.isReceiveDamageDebuff = false;
             detectedEnemy.isSlowC = false;
             detectedEnemy.isSlowE = false;
-            detectedEnemy.isSlowStun = false;
-            detectedEnemy.isSlowBleedStun = false;
             detectedEnemy.isBurningPoison = false;
             detectedEnemy.transform.localScale = Vector3.one;
             detectedEnemy.GetComponent<SpriteRenderer>().color = Color.white;

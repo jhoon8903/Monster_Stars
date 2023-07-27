@@ -18,14 +18,15 @@ namespace Script.WeaponScriptGroup
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
+
+            if (CharacterBase.GetComponent<UnitA>().atkCount == 5)
+            {
+                Sprite = Color.yellow;
+                Damage *= 2f;
+                CharacterBase.GetComponent<UnitA>().atkCount = 0;                
+            }
             var useTime = Distance / Speed;
             _rigidbody2D.velocity = new Vector2(0, Speed);
-            if (EnforceManager.Instance.divineFifthAttackBoost && CharacterBase.GetComponent<UnitA>().atkCount == 5)
-            {
-                transform.GetComponent<SpriteRenderer>().color = Color.cyan;
-                Damage *= 2f;
-                CharacterBase.GetComponent<UnitA>().atkCount = 0;
-            }
             yield return new WaitForSeconds(useTime);
             StopUseWeapon(gameObject);
         }

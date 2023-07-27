@@ -14,7 +14,6 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level3Sprite;
         [SerializeField] private Sprite level4Sprite;
         [SerializeField] private Sprite level5Sprite;
-
         public override void Initialize()
         {
             base.Initialize();
@@ -75,24 +74,19 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = (unitPieceLevel-1) * 25f;
+            UnitLevelDamage = unitPieceLevel > 1 ? unitPieceLevel * 3 : 0f;
             Type = Types.Character;
             unitGroup = UnitGroups.D;
-            var increaseDamage = 1f + 6 * EnforceManager.Instance.physicalDamage6Boost / 100f;
-            var damage18Boost = 1f;
-            if (EnforceManager.Instance.physicalDamage18Boost)
-            {
-                damage18Boost += 0.18f;
-            }
-            DefaultDamage = UnitLevelDamage + 17f * increaseDamage * damage18Boost * level switch
+            var increaseDamage = 1f - EnforceManager.Instance.physicalDamageBoost;
+            DefaultDamage = UnitLevelDamage + 23f * increaseDamage * level switch
             {
                 <= 2 => 1f,
                 3 => 1.7f,
                 4 => 2f,
                 _ => 2.3f
             };
-            defaultAtkRate = 1f / (1f + EnforceManager.Instance.physicalAttackSpeedBoost * 7 / 100f);
-            swingSpeed = 1f; 
+            defaultAtkRate = 1f * (1f - EnforceManager.Instance.physicalAttackSpeedBoost) * (1f - AtkManager.Instance.groupDAtkRate);
+            swingSpeed = defaultAtkRate; 
             UnitAtkType = UnitAtkTypes.Circle;
             UnitProperty = UnitProperties.Physics;
             UnitEffect = UnitEffects.Bleed;

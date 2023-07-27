@@ -18,49 +18,46 @@ namespace Script.RewardScript
         public bool divineBindDurationBoost;
         public bool divineShackledExplosion;
         public bool divineFifthAttackBoost;
-        public int divineAttackBoost;
+        public float divineRateBoost;
         public bool divineBindChanceBoost;
         public bool divineDualAttack;
 
         //Darkness Unit B
-        public bool darkTenthAttackDamageBoost;
-        public int darkAttackSpeedBoost;
-        public int darkAttackPowerBoost;
-        public bool darkStatusAilmentDamageChance;
+        public bool darkFifthAttackDamageBoost;
+        public float darkAttackSpeedBoost;
+        public float darkAttackPowerBoost;
         public bool darkKnockBackChance;
         public bool darkStatusAilmentDamageBoost;
         public bool darkRangeIncrease;
         public bool darkStatusAilmentSlowEffect;
 
         //Water1 Unit C
-        public int waterAttackSpeedBoost;
-        public bool waterAllyDamageBoost;
-        public bool waterProjectileIncrease;
-        public int waterAttackBoost;
-        public bool waterSlowEnemyDamageBoost;
-        public bool waterGlobalSlowEffect;
-        public bool waterSlowEnemyStunChance;
-        public bool waterDamageIncreaseDebuff;
+        public bool waterFreeze;
+        public bool waterFreezeChance;
+        public float waterSlowDurationBoost;
+        public bool waterFreezeDamageBoost;
+        public bool waterSlowCPowerBoost;
+        public float waterAttackRateBoost;
+        public bool waterGlobalFreeze;
 
         //Physical Unit D
-        public int physicalAttackSpeedBoost;
-        public bool physicalDamage35Boost;
-        public int physicalDamage6Boost;
-        public bool physicalBleedingChance;
-        public bool physicalSwordAddition;
-        public bool physicalSlowEnemyDamageBoost;
         public bool physicalSwordScaleIncrease;
-        public bool physicalDamage18Boost;
+        public bool physicalSwordAddition;
+        public float physicalAttackSpeedBoost;
+        public bool physicalRatePerAttack;
+        public bool physicalBindBleed;
+        public float physicalDamageBoost;
+        public bool physicalBleedDuration;
 
         //Water2 Unit E
-        public int water2DebuffDurationIncrease;
-        public int water2AttackSpeedIncrease;
-        public bool water2StunChanceAgainstBleeding;
-        public bool water2IceSpikeProjectile;
-        public int water2AttackPowerIncrease;
-        public bool water2ProjectileSpeedIncrease;
-        public bool water2DebuffStrengthIncrease;
-        public bool water2AttackSpeedBuffToAdjacentAllies;
+        public bool water2Freeze;
+        public bool water2SlowPowerBoost;
+        public bool water2FreezeTimeBoost;
+        public float water2DamageBoost;
+        public bool water2FreezeChanceBoost;
+        public bool water2FreezeDamageBoost;
+        public float water2SlowTimeBoost;
+
 
         //Poison Unit F
         public int poisonAttackSpeedIncrease;
@@ -116,8 +113,7 @@ namespace Script.RewardScript
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private GridManager gridManager;
         [SerializeField] private CharacterPool characterPool;
-        [RuntimeInitializeOnLoadMethod]
-        private static void InitializeOnLoad()
+        [RuntimeInitializeOnLoadMethod] private static void InitializeOnLoad()
         {
             var existingInstance = FindObjectOfType<EnforceManager>();
             if (existingInstance == null)
@@ -142,188 +138,171 @@ namespace Script.RewardScript
 
         [Header("\n\nA 신성: Blue\n")]
         // 완료
-        [Header("Green / 9: 중독된 적 추가데미지 25%")] 
-        public bool divinePoisonDamageBoost;
-        // 완료
-        [Header("Green / 3Lv: 속박지속시간 0.5초 증가")] 
-        public bool divineBindDurationBoost;
-        // 완료
-        [Header("Green / 7Lv: 적 제거시 주변 1칸 범위의 100% 폭발데미지 추가")] 
-        public bool divineShackledExplosion;
-        // 완료
         [Header("Blue / 1Lv: 5회 공격마다 100% 추가데미지 (투사체 컬러 변경)")] 
         public bool divineFifthAttackBoost;
         // 완료
-        [Header("Blue / 13Lv: 공격력 12% 증가 (최대 4회)")] 
-        public int divineAttackBoost; 
-        protected internal void DivineAttackDamageIncrease()
-        {   
-            if (divineAttackBoost >= 4) return;
-            divineAttackBoost++;
-        }
+        [Header("Purple / 3Lv: 앞 뒤 동시공격")]
+        public bool divineDualAttack; 
         // 완료
-        [Header("Purple / Lv5: 속박확률 20% 증가 (20% > 40%)")] 
+        [Header("Green / 5Lv: 속박지속시간 0.5초 증가")] 
+        public bool divineBindDurationBoost;
+        // 완료
+        [Header("Blue / 7Lv: 적 제거시 주변 1칸 범위의 100% 폭발데미지 추가")] 
+        public bool divineShackledExplosion;
+        // 완료
+        [Header("Green / 9Lv: 중독된 적 추가데미지 25%")] 
+        public bool divinePoisonDamageBoost;
+        // 완료 
+        [Header("Purple / Lv11: 속박확률 20% 증가 (30% > 50%)")] 
         public bool divineBindChanceBoost;
         // 완료
-        [Header("Purple / 11Lv: 백어텍 가능")]
-        public bool divineDualAttack;
+        [Header("Blue / 13Lv: 공격속도 9% 증가 (최대 4회)")] 
+        public float divineRateBoost; 
+        protected internal void DivineRateBoost()
+        {   
+            if (divineRateBoost >= 0.36f) return;
+            divineRateBoost+= 0.09f;
+        }
 
 
         [Header("\n\nB 어둠: Green\n")]
-        // 완료 
-        [Header("Green / 5Lv: 10회 공격마다 300% 추가 데미지 (투사체 컬러 변경)")] 
-        public bool darkTenthAttackDamageBoost;
         // 완료
-        [Header("Green / Default: 공격속도 6% 증가 (최대 4회)")] 
-        public int darkAttackSpeedBoost;
-        protected internal void DarkAttackSpeedIncrease()
+        [Header("Green / 1Lv: 5회 공격마다 100% 추가 데미지")] 
+        public bool darkFifthAttackDamageBoost;
+        // 완료
+        [Header("Blue / 3Lv: 상태이상 적 공격시 1초 이동속도 20% 감소")] 
+        public bool darkStatusAilmentSlowEffect;
+        // 완료
+        [Header("Purple / 5Lv: 사거리 1 증가")] 
+        public bool darkRangeIncrease;
+        // 완료
+        [Header("Green / 7Lv: 공격력 4% 증가 (최대 6회)")] 
+        public float darkAttackPowerBoost; 
+        protected internal void DarkAttackDamageBoost()
         {
-            if(darkAttackSpeedBoost >= 4) return;
-            darkAttackSpeedBoost++;
+            if (darkAttackPowerBoost >= 0.24f) return;
+            darkAttackPowerBoost += 0.04f;
         }
         // 완료
-        [Header("Green / 9Lv: 공격력 6% 증가 (최대 4회)")] 
-        public int darkAttackPowerBoost; 
-        protected internal void DarkAttackDamageIncrease()
-        {
-            if (darkAttackPowerBoost >= 4) return;
-            darkAttackPowerBoost++;
-        }
-        // 완료
-        [Header("Blue / 11Lv: 상태이상 적 공격시 10% 확률로 500% 추가데미지")] 
-        public bool darkStatusAilmentDamageChance;
-        // 완료
-        [Header("Blue / 3Lv: 10% 확률로 적 밀침 (1칸)")] 
-        public bool darkKnockBackChance;
-        // 완료
-        [Header("Blue / Default: 상태이상 적 공격시 15% 추가데미지")] 
+        [Header("Purple / 9Lv: 상태이상 적 공격시 50% 확률로 50% 추가데미지")] 
         public bool darkStatusAilmentDamageBoost;
         // 완료
-        [Header("Purple / 7Lv: 사거리 1 증가")] 
-        public bool darkRangeIncrease;
-        // 완료 
-        [Header("Purple / 13Lv: 상태이상 적 공격시 1초 이동속도 20% 감소")] 
-        public bool darkStatusAilmentSlowEffect;
+        [Header("Blue / 11: 공격속도 9% 증가 (최대 4회)")] 
+        public float darkAttackSpeedBoost;
+        protected internal void DarkAttackSpeedBoost()
+        {
+            if(darkAttackSpeedBoost >= 0.36f) return;
+            darkAttackSpeedBoost += 0.09f;
+        }
+        // 완료
+        [Header("Blue / 13Lv: 10% 확률로 적 밀침 (0.5칸)")] 
+        public bool darkKnockBackChance;
 
 
         [Header("\n\nC 물: Purple\n")]
         // 완료
-        [Header("Green / 5Lv: 공격속도 6% 증가 (최대 4회)")] 
-        public int waterAttackSpeedBoost; 
-        protected internal void WaterAttackSpeedIncrease()
-        {
-            if (waterAttackSpeedBoost >= 4) return;
-            waterAttackSpeedBoost++;
-        }
-        // 완료 
-        [Header("Green / Default: 같은 속성(물) 유닛 존재시 둔화 비활성화 200% 추가데미지")] 
-        public bool waterAllyDamageBoost;
+        [Header("Blue / 1Lv: 15% 확률로 적을 1초간 빙결(이동불가)시킵니다.")]
+        public bool waterFreeze;
         // 완료
-        [Header("Blue / 11Lv: 발사체의 갯수가 2개로 변화합니다.")] 
-        public bool waterProjectileIncrease;
+        [Header("Blue / 3Lv: 빙결 확률이 10% 증가합니다.")]
+        public bool waterFreezeChance;
         // 완료
-        [Header("Blue / 13Lv: 공격력 12% 증가 (최대 4회)")] 
-        public int waterAttackBoost; 
-        protected internal void WaterAttackDamageIncrease()
+        [Header("Green / 5Lv: 둔화 지속시간 0.2초 증가 (최대 5회 / 1초)")]
+        public float waterSlowDurationBoost;
+        protected internal void WaterSlowDurationBoost()
         {
-            if (waterAttackBoost >= 4) return;
-            waterAttackBoost++;
+            if (waterSlowDurationBoost >= 1f) return;
+            waterSlowDurationBoost += 0.2f;
         }
         // 완료
-        [Header("Blue / 7Lv: 둔화 적 공격 시 20% 추가데미지")] 
-        public bool waterSlowEnemyDamageBoost;
+        [Header("Purple / 7Lv: C 유닛에게 빙결된 적은 받는 피해 15% 증가")]
+        public bool waterFreezeDamageBoost;
         // 완료
-        [Header("Purple / Default: 100회 공격시 모든적 20% 둔화 1초 (웨이브마다 초기화)")] 
-        public bool waterGlobalSlowEffect;
+        [Header("Blue / 9Lv: 둔화강도 15% 증가")] 
+        public bool waterSlowCPowerBoost;
         // 완료
-        [Header("Purple / 3Lv: 둔화상태의 적 공격시 40% 확률로 0.1초간 기절")] 
-        public bool waterSlowEnemyStunChance;
+        [Header("Green / 11Lv: 공격속도 4% 증가 (최대 6회)")]
+        public float waterAttackRateBoost;
+        protected internal void WaterAttackRateBoost()
+        {
+              if ( waterAttackRateBoost >= 0.24f) return;
+              waterAttackRateBoost += 0.06f;
+        }
         // 완료
-        [Header("Purple / 9Lv: 피격당한 적은 5초간 받는데미지 15% 증가")] 
-        public bool waterDamageIncreaseDebuff;
+        [Header("Purple / 13Lv: 퍼즐위 모든 C 유닛의 공격 횟수의 합이 100이면 될 때마다 눈보라를 일으켜 보스를 제외한 모든 적을 빙결")]
+        public bool waterGlobalFreeze;
 
 
         [Header("\n\nD 물리: Green\n")]
-        // 완료 
-        [Header("Green / 9Lv: 공격속도 7% 증가 (최대 4회)")] 
-        public int physicalAttackSpeedBoost; 
-        protected internal void PhysicalAttackSpeedIncrease()
-        {
-            if (physicalAttackSpeedBoost >= 4) return;
-            physicalAttackSpeedBoost++;
-        }
         // 완료
-        [Header("Green / Default: 다른 물리 속성 유닛이 존재시 데미지 35% 증가")] 
-        public bool physicalDamage35Boost;
-        // 완료
-        [Header("Green / 5Lv: 공격력 6% 증가 (최대 4회)")] 
-        public int physicalDamage6Boost; 
-        protected internal void PhysicalAttackDamageIncrease()
-        {
-            if (physicalDamage6Boost >= 4) return;
-            physicalDamage6Boost++;
-        }
-        // 완료 
-        [Header("Blue / 11Lv: 공격 시 10% 확률로 10% 데미지를 주는 2초간 출혈")] 
-        public bool physicalBleedingChance;
-        // 완료
-        [Header("Blue / Default: 공격 시 검 한자루 추가")] 
-        public bool physicalSwordAddition;
-        // 완료
-        [Header("BLue / 7Lv: 둔화된 적을 공격할 시 데미지가 15% 증가")] 
-        public bool physicalSlowEnemyDamageBoost;
-        // 완료
-        [Header("Purple / 3Lv: 검의 크기가 100% 증가")] 
+        [Header("Purple / 1Lv: 검의 크기가 100% 증가")] 
         public bool physicalSwordScaleIncrease;
         // 완료
-        [Header("Purple / 13Lv: 공격력 18% 증가")] 
-        public bool physicalDamage18Boost;
+        [Header("Purple / 3Lv: 공격 시 검 한자루 추가")] 
+        public bool physicalSwordAddition;
+        // 완료
+        [Header("Blue / 5Lv: 공격속도 9% 증가 (최대 4회)")] 
+        public float physicalAttackSpeedBoost; 
+        protected internal void PhysicalAttackSpeedIncrease()
+        {
+            if (physicalAttackSpeedBoost >= 0.36f) return;
+            physicalAttackSpeedBoost += 0.09f;
+        }
+        // 완료
+        [Header("Blue / 7Lv: 해당 웨이브에서 유닛 3회 공격당 공속 1% 증가 (최대 60%)")]
+        public bool physicalRatePerAttack;
+        // 완료
+        [Header("Blue / 9Lv: 속박에 걸린적을 공격하면 초당 20% 데미지의 3초간 출혈 발생")]
+        public bool physicalBindBleed;
+        // 완료
+        [Header("Green / 11Lv: 공격력 3% 증가 (최대 6회)")]
+        public float physicalDamageBoost;
+        protected internal void PhysicalDamageBoost()
+        {
+            if (physicalDamageBoost >= 0.18f) return;
+            physicalDamageBoost += 0.06f;
+        }
+        // 완료
+        [Header("Green / 13Lv: 출혈 지속시간 2초 증가")]
+        public bool physicalBleedDuration;
 
 
         [Header("\n\nE 물: Green\n")]
+        // 완료
+        [Header("Blue / 1Lv: 타격시 10% 확률로 적을 1초간 빙결 (이동불가)")]
+        public bool water2Freeze;
+        // 완료
+        [Header("Purple / 3Lv: 둔화강도가 10% 증가합니다.")]
+        public bool water2SlowPowerBoost;
+        // 완료
+        [Header("Blue / 5Lv: 빙결지속시간 0.5초 증가")] 
+        public bool water2FreezeTimeBoost;
+        // 완료
+        [Header("Green / 7Lv: 공격력 4% 증가 (최대 6회)")]
+        public float water2DamageBoost;
+        protected internal void Water2DamageBoost()
+        {
+            if (water2DamageBoost >= 0.24f) return;
+            water2DamageBoost += 0.04f;
+        }
+        // 완료
+        [Header("Purple / 9Lv: 빙결확률 10% 증가")] 
+        public bool water2FreezeChanceBoost;
         // 완료 
-        [Header("Green / Default: 둔화지속시간 0.1초씩 증가 (최대 0.5초 / 5회)")] 
-        public int water2DebuffDurationIncrease; 
-        protected internal void Water2DebuffDurationIncrease()
+        [Header("Blue / 11Lv: 빙결당한적은 받는 피해가 15% 증가")]
+        public bool water2FreezeDamageBoost;
+        // 완료
+        [Header("Green / 13Lv: 둔화지속시간 0.1초 증가 (최대 0.5초)")]
+        public float water2SlowTimeBoost;
+        protected internal void Water2SlowTimeBoost()
         {
-            if (water2DebuffDurationIncrease >= 5) return;
-            water2DebuffDurationIncrease++;
+            if (water2SlowTimeBoost >= 0.5f) return;
+            water2SlowTimeBoost += 0.1f;
         }
-        // 완료
-        [Header("Green / 7Lv: 공격속도 6% 증가 (최대 4회)")] 
-        public int water2AttackSpeedIncrease; 
-        protected internal void Water2AttackSpeedIncrease()
-        {
-            if (water2AttackSpeedIncrease >= 4) return;
-            water2AttackSpeedIncrease++;
-        }
-        // 완료
-        [Header("Green / 11Lv: 출혈 중인 적을 공격 시 10% 확률로 0.5초 기절")] 
-        public bool water2StunChanceAgainstBleeding;
-        // 완료
-        [Header("Blue / 9Lv: 적을 죽이면 그 위치에서 좌우로 고드름 발사")] 
-        public bool water2IceSpikeProjectile;
-        // 완료
-        [Header("Blue / 5Lv: 공격력 12% 증가 (최대 4회)")] 
-        public int water2AttackPowerIncrease; 
-        protected internal void Water2AttackPowerIncrease()
-        {
-            if (water2AttackPowerIncrease >= 4) return;
-            water2AttackPowerIncrease++;
-        }
-        // 완료
-        [Header("BLue / 3Lv: 투사체 속도 50% 증가")] 
-        public bool water2ProjectileSpeedIncrease;
-        // 완료
-        [Header("Purple / Default: 둔화 강도 10% 증가 (30% => 40%)")] 
-        public bool water2DebuffStrengthIncrease;
-        // 완료 
-        [Header("Purple / 13Lv: 주위의 아군 공격속도 10% 증가")] 
-        public bool water2AttackSpeedBuffToAdjacentAllies;
 
 
         [Header("\n\nF 독: Green\n")]
-        // 완료
+
         [Header("Green / Default: 공격속도 6% 증가 (최대4회)")] 
         public int poisonAttackSpeedIncrease; 
         protected internal void PoisonAttackSpeedIncrease()
@@ -331,7 +310,7 @@ namespace Script.RewardScript
             if(poisonAttackSpeedIncrease >= 4) return;
             poisonAttackSpeedIncrease++;
         }
-        // 완료
+
         [Header("Green / 3Lv: 중독최대중첩 수 1회 증가 (최대 5)")] 
         public int poisonMaxStackIncrease; 
         protected internal void PoisonMaxStackIncrease()
@@ -339,7 +318,7 @@ namespace Script.RewardScript
             if (poisonMaxStackIncrease >= 5) return;
             poisonMaxStackIncrease++;
         }
-        // 완료
+
         [Header("Green / 11Lv: 중독 데미지 10% 증가 (최대 40% / 최대 3회)")] 
         public int poisonDamageAttackPowerIncrease; 
         protected internal void PoisonDamageAttackPowerIncrease()
@@ -347,28 +326,28 @@ namespace Script.RewardScript
             if (poisonDamageAttackPowerIncrease >= 3) return;
             poisonDamageAttackPowerIncrease++;
         }
-        // 완료
+
         [Header("Blue / 5Lv: 투사체 1개 증가")] 
         public bool poisonProjectileIncrease;
-        // 완료
+
         [Header("Blue / 9Lv: 사거리 1칸 증가")] 
         public bool poisonRangeIncrease;
-        // 완료
+
         [Header("Blue / 13Lv: 출혈중인 적 공격시 50% 데미지 증가")] 
         public bool poisonBleedingEnemyDamageBoost;
-        // 완료
+ 
         [Header("Purple / Default: 중독 된 적의 체력이 7% 미만이면 즉사")] 
         public bool poisonEnemyInstantKill;
-        // 완료
+   
         [Header("Purple / 7Lv: 초당 10% 데미지를 가하는 중독을 4초간 발생")] 
         public bool poisonPerHitEffect;
 
 
         [Header("\n\nG 불: Blue\n")]
-        // 완료 
+
         [Header("Green/ 3Lv: 독에 걸린 적 공격시 15% 데미지 추가")] 
         public bool fire2PoisonDamageIncrease;
-        // 완료 
+
         [Header("Green/ 9Lv: 공격속도 6% 증가 (최대 4회)")] 
         public int fire2AttackSpeedIncrease; 
         protected internal void Fire2AttackSpeedIncrease()
@@ -376,10 +355,10 @@ namespace Script.RewardScript
             if (fire2AttackSpeedIncrease >= 4) return;
             fire2AttackSpeedIncrease++;
         }
-        // 완료
+
         [Header("Green/ 11Lv: 화상 최대 중첩 3회 증가")] 
         public bool fire2BurnStackIncrease;
-        // 완료
+
         [Header("Blue/ Default: 공격력 12% 증가 (최대 4회)")] 
         public int fire2AttackPowerIncrease; 
         protected internal void Fire2AttackPowerIncrease()
@@ -387,10 +366,10 @@ namespace Script.RewardScript
             if (fire2AttackPowerIncrease >= 4) return;
             fire2AttackPowerIncrease++;
         }
-        // 완료
+  
         [Header("Blue/ 13Lv: 독에 걸린 적 공격시 20% 확률로 0.5초 기절")] 
         public bool fire2StunChance;
-        // 완료
+  
         [Header("Blue/ 5Lv: 화상 데미지 10% 증가 (최대 40% / 최대 3회)")]
         public int fire2BurningDamageBoost;
         protected internal void Fire2BurningDamageBoost()
@@ -398,16 +377,16 @@ namespace Script.RewardScript
             if(fire2BurningDamageBoost >= 3) return;
             fire2BurningDamageBoost++;
         }
-        // 완료
+ 
         [Header("Purple/ Default: 검의 크기가 100% 증가")] 
         public bool fire2SwordSizeIncrease;
-        // 완료
+  
         [Header("Purple/ 7Lv: 더이상 화상을 발생시키지 않는 대신 150% 데미지 추가")] 
         public bool fire2NoBurnDamageIncrease;
 
 
         [Header("\n\nH 불: Blue\n")]
-        // 완료
+
         [Header("Green/ Default: 화상 중첩수 증가 (최대 5회)")] 
         public int fireImageOverlapIncrease = 1 ; 
         protected internal void FireOverLapIncrease()
@@ -415,7 +394,7 @@ namespace Script.RewardScript
             if (fireImageOverlapIncrease >= 5) return;
             fireImageOverlapIncrease++;
         }
-        // 완료
+
         [Header("Green/ 9Lv: 공격속도 6% 증가 (최대 4회)")] 
         public int fireAttackSpeedBoost; 
         protected internal void FireAttackSpeedBoost()
@@ -423,22 +402,22 @@ namespace Script.RewardScript
             if (fireAttackSpeedBoost >= 4) return;
             fireAttackSpeedBoost++;
         }
-        // 완료
+
         [Header("Green/ 11Lv: 둔화중인 적을 공격시 10% 데미지 추가")]
         public bool fireSlowEnemyDamageBoost;
-        // 완료
+
         [Header("Blue/ 3Lv: 투사체 속도가 100% 증가, 반드시 명중")] 
         public bool fireProjectileSpeedIncrease;
-        // 완료
+
         [Header("Blue/ 7Lv: 화상에 걸린 적 제거시 주변 1칸 범위의 200% 폭발데미지 추가")] 
         public bool fireBurnedEnemyExplosion;
-        // 완료
+
         [Header("Purple/ 5Lv: 적 적중시 가장 가까운적에게 투사체 튕김")] 
         public bool fireProjectileBounceDamage;
-        // 완료 
+  
         [Header("Purple/ Default: 적을 공격하면 5초간 화상 초당 10% 데미지")] 
         public bool fireBurnPerAttackEffect;
-        // 완료
+
         [Header("Purple/ 13Lv: 투사체가 튕기는 횟수 증가")] 
         public bool fireProjectileBounceIncrease;
        
@@ -574,45 +553,42 @@ namespace Script.RewardScript
                 divineBindDurationBoost = divineBindDurationBoost,
                 divineShackledExplosion = divineShackledExplosion,
                 divineFifthAttackBoost = divineFifthAttackBoost,
-                divineAttackBoost = divineAttackBoost,
+                divineRateBoost = divineRateBoost,
                 divineBindChanceBoost = divineBindChanceBoost,
                 divineDualAttack = divineDualAttack,
                 //Darkness Unit B
-                darkTenthAttackDamageBoost = darkTenthAttackDamageBoost,
+                darkFifthAttackDamageBoost = darkFifthAttackDamageBoost,
                 darkAttackSpeedBoost = darkAttackSpeedBoost,                        
                 darkAttackPowerBoost = darkAttackPowerBoost,
-                darkStatusAilmentDamageChance = darkStatusAilmentDamageChance,
                 darkKnockBackChance = darkKnockBackChance,
                 darkStatusAilmentDamageBoost = darkStatusAilmentDamageBoost,
                 darkRangeIncrease = darkRangeIncrease,
                 darkStatusAilmentSlowEffect = darkStatusAilmentSlowEffect,
                 //Water1 Unit C
-                waterAttackSpeedBoost = waterAttackSpeedBoost, 
-                waterAllyDamageBoost = waterAllyDamageBoost, 
-                waterProjectileIncrease = waterProjectileIncrease, 
-                waterAttackBoost = waterAttackBoost, 
-                waterSlowEnemyDamageBoost = waterSlowEnemyDamageBoost, 
-                waterGlobalSlowEffect = waterGlobalSlowEffect, 
-                waterSlowEnemyStunChance = waterSlowEnemyStunChance, 
-                waterDamageIncreaseDebuff = waterDamageIncreaseDebuff,
+                waterFreeze = waterFreeze,
+                waterFreezeChance = waterFreezeChance,
+                waterSlowDurationBoost = waterSlowDurationBoost,
+                waterFreezeDamageBoost = waterFreezeDamageBoost,
+                waterSlowCPowerBoost =  waterSlowCPowerBoost,
+                waterAttackRateBoost = waterAttackRateBoost,
+                waterGlobalFreeze = waterGlobalFreeze, 
                 //Physical Unit D
                 physicalAttackSpeedBoost = physicalAttackSpeedBoost,
-                physicalDamage35Boost = physicalDamage35Boost,
-                physicalDamage6Boost = physicalDamage6Boost,
-                physicalBleedingChance = physicalBleedingChance,
                 physicalSwordAddition = physicalSwordAddition,
-                physicalSlowEnemyDamageBoost = physicalSlowEnemyDamageBoost,
                 physicalSwordScaleIncrease = physicalSwordScaleIncrease,
-                physicalDamage18Boost = physicalDamage18Boost,
+                physicalRatePerAttack = physicalRatePerAttack, 
+                physicalBindBleed = physicalBindBleed,
+                physicalDamageBoost = physicalDamageBoost,
+                physicalBleedDuration = physicalBleedDuration,
                 //Water2 Unit E
-                water2DebuffDurationIncrease = water2DebuffDurationIncrease,
-                water2AttackSpeedIncrease = water2AttackSpeedIncrease,
-                water2StunChanceAgainstBleeding = water2StunChanceAgainstBleeding,
-                water2IceSpikeProjectile = water2IceSpikeProjectile,
-                water2AttackPowerIncrease = water2AttackPowerIncrease,
-                water2ProjectileSpeedIncrease = water2ProjectileSpeedIncrease,
-                water2DebuffStrengthIncrease = water2DebuffStrengthIncrease,
-                water2AttackSpeedBuffToAdjacentAllies = water2AttackSpeedBuffToAdjacentAllies,
+                water2Freeze = water2Freeze,
+                water2SlowPowerBoost = water2SlowPowerBoost,
+                water2FreezeTimeBoost = water2FreezeTimeBoost,
+                water2DamageBoost = water2DamageBoost,
+                water2FreezeChanceBoost = water2FreezeChanceBoost,
+                water2FreezeDamageBoost = water2FreezeDamageBoost,
+                water2SlowTimeBoost = water2SlowTimeBoost,
+                
                 //Poison Unit F
                 poisonAttackSpeedIncrease = poisonAttackSpeedIncrease,
                 poisonMaxStackIncrease = poisonMaxStackIncrease,
@@ -673,45 +649,41 @@ namespace Script.RewardScript
             divineBindDurationBoost = data.divineBindDurationBoost;
             divineShackledExplosion = data.divineShackledExplosion;
             divineFifthAttackBoost = data.divineFifthAttackBoost;
-            divineAttackBoost = data.divineAttackBoost;
             divineBindChanceBoost = data.divineBindChanceBoost;                                                        
             divineDualAttack = data.divineDualAttack;
+            divineRateBoost = data.divineRateBoost;
             //Darkness Unit B
-            darkTenthAttackDamageBoost = data.darkTenthAttackDamageBoost;
+            darkFifthAttackDamageBoost = data.darkFifthAttackDamageBoost;
             darkAttackSpeedBoost = data.darkAttackSpeedBoost;
             darkAttackPowerBoost = data.darkAttackPowerBoost;
-            darkStatusAilmentDamageChance = data.darkStatusAilmentDamageChance;
             darkKnockBackChance = data.darkKnockBackChance;
             darkStatusAilmentDamageBoost = data.darkStatusAilmentDamageBoost;
             darkRangeIncrease = data.darkRangeIncrease;
             darkStatusAilmentSlowEffect = data.darkStatusAilmentSlowEffect;
             //Water1 Unit C
-            waterAttackSpeedBoost = data.waterAttackSpeedBoost; 
-            waterAllyDamageBoost = data.waterAllyDamageBoost; 
-            waterProjectileIncrease = data.waterProjectileIncrease; 
-            waterAttackBoost = data.waterAttackBoost; 
-            waterSlowEnemyDamageBoost = data.waterSlowEnemyDamageBoost; 
-            waterGlobalSlowEffect = data.waterGlobalSlowEffect; 
-            waterSlowEnemyStunChance = data.waterSlowEnemyStunChance; 
-            waterDamageIncreaseDebuff = data.waterDamageIncreaseDebuff;
+            waterFreeze = data.waterFreeze;
+            waterFreezeChance = data.waterFreezeChance;
+            waterSlowDurationBoost = data.waterSlowDurationBoost;
+            waterFreezeDamageBoost = data.waterFreezeDamageBoost;
+            waterSlowCPowerBoost =  data.waterSlowCPowerBoost;
+            waterAttackRateBoost = data.waterAttackRateBoost;
+            waterGlobalFreeze = data.waterGlobalFreeze;
             //Physical Unit D
             physicalAttackSpeedBoost = data.physicalAttackSpeedBoost;
-            physicalDamage35Boost = data.physicalDamage35Boost;
-            physicalDamage6Boost = data.physicalDamage6Boost;
-            physicalBleedingChance = data.physicalBleedingChance;
             physicalSwordAddition = data.physicalSwordAddition;
-            physicalSlowEnemyDamageBoost = data.physicalSlowEnemyDamageBoost;
             physicalSwordScaleIncrease = data.physicalSwordScaleIncrease;
-            physicalDamage18Boost = data.physicalDamage18Boost;
+            physicalRatePerAttack = data.physicalRatePerAttack; 
+            physicalBindBleed = data.physicalBindBleed;
+            physicalDamageBoost = data.physicalDamageBoost;
+            physicalBleedDuration = data.physicalBleedDuration;
             //Water2 Unit E
-            water2DebuffDurationIncrease = data.water2DebuffDurationIncrease;
-            water2AttackSpeedIncrease = data.water2AttackSpeedIncrease;
-            water2StunChanceAgainstBleeding = data.water2StunChanceAgainstBleeding;
-            water2IceSpikeProjectile = data.water2IceSpikeProjectile;
-            water2AttackPowerIncrease = data.water2AttackPowerIncrease;
-            water2ProjectileSpeedIncrease = data.water2ProjectileSpeedIncrease;
-            water2DebuffStrengthIncrease = data.water2DebuffStrengthIncrease;
-            water2AttackSpeedBuffToAdjacentAllies = data.water2AttackSpeedBuffToAdjacentAllies;
+            water2Freeze = data.water2Freeze;
+            water2SlowPowerBoost = data.water2SlowPowerBoost;
+            water2FreezeTimeBoost = data.water2FreezeTimeBoost;
+            water2DamageBoost = data.water2DamageBoost;
+            water2FreezeChanceBoost = data.water2FreezeChanceBoost;
+            water2FreezeDamageBoost = data.water2FreezeDamageBoost;
+            water2SlowTimeBoost = data.water2SlowTimeBoost;
             //Poison Unit F
             poisonAttackSpeedIncrease = data.poisonAttackSpeedIncrease;
             poisonMaxStackIncrease = data.poisonMaxStackIncrease;

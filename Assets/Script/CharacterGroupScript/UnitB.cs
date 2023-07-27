@@ -100,17 +100,17 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = (unitPieceLevel-1) * 16;
+            UnitLevelDamage = unitPieceLevel > 1 ? unitPieceLevel * 2 + 8f : 0;
             Type = Types.Character;
             unitGroup = UnitGroups.B;
-            DefaultDamage = UnitLevelDamage + 10f * (1f + 6 * EnforceManager.Instance.divineAttackBoost / 100f) * level switch
+            DefaultDamage = UnitLevelDamage + 38f * (1f + EnforceManager.Instance.darkAttackPowerBoost) * level switch
             {
                <= 2 => 1f,
                 3 => 1.7f,
                 4 => 2f,
                 _ => 2.3f
             };
-            defaultAtkRate = 1.4f / (1f + 6 * EnforceManager.Instance.darkAttackSpeedBoost / 100f);
+            defaultAtkRate = 1.2f * (1f - EnforceManager.Instance.darkAttackSpeedBoost);
             projectileSpeed = 1f;
             UnitAtkType = UnitAtkTypes.Projectile;
             UnitProperty = UnitProperties.Darkness;
