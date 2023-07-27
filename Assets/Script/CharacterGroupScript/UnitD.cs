@@ -14,6 +14,7 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level3Sprite;
         [SerializeField] private Sprite level4Sprite;
         [SerializeField] private Sprite level5Sprite;
+        public float groupDAtkRate;
         public override void Initialize()
         {
             base.Initialize();
@@ -85,7 +86,7 @@ namespace Script.CharacterGroupScript
                 4 => 2f,
                 _ => 2.3f
             };
-            defaultAtkRate = 1f * (1f - EnforceManager.Instance.physicalAttackSpeedBoost) * (1f - AtkManager.Instance.groupDAtkRate);
+            defaultAtkRate = 1f * (1f - EnforceManager.Instance.physicalAttackSpeedBoost) * (1f - groupDAtkRate);
             swingSpeed = defaultAtkRate; 
             UnitAtkType = UnitAtkTypes.Circle;
             UnitProperty = UnitProperties.Physics;

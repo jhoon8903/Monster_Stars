@@ -184,34 +184,31 @@ namespace Script.RewardScript
                 case ExpData.Types.Water2SlowTimeBoost:
                     EnforceManager.Instance.Water2SlowTimeBoost();
                     break;
-
-
-
-
-                case ExpData.Types.PoisonAttackSpeedIncrease:
-                    EnforceManager.Instance.PoisonAttackSpeedIncrease();
-                    break;
-                case ExpData.Types.PoisonMaxStackIncrease:
-                    EnforceManager.Instance.PoisonMaxStackIncrease();
-                    break;
-                case ExpData.Types.PoisonDamageAttackPowerIncrease:
-                    EnforceManager.Instance.PoisonDamageAttackPowerIncrease();
-                    break;
-                case ExpData.Types.PoisonProjectileIncrease:
-                    EnforceManager.Instance.poisonProjectileIncrease = true;
-                    break;
-                case ExpData.Types.PoisonRangeIncrease:
-                    EnforceManager.Instance.poisonRangeIncrease = true;
+                // F
+                case ExpData.Types.PoisonPerHitEffect:
+                    EnforceManager.Instance.poisonPerHitEffect = true;
                     break;
                 case ExpData.Types.PoisonBleedingEnemyDamageBoost:
                     EnforceManager.Instance.poisonBleedingEnemyDamageBoost = true;
                     break;
-                case ExpData.Types.PoisonEnemyInstantKill:
-                    EnforceManager.Instance.poisonEnemyInstantKill = true;
+                case ExpData.Types.PoisonDamagePerBoost:
+                    EnforceManager.Instance.poisonDamagePerBoost = true;
                     break;
-                case ExpData.Types.PoisonPerHitEffect:
-                    EnforceManager.Instance.poisonPerHitEffect = true;
+                case ExpData.Types.PoisonDamageBoost:
+                    EnforceManager.Instance.poisonDamageBoost = true;
                     break;
+                case ExpData.Types.PoisonDotDamageBoost:
+                   EnforceManager.Instance.poisonDotDamageBoost = true;
+                   break;
+                case ExpData.Types.PoisonAttackSpeedIncrease:
+                    EnforceManager.Instance.PoisonAttackSpeedIncrease();
+                    break;
+                case ExpData.Types.PoisonDurationBoost:
+                    EnforceManager.Instance.poisonDurationBoost = true;
+                    break;
+                // G
+
+
                 case ExpData.Types.Fire2PoisonDamageIncrease:
                     EnforceManager.Instance.fire2PoisonDamageIncrease = true;
                     break;
@@ -546,46 +543,44 @@ namespace Script.RewardScript
                     if (UnitPieceLevel(CharacterBase.UnitGroups.E) < 13) return false;
                     if (EnforceManager.Instance.water2SlowTimeBoost >= 0.5f) return false;
                     break;
-
                 //Unit F
-                case ExpData.Types.PoisonAttackSpeedIncrease:
+                case ExpData.Types.PoisonPerHitEffect:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
-                    if (EnforceManager.Instance.poisonAttackSpeedIncrease >= 4) return false;
-                    break;
-                case ExpData.Types.PoisonMaxStackIncrease:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.F) < 3) return false;
-                    if (EnforceManager.Instance.poisonMaxStackIncrease >= 5) return false;
-                    break;
-                case ExpData.Types.PoisonDamageAttackPowerIncrease:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.F) < 11) return false;
-                    if (EnforceManager.Instance.poisonDamageAttackPowerIncrease >= 3) return false;
-                    break;
-                case ExpData.Types.PoisonProjectileIncrease:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.F) < 5) return false;
-                    if (EnforceManager.Instance.poisonProjectileIncrease) return false;
-                    break;
-                case ExpData.Types.PoisonRangeIncrease:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.F) < 9) return false;
-                    if (EnforceManager.Instance.poisonRangeIncrease) return false;
+                    if (EnforceManager.Instance.poisonPerHitEffect) return false;
                     break;
                 case ExpData.Types.PoisonBleedingEnemyDamageBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.F) < 13) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.F) < 3) return false;
                     if (EnforceManager.Instance.poisonBleedingEnemyDamageBoost) return false;
                     break;
-                case ExpData.Types.PoisonEnemyInstantKill:
+                case ExpData.Types.PoisonDamagePerBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
-                    if (EnforceManager.Instance.poisonEnemyInstantKill) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.F) < 5) return false;
+                    if (EnforceManager.Instance.poisonDamagePerBoost) return false;
                     break;
-                case ExpData.Types.PoisonPerHitEffect:
+                case ExpData.Types.PoisonDamageBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.F) < 7) return false;
-                    if (EnforceManager.Instance.poisonPerHitEffect) return false;
+                    if (EnforceManager.Instance.poisonDamageBoost) return false;
                     break;
+                case ExpData.Types.PoisonDotDamageBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.F) < 9) return false;
+                    if (!EnforceManager.Instance.poisonPerHitEffect) return false;
+                    if (EnforceManager.Instance.poisonDotDamageBoost) return false;
+                    break;
+                case ExpData.Types.PoisonAttackSpeedIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.F) < 11) return false;
+                    if (EnforceManager.Instance.poisonAttackSpeedIncrease >= 0.24f) return false;
+                    break;
+                case ExpData.Types.PoisonDurationBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.F)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.F) < 13) return false;
+                    if (!EnforceManager.Instance.poisonPerHitEffect) return false;
+                    if (EnforceManager.Instance.poisonDurationBoost) return false;
+                    break;
+  
                 
                 //Unit G
                 case ExpData.Types.Fire2PoisonDamageIncrease:
@@ -740,14 +735,13 @@ namespace Script.RewardScript
                 ExpData.Types.Water2FreezeChanceBoost => finalTranslation,
                 ExpData.Types.Water2FreezeDamageBoost => finalTranslation,
                 ExpData.Types.Water2SlowTimeBoost => finalTranslation,
-                ExpData.Types.PoisonAttackSpeedIncrease => finalTranslation,
-                ExpData.Types.PoisonMaxStackIncrease => finalTranslation,
-                ExpData.Types.PoisonDamageAttackPowerIncrease => finalTranslation,
-                ExpData.Types.PoisonProjectileIncrease => finalTranslation,
-                ExpData.Types.PoisonRangeIncrease => finalTranslation,
-                ExpData.Types.PoisonBleedingEnemyDamageBoost => finalTranslation,
-                ExpData.Types.PoisonEnemyInstantKill => finalTranslation,
                 ExpData.Types.PoisonPerHitEffect => finalTranslation,
+                ExpData.Types.PoisonBleedingEnemyDamageBoost => finalTranslation,
+                ExpData.Types.PoisonDamagePerBoost => finalTranslation,
+                ExpData.Types.PoisonDamageBoost => finalTranslation,
+                ExpData.Types.PoisonDotDamageBoost => finalTranslation,
+                ExpData.Types.PoisonAttackSpeedIncrease => finalTranslation,
+                ExpData.Types.PoisonDurationBoost => finalTranslation,
                 ExpData.Types.Fire2PoisonDamageIncrease => finalTranslation,
                 ExpData.Types.Fire2AttackSpeedIncrease => finalTranslation,
                 ExpData.Types.Fire2BurnStackIncrease => finalTranslation,

@@ -34,7 +34,7 @@ namespace Script.CharacterManagerScript
         public static AtkManager Instance { get; private set; }
         public int groupCAtkCount;
         public int groupDAtkCount;
-        public float groupDAtkRate;
+        public int groupFCount;
         public void Awake()
         {
             if (Instance == null)
@@ -46,7 +46,6 @@ namespace Script.CharacterManagerScript
                 Destroy(gameObject);
             }
         }
-
         public IEnumerator CheckForAttack()
         {
             var characters = characterPool.UsePoolCharacterList();
@@ -145,18 +144,8 @@ namespace Script.CharacterManagerScript
             switch (unitGroup)
             {
                 case CharacterBase.UnitGroups.F:
-                    switch (EnforceManager.Instance.poisonProjectileIncrease)
-                    {
-                        case true:
-                            StartCoroutine(DoubleAtk(new AttackData(unit, WeaponsPool.WeaponType.F)));
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.F));
                             break;
-                        default:
-                            Attack(new AttackData(unit, WeaponsPool.WeaponType.F));
-                            break;
-                    }
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(unitGroup), unitGroup, null);
             }
         }
         private GameObject Attack(AttackData attackData, GameObject target = null)
@@ -192,10 +181,20 @@ namespace Script.CharacterManagerScript
                        groupDAtkCount++;
                        if (groupDAtkCount % 3 == 0)
                        {
-                           if (groupDAtkRate < 0.6f)
+                           if (GetComponent<UnitD>().groupDAtkRate < 0.6f)
                            {
-                               groupDAtkRate += 0.01f;
+                               GetComponent<UnitD>().groupDAtkRate += 0.01f;
                            }
+                       }
+                   }
+                   break;
+               case CharacterBase.UnitGroups.F:
+                   if (EnforceManager.Instance.poisonDamagePerBoost)
+                   {
+                       groupFCount++;
+                       if (groupFCount % 5 == 0 && GetComponent<UnitF>().groupFDamage < 0.6f)
+                       {
+                           GetComponent<UnitF>().groupFDamage += 0.01f;
                        }
                    }
                    break;
@@ -219,7 +218,6 @@ namespace Script.CharacterManagerScript
 
         private IEnumerator DoubleAtk(AttackData attackData)
         {
-            if (!EnforceManager.Instance.poisonProjectileIncrease) yield break;
             var unit = attackData.Unit;
             var weaponType = attackData.WeaponType;
             var enemies = unit.GetComponent<UnitF>().DetectEnemies();

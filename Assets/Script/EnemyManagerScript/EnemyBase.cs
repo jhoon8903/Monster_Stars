@@ -7,6 +7,7 @@ using Script.UIManager;
 using Script.WeaponScriptGroup;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.EnemyManagerScript
@@ -27,9 +28,6 @@ namespace Script.EnemyManagerScript
         public enum RegistryTypes { Physics, Divine, Poison, Burn, Water, Darkness, None }
         protected internal RegistryTypes RegistryType; 
         protected internal SpawnZones SpawnZone;
-
-        protected internal int CurrentPoisonStacks { get; set; }
-        protected internal int BurningStack { get; set; }
         private static readonly object Lock = new object();
         public enum KillReasons { ByPlayer }
         public int number;
@@ -66,22 +64,39 @@ namespace Script.EnemyManagerScript
                 StartCoroutine(FlickerEffect(originColor, poisonColor));
             }
         }
-        public bool isBurn;
-        public bool IsBurn
+        public bool isBurnG;
+        public bool IsBurnG
         {
-            get => isBurn;
+            get => isBurnG;
             set
             {
-                isBurn = value;
-                var fireBall = FindObjectOfType<G>();
+                isBurnG = value;
+                var g = FindObjectOfType<G>();
                 var burningColor = new Color(1f,0,0.4f);
                 var originColor = gameObject.GetComponent<SpriteRenderer>();
-                if (fireBall == null) return;
-                if (!isBurn || !gameObject.activeInHierarchy) return;
-                StartCoroutine(fireBall.BurningEffect(this));
+                if (g == null) return;
+                if (!isBurnG || !gameObject.activeInHierarchy) return;
+                StartCoroutine(g.BurningGEffect(this));
                 StartCoroutine(FlickerEffect(originColor, burningColor));
             }
         }
+        public bool isBurnH;
+        public bool IsBurnH
+        {
+            get => isBurnH;
+            set
+            {
+                isBurnH = value;
+                var h = FindObjectOfType<H>();
+                var burningColor = new Color(1f,0,0.4f);
+                var originColor = gameObject.GetComponent<SpriteRenderer>();
+                if (h == null) return;
+                if (!isBurnH || !gameObject.activeInHierarchy) return;
+                // StartCoroutine(h.BurningHEffect(this));
+                StartCoroutine(FlickerEffect(originColor, burningColor));
+            }
+        }
+
         public bool isBleed;
         public bool IsBleed
         {
@@ -92,7 +107,7 @@ namespace Script.EnemyManagerScript
                 var sword = FindObjectOfType<D>();
                 var bleedingColor = new Color(1f,0.2f,0.3f);
                 var originColor = gameObject.GetComponent<SpriteRenderer>();
-                if (!isBurn || !gameObject.activeInHierarchy) return;
+                if (!isBurnG || !gameObject.activeInHierarchy) return;
                 StartCoroutine(sword.BleedEffect(this));
                 StartCoroutine(FlickerEffect(originColor, bleedingColor));
             }
@@ -220,8 +235,8 @@ namespace Script.EnemyManagerScript
             detectedEnemy.IsPoison = false;
             detectedEnemy.isPoison = false;
             detectedEnemy.isBind = false;
-            detectedEnemy.IsBurn = false;
-            detectedEnemy.isBurn = false;
+            detectedEnemy.IsBurnG = false;
+            detectedEnemy.isBurnG = false;
             detectedEnemy.IsBleed = false;
             detectedEnemy.isBleed = false;
             detectedEnemy.isDead = false;
@@ -250,7 +265,7 @@ namespace Script.EnemyManagerScript
         {
             var originalColor = render.color;
             var elapsedTime = 0f;
-            while ( isBurn || isPoison || isBleed )
+            while ( isBurnG || isPoison || isBleed )
             {
                 var lerpValue = Mathf.Abs(Mathf.Sin(elapsedTime / 0.5f * Mathf.PI));
                 render.color = Color.Lerp(originalColor, targetColor, lerpValue);

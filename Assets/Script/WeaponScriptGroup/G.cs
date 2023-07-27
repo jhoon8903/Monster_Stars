@@ -47,8 +47,9 @@ namespace Script.WeaponScriptGroup
             enemy.ReceiveDamage(enemy,damage, CharacterBase);
         }
 
-        public IEnumerator BurningEffect(EnemyBase hitEnemy)
+        public IEnumerator BurningGEffect(EnemyBase hitEnemy)
         {
+            float burnDotDamage;
             burnDotDamage = CharacterBase.unitGroup switch
             {
                 CharacterBase.UnitGroups.G => Damage * (0.1f + EnforceManager.Instance.fire2BurningDamageBoost / 10f),
@@ -64,17 +65,14 @@ namespace Script.WeaponScriptGroup
                 CharacterBase.UnitGroups.G => EnforceManager.Instance.fire2BurnStackIncrease ? 1 : 4,
                 CharacterBase.UnitGroups.H => EnforceManager.Instance.fireImageOverlapIncrease
             };
-            hitEnemy.BurningStack++;
-            if (hitEnemy.BurningStack > maxBurningStack) yield break;
             for (var i = 0; i < burningDuration; i++)
             {
                 var damage = DamageCalculator(burnDotDamage, hitEnemy, CharacterBase.UnitGroups.G); 
-                hitEnemy.ReceiveDamage(hitEnemy, (int)damage * hitEnemy.BurningStack, CharacterBase);
+                hitEnemy.ReceiveDamage(hitEnemy, (int)damage , CharacterBase);
                 yield return new WaitForSeconds(1f);
             }
-            hitEnemy.BurningStack--;
-            hitEnemy.isBurn = false;
-            hitEnemy.IsBurn = false;
+            hitEnemy.isBurnG = false;
+            hitEnemy.IsBurnG = false;
         }
     }
 }

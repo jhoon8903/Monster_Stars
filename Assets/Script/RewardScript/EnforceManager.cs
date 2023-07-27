@@ -58,16 +58,14 @@ namespace Script.RewardScript
         public bool water2FreezeDamageBoost;
         public float water2SlowTimeBoost;
 
-
         //Poison Unit F
-        public int poisonAttackSpeedIncrease;
-        public int poisonMaxStackIncrease;
-        public int poisonDamageAttackPowerIncrease;
-        public bool poisonProjectileIncrease;
-        public bool poisonRangeIncrease;
-        public bool poisonBleedingEnemyDamageBoost;
-        public bool poisonEnemyInstantKill;
         public bool poisonPerHitEffect;
+        public bool poisonBleedingEnemyDamageBoost;
+        public bool poisonDamagePerBoost;
+        public bool poisonDamageBoost;
+        public bool poisonDotDamageBoost;
+        public float poisonAttackSpeedIncrease;
+        public bool poisonDurationBoost;
 
         //Fire2 Unit G
         public bool fire2PoisonDamageIncrease;
@@ -302,45 +300,32 @@ namespace Script.RewardScript
 
 
         [Header("\n\nF 독: Green\n")]
-
-        [Header("Green / Default: 공격속도 6% 증가 (최대4회)")] 
-        public int poisonAttackSpeedIncrease; 
+        // 완료
+        [Header("Purple / 1Lv: 초당 20% 데미지를 가하는 중독을 3초간 발생")] 
+        public bool poisonPerHitEffect;
+        // 완료
+        [Header("Green / 3Lv: 출혈중인 적 공격시 80% 데미지 증가")] 
+        public bool poisonBleedingEnemyDamageBoost;
+        // 완료
+        [Header("Blue / 5Lv: 유닛 C가 5회 공격마다 공격력 1% 증가, 웨이브마다 초기화 (최대 60%)")]
+        public bool poisonDamagePerBoost;
+        // 완료
+        [Header("Purple / 7Lv: 공격력 16% 증가")] 
+        public bool poisonDamageBoost;
+        // 완료
+        [Header("Blue / 9Lv: 중독 피해 10% 증가")] 
+        public bool poisonDotDamageBoost;
+        // 완료
+        [Header("Green / 11Lv: 공격속도 4% 증가 (최대 6회)")] 
+        public float poisonAttackSpeedIncrease; 
         protected internal void PoisonAttackSpeedIncrease()
         {
-            if(poisonAttackSpeedIncrease >= 4) return;
-            poisonAttackSpeedIncrease++;
+            if(poisonAttackSpeedIncrease >= 0.24f) return;
+            poisonAttackSpeedIncrease += 0.04f;
         }
-
-        [Header("Green / 3Lv: 중독최대중첩 수 1회 증가 (최대 5)")] 
-        public int poisonMaxStackIncrease; 
-        protected internal void PoisonMaxStackIncrease()
-        {
-            if (poisonMaxStackIncrease >= 5) return;
-            poisonMaxStackIncrease++;
-        }
-
-        [Header("Green / 11Lv: 중독 데미지 10% 증가 (최대 40% / 최대 3회)")] 
-        public int poisonDamageAttackPowerIncrease; 
-        protected internal void PoisonDamageAttackPowerIncrease()
-        {
-            if (poisonDamageAttackPowerIncrease >= 3) return;
-            poisonDamageAttackPowerIncrease++;
-        }
-
-        [Header("Blue / 5Lv: 투사체 1개 증가")] 
-        public bool poisonProjectileIncrease;
-
-        [Header("Blue / 9Lv: 사거리 1칸 증가")] 
-        public bool poisonRangeIncrease;
-
-        [Header("Blue / 13Lv: 출혈중인 적 공격시 50% 데미지 증가")] 
-        public bool poisonBleedingEnemyDamageBoost;
- 
-        [Header("Purple / Default: 중독 된 적의 체력이 7% 미만이면 즉사")] 
-        public bool poisonEnemyInstantKill;
-   
-        [Header("Purple / 7Lv: 초당 10% 데미지를 가하는 중독을 4초간 발생")] 
-        public bool poisonPerHitEffect;
+        // 완료
+        [Header("Blue / 13Lv: 중족 지속시간 2초 증가")] 
+        public bool poisonDurationBoost;
 
 
         [Header("\n\nG 불: Blue\n")]
@@ -590,14 +575,13 @@ namespace Script.RewardScript
                 water2SlowTimeBoost = water2SlowTimeBoost,
                 
                 //Poison Unit F
-                poisonAttackSpeedIncrease = poisonAttackSpeedIncrease,
-                poisonMaxStackIncrease = poisonMaxStackIncrease,
-                poisonDamageAttackPowerIncrease = poisonDamageAttackPowerIncrease,
-                poisonProjectileIncrease = poisonProjectileIncrease,
-                poisonRangeIncrease = poisonRangeIncrease,
-                poisonBleedingEnemyDamageBoost = poisonBleedingEnemyDamageBoost,
-                poisonEnemyInstantKill = poisonEnemyInstantKill,
                 poisonPerHitEffect = poisonPerHitEffect,
+                poisonBleedingEnemyDamageBoost = poisonBleedingEnemyDamageBoost,
+                poisonDamagePerBoost = poisonDamagePerBoost,
+                poisonDamageBoost = poisonDamageBoost,
+                poisonDotDamageBoost = poisonDotDamageBoost,
+                poisonAttackSpeedIncrease = poisonAttackSpeedIncrease,
+                poisonDurationBoost = poisonDurationBoost,
                 //Fire2 Unit G
                 fire2PoisonDamageIncrease = fire2PoisonDamageIncrease,
                 fire2AttackSpeedIncrease = fire2AttackSpeedIncrease,
@@ -685,14 +669,13 @@ namespace Script.RewardScript
             water2FreezeDamageBoost = data.water2FreezeDamageBoost;
             water2SlowTimeBoost = data.water2SlowTimeBoost;
             //Poison Unit F
-            poisonAttackSpeedIncrease = data.poisonAttackSpeedIncrease;
-            poisonMaxStackIncrease = data.poisonMaxStackIncrease;
-            poisonDamageAttackPowerIncrease = data.poisonDamageAttackPowerIncrease;
-            poisonProjectileIncrease = data.poisonProjectileIncrease;
-            poisonRangeIncrease = data.poisonRangeIncrease;
-            poisonBleedingEnemyDamageBoost = data.poisonBleedingEnemyDamageBoost;
-            poisonEnemyInstantKill = data.poisonEnemyInstantKill;
             poisonPerHitEffect = data.poisonPerHitEffect;
+            poisonBleedingEnemyDamageBoost = data.poisonBleedingEnemyDamageBoost;
+            poisonDamagePerBoost = data.poisonDamagePerBoost;
+            poisonDamageBoost = data.poisonDamageBoost;
+            poisonDotDamageBoost = data.poisonDotDamageBoost;
+            poisonAttackSpeedIncrease = data.poisonAttackSpeedIncrease;
+            poisonDurationBoost = data.poisonDurationBoost;
             //Fire2 Unit G
             fire2PoisonDamageIncrease = data.fire2PoisonDamageIncrease;
             fire2AttackSpeedIncrease = data.fire2AttackSpeedIncrease;

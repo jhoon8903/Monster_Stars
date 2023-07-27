@@ -163,7 +163,9 @@ namespace Script
             enemyPool.ClearList();
             StageManager.Instance.isBossClear = false;
             AtkManager.Instance.groupDAtkCount = 0;
-            AtkManager.Instance.groupDAtkRate = 0f;
+            GetComponent<UnitD>().groupDAtkRate = 0f;
+            AtkManager.Instance.groupFCount = 0;
+            GetComponent<UnitF>().groupFDamage = 0f;
         }
         private void LoseGame()
         {

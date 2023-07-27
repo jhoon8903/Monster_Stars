@@ -68,15 +68,14 @@ namespace Script.RewardScript
              Water2SlowTimeBoost,
 
              //Poison F
-             PoisonAttackSpeedIncrease,
-             PoisonMaxStackIncrease,
-             PoisonDamageAttackPowerIncrease,
-             PoisonProjectileIncrease,
-             PoisonRangeIncrease,
-             PoisonBleedingEnemyDamageBoost,
-             PoisonEnemyInstantKill,
              PoisonPerHitEffect,
-             
+             PoisonBleedingEnemyDamageBoost,
+             PoisonDamagePerBoost,
+             PoisonDamageBoost,
+             PoisonDotDamageBoost,
+             PoisonAttackSpeedIncrease,
+             PoisonDurationBoost,
+
              //Fire2 G
              Fire2PoisonDamageIncrease,
              Fire2AttackSpeedIncrease,

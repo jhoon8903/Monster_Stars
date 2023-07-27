@@ -153,7 +153,7 @@ namespace Script.WeaponScriptGroup
         }
         private static void IsBurn(EnemyBase enemyStatus)
         {
-            enemyStatus.IsBurn = true;
+            enemyStatus.IsBurnG = true;
         }
         private void IsBleed(EnemyBase enemyStatus)
         {
@@ -192,7 +192,7 @@ namespace Script.WeaponScriptGroup
                     }
                     return damage;
                 case CharacterBase.UnitGroups.B:
-                    if (enemyBase.isFreeze ||enemyBase.isBind || enemyBase.isSlowC || enemyBase.isSlowE || enemyBase.isBleed || enemyBase.isBurn || enemyBase.isPoison)
+                    if (enemyBase.isFreeze ||enemyBase.isBind || enemyBase.isSlowC || enemyBase.isSlowE || enemyBase.isBleed || enemyBase.isBurnG || enemyBase.isPoison)
                     {
                         if (EnforceManager.Instance.darkStatusAilmentDamageBoost)
                         {
@@ -228,9 +228,9 @@ namespace Script.WeaponScriptGroup
                 case CharacterBase.UnitGroups.F:
                    if (EnforceManager.Instance.poisonBleedingEnemyDamageBoost && enemyBase.isBleed )
                    {
-                       damage *= 1.5f;
+                       damage *= 1.8f;
                    }
-                   if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Burn)
+                   if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Poison)
                    {
                        damage *= 0.8f;
                    }
@@ -238,7 +238,6 @@ namespace Script.WeaponScriptGroup
                 case CharacterBase.UnitGroups.G:
                     if (EnforceManager.Instance.fire2PoisonDamageIncrease && enemyBase.isPoison)
                     {
-            
                         damage *= 1.15f;
                     }
                     if (EnforceManager.Instance.fire2NoBurnDamageIncrease)

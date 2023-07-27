@@ -257,7 +257,7 @@ namespace Script.EnemyManagerScript
             }
             if (EnforceManager.Instance.darkStatusAilmentSlowEffect)
             {
-                if (enemyBase.isBind || enemyBase.isSlowC || enemyBase.isSlowE || enemyBase.isBleed || enemyBase.isBurn || enemyBase.isPoison || enemyBase.isFreeze)
+                if (enemyBase.isBind || enemyBase.isSlowC || enemyBase.isSlowE || enemyBase.isBleed || enemyBase.isBurnG || enemyBase.isPoison || enemyBase.isFreeze)
                 {
                     StartCoroutine(StatusSlowEffect(enemyBase));
                 }

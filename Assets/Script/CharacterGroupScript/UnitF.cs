@@ -15,6 +15,7 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level4Sprite;
         [SerializeField] private Sprite level5Sprite;
         private Vector2 _detectionSize;
+        public float groupFDamage;
 
         public void Awake()
         {
@@ -56,7 +57,7 @@ namespace Script.CharacterGroupScript
 
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
-            _detectionSize = EnforceManager.Instance.poisonRangeIncrease ? new Vector2(5, 5) : new Vector2(3, 3);
+            _detectionSize = new Vector2(3, 3);
             center = transform.position;
             size = _detectionSize;
         }
@@ -90,18 +91,19 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = (unitPieceLevel-1) * 20f;
+            UnitLevelDamage = unitPieceLevel > 0 ? unitPieceLevel * 5 + 1f : 0f;
             Type = Types.Character;
             unitGroup = UnitGroups.F;
-            DefaultDamage = UnitLevelDamage + 17f * level switch
+            var increaseDamage = EnforceManager.Instance.poisonDamageBoost ? 0.16f : 0f;
+            DefaultDamage = UnitLevelDamage + 32f * (1f + groupFDamage) * (1f + increaseDamage) * level switch
             {
                 <=  2 => 1f,
                 3 => 1.7f,
                 4 => 2f,
                 _ => 2.3f
             };
-            var increaseRateBoost = 1f + EnforceManager.Instance.poisonAttackSpeedIncrease * 6 / 100f; 
-            defaultAtkRate = 1.2f / increaseRateBoost;
+            var increaseRateBoost = 1f - EnforceManager.Instance.poisonAttackSpeedIncrease; 
+            defaultAtkRate = 1.2f * increaseRateBoost;
             projectileSpeed = 1f;
             UnitAtkType = UnitAtkTypes.GuideProjectile;
             UnitProperty = UnitProperties.Poison;
