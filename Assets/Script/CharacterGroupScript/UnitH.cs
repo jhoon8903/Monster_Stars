@@ -87,18 +87,18 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = (unitPieceLevel-1) * 16f;
+            UnitLevelDamage = unitPieceLevel > 1 ? unitPieceLevel * 2 + 3f : 0f;
             Type = Types.Character;
             unitGroup = UnitGroups.H;
-            DefaultDamage = UnitLevelDamage + 19f * level switch
+            DefaultDamage = UnitLevelDamage + 27f * level switch
             {
                 <= 2 => 1f,
                 3 => 1.7f,
                 4 => 2f,
                 _ => 2.3f
             };
-            var increaseRateBoost = 1f + EnforceManager.Instance.fireAttackSpeedBoost * 6 / 100f;
-            defaultAtkRate = 1f / increaseRateBoost;
+            var increaseRateBoost = 1f - EnforceManager.Instance.fireAttackSpeedBoost;
+            defaultAtkRate = 1f * increaseRateBoost;
             defaultAtkDistance = 9f; 
             var increaseProjectileBoost = EnforceManager.Instance.fireProjectileSpeedIncrease ? 1f : 0f;
             projectileSpeed = 1f + increaseProjectileBoost;

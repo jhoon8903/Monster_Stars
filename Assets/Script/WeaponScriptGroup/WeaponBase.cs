@@ -73,10 +73,6 @@ namespace Script.WeaponScriptGroup
                     break;
                 case CharacterBase.UnitEffects.Burn:
                     IsBurn(enemyObject);
-                    if (EnforceManager.Instance.fire2StunChance)
-                    {
-                        IsBurningPoison(enemyObject);
-                    }
                     break;
                 case CharacterBase.UnitEffects.Bleed:
                     if (EnforceManager.Instance.physicalBindBleed && enemyObject.isBind)
@@ -96,7 +92,6 @@ namespace Script.WeaponScriptGroup
         {
             return _random.Next(100) < percent;
         }
-
         private void IsFreeze(EnemyBase enemyStatus)
         {
             var chance = EnforceManager.Instance.waterFreezeChance ? 25 : 15;
@@ -151,10 +146,22 @@ namespace Script.WeaponScriptGroup
             if (!EnforceManager.Instance.poisonPerHitEffect) return;
             enemyStatus.IsPoison = true;
         }
-        private static void IsBurn(EnemyBase enemyStatus)
+        private void IsBurn(EnemyBase enemyStatus)
         {
-            enemyStatus.IsBurnG = true;
+            switch (CharacterBase.unitGroup)
+            {
+                case CharacterBase.UnitGroups.G:
+                    enemyStatus.IsBurnG = true;
+                    break;
+                case CharacterBase.UnitGroups.H:
+                    if (EnforceManager.Instance.fireBurnPerAttackEffect)
+                    {
+                        enemyStatus.IsBurnH = true;
+                    }
+                    break;
+            }
         }
+        
         private void IsBleed(EnemyBase enemyStatus)
         {
             enemyStatus.IsBleed = true;
@@ -173,12 +180,10 @@ namespace Script.WeaponScriptGroup
             {
                 damage *= 1.5f;
             }
-
             if (enemyBase.isFreeze)
             {
                 damage *= 1.15f;
             }
-
             switch (unitGroup)
             {
                 case CharacterBase.UnitGroups.A:
@@ -236,17 +241,17 @@ namespace Script.WeaponScriptGroup
                    }
                    return damage;
                 case CharacterBase.UnitGroups.G:
-                    if (EnforceManager.Instance.fire2PoisonDamageIncrease && enemyBase.isPoison)
+                    if (EnforceManager.Instance.fire2FreezeDamageBoost && enemyBase.isFreezeE || enemyBase.isFreeze)
                     {
-                        damage *= 1.15f;
+                        damage *= 2f;
                     }
-                    if (EnforceManager.Instance.fire2NoBurnDamageIncrease)
+                    if (EnforceManager.Instance.fire2BossDamageBoost && enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
                     {
-                        damage *= 1.5f;
+                        damage += 1.3f;
                     }
                     if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Burn)
                     {
-                        damage *= 0.8f;
+                        damage *= EnforceManager.Instance.fire2ChangeProperty ? 1f : 0.8f;
                     }
                     return damage; 
                 case CharacterBase.UnitGroups.H:
@@ -255,9 +260,8 @@ namespace Script.WeaponScriptGroup
                         damage *= 0.8f;
                     }
                     return damage;
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
+            return damage;
         }
         protected static void InstantKill(EnemyBase target)
         {

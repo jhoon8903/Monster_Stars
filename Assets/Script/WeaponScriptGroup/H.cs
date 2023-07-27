@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Script.CharacterGroupScript;
@@ -14,7 +15,8 @@ namespace Script.WeaponScriptGroup
         private List<GameObject> _enemyTransforms = new List<GameObject>();
         private Rigidbody2D _rigidbody2D; 
         private int _bounceCount; 
-
+        private int _maxStack; 
+        private readonly Dictionary<EnemyBase, int> burnStacks = new Dictionary<EnemyBase, int>();
         private void Awake()
         {
             _rigidbody2D = GetComponent<Rigidbody2D>();
@@ -42,7 +44,6 @@ namespace Script.WeaponScriptGroup
                     yield return new WaitForSeconds(useTime);
                     StopUseWeapon(gameObject);
                 }
-
             }
             else
             {
@@ -65,11 +66,9 @@ namespace Script.WeaponScriptGroup
                             }
                         }
                     }
-
                     _enemyTransforms.Sort((enemy1, enemy2) =>
                         Vector3.Distance(transform.position, enemy1.transform.position)
                             .CompareTo(Vector3.Distance(transform.position, enemy2.transform.position)));
-
                     if (_enemyTransforms.Count == 0)
                     {
                         StopUseWeapon(gameObject);
@@ -103,6 +102,30 @@ namespace Script.WeaponScriptGroup
             {
                 StopUseWeapon(gameObject);
             }
+        }
+        public IEnumerator BurningHEffect(EnemyBase hitEnemy)
+        {
+            _maxStack = EnforceManager.Instance.fireStackOverlap ? 4 : 1;
+            if (!burnStacks.ContainsKey(hitEnemy))
+            {
+                burnStacks[hitEnemy] = 1;
+            }
+            else
+            {
+                burnStacks[hitEnemy] = Math.Min(burnStacks[hitEnemy] + 1, _maxStack);
+            }
+            var burnDotDamage = DamageCalculator(Damage, hitEnemy, CharacterBase.UnitGroups.H) * 0.1f * burnStacks[hitEnemy];
+            const int burningDuration = 5;
+            for (var i = 0; i < burningDuration; i++)
+            {
+                hitEnemy.ReceiveDamage(hitEnemy, (int)burnDotDamage , CharacterBase);
+                yield return new WaitForSeconds(1f);
+            }
+            burnStacks[hitEnemy]--;
+            if (burnStacks[hitEnemy] > 0) yield break;
+            burnStacks.Remove(hitEnemy);
+            hitEnemy.isBurnH = false;
+            hitEnemy.IsBurnH = false;
         }
     }
 }

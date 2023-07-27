@@ -92,7 +92,7 @@ namespace Script.EnemyManagerScript
                 var originColor = gameObject.GetComponent<SpriteRenderer>();
                 if (h == null) return;
                 if (!isBurnH || !gameObject.activeInHierarchy) return;
-                // StartCoroutine(h.BurningHEffect(this));
+                StartCoroutine(h.BurningHEffect(this));
                 StartCoroutine(FlickerEffect(originColor, burningColor));
             }
         }

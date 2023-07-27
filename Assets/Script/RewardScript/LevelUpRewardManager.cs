@@ -207,58 +207,50 @@ namespace Script.RewardScript
                     EnforceManager.Instance.poisonDurationBoost = true;
                     break;
                 // G
+                case ExpData.Types.Fire2FreezeDamageBoost:
+                    EnforceManager.Instance.fire2FreezeDamageBoost = true;
+                    break;
+                case ExpData.Types.Fire2BurnDurationBoost:
+                    EnforceManager.Instance.fire2BurnDurationBoost = true;
+                    break;
+                case ExpData.Types.Fire2ChangeProperty:
+                    EnforceManager.Instance.fire2ChangeProperty = true;
+                    break;
+                case ExpData.Types.Fire2DamageBoost:
+                    EnforceManager.Instance.Fire2DamageBoost();
+                    break;
+                case ExpData.Types.Fire2RangeBoost:
+                    EnforceManager.Instance.fire2RangeBoost = true;
+                    break;
+                case ExpData.Types.Fire2RateBoost:
+                    EnforceManager.Instance.fire2RateBoost = true;
+                    break;
+                case ExpData.Types.Fire2BossDamageBoost:
+                    EnforceManager.Instance.fire2BossDamageBoost = true;
+                    break;
 
-
-                case ExpData.Types.Fire2PoisonDamageIncrease:
-                    EnforceManager.Instance.fire2PoisonDamageIncrease = true;
-                    break;
-                case ExpData.Types.Fire2AttackSpeedIncrease:
-                    EnforceManager.Instance.Fire2AttackSpeedIncrease();
-                    break;
-                case ExpData.Types.Fire2BurnStackIncrease:
-                    EnforceManager.Instance.fire2BurnStackIncrease = true;
-                    break;
-                case ExpData.Types.Fire2AttackPowerIncrease:
-                    EnforceManager.Instance.Fire2AttackPowerIncrease();
-                    break;
-                case ExpData.Types.Fire2StunChance:
-                    EnforceManager.Instance.fire2StunChance = true;
-                    break;
-                case ExpData.Types.Fire2SwordSizeIncrease:
-                    EnforceManager.Instance.fire2SwordSizeIncrease = true;
-                    break;
-                case ExpData.Types.Fire2BurningDamageBoost:
-                    EnforceManager.Instance.Fire2BurningDamageBoost();
-                    break;
-                case ExpData.Types.Fire2NoBurnDamageIncrease:
-                    EnforceManager.Instance.fire2NoBurnDamageIncrease = true;
-                    break;
-                case ExpData.Types.FireImageOverlapIncrease:
-                    EnforceManager.Instance.FireOverLapIncrease();
-                    break;
-                case ExpData.Types.FireAttackSpeedBoost:
-                    EnforceManager.Instance.FireAttackSpeedBoost();
-                    break;
-                case ExpData.Types.FireSlowEnemyDamageBoost:
-                    EnforceManager.Instance.fireSlowEnemyDamageBoost = true;
-                    break;
-                case ExpData.Types.FireProjectileSpeedIncrease:
-                    EnforceManager.Instance.fireProjectileSpeedIncrease = true;
-                    break;
-                case ExpData.Types.FireBurnedEnemyExplosion:
-                    EnforceManager.Instance.fireBurnedEnemyExplosion = true;
-                    break;
-                case ExpData.Types.FireProjectileBounceDamage:
-                    EnforceManager.Instance.fireProjectileBounceDamage = true;
-                    break;
+                // H
                 case ExpData.Types.FireBurnPerAttackEffect:
                     EnforceManager.Instance.fireBurnPerAttackEffect = true;
+                    break;
+                case ExpData.Types.FireStackOverlap:
+                    EnforceManager.Instance.fireStackOverlap = true;
                     break;
                 case ExpData.Types.FireProjectileBounceIncrease:
                     EnforceManager.Instance.fireProjectileBounceIncrease = true;
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException();
+                case ExpData.Types.FireBurnedEnemyExplosion:
+                    EnforceManager.Instance.fireBurnedEnemyExplosion = true;
+                    break;
+                case ExpData.Types.FireAttackSpeedBoost:
+                    EnforceManager.Instance.FireAttackSpeedBoost();
+                    break;
+                case ExpData.Types.FireProjectileSpeedIncrease:
+                    EnforceManager.Instance.fireProjectileSpeedIncrease = true;
+                    break;
+                case ExpData.Types.FireProjectileBounceDamage:
+                    EnforceManager.Instance.fireProjectileBounceDamage = true;
+                    break;
             }
             selectedReward.ChosenProperty = null;
         }
@@ -580,84 +572,76 @@ namespace Script.RewardScript
                     if (!EnforceManager.Instance.poisonPerHitEffect) return false;
                     if (EnforceManager.Instance.poisonDurationBoost) return false;
                     break;
-  
-                
                 //Unit G
-                case ExpData.Types.Fire2PoisonDamageIncrease:
+                case ExpData.Types.Fire2FreezeDamageBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
+                    if (EnforceManager.Instance.fire2FreezeDamageBoost) return false;
+                    break;
+                case ExpData.Types.Fire2BurnDurationBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.G) < 3) return false;
-                    if (EnforceManager.Instance.fire2PoisonDamageIncrease) return false;
-                    break;
-                case ExpData.Types.Fire2AttackSpeedIncrease:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.G) < 9) return false;
-                    if (EnforceManager.Instance.fire2AttackSpeedIncrease >= 4) return false;
-                    break;
-                case ExpData.Types.Fire2BurnStackIncrease:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.G) < 11) return false;
-                    if (EnforceManager.Instance.fire2BurnStackIncrease) return false;
-                    break;
-                case ExpData.Types.Fire2AttackPowerIncrease:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
-                    if (EnforceManager.Instance.fire2AttackPowerIncrease >= 4) return false;
-                    break;
-                case ExpData.Types.Fire2StunChance:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.G) < 13) return false;
-                    if (EnforceManager.Instance.fire2StunChance) return false;
-                    break;
-                case ExpData.Types.Fire2SwordSizeIncrease:
+                    if (EnforceManager.Instance.fire2BurnDurationBoost) return false;
+                    break;   
+                case ExpData.Types.Fire2ChangeProperty:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.G) < 5) return false;
-                    if (EnforceManager.Instance.fire2SwordSizeIncrease) return false;
+                    if (EnforceManager.Instance.fire2ChangeProperty) return false;
                     break;
-                case ExpData.Types.Fire2BurningDamageBoost:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
-                    if (EnforceManager.Instance.fire2BurningDamageBoost >= 3) return false;
-                    break;
-                case ExpData.Types.Fire2NoBurnDamageIncrease:
+                case ExpData.Types.Fire2DamageBoost:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.G) < 7) return false;
-                    if (EnforceManager.Instance.fire2NoBurnDamageIncrease) return false;
+                    if (EnforceManager.Instance.fire2DamageBoost >= 0.24f) return false;
                     break;
-                // //Unit H
-                case ExpData.Types.FireImageOverlapIncrease:
+                case ExpData.Types.Fire2RangeBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.G) < 9) return false;
+                    if (EnforceManager.Instance.fire2RangeBoost) return false;
+                    break;
+                case ExpData.Types.Fire2RateBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.G) < 11) return false;
+                    if (EnforceManager.Instance.fire2RateBoost) return false;
+                    break;
+                case ExpData.Types.Fire2BossDamageBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.G) < 13) return false;
+                    if (EnforceManager.Instance.fire2BossDamageBoost) return false;
+                    break;
+                //Unit H
+                case ExpData.Types.FireBurnPerAttackEffect:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
-                    if (EnforceManager.Instance.fireImageOverlapIncrease >= 5) return false;
+                    if (EnforceManager.Instance.fireBurnPerAttackEffect) return false;
                     break;
-                case ExpData.Types.FireAttackSpeedBoost:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.H) < 9) return false;
-                    if (EnforceManager.Instance.fireAttackSpeedBoost >= 4) return false;
-                    break;
-                case ExpData.Types.FireSlowEnemyDamageBoost:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.H) < 11) return false;
-                    if (EnforceManager.Instance.fireSlowEnemyDamageBoost) return false;
-                    break;
-                case ExpData.Types.FireProjectileSpeedIncrease:
+                case ExpData.Types.FireStackOverlap:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.H) < 3) return false;
-                    if (EnforceManager.Instance.fireProjectileSpeedIncrease) return false;
-                    break;
-                case ExpData.Types.FireBurnedEnemyExplosion:
-                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
-                    if (UnitPieceLevel(CharacterBase.UnitGroups.H) < 7) return false;
-                    if (EnforceManager.Instance.fireBurnedEnemyExplosion) return false;
+                    if (!EnforceManager.Instance.fireBurnPerAttackEffect) return false;
+                    if (EnforceManager.Instance.fireStackOverlap) return false;
                     break;
                 case ExpData.Types.FireProjectileBounceDamage:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.H) < 5) return false;
                     if (EnforceManager.Instance.fireProjectileBounceDamage) return false;
                     break;
-                case ExpData.Types.FireBurnPerAttackEffect:
+                case ExpData.Types.FireBurnedEnemyExplosion:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
-                    if (EnforceManager.Instance.fireBurnPerAttackEffect) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.H) < 7) return false;
+                    if (EnforceManager.Instance.fireBurnedEnemyExplosion) return false;
+                    break;
+                case ExpData.Types.FireAttackSpeedBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.H) < 9) return false;
+                    if (EnforceManager.Instance.fireAttackSpeedBoost >= 0.24f) return false;
+                    break;
+                case ExpData.Types.FireProjectileSpeedIncrease:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.H) < 11) return false;
+                    if (EnforceManager.Instance.fireProjectileSpeedIncrease) return false;
                     break;
                 case ExpData.Types.FireProjectileBounceIncrease:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.H)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.H) < 13) return false;
+                    if (!EnforceManager.Instance.fireProjectileBounceDamage) return false;
                     if (EnforceManager.Instance.fireProjectileBounceIncrease) return false;
                     break;
             }
@@ -742,21 +726,19 @@ namespace Script.RewardScript
                 ExpData.Types.PoisonDotDamageBoost => finalTranslation,
                 ExpData.Types.PoisonAttackSpeedIncrease => finalTranslation,
                 ExpData.Types.PoisonDurationBoost => finalTranslation,
-                ExpData.Types.Fire2PoisonDamageIncrease => finalTranslation,
-                ExpData.Types.Fire2AttackSpeedIncrease => finalTranslation,
-                ExpData.Types.Fire2BurnStackIncrease => finalTranslation,
-                ExpData.Types.Fire2AttackPowerIncrease => finalTranslation,
-                ExpData.Types.Fire2StunChance => finalTranslation,
-                ExpData.Types.Fire2SwordSizeIncrease => finalTranslation,
-                ExpData.Types.Fire2BurningDamageBoost => finalTranslation,
-                ExpData.Types.Fire2NoBurnDamageIncrease => finalTranslation,
-                ExpData.Types.FireImageOverlapIncrease => finalTranslation,
-                ExpData.Types.FireAttackSpeedBoost => finalTranslation,
-                ExpData.Types.FireSlowEnemyDamageBoost => finalTranslation,
-                ExpData.Types.FireProjectileSpeedIncrease => finalTranslation,
-                ExpData.Types.FireBurnedEnemyExplosion => finalTranslation,
-                ExpData.Types.FireProjectileBounceDamage => finalTranslation,
+                ExpData.Types.Fire2FreezeDamageBoost => finalTranslation,
+                ExpData.Types.Fire2BurnDurationBoost => finalTranslation,
+                ExpData.Types.Fire2ChangeProperty => finalTranslation,
+                ExpData.Types.Fire2DamageBoost => finalTranslation,
+                ExpData.Types.Fire2RangeBoost => finalTranslation,
+                ExpData.Types.Fire2RateBoost => finalTranslation, 
+                ExpData.Types.Fire2BossDamageBoost => finalTranslation,
                 ExpData.Types.FireBurnPerAttackEffect => finalTranslation,
+                ExpData.Types.FireStackOverlap => finalTranslation,
+                ExpData.Types.FireProjectileBounceDamage => finalTranslation,
+                ExpData.Types.FireBurnedEnemyExplosion => finalTranslation,
+                ExpData.Types.FireAttackSpeedBoost => finalTranslation,
+                ExpData.Types.FireProjectileSpeedIncrease => finalTranslation,
                 ExpData.Types.FireProjectileBounceIncrease => finalTranslation,
             };
             powerCode.text = $"{powerUp.Code}";

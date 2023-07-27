@@ -6,7 +6,6 @@ using Script.PuzzleManagerGroup;
 using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.UIManager;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Script.RewardScript
 {
@@ -68,23 +67,22 @@ namespace Script.RewardScript
         public bool poisonDurationBoost;
 
         //Fire2 Unit G
-        public bool fire2PoisonDamageIncrease;
-        public int fire2AttackSpeedIncrease;
-        public bool fire2BurnStackIncrease;
-        public int fire2AttackPowerIncrease;
-        public bool fire2StunChance;
-        public bool fire2SwordSizeIncrease;
-        public int fire2BurningDamageBoost;
-        public bool fire2NoBurnDamageIncrease;
-        
+        public bool fire2FreezeDamageBoost;
+        public bool fire2BurnDurationBoost;
+        public bool fire2ChangeProperty;
+        public float fire2DamageBoost;
+        public bool fire2RangeBoost;
+        public bool fire2RateBoost;
+        public bool fire2BossDamageBoost;
+
+
         //Fire1 Unit H
-        public int fireImageOverlapIncrease;
-        public int fireAttackSpeedBoost;
-        public bool fireSlowEnemyDamageBoost;
-        public bool fireProjectileSpeedIncrease;
-        public bool fireBurnedEnemyExplosion;
-        public bool fireProjectileBounceDamage;
         public bool fireBurnPerAttackEffect;
+        public bool fireStackOverlap;
+        public bool fireProjectileBounceDamage;
+        public bool fireBurnedEnemyExplosion;
+        public float fireAttackSpeedBoost;
+        public bool fireProjectileSpeedIncrease;
         public bool fireProjectileBounceIncrease;
       
         //common
@@ -328,80 +326,61 @@ namespace Script.RewardScript
         public bool poisonDurationBoost;
 
 
-        [Header("\n\nG 불: Blue\n")]
-
-        [Header("Green/ 3Lv: 독에 걸린 적 공격시 15% 데미지 추가")] 
-        public bool fire2PoisonDamageIncrease;
-
-        [Header("Green/ 9Lv: 공격속도 6% 증가 (최대 4회)")] 
-        public int fire2AttackSpeedIncrease; 
-        protected internal void Fire2AttackSpeedIncrease()
+        [Header("\n\nG 불: Blue\n")] 
+        // 완료
+        [Header("Purple / 1Lv: 빙결된 적에게 가하는 추가데미지 200%")]
+        public bool fire2FreezeDamageBoost;
+        // 완료
+        [Header("Green / 3Lv: 화상지속시간 2초 증가")] 
+        public bool fire2BurnDurationBoost;
+        // 완료
+        [Header("Blue / 5Lv: 화상 비활성화 데미지 150% 증가")]
+        public bool fire2ChangeProperty;
+        // 완료
+        [Header("Green / 7Lv: 공격력 4% 증가 (최대 6회)")]
+        public float fire2DamageBoost;
+        protected internal void Fire2DamageBoost()
         {
-            if (fire2AttackSpeedIncrease >= 4) return;
-            fire2AttackSpeedIncrease++;
+            if (fire2DamageBoost >= 0.24f) return;
+            fire2DamageBoost += 0.04f;
         }
+        // 완료
+        [Header("Blue / 7Lv: 사거리가 1 증가합니다. ")] 
+        public bool fire2RangeBoost;
+        // 완료
+        [Header("Purple / 11Lv: 공격속도 15% 증가")] 
+        public bool fire2RateBoost;
+        // 완료
+        [Header("Blue / 13Lv: 보스 데미지 30% 증가")] 
+        public bool fire2BossDamageBoost;
 
-        [Header("Green/ 11Lv: 화상 최대 중첩 3회 증가")] 
-        public bool fire2BurnStackIncrease;
-
-        [Header("Blue/ Default: 공격력 12% 증가 (최대 4회)")] 
-        public int fire2AttackPowerIncrease; 
-        protected internal void Fire2AttackPowerIncrease()
-        {
-            if (fire2AttackPowerIncrease >= 4) return;
-            fire2AttackPowerIncrease++;
-        }
-  
-        [Header("Blue/ 13Lv: 독에 걸린 적 공격시 20% 확률로 0.5초 기절")] 
-        public bool fire2StunChance;
-  
-        [Header("Blue/ 5Lv: 화상 데미지 10% 증가 (최대 40% / 최대 3회)")]
-        public int fire2BurningDamageBoost;
-        protected internal void Fire2BurningDamageBoost()
-        {
-            if(fire2BurningDamageBoost >= 3) return;
-            fire2BurningDamageBoost++;
-        }
- 
-        [Header("Purple/ Default: 검의 크기가 100% 증가")] 
-        public bool fire2SwordSizeIncrease;
-  
-        [Header("Purple/ 7Lv: 더이상 화상을 발생시키지 않는 대신 150% 데미지 추가")] 
-        public bool fire2NoBurnDamageIncrease;
 
 
         [Header("\n\nH 불: Blue\n")]
-
-        [Header("Green/ Default: 화상 중첩수 증가 (최대 5회)")] 
-        public int fireImageOverlapIncrease = 1 ; 
-        protected internal void FireOverLapIncrease()
-        {
-            if (fireImageOverlapIncrease >= 5) return;
-            fireImageOverlapIncrease++;
-        }
-
-        [Header("Green/ 9Lv: 공격속도 6% 증가 (최대 4회)")] 
-        public int fireAttackSpeedBoost; 
-        protected internal void FireAttackSpeedBoost()
-        {
-            if (fireAttackSpeedBoost >= 4) return;
-            fireAttackSpeedBoost++;
-        }
-
-        [Header("Green/ 11Lv: 둔화중인 적을 공격시 10% 데미지 추가")]
-        public bool fireSlowEnemyDamageBoost;
-
-        [Header("Blue/ 3Lv: 투사체 속도가 100% 증가, 반드시 명중")] 
-        public bool fireProjectileSpeedIncrease;
-
-        [Header("Blue/ 7Lv: 화상에 걸린 적 제거시 주변 1칸 범위의 200% 폭발데미지 추가")] 
-        public bool fireBurnedEnemyExplosion;
-
+        // 완료
+        [Header("Purple/ 1Lv: 적을 공격하면 5초간 화상 초당 10% 데미지")] 
+        public bool fireBurnPerAttackEffect;
+        // 완료
+        [Header("Blue/ 3Lv: 화상 중첩수 3회 증기")] 
+        public bool fireStackOverlap;
+        // 완료
         [Header("Purple/ 5Lv: 적 적중시 가장 가까운적에게 투사체 튕김")] 
         public bool fireProjectileBounceDamage;
-  
-        [Header("Purple/ Default: 적을 공격하면 5초간 화상 초당 10% 데미지")] 
-        public bool fireBurnPerAttackEffect;
+        // 완료
+        [Header("Blue/ 7Lv: 화상에 걸린 적 제거시 주변 1칸 범위의 200% 폭발데미지 추가")] 
+        public bool fireBurnedEnemyExplosion;
+        // 완료
+        [Header("Green/ 9Lv: 공격속도 4% 증가 (최대 6회)")] 
+        public float fireAttackSpeedBoost; 
+        protected internal void FireAttackSpeedBoost()
+        {
+            if (fireAttackSpeedBoost >= 0.24f) return;
+            fireAttackSpeedBoost += 0.06f;
+        }
+        // 
+        [Header("Green / 11Lv: 투사체 속도가 100% 증가, 반드시 명중")] 
+        public bool fireProjectileSpeedIncrease;
+
 
         [Header("Purple/ 13Lv: 투사체가 튕기는 횟수 증가")] 
         public bool fireProjectileBounceIncrease;
@@ -573,7 +552,6 @@ namespace Script.RewardScript
                 water2FreezeChanceBoost = water2FreezeChanceBoost,
                 water2FreezeDamageBoost = water2FreezeDamageBoost,
                 water2SlowTimeBoost = water2SlowTimeBoost,
-                
                 //Poison Unit F
                 poisonPerHitEffect = poisonPerHitEffect,
                 poisonBleedingEnemyDamageBoost = poisonBleedingEnemyDamageBoost,
@@ -583,24 +561,24 @@ namespace Script.RewardScript
                 poisonAttackSpeedIncrease = poisonAttackSpeedIncrease,
                 poisonDurationBoost = poisonDurationBoost,
                 //Fire2 Unit G
-                fire2PoisonDamageIncrease = fire2PoisonDamageIncrease,
-                fire2AttackSpeedIncrease = fire2AttackSpeedIncrease,
-                fire2BurnStackIncrease = fire2BurnStackIncrease,
-                fire2AttackPowerIncrease = fire2AttackPowerIncrease,
-                fire2StunChance = fire2StunChance,
-                fire2SwordSizeIncrease = fire2SwordSizeIncrease,
-                fire2BurningDamageBoost = fire2BurningDamageBoost,
-                fire2NoBurnDamageIncrease = fire2NoBurnDamageIncrease,
+                fire2FreezeDamageBoost = fire2FreezeDamageBoost,
+                fire2BurnDurationBoost = fire2BurnDurationBoost,
+                fire2ChangeProperty = fire2ChangeProperty,
+                fire2DamageBoost =  fire2DamageBoost,
+                fire2RangeBoost = fire2RangeBoost,
+                fire2RateBoost = fire2RateBoost, 
+                fire2BossDamageBoost = fire2BossDamageBoost,  
+
                 //Fire1 Unit H
-                fireImageOverlapIncrease = fireImageOverlapIncrease,
-                fireAttackSpeedBoost = fireAttackSpeedBoost,
-                fireSlowEnemyDamageBoost = fireSlowEnemyDamageBoost,
-                fireProjectileSpeedIncrease = fireProjectileSpeedIncrease,
-                fireBurnedEnemyExplosion = fireBurnedEnemyExplosion,
-                fireProjectileBounceDamage = fireProjectileBounceDamage,
                 fireBurnPerAttackEffect = fireBurnPerAttackEffect,
+                fireStackOverlap = fireStackOverlap,
+                fireProjectileBounceDamage = fireProjectileBounceDamage,
+                fireBurnedEnemyExplosion = fireBurnedEnemyExplosion,
+                fireAttackSpeedBoost = fireAttackSpeedBoost,
+                fireProjectileSpeedIncrease = fireProjectileSpeedIncrease,
                 fireProjectileBounceIncrease = fireProjectileBounceIncrease,
 
+                // Common
                 addRowCount = addRowCount,
                 slowCount = slowCount,
                 diagonalMovement = diagonalMovement,
@@ -677,24 +655,22 @@ namespace Script.RewardScript
             poisonAttackSpeedIncrease = data.poisonAttackSpeedIncrease;
             poisonDurationBoost = data.poisonDurationBoost;
             //Fire2 Unit G
-            fire2PoisonDamageIncrease = data.fire2PoisonDamageIncrease;
-            fire2AttackSpeedIncrease = data.fire2AttackSpeedIncrease;
-            fire2BurnStackIncrease = data.fire2BurnStackIncrease;
-            fire2AttackPowerIncrease = data.fire2AttackPowerIncrease;
-            fire2StunChance = data.fire2StunChance;
-            fire2SwordSizeIncrease = data.fire2SwordSizeIncrease;
-            fire2BurningDamageBoost = data.fire2BurningDamageBoost;
-            fire2NoBurnDamageIncrease = data.fire2NoBurnDamageIncrease;
+            fire2FreezeDamageBoost = data.fire2FreezeDamageBoost;
+            fire2BurnDurationBoost = data.fire2BurnDurationBoost;
+            fire2ChangeProperty = data.fire2ChangeProperty;
+            fire2DamageBoost =  data.fire2DamageBoost;
+            fire2RangeBoost = data.fire2RangeBoost;
+            fire2RateBoost = data.fire2RateBoost; 
+            fire2BossDamageBoost = data.fire2BossDamageBoost;  
             //Fire1 Unit H
-            fireImageOverlapIncrease = data.fireImageOverlapIncrease;
-            fireAttackSpeedBoost = data.fireAttackSpeedBoost;
-            fireSlowEnemyDamageBoost = data.fireSlowEnemyDamageBoost;
-            fireProjectileSpeedIncrease = data.fireProjectileSpeedIncrease;
-            fireBurnedEnemyExplosion = data.fireBurnedEnemyExplosion;
-            fireProjectileBounceDamage = data.fireProjectileBounceDamage;
             fireBurnPerAttackEffect = data.fireBurnPerAttackEffect;
+            fireStackOverlap = data.fireStackOverlap;
+            fireProjectileBounceDamage = data.fireProjectileBounceDamage;
+            fireBurnedEnemyExplosion = data.fireBurnedEnemyExplosion;
+            fireAttackSpeedBoost = data.fireAttackSpeedBoost;
+            fireProjectileSpeedIncrease = data.fireProjectileSpeedIncrease;                            
             fireProjectileBounceIncrease = data.fireProjectileBounceIncrease;
-
+            // Common
             addRowCount = data.addRowCount;
             slowCount = data.slowCount;
             diagonalMovement = data.diagonalMovement;

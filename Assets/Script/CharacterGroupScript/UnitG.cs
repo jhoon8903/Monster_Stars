@@ -58,7 +58,7 @@ namespace Script.CharacterGroupScript
         private void GetDetectionProperties(out float size, out Vector2 center)
         {
             center = transform.position;
-            size = EnforceManager.Instance.fire2SwordSizeIncrease ? 2.5f : 1.5f;
+            size = EnforceManager.Instance.fire2RangeBoost ? 2.5f : 1.5f;
         }
 
         public override List<GameObject> DetectEnemies()
@@ -93,21 +93,21 @@ namespace Script.CharacterGroupScript
             UnitLevelDamage = unitPieceLevel > 0 ? unitPieceLevel * 3f + 2f: 0f;
             Type = Types.Character;
             unitGroup = UnitGroups.G;
-            var damageBoost = 1f + EnforceManager.Instance.fire2AttackPowerIncrease * 12 / 100f;
-            DefaultDamage = UnitLevelDamage + 29f * damageBoost * level switch
+            var damageBoost = 1f + EnforceManager.Instance.fire2DamageBoost;
+            var propertyDamage = EnforceManager.Instance.fire2ChangeProperty ? 1.5f : 1f;
+            DefaultDamage = UnitLevelDamage + 29f * damageBoost * propertyDamage * level switch
             {
                 <= 2 => 1f,
                 3 => 1.7f,
                 4 => 2f,
                 _ => 2.3f
             };
-            var increaseRateBoost = 1f + EnforceManager.Instance.fire2AttackSpeedIncrease * 6 / 100f;
-            defaultAtkRate = 1f / increaseRateBoost;
-            defaultAtkDistance = 1f;
-            swingSpeed = 1f;
+            var increaseRateBoost = EnforceManager.Instance.fire2RateBoost ? 0.85f : 1f;
+            defaultAtkRate = 1f * increaseRateBoost;
+            swingSpeed = 1f * increaseRateBoost;
             UnitAtkType = UnitAtkTypes.Circle;
             UnitProperty = UnitProperties.Fire;
-            UnitEffect = EnforceManager.Instance.fire2NoBurnDamageIncrease ? UnitEffects.None : UnitEffects.Burn;
+            UnitEffect = EnforceManager.Instance.fire2ChangeProperty? UnitEffects.None : UnitEffects.Burn;
         }
     }
 }

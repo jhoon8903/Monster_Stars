@@ -1,4 +1,6 @@
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
@@ -11,8 +13,9 @@ namespace Script.WeaponScriptGroup
     {
         public GameObject pivotPoint;
         public GameObject secondSword;
-        public float burnDotDamage;
         private Tween _pivotTween;
+        private int _maxStack; 
+        private readonly Dictionary<EnemyBase, int> burnStacks = new Dictionary<EnemyBase, int>();
 
         public override IEnumerator UseWeapon()
         {
@@ -49,28 +52,29 @@ namespace Script.WeaponScriptGroup
 
         public IEnumerator BurningGEffect(EnemyBase hitEnemy)
         {
-            float burnDotDamage;
-            burnDotDamage = CharacterBase.unitGroup switch
+            _maxStack = 1;
+            if (!burnStacks.ContainsKey(hitEnemy))
             {
-                CharacterBase.UnitGroups.G => Damage * (0.1f + EnforceManager.Instance.fire2BurningDamageBoost / 10f),
-                CharacterBase.UnitGroups.H => Damage * 0.1f,
-            };
-            var burningDuration = CharacterBase.unitGroup switch
+                burnStacks[hitEnemy] = 1;
+            }
+            else
             {
-               CharacterBase.UnitGroups.G => 2f,
-               CharacterBase.UnitGroups.H => EnforceManager.Instance.fireBurnPerAttackEffect ? 5f : 0f,
-            };
-            var maxBurningStack = CharacterBase.unitGroup switch
-            {
-                CharacterBase.UnitGroups.G => EnforceManager.Instance.fire2BurnStackIncrease ? 1 : 4,
-                CharacterBase.UnitGroups.H => EnforceManager.Instance.fireImageOverlapIncrease
-            };
+                burnStacks[hitEnemy] = Math.Min(burnStacks[hitEnemy] + 1, _maxStack);
+            }
+
+            var burnDotDamage = DamageCalculator(Damage, hitEnemy, CharacterBase.UnitGroups.G) * 0.2f * burnStacks[hitEnemy];
+            var burningDuration = EnforceManager.Instance.fire2BurnDurationBoost ? 5:3;
+
             for (var i = 0; i < burningDuration; i++)
             {
-                var damage = DamageCalculator(burnDotDamage, hitEnemy, CharacterBase.UnitGroups.G); 
-                hitEnemy.ReceiveDamage(hitEnemy, (int)damage , CharacterBase);
+                hitEnemy.ReceiveDamage(hitEnemy, (int)burnDotDamage , CharacterBase);
                 yield return new WaitForSeconds(1f);
             }
+
+            burnStacks[hitEnemy]--;
+
+            if (burnStacks[hitEnemy] > 0) yield break;
+            burnStacks.Remove(hitEnemy);
             hitEnemy.isBurnG = false;
             hitEnemy.IsBurnG = false;
         }

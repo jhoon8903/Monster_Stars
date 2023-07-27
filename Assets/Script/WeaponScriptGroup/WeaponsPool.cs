@@ -18,7 +18,6 @@ namespace Script.WeaponScriptGroup
         private Dictionary<WeaponType, List<Queue<GameObject>>> _poolDictionary;
         private static readonly Vector3 InitLocalScale = new Vector3(1f, 1f , 1f);
         private GameObject _pivotDSword;
-        private GameObject _pivotGSword;
         private void Start()
         {
             _poolDictionary = new Dictionary<WeaponType, List<Queue<GameObject>>>();
@@ -51,20 +50,11 @@ namespace Script.WeaponScriptGroup
             objectToSpawn.transform.position = position;
             objectToSpawn.transform.rotation = rotation;
             _pivotDSword = FindInChildren(objectToSpawn, $"D{puzzleLevel-1}(Clone)");
-            _pivotGSword = FindInChildren(objectToSpawn, $"G{puzzleLevel-1}(Clone)");
             if (EnforceManager.Instance.physicalSwordScaleIncrease)
             {
                 if (_pivotDSword != null)
                 {
                     _pivotDSword.transform.localScale = new Vector3(1.5f,2f,1f);
-                }
-            }
-
-            if (EnforceManager.Instance.fire2SwordSizeIncrease)
-            {
-                if (_pivotDSword != null)
-                {
-                    _pivotGSword.transform.localScale = new Vector3(1.5f,2f,1f);
                 }
             }
             _poolDictionary[weaponType][puzzleLevel-2].Enqueue(objectToSpawn);

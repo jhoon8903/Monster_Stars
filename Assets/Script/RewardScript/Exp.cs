@@ -77,23 +77,21 @@ namespace Script.RewardScript
              PoisonDurationBoost,
 
              //Fire2 G
-             Fire2PoisonDamageIncrease,
-             Fire2AttackSpeedIncrease,
-             Fire2BurnStackIncrease,
-             Fire2AttackPowerIncrease,
-             Fire2StunChance,
-             Fire2SwordSizeIncrease,
-             Fire2BurningDamageBoost,
-             Fire2NoBurnDamageIncrease,
+             Fire2FreezeDamageBoost,
+             Fire2BurnDurationBoost,
+             Fire2ChangeProperty,
+             Fire2DamageBoost,
+             Fire2RangeBoost,
+             Fire2RateBoost, 
+             Fire2BossDamageBoost,
 
              //Fire1 H
-             FireImageOverlapIncrease,
-             FireAttackSpeedBoost,
-             FireSlowEnemyDamageBoost,
-             FireProjectileSpeedIncrease,
-             FireBurnedEnemyExplosion,
-             FireProjectileBounceDamage,
              FireBurnPerAttackEffect,
+             FireStackOverlap,
+             FireProjectileBounceDamage,
+             FireBurnedEnemyExplosion,
+             FireAttackSpeedBoost,
+             FireProjectileSpeedIncrease,
              FireProjectileBounceIncrease,
          }
         public Types Type { get; set; }
