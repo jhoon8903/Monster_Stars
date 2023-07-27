@@ -45,6 +45,7 @@ namespace Script
         {
             Instance = this;
             Application.targetFrameRate = 60;
+
         }
 
         private void Start()
@@ -162,10 +163,15 @@ namespace Script
             yield return StartCoroutine(cameraManager.CameraPuzzleSizeChange());
             enemyPool.ClearList();
             StageManager.Instance.isBossClear = false;
-            AtkManager.Instance.groupDAtkCount = 0;
-            FindObjectOfType<UnitD>().groupDAtkRate = 0f;
-            AtkManager.Instance.groupFCount = 0;
-            FindObjectOfType<UnitF>().groupFDamage = 0f;
+            if (levelUpRewardManager.HasUnitInGroup(CharacterBase.UnitGroups.D))
+            {
+                AtkManager.Instance.groupDAtkCount = 0;
+                FindObjectOfType<UnitD>().groupDAtkRate = 0f;
+            } else if (levelUpRewardManager.HasUnitInGroup(CharacterBase.UnitGroups.F))
+            {
+                AtkManager.Instance.groupFCount = 0;
+                FindObjectOfType<UnitF>().groupFDamage = 0f;
+            }
         }
         private void LoseGame()
         {
