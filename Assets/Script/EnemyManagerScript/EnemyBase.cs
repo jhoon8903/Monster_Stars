@@ -186,8 +186,8 @@ namespace Script.EnemyManagerScript
                 if (isDead) return;
                 if (detectEnemy.isReceiveDamageDebuff) damage *= 1.15f;
                 currentHealth -= receiveDamage;
-                StartCoroutine(DamageTextPopup(receiveDamage));
                 if (!gameObject.activeInHierarchy) return;
+                StartCoroutine(DamageTextPopup(receiveDamage));
                 _updateSlider = true;
 
                 if (currentHealth > 0f || isDead) return;
