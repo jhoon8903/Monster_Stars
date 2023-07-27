@@ -44,11 +44,16 @@ namespace Script.PuzzleManagerGroup
             var newGridHeight = gridHeight + 1;
             PlayerPrefs.SetInt("GridHeight", newGridHeight);
             var newGridCells = new GameObject[gridWidth, newGridHeight];
+            var newBossGridCells = new GameObject[gridWidth, newGridHeight]; // Initialize newBossGridCells array here
             for (var x = 0; x < gridWidth; x++)
             {
                 for (var y = 0; y < gridHeight; y++)
                 {
                     newGridCells[x, y + 1] = _gridCells[x, y];
+                    if (_bossGridCells != null) // If the boss grid exists
+                    {
+                        newBossGridCells[x, y + 1] = _bossGridCells[x, y]; // Copy existing boss grid cells
+                    }
                 }
             }
             gridHeight++;
@@ -62,29 +67,18 @@ namespace Script.PuzzleManagerGroup
             {
                 var spritePrefab = (x + CurrentRowType) % 2 == 0 ? grid1Sprite : grid2Sprite;
                 var newCell = Instantiate(spritePrefab, new Vector3(x, 0, 0), Quaternion.identity, transform);
-                newGridCells[x, 0] = newCell; 
-            }
-            if (_bossGridCells != null) // If the boss grid exists
-            {
-                var newBossGridCells = new GameObject[gridWidth, gridHeight+1];
-                for (var x = 0; x < gridWidth; x++)
+                newGridCells[x, 0] = newCell;
+                if (_bossGridCells != null) // If the boss grid exists
                 {
-                    for (var y = 0; y < gridHeight; y++)
-                    {
-                        newBossGridCells[x, y] = _bossGridCells[x, y];
-                    }
+                    newBossGridCells[x, 0] = null; // Add new row to boss grid
                 }
-                for (var x = 0; x < gridWidth; x++)
-                {
-                    newBossGridCells[x, gridHeight] = null;  // Add new row to boss grid
-                }
-                _bossGridCells = newBossGridCells; // Assign the new array to _bossGridCells
             }
             _gridCells = newGridCells;
+            _bossGridCells = newBossGridCells; // Assign the new array to _bossGridCells
             gridHeight = newGridHeight;
             Debug.Log(gridHeight);
-           
         }
+
         public void ApplyBossSpawnColor(Vector3Int bossArea)
         {
             bossSpawnArea = bossArea;
