@@ -132,16 +132,13 @@ namespace Script.EnemyManagerScript
         {
             _rb = enemyBase.GetComponent<Rigidbody2D>();
             _enemyRigidbodies[enemyBase] = _rb;
-
             var direction = Random.Range(0, 2) == 0 ? -1 : 1;
             var waypoints = new Vector2[5];
-
             for (var i = 0; i < waypoints.Length; i++)
             {
                 waypoints[i] = new Vector2(_enemyRigidbodies[enemyBase].transform.position.x + direction, _enemyRigidbodies[enemyBase].transform.position.y - (2 * (i + 1)));
                 direction *= -1;
             }
-
             var waypointIndex = 0;
 
             while (gameManager.IsBattle)
@@ -166,7 +163,6 @@ namespace Script.EnemyManagerScript
                     if (waypointIndex >= waypoints.Length) break;
                     continue;
                 }
-
                 StartCoroutine(Effect(enemyBase));
             }
         }
@@ -382,7 +378,6 @@ namespace Script.EnemyManagerScript
             enemyBase.GetComponent<SpriteRenderer>().color = originColor;
             _alreadyStatusSlow[enemyBase] = false;
         }
-        
         private GameObject GetFreezeEffectFromPool()
         {
             GameObject freeze;
@@ -411,7 +406,6 @@ namespace Script.EnemyManagerScript
             }
             yield return null;
         }
-
         private IEnumerator FreezeEffect(EnemyBase enemyBase)
         {
             var freezeTime = 1f;
@@ -428,12 +422,14 @@ namespace Script.EnemyManagerScript
             var freeze = GetFreezeEffectFromPool();
             freeze.transform.position = enemyBase.transform.position;
             freeze.SetActive(true);
-            if (enemyBase.isDead)
-            {
-                freeze.SetActive(false);
-            }
             enemyBase.moveSpeed = 0;
-            yield return new WaitForSeconds(freezeTime);
+    
+            float timer = 0;
+            while (timer < freezeTime && !enemyBase.isDead)
+            {
+                timer += Time.deltaTime;
+                yield return null; 
+            }
             freeze.SetActive(false);
             freezeEffectPool.Add(freeze);
             enemyBase.moveSpeed = enemyBase.originSpeed;
@@ -447,7 +443,6 @@ namespace Script.EnemyManagerScript
             }
             _alreadyFreeze[enemyBase] = false;
         }
-
         private IEnumerator BlizzardEffect()
         {
             blizzardEffect.SetActive(true);

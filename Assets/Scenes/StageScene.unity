@@ -898,6 +898,8 @@ MonoBehaviour:
   enemyList: []
   weaponsList: []
   groupCAtkCount: 0
+  groupDAtkCount: 0
+  groupFCount: 0
 --- !u!114 &149521969
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1908,41 +1910,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyList:
   - enemyPrefab: {fileID: 3415115993854886546, guid: 57973fa9f574848b58752b70bc213f3d, type: 3}
-    poolSize: 10
+    poolSize: 48
   - enemyPrefab: {fileID: 6354447749098710767, guid: a6f54a32111d143f390da2cf21d4a958, type: 3}
-    poolSize: 10
+    poolSize: 48
   - enemyPrefab: {fileID: 5608433991594180286, guid: 375e7fd397b004d4490e979ec2e97dcd, type: 3}
-    poolSize: 10
+    poolSize: 48
   - enemyPrefab: {fileID: 2768350010340750158, guid: 0bba613c82da940d9922036e0a6aa47a, type: 3}
-    poolSize: 10
+    poolSize: 48
   - enemyPrefab: {fileID: 1717970540844894003, guid: 5bd7ef05268cd4e7ea507831672cad76, type: 3}
-    poolSize: 10
+    poolSize: 48
   - enemyPrefab: {fileID: 2579904171076932808, guid: 688696ac12a064a9185e3784f0c34b62, type: 3}
-    poolSize: 10
+    poolSize: 48
   - enemyPrefab: {fileID: 1451612114469407511, guid: a67623c7e33ef449583533f506e334a1, type: 3}
-    poolSize: 10
+    poolSize: 48
   - enemyPrefab: {fileID: 4205113384316921532, guid: fba66d59eef3e42e2bb822be66513a96, type: 3}
-    poolSize: 10
+    poolSize: 48
   - enemyPrefab: {fileID: 5386890575874530227, guid: bfeaee0da0f074743a6f4901c62bf1d2, type: 3}
-    poolSize: 10
+    poolSize: 48
   - enemyPrefab: {fileID: 7737460370207903221, guid: 6831745aaf39a4cf7b9ad4f18f159320, type: 3}
-    poolSize: 10
+    poolSize: 48
   - enemyPrefab: {fileID: 4755727879278904443, guid: 63cefaae255324635892057cca49b47a, type: 3}
-    poolSize: 10
+    poolSize: 48
   - enemyPrefab: {fileID: 3200279647660370638, guid: bbdfd9ac701ae4cf19f0390f389b061a, type: 3}
-    poolSize: 10
+    poolSize: 48
   - enemyPrefab: {fileID: 2707937106763202311, guid: 87d63693491194db69595d06f0255f07, type: 3}
-    poolSize: 10
+    poolSize: 48
   - enemyPrefab: {fileID: 4730724374024331694, guid: 53c258f5b07de43268ed89dfab8434b5, type: 3}
-    poolSize: 10
+    poolSize: 48
   - enemyPrefab: {fileID: 160340852449985320, guid: 22d84316c13ba4c00b0f2bc3460771d8, type: 3}
-    poolSize: 10
+    poolSize: 48
   - enemyPrefab: {fileID: 2675399058660435764, guid: bb84ea4bcd3d24343aaef5988609e4e5, type: 3}
-    poolSize: 10
+    poolSize: 48
   - enemyPrefab: {fileID: 3050334315341218211, guid: cadb09f772a854e4d81f9e374233c081, type: 3}
-    poolSize: 10
+    poolSize: 48
   - enemyPrefab: {fileID: 6516928806568798385, guid: 8b34e044734ff446a8f9ea34644d445e, type: 3}
-    poolSize: 10
+    poolSize: 48
   stageBoss: {fileID: 5789142652586811858, guid: 18be4b048fd8a40fbadab1199bbdec9a, type: 3}
 --- !u!114 &329010038
 MonoBehaviour:
@@ -2013,13 +2015,13 @@ MonoBehaviour:
   isReceiveDamageDebuff: 0
   isSlowC: 0
   isSlowE: 0
-  isSlowStun: 0
-  isSlowBleedStun: 0
   isBurningPoison: 0
   isPoison: 0
   isKnockBack: 0
   isFreeze: 0
-  isBurn: 0
+  isFreezeE: 0
+  isBurnG: 0
+  isBurnH: 0
   isBleed: 0
 --- !u!1 &348132021
 GameObject:
@@ -8213,45 +8215,40 @@ MonoBehaviour:
   waterSlowCPowerBoost: 0
   waterAttackRateBoost: 0
   waterGlobalFreeze: 0
-  physicalAttackSpeedBoost: 0
-  physicalDamage35Boost: 0
-  physicalDamage6Boost: 0
-  physicalBleedingChance: 0
-  physicalSwordAddition: 0
-  physicalSlowEnemyDamageBoost: 0
   physicalSwordScaleIncrease: 0
-  physicalDamage18Boost: 0
-  water2DebuffDurationIncrease: 0
-  water2AttackSpeedIncrease: 0
-  water2StunChanceAgainstBleeding: 0
-  water2IceSpikeProjectile: 0
-  water2AttackPowerIncrease: 0
-  water2ProjectileSpeedIncrease: 0
-  water2DebuffStrengthIncrease: 0
-  water2AttackSpeedBuffToAdjacentAllies: 0
-  poisonAttackSpeedIncrease: 0
-  poisonMaxStackIncrease: 0
-  poisonDamageAttackPowerIncrease: 0
-  poisonProjectileIncrease: 0
-  poisonRangeIncrease: 0
-  poisonBleedingEnemyDamageBoost: 0
-  poisonEnemyInstantKill: 0
+  physicalSwordAddition: 0
+  physicalAttackSpeedBoost: 0
+  physicalRatePerAttack: 0
+  physicalBindBleed: 0
+  physicalDamageBoost: 0
+  physicalBleedDuration: 0
+  water2Freeze: 0
+  water2SlowPowerBoost: 0
+  water2FreezeTimeBoost: 0
+  water2DamageBoost: 0
+  water2FreezeChanceBoost: 0
+  water2FreezeDamageBoost: 0
+  water2SlowTimeBoost: 0
   poisonPerHitEffect: 0
-  fire2PoisonDamageIncrease: 0
-  fire2AttackSpeedIncrease: 0
-  fire2BurnStackIncrease: 0
-  fire2AttackPowerIncrease: 0
-  fire2StunChance: 0
-  fire2BurningDamageBoost: 0
-  fire2SwordSizeIncrease: 0
-  fire2NoBurnDamageIncrease: 0
-  fireImageOverlapIncrease: 1
-  fireAttackSpeedBoost: 0
-  fireSlowEnemyDamageBoost: 0
-  fireProjectileSpeedIncrease: 0
-  fireBurnedEnemyExplosion: 0
-  fireProjectileBounceDamage: 0
+  poisonBleedingEnemyDamageBoost: 0
+  poisonDamagePerBoost: 0
+  poisonDamageBoost: 0
+  poisonDotDamageBoost: 0
+  poisonAttackSpeedIncrease: 0
+  poisonDurationBoost: 0
+  fire2FreezeDamageBoost: 0
+  fire2BurnDurationBoost: 0
+  fire2ChangeProperty: 0
+  fire2DamageBoost: 0
+  fire2RangeBoost: 0
+  fire2RateBoost: 0
+  fire2BossDamageBoost: 0
   fireBurnPerAttackEffect: 0
+  fireStackOverlap: 0
+  fireProjectileBounceDamage: 0
+  fireBurnedEnemyExplosion: 0
+  fireAttackSpeedBoost: 0
+  fireProjectileSpeedIncrease: 0
   fireProjectileBounceIncrease: 0
   addRowCount: 0
   slowCount: 0
