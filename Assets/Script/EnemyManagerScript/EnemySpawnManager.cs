@@ -133,16 +133,14 @@ namespace Script.EnemyManagerScript
                 }
                 case EnemyBase.SpawnZones.E:
                 {
-                    var spawnPosY = _spawnZones[zone].position.y;
-                    spawnPosY = EnforceManager.Instance.addRowCount == 0 ? spawnPosY : spawnPosY + 1; 
+                    var spawnPosY = EnforceManager.Instance.addRowCount == 0 ? _spawnZones[zone].position.y : _spawnZones[zone].position.y + 1;
                     randomX = Random.Range(2, 4);
                     spawnPosition = new Vector3(randomX, spawnPosY, 0);
                     break;
                 }
                 case EnemyBase.SpawnZones.F:
                 {
-                    var spawnPosY = _spawnZones[zone].position.y;
-                    spawnPosY = EnforceManager.Instance.addRowCount == 0 ? spawnPosY : spawnPosY + 1; 
+                    var spawnPosY = EnforceManager.Instance.addRowCount == 0 ? _spawnZones[zone].position.y : _spawnZones[zone].position.y + 1; 
                     randomX = (Random.value > 0.5f) ? -1 : 6;
                     spawnPosition = new Vector3(randomX, spawnPosY, 0);
                     break;
