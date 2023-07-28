@@ -302,7 +302,7 @@ namespace Script.CharacterManagerScript
         public IEnumerator UnitLevelUp()
         {
             CharacterPieceCount -= CharacterMaxPiece;
-            CoinsScript.Instance.Coin -= unitPieceLevel * 500;
+            CoinsScript.Instance.Coin -= CharacterLevelUpCoin;
             unitPieceLevel++;
             Initialize();
             yield return null;
