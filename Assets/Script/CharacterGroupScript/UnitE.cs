@@ -14,7 +14,7 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level3Sprite; 
         [SerializeField] private Sprite level4Sprite; 
         [SerializeField] private Sprite level5Sprite;
-        private const float DetectionWidth = 1f;
+        private const float DetectionWidth = 0.8f;
         private float _detectionHeight;
 
         public void Awake()
@@ -57,8 +57,8 @@ namespace Script.CharacterGroupScript
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
             _detectionHeight = defaultAtkDistance;
-            size = new Vector2(DetectionWidth, _detectionHeight);
-            center = (Vector2)transform.position + Vector2.up * _detectionHeight / 2f;
+            size = new Vector2(DetectionWidth, _detectionHeight * 2f);
+            center = transform.position;
         }
 
         public override List<GameObject> DetectEnemies()

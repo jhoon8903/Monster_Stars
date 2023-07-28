@@ -44,16 +44,8 @@ namespace Script.RewardScript
         }
         public void GetCoin()
         {
-            var stage = StageManager.Instance.selectStage;
             var wave = StageManager.Instance.currentWave;
-            var coin = stage switch
-            {
-                >= 1 and <= 10 => 7 * wave,
-                <= 20 => 10 + 7 * wave,
-                <= 30 => 20 + 7 * wave,
-                <= 40 => 30 + 7 * wave,
-                _ => 40 + 7 * wave
-            };
+            var coin = StageManager.Instance.isStageClear ? 100 * wave : 50 * wave;
             var getCoin = coin + EnforceManager.Instance.addGoldCount;
             CoinsScript.Instance.Coin += getCoin;
             CoinsScript.Instance.UpdateCoin();

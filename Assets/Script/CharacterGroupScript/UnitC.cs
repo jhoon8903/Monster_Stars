@@ -55,8 +55,8 @@ namespace Script.CharacterGroupScript
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
             _detectionHeight = defaultAtkDistance;
-            size = new Vector2(_detectionWidth, _detectionHeight);
-            center = (Vector2)transform.position + Vector2.up * _detectionHeight / 2f;
+            size = new Vector2(_detectionWidth, _detectionHeight * 2f);
+            center = transform.position;
         }
 
         public override List<GameObject> DetectEnemies()

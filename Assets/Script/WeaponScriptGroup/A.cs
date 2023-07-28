@@ -1,7 +1,9 @@
 using System.Collections;
+using System.Linq;
 using Script.CharacterGroupScript;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
+using Script.RewardScript;
 using UnityEngine;
 namespace Script.WeaponScriptGroup
 {
@@ -25,6 +27,15 @@ namespace Script.WeaponScriptGroup
                 CharacterBase.GetComponent<UnitA>().atkCount = 0;                
             }
             var useTime = Distance / Speed;
+            if (!EnforceManager.Instance.divineDualAttack)
+            {
+                var enemyTransforms = CharacterBase.GetComponent<UnitA>().DetectEnemies();
+                foreach (var enemy in enemyTransforms.Where(enemy => enemy.transform.position.y < CharacterBase.transform.position.y))
+                {
+                    Speed = -Speed;
+                    transform.rotation = Quaternion.Euler(0, 0, 180);
+                }
+            }
             _rigidbody2D.velocity = direction == Vector2.down ? new Vector2(0, -Speed) : new Vector2(0, Speed);
             yield return new WaitForSeconds(useTime);
             StopUseWeapon(gameObject);

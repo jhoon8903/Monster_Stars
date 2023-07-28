@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
+using UnityEditor;
 using UnityEngine;
 
 namespace Script.CharacterGroupScript
@@ -55,16 +57,8 @@ namespace Script.CharacterGroupScript
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
             _detectionHeight = defaultAtkDistance;
-            if (EnforceManager.Instance.divineDualAttack)
-            {
-                size = new Vector2(DetectionWidth, _detectionHeight * 2);
-                center = transform.position;
-            }
-            else
-            {
-                size = new Vector2(DetectionWidth, _detectionHeight);
-                center = (Vector2)transform.position + Vector2.up * _detectionHeight / 2f;
-            }
+            size = new Vector2(DetectionWidth, _detectionHeight * 2);
+            center = transform.position;
         }
         public override List<GameObject> DetectEnemies()
         {
@@ -81,6 +75,14 @@ namespace Script.CharacterGroupScript
             DetectedEnemies = currentlyDetectedEnemies;
             return DetectedEnemies;
         }
+
+        public void OnDrawGizmos()
+        {
+            GetDetectionProperties(out var detectionSize, out var detectionCenter); 
+            Gizmos.DrawWireCube(detectionCenter,detectionSize);
+            Gizmos.color = Color.yellow;
+        }
+
         protected internal override Sprite GetSprite(int level)
         {
             return level switch
