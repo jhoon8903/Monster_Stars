@@ -133,14 +133,14 @@ namespace Script.EnemyManagerScript
                 }
                 case EnemyBase.SpawnZones.E:
                 {
-                    var spawnPosY = gridManager.gridHeight + 1f;
+                    var spawnPosY = gridManager.gridHeight;
                     randomX = Random.Range(2, 4);
                     spawnPosition = new Vector3(randomX, spawnPosY, 0);
                     break;
                 }
                 case EnemyBase.SpawnZones.F:
                 {
-                    var spawnPosY = gridManager.gridHeight + 1f; 
+                    var spawnPosY = gridManager.gridHeight; 
                     randomX = (Random.value > 0.5f) ? -1 : 6;
                     spawnPosition = new Vector3(randomX, spawnPosY, 0);
                     break;
