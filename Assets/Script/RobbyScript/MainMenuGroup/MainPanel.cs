@@ -1,3 +1,4 @@
+using Script.RewardScript;
 using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
 using Script.UIManager;
@@ -21,10 +22,11 @@ namespace Script.RobbyScript.MainMenuGroup
         [SerializeField] private GameObject stageImage;
         [SerializeField] private Slider stageProgress;
         [SerializeField] private TextMeshProUGUI stageProgressText;
+        [SerializeField] private GameObject timeRewardBtn;
         [SerializeField] private GameObject continuePanel;
         [SerializeField] private GameObject confirmBtn;
         [SerializeField] private GameObject cancelBtn;
-        private int LatestStage { get; set; }
+        public int LatestStage { get; set; }
         public int SelectStage { get; private set; }
         public int recordWave;
         public static MainPanel Instance { get; private set; }
@@ -49,6 +51,7 @@ namespace Script.RobbyScript.MainMenuGroup
             previousStageBtn.GetComponent<Button>().onClick.AddListener(PreviousStage);
             confirmBtn.GetComponent<Button>().onClick.AddListener(ContinueGame);
             cancelBtn.GetComponent<Button>().onClick.AddListener(CancelContinue);
+            timeRewardBtn.GetComponent<Button>().onClick.AddListener(OpenTimeReward);
         }
         private void Update()
         {
@@ -70,14 +73,14 @@ namespace Script.RobbyScript.MainMenuGroup
         {
             if ( SelectedUnitHolder.Instance.selectedUnit.Count == 4)
             {
-                if (staminaScript.currentStamina >= 5)
+                if (staminaScript.CurrentStamina >= 5)
                 {
                     if (PlayerPrefs.HasKey("Retry"))
                     {
                         PlayerPrefs.SetInt("Retry", 1);
                     } 
 
-                    staminaScript.currentStamina -= 5;
+                    staminaScript.CurrentStamina -= 5;
                     staminaScript.StaminaUpdate();
                     staminaScript.SaveStaminaState();
                     SceneManager.LoadScene("StageScene");
@@ -148,6 +151,11 @@ namespace Script.RobbyScript.MainMenuGroup
             PlayerPrefs.SetInt("GridHeight", 6);
             PlayerPrefs.Save();
             SceneManager.LoadScene("SelectScene");
+        }
+
+        private static void OpenTimeReward()
+        {
+            TimeRewardManager.Instance.OpenPanel();
         }
     }
 }

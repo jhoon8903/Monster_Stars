@@ -41,15 +41,14 @@ namespace Script.WeaponScriptGroup
 
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            if (HasHit) return;
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
-            if (enemy == null || HitEnemy.Contains(enemy)) return;
-            HitEnemy.Add(enemy);
+            HasHit = true;
             AtkEffect(enemy);
             var damage = DamageCalculator(Damage, enemy, CharacterBase.UnitGroups.B); 
             enemy.ReceiveDamage(enemy, (int)damage, CharacterBase);
             StopUseWeapon(gameObject);
-            HitEnemy.Clear();
         }
     }
 }

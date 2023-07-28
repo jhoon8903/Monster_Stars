@@ -16,7 +16,7 @@ namespace Script.RobbyScript.TopMenuGroup
         private const string LastTimeKey = "LastTimeKey";
         private const string StaminaKey = "Stamina";
 
-        public int currentStamina
+        public int CurrentStamina
         {
             get => PlayerPrefs.GetInt(StaminaKey, 0);
             set
@@ -42,14 +42,11 @@ namespace Script.RobbyScript.TopMenuGroup
             StaminaUpdate();
             StartCoroutine(RecoveryStamina());
         }
-
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                currentStamina = 30;
-                StaminaUpdate();
-            }
+            if (!Input.GetKeyDown(KeyCode.S)) return;
+            CurrentStamina = 30;
+            StaminaUpdate();
         }
         private void OnApplicationQuit()
         {
@@ -69,27 +66,29 @@ namespace Script.RobbyScript.TopMenuGroup
         public void SaveStaminaState()
         {
             PlayerPrefs.SetString(LastTimeKey, DateTime.UtcNow.ToString());
-            PlayerPrefs.SetInt("Stamina", currentStamina);
+            PlayerPrefs.SetInt("Stamina", CurrentStamina);
             PlayerPrefs.SetFloat("Cooldown", _currentCooldown);
         }
+
         private void LoadStaminaState()
         {
             var lastTime = PlayerPrefs.GetString(LastTimeKey, DateTime.UtcNow.ToString());
             var lastDateTime = DateTime.Parse(lastTime);
             var elapsed = DateTime.UtcNow - lastDateTime;
             var recoveryAmount = Mathf.FloorToInt((float)elapsed.TotalSeconds / RecoveryCooldown);
-            currentStamina = PlayerPrefs.GetInt("Stamina", MaxStamina); // 시작 스테미나 설정 기본 MaxStamina
-            currentStamina = Mathf.Min(MaxStamina, currentStamina + recoveryAmount);
+            CurrentStamina = PlayerPrefs.GetInt("Stamina", MaxStamina); // 시작 스테미나 설정 기본 MaxStamina
+            CurrentStamina = Mathf.Min(MaxStamina, CurrentStamina + recoveryAmount);
             _currentCooldown = PlayerPrefs.GetFloat("Cooldown", RecoveryCooldown);
             _currentCooldown -= (float)(elapsed.TotalSeconds % RecoveryCooldown);
             if (!(_currentCooldown < 0)) return;
             _currentCooldown += RecoveryCooldown;
-            currentStamina = Mathf.Min(MaxStamina, currentStamina + 1);
+            CurrentStamina = Mathf.Min(MaxStamina, CurrentStamina + 1);
         }
         public void StaminaUpdate()
         {
-            staminaText.text = $"{currentStamina}/{MaxStamina}";
+            staminaText.text = $"{CurrentStamina}/{MaxStamina}";
         }
+        
         private void StaminaTimeUpdate()
         {
             var minutes = Mathf.FloorToInt(_currentCooldown / 60);
@@ -100,13 +99,13 @@ namespace Script.RobbyScript.TopMenuGroup
         {
             while (true)
             {
-                if (currentStamina < MaxStamina)
+                if (CurrentStamina < MaxStamina)
                 {
                     staminaRecoveryTime.gameObject.SetActive(true);
                     _currentCooldown -= Time.deltaTime;
                     if (_currentCooldown <= 0)
                     {
-                        currentStamina++;
+                        CurrentStamina++;
                         StaminaUpdate();
                         _currentCooldown = RecoveryCooldown;
                     }

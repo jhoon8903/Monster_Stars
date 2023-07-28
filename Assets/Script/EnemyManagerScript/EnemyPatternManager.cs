@@ -4,7 +4,6 @@ using System.Linq;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Script.EnemyManagerScript
@@ -20,30 +19,24 @@ namespace Script.EnemyManagerScript
         private readonly Dictionary<EnemyBase, Rigidbody2D> _enemyRigidbodies = new Dictionary<EnemyBase, Rigidbody2D>();
         private float _moveSpeed;
         public float moveSpeedOffset;
-        private readonly System.Random _random = new System.Random();
-        private readonly Dictionary<EnemyBase, bool> _alreadySlow = new Dictionary<EnemyBase, bool>();
-        private readonly Dictionary<EnemyBase, bool> _alreadyRestrain = new Dictionary<EnemyBase, bool>();
-        private readonly Dictionary<EnemyBase, bool> _alreadyKnockBack = new Dictionary<EnemyBase, bool>();
-        private readonly Dictionary<EnemyBase, bool> _alreadyStatusSlow = new Dictionary<EnemyBase, bool>();
-        private readonly Dictionary<EnemyBase, bool> _alreadyFreeze = new Dictionary<EnemyBase, bool>();
+        public readonly Dictionary<EnemyBase, bool> AlreadySlow = new Dictionary<EnemyBase, bool>();
+        public readonly Dictionary<EnemyBase, bool> AlreadyRestrain = new Dictionary<EnemyBase, bool>();
+        public readonly Dictionary<EnemyBase, bool> AlreadyKnockBack = new Dictionary<EnemyBase, bool>();
+        public readonly Dictionary<EnemyBase, bool> AlreadyStatusSlow = new Dictionary<EnemyBase, bool>();
+        public readonly Dictionary<EnemyBase, bool> AlreadyFreeze = new Dictionary<EnemyBase, bool>();
         private readonly List<GameObject> freezeEffectPool = new List<GameObject>();
         private Rigidbody2D _rb;
         private float _endY;
         private int _slowCount;
         private float _speedReductionFactor;
         public bool globalFreeze;
-
+        public static EnemyPatternManager Instance { get; private set; }
 
         private void Awake()
         {
+            Instance = this;
            _endY = castle.GetComponent<BoxCollider2D>().transform.position.y;
         }
-
-        private bool Chance(int percent)
-        {
-            return _random.Next(100) < percent;
-        }
-
         public IEnumerator Zone_Move(EnemyBase enemyBase)
         {
             if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
@@ -52,7 +45,7 @@ namespace Script.EnemyManagerScript
                 StartCoroutine(Rain(enemyBase));
             }
 
-            _alreadyKnockBack.TryAdd(enemyBase, false);
+            AlreadyKnockBack.TryAdd(enemyBase, false);
 
             switch (enemyBase.SpawnZone)
             {
@@ -78,14 +71,13 @@ namespace Script.EnemyManagerScript
             }
             yield return null;
         }
-
         private IEnumerator Rain(EnemyBase enemyBase)
         {
             _rb = enemyBase.GetComponent<Rigidbody2D>();
             _enemyRigidbodies[enemyBase] = _rb;
             
             var targetPosition = new Vector2(_enemyRigidbodies[enemyBase].transform.position.x, _endY);
-            _alreadyKnockBack.TryAdd(enemyBase, false);
+            AlreadyKnockBack.TryAdd(enemyBase, false);
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
@@ -234,7 +226,6 @@ namespace Script.EnemyManagerScript
                 StartCoroutine(Effect(enemyBase));
             }
         }
-
         private IEnumerator Effect(EnemyBase enemyBase)
         {
             if (enemyBase.isBind)
@@ -266,30 +257,20 @@ namespace Script.EnemyManagerScript
         {
             var restrainColor = new Color(1, 0.5f, 0);
             var originColor = new Color(1, 1, 1);
-            float restrainTime;
-            
-            if (enemyBase.isBurningPoison)
-            {
-                restrainTime = 0.5f;
-            }
-            else
-            {
-                restrainTime = EnforceManager.Instance.divineBindDurationBoost? 1f : 1.5f;
-            }
-
-            if (!_alreadyRestrain.TryGetValue(enemyBase, out var isAlreadyRestraint))
+            var restrainTime = EnforceManager.Instance.divineBindDurationBoost? 1f : 1.5f;
+            if (!AlreadyRestrain.TryGetValue(enemyBase, out var isAlreadyRestraint))
             {
                 isAlreadyRestraint = false;
-                _alreadyRestrain[enemyBase] = false;
+                AlreadyRestrain[enemyBase] = false;
             }
             if  (isAlreadyRestraint) yield break;
-            _alreadyRestrain[enemyBase] = true;
+            AlreadyRestrain[enemyBase] = true;
             enemyBase.GetComponent<SpriteRenderer>().color = restrainColor;
             enemyBase.moveSpeed = 0;
             yield return new WaitForSeconds(restrainTime);
             enemyBase.moveSpeed = enemyBase.originSpeed;
             enemyBase.GetComponent<SpriteRenderer>().color = originColor;
-            _alreadyRestrain[enemyBase] = false;
+            AlreadyRestrain[enemyBase] = false;
             enemyBase.isBind = false;
         }
         private IEnumerator SlowEffect(EnemyBase enemyBase)
@@ -308,19 +289,19 @@ namespace Script.EnemyManagerScript
                 slowTime = 1.5f + EnforceManager.Instance.water2SlowTimeBoost;
                 slowPower = EnforceManager.Instance.water2SlowPowerBoost ? 0.6f : 0.7f;
             }
-            if (!_alreadySlow.TryGetValue(enemyBase, out var isAlreadySlow))
+            if (!AlreadySlow.TryGetValue(enemyBase, out var isAlreadySlow))
             {
                 isAlreadySlow = false;
-                _alreadySlow[enemyBase] = false;
+                AlreadySlow[enemyBase] = false;
             }
             if (isAlreadySlow) yield break;
-            _alreadySlow[enemyBase] = true;
+            AlreadySlow[enemyBase] = true;
             enemyBase.GetComponent<SpriteRenderer>().color = slowColor;
             enemyBase.moveSpeed *= slowPower;
             yield return new WaitForSeconds(slowTime);
             enemyBase.moveSpeed = enemyBase.originSpeed;
             enemyBase.GetComponent<SpriteRenderer>().color = originColor;
-            _alreadySlow[enemyBase] = false;
+            AlreadySlow[enemyBase] = false;
             if (enemyBase.isSlowC)
             {
                 enemyBase.isSlowC = false;
@@ -332,13 +313,13 @@ namespace Script.EnemyManagerScript
         }
         private IEnumerator KnockBackEffect(EnemyBase enemyBase)
         {
-            if (!_alreadyKnockBack.TryGetValue(enemyBase, out var isAlreadyKnockBack))
+            if (!AlreadyKnockBack.TryGetValue(enemyBase, out var isAlreadyKnockBack))
             {
                 isAlreadyKnockBack = false;
-                _alreadyKnockBack[enemyBase] = false;
+                AlreadyKnockBack[enemyBase] = false;
             }
             if (isAlreadyKnockBack) yield break;
-            _alreadyKnockBack[enemyBase] = true;
+            AlreadyKnockBack[enemyBase] = true;
             enemyBase.isKnockBack = true;
 
             var knockBackDirection = Vector2.up; 
@@ -354,7 +335,7 @@ namespace Script.EnemyManagerScript
             }
             rb.velocity = Vector2.zero;
             enemyBase.moveSpeed = enemyBase.originSpeed;
-            _alreadyKnockBack[enemyBase] = false;
+            AlreadyKnockBack[enemyBase] = false;
             enemyBase.isKnockBack = false;
         }
         private IEnumerator StatusSlowEffect(EnemyBase enemyBase)
@@ -364,19 +345,19 @@ namespace Script.EnemyManagerScript
             var slowColor = new Color(0.2311f, 0.2593f, 1f, 1f);
             var originColor = new Color(1f, 1f, 1f);
 
-            if (!_alreadyStatusSlow.TryGetValue(enemyBase, out var isAlreadyStatusSlow))
+            if (!AlreadyStatusSlow.TryGetValue(enemyBase, out var isAlreadyStatusSlow))
             {
                 isAlreadyStatusSlow = false;
-                _alreadyStatusSlow[enemyBase] = false;
+                AlreadyStatusSlow[enemyBase] = false;
             }
             if(isAlreadyStatusSlow) yield break;
-            _alreadyStatusSlow[enemyBase] = true;
+            AlreadyStatusSlow[enemyBase] = true;
             enemyBase.GetComponent<SpriteRenderer>().color = slowColor;
             enemyBase.moveSpeed *= moveSpeedMultiplier;
             yield return new WaitForSeconds(slowTime);
             enemyBase.moveSpeed = enemyBase.originSpeed;
             enemyBase.GetComponent<SpriteRenderer>().color = originColor;
-            _alreadyStatusSlow[enemyBase] = false;
+            AlreadyStatusSlow[enemyBase] = false;
         }
         private GameObject GetFreezeEffectFromPool()
         {
@@ -390,7 +371,6 @@ namespace Script.EnemyManagerScript
             {
                 freeze = Instantiate(freezeEffect, transform, true);
             }
-
             return freeze;
         }
         public IEnumerator GlobalFreezeEffect()
@@ -413,12 +393,12 @@ namespace Script.EnemyManagerScript
             {
                 freezeTime = 1.5f;
             }
-            if (!_alreadyFreeze.TryGetValue(enemyBase, out var isAlreadyFreeze))
+            if (!AlreadyFreeze.TryGetValue(enemyBase, out var isAlreadyFreeze))
             {
                 isAlreadyFreeze = false;
             }
             if  (isAlreadyFreeze) yield break;
-            _alreadyFreeze[enemyBase] = true;
+            AlreadyFreeze[enemyBase] = true;
             var freeze = GetFreezeEffectFromPool();
             freeze.transform.position = enemyBase.transform.position;
             freeze.SetActive(true);
@@ -441,7 +421,7 @@ namespace Script.EnemyManagerScript
             {
                 enemyBase.isFreezeE = false;
             }
-            _alreadyFreeze[enemyBase] = false;
+            AlreadyFreeze[enemyBase] = false;
         }
         private IEnumerator BlizzardEffect()
         {

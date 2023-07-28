@@ -24,6 +24,7 @@ namespace Script.WeaponScriptGroup
         private EnemyBase _poisonedEnemy;
         protected readonly List<EnemyBase> HitEnemy = new List<EnemyBase>();
         public Vector2 Direction { get; set; } = Vector2.up;
+        protected bool HasHit;
         public void InitializeWeapon(CharacterBase characterBase , GameObject target = null)
         {
             CharacterBase = characterBase;
@@ -33,6 +34,7 @@ namespace Script.WeaponScriptGroup
             Damage = CharacterBase.DefaultDamage;
             Speed = CharacterBase.projectileSpeed * 2f;
             Sprite = GetComponent<SpriteRenderer>().color;
+            HasHit = false;
         }
         public virtual IEnumerator UseWeapon()
         {
@@ -115,12 +117,6 @@ namespace Script.WeaponScriptGroup
                 enemyStatus.isKnockBack = true;
             }
         }
-        private static IEnumerator IsDamageDebuff(EnemyBase enemyStatus)
-        {
-            enemyStatus.isReceiveDamageDebuff = true;
-            yield return new WaitForSeconds(5f);
-            enemyStatus.isReceiveDamageDebuff = false;
-        }
         private void IsBind(EnemyBase enemyStatus)
         {
             var bindChance = EnforceManager.Instance.divineBindChanceBoost ? 50 : 30;
@@ -162,16 +158,9 @@ namespace Script.WeaponScriptGroup
             }
         }
         
-        private void IsBleed(EnemyBase enemyStatus)
+        private static void IsBleed(EnemyBase enemyStatus)
         {
             enemyStatus.IsBleed = true;
-        }
-        private void IsBurningPoison(EnemyBase enemyStatus)
-        {
-            if (_random.Next(100) < 20)
-            {
-                enemyStatus.isBurningPoison = true;
-            }
         }
 
         protected internal float DamageCalculator(float damage,EnemyBase enemyBase, CharacterBase.UnitGroups unitGroup)

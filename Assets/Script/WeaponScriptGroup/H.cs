@@ -86,8 +86,10 @@ namespace Script.WeaponScriptGroup
         }
         private void OnTriggerEnter2D(Collider2D collision)
         {
+            if (HasHit) return;
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
+            HasHit = true;
             AtkEffect(enemy);
             var damage = DamageCalculator(Damage, enemy, CharacterBase.UnitGroups.H); 
             enemy.ReceiveDamage(enemy,damage, CharacterBase);
@@ -96,6 +98,7 @@ namespace Script.WeaponScriptGroup
             {
                 _bounceCount++;
                 StopCoroutine(UseWeapon());
+                HasHit = false;
                 StartCoroutine(UseWeapon());
             }
             else

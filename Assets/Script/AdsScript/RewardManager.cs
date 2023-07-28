@@ -74,7 +74,7 @@ namespace Script.AdsScript
         private void GiveStaminaReward()
         {
             Debug.Log("스테미너 보상을 제공합니다.");
-            StaminaScript.Instance.currentStamina += 5;
+            StaminaScript.Instance.CurrentStamina += 5;
             rewardBtn.GetComponent<Button>().onClick.RemoveListener(GiveStaminaReward);
         }
 

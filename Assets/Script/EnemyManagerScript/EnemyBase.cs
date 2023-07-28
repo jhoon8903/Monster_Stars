@@ -38,10 +38,8 @@ namespace Script.EnemyManagerScript
         private GameObject damagePopup;
         public bool isDead;
         public bool isBind;
-        public bool isReceiveDamageDebuff;
         public bool isSlowC;
         public bool isSlowE;
-        public bool isBurningPoison;
         public bool isPoison;
         public bool isKnockBack;
         public bool isFreeze;
@@ -184,7 +182,6 @@ namespace Script.EnemyManagerScript
             {
                 var receiveDamage = (int)damage;
                 if (isDead) return;
-                if (detectEnemy.isReceiveDamageDebuff) damage *= 1.15f;
                 currentHealth -= receiveDamage;
                 if (!gameObject.activeInHierarchy) return;
                 StartCoroutine(DamageTextPopup(receiveDamage));
@@ -240,10 +237,13 @@ namespace Script.EnemyManagerScript
             detectedEnemy.IsBleed = false;
             detectedEnemy.isBleed = false;
             detectedEnemy.isDead = false;
-            detectedEnemy.isReceiveDamageDebuff = false;
             detectedEnemy.isSlowC = false;
             detectedEnemy.isSlowE = false;
-            detectedEnemy.isBurningPoison = false;
+            EnemyPatternManager.Instance.AlreadyRestrain.Remove(detectedEnemy);
+            EnemyPatternManager.Instance.AlreadySlow.Remove(detectedEnemy);
+            EnemyPatternManager.Instance.AlreadyKnockBack.Remove(detectedEnemy);
+            EnemyPatternManager.Instance.AlreadyStatusSlow.Remove(detectedEnemy);
+            EnemyPatternManager.Instance.AlreadyFreeze.Remove(detectedEnemy);
             detectedEnemy.transform.localScale = Vector3.one;
             detectedEnemy.GetComponent<SpriteRenderer>().color = Color.white;
             enemyPool.ReturnToPool(detectedEnemy);
