@@ -11,6 +11,7 @@ namespace Script.AdsScript
         [SerializeField] private Text rewardText;
         [SerializeField] private GameObject rewardBtn;
         public static RewardManager Instance { get; private set; }
+        public bool isRetry;
 
         private void Awake()
         {
@@ -26,7 +27,6 @@ namespace Script.AdsScript
 
         public void RewardButtonClicked(string buttonType)
         {
-            MaxSdkUnityEditor.IsRetry = false;
             switch (buttonType)
             {
                 case "Coin":
@@ -43,7 +43,7 @@ namespace Script.AdsScript
                     break;
                 case "Retry":
                     rewardText.text = " Retry ";
-                    MaxSdkUnityEditor.IsRetry = true;
+                    MaxSdkCallbacks.Instance.isRetry = true;
                     rewardBtn.GetComponent<Button>().onClick.AddListener(Retry);
                     break;
             }

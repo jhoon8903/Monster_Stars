@@ -32,9 +32,6 @@ public class MaxSdkUnityEditor : MaxSdkBase
     private static readonly HashSet<string> RequestedAdUnits = new HashSet<string>();
     private static readonly HashSet<string> ReadyAdUnits = new HashSet<string>();
     private static readonly Dictionary<string, GameObject> StubBanners = new Dictionary<string, GameObject>();
-
-    public static bool IsRetry { get; set; }
-
     public static MaxVariableServiceUnityEditor VariableService
     {
         get { return MaxVariableServiceUnityEditor.Instance; }
@@ -1143,13 +1140,8 @@ public class MaxSdkUnityEditor : MaxSdkBase
                 var rewardEventProps = Json.Serialize(rewardEventPropsDict);
                 MaxSdkCallbacks.Instance.ForwardEvent(rewardEventProps);
             }
-
             var adHiddenEventProps = Json.Serialize(CreateBaseEventPropsDictionary("OnRewardedAdHiddenEvent", adUnitIdentifier));
             MaxSdkCallbacks.Instance.ForwardEvent(adHiddenEventProps);
-            if (IsRetry)
-            {
-                SceneManager.LoadSceneAsync("StageScene");
-            }
             Object.Destroy(stubRewardedAd);
         });
         rewardButton.onClick.AddListener(() =>
@@ -1275,8 +1267,6 @@ public class MaxSdkUnityEditor : MaxSdkBase
             if (grantedReward)
             {
                 var rewardEventPropsDict = CreateBaseEventPropsDictionary("OnRewardedInterstitialAdReceivedRewardEvent", adUnitIdentifier);
-                rewardEventPropsDict["rewardLabel"] = "coins";
-                rewardEventPropsDict["rewardAmount"] = "5";
                 var rewardEventProps = Json.Serialize(rewardEventPropsDict);
                 MaxSdkCallbacks.Instance.ForwardEvent(rewardEventProps);
             }

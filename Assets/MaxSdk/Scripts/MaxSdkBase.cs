@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using AppLovinMax.ThirdParty.MiniJson;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 #if UNITY_IOS && !UNITY_EDITOR
 using System.Runtime.InteropServices;

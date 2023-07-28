@@ -8,6 +8,7 @@ using System.Globalization;
 using UnityEngine;
 using AppLovinMax.Internal.API;
 using AppLovinMax.ThirdParty.MiniJson;
+using UnityEngine.SceneManagement;
 
 public class MaxSdkCallbacks : MonoBehaviour
 {
@@ -1341,6 +1342,7 @@ public class MaxSdkCallbacks : MonoBehaviour
     }
 #endif
 
+    public bool isRetry;
     public void ForwardEvent(string eventPropsStr)
     {
         var eventProps = Json.Deserialize(eventPropsStr) as Dictionary<string, object>;
@@ -1655,6 +1657,10 @@ public class MaxSdkCallbacks : MonoBehaviour
             {
                 MaxSdkLogger.UserWarning("Unknown MAX Ads event fired: " + eventName);
             }
+
+            if (!isRetry) return;
+            SceneManager.LoadScene("StageScene");
+            isRetry = false;
         }
     }
 

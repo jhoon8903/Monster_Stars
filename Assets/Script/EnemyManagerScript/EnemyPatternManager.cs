@@ -26,7 +26,7 @@ namespace Script.EnemyManagerScript
         private readonly Dictionary<EnemyBase, bool> _alreadyKnockBack = new Dictionary<EnemyBase, bool>();
         private readonly Dictionary<EnemyBase, bool> _alreadyStatusSlow = new Dictionary<EnemyBase, bool>();
         private readonly Dictionary<EnemyBase, bool> _alreadyFreeze = new Dictionary<EnemyBase, bool>();
-        private List<GameObject> freezeEffectPool = new List<GameObject>();
+        private readonly List<GameObject> freezeEffectPool = new List<GameObject>();
         private Rigidbody2D _rb;
         private float _endY;
         private int _slowCount;
