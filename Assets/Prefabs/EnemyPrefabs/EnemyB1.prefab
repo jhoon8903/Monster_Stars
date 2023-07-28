@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6387511958117019987}
   - component: {fileID: 3082779425689049076}
   - component: {fileID: 6534090296602278614}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Canvas (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,7 +114,7 @@ GameObject:
   - component: {fileID: 6230031516394862785}
   - component: {fileID: 2134538432475379097}
   - component: {fileID: 663686508516630214}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: EnemyB1
   m_TagString: Enemy
   m_Icon: {fileID: 0}
@@ -274,18 +274,18 @@ MonoBehaviour:
   healthPoint: 0
   maxHealthPoint: 0
   currentHealth: 0
-  lastIncreaseHealthPoint: 0
+  isDead: 0
   isBind: 0
-  isSlow: 0
   isReceiveDamageDebuff: 0
   isSlowC: 0
   isSlowE: 0
-  isSlowStun: 0
-  isSlowBleedStun: 0
   isBurningPoison: 0
   isPoison: 0
   isKnockBack: 0
-  isBurn: 0
+  isFreeze: 0
+  isFreezeE: 0
+  isBurnG: 0
+  isBurnH: 0
   isBleed: 0
 --- !u!1 &5945068740740363883
 GameObject:
@@ -296,7 +296,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5658408608141097040}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Fill Area
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -335,7 +335,7 @@ GameObject:
   - component: {fileID: 1607309575933622674}
   - component: {fileID: 1208776098906931572}
   - component: {fileID: 534958299074407955}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Fill
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -410,7 +410,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4164987360210061746}
   - component: {fileID: 122085473514490515}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: EnemyHp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -501,7 +501,7 @@ GameObject:
   - component: {fileID: 515211667719433365}
   - component: {fileID: 7069310231411795817}
   - component: {fileID: 3286417243762480648}
-  m_Layer: 5
+  m_Layer: 8
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}

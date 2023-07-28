@@ -44,7 +44,7 @@ namespace Script
         private void Awake()
         {
             Instance = this;
-            Application.targetFrameRate = 300;
+            Application.targetFrameRate = 60;
 
         }
 

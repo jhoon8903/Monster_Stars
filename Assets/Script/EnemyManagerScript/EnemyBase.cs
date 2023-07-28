@@ -107,7 +107,7 @@ namespace Script.EnemyManagerScript
                 var sword = FindObjectOfType<D>();
                 var bleedingColor = new Color(1f,0.2f,0.3f);
                 var originColor = gameObject.GetComponent<SpriteRenderer>();
-                if (!isBurnG || !gameObject.activeInHierarchy) return;
+                if (!isBleed || !gameObject.activeInHierarchy) return;
                 StartCoroutine(sword.BleedEffect(this));
                 StartCoroutine(FlickerEffect(originColor, bleedingColor));
             }

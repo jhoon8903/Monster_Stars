@@ -162,7 +162,7 @@ namespace Script.UIManager
             }
             else
             {
-                StartCoroutine(GameManager.Instance.ContinueOrLose());
+                    StartCoroutine(GameManager.Instance.ContinueOrLose());
             }
         }
         private void StageClear()
