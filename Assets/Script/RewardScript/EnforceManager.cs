@@ -86,7 +86,7 @@ namespace Script.RewardScript
         public bool fireProjectileBounceIncrease;
       
         //common
-        public int addRowCount;
+        public bool addRow;
         public int slowCount;
         public bool diagonalMovement;
         public bool recoveryCastle;
@@ -388,14 +388,11 @@ namespace Script.RewardScript
         
         [Header("\n\n공통강화\n")] 
         [Header("가로줄 추가")] 
-        public int addRowCount; 
-        public delegate void AddRowDelegate(); 
-        public event AddRowDelegate OnAddRow; 
+        public bool addRow;
         protected internal void AddRow()
         {
-            addRowCount += 1;
+            addRow = true;
             gridManager.AddRow();
-            OnAddRow?.Invoke();
         }
         [Header("적 이동속도 감소 15%증가 (최대 45%)")] 
         public int slowCount; 
@@ -592,7 +589,7 @@ namespace Script.RewardScript
                 fireProjectileBounceIncrease = fireProjectileBounceIncrease,
 
                 // Common
-                addRowCount = addRowCount,
+                addRow = addRow,
                 slowCount = slowCount,
                 diagonalMovement = diagonalMovement,
                 recoveryCastle = recoveryCastle,
@@ -684,7 +681,7 @@ namespace Script.RewardScript
             fireProjectileSpeedIncrease = data.fireProjectileSpeedIncrease;                            
             fireProjectileBounceIncrease = data.fireProjectileBounceIncrease;
             // Common
-            addRowCount = data.addRowCount;
+            addRow = data.addRow;
             slowCount = data.slowCount;
             diagonalMovement = data.diagonalMovement;
             recoveryCastle = data.recoveryCastle;

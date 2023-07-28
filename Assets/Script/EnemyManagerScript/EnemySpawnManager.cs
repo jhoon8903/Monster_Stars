@@ -113,14 +113,14 @@ namespace Script.EnemyManagerScript
                 case EnemyBase.SpawnZones.B:
                 {
                     var spawnPosX = _spawnZones[zone].position.x;
-                    randomY = Random.Range(EnforceManager.Instance.addRowCount == 0 ? 6 : 7, 9);
+                    randomY = Random.Range(EnforceManager.Instance.addRow ? 6 : 7, 9);
                     spawnPosition = new Vector3(spawnPosX, randomY + 0.5f,0);
                     break;
                 }
                 case EnemyBase.SpawnZones.C:
                 {
                     var spawnPosX = _spawnZones[zone].position.x;
-                    randomY = Random.Range(EnforceManager.Instance.addRowCount == 0 ? 6 : 7, 9);
+                    randomY = Random.Range(EnforceManager.Instance.addRow ? 6 : 7, 9);
                     spawnPosition = new Vector3(spawnPosX, randomY + 0.5f,0);
                     break;
                 }
@@ -133,14 +133,14 @@ namespace Script.EnemyManagerScript
                 }
                 case EnemyBase.SpawnZones.E:
                 {
-                    var spawnPosY = EnforceManager.Instance.addRowCount == 0 ? _spawnZones[zone].position.y : _spawnZones[zone].position.y + 1;
+                    var spawnPosY = gridManager.gridHeight + 1f;
                     randomX = Random.Range(2, 4);
                     spawnPosition = new Vector3(randomX, spawnPosY, 0);
                     break;
                 }
                 case EnemyBase.SpawnZones.F:
                 {
-                    var spawnPosY = EnforceManager.Instance.addRowCount == 0 ? _spawnZones[zone].position.y : _spawnZones[zone].position.y + 1; 
+                    var spawnPosY = gridManager.gridHeight + 1f; 
                     randomX = (Random.value > 0.5f) ? -1 : 6;
                     spawnPosition = new Vector3(randomX, spawnPosY, 0);
                     break;

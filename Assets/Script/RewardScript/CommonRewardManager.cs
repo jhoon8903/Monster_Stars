@@ -90,12 +90,11 @@ namespace Script.RewardScript
             var selectedCodes = new HashSet<int>();
 
             // 보스 클리어 시 첫번째 선택지인 "addrow"를 추가
-            if (StageManager.Instance.isBossClear && EnforceManager.Instance.addRowCount < 1)
+            if (StageManager.Instance.isBossClear && !EnforceManager.Instance.addRow)
             {
                 var firstDesiredPowerUp = new CommonPurpleData(purpleSprite, 16, CommonData.Types.AddRow, new[] { 1 });
                 commonPowerUps.Add(firstDesiredPowerUp);
                 selectedCodes.Add(firstDesiredPowerUp.Code);
-                EnforceManager.Instance.addRowCount++; // 선택지 추가 횟수 증가
 
                 for (var i = 0; i < 2; i++)
                 {
@@ -170,7 +169,7 @@ namespace Script.RewardScript
                         if (EnforceManager.Instance.expPercentage >= 30) return false; // Make sure the EXP increment does not exceed 30%
                         break;
                     case CommonData.Types.AddRow:
-                        if (EnforceManager.Instance.addRowCount > 1) return false;
+                        if (EnforceManager.Instance.addRow) return false;
                         if (!StageManager.Instance.isBossClear) return false;
                         if (StageManager.Instance.currentWave % 10 != 0 ) return false;// Show row extra reward only after boss stage, up to 2 times
                         break;
