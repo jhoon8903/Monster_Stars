@@ -56,7 +56,7 @@ namespace Script.UIManager
             const int sets = 2;
             if (currentWave % 10 == 0)
             {
-                yield return StartCoroutine(enemySpawnManager.SpawnBoss(currentWave));
+                yield return StartCoroutine(enemySpawnManager.SpawnBoss());
             }
             else
             {

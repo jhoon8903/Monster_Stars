@@ -4,6 +4,7 @@ using DG.Tweening;
 using Script.CharacterGroupScript;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
+using Script.EnemyScript;
 using Script.PuzzleManagerGroup;
 using Script.RewardScript;
 using Script.UIManager;
@@ -39,7 +40,6 @@ namespace Script
         public bool speedUp;
         private Vector3Int _bossSpawnArea;
         public bool IsBattle { get; private set; }
-        public bool globalSlow;
 
         private void Awake()
         {

@@ -29,6 +29,7 @@ namespace Script.CharacterManagerScript
         [SerializeField] private GameManager gameManager;
         [SerializeField] private EnemyPatternManager enemyPatternManager;
         private const float AttackRate = 1f;
+        public float atkRate;
         public List<GameObject> enemyList = new List<GameObject>();
         public List<GameObject> weaponsList = new List<GameObject>();
         public static AtkManager Instance { get; private set; }
@@ -59,7 +60,7 @@ namespace Script.CharacterManagerScript
         }
         private IEnumerator AtkMotion(CharacterBase unit)
         {
-            var atkRate = unit.defaultAtkRate / (AttackRate + EnforceManager.Instance.increaseAtkRate / 100f);
+            atkRate = unit.defaultAtkRate * (AttackRate - EnforceManager.Instance.increaseAtkRate / 100f);
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());

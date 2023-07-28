@@ -66,7 +66,7 @@ namespace Script.RewardScript
         // 2. 상자마다의 확률 분배
         private IEnumerator CommonChance(int greenChance, int blueChance, int purpleChance, string forcedColor)
         {
-            if (StageManager.Instance.currentWave >= 11)
+            if (StageManager.Instance.currentWave >= 11 && !StageManager.Instance.isBossClear)
             {
                 greenChance = 60;
                 blueChance = 35;
@@ -96,6 +96,28 @@ namespace Script.RewardScript
                 commonPowerUps.Add(firstDesiredPowerUp);
                 selectedCodes.Add(firstDesiredPowerUp.Code);
                 EnforceManager.Instance.addRowCount++; // 선택지 추가 횟수 증가
+
+                for (var i = 0; i < 2; i++)
+                {
+                    CommonData selectedPowerUp;
+                    switch (forcedColor)
+                    {
+                        case "blue" when i == 0: selectedPowerUp = CommonUnique(common.CommonBlueList, selectedCodes); break;
+                        case "purple" when i == 0: selectedPowerUp = CommonUnique(common.CommonPurpleList, selectedCodes); break;
+                        default:
+                        {
+                            var total = greenChance + blueChance + purpleChance;
+                            var randomValue = Random.Range(0, total);
+                            if (randomValue < greenChance) { selectedPowerUp = CommonUnique(common.CommonGreenList, selectedCodes); }
+                            else if (randomValue < greenChance + blueChance) { selectedPowerUp = CommonUnique(common.CommonBlueList, selectedCodes); }
+                            else { selectedPowerUp = CommonUnique(common.CommonPurpleList, selectedCodes); }
+                            break;
+                        }
+                    }
+                    if (selectedPowerUp == null) continue;
+                    commonPowerUps.Add(selectedPowerUp);
+                    selectedCodes.Add(selectedPowerUp.Code);
+                }
             }
             else
             {

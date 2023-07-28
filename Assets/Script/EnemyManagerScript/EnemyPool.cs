@@ -65,12 +65,6 @@ namespace Script.EnemyManagerScript
             {
                 pooledEnemy.Remove(enemyBaseGameObject);
             }
-
-            if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
-            {
-                Destroy(enemyBaseGameObject);
-            }
-
             enemyBaseGameObject.SetActive(false);
         }
     }

@@ -50,6 +50,7 @@ namespace Script.EnemyManagerScript
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 var spawnZone = groupZone[i % groupZone.Count];
                 StartCoroutine(SpawnEnemy(enemyType, spawnZone));
+                yield return new WaitForSeconds(0.15f);
             }
         }
 
@@ -66,10 +67,12 @@ namespace Script.EnemyManagerScript
             yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyBase));
         }
 
-        public IEnumerator SpawnBoss(int wave)
+        public IEnumerator SpawnBoss()
         {
             enemyPool.enemyBases.Clear();
-            var bossObject = Instantiate(enemyManager.stageBoss, transform);
+            GameObject bossObject = null;
+            var existingBoss = enemyPool.enemyBases.FirstOrDefault();
+            bossObject = existingBoss != null ? existingBoss.gameObject : Instantiate(enemyManager.stageBoss, transform);
             var enemyBase = bossObject.GetComponent<EnemyBase>();
             enemyPool.enemyBases.Add(enemyBase);
             enemyBase.transform.position = gridManager.bossSpawnArea;
@@ -77,6 +80,7 @@ namespace Script.EnemyManagerScript
             enemyBase.Initialize();
             yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyBase));
         }
+
         private IEnumerator GetRandomPointInBounds(EnemyBase.SpawnZones zone, Action<Vector3> callback)
         {
             var spawnPosition = Vector3.zero;

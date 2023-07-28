@@ -447,7 +447,7 @@ namespace Script.RewardScript
             increaseAtkDamage += increaseAmount;
         }
         [Header("전체 공격속도 증가 (%)")] 
-        public float increaseAtkRate = 1f; 
+        public float increaseAtkRate; 
         protected internal void IncreaseGroupRate(float increaseRateAmount)
         {
             increaseAtkRate += increaseRateAmount;
