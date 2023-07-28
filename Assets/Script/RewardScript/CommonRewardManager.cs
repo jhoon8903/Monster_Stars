@@ -198,10 +198,10 @@ namespace Script.RewardScript
         }
 
        // 8. 옵션 텍스트
-       private void CommonDisplayText(Button commonButton, TMP_Text powerText, TMP_Text powerCode, Image btnBadge, CommonData powerUp, Language selectedLanguage)
+       private void CommonDisplayText(Button commonButton, TMP_Text powerText, TMP_Text powerCode, Image btnBadge, CommonData powerUp, Language language)
        {
            var translationKey = powerUp.Type.ToString();
-           var powerTextTranslation = selectedLanguage.GetTranslation(translationKey);
+           var powerTextTranslation = language.GetTranslation(translationKey);
            var p = powerUp.Property[0].ToString();
            var finalPowerText = powerTextTranslation.Replace("{p}", p);
 

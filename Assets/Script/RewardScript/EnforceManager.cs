@@ -504,10 +504,23 @@ namespace Script.RewardScript
             }
         }
         // Unit Group PermanentLevelUp
-        public List<int> permanentGroupIndex = new List<int>(); public void PermanentIncreaseCharacter(int characterListIndex)
+        public List<int> permanentGroupIndex = new List<int>();
+
+        public void PermanentIncreaseCharacter(int characterListIndex)
         {
-            permanentGroupIndex.Add(characterListIndex);
+            // 이미 해당 characterListIndex가 리스트에 있는지 확인
+            if (!permanentGroupIndex.Contains(characterListIndex))
+            {
+                // 아직 적용되지 않았으면 리스트에 추가
+                permanentGroupIndex.Add(characterListIndex);
+            }
+            else
+            {
+                // 이미 적용되었으므로 아무것도 하지 않고 함수 종료
+                return;
+            }
         }
+
         public void SaveEnforceData()
         {
             var data = new EnforceData
