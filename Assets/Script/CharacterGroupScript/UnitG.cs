@@ -35,10 +35,10 @@ namespace Script.CharacterGroupScript
         {
             return characterObjectLevel switch
             {
-                <= 9 => level1Sprite,
-                <= 19 => level2Sprite,
-                <= 29 => level3Sprite,
-                <= 39 => level4Sprite,
+                <= 3 => level1Sprite,
+                <= 6 => level2Sprite,
+                <= 9 => level3Sprite,
+                <= 12 => level4Sprite,
                 _ => level5Sprite
             };
         }

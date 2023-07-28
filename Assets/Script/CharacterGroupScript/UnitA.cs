@@ -17,12 +17,10 @@ namespace Script.CharacterGroupScript
         private float _detectionHeight;
         public int atkCount;
 
-
         public void Awake()
         {
             Initialize();
         }
-
         public override void Initialize()
         {
             base.Initialize();
@@ -32,15 +30,14 @@ namespace Script.CharacterGroupScript
             UnitDesc = "유닛A 입니다.";
             SetLevel(1);
         }
-        
         public override Sprite GetSpriteForLevel(int characterObjectLevel)
         {
             return characterObjectLevel switch
             {
-                <= 5 => level1Sprite,
-                <= 10 => level2Sprite,
-                <= 15 => level3Sprite,
-                <= 20 => level4Sprite,
+                <= 3 => level1Sprite,
+                <= 6 => level2Sprite,
+                <= 9 => level3Sprite,
+                <= 12 => level4Sprite,
                 _ => level5Sprite
             };
         }
@@ -55,7 +52,6 @@ namespace Script.CharacterGroupScript
             base.CharacterReset();
             SetLevel(unitPuzzleLevel);
         }
-
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
             _detectionHeight = defaultAtkDistance;
@@ -70,7 +66,6 @@ namespace Script.CharacterGroupScript
                 center = (Vector2)transform.position + Vector2.up * _detectionHeight / 2f;
             }
         }
-
         public override List<GameObject> DetectEnemies()
         {
             GetDetectionProperties(out var detectionSize, out var detectionCenter);
@@ -86,7 +81,6 @@ namespace Script.CharacterGroupScript
             DetectedEnemies = currentlyDetectedEnemies;
             return DetectedEnemies;
         }
-
         protected internal override Sprite GetSprite(int level)
         {
             return level switch

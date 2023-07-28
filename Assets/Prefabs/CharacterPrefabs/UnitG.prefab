@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 09814a1c658b460dbf8b3427b7da83fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitPieceLevel: 1
+  unitPieceLevel: 3
   unitPuzzleLevel: 1
   unitGroup: 6
   baseDamage: 220

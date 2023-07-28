@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4364907556356387206}
   - component: {fileID: 1792432465786846471}
   - component: {fileID: 1228786379183244117}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sword1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,7 +50,6 @@ MonoBehaviour:
   isInUse: 0
   pivotPoint: {fileID: 6803344351827666215}
   secondSword: {fileID: 8342970395130648100}
-  burnDotDamage: 0
 --- !u!212 &4364907556356387206
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -159,7 +158,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4586831683388697874}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: G3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -196,7 +195,7 @@ GameObject:
   - component: {fileID: 7519353018867978711}
   - component: {fileID: 6433954971432813977}
   - component: {fileID: 406386378757669512}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sword2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -233,7 +232,6 @@ MonoBehaviour:
   isInUse: 0
   pivotPoint: {fileID: 6803344351827666215}
   secondSword: {fileID: 8342970395130648100}
-  burnDotDamage: 0
 --- !u!212 &7519353018867978711
 SpriteRenderer:
   m_ObjectHideFlags: 0

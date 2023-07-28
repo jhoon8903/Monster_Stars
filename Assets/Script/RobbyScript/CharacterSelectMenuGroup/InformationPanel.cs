@@ -219,6 +219,11 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     Information(unitInstance, characterBase);
                 });
             }
+            else if (characterBase.unitPieceLevel >= 14)
+            {
+                levelUpBtn.GetComponent<Button>().interactable = false;
+                levelUpCoinText.color = Color.gray;
+            }
             else
             {
                 levelUpBtn.GetComponent<Button>().interactable = false;
@@ -228,9 +233,9 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             yield return null;
         }
 
-        public void DestroyPanel()
+        public void ClosePanel()
         {
-            Destroy(gameObject);
+            gameObject.SetActive(false);
         }
     }
 }

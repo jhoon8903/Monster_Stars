@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 8883809848140716900}
   - component: {fileID: 175261911327293221}
   - component: {fileID: 2999858577522396496}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sword1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -163,7 +163,7 @@ GameObject:
   - component: {fileID: 2564752316018276406}
   - component: {fileID: 125837573562114250}
   - component: {fileID: 2503686282456763777}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: Sword2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -309,7 +309,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 168335878369343451}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: D4
   m_TagString: Untagged
   m_Icon: {fileID: 0}

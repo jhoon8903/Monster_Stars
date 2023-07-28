@@ -66,7 +66,7 @@ namespace Script.UIManager
                     StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group2, group2, group2Zone));
                     StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group3, group3, group3Zone));
                     _setCount++;
-                    yield return new WaitForSeconds(2f);
+                    yield return new WaitForSeconds(3f);
                 }
             }
         }

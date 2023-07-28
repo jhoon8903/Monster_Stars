@@ -362,7 +362,7 @@ MonoBehaviour:
       - m_Target: {fileID: 8043776316009685750}
         m_TargetAssemblyTypeName: Script.RobbyScript.CharacterSelectMenuGroup.InformationPanel,
           Assembly-CSharp
-        m_MethodName: DestroyPanel
+        m_MethodName: ClosePanel
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

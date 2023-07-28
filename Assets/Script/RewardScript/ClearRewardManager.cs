@@ -90,7 +90,7 @@ namespace Script.RewardScript
 
             foreach (var grade in totalPiecesPerGrade.Keys)
             {
-                var unitsOfThisGrade = selectedUnitIndices.Where(index => rewardUnitList[index].UnitGrade == grade).ToList();
+                var unitsOfThisGrade = selectedUnitIndices.Where(index => rewardUnitList[index].UnitGrade == grade && rewardUnitList[index].unitPieceLevel < 14).ToList();
                 var remainingPieces = totalPiecesPerGrade[grade];
                 foreach (var index in unitsOfThisGrade)
                 {
@@ -109,7 +109,6 @@ namespace Script.RewardScript
                     }
                 }
 
-
                 while (remainingPieces > 0 && unitsOfThisGrade.Count > 0)
                 {
                     for (var i = 0; i < unitsOfThisGrade.Count && remainingPieces > 0; i++)
@@ -120,17 +119,13 @@ namespace Script.RewardScript
                     }
                 }
             }
-
             foreach (var index in selectedUnitIndices)
             {
                 var unit = rewardUnitList[index];
+                if (unit.unitPieceLevel >= 14) continue;
                 unit.Initialize();
                 var unitPieceReward = pieceCountPerUnit[index];
-                if (unitPieceReward == 0)
-                {
-                    continue;
-                }
-
+                if (unitPieceReward == 0) continue;
                 var goodies = Instantiate(goods, rewardBox.transform);
                 goodies.goodsBack.GetComponent<Image>().color = unit.UnitGrade switch
                 {
@@ -139,11 +134,12 @@ namespace Script.RewardScript
                     CharacterBase.UnitGrades.Purple => Color.magenta,
                     _ => Color.gray
                 };
-                goodies.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(1);
+                goodies.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPieceLevel);
                 unit.CharacterPieceCount += unitPieceReward;
                 goodies.goodsValue.text = $"{unitPieceReward}";
             }
         }
+
         private static int GetUnitPieceReward(int stage, CharacterBase.UnitGrades unitGrade)
         {
             var greenReward = 0;
@@ -165,16 +161,6 @@ namespace Script.RewardScript
                     greenReward = 28;
                     blueReward = 2;
                     purpleReward = 0;
-                    break;
-                case <= 40:
-                    greenReward = 30;
-                    blueReward = 2;
-                    purpleReward = 0;
-                    break;
-                case <= 50:
-                    greenReward = 32;
-                    blueReward = 2;
-                    purpleReward = 1;
                     break;
             }
             return unitGrade switch
