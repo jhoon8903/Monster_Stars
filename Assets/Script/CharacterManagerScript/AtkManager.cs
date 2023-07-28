@@ -262,7 +262,7 @@ namespace Script.CharacterManagerScript
                 var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
                 weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
                 weaponsList.Add(weaponBase.gameObject);
-                weaponBase.Direction = weapon.Direction;
+                weaponBase.direction = weapon.Direction;
                 StartCoroutine(weaponBase.UseWeapon());
             }
             yield return null;
@@ -270,6 +270,10 @@ namespace Script.CharacterManagerScript
         private IEnumerator DivineDualAttack(AttackData attackData)
         {
             var unit = attackData.Unit;
+            if (EnforceManager.Instance.divineFifthAttackBoost)
+            {
+                unit.GetComponent<UnitA>().atkCount++;
+            }
             var weaponType = attackData.WeaponType;
             var unitPosition = unit.transform.position;
             var weaponDirections = new[]
@@ -283,7 +287,7 @@ namespace Script.CharacterManagerScript
                 var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
                 weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
                 weaponsList.Add(weaponBase.gameObject);
-                weaponBase.Direction = weapon.Direction;
+                weaponBase.direction = weapon.Direction;
                 StartCoroutine(weaponBase.UseWeapon());
             }
             yield return null;

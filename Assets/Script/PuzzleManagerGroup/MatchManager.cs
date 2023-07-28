@@ -152,6 +152,11 @@ namespace Script.PuzzleManagerGroup
             isMatchActivated = false;
             foreach (var character in FindConsecutiveCharacters(characterList))
             {
+                if (character.GetComponent<CharacterBase>().unitPuzzleLevel == 5)
+                {
+                    continue;
+                }
+
                 yield return StartCoroutine(swipeManager.AllMatchesCheck(character));
                 count++;
                 if (count <= 1) continue;
@@ -806,7 +811,7 @@ namespace Script.PuzzleManagerGroup
                         result.Add(currentList);
                     }
                 }
-                if ((i / 6) < currentFloor)
+                if (i / 6 < currentFloor)
                 {
                     if (tempLevel == characters[i].GetComponent<CharacterBase>().unitPuzzleLevel 
                         && tempUnitGroup == characters[i].GetComponent<CharacterBase>().unitGroup)
@@ -881,7 +886,7 @@ namespace Script.PuzzleManagerGroup
                             if (sameCount >= 3)
                             {
                                 var currentList = new List<GameObject>();
-                                for (var k = i + (totalColumns * (j - sameCount)); k <= i + (totalColumns * j - 1); k += totalColumns)
+                                for (var k = i + (totalColumns * j - sameCount); k <= i + (totalColumns * j - 1); k += totalColumns)
                                 {
                                     currentList.Add(characters[k]);
                                 }

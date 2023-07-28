@@ -25,7 +25,7 @@ namespace Script.WeaponScriptGroup
                 CharacterBase.GetComponent<UnitA>().atkCount = 0;                
             }
             var useTime = Distance / Speed;
-            _rigidbody2D.velocity = new Vector2(0, Speed);
+            _rigidbody2D.velocity = direction == Vector2.down ? new Vector2(0, -Speed) : new Vector2(0, Speed);
             yield return new WaitForSeconds(useTime);
             StopUseWeapon(gameObject);
         }

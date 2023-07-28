@@ -157,6 +157,7 @@ namespace Script.EnemyManagerScript
                 if (EnemyType == EnemyTypes.Boss)
                 {
                     popup.transform.position = new Vector3(pos.x,pos.y + 1.7f,0f);
+                    popup.transform.localScale = new Vector3(3,3,0);
                 }
                 Vector2 startPosition = popup.transform.position;
                 var endPosition = new Vector2(startPosition.x, startPosition.y + 0.2f);

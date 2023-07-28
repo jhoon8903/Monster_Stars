@@ -6,6 +6,7 @@ using Script.EnemyManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Script.WeaponScriptGroup
 {
@@ -23,7 +24,7 @@ namespace Script.WeaponScriptGroup
         private readonly System.Random _random = new System.Random();
         private EnemyBase _poisonedEnemy;
         protected readonly List<EnemyBase> HitEnemy = new List<EnemyBase>();
-        public Vector2 Direction { get; set; } = Vector2.up;
+        public Vector2 direction;
         protected bool HasHit;
         public void InitializeWeapon(CharacterBase characterBase , GameObject target = null)
         {

@@ -4,6 +4,7 @@ using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Script.PuzzleManagerGroup
@@ -237,21 +238,27 @@ namespace Script.PuzzleManagerGroup
             yield return StartCoroutine(MatchesCheck(endObject));
             countManager.IsSwapOccurred = false;
             countManager.DecreaseMoveCount();
-
             yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
         }
 
         // 이 코루틴은 주어진 오브젝트가 MatchManager를 사용하여 매치의 일부인지 여부를 확인합니다.
-        public IEnumerator MatchesCheck(GameObject characterObject)
+        private IEnumerator MatchesCheck(GameObject characterObject)
         {
             if (characterObject == null) yield break;
-            matchManager.IsMatched(characterObject);
+            if (!matchManager.IsMatched(characterObject))
+            {
+                yield break;
+            }
             yield return null;
         }
+
         public IEnumerator AllMatchesCheck(GameObject characterObject)
         {
             if (characterObject == null) yield break;
-            matchManager.IsMatched(characterObject);
+            if (!matchManager.IsMatched(characterObject))
+            {
+                yield break;
+            }
             yield return null;
         }
     }
