@@ -14,7 +14,6 @@ namespace Script.UIManager
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log("Clicked on: " + eventData.pointerCurrentRaycast.gameObject.name);
             if (_activeSkillInfoPanel != null && _activeSkillInfoPanel != skillInfoPanel)
             {
                 _activeSkillInfoPanel.SetActive(false);

@@ -50,7 +50,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             PopulateUnitInfoObject(unitDataList, characterBase);
             var unitSkillLists = UnitSkills(characterBase);
             PopulateUnitSkillObject(unitSkillLists, characterBase);
-            var unitLevelUpPrice = characterBase.unitPieceLevel * 500;
+            var unitLevelUpPrice = characterBase.CharacterLevelUpCoin;
             levelUpCoinText.text = unitLevelUpPrice.ToString();
         }
 
@@ -207,7 +207,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         private IEnumerator CheckForLevelUp(UnitIcon unitInstance, CharacterBase characterBase)
         {
             levelUpBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece && CoinsScript.Instance.Coin >= characterBase.unitPieceLevel * 500)
+            if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece && CoinsScript.Instance.Coin >= characterBase.CharacterLevelUpCoin)
             {
                 levelUpBtn.GetComponent<Button>().interactable = true;
                 levelUpBtn.GetComponent<Button>().onClick.AddListener(() =>

@@ -46,12 +46,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e301adfaec441c3b2b4a3289e0f37b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  unitPieceLevel: 3
+  unitPuzzleLevel: 1
   unitGroup: 7
-  baseDamage: 0
-  defaultAtkRate: 0
-  projectileSpeed: 0
+  baseDamage: 27
+  defaultAtkRate: 1
+  projectileSpeed: 1
   swingSpeed: 0
-  defaultAtkDistance: 0
+  defaultAtkDistance: 9
   level1Sprite: {fileID: 21300000, guid: 80864d9771c404f798dae0a6fb7931b9, type: 3}
   level2Sprite: {fileID: 21300000, guid: 1967888404b4e499bb74b1c98b6c54a8, type: 3}
   level3Sprite: {fileID: 21300000, guid: 117c7a06026aa4212b0e255a97a71970, type: 3}
