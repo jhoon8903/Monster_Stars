@@ -70,9 +70,8 @@ namespace Script.EnemyManagerScript
         public IEnumerator SpawnBoss()
         {
             enemyPool.enemyBases.Clear();
-            GameObject bossObject = null;
             var existingBoss = enemyPool.enemyBases.FirstOrDefault();
-            bossObject = existingBoss != null ? existingBoss.gameObject : Instantiate(enemyManager.stageBoss, transform);
+            var bossObject = existingBoss != null ? existingBoss.gameObject : Instantiate(enemyManager.stageBoss, transform);
             var enemyBase = bossObject.GetComponent<EnemyBase>();
             enemyPool.enemyBases.Add(enemyBase);
             enemyBase.transform.position = gridManager.bossSpawnArea;

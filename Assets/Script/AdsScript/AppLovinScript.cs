@@ -1,7 +1,5 @@
 using System;
-using Script.UIManager;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Script.AdsScript
 {
@@ -36,7 +34,7 @@ namespace Script.AdsScript
 
         public void Start()
         {
-            MaxSdkCallbacks.OnSdkInitializedEvent += sdkConfiguration =>
+            MaxSdkCallbacks.OnSdkInitializedEvent += _ =>
                 {
                     InitializeInterstitialAds();
                     InitializeRewardedAds();
@@ -58,13 +56,13 @@ namespace Script.AdsScript
 
         private void LoadInterstitial()
         {
-            MaxSdk.LoadInterstitial(InterstitialAdUnitId);
+            MaxSdkUnityEditor.LoadInterstitial(InterstitialAdUnitId);
         }
         public static void ShowInterstitial()
         {
-            if (MaxSdk.IsInterstitialReady(InterstitialAdUnitId))
+            if (MaxSdkUnityEditor.IsInterstitialReady(InterstitialAdUnitId))
             {
-                MaxSdk.ShowInterstitial(InterstitialAdUnitId);
+                MaxSdkUnityEditor.ShowInterstitial(InterstitialAdUnitId);
             }
             else
             {
@@ -117,16 +115,16 @@ namespace Script.AdsScript
 
         private void LoadRewardedAd()
         {
-            MaxSdk.LoadRewardedAd(RewardedAdUnitId);
+            MaxSdkUnityEditor.LoadRewardedAd(RewardedAdUnitId);
 
         }
 
         public static void ShowRewardedAd()
         {
-            if (MaxSdk.IsRewardedAdReady(RewardedAdUnitId))
+            if (MaxSdkUnityEditor.IsRewardedAdReady(RewardedAdUnitId))
             {
                 Debug.Log("Showing");
-                MaxSdk.ShowRewardedAd(RewardedAdUnitId);
+                MaxSdkUnityEditor.ShowRewardedAd(RewardedAdUnitId);
          
             }
             else
@@ -172,7 +170,7 @@ namespace Script.AdsScript
 
         }
 
-        private void OnRewardedAdReceivedRewardEvent(string adUnitId, MaxSdkBase.Reward reward, MaxSdkBase.AdInfo adInfo)
+        private static void OnRewardedAdReceivedRewardEvent(string adUnitId, MaxSdkBase.Reward reward, MaxSdkBase.AdInfo adInfo)
         {
             Debug.Log("Rewarded ad received reward");
         }
@@ -182,14 +180,14 @@ namespace Script.AdsScript
             Debug.Log("Rewarded ad revenue paid");
         }
 
-        private void InitializeBannerAds()
+        private static void InitializeBannerAds()
         {
             MaxSdkCallbacks.Banner.OnAdLoadedEvent += OnBannerAdLoadedEvent;
             MaxSdkCallbacks.Banner.OnAdLoadFailedEvent += OnBannerAdFailedEvent;
             MaxSdkCallbacks.Banner.OnAdClickedEvent += OnBannerAdClickedEvent;
             MaxSdkCallbacks.Banner.OnAdRevenuePaidEvent += OnBannerAdRevenuePaidEvent;
-            MaxSdk.CreateBanner(BannerAdUnitId, MaxSdkBase.BannerPosition.BottomCenter);
-            MaxSdk.SetBannerBackgroundColor(BannerAdUnitId, Color.white);
+            MaxSdkAndroid.CreateBanner(BannerAdUnitId, MaxSdkBase.BannerPosition.BottomCenter);
+            MaxSdkAndroid.SetBannerBackgroundColor(BannerAdUnitId, Color.white);
         }
 
         private static void OnBannerAdLoadedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)

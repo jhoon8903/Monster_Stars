@@ -30,8 +30,8 @@ namespace Script.WeaponScriptGroup
             while (Vector3.Distance(transform.position, _enemyTransform) > 0.1f)
             {
                 var position = transform.position;
-                var direction = (_enemyTransform - position).normalized;
-                transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
+                var upwards = (_enemyTransform - position).normalized;
+                transform.rotation = Quaternion.LookRotation(Vector3.forward, upwards);
                 position = Vector3.MoveTowards(position, _enemyTransform, Speed * Time.deltaTime);
                 transform.position = position;
                 yield return null;

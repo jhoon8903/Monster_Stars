@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using DG.Tweening;
 using Script.CharacterManagerScript;
@@ -88,8 +89,6 @@ namespace Script.RewardScript
         {
             var commonPowerUps = new List<CommonData>();
             var selectedCodes = new HashSet<int>();
-
-            // 보스 클리어 시 첫번째 선택지인 "addrow"를 추가
             if (StageManager.Instance.isBossClear && !EnforceManager.Instance.addRow)
             {
                 var firstDesiredPowerUp = new CommonPurpleData(purpleSprite, 16, CommonData.Types.AddRow, new[] { 1 });
@@ -219,10 +218,10 @@ namespace Script.RewardScript
         }
 
        // 8. 옵션 텍스트
-       private void CommonDisplayText(Button commonButton, TMP_Text powerText, TMP_Text powerCode, Image btnBadge, CommonData powerUp, Language language)
+       private void CommonDisplayText(Button commonButton, TMP_Text powerText, TMP_Text powerCode, Image btnBadge, CommonData powerUp, Language languages)
        {
            var translationKey = powerUp.Type.ToString();
-           var powerTextTranslation = language.GetTranslation(translationKey);
+           var powerTextTranslation = languages.GetTranslation(translationKey);
            var p = powerUp.Property[0].ToString();
            var finalPowerText = powerTextTranslation.Replace("{p}", p);
 
@@ -232,7 +231,7 @@ namespace Script.RewardScript
                { "{EnforceManager.Instance.highLevelCharacterCount}", () => EnforceManager.Instance.highLevelCharacterCount},
 
            };
-           finalPowerText = placeholderValues.Aggregate(finalPowerText, (current, placeholder) => current.Replace(placeholder.Key, placeholder.Value().ToString()));
+           finalPowerText = placeholderValues.Aggregate(finalPowerText, (current, placeholder) => current.Replace(placeholder.Key, placeholder.Value().ToString(CultureInfo.CurrentCulture)));
 
            var finalTranslation = finalPowerText.Replace("||", "\n");
 

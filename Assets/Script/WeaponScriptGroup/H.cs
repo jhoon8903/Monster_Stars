@@ -16,7 +16,7 @@ namespace Script.WeaponScriptGroup
         private Rigidbody2D _rigidbody2D; 
         private int _bounceCount; 
         private int _maxStack; 
-        private readonly Dictionary<EnemyBase, int> burnStacks = new Dictionary<EnemyBase, int>();
+        private readonly Dictionary<EnemyBase, int> _burnStacks = new Dictionary<EnemyBase, int>();
         private void Awake()
         {
             _rigidbody2D = GetComponent<Rigidbody2D>();
@@ -36,10 +36,10 @@ namespace Script.WeaponScriptGroup
                         break;
                     }
                     var currentEnemy = _enemyTransforms[0].GetComponent<EnemyBase>();
-                    var direction = (currentEnemy.transform.position - transform.position).normalized;
+                    var upwards = (currentEnemy.transform.position - transform.position).normalized;
 
-                    transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
-                    _rigidbody2D.velocity = direction * Speed;
+                    transform.rotation = Quaternion.LookRotation(Vector3.forward, upwards);
+                    _rigidbody2D.velocity = upwards * Speed;
                     var useTime = Distance / Speed;
                     yield return new WaitForSeconds(useTime);
                     StopUseWeapon(gameObject);
@@ -67,17 +67,20 @@ namespace Script.WeaponScriptGroup
                         }
                     }
                     _enemyTransforms.Sort((enemy1, enemy2) =>
-                        Vector3.Distance(transform.position, enemy1.transform.position)
-                            .CompareTo(Vector3.Distance(transform.position, enemy2.transform.position)));
+                    {
+                        var position = transform.position;
+                        return Vector3.Distance(position, enemy1.transform.position)
+                            .CompareTo(Vector3.Distance(position, enemy2.transform.position));
+                    });
                     if (_enemyTransforms.Count == 0)
                     {
                         StopUseWeapon(gameObject);
                         break;
                     }
                     var currentEnemy = _enemyTransforms[0].GetComponent<EnemyBase>();
-                    var direction = (currentEnemy.transform.position - transform.position).normalized;
-                    transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
-                    _rigidbody2D.velocity = direction * Speed;
+                    var upwards = (currentEnemy.transform.position - transform.position).normalized;
+                    transform.rotation = Quaternion.LookRotation(Vector3.forward, upwards);
+                    _rigidbody2D.velocity = upwards * Speed;
                     yield return null;
                 }
                 StopUseWeapon(gameObject);
@@ -109,24 +112,24 @@ namespace Script.WeaponScriptGroup
         public IEnumerator BurningHEffect(EnemyBase hitEnemy)
         {
             _maxStack = EnforceManager.Instance.fireStackOverlap ? 4 : 1;
-            if (!burnStacks.ContainsKey(hitEnemy))
+            if (!_burnStacks.ContainsKey(hitEnemy))
             {
-                burnStacks[hitEnemy] = 1;
+                _burnStacks[hitEnemy] = 1;
             }
             else
             {
-                burnStacks[hitEnemy] = Math.Min(burnStacks[hitEnemy] + 1, _maxStack);
+                _burnStacks[hitEnemy] = Math.Min(_burnStacks[hitEnemy] + 1, _maxStack);
             }
-            var burnDotDamage = DamageCalculator(Damage, hitEnemy, CharacterBase.UnitGroups.H) * 0.1f * burnStacks[hitEnemy];
+            var burnDotDamage = DamageCalculator(Damage, hitEnemy, CharacterBase.UnitGroups.H) * 0.1f * _burnStacks[hitEnemy];
             const int burningDuration = 5;
             for (var i = 0; i < burningDuration; i++)
             {
                 hitEnemy.ReceiveDamage(hitEnemy, (int)burnDotDamage , CharacterBase);
                 yield return new WaitForSeconds(1f);
             }
-            burnStacks[hitEnemy]--;
-            if (burnStacks[hitEnemy] > 0) yield break;
-            burnStacks.Remove(hitEnemy);
+            _burnStacks[hitEnemy]--;
+            if (_burnStacks[hitEnemy] > 0) yield break;
+            _burnStacks.Remove(hitEnemy);
             hitEnemy.isBurnH = false;
             hitEnemy.IsBurnH = false;
         }

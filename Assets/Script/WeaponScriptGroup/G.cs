@@ -15,7 +15,7 @@ namespace Script.WeaponScriptGroup
         public GameObject secondSword;
         private Tween _pivotTween;
         private int _maxStack; 
-        private readonly Dictionary<EnemyBase, int> burnStacks = new Dictionary<EnemyBase, int>();
+        private readonly Dictionary<EnemyBase, int> _burnStacks = new Dictionary<EnemyBase, int>();
 
         public override IEnumerator UseWeapon()
         {
@@ -53,16 +53,16 @@ namespace Script.WeaponScriptGroup
         public IEnumerator BurningGEffect(EnemyBase hitEnemy)
         {
             _maxStack = 1;
-            if (!burnStacks.ContainsKey(hitEnemy))
+            if (!_burnStacks.ContainsKey(hitEnemy))
             {
-                burnStacks[hitEnemy] = 1;
+                _burnStacks[hitEnemy] = 1;
             }
             else
             {
-                burnStacks[hitEnemy] = Math.Min(burnStacks[hitEnemy] + 1, _maxStack);
+                _burnStacks[hitEnemy] = Math.Min(_burnStacks[hitEnemy] + 1, _maxStack);
             }
 
-            var burnDotDamage = DamageCalculator(Damage, hitEnemy, CharacterBase.UnitGroups.G) * 0.2f * burnStacks[hitEnemy];
+            var burnDotDamage = DamageCalculator(Damage, hitEnemy, CharacterBase.UnitGroups.G) * 0.2f * _burnStacks[hitEnemy];
             var burningDuration = EnforceManager.Instance.fire2BurnDurationBoost ? 5:3;
 
             for (var i = 0; i < burningDuration; i++)
@@ -71,10 +71,10 @@ namespace Script.WeaponScriptGroup
                 yield return new WaitForSeconds(1f);
             }
 
-            burnStacks[hitEnemy]--;
+            _burnStacks[hitEnemy]--;
 
-            if (burnStacks[hitEnemy] > 0) yield break;
-            burnStacks.Remove(hitEnemy);
+            if (_burnStacks[hitEnemy] > 0) yield break;
+            _burnStacks.Remove(hitEnemy);
             hitEnemy.isBurnG = false;
             hitEnemy.IsBurnG = false;
         }

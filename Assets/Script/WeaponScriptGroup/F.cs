@@ -36,9 +36,9 @@ namespace Script.WeaponScriptGroup
                     break;
                 }
                 var currentEnemy = _enemyTransforms[0].GetComponent<EnemyBase>();
-                var direction = (currentEnemy.transform.position - transform.position).normalized;
-                transform.rotation = Quaternion.LookRotation(Vector3.forward, direction);
-                _rigidbody2D.velocity = direction * Speed;
+                var upwards = (currentEnemy.transform.position - transform.position).normalized;
+                transform.rotation = Quaternion.LookRotation(Vector3.forward, upwards);
+                _rigidbody2D.velocity = upwards * Speed;
                 yield return null;
             }
         }

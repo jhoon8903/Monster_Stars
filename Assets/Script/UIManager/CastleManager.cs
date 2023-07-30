@@ -11,7 +11,6 @@ namespace Script.UIManager
     {
         [SerializeField] protected internal Slider hpBar;
         [SerializeField] private TextMeshProUGUI hpText;
-        [SerializeField] private GameManager gameManager;
         public float HpPoint { get; private set; }
         private float MaxHpPoint { get; set; }
         public float baseCastleHp = 1000;

@@ -7,7 +7,6 @@ using Script.UIManager;
 using Script.WeaponScriptGroup;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.EnemyManagerScript
@@ -15,7 +14,7 @@ namespace Script.EnemyManagerScript
     public class EnemyBase : MonoBehaviour
     {
         [SerializeField] private GameObject damageText;
-        private readonly List<GameObject> damagePopupList = new List<GameObject>();
+        private readonly List<GameObject> _damagePopupList = new List<GameObject>();
         private CharacterBase _characterBase;
         private EnemyPool _enemyPool;
         private Slider _hpSlider;
@@ -35,7 +34,7 @@ namespace Script.EnemyManagerScript
         public float maxHealthPoint;
         public float currentHealth;
         public enum SpawnZones { A, B, C, D, E, F }
-        private GameObject damagePopup;
+        private GameObject _damagePopup;
         public bool isDead;
         public bool isBind;
         public bool isSlowC;
@@ -44,7 +43,7 @@ namespace Script.EnemyManagerScript
         public bool isKnockBack;
         public bool isFreeze;
         public bool isFreezeE;
-        private bool pooling;
+        private bool _pooling;
     
         public bool IsPoison
         {
@@ -113,14 +112,14 @@ namespace Script.EnemyManagerScript
         public virtual void Initialize()
         {
             _hpSlider = GetComponentInChildren<Slider>(true);
-            if (!pooling)
+            if (!_pooling)
             {
                 for (var i = 0; i < 10; i++)
                 {
-                    damagePopup = Instantiate(damageText, gameObject.transform, false);
-                    damagePopupList.Add(damagePopup);
-                    damagePopup.SetActive(false);
-                    pooling = true;
+                    _damagePopup = Instantiate(damageText, gameObject.transform, false);
+                    _damagePopupList.Add(_damagePopup);
+                    _damagePopup.SetActive(false);
+                    _pooling = true;
                 }
             }
             if (EnemyType != EnemyTypes.Boss)
@@ -149,7 +148,7 @@ namespace Script.EnemyManagerScript
         {
             if (!gameObject.activeInHierarchy) yield break;
 
-            foreach (var popup in damagePopupList)
+            foreach (var popup in _damagePopupList)
             {
                 if (popup.activeInHierarchy) continue;
                 var pos = gameObject.transform.position;
@@ -222,7 +221,7 @@ namespace Script.EnemyManagerScript
         }
         public void EnemyKilledEvents(EnemyBase detectedEnemy)
         {
-            foreach (var popup in detectedEnemy.damagePopupList)
+            foreach (var popup in detectedEnemy._damagePopupList)
             {
                 popup.SetActive(false);
             }
@@ -268,8 +267,8 @@ namespace Script.EnemyManagerScript
             var elapsedTime = 0f;
             while ( isBurnG || isPoison || isBleed )
             {
-                var lerpValue = Mathf.Abs(Mathf.Sin(elapsedTime / 0.5f * Mathf.PI));
-                render.color = Color.Lerp(originalColor, targetColor, lerpValue);
+                var value = Mathf.Abs(Mathf.Sin(elapsedTime / 0.5f * Mathf.PI));
+                render.color = Color.Lerp(originalColor, targetColor, value);
                 elapsedTime += Time.deltaTime;
                 yield return null;
             }

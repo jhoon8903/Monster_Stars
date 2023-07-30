@@ -4,6 +4,8 @@ using UnityEngine;
 using DG.Tweening;
 using Script.RewardScript;
 using Script.RobbyScript.TopMenuGroup;
+#pragma warning disable CS8524
+#pragma warning disable CS8509
 
 namespace Script.CharacterManagerScript
 {

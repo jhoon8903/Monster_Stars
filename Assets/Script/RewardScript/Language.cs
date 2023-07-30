@@ -5,7 +5,7 @@ namespace Script.RewardScript
 {
     public class Language : MonoBehaviour
     {
-        public static Language Instance { get; private set; }
+        private static Language Instance { get; set; }
         public enum LanguageType { Korean, English }
         public LanguageType selectedLanguage = LanguageType.Korean;
         private readonly Dictionary<string, Dictionary<string, string>> _translations = new Dictionary<string, Dictionary<string, string>>();

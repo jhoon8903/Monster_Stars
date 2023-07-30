@@ -1,9 +1,7 @@
-using System;
 using System.Collections.Generic;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
-using UnityEditor;
 using UnityEngine;
 
 namespace Script.CharacterGroupScript

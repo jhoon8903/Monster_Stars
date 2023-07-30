@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Script.CharacterManagerScript;
 using Script.UIManager;
@@ -8,6 +9,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+#pragma warning disable CS8524
 
 namespace Script.RewardScript
 {
@@ -674,7 +676,7 @@ namespace Script.RewardScript
 
             };
             finalPowerText = placeholderValues.Aggregate(finalPowerText, (current, placeholder) 
-                => current.Replace(placeholder.Key, placeholder.Value().ToString()));
+                => current.Replace(placeholder.Key, placeholder.Value().ToString(CultureInfo.CurrentCulture)));
             var finalTranslation = finalPowerText.Replace("||", "\n");
 
             powerText.text = powerUp.Type switch

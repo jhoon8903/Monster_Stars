@@ -217,56 +217,56 @@ namespace Script.CharacterManagerScript
             return weaponObject;
         }
 
-        private IEnumerator DoubleAtk(AttackData attackData)
-        {
-            var unit = attackData.Unit;
-            var weaponType = attackData.WeaponType;
-            var enemies = unit.GetComponent<UnitF>().DetectEnemies();
-            if (enemies.Count == 0) yield break;
-            Attack(new AttackData(unit, weaponType), enemies[0]);
-            Attack(new AttackData(unit, weaponType), enemies.Count > 1 ? enemies[1] : enemies[0]);
-        }
-        private IEnumerator DoubleFire(AttackData attackData)
-        {
-            var unit = attackData.Unit;
-            var weaponType = attackData.WeaponType; 
-            const float offset = 0.3f;
-            var unitPosition = unit.transform.position;
-            var weaponPositions = new []
-            {
-                new Vector3(unitPosition.x - offset, unitPosition.y, 0),
-                new Vector3(unitPosition.x + offset, unitPosition.y, 0)
-            };
-            foreach (var position in weaponPositions)
-            {
-                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, position, unit.transform.rotation);
-                var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
-                weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
-                weaponsList.Add(weaponBase.gameObject);
-                StartCoroutine(weaponBase.UseWeapon());
-            }
-            yield return null;
-        }
-        public IEnumerator SplitAttack(AttackData attackData, Vector3 enemyPosition)
-        {
-            var unit = attackData.Unit;
-            var weaponType = attackData.WeaponType;
-            var weaponDirections = new[]
-            {
-                new {Direction = Vector2.left, Rotation = Quaternion.Euler(0, 0, 90)},
-                new {Direction = Vector2.right, Rotation = Quaternion.Euler(0, 0, -90)}
-            };
-            foreach (var weapon in weaponDirections)
-            {
-                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, enemyPosition, weapon.Rotation);
-                var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
-                weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
-                weaponsList.Add(weaponBase.gameObject);
-                weaponBase.direction = weapon.Direction;
-                StartCoroutine(weaponBase.UseWeapon());
-            }
-            yield return null;
-        }
+        // private IEnumerator DoubleAtk(AttackData attackData)
+        // {
+        //     var unit = attackData.Unit;
+        //     var weaponType = attackData.WeaponType;
+        //     var enemies = unit.GetComponent<UnitF>().DetectEnemies();
+        //     if (enemies.Count == 0) yield break;
+        //     Attack(new AttackData(unit, weaponType), enemies[0]);
+        //     Attack(new AttackData(unit, weaponType), enemies.Count > 1 ? enemies[1] : enemies[0]);
+        // }
+        // private IEnumerator DoubleFire(AttackData attackData)
+        // {
+        //     var unit = attackData.Unit;
+        //     var weaponType = attackData.WeaponType; 
+        //     const float offset = 0.3f;
+        //     var unitPosition = unit.transform.position;
+        //     var weaponPositions = new []
+        //     {
+        //         new Vector3(unitPosition.x - offset, unitPosition.y, 0),
+        //         new Vector3(unitPosition.x + offset, unitPosition.y, 0)
+        //     };
+        //     foreach (var position in weaponPositions)
+        //     {
+        //         var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, position, unit.transform.rotation);
+        //         var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
+        //         weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
+        //         weaponsList.Add(weaponBase.gameObject);
+        //         StartCoroutine(weaponBase.UseWeapon());
+        //     }
+        //     yield return null;
+        // }
+        // public IEnumerator SplitAttack(AttackData attackData, Vector3 enemyPosition)
+        // {
+        //     var unit = attackData.Unit;
+        //     var weaponType = attackData.WeaponType;
+        //     var weaponDirections = new[]
+        //     {
+        //         new {Direction = Vector2.left, Rotation = Quaternion.Euler(0, 0, 90)},
+        //         new {Direction = Vector2.right, Rotation = Quaternion.Euler(0, 0, -90)}
+        //     };
+        //     foreach (var weapon in weaponDirections)
+        //     {
+        //         var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, enemyPosition, weapon.Rotation);
+        //         var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
+        //         weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
+        //         weaponsList.Add(weaponBase.gameObject);
+        //         weaponBase.direction = weapon.Direction;
+        //         StartCoroutine(weaponBase.UseWeapon());
+        //     }
+        //     yield return null;
+        // }
         private IEnumerator DivineDualAttack(AttackData attackData)
         {
             var unit = attackData.Unit;

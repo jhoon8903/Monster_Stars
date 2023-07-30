@@ -1,8 +1,8 @@
 using System.Collections;
+using System.Globalization;
 using Script.AdsScript;
 using TMPro;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Script.UIManager
@@ -41,7 +41,7 @@ namespace Script.UIManager
                 if (_currentCountdown > 0)
                 {
                     _currentCountdown -= Time.unscaledDeltaTime;
-                    countdownText.text = Mathf.Ceil(_currentCountdown).ToString(); // 올림으로 반올림
+                    countdownText.text = Mathf.Ceil(_currentCountdown).ToString(CultureInfo.CurrentCulture); // 올림으로 반올림
                 }
 
                 if (!(_currentCountdown <= 0)) return;
@@ -66,7 +66,7 @@ namespace Script.UIManager
             adsContinueBtn.SetActive(false); // retry 상태 저장
         }
 
-        public void YesRetry()
+        private static void YesRetry()
         {
             AppLovinScript.ShowRewardedAd();
             RewardManager.Instance.RewardButtonClicked("Retry");

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterGroupScript;
 using Script.CharacterManagerScript;
@@ -10,11 +9,11 @@ namespace Script.WeaponScriptGroup
 {
     public class C : WeaponBase
     {
-        private Rigidbody2D _rigidbody2D;
+        private Rigidbody2D _rigidBody2D;
         private Vector3 _enemyTransformC;
         private void Awake()
         {
-            _rigidbody2D = GetComponent<Rigidbody2D>();
+            _rigidBody2D = GetComponent<Rigidbody2D>();
         }
 
         public override IEnumerator UseWeapon()
@@ -22,12 +21,12 @@ namespace Script.WeaponScriptGroup
             yield return base.UseWeapon();
             var useTime = Distance / Speed;
             var enemyPosition = CharacterBase.GetComponent<UnitC>().DetectEnemies();
-            foreach (var enemy in enemyPosition.Where(enemy => enemy.transform.position.y < CharacterBase.transform.position.y))
+            foreach (var unused in enemyPosition.Where(enemy => enemy.transform.position.y < CharacterBase.transform.position.y))
             {
                 Speed = -Speed;
                 transform.rotation = Quaternion.Euler(0, 0, 180);
             }
-            _rigidbody2D.velocity = new Vector2(0, Speed);
+            _rigidBody2D.velocity = new Vector2(0, Speed);
             yield return new WaitForSeconds(useTime);
             StopUseWeapon(gameObject);
         }

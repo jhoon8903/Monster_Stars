@@ -1,10 +1,8 @@
-using System;
 using System.Collections;
 using DG.Tweening;
 using Script.CharacterGroupScript;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
-using Script.EnemyScript;
 using Script.PuzzleManagerGroup;
 using Script.RewardScript;
 using Script.UIManager;

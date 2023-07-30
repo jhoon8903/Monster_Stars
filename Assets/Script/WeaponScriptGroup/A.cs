@@ -10,10 +10,10 @@ namespace Script.WeaponScriptGroup
     public class A : WeaponBase
     {
         private float _distance;
-        private Rigidbody2D _rigidbody2D;
+        private Rigidbody2D _rigidBody2D;
         private void Awake()
         {
-            _rigidbody2D = GetComponent<Rigidbody2D>();
+            _rigidBody2D = GetComponent<Rigidbody2D>();
         }
 
         public override IEnumerator UseWeapon()
@@ -22,7 +22,8 @@ namespace Script.WeaponScriptGroup
 
             if (CharacterBase.GetComponent<UnitA>().atkCount == 5)
             {
-                Sprite = Color.yellow;
+                Sprite = GetComponent<SpriteRenderer>().color = Color.yellow;
+                transform.localScale = new Vector3(1.5f, 1.5f, 0);
                 Damage *= 2f;
                 CharacterBase.GetComponent<UnitA>().atkCount = 0;                
             }
@@ -30,13 +31,13 @@ namespace Script.WeaponScriptGroup
             if (!EnforceManager.Instance.divineDualAttack)
             {
                 var enemyTransforms = CharacterBase.GetComponent<UnitA>().DetectEnemies();
-                foreach (var enemy in enemyTransforms.Where(enemy => enemy.transform.position.y < CharacterBase.transform.position.y))
+                foreach (var unused in enemyTransforms.Where(enemy => enemy.transform.position.y < CharacterBase.transform.position.y))
                 {
                     Speed = -Speed;
                     transform.rotation = Quaternion.Euler(0, 0, 180);
                 }
             }
-            _rigidbody2D.velocity = direction == Vector2.down ? new Vector2(0, -Speed) : new Vector2(0, Speed);
+            _rigidBody2D.velocity = direction == Vector2.down ? new Vector2(0, -Speed) : new Vector2(0, Speed);
             yield return new WaitForSeconds(useTime);
             StopUseWeapon(gameObject);
         }

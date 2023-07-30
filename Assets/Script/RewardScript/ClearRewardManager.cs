@@ -27,7 +27,6 @@ namespace Script.RewardScript
                 Destroy(gameObject);
             }
         }
-
         public void Update()
         {
             if (!Input.GetKeyDown(KeyCode.C)) return;
@@ -44,8 +43,7 @@ namespace Script.RewardScript
         }
         public void GetCoin()
         {
-            var wave = StageManager.Instance.currentWave;
-            var coin = StageManager.Instance.isStageClear ? 100 * wave : 50 * wave;
+            var coin = StageManager.Instance.isStageClear ? 100 : 50;
             var getCoin = coin + EnforceManager.Instance.addGoldCount;
             CoinsScript.Instance.Coin += getCoin;
             CoinsScript.Instance.UpdateCoin();
@@ -56,7 +54,6 @@ namespace Script.RewardScript
             goods.goodsValue.text = $"{getCoin}";
             EnforceManager.Instance.addGoldCount = 0;
         }
-
         private void RewardUnitPiece(int stage)
         {
             var possibleIndices = Enumerable.Range(0, rewardUnitList.Count).ToList();
@@ -127,11 +124,10 @@ namespace Script.RewardScript
                     _ => Color.gray
                 };
                 goodies.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPieceLevel);
-                unit.CharacterPieceCount += unitPieceReward;
                 goodies.goodsValue.text = $"{unitPieceReward}";
+                unit.CharacterPieceCount += unitPieceReward;
             }
         }
-
         private static int GetUnitPieceReward(int stage, CharacterBase.UnitGrades unitGrade)
         {
             var greenReward = 0;

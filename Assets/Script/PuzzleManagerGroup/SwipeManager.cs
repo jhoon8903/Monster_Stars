@@ -4,7 +4,6 @@ using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Script.PuzzleManagerGroup

@@ -16,19 +16,19 @@ namespace Script.AdsScript
             gemBtn.GetComponent<Button>().onClick.AddListener(Gem);
         }
 
-        public void Coin()
+        public static void Coin()
         {
             AppLovinScript.ShowRewardedAd();
             RewardManager.Instance.RewardButtonClicked("Coin");
         }
 
-        public void Stamina()
+        public static void Stamina()
         {
             AppLovinScript.ShowRewardedAd();
             RewardManager.Instance.RewardButtonClicked("Stamina");
         }
 
-        public void Gem()
+        public static void Gem()
         {
             AppLovinScript.ShowRewardedAd();
             RewardManager.Instance.RewardButtonClicked("Gem");

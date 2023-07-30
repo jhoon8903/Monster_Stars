@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Globalization;
 using TMPro;
 using UnityEngine;
 
@@ -9,7 +10,6 @@ namespace Script.RobbyScript.TopMenuGroup
     {
         [SerializeField] private TextMeshProUGUI staminaText;
         [SerializeField] private TextMeshProUGUI staminaRecoveryTime;
-        //public int currentStamina;
         private const int MaxStamina = 30;
         private const float RecoveryCooldown = 1200.0f;
         private float _currentCooldown;
@@ -18,7 +18,7 @@ namespace Script.RobbyScript.TopMenuGroup
 
         public int CurrentStamina
         {
-            get => PlayerPrefs.GetInt(StaminaKey, 0);
+            get => PlayerPrefs.GetInt(StaminaKey, MaxStamina);
             set
             {
                 PlayerPrefs.SetInt(StaminaKey, value);
@@ -65,18 +65,17 @@ namespace Script.RobbyScript.TopMenuGroup
         }
         public void SaveStaminaState()
         {
-            PlayerPrefs.SetString(LastTimeKey, DateTime.UtcNow.ToString());
+            PlayerPrefs.SetString(LastTimeKey, DateTime.UtcNow.ToString(CultureInfo.CurrentCulture));
             PlayerPrefs.SetInt("Stamina", CurrentStamina);
             PlayerPrefs.SetFloat("Cooldown", _currentCooldown);
         }
 
         private void LoadStaminaState()
         {
-            var lastTime = PlayerPrefs.GetString(LastTimeKey, DateTime.UtcNow.ToString());
+            var lastTime = PlayerPrefs.GetString(LastTimeKey, DateTime.UtcNow.ToString(CultureInfo.CurrentCulture));
             var lastDateTime = DateTime.Parse(lastTime);
             var elapsed = DateTime.UtcNow - lastDateTime;
-            var recoveryAmount = Mathf.FloorToInt((float)elapsed.TotalSeconds / RecoveryCooldown);
-            CurrentStamina = PlayerPrefs.GetInt("Stamina", MaxStamina); // 시작 스테미나 설정 기본 MaxStamina
+            var recoveryAmount = Mathf.FloorToInt((float)elapsed.TotalSeconds / RecoveryCooldown); // 시작 스테미나 설정 기본 MaxStamina
             CurrentStamina = Mathf.Min(MaxStamina, CurrentStamina + recoveryAmount);
             _currentCooldown = PlayerPrefs.GetFloat("Cooldown", RecoveryCooldown);
             _currentCooldown -= (float)(elapsed.TotalSeconds % RecoveryCooldown);

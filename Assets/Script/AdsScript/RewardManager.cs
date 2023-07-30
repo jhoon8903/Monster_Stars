@@ -1,5 +1,6 @@
+using System;
+using Script.RobbyScript.StoreMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
-using Script.UIManager;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,12 +8,11 @@ namespace Script.AdsScript
 {
     public class RewardManager : MonoBehaviour
     {
-
         [SerializeField] private Text rewardText;
         [SerializeField] private GameObject rewardBtn;
         public static RewardManager Instance { get; private set; }
-        public bool isRetry;
-
+        private StoreMenu.BoxGrade _boxGrade;
+        private Action _currentRewardAction;
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -27,24 +27,49 @@ namespace Script.AdsScript
 
         public void RewardButtonClicked(string buttonType)
         {
+            var rewardClick = rewardBtn.GetComponent<Button>().onClick;
+
+            if (_currentRewardAction != null)
+            {
+                rewardClick.RemoveListener(_currentRewardAction.Invoke);
+                _currentRewardAction = null;
+            }
             switch (buttonType)
             {
                 case "Coin":
                     rewardText.text = " Coin 5 Get";
-                    rewardBtn.GetComponent<Button>().onClick.AddListener(GiveCoinReward);
+                    rewardClick.AddListener(GiveCoinReward);
                     break;
                 case "Gem":
                     rewardText.text = " Gem 5 Get";
-                    rewardBtn.GetComponent<Button>().onClick.AddListener(GiveGemReward);
+                    rewardClick.AddListener(GiveGemReward);
                     break;
                 case "Stamina":
                     rewardText.text = " Stamina 5 Get";
-                    rewardBtn.GetComponent<Button>().onClick.AddListener(GiveStaminaReward);
+                    rewardClick.AddListener(GiveStaminaReward);
                     break;
                 case "Retry":
                     rewardText.text = " Retry ";
                     MaxSdkCallbacks.Instance.isRetry = true;
-                    rewardBtn.GetComponent<Button>().onClick.AddListener(Retry);
+                    rewardClick.AddListener(Retry);
+                    break;
+                case "Green":
+                    rewardText.text = " GreenBox ";
+                    _boxGrade = StoreMenu.BoxGrade.Green;
+                    _currentRewardAction = () => StoreMenu.Instance.Reward(_boxGrade);
+                    rewardClick.AddListener(_currentRewardAction.Invoke);
+                    break;
+                case "Blue":
+                    rewardText.text = " BlueBox ";
+                    _boxGrade = StoreMenu.BoxGrade.Blue;
+                    _currentRewardAction = () => StoreMenu.Instance.Reward(_boxGrade);
+                    rewardClick.AddListener(_currentRewardAction.Invoke);
+                    break;
+                case "Purple":
+                    rewardText.text = " PurpleBox ";
+                    _boxGrade = StoreMenu.BoxGrade.Purple;
+                    _currentRewardAction = () => StoreMenu.Instance.Reward(_boxGrade);
+                    rewardClick.AddListener(_currentRewardAction.Invoke);
                     break;
             }
         }
@@ -54,7 +79,6 @@ namespace Script.AdsScript
             Debug.Log("코인 보상을 제공합니다.");
             if (CoinsScript.Instance != null)
             {
-                // Access the Coin property and add the specified amount
                 CoinsScript.Instance.Coin += 1000;
             }
             rewardBtn.GetComponent<Button>().onClick.RemoveListener(GiveCoinReward);

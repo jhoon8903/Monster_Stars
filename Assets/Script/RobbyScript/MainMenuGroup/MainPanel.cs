@@ -1,7 +1,7 @@
+using System;
 using Script.RewardScript;
 using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
-using Script.UIManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -26,7 +26,8 @@ namespace Script.RobbyScript.MainMenuGroup
         [SerializeField] private GameObject continuePanel;
         [SerializeField] private GameObject confirmBtn;
         [SerializeField] private GameObject cancelBtn;
-        public int LatestStage { get; set; }
+
+        private int LatestStage { get; set; }
         public int SelectStage { get; private set; }
         public int recordWave;
         public static MainPanel Instance { get; private set; }
@@ -55,10 +56,17 @@ namespace Script.RobbyScript.MainMenuGroup
         }
         private void Update()
         {
-           if (Input.GetKeyDown(KeyCode.R))
-           {
+            try
+            {
+                if (!Input.GetKeyDown(KeyCode.R)) return;
+                Debug.Log("All Data Delete Complete");
                 PlayerPrefs.DeleteAll();
-           }
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e);
+            }
+
         }
         private static void ContinueGame()
         {

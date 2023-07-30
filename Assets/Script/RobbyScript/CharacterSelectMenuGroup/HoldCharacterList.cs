@@ -26,6 +26,22 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         private GameObject _activeStatusPanel;
         private static readonly Dictionary<UnitIcon, UnitIcon> UnitIconMapping = new Dictionary<UnitIcon, UnitIcon>();
         private InformationPanel _informationPanel;
+        public static HoldCharacterList Instance { get; private set; }
+        public bool update;
+
+        private void Awake()
+        {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(Instance.gameObject);
+            }
+            gameObject.SetActive(false);
+            update = true;
+        }
 
         private void Update()
         {
@@ -67,6 +83,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 }
             }
         }
+
         private void SetupUnitIcon(UnitIcon unitInstance, CharacterBase character)
         {
             unitInstance.CharacterBase = character;
@@ -126,7 +143,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             });
         }
 
-        public static void UpdateUnit(UnitIcon unitInstance, CharacterBase character)
+        private static void UpdateUnit(UnitIcon unitInstance, CharacterBase character)
         {
             unitInstance.unitBackGround.GetComponent<Image>().color = character.UnitGrade switch
             {
@@ -221,6 +238,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     break;
             }
         }
+
         private void UpdateMainUnitContent()
         {
             UnitIconMapping.Clear();
@@ -248,7 +266,8 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 });
             }
         }
-        public static void SyncWithSelected(UnitIcon unitIcon, CharacterBase unitBase)
+
+        private static void SyncWithSelected(UnitIcon unitIcon, CharacterBase unitBase)
         {
             var correspondingUnit 
                 = (from pair in UnitIconMapping where pair.Key 
@@ -269,5 +288,22 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             _activeStatusPanel.SetActive(false);
             _activeStatusPanel = null;
         }
+
+        public void UpdateRewardPiece(CharacterBase characterBase)
+        {
+            var allUnitIconInstances = new List<UnitIcon>();
+            allUnitIconInstances.AddRange(selectedContent.GetComponentsInChildren<UnitIcon>());
+            allUnitIconInstances.AddRange(mainUnitContent.GetComponentsInChildren<UnitIcon>());
+            allUnitIconInstances.AddRange(activateUnitContent.GetComponentsInChildren<UnitIcon>());
+            allUnitIconInstances.AddRange(inActivateUnitContent.GetComponentsInChildren<UnitIcon>());
+            var matchingUnitIcons = allUnitIconInstances.Where(unitIcon => unitIcon.CharacterBase == characterBase).ToList();
+            foreach (var unitIcon in matchingUnitIcons)
+            {
+                unitIcon.unitPieceSlider.maxValue = characterBase.CharacterMaxPiece;
+                unitIcon.unitPieceSlider.value = characterBase.CharacterPieceCount;
+                unitIcon.unitPieceText.text = $"{characterBase.CharacterPieceCount}/{unitIcon.unitPieceSlider.maxValue}";
+            }
+        }
+
     }
 }

@@ -1,4 +1,3 @@
-using Script.RewardScript;
 using TMPro;
 using UnityEngine;
 

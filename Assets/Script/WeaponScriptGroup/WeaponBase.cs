@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using Script.CharacterManagerScript;
@@ -6,7 +5,6 @@ using Script.EnemyManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Script.WeaponScriptGroup
 {
@@ -17,7 +15,6 @@ namespace Script.WeaponScriptGroup
         protected float Damage { get; set; }
         protected float Distance { get; private set; }
         protected Color Sprite { get; set; }
-        private CharacterBase.UnitProperties UnitProperty { get; set; }
         private CharacterBase.UnitEffects UnitEffect { get; set; }
         private CharacterBase.UnitGroups UnitGroup { get; set; }
         protected CharacterBase CharacterBase;
@@ -29,7 +26,6 @@ namespace Script.WeaponScriptGroup
         public void InitializeWeapon(CharacterBase characterBase , GameObject target = null)
         {
             CharacterBase = characterBase;
-            UnitProperty = CharacterBase.UnitProperty;
             UnitEffect = CharacterBase.UnitEffect;
             Distance = CharacterBase.defaultAtkDistance;
             Damage = CharacterBase.DefaultDamage;

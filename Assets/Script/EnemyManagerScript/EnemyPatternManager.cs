@@ -24,7 +24,7 @@ namespace Script.EnemyManagerScript
         public readonly Dictionary<EnemyBase, bool> AlreadyKnockBack = new Dictionary<EnemyBase, bool>();
         public readonly Dictionary<EnemyBase, bool> AlreadyStatusSlow = new Dictionary<EnemyBase, bool>();
         public readonly Dictionary<EnemyBase, bool> AlreadyFreeze = new Dictionary<EnemyBase, bool>();
-        private readonly List<GameObject> freezeEffectPool = new List<GameObject>();
+        private readonly List<GameObject> _freezeEffectPool = new List<GameObject>();
         private Rigidbody2D _rb;
         private float _endY;
         private int _slowCount;
@@ -362,10 +362,10 @@ namespace Script.EnemyManagerScript
         private GameObject GetFreezeEffectFromPool()
         {
             GameObject freeze;
-            if (freezeEffectPool.Count > 0)
+            if (_freezeEffectPool.Count > 0)
             {
-                freeze = freezeEffectPool[^1];
-                freezeEffectPool.RemoveAt(freezeEffectPool.Count - 1);
+                freeze = _freezeEffectPool[^1];
+                _freezeEffectPool.RemoveAt(_freezeEffectPool.Count - 1);
             }
             else
             {
@@ -411,7 +411,7 @@ namespace Script.EnemyManagerScript
                 yield return null; 
             }
             freeze.SetActive(false);
-            freezeEffectPool.Add(freeze);
+            _freezeEffectPool.Add(freeze);
             enemyBase.moveSpeed = enemyBase.originSpeed;
             if (enemyBase.isFreeze)
             {
