@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using DG.Tweening;
+using Script.AdsScript;
 using Script.CharacterManagerScript;
 using Script.PuzzleManagerGroup;
 using Script.UIManager;
@@ -23,7 +24,8 @@ namespace Script.RewardScript
         [SerializeField] private TextMeshProUGUI common3Text; // 파워3 텍스트
         [SerializeField] private Button common1Button; 
         [SerializeField] private Button common2Button; 
-        [SerializeField] private Button common3Button; 
+        [SerializeField] private Button common3Button;
+        [SerializeField] private Button commonShuffle;
         [SerializeField] private Image common1BtnBadge;
         [SerializeField] private Image common2BtnBadge;
         [SerializeField] private Image common3BtnBadge;
@@ -38,7 +40,12 @@ namespace Script.RewardScript
         [SerializeField] private CountManager countManager;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private CharacterManager characterManager;
-        [SerializeField] private Language language; // 텍스트 
+        [SerializeField] private Language language; // 텍스트
+        public static CommonRewardManager Instance;
+        private void Awake()
+        {
+            Instance = this;
+        }
 
         public readonly Queue<GameObject> PendingTreasure = new Queue<GameObject>(); // 보류 중인 보물 큐
         private GameObject _currentTreasure; // 현재 보물
@@ -52,7 +59,7 @@ namespace Script.RewardScript
         public void EnqueueTreasure()
         {
             if (isOpenBox) return;
-
+            commonShuffle.gameObject.SetActive(true);
             isOpenBox = true;
             var treasure = PendingTreasure.Dequeue();
             openBoxing = true;
@@ -62,6 +69,12 @@ namespace Script.RewardScript
                 _currentTreasure = treasure;
                 StartCoroutine(OpenBox(_currentTreasure));
             });
+        }
+
+        // 1-1. 다시 섞기
+        public void ReEnqueueTreasure()
+        {
+            StartCoroutine(OpenBox(_currentTreasure));
         }
 
         // 2. 상자마다의 확률 분배
@@ -293,11 +306,13 @@ namespace Script.RewardScript
             _groupName = null;
             commonButton.image = commonButton.image;
             commonButton.onClick.RemoveAllListeners();
+            commonShuffle.onClick.RemoveAllListeners();
             commonButton.onClick.AddListener(() => SelectCommonReward(powerUp));
+            commonShuffle.onClick.AddListener(() => ShuffleCommonReward());
         }
 
         // 9. 상자 오픈
-        private IEnumerator OpenBox(GameObject treasure)
+        public IEnumerator OpenBox(GameObject treasure)
         {
             Time.timeScale = 0; // 게임 일시 정지
             commonRewardPanel.SetActive(true); // 보물 패널 활성화
@@ -423,6 +438,13 @@ namespace Script.RewardScript
             Time.timeScale = 0;
             commonRewardPanel.SetActive(true);
             yield return StartCoroutine(CommonChance(30, 55, 15, null));
+        }
+
+        private void ShuffleCommonReward()
+        {
+            AppLovinScript.ShowRewardedAd();
+            RewardManager.Instance.RewardButtonClicked("CommonShuffle");
+            commonShuffle.gameObject.SetActive(false);
         }
     }
 }

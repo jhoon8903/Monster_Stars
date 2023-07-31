@@ -1,4 +1,5 @@
 using System;
+using Script.RewardScript;
 using Script.RobbyScript.StoreMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
 using UnityEngine;
@@ -13,6 +14,7 @@ namespace Script.AdsScript
         public static RewardManager Instance { get; private set; }
         private StoreMenu.BoxGrade _boxGrade;
         private Action _currentRewardAction;
+
         private void Awake()
         {
             if (Instance != null && Instance != this)
@@ -71,6 +73,14 @@ namespace Script.AdsScript
                     _currentRewardAction = () => StoreMenu.Instance.Reward(_boxGrade);
                     rewardClick.AddListener(_currentRewardAction.Invoke);
                     break;
+                case "CommonShuffle":
+                    rewardText.text = " CommonShuffle ";
+                    rewardClick.AddListener(CommonShuffle);
+                    break;
+                case "ExpShuffle":
+                    rewardText.text = " ExpShuffle ";
+                    rewardClick.AddListener(ExpShuffle);
+                    break;
             }
         }
 
@@ -105,6 +115,19 @@ namespace Script.AdsScript
         private void Retry()
         {
             rewardBtn.GetComponent<Button>().onClick.RemoveListener(Retry);
+        }
+
+        private void CommonShuffle()
+        {
+            CommonRewardManager.Instance.ReEnqueueTreasure();
+            rewardBtn.GetComponent<Button>().onClick.RemoveListener(CommonShuffle);
+        }
+
+        private void ExpShuffle()
+        {
+            Debug.Log("레벨업 동작");
+            LevelUpRewardManager.Instance.ReLevelUpReward();
+            rewardBtn.GetComponent<Button>().onClick.RemoveListener(ExpShuffle);
         }
     }
 }

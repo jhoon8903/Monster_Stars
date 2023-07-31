@@ -764,6 +764,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rewardText: {fileID: 3366016410383180441}
   rewardBtn: {fileID: 3096027301306273604}
+  commonRewardManager: {fileID: 0}
 --- !u!1 &8436952342056443077
 GameObject:
   m_ObjectHideFlags: 0

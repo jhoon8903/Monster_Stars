@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Script.AdsScript;
 using Script.CharacterManagerScript;
 using Script.UIManager;
 using TMPro;
@@ -22,6 +23,7 @@ namespace Script.RewardScript
         [SerializeField] private Button exp1Button; 
         [SerializeField] private Button exp2Button; 
         [SerializeField] private Button exp3Button;
+        [SerializeField] private Button expShuffle;
         [SerializeField] private Image exp1BtnBadge;
         [SerializeField] private Image exp2BtnBadge;
         [SerializeField] private Image exp3BtnBadge;
@@ -259,6 +261,7 @@ namespace Script.RewardScript
         private void Selected(ExpData selectedReward)
         {
             levelUpRewardPanel.SetActive(false);
+            expShuffle.gameObject.SetActive(true);
             gameManager.GameSpeed();
             ProcessExpReward(selectedReward);
         }
@@ -276,6 +279,10 @@ namespace Script.RewardScript
                 yield return StartCoroutine(LevelUpChance(50, 40, 10));
             }
             yield return new WaitUntil(() => levelUpRewardPanel.activeSelf == false); // 보물 패널이 비활성화될 때까지 대기
+        }
+        public void ReLevelUpReward() // 레벨업 보상 처리
+        {
+            StartCoroutine(LevelUpReward());
         }
         private IEnumerator LevelUpChance(int greenChance, int blueChance, int purpleChance)
         {
@@ -752,7 +759,16 @@ namespace Script.RewardScript
             btnBadge.sprite = powerUp.BtnColor;
             expButton.image = expButton.image;
             expButton.onClick.RemoveAllListeners();
+            expShuffle.onClick.RemoveAllListeners();
             expButton.onClick.AddListener(() => Selected(powerUp));
+            expShuffle.onClick.AddListener(() => ShuffleExpReward());
+        }
+
+        private void ShuffleExpReward()
+        {
+            AppLovinScript.ShowRewardedAd();
+            RewardManager.Instance.RewardButtonClicked("ExpShuffle");
+            expShuffle.gameObject.SetActive(false);
         }
     }
 }
