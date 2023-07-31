@@ -36,8 +36,8 @@ namespace Script.RobbyScript.TopMenuGroup
         {
             var gemValue = Gem switch
             {
-              >=100000 => Gem / 1000000 +"M",
-              >=1000 => Gem / 1000 + "k",
+                var g and >= 1000000 => $"{g / 1000000f:F1}M",
+                var g and >= 1000 => $"{g / 1000f:F1}K",
               _=> Gem.ToString()
             };
             gemText.text = $"{gemValue}";

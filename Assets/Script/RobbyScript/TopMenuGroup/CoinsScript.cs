@@ -36,11 +36,12 @@ namespace Script.RobbyScript.TopMenuGroup
         {
             var coinValue = Coin switch
             {
-                >= 1000000 => Coin / 1000000 + "M",
-                >= 1000 => Coin / 1000 + "k",
+                var c and >= 1000000 => $"{c / 1000000f:F1}M",
+                var c and >= 1000 => $"{c / 1000f:F1}K",
                 _ => Coin.ToString()
             };
-            coinText.text = $"{coinValue}";
+            coinText.text = coinValue;
         }
+
     }
 }

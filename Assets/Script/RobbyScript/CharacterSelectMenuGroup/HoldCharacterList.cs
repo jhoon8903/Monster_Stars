@@ -239,7 +239,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             }
         }
 
-        public void UpdateMainUnitContent()
+        private void UpdateMainUnitContent()
         {
             UnitIconMapping.Clear();
             foreach (Transform child in mainUnitContent.transform)
