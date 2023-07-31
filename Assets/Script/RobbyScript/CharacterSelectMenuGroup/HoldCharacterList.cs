@@ -143,7 +143,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             });
         }
 
-        private static void UpdateUnit(UnitIcon unitInstance, CharacterBase character)
+        public static void UpdateUnit(UnitIcon unitInstance, CharacterBase character)
         {
             unitInstance.unitBackGround.GetComponent<Image>().color = character.UnitGrade switch
             {
@@ -239,7 +239,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             }
         }
 
-        private void UpdateMainUnitContent()
+        public void UpdateMainUnitContent()
         {
             UnitIconMapping.Clear();
             foreach (Transform child in mainUnitContent.transform)
@@ -267,7 +267,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             }
         }
 
-        private static void SyncWithSelected(UnitIcon unitIcon, CharacterBase unitBase)
+        public static void SyncWithSelected(UnitIcon unitIcon, CharacterBase unitBase)
         {
             var correspondingUnit 
                 = (from pair in UnitIconMapping where pair.Key 

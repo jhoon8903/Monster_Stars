@@ -59,7 +59,6 @@ namespace Script.CharacterManagerScript
             Selected = false;
             _spriteRenderer = GetComponent<SpriteRenderer>();
         }
-
         private int CheckForMaxPiece()
         {
             var maxPiece = 0;
@@ -166,7 +165,6 @@ namespace Script.CharacterManagerScript
             }
             return maxPiece;
         }
-
         private int CheckForLevelUpCoin()
         {
             var coin = 0;

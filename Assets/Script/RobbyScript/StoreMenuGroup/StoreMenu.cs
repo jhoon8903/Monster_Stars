@@ -41,7 +41,7 @@ namespace Script.RobbyScript.StoreMenuGroup
         private BoxGrade _selectBox;
         private int _coinReward;
         private int _unitPieceReward;
-        private Dictionary<CharacterBase, Tuple<int, Goods>> _unitPieceDict = new Dictionary<CharacterBase, Tuple<int, Goods>>();
+        private readonly Dictionary<CharacterBase, Tuple<int, Goods>> _unitPieceDict = new Dictionary<CharacterBase, Tuple<int, Goods>>();
         private Goods _coinObject;
         private Goods _unitPieceObject;
         private const int GreenLimit = 20;

@@ -214,6 +214,8 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 {
                     StartCoroutine(characterBase.UnitLevelUp());
                     StartCoroutine(CheckForLevelUp(unitInstance, characterBase));
+                    HoldCharacterList.SyncWithSelected(unitInstance, characterBase);
+                    HoldCharacterList.UpdateUnit(unitInstance, characterBase);
                     HoldCharacterList.Instance.UpdateRewardPiece(characterBase);
                     Information(characterBase);
                 });
