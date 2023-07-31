@@ -87,6 +87,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                 ResetButtonCounts();
                 _lastDayCheck = DateTime.Now;
             }
+            CheckOpen();
             StartCoroutine(CheckBox());
         }
 
@@ -145,7 +146,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                     else
                     {
                         var remainingTime = TimeSpan.FromMinutes(coolTime) - timePassed;
-                        if (remainingTime >= TimeSpan.Zero)
+                        if (remainingTime > TimeSpan.Zero)
                         {
                             var remainingTimeText = remainingTime.ToString(@"mm\:ss");
                             button.GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
