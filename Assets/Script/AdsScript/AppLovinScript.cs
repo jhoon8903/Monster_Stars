@@ -56,13 +56,13 @@ namespace Script.AdsScript
 
         private void LoadInterstitial()
         {
-            MaxSdkUnityEditor.LoadInterstitial(InterstitialAdUnitId);
+            MaxSdk.LoadInterstitial(InterstitialAdUnitId);
         }
         public static void ShowInterstitial()
         {
-            if (MaxSdkUnityEditor.IsInterstitialReady(InterstitialAdUnitId))
+            if (MaxSdk.IsInterstitialReady(InterstitialAdUnitId))
             {
-                MaxSdkUnityEditor.ShowInterstitial(InterstitialAdUnitId);
+                MaxSdk.ShowInterstitial(InterstitialAdUnitId);
             }
             else
             {
@@ -115,16 +115,16 @@ namespace Script.AdsScript
 
         private void LoadRewardedAd()
         {
-            MaxSdkUnityEditor.LoadRewardedAd(RewardedAdUnitId);
+            MaxSdk.LoadRewardedAd(RewardedAdUnitId);
 
         }
 
         public static void ShowRewardedAd()
         {
-            if (MaxSdkUnityEditor.IsRewardedAdReady(RewardedAdUnitId))
+            if (MaxSdk.IsRewardedAdReady(RewardedAdUnitId))
             {
                 Debug.Log("Showing");
-                MaxSdkUnityEditor.ShowRewardedAd(RewardedAdUnitId);
+                MaxSdk.ShowRewardedAd(RewardedAdUnitId);
          
             }
             else
