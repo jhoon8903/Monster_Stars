@@ -657,7 +657,7 @@ GameObject:
   - component: {fileID: 2511819091764556577}
   - component: {fileID: 2638196187645015298}
   - component: {fileID: 633018877563332563}
-  - component: {fileID: 6727800372314472960}
+  - component: {fileID: 7933794176690166529}
   m_Layer: 5
   m_Name: Rewarded
   m_TagString: Untagged
@@ -750,7 +750,7 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
---- !u!114 &6727800372314472960
+--- !u!114 &7933794176690166529
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -764,7 +764,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rewardText: {fileID: 3366016410383180441}
   rewardBtn: {fileID: 3096027301306273604}
-  commonRewardManager: {fileID: 0}
 --- !u!1 &8436952342056443077
 GameObject:
   m_ObjectHideFlags: 0

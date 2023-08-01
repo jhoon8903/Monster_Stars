@@ -68,7 +68,7 @@ namespace Script.UIManager
 
         private static void YesRetry()
         {
-            AppLovinScript.ShowRewardedAd();
+            AdsManager.Instance.ShowRewardedAd();
             RewardManager.Instance.RewardButtonClicked("Retry");
             ClickRetry = true;
         }

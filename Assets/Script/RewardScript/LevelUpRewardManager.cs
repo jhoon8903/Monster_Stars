@@ -766,7 +766,7 @@ namespace Script.RewardScript
 
         private void ShuffleExpReward()
         {
-            AppLovinScript.ShowRewardedAd();
+            AdsManager.Instance.ShowRewardedAd();
             RewardManager.Instance.RewardButtonClicked("ExpShuffle");
             expShuffle.gameObject.SetActive(false);
         }

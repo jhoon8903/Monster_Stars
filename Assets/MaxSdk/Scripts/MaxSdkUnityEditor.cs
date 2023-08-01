@@ -11,7 +11,6 @@ using AppLovinMax.ThirdParty.MiniJson;
 using UnityEditor;
 #endif
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
@@ -20,6 +19,7 @@ using Object = UnityEngine.Object;
 /// </summary>
 public class MaxSdkUnityEditor : MaxSdkBase
 {
+    [SerializeField] private GameObject _rewardPrefabs;
     private static bool _isInitialized;
     private static bool _hasSdkKey;
     private static bool _hasUserConsent = false;
@@ -32,6 +32,7 @@ public class MaxSdkUnityEditor : MaxSdkBase
     private static readonly HashSet<string> RequestedAdUnits = new HashSet<string>();
     private static readonly HashSet<string> ReadyAdUnits = new HashSet<string>();
     private static readonly Dictionary<string, GameObject> StubBanners = new Dictionary<string, GameObject>();
+
     public static MaxVariableServiceUnityEditor VariableService
     {
         get { return MaxVariableServiceUnityEditor.Instance; }
@@ -881,6 +882,7 @@ public class MaxSdkUnityEditor : MaxSdkBase
 
         if (_showStubAds)
         {
+            Debug.Log("여기냐!");
             ShowStubInterstitial(adUnitIdentifier);
         }
     }
@@ -1113,16 +1115,17 @@ public class MaxSdkUnityEditor : MaxSdkBase
         RemoveReadyAdUnit(adUnitIdentifier);
 
         if (_showStubAds)
-        {
+        { 
+            Debug.Log(" 여긴가!");
             ShowStubRewardedAd(adUnitIdentifier);
         }
     }
 
     private static void ShowStubRewardedAd(string adUnitIdentifier)
     {
-#if UNITY_EDITOR
         var prefabPath = MaxSdkUtils.GetAssetPathForExportPath("MaxSdk/Prefabs/Rewarded.prefab");
         var rewardedPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
+        Debug.Log("RewardPrefabs" + rewardedPrefab);
         var stubRewardedAd = Object.Instantiate(rewardedPrefab, Vector3.zero, Quaternion.identity);
         var grantedReward = false;
         var rewardedTitle = GameObject.Find("MaxRewardTitle").GetComponent<Text>();
@@ -1137,9 +1140,12 @@ public class MaxSdkUnityEditor : MaxSdkBase
             if (grantedReward)
             {
                 var rewardEventPropsDict = CreateBaseEventPropsDictionary("OnRewardedAdReceivedRewardEvent", adUnitIdentifier);
+                rewardEventPropsDict["rewardLabel"] = "coins";
+                rewardEventPropsDict["rewardAmount"] = "5";
                 var rewardEventProps = Json.Serialize(rewardEventPropsDict);
                 MaxSdkCallbacks.Instance.ForwardEvent(rewardEventProps);
             }
+
             var adHiddenEventProps = Json.Serialize(CreateBaseEventPropsDictionary("OnRewardedAdHiddenEvent", adUnitIdentifier));
             MaxSdkCallbacks.Instance.ForwardEvent(adHiddenEventProps);
             Object.Destroy(stubRewardedAd);
@@ -1152,7 +1158,6 @@ public class MaxSdkUnityEditor : MaxSdkBase
 
         var adDisplayedEventProps = Json.Serialize(CreateBaseEventPropsDictionary("OnRewardedAdDisplayedEvent", adUnitIdentifier));
         MaxSdkCallbacks.Instance.ForwardEvent(adDisplayedEventProps);
-#endif
     }
 
     /// <summary>
@@ -1267,6 +1272,8 @@ public class MaxSdkUnityEditor : MaxSdkBase
             if (grantedReward)
             {
                 var rewardEventPropsDict = CreateBaseEventPropsDictionary("OnRewardedInterstitialAdReceivedRewardEvent", adUnitIdentifier);
+                rewardEventPropsDict["rewardLabel"] = "coins";
+                rewardEventPropsDict["rewardAmount"] = "5";
                 var rewardEventProps = Json.Serialize(rewardEventPropsDict);
                 MaxSdkCallbacks.Instance.ForwardEvent(rewardEventProps);
             }
@@ -1382,13 +1389,7 @@ public class MaxSdkUnityEditor : MaxSdkBase
     /// Refer to AppLovin logs for the IDFA/GAID of your current device.
     /// </summary>
     /// <param name="advertisingIdentifiers">String list of advertising identifiers from devices to receive test ads.</param>
-    public static void SetTestDeviceAdvertisingIdentifiers(string[] advertisingIdentifiers)
-    { 
-        if (IsInitialized())
-        {
-            MaxSdkLogger.UserError("Test Device Advertising Identifiers must be set before SDK initialization.");
-        }
-    }
+    public static void SetTestDeviceAdvertisingIdentifiers(string[] advertisingIdentifiers) { }
 
     /// <summary>
     /// Whether or not the native AppLovin SDKs listen to exceptions. Defaults to <c>true</c>.

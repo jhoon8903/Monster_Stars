@@ -3,6 +3,7 @@ using Script.RewardScript;
 using Script.RobbyScript.StoreMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace Script.AdsScript
@@ -14,6 +15,7 @@ namespace Script.AdsScript
         public static RewardManager Instance { get; private set; }
         private StoreMenu.BoxGrade _boxGrade;
         private Action _currentRewardAction;
+        private bool _isRetry;
 
         private void Awake()
         {
@@ -52,7 +54,7 @@ namespace Script.AdsScript
                     break;
                 case "Retry":
                     rewardText.text = " Retry ";
-                    MaxSdkCallbacks.Instance.isRetry = true;
+                    _isRetry = true;
                     rewardClick.AddListener(Retry);
                     break;
                 case "Green":
@@ -114,6 +116,9 @@ namespace Script.AdsScript
 
         private void Retry()
         {
+            if (!_isRetry) return;
+            SceneManager.LoadScene("StageScene");
+            _isRetry = false;
             rewardBtn.GetComponent<Button>().onClick.RemoveListener(Retry);
         }
 

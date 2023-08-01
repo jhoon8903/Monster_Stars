@@ -442,7 +442,7 @@ namespace Script.RewardScript
 
         private void ShuffleCommonReward()
         {
-            AppLovinScript.ShowRewardedAd();
+            AdsManager.Instance.ShowRewardedAd();
             RewardManager.Instance.RewardButtonClicked("CommonShuffle");
             commonShuffle.gameObject.SetActive(false);
         }

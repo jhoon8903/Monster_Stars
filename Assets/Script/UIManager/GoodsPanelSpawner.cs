@@ -11,7 +11,6 @@ namespace Script.UIManager
         public int numberOfPanels = 3;
         public float initialPanelPosY = 205.0f; // 처음 생성되는 패널의 Y 위치
         public float panelSpacing = 400.0f; // 패널 사이의 간격
-        public AdsManager adsManager;
         public string[] goodsNames = { "COIN", "GEM", "STAMINA" }; // 각 굿즈 패널에 할당할 이름 배열
 
 
@@ -50,13 +49,13 @@ namespace Script.UIManager
             switch (goodsName)
             {
                 case "COIN":
-                    AdsManager.Coin();
+                    AdsManager.Instance.Coin();
                     break;
                 case "GEM":
-                    AdsManager.Gem();
+                    AdsManager.Instance.Gem();
                     break;
                 case "STAMINA":
-                    AdsManager.Stamina();
+                    AdsManager.Instance.Stamina();
                     break;
             }
         }

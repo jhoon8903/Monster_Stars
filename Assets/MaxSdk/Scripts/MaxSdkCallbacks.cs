@@ -8,7 +8,6 @@ using System.Globalization;
 using UnityEngine;
 using AppLovinMax.Internal.API;
 using AppLovinMax.ThirdParty.MiniJson;
-using UnityEngine.SceneManagement;
 
 public class MaxSdkCallbacks : MonoBehaviour
 {
@@ -32,6 +31,8 @@ public class MaxSdkCallbacks : MonoBehaviour
         get; private set;
 #endif
     }
+
+    public bool isRetry;
 
     // Fired when the SDK has finished initializing
     private static Action<MaxSdkBase.SdkConfiguration> _onSdkInitializedEvent;
@@ -187,7 +188,6 @@ public class MaxSdkCallbacks : MonoBehaviour
         /// <summary>
         /// Fired when an Ad Review Creative ID has been generated.
         /// The parameters returned are the adUnitIdentifier, adReviewCreativeId, and adInfo in that respective order.
-        /// Executed on a background thread to avoid any delays in execution.
         /// </summary>
         public static event Action<string, string, MaxSdkBase.AdInfo> OnAdReviewCreativeIdGeneratedEvent
         {
@@ -440,7 +440,6 @@ public class MaxSdkCallbacks : MonoBehaviour
         /// <summary>
         /// Fired when an Ad Review Creative ID has been generated.
         /// The parameters returned are the adUnitIdentifier, adReviewCreativeId, and adInfo in that respective order.
-        /// Executed on a background thread to avoid any delays in execution.
         /// </summary>
         public static event Action<string, string, MaxSdkBase.AdInfo> OnAdReviewCreativeIdGeneratedEvent
         {
@@ -592,7 +591,6 @@ public class MaxSdkCallbacks : MonoBehaviour
         /// <summary>
         /// Fired when an Ad Review Creative ID has been generated.
         /// The parameters returned are the adUnitIdentifier, adReviewCreativeId, and adInfo in that respective order.
-        /// Executed on a background thread to avoid any delays in execution.
         /// </summary>
         public static event Action<string, string, MaxSdkBase.AdInfo> OnAdReviewCreativeIdGeneratedEvent
         {
@@ -1342,13 +1340,12 @@ public class MaxSdkCallbacks : MonoBehaviour
     }
 #endif
 
-    public bool isRetry;
     public void ForwardEvent(string eventPropsStr)
     {
         var eventProps = Json.Deserialize(eventPropsStr) as Dictionary<string, object>;
         if (eventProps == null)
         {
-            MaxSdkLogger.E("Failed to forward event due to invalid event data");
+            MaxSdkLogger.E("Failed to forward event for serialized event data: " + eventPropsStr);
             return;
         }
 
@@ -1657,10 +1654,6 @@ public class MaxSdkCallbacks : MonoBehaviour
             {
                 MaxSdkLogger.UserWarning("Unknown MAX Ads event fired: " + eventName);
             }
-
-            if (!isRetry) return;
-            SceneManager.LoadScene("StageScene");
-            isRetry = false;
         }
     }
 

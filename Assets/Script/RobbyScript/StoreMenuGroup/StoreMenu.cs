@@ -225,17 +225,17 @@ namespace Script.RobbyScript.StoreMenuGroup
         }
         private static void GreenAds()
         {
-            AppLovinScript.ShowRewardedAd();
+            AdsManager.Instance.ShowRewardedAd();
             RewardManager.Instance.RewardButtonClicked("Green");
         }
         private static void BlueAds()
         {
-            AppLovinScript.ShowRewardedAd();
+            AdsManager.Instance.ShowRewardedAd();
             RewardManager.Instance.RewardButtonClicked("Blue");
         }
         private static void PurpleAds()
         {
-            AppLovinScript.ShowRewardedAd();
+            AdsManager.Instance.ShowRewardedAd();
             RewardManager.Instance.RewardButtonClicked("Purple");
         }
         private void CalculateCoinReward(BoxGrade boxTypes, int openCount)
