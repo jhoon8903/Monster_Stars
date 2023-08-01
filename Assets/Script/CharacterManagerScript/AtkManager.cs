@@ -6,6 +6,7 @@ using Script.CharacterGroupScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
 using Script.WeaponScriptGroup;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 namespace Script.CharacterManagerScript
@@ -97,7 +98,7 @@ namespace Script.CharacterManagerScript
                 case CharacterBase.UnitGroups.A:
                     if (EnforceManager.Instance.divineDualAttack)
                     {
-                        StartCoroutine(DivineDualAttack(new AttackData(unit, WeaponsPool.WeaponType.A)));
+                        StartCoroutine(DualAttack(new AttackData(unit, WeaponsPool.WeaponType.A)));
                     }
                     else
                     {
@@ -115,6 +116,28 @@ namespace Script.CharacterManagerScript
                     break;
                 case CharacterBase.UnitGroups.H:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.H));
+                    break;
+                case CharacterBase.UnitGroups.J: 
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.J));
+                    break;
+                case CharacterBase.UnitGroups.K:
+                    if (EnforceManager.Instance.dark2DualAttack)
+                    {
+                        StartCoroutine(EnforceManager.Instance.dark2DoubleAttack
+                            ? CombinedAttack(new AttackData(unit, WeaponsPool.WeaponType.K))
+                            : DualAttack(new AttackData(unit, WeaponsPool.WeaponType.K)));
+                    }
+                    else
+                    {
+                        if (EnforceManager.Instance.dark2DoubleAttack)
+                        {
+                            StartCoroutine(DoubleFire(new AttackData(unit, WeaponsPool.WeaponType.K)));
+                        }
+                        else
+                        {
+                            Attack(new AttackData(unit, WeaponsPool.WeaponType.K));
+                        }
+                    }
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(unitGroup), unitGroup, null);
@@ -145,8 +168,11 @@ namespace Script.CharacterManagerScript
             switch (unitGroup)
             {
                 case CharacterBase.UnitGroups.F:
-                    Attack(new AttackData(unit, WeaponsPool.WeaponType.F));
-                            break;
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.F)); 
+                    break;
+                case CharacterBase.UnitGroups.I:
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.I));
+                    break;
             }
         }
         private GameObject Attack(AttackData attackData, GameObject target = null)
@@ -182,9 +208,9 @@ namespace Script.CharacterManagerScript
                        groupDAtkCount++;
                        if (groupDAtkCount % 3 == 0)
                        {
-                           if (GetComponent<UnitD>().groupDAtkRate < 0.6f)
+                           if (unit.GetComponent<UnitD>().groupDAtkRate < 0.6f)
                            {
-                               GetComponent<UnitD>().groupDAtkRate += 0.01f;
+                               unit.GetComponent<UnitD>().groupDAtkRate += 0.01f;
                            }
                        }
                    }
@@ -193,10 +219,16 @@ namespace Script.CharacterManagerScript
                    if (EnforceManager.Instance.poisonDamagePerBoost)
                    {
                        groupFCount++;
-                       if (groupFCount % 5 == 0 && GetComponent<UnitF>().groupFDamage < 0.6f)
+                       if (groupFCount % 5 == 0 && unit.GetComponent<UnitF>().groupFDamage < 0.6f)
                        {
-                           GetComponent<UnitF>().groupFDamage += 0.01f;
+                           unit.GetComponent<UnitF>().groupFDamage += 0.01f;
                        }
+                   }
+                   break;
+               case CharacterBase.UnitGroups.J:
+                   if (EnforceManager.Instance.physical2FifthBoost)
+                   {
+                       unit.GetComponent<UnitJ>().atkCount++;
                    }
                    break;
             }
@@ -216,58 +248,7 @@ namespace Script.CharacterManagerScript
             StartCoroutine(weaponBase.UseWeapon());
             return weaponObject;
         }
-
-        // private IEnumerator DoubleAtk(AttackData attackData)
-        // {
-        //     var unit = attackData.Unit;
-        //     var weaponType = attackData.WeaponType;
-        //     var enemies = unit.GetComponent<UnitF>().DetectEnemies();
-        //     if (enemies.Count == 0) yield break;
-        //     Attack(new AttackData(unit, weaponType), enemies[0]);
-        //     Attack(new AttackData(unit, weaponType), enemies.Count > 1 ? enemies[1] : enemies[0]);
-        // }
-        // private IEnumerator DoubleFire(AttackData attackData)
-        // {
-        //     var unit = attackData.Unit;
-        //     var weaponType = attackData.WeaponType; 
-        //     const float offset = 0.3f;
-        //     var unitPosition = unit.transform.position;
-        //     var weaponPositions = new []
-        //     {
-        //         new Vector3(unitPosition.x - offset, unitPosition.y, 0),
-        //         new Vector3(unitPosition.x + offset, unitPosition.y, 0)
-        //     };
-        //     foreach (var position in weaponPositions)
-        //     {
-        //         var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, position, unit.transform.rotation);
-        //         var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
-        //         weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
-        //         weaponsList.Add(weaponBase.gameObject);
-        //         StartCoroutine(weaponBase.UseWeapon());
-        //     }
-        //     yield return null;
-        // }
-        // public IEnumerator SplitAttack(AttackData attackData, Vector3 enemyPosition)
-        // {
-        //     var unit = attackData.Unit;
-        //     var weaponType = attackData.WeaponType;
-        //     var weaponDirections = new[]
-        //     {
-        //         new {Direction = Vector2.left, Rotation = Quaternion.Euler(0, 0, 90)},
-        //         new {Direction = Vector2.right, Rotation = Quaternion.Euler(0, 0, -90)}
-        //     };
-        //     foreach (var weapon in weaponDirections)
-        //     {
-        //         var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, enemyPosition, weapon.Rotation);
-        //         var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
-        //         weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
-        //         weaponsList.Add(weaponBase.gameObject);
-        //         weaponBase.direction = weapon.Direction;
-        //         StartCoroutine(weaponBase.UseWeapon());
-        //     }
-        //     yield return null;
-        // }
-        private IEnumerator DivineDualAttack(AttackData attackData)
+        private IEnumerator DualAttack(AttackData attackData)
         {
             var unit = attackData.Unit;
             if (EnforceManager.Instance.divineFifthAttackBoost)
@@ -292,6 +273,50 @@ namespace Script.CharacterManagerScript
             }
             yield return null;
         }
+        private IEnumerator DoubleFire(AttackData attackData)
+        {
+            var unit = attackData.Unit;
+            var weaponType = attackData.WeaponType; 
+            const float offset = 0.3f;
+            var unitPosition = unit.transform.position;
+            var weaponPositions = new []
+            {
+                new Vector3(unitPosition.x - offset, unitPosition.y, 0),
+                new Vector3(unitPosition.x + offset, unitPosition.y, 0)
+            };
+            foreach (var position in weaponPositions)
+            {
+                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, position, unit.transform.rotation);
+                var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
+                weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
+                weaponsList.Add(weaponBase.gameObject);
+                StartCoroutine(weaponBase.UseWeapon());
+            }
+            yield return null;
+        }
+
+        private IEnumerator CombinedAttack(AttackData attackData)
+        {
+            var unit = attackData.Unit;
+            var weaponType = attackData.WeaponType;
+            var unitPosition = unit.transform.position;
+            var directionsAndPositions = new[]
+            {
+                new {Direction = Vector2.up, Rotation = Quaternion.identity, Position = new Vector3(unitPosition.x - 0.3f, unitPosition.y, 0)},
+                new {Direction = Vector2.down, Rotation = Quaternion.Euler(0, 0, 180), Position = new Vector3(unitPosition.x + 0.3f, unitPosition.y, 0)}
+            };
+            foreach (var item in directionsAndPositions)
+            {
+                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, item.Position, item.Rotation);
+                var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
+                weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
+                weaponsList.Add(weaponBase.gameObject);
+                weaponBase.direction = item.Direction;
+                StartCoroutine(weaponBase.UseWeapon());
+            }
+            yield return null;
+        }
+
         public void ClearWeapons()
         {
             for (var i = weaponsList.Count - 1; i >= 0; i--)
@@ -303,5 +328,35 @@ namespace Script.CharacterManagerScript
                 }
             }
         }
+        // private IEnumerator DoubleAtk(AttackData attackData)
+        // {
+        //     var unit = attackData.Unit;
+        //     var weaponType = attackData.WeaponType;
+        //     var enemies = unit.GetComponent<UnitF>().DetectEnemies();
+        //     if (enemies.Count == 0) yield break;
+        //     Attack(new AttackData(unit, weaponType), enemies[0]);
+        //     Attack(new AttackData(unit, weaponType), enemies.Count > 1 ? enemies[1] : enemies[0]);
+        // }
+
+        // public IEnumerator SplitAttack(AttackData attackData, Vector3 enemyPosition)
+        // {
+        //     var unit = attackData.Unit;
+        //     var weaponType = attackData.WeaponType;
+        //     var weaponDirections = new[]
+        //     {
+        //         new {Direction = Vector2.left, Rotation = Quaternion.Euler(0, 0, 90)},
+        //         new {Direction = Vector2.right, Rotation = Quaternion.Euler(0, 0, -90)}
+        //     };
+        //     foreach (var weapon in weaponDirections)
+        //     {
+        //         var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, enemyPosition, weapon.Rotation);
+        //         var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
+        //         weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
+        //         weaponsList.Add(weaponBase.gameObject);
+        //         weaponBase.direction = weapon.Direction;
+        //         StartCoroutine(weaponBase.UseWeapon());
+        //     }
+        //     yield return null;
+        // }
     }
 }

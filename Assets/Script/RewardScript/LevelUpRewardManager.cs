@@ -255,6 +255,76 @@ namespace Script.RewardScript
                 case ExpData.Types.FireProjectileBounceDamage:
                     EnforceManager.Instance.fireProjectileBounceDamage = true;
                     break;
+
+                // I
+                case ExpData.Types.Poison2StunToChance:
+                    EnforceManager.Instance.poison2StunToChance = true;
+                    break;
+                case ExpData.Types.Poison2RangeBoost:
+                    EnforceManager.Instance.poison2RangeBoost = true;
+                    break;
+                case ExpData.Types.Poison2DotDamageBoost:
+                    EnforceManager.Instance.poison2DotDamageBoost = true;
+                    break;
+                case ExpData.Types.Poison2StunTimeBoost:
+                    EnforceManager.Instance.Poison2StunTimeBoost();
+                    break;
+                case ExpData.Types.Poison2SpawnPoisonArea:
+                    EnforceManager.Instance.poison2SpawnPoisonArea = true;
+                    break;
+                case ExpData.Types.Poison2RateBoost:
+                    EnforceManager.Instance.poison2RateBoost = true;
+                    break;
+                case ExpData.Types.Poison2PoolTimeBoost:
+                    EnforceManager.Instance.poison2PoolTimeBoost = true;
+                    break;
+
+                // J
+                case ExpData.Types.Physical2CastleCrushStatBoost:
+                    EnforceManager.Instance.physical2CastleCrushStatBoost = true;
+                    break;
+                case ExpData.Types.Physical2FifthBoost:
+                    EnforceManager.Instance.physical2FifthBoost = true;
+                    break;
+                case ExpData.Types.Physical2BleedTimeBoost:
+                    EnforceManager.Instance.physical2BleedTimeBoost = true;
+                    break;
+                case ExpData.Types.Physical2PoisonDamageBoost:
+                    EnforceManager.Instance.physical2PoisonDamageBoost = true;
+                    break;
+                case ExpData.Types.Physical2RangeBoost:
+                    EnforceManager.Instance.physical2RangeBoost = true;
+                    break;
+                case ExpData.Types.Physical2RateBoost:
+                    EnforceManager.Instance.Physical2RateBoost();
+                    break;
+                case ExpData.Types.Physical2BossBoost:
+                    EnforceManager.Instance.physical2BossBoost = true;
+                    break;
+
+                // K
+                case ExpData.Types.Dark2BackBoost:
+                    EnforceManager.Instance.dark2BackBoost = true;
+                    break;
+                case ExpData.Types.Dark2DualAttack:
+                    EnforceManager.Instance.dark2DualAttack = true;
+                    break;
+                case ExpData.Types.Dark2StatusDamageBoost:
+                    EnforceManager.Instance.dark2StatusDamageBoost = true;
+                    break;
+                case ExpData.Types.Dark2ExplosionBoost:
+                    EnforceManager.Instance.dark2ExplosionBoost = true;
+                    break;
+                case ExpData.Types.Dark2DoubleAttack:
+                    EnforceManager.Instance.dark2DoubleAttack = true;
+                    break;
+                case ExpData.Types.Dark2StatusPoison:
+                    EnforceManager.Instance.dark2StatusPoison = true;
+                    break;
+                case ExpData.Types.Dark2SameEnemyBoost:
+                    EnforceManager.Instance.dark2SameEnemyBoost = true;
+                    break;
+
             }
             selectedReward.ChosenProperty = null;
         }
@@ -335,7 +405,8 @@ namespace Script.RewardScript
             }
             return unitLevel;
         }
-        private bool IsValidOption (ExpData powerUp, ICollection<int> selectedCodes)
+
+        private bool IsValidOption(ExpData powerUp, ICollection<int> selectedCodes)
         {
             if (selectedCodes.Contains(powerUp.Code)) return false;
             switch (powerUp.Type)
@@ -359,7 +430,7 @@ namespace Script.RewardScript
                 case ExpData.Types.StepDirection:
                     if (EnforceManager.Instance.diagonalMovement) return false;
                     if (!StageManager.Instance.isBossClear) return false;
-                    if (StageManager.Instance.currentWave % 10 != 0 ) return false;
+                    if (StageManager.Instance.currentWave % 10 != 0) return false;
                     break;
                 case ExpData.Types.CastleMaxHp:
                     if (EnforceManager.Instance.castleMaxHp >= 1000) return false;
@@ -437,7 +508,7 @@ namespace Script.RewardScript
                 // Unit C
                 case ExpData.Types.WaterFreeze:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
-                    if (EnforceManager.Instance.waterFreeze) return false; 
+                    if (EnforceManager.Instance.waterFreeze) return false;
                     break;
                 case ExpData.Types.WaterFreezeChance:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.C)) return false;
@@ -590,7 +661,7 @@ namespace Script.RewardScript
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.G) < 3) return false;
                     if (EnforceManager.Instance.fire2BurnDurationBoost) return false;
-                    break;   
+                    break;
                 case ExpData.Types.Fire2ChangeProperty:
                     if (!HasUnitInGroup(CharacterBase.UnitGroups.G)) return false;
                     if (UnitPieceLevel(CharacterBase.UnitGroups.G) < 5) return false;
@@ -653,9 +724,120 @@ namespace Script.RewardScript
                     if (!EnforceManager.Instance.fireProjectileBounceDamage) return false;
                     if (EnforceManager.Instance.fireProjectileBounceIncrease) return false;
                     break;
+
+                // Unit I
+                case ExpData.Types.Poison2StunToChance:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.I)) return false;
+                    if (EnforceManager.Instance.poison2StunToChance) return false;
+                    break;
+                case ExpData.Types.Poison2RangeBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.I)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.I) < 3) return false;
+                    if (EnforceManager.Instance.poison2RangeBoost) return false;
+                    break;
+                case ExpData.Types.Poison2DotDamageBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.I)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.I) < 5) return false;
+                    if (EnforceManager.Instance.poison2DotDamageBoost) return false;
+                    break;
+                case ExpData.Types.Poison2StunTimeBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.I)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.I) < 7) return false;
+                    if (!EnforceManager.Instance.poison2StunToChance) return false;
+                    if (EnforceManager.Instance.poison2StunTimeBoost >= 0.5f) return false;
+                    break;
+                case ExpData.Types.Poison2SpawnPoisonArea:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.I)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.I) < 9) return false;
+                    if (EnforceManager.Instance.poison2SpawnPoisonArea) return false;
+                    break;
+                case ExpData.Types.Poison2RateBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.I)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.I) < 11) return false;
+                    if (EnforceManager.Instance.poison2RateBoost) return false;
+                    break;
+                case ExpData.Types.Poison2PoolTimeBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.I)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.I) < 13) return false;
+                    if (!EnforceManager.Instance.poison2SpawnPoisonArea) return false;
+                    if (EnforceManager.Instance.poison2PoolTimeBoost) return false;
+                    break;
+
+                // Unit J
+                case ExpData.Types.Physical2CastleCrushStatBoost:                         
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.J)) return false;
+                    if (EnforceManager.Instance.physical2CastleCrushStatBoost) return false;
+                    break;
+                case ExpData.Types.Physical2FifthBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.J)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.J) < 3) return false;
+                    if (EnforceManager.Instance.physical2FifthBoost) return false;
+                    break;
+                case ExpData.Types.Physical2BleedTimeBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.J)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.J) < 5) return false;
+                    if (EnforceManager.Instance.physical2BleedTimeBoost) return false;
+                    break;
+                case ExpData.Types.Physical2PoisonDamageBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.J)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.J) < 7) return false;
+                    if (EnforceManager.Instance.physical2PoisonDamageBoost) return false;
+                    break;
+                case ExpData.Types.Physical2RangeBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.J)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.J) < 9) return false;
+                    if (EnforceManager.Instance.physical2RangeBoost) return false;
+                    break;
+                case ExpData.Types.Physical2RateBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.J)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.J) < 11) return false;
+                    if (EnforceManager.Instance.physical2RateBoost >= 0.36f) return false;
+                    break;
+                case ExpData.Types.Physical2BossBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.J)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.J) < 13) return false;
+                    if (EnforceManager.Instance.physical2BossBoost) return false;
+                    break;
+                
+                // Unit K
+                case ExpData.Types.Dark2BackBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.K)) return false;
+                    if (EnforceManager.Instance.dark2BackBoost) return false;
+                    break;
+                case ExpData.Types.Dark2DualAttack:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.K)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.K) < 3) return false;
+                    if (EnforceManager.Instance.dark2DualAttack) return false;
+                    break;
+                case ExpData.Types.Dark2StatusDamageBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.K)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.K) < 5) return false;
+                    if (EnforceManager.Instance.dark2StatusDamageBoost) return false;
+                    break;
+                case ExpData.Types.Dark2ExplosionBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.K)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.K) < 7) return false;
+                    if (EnforceManager.Instance.dark2ExplosionBoost) return false;
+                    break;
+                case ExpData.Types.Dark2DoubleAttack:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.K)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.K) < 9) return false;
+                    if (EnforceManager.Instance.dark2DoubleAttack) return false;
+                    break;
+                case ExpData.Types.Dark2StatusPoison:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.K)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.K) < 11) return false;
+                    if (EnforceManager.Instance.dark2StatusPoison) return false;
+                    break;
+                case ExpData.Types.Dark2SameEnemyBoost:
+                    if (!HasUnitInGroup(CharacterBase.UnitGroups.K)) return false;
+                    if (UnitPieceLevel(CharacterBase.UnitGroups.K) < 13) return false;
+                    if (EnforceManager.Instance.dark2SameEnemyBoost) return false;
+                    break;
             }
             return true;
         }
+
         private static ExpData SelectRandom(IEnumerable<ExpData> validOptions)
         {
             var commonDataList = validOptions.ToList();
@@ -763,7 +945,6 @@ namespace Script.RewardScript
             expButton.onClick.AddListener(() => Selected(powerUp));
             expShuffle.onClick.AddListener(ShuffleExpReward);
         }
-
         private void ShuffleExpReward()
         {
             AdsManager.Instance.ShowRewardedAd();

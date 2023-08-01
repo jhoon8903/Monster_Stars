@@ -3,25 +3,27 @@ using System.Linq;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
+using Script.UIManager;
 using UnityEngine;
 
 namespace Script.CharacterGroupScript
 {
-    public class UnitD : CharacterBase
+    public class UnitJ : CharacterBase
     {
         [SerializeField] private Sprite level1Sprite;
         [SerializeField] private Sprite level2Sprite;
         [SerializeField] private Sprite level3Sprite;
         [SerializeField] private Sprite level4Sprite;
         [SerializeField] private Sprite level5Sprite;
-        public float groupDAtkRate;
+        private Vector2 _detectionSize;
+        public int atkCount;
         public override void Initialize()
         {
             base.Initialize();
-            unitGroup = UnitGroups.D;
+            unitGroup = UnitGroups.J;
             UnitProperty = UnitProperties.Physics;
-            UnitGrade = UnitGrades.Green;
-            UnitDesc = "유닛D 입니다.";
+            UnitGrade = UnitGrades.Blue;
+            UnitDesc = "유닛J 입니다.";
             SetLevel(1);
         }
         public void Awake()
@@ -51,20 +53,22 @@ namespace Script.CharacterGroupScript
             SetLevel(unitPuzzleLevel);
         }
 
-        private void GetDetectionProperties(out float size, out Vector2 center)
+        private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
+            var rangeBoost = EnforceManager.Instance.physical2RangeBoost ? 1 : 0;
+            _detectionSize = CastleManager.Instance.castleCrushBoost ? new Vector2(5+rangeBoost,5+rangeBoost) : new Vector2(3+rangeBoost, 3+rangeBoost);
             center = transform.position;
-            size = EnforceManager.Instance.physicalSwordScaleIncrease ? 2.5f : 1.5f;
+            size = _detectionSize;
         }
 
         public override List<GameObject> DetectEnemies()
         {
-            GetDetectionProperties(out var size, out var center);
-            var colliders = Physics2D.OverlapCircleAll(center, size);
+            GetDetectionProperties(out var detectionSize, out var detectionCenter);
+            var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize,0f);
             var currentlyDetectedEnemies = (
                 from enemyObject in colliders 
                 where enemyObject.gameObject.CompareTag("Enemy") && enemyObject.gameObject.activeInHierarchy 
-                select enemyObject.GetComponent<EnemyBase>() 
+                select enemyObject.GetComponent<EnemyBase>()
                 into enemyBase 
                 select enemyBase.gameObject).ToList();
             DetectedEnemies = currentlyDetectedEnemies;
@@ -75,11 +79,11 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = unitPieceLevel > 1 ? unitPieceLevel * 3 : 0f;
+            UnitLevelDamage = unitPieceLevel > 1 ? unitPieceLevel * 6 : 0f;
             Type = Types.Character;
-            unitGroup = UnitGroups.D;
-            var increaseDamage = 1f - EnforceManager.Instance.physicalDamageBoost;
-            DefaultDamage = UnitLevelDamage + 23f * increaseDamage * level switch
+            unitGroup = UnitGroups.J;
+            var crushDamageBoost = CastleManager.Instance.castleCrushBoost ? 1.3f : 1f; 
+            DefaultDamage = UnitLevelDamage + 49f * crushDamageBoost * level switch
             {
                 <= 2 => 1f,
                 3 => 1.7f,
@@ -87,10 +91,12 @@ namespace Script.CharacterGroupScript
                 _ => 2.3f
             };
             dotDamage = DefaultDamage * 0.2f;
-            bleedTime = EnforceManager.Instance.physicalBleedDuration ? 5 : 3;
-            defaultAtkRate = 1f * (1f - EnforceManager.Instance.physicalAttackSpeedBoost) * (1f - groupDAtkRate);
-            swingSpeed = defaultAtkRate; 
-            UnitAtkType = UnitAtkTypes.Circle;
+            bleedTime = EnforceManager.Instance.physical2BleedTimeBoost ? 5f : 3f;
+            var rateBoost = 1f - EnforceManager.Instance.physical2RateBoost;
+            defaultAtkRate = 1f * rateBoost;
+            projectileSpeed = 1f;
+            defaultAtkDistance = 9f;
+            UnitAtkType = UnitAtkTypes.Projectile;
             UnitProperty = UnitProperties.Physics;
             UnitEffect = UnitEffects.Bleed;
         }

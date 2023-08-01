@@ -84,7 +84,35 @@ namespace Script.RewardScript
         public float fireAttackSpeedBoost;
         public bool fireProjectileSpeedIncrease;
         public bool fireProjectileBounceIncrease;
+
+        //Poison2 Unit I
+        public bool poison2StunToChance;
+        public bool poison2RangeBoost;
+        public bool poison2DotDamageBoost;
+        public float poison2StunTimeBoost;
+        public bool poison2SpawnPoisonArea;
+        public bool poison2RateBoost;
+        public bool poison2PoolTimeBoost;
       
+        //Physical2 Unit J
+        public bool physical2CastleCrushStatBoost;
+        public bool physical2FifthBoost;
+        public bool physical2BleedTimeBoost;
+        public bool physical2PoisonDamageBoost;
+        public bool physical2RangeBoost;
+        public float physical2RateBoost;
+        public bool physical2BossBoost;
+
+        //Dark2 Unit K
+        public bool dark2BackBoost;
+        public bool dark2DualAttack;
+        public bool dark2StatusDamageBoost;
+        public bool dark2ExplosionBoost;
+        public bool dark2DoubleAttack;
+        public bool dark2StatusPoison;
+        public bool dark2SameEnemyBoost;
+
+
         //common
         public bool addRow;
         public int slowCount;
@@ -355,7 +383,6 @@ namespace Script.RewardScript
         public bool fire2BossDamageBoost;
 
 
-
         [Header("\n\nH 불: Blue\n")]
         // 완료
         [Header("Purple/ 1Lv: 적을 공격하면 5초간 화상 초당 10% 데미지")] 
@@ -377,15 +404,93 @@ namespace Script.RewardScript
             if (fireAttackSpeedBoost >= 0.24f) return;
             fireAttackSpeedBoost += 0.06f;
         }
-        // 
+        // 완료
         [Header("Green / 11Lv: 투사체 속도가 100% 증가, 반드시 명중")] 
         public bool fireProjectileSpeedIncrease;
-
-
+        // 완료
         [Header("Purple/ 13Lv: 투사체가 튕기는 횟수 증가")] 
         public bool fireProjectileBounceIncrease;
-       
-        
+
+
+        [Header("\n\nI 독: Blue\n")] 
+        // 완료
+        [Header("Purple / 1Lv: 타격시 50% 확률로 적을 0.4초간 기절 시킵니다.")]
+        public bool poison2StunToChance;
+        // 완료
+        [Header("Purple / 3Lv: 사거리 1칸 증가")] 
+        public bool poison2RangeBoost;
+        // 완료
+        [Header("Blue / 5Lv: 중독 데미지가 10% 증가")]
+        public bool poison2DotDamageBoost;
+        // 완료
+        [Header("Green / 7Lv: 기절 시간 0.1초 증가 (최대 5회 / 0.5초)")]
+        public float poison2StunTimeBoost;
+        protected internal void Poison2StunTimeBoost()
+        {
+            poison2StunTimeBoost += 0.1f;
+        }
+        // 완료
+        [Header("Blue / 9Lv: 중독 된 적이 죽으면, 그 자리에 2초간 독 웅덩이가 초당 200% 데미지를 입힘")]
+        public bool poison2SpawnPoisonArea;
+        // 완료
+        [Header("Purple / 11Lv: 공격속도 20% 증가")] 
+        public bool poison2RateBoost;
+        // 완료
+        [Header("Blue / 13Lv: 독 웅덩이 지속시간 1초 증가")]
+        public bool poison2PoolTimeBoost;
+
+
+        [Header("\n\nJ 물리: Blue\n")] 
+        // 완료
+        [Header("Purple / 1Lv: 성이 데미지를 받을 경우 해당 웨이브동안 사거리가 1 증가, 데미지 30% 증가")]
+        public bool physical2CastleCrushStatBoost;
+        // 완료 
+        [Header("Purple / 3Lv: 5회 공격마다 공격력의 200% 데미지 투사체 전방 발사")]
+        public bool physical2FifthBoost;
+        // 완료
+        [Header("Green / 5Lv: 출혈 지속시간 2초 증가")] 
+        public bool physical2BleedTimeBoost;
+        // 완료
+        [Header("Blue / 7Lv: 중독상태의 적 공격시 데미지 60% 증가")]
+        public bool physical2PoisonDamageBoost;
+        // 완료
+        [Header("Purple / 9Lv: 사거리가 1 증가합니다.")]
+        public bool physical2RangeBoost;
+        // 완료
+        [Header("Blue / 11Lv: 공격속도 9% 증가 (최대 4회)")]
+        public float physical2RateBoost;
+        protected internal void Physical2RateBoost()
+        {
+            physical2RateBoost += 0.09f;
+        }
+        // 완료
+        [Header("Blue / 13Lv: 보스 데미지 30% 증가")] 
+        public bool physical2BossBoost;
+
+        [Header("\n\nK 어둠: Purple\n")] 
+        // 완료
+        [Header("Purple / 1Lv: 적의 뒤를 공격하면, 데미지 30% 증가")]
+        public bool dark2BackBoost;
+        // 완료
+        [Header("Purple / 3Lv: 앞 뒤 동시공격")]
+        public bool dark2DualAttack;
+        // 완료
+        [Header("Blue / 5Lv: 적에게 걸린 상태이상 갯수 마다 15% 데미지 증가 (최대 5개)")]
+        public bool dark2StatusDamageBoost;
+        // 완료
+        [Header("Blue / 7Lv: 상태이상적을 처치하면 주변 2칸을 100% 추가데미지")]
+        public bool dark2ExplosionBoost;
+        // 완료
+        [Header("Purple / 9Lv: 발사하는 투사체 갯수 1개 증가")]
+        public bool dark2DoubleAttack;
+        // 완료
+        [Header("Green / 11Lv: 적이 상태이상에 걸리지 않았을때, 초당 공격력의 20%의 중독을 3초간 발생시킵니다.")]
+        public bool dark2StatusPoison;
+        // 완료
+        [Header("Blue / 13Lv: 동일한 적을 타격할때마다 데미지가 5% 증가 (최대 10회)")]
+        public bool dark2SameEnemyBoost;
+
+
         [Header("\n\n공통강화\n")] 
         [Header("가로줄 추가")] 
         public bool addRow;
@@ -583,6 +688,33 @@ namespace Script.RewardScript
                 fireProjectileSpeedIncrease = fireProjectileSpeedIncrease,
                 fireProjectileBounceIncrease = fireProjectileBounceIncrease,
 
+                //Poison2 Unit I
+                poison2StunToChance = poison2StunToChance,
+                poison2RangeBoost = poison2RangeBoost,
+                poison2DotDamageBoost = poison2DotDamageBoost,
+                poison2StunTimeBoost = poison2StunTimeBoost,
+                poison2SpawnPoisonArea = poison2SpawnPoisonArea,
+                poison2RateBoost = poison2RateBoost,
+                poison2PoolTimeBoost = poison2PoolTimeBoost,
+
+                //Physical2 Unit J
+                physical2CastleCrushStatBoost = physical2CastleCrushStatBoost,
+                physical2FifthBoost = physical2FifthBoost,
+                physical2BleedTimeBoost = physical2BleedTimeBoost,
+                physical2PoisonDamageBoost = physical2PoisonDamageBoost,       
+                physical2RangeBoost = physical2RangeBoost,
+                physical2RateBoost = physical2RateBoost,
+                physical2BossBoost = physical2BossBoost,
+
+                //Darkness Unit K
+                dark2BackBoost = dark2BackBoost,
+                dark2DualAttack = dark2DualAttack,
+                dark2StatusDamageBoost = dark2StatusDamageBoost,
+                dark2ExplosionBoost = dark2ExplosionBoost,
+                dark2DoubleAttack = dark2DoubleAttack,
+                dark2StatusPoison = dark2StatusPoison,
+                dark2SameEnemyBoost = dark2SameEnemyBoost,
+
                 // Common
                 addRow = addRow,
                 slowCount = slowCount,
@@ -675,6 +807,30 @@ namespace Script.RewardScript
             fireAttackSpeedBoost = data.fireAttackSpeedBoost;
             fireProjectileSpeedIncrease = data.fireProjectileSpeedIncrease;                            
             fireProjectileBounceIncrease = data.fireProjectileBounceIncrease;
+            //Poison2 Unit I
+            poison2StunToChance = data.poison2StunToChance;
+            poison2RangeBoost = data.poison2RangeBoost;
+            poison2DotDamageBoost = data.poison2DotDamageBoost;
+            poison2StunTimeBoost = data.poison2StunTimeBoost;
+            poison2SpawnPoisonArea = data.poison2SpawnPoisonArea;
+            poison2RateBoost = data.poison2RateBoost;
+            poison2PoolTimeBoost = data.poison2PoolTimeBoost;
+            //Physical2 Unit J
+            physical2CastleCrushStatBoost = data.physical2CastleCrushStatBoost;
+            physical2FifthBoost = data.physical2FifthBoost;
+            physical2BleedTimeBoost = data.physical2BleedTimeBoost;
+            physical2PoisonDamageBoost = data.physical2PoisonDamageBoost;       
+            physical2RangeBoost = data.physical2RangeBoost;
+            physical2RateBoost = data.physical2RateBoost;
+            physical2BossBoost = data.physical2BossBoost;
+            //Darkness Unit K
+            dark2BackBoost = data.dark2BackBoost;
+            dark2DualAttack = data.dark2DualAttack;
+            dark2StatusDamageBoost = data.dark2StatusDamageBoost;
+            dark2ExplosionBoost = data.dark2ExplosionBoost;
+            dark2DoubleAttack = data.dark2DoubleAttack;              
+            dark2StatusPoison = data.dark2StatusPoison;
+            dark2SameEnemyBoost = data.dark2SameEnemyBoost;
             // Common
             addRow = data.addRow;
             slowCount = data.slowCount;

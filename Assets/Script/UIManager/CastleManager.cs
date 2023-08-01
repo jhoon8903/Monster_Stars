@@ -3,7 +3,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 using DG.Tweening;
+using Script.CharacterManagerScript;
 using Script.RewardScript;
+using Unity.VisualScripting;
 
 namespace Script.UIManager
 {
@@ -16,9 +18,19 @@ namespace Script.UIManager
         public float baseCastleHp = 1000;
         private float _increaseHp;                   
         public bool TookDamageLastWave { get; set; }
+        public static CastleManager Instance { get; private set; }
+        public bool castleCrushBoost;
 
         private void Awake()
         {
+            if (Instance == null)
+            {
+                Instance = this;
+            }
+            else
+            {
+                Destroy(gameObject);
+            }
             _increaseHp = EnforceManager.Instance.castleMaxHp;
             HpPoint = baseCastleHp;
             MaxHpPoint = baseCastleHp;
@@ -37,6 +49,10 @@ namespace Script.UIManager
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
+            if (EnforceManager.Instance.physical2CastleCrushStatBoost)
+            {
+                castleCrushBoost = true;
+            }
             var enemyBase = collision.gameObject.GetComponent<EnemyBase>();
             if (enemyBase == null) return;
             HpPoint -= enemyBase.CrushDamage;
@@ -60,7 +76,6 @@ namespace Script.UIManager
             hpBar.value = HpPoint;
             UpdateHpText();
         }
-
 
         public void RecoverCastleHp()
         {

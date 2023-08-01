@@ -11,7 +11,7 @@ namespace Script.WeaponScriptGroup
     {
         private Rigidbody2D _rigidBody2D;
         private Vector3 _enemyTransformC;
-        private void Awake()
+        private new void Awake()
         {
             _rigidBody2D = GetComponent<Rigidbody2D>();
         }
@@ -37,9 +37,9 @@ namespace Script.WeaponScriptGroup
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
             HasHit = true;
-            AtkEffect(enemy);
-            var damage = DamageCalculator(Damage, enemy, CharacterBase.UnitGroups.C); 
-            enemy.ReceiveDamage(enemy,(int)damage,CharacterBase);
+            AtkEffect(enemy, CharacterBase);
+            var damage = DamageCalculator(Damage, enemy, CharacterBase); 
+            enemy.ReceiveDamage(enemy,(int)damage, CharacterBase);
             StopUseWeapon(gameObject);
         }
     }

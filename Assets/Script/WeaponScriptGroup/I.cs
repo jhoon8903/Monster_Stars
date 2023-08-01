@@ -6,36 +6,37 @@ using UnityEngine;
 
 namespace Script.WeaponScriptGroup
 {
-    public class B : WeaponBase
+    public class I : WeaponBase
     {
         private float _distance;
         private Vector3 _enemyTransform;
         private List<GameObject> _enemyTransforms = new List<GameObject>();
-        private int _bounceCount;
+        private Rigidbody2D _rigidbody2D;
+        private int _bounceCount; 
+
+        private new void Awake() 
+        {
+            _rigidbody2D = GetComponent<Rigidbody2D>();
+        }
 
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
-            _enemyTransforms = CharacterBase.GetComponent<UnitB>().DetectEnemies();
-            foreach (var enemy in _enemyTransforms)
+
+            while (isInUse)
             {
-                _enemyTransform = enemy.transform.position;
-            }
-            if (CharacterBase.GetComponent<UnitB>().atkCount == 5)
-            {
-                Damage *= 2f;
-                CharacterBase.GetComponent<UnitB>().atkCount = 0;
-            }
-            while (Vector3.Distance(transform.position, _enemyTransform) > 0.1f)
-            {
-                var position = transform.position;
-                var upwards = (_enemyTransform - position).normalized;
+                _enemyTransforms = CharacterBase.GetComponent<UnitI>().DetectEnemies();
+                if (_enemyTransforms.Count == 0)                             
+                {
+                    StopUseWeapon(gameObject);
+                    break;
+                }
+                var currentEnemy = _enemyTransforms[0].GetComponent<EnemyBase>();
+                var upwards = (currentEnemy.transform.position - transform.position).normalized;
                 transform.rotation = Quaternion.LookRotation(Vector3.forward, upwards);
-                position = Vector3.MoveTowards(position, _enemyTransform, Speed * Time.deltaTime);
-                transform.position = position;
+                _rigidbody2D.velocity = upwards * Speed;
                 yield return null;
             }
-            StopUseWeapon(gameObject);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -46,7 +47,7 @@ namespace Script.WeaponScriptGroup
             HasHit = true;
             AtkEffect(enemy, CharacterBase);
             var damage = DamageCalculator(Damage, enemy, CharacterBase); 
-            enemy.ReceiveDamage(enemy, (int)damage, CharacterBase);
+            enemy.ReceiveDamage(enemy,(int)damage,CharacterBase);
             StopUseWeapon(gameObject);
         }
     }

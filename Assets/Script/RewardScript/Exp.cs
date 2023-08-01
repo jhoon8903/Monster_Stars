@@ -93,6 +93,33 @@ namespace Script.RewardScript
              FireAttackSpeedBoost,
              FireProjectileSpeedIncrease,
              FireProjectileBounceIncrease,
+
+             //Poison2 I
+             Poison2StunToChance,
+             Poison2RangeBoost,
+             Poison2DotDamageBoost,
+             Poison2StunTimeBoost,
+             Poison2SpawnPoisonArea,
+             Poison2RateBoost, 
+             Poison2PoolTimeBoost,
+
+             //Physical2 J
+             Physical2CastleCrushStatBoost,
+             Physical2FifthBoost,
+             Physical2BleedTimeBoost,
+             Physical2PoisonDamageBoost,
+             Physical2RangeBoost,
+             Physical2RateBoost,
+             Physical2BossBoost,
+
+             //Darkness2 K
+             Dark2BackBoost,
+             Dark2DualAttack,
+             Dark2StatusDamageBoost,
+             Dark2ExplosionBoost,
+             Dark2DoubleAttack,
+             Dark2StatusPoison,
+             Dark2SameEnemyBoost,
          }
         public Types Type { get; set; }
         private readonly int[] _property;

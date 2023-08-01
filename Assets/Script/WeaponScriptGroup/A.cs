@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Linq;
 using Script.CharacterGroupScript;
-using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
 using UnityEngine;
@@ -11,7 +10,7 @@ namespace Script.WeaponScriptGroup
     {
         private float _distance;
         private Rigidbody2D _rigidBody2D;
-        private void Awake()
+        private new void Awake()
         {
             _rigidBody2D = GetComponent<Rigidbody2D>();
         }
@@ -47,8 +46,8 @@ namespace Script.WeaponScriptGroup
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
             HasHit = true;
-            AtkEffect(enemy);
-            var damage = DamageCalculator(Damage, enemy, CharacterBase.UnitGroups.A); 
+            AtkEffect(enemy, CharacterBase);
+            var damage = DamageCalculator(Damage, enemy, CharacterBase); 
             enemy.ReceiveDamage(enemy,(int)damage,CharacterBase);
             StopUseWeapon(gameObject);
         }

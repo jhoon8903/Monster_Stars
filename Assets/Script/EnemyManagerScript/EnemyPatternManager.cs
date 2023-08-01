@@ -10,7 +10,6 @@ namespace Script.EnemyManagerScript
 {
     public class EnemyPatternManager : MonoBehaviour
     {
-
         [SerializeField] private GameManager gameManager;
         [SerializeField] private GameObject castle;
         [SerializeField] private EnemyPool enemyPool;
@@ -19,11 +18,6 @@ namespace Script.EnemyManagerScript
         private readonly Dictionary<EnemyBase, Rigidbody2D> _enemyRigidbodies = new Dictionary<EnemyBase, Rigidbody2D>();
         private float _moveSpeed;
         public float moveSpeedOffset;
-        public readonly Dictionary<EnemyBase, bool> AlreadySlow = new Dictionary<EnemyBase, bool>();
-        public readonly Dictionary<EnemyBase, bool> AlreadyRestrain = new Dictionary<EnemyBase, bool>();
-        public readonly Dictionary<EnemyBase, bool> AlreadyKnockBack = new Dictionary<EnemyBase, bool>();
-        public readonly Dictionary<EnemyBase, bool> AlreadyStatusSlow = new Dictionary<EnemyBase, bool>();
-        public readonly Dictionary<EnemyBase, bool> AlreadyFreeze = new Dictionary<EnemyBase, bool>();
         private readonly List<GameObject> _freezeEffectPool = new List<GameObject>();
         private Rigidbody2D _rb;
         private float _endY;
@@ -31,7 +25,6 @@ namespace Script.EnemyManagerScript
         private float _speedReductionFactor;
         public bool globalFreeze;
         public static EnemyPatternManager Instance { get; private set; }
-
         private void Awake()
         {
             Instance = this;
@@ -44,9 +37,6 @@ namespace Script.EnemyManagerScript
                 enemyBase.Initialize();
                 StartCoroutine(Rain(enemyBase));
             }
-
-            AlreadyKnockBack.TryAdd(enemyBase, false);
-
             switch (enemyBase.SpawnZone)
             {
                 case EnemyBase.SpawnZones.A:
@@ -77,7 +67,6 @@ namespace Script.EnemyManagerScript
             _enemyRigidbodies[enemyBase] = _rb;
             
             var targetPosition = new Vector2(_enemyRigidbodies[enemyBase].transform.position.x, _endY);
-            AlreadyKnockBack.TryAdd(enemyBase, false);
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
@@ -94,7 +83,14 @@ namespace Script.EnemyManagerScript
                     _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed);
                 }
 
-                StartCoroutine(Effect(enemyBase));
+                if (enemyBase.gameObject.activeInHierarchy)
+                {
+                    StartCoroutine(Effect(enemyBase));
+                }
+                else
+                {
+                    StopCoroutine(Effect(enemyBase));
+                }
             }
         }
         private IEnumerator Diagonal(EnemyBase enemyBase)
@@ -117,7 +113,14 @@ namespace Script.EnemyManagerScript
                 _moveSpeed = enemyBase.moveSpeed * _speedReductionFactor * moveSpeedOffset * Time.deltaTime;
                 _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed);
                 
-                StartCoroutine(Effect(enemyBase));
+                if (enemyBase.gameObject.activeInHierarchy)
+                {
+                    StartCoroutine(Effect(enemyBase));
+                }
+                else
+                {
+                    StopCoroutine(Effect(enemyBase));
+                }
             }
         }
         private IEnumerator Zigzag(EnemyBase enemyBase)
@@ -155,7 +158,14 @@ namespace Script.EnemyManagerScript
                     if (waypointIndex >= waypoints.Length) break;
                     continue;
                 }
-                StartCoroutine(Effect(enemyBase));
+                if (enemyBase.gameObject.activeInHierarchy)
+                {
+                    StartCoroutine(Effect(enemyBase));
+                }
+                else
+                {
+                    StopCoroutine(Effect(enemyBase));
+                }
             }
         }
         private IEnumerator OutSide(EnemyBase enemyBase)
@@ -185,7 +195,14 @@ namespace Script.EnemyManagerScript
                     targetPosition = new Vector2(targetPosition.x, _endY);
                 }
 
-                StartCoroutine(Effect(enemyBase));
+                if (enemyBase.gameObject.activeInHierarchy)
+                {
+                    StartCoroutine(Effect(enemyBase));
+                }
+                else
+                {
+                    StopCoroutine(Effect(enemyBase));
+                }
             }
         }
         private IEnumerator InSide(EnemyBase enemyBase)
@@ -223,110 +240,115 @@ namespace Script.EnemyManagerScript
                 {
                     targetPosition = new Vector3(targetPosition.x, _endY);
                 }
-                StartCoroutine(Effect(enemyBase));
+
+                if (enemyBase.gameObject.activeInHierarchy)
+                {
+                    StartCoroutine(Effect(enemyBase));
+                }
+                else
+                {
+                    StopCoroutine(Effect(enemyBase));
+                }
+                
             }
         }
         private IEnumerator Effect(EnemyBase enemyBase)
         {
             if (enemyBase.isBind)
             {
-                StartCoroutine(BindEffect(enemyBase));
+                StartCoroutine(BindEffect(enemyBase, enemyBase.Character));
             }
-            if (enemyBase.isSlowC || enemyBase.isSlowE)
-            { 
-                StartCoroutine(SlowEffect(enemyBase));
-            }
-            if ( enemyBase.isKnockBack )
+
+            if (enemyBase.isSlow)
             {
-                StartCoroutine(KnockBackEffect(enemyBase));
-            }
-            if (enemyBase.isFreeze || enemyBase.isFreezeE)
+                StartCoroutine(SlowEffect(enemyBase, enemyBase.Character));
+            }                                                                   
+
+            if (enemyBase.isKnockBack)
             {
-                StartCoroutine(FreezeEffect(enemyBase));
+                StartCoroutine(KnockBackEffect(enemyBase, enemyBase.Character));
             }
+
+            if (enemyBase.isFreeze)
+            {
+                StartCoroutine(FreezeEffect(enemyBase, enemyBase.Character));
+            }
+
             if (EnforceManager.Instance.darkStatusAilmentSlowEffect)
             {
-                if (enemyBase.isBind || enemyBase.isSlowC || enemyBase.isSlowE || enemyBase.isBleed || enemyBase.isBurnG || enemyBase.isPoison || enemyBase.isFreeze)
+                if (enemyBase.isBind|| enemyBase.isSlow || enemyBase.isBleed || enemyBase.isBurn || enemyBase.isPoison || enemyBase.isFreeze || enemyBase.isStun)
                 {
-                    StartCoroutine(StatusSlowEffect(enemyBase));
+                    StartCoroutine(SlowEffect(enemyBase, enemyBase.Character));
                 }
+            }
+
+            if (enemyBase.isStun)
+            {
+                StartCoroutine(StunEffect(enemyBase, enemyBase.Character));
             }
             yield return null;
         }
-        private IEnumerator BindEffect(EnemyBase enemyBase)
+
+        private static IEnumerator BindEffect(EnemyBase enemyBase, CharacterBase characterBase)
         {
             var restrainColor = new Color(1, 0.5f, 0);
             var originColor = new Color(1, 1, 1);
-            var restrainTime = EnforceManager.Instance.divineBindDurationBoost? 1f : 1.5f;
-            if (!AlreadyRestrain.TryGetValue(enemyBase, out var isAlreadyRestraint))
+            var restrainTime = characterBase.bindTime;
+            if (!enemyBase.AlreadyBind.TryGetValue(enemyBase, out var isAlreadyBind))
             {
-                isAlreadyRestraint = false;
-                AlreadyRestrain[enemyBase] = false;
+                isAlreadyBind = false;
+                enemyBase.AlreadyBind[enemyBase] = false;
             }
-            if  (isAlreadyRestraint) yield break;
-            AlreadyRestrain[enemyBase] = true;
+            if  (isAlreadyBind) yield break;
+            enemyBase.AlreadyBind[enemyBase] = true;
             enemyBase.GetComponent<SpriteRenderer>().color = restrainColor;
             enemyBase.moveSpeed = 0;
             yield return new WaitForSeconds(restrainTime);
             enemyBase.moveSpeed = enemyBase.originSpeed;
             enemyBase.GetComponent<SpriteRenderer>().color = originColor;
-            AlreadyRestrain[enemyBase] = false;
-            enemyBase.isBind = false;
+            enemyBase.AlreadyBind[enemyBase] = false;
+            enemyBase.BindStatus(false, characterBase);
+            enemyBase.IsBind.Remove(characterBase);
+            enemyBase.statusList.Remove(enemyBase.IsBind[characterBase]);
         }
-        private IEnumerator SlowEffect(EnemyBase enemyBase)
+        private static IEnumerator SlowEffect(EnemyBase enemyBase, CharacterBase characterBase)
         {
             var slowColor = new Color(0f, 0.74f, 1);
             var originColor = new Color(1, 1, 1);
-            var slowTime = 0f;
-            var slowPower = 0f;
-            if (enemyBase.isSlowC)
-            {
-                slowTime = 1f + EnforceManager.Instance.waterSlowDurationBoost;
-                slowPower = EnforceManager.Instance.waterSlowCPowerBoost ? 0.55f : 0.7f;
-            }
-            else if (enemyBase.isSlowE)
-            {
-                slowTime = 1.5f + EnforceManager.Instance.water2SlowTimeBoost;
-                slowPower = EnforceManager.Instance.water2SlowPowerBoost ? 0.6f : 0.7f;
-            }
-            if (!AlreadySlow.TryGetValue(enemyBase, out var isAlreadySlow))
+            var slowTime = characterBase.slowTime;
+            var slowPower = characterBase.slowPower;
+            if (!enemyBase.AlreadySlow.TryGetValue(enemyBase, out var isAlreadySlow))
             {
                 isAlreadySlow = false;
-                AlreadySlow[enemyBase] = false;
+                enemyBase.AlreadySlow[enemyBase] = false;
             }
             if (isAlreadySlow) yield break;
-            AlreadySlow[enemyBase] = true;
+            enemyBase.AlreadySlow[enemyBase] = true;
             enemyBase.GetComponent<SpriteRenderer>().color = slowColor;
             enemyBase.moveSpeed *= slowPower;
             yield return new WaitForSeconds(slowTime);
             enemyBase.moveSpeed = enemyBase.originSpeed;
             enemyBase.GetComponent<SpriteRenderer>().color = originColor;
-            AlreadySlow[enemyBase] = false;
-            if (enemyBase.isSlowC)
-            {
-                enemyBase.isSlowC = false;
-            }
-            else if (enemyBase.isSlowE)
-            {
-                enemyBase.isSlowE = false;
-            }
+            enemyBase.AlreadySlow[enemyBase] = false;
+            enemyBase.SlowStatus(false, characterBase);
+            enemyBase.IsSlow.Remove(characterBase);
+            enemyBase.statusList.Remove(enemyBase.IsSlow[characterBase]);
         }
-        private IEnumerator KnockBackEffect(EnemyBase enemyBase)
+        private static IEnumerator KnockBackEffect(EnemyBase enemyBase, CharacterBase characterBase)
         {
-            if (!AlreadyKnockBack.TryGetValue(enemyBase, out var isAlreadyKnockBack))
+            if (!enemyBase.AlreadyKnockBack.TryGetValue(enemyBase, out var isAlreadyKnockBack))
             {
                 isAlreadyKnockBack = false;
-                AlreadyKnockBack[enemyBase] = false;
+                enemyBase.AlreadyKnockBack[enemyBase] = false;
             }
             if (isAlreadyKnockBack) yield break;
-            AlreadyKnockBack[enemyBase] = true;
-            enemyBase.isKnockBack = true;
-
+            enemyBase.AlreadyKnockBack[enemyBase] = true;
             var knockBackDirection = Vector2.up; 
-            var knockBackForce = 1f;
+            var knockBackForce = characterBase.knockBackPower;
+            var knockBackTime = characterBase.knockBackTime;
             var rb = enemyBase.GetComponent<Rigidbody2D>();
             rb.AddForce(knockBackDirection * knockBackForce, ForceMode2D.Impulse);
-            yield return new WaitForSeconds(0.2f);
+            yield return new WaitForSeconds(knockBackTime);
             while (knockBackForce > 0.1)
             {
                 knockBackForce -= Time.deltaTime;
@@ -335,29 +357,38 @@ namespace Script.EnemyManagerScript
             }
             rb.velocity = Vector2.zero;
             enemyBase.moveSpeed = enemyBase.originSpeed;
-            AlreadyKnockBack[enemyBase] = false;
-            enemyBase.isKnockBack = false;
+            enemyBase.AlreadyKnockBack[enemyBase] = false;
+            enemyBase.KnockBackStatus(false, characterBase);
+            enemyBase.IsKnockBack.Remove(characterBase);
+            enemyBase.statusList.Remove(enemyBase.IsKnockBack[characterBase]);
         }
-        private IEnumerator StatusSlowEffect(EnemyBase enemyBase)
+        private IEnumerator FreezeEffect(EnemyBase enemyBase, CharacterBase characterBase)
         {
-            const float slowTime = 1f;
-            const float moveSpeedMultiplier = 0.8f;
-            var slowColor = new Color(0.2311f, 0.2593f, 1f, 1f);
-            var originColor = new Color(1f, 1f, 1f);
-
-            if (!AlreadyStatusSlow.TryGetValue(enemyBase, out var isAlreadyStatusSlow))
+            var freezeTime = characterBase.freezeTime;
+            if (!enemyBase.AlreadyFreeze.TryGetValue(enemyBase, out var isAlreadyFreeze))
             {
-                isAlreadyStatusSlow = false;
-                AlreadyStatusSlow[enemyBase] = false;
+                isAlreadyFreeze = false;
             }
-            if(isAlreadyStatusSlow) yield break;
-            AlreadyStatusSlow[enemyBase] = true;
-            enemyBase.GetComponent<SpriteRenderer>().color = slowColor;
-            enemyBase.moveSpeed *= moveSpeedMultiplier;
-            yield return new WaitForSeconds(slowTime);
+            if  (isAlreadyFreeze) yield break;
+            enemyBase.AlreadyFreeze[enemyBase] = true;
+            var freeze = GetFreezeEffectFromPool();
+            freeze.transform.position = enemyBase.transform.position;
+            freeze.SetActive(true);
+            enemyBase.moveSpeed = 0;
+    
+            float timer = 0;
+            while (timer < freezeTime && !enemyBase.isDead)
+            {
+                timer += Time.deltaTime;
+                yield return null; 
+            }
+            freeze.SetActive(false);
+            _freezeEffectPool.Add(freeze);
             enemyBase.moveSpeed = enemyBase.originSpeed;
-            enemyBase.GetComponent<SpriteRenderer>().color = originColor;
-            AlreadyStatusSlow[enemyBase] = false;
+            enemyBase.AlreadyFreeze[enemyBase] = false;
+            enemyBase.FreezeStatus(false, characterBase);
+            enemyBase.IsFreeze.Remove(characterBase);
+            enemyBase.statusList.Remove(enemyBase.IsFreeze[characterBase]);
         }
         private GameObject GetFreezeEffectFromPool()
         {
@@ -382,46 +413,9 @@ namespace Script.EnemyManagerScript
             var enemyList = enemyPool.enemyBases;
             foreach (var enemyBase in enemyList.Select(enemy => enemy.GetComponent<EnemyBase>()))
             {
-                StartCoroutine(FreezeEffect(enemyBase));
+                StartCoroutine(FreezeEffect(enemyBase, enemyBase.Character));
             }
             yield return null;
-        }
-        private IEnumerator FreezeEffect(EnemyBase enemyBase)
-        {
-            var freezeTime = 1f;
-            if (enemyBase.isFreezeE && EnforceManager.Instance.water2FreezeTimeBoost)
-            {
-                freezeTime = 1.5f;
-            }
-            if (!AlreadyFreeze.TryGetValue(enemyBase, out var isAlreadyFreeze))
-            {
-                isAlreadyFreeze = false;
-            }
-            if  (isAlreadyFreeze) yield break;
-            AlreadyFreeze[enemyBase] = true;
-            var freeze = GetFreezeEffectFromPool();
-            freeze.transform.position = enemyBase.transform.position;
-            freeze.SetActive(true);
-            enemyBase.moveSpeed = 0;
-    
-            float timer = 0;
-            while (timer < freezeTime && !enemyBase.isDead)
-            {
-                timer += Time.deltaTime;
-                yield return null; 
-            }
-            freeze.SetActive(false);
-            _freezeEffectPool.Add(freeze);
-            enemyBase.moveSpeed = enemyBase.originSpeed;
-            if (enemyBase.isFreeze)
-            {
-                enemyBase.isFreeze = false;
-            }
-            else if (enemyBase.isFreezeE)
-            {
-                enemyBase.isFreezeE = false;
-            }
-            AlreadyFreeze[enemyBase] = false;
         }
         private IEnumerator BlizzardEffect()
         {
@@ -429,6 +423,28 @@ namespace Script.EnemyManagerScript
             yield return new WaitForSeconds(1f);
             blizzardEffect.SetActive(false);
             globalFreeze = false;
+        }
+        private IEnumerator StunEffect(EnemyBase enemyBase, CharacterBase characterBase)
+        {
+            var stunColor = new Color(1f, 0.3f, 0);
+            var originColor = enemyBase.GetComponent<SpriteRenderer>();
+            var stunTime = characterBase.stunTime;
+            if (!enemyBase.AlreadyStun.TryGetValue(enemyBase, out var isAlreadyStun))
+            {
+                isAlreadyStun = false;
+                enemyBase.AlreadyStun[enemyBase] = false;
+            }
+            if (isAlreadyStun) yield break;
+            enemyBase.AlreadyStun[enemyBase] = true;
+            enemyBase.moveSpeed = 0;
+            StartCoroutine(enemyBase.FlickerEffect(originColor, stunColor));
+            yield return new WaitForSeconds(stunTime);
+            StopCoroutine(enemyBase.FlickerEffect(originColor, stunColor));
+            enemyBase.moveSpeed = enemyBase.originSpeed;
+            enemyBase.AlreadyStun[enemyBase] = false;
+            enemyBase.StunStatus(false, characterBase);
+            enemyBase.IsStun.Remove(characterBase);
+            enemyBase.statusList.Remove(enemyBase.IsStun[characterBase]);
         }
     }
 }

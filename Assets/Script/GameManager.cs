@@ -72,7 +72,9 @@ namespace Script
             {
                 countManager.Initialize(moveCount);
                 StartCoroutine(spawnManager.PositionUpCharacterObject());
+                castleManager.castleCrushBoost = false;
             }
+            castleManager.castleCrushBoost = false;
             StageManager.Instance.SelectedStages();
             StageManager.Instance.UpdateWaveText();
             speedUp = true;
@@ -161,6 +163,7 @@ namespace Script
             yield return StartCoroutine(cameraManager.CameraPuzzleSizeChange());
             enemyPool.ClearList();
             StageManager.Instance.isBossClear = false;
+            castleManager.castleCrushBoost = false;
             if (levelUpRewardManager.HasUnitInGroup(CharacterBase.UnitGroups.D))
             {
                 AtkManager.Instance.groupDAtkCount = 0;

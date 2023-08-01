@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
-using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
 using UnityEngine;
@@ -14,8 +12,6 @@ namespace Script.WeaponScriptGroup
         public GameObject pivotPoint;
         public GameObject secondSword;
         private Tween _pivotTween;
-        private int _maxStack; 
-        private readonly Dictionary<EnemyBase, int> _burnStacks = new Dictionary<EnemyBase, int>();
 
         public override IEnumerator UseWeapon()
         {
@@ -45,38 +41,9 @@ namespace Script.WeaponScriptGroup
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
-            AtkEffect(enemy);
-            var damage = DamageCalculator(Damage, enemy, CharacterBase.UnitGroups.G); 
+            AtkEffect(enemy, CharacterBase);
+            var damage = DamageCalculator(Damage, enemy, CharacterBase); 
             enemy.ReceiveDamage(enemy,damage, CharacterBase);
-        }
-
-        public IEnumerator BurningGEffect(EnemyBase hitEnemy)
-        {
-            _maxStack = 1;
-            if (!_burnStacks.ContainsKey(hitEnemy))
-            {
-                _burnStacks[hitEnemy] = 1;
-            }
-            else
-            {
-                _burnStacks[hitEnemy] = Math.Min(_burnStacks[hitEnemy] + 1, _maxStack);
-            }
-
-            var burnDotDamage = DamageCalculator(Damage, hitEnemy, CharacterBase.UnitGroups.G) * 0.2f * _burnStacks[hitEnemy];
-            var burningDuration = EnforceManager.Instance.fire2BurnDurationBoost ? 5:3;
-
-            for (var i = 0; i < burningDuration; i++)
-            {
-                hitEnemy.ReceiveDamage(hitEnemy, (int)burnDotDamage , CharacterBase);
-                yield return new WaitForSeconds(1f);
-            }
-
-            _burnStacks[hitEnemy]--;
-
-            if (_burnStacks[hitEnemy] > 0) yield break;
-            _burnStacks.Remove(hitEnemy);
-            hitEnemy.isBurnG = false;
-            hitEnemy.IsBurnG = false;
         }
     }
 }

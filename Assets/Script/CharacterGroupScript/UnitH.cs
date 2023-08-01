@@ -97,6 +97,9 @@ namespace Script.CharacterGroupScript
                 4 => 2f,
                 _ => 2.3f
             };
+            effectStack = EnforceManager.Instance.fireStackOverlap ? 4 : 1;
+            dotDamage = DefaultDamage * 0.1f;
+            burnTime = 5f;
             var increaseRateBoost = 1f - EnforceManager.Instance.fireAttackSpeedBoost;
             defaultAtkRate = 1f * increaseRateBoost;
             defaultAtkDistance = 9f; 

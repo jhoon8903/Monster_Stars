@@ -6,7 +6,7 @@ namespace Script.WeaponScriptGroup
 {
     public class WeaponsPool : MonoBehaviour
     {
-        public enum WeaponType { None, A, B, C, D, E, F, G, H }
+        public enum WeaponType { None, A, B, C, D, E, F, G, H, I, J, K }
         [System.Serializable]
         public class Weapon
         {

@@ -1,6 +1,5 @@
 using System.Collections;
 using DG.Tweening;
-using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
 using UnityEngine;
@@ -11,7 +10,6 @@ namespace Script.WeaponScriptGroup
     {
         public GameObject pivotPoint;
         public GameObject secondSword;
-        public float bleedDotDamage;
         private Tween _pivotTween;
 
         public override IEnumerator UseWeapon()
@@ -42,22 +40,9 @@ namespace Script.WeaponScriptGroup
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
             var enemy = collision.gameObject.GetComponent<EnemyBase>();
-            AtkEffect(enemy);
-            var damage = DamageCalculator(Damage, enemy, CharacterBase.UnitGroups.G); 
+            AtkEffect(enemy, CharacterBase);
+            var damage = DamageCalculator(Damage, enemy, CharacterBase); 
             enemy.ReceiveDamage(enemy,damage, CharacterBase);
-        }
-
-        public IEnumerator BleedEffect(EnemyBase hitEnemy)
-        {
-            bleedDotDamage = DamageCalculator(Damage, hitEnemy, CharacterBase.UnitGroups.D) * 0.2f;
-            var bleedDuration = EnforceManager.Instance.physicalBleedDuration ? 5 : 3;
-            for(var i = 0; i < bleedDuration; i++)
-            {
-                hitEnemy.ReceiveDamage(hitEnemy, (int)bleedDotDamage, CharacterBase);
-                yield return new WaitForSeconds(1f);
-            }
-            hitEnemy.isBleed = false;
-            hitEnemy.IsBleed = false;
         }
     }
 }

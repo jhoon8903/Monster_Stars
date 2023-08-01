@@ -2,10 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Script.EnemyManagerScript;
 using Script.RewardScript;
 using Script.RobbyScript.TopMenuGroup;
-#pragma warning disable CS8524
-#pragma warning disable CS8509
 
 namespace Script.CharacterManagerScript
 {
@@ -22,7 +21,7 @@ namespace Script.CharacterManagerScript
         public int unitPuzzleLevel;
         public enum Types { Character, Treasure }
         protected internal Types Type; 
-        public enum UnitGroups { A,B,C,D,E,F,G,H,None }
+        public enum UnitGroups { A,B,C,D,E,F,G,H,I,J,K,None }
         public enum UnitAtkTypes {None, Projectile, GuideProjectile, Circle}
         public enum UnitProperties { Divine, Darkness, Physics, Water, Poison, Fire, None }
         public enum UnitEffects { Slow, Bleed, Poison, Burn, Bind, None } 
@@ -31,6 +30,20 @@ namespace Script.CharacterManagerScript
         protected internal UnitProperties UnitProperty = UnitProperties.None;
         protected internal UnitEffects UnitEffect = UnitEffects.None;
         public int baseDamage;
+        public float dotDamage;
+        public int effectChance;
+        public int effectStack;
+        public float slowTime;
+        public float slowPower;
+        public float bindTime;
+        public float freezeTime;
+        public float knockBackPower;
+        public float knockBackTime;
+        public float bleedTime;
+        public float poisonTime;
+        public float burnTime;
+        public float stunTime;
+        public float poisonAreaTime;
         public float DefaultDamage
         {
             get
@@ -50,9 +63,10 @@ namespace Script.CharacterManagerScript
         protected internal bool IsClicked { get; set; }
         protected static List<GameObject> DetectedEnemies = new List<GameObject>();
         private SpriteRenderer _spriteRenderer;
-        protected internal bool HasAttackSpeedBuff { get; set; }
         protected internal string UnitDesc { get; protected set; }
         protected internal float UnitLevelDamage { get; protected set; }
+        public Dictionary<EnemyBase, int> AttackCounts { get; set; } = new Dictionary<EnemyBase, int>();
+        
         public virtual void Initialize()
         {
             UnLock = true;

@@ -19,7 +19,6 @@ namespace Script.EnemyManagerScript
                 for (var i = 0; i < enemySettings.poolSize; i++)
                 {
                     var obj = Instantiate(enemySettings.enemyPrefab, transform);
-                    obj.GetComponent<EnemyBase>().number = i + 1;
                     obj.GetComponent<EnemyBase>().Initialize();
                     obj.SetActive(false);
                     pooledDefaultEnemy.Add(obj);
@@ -38,7 +37,6 @@ namespace Script.EnemyManagerScript
                 if (enemySettings != null)
                 {
                     spawnEnemy = Instantiate(enemySettings.enemyPrefab, transform);
-                    spawnEnemy.GetComponent<EnemyBase>().number = pooledDefaultEnemy.Count + 1;
                     spawnEnemy.GetComponent<EnemyBase>().Initialize();
                     spawnEnemy.SetActive(false);
                     pooledDefaultEnemy.Add(spawnEnemy);

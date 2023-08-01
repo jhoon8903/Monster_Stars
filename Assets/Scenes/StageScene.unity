@@ -2127,22 +2127,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageText: {fileID: 3584920970260779170, guid: 21d3aafccea744b7696aa042fd57c566, type: 3}
+  poisonAreaObject: {fileID: 0}
   moveSpeed: 0
   originSpeed: 0
-  number: 0
   healthPoint: 0
   maxHealthPoint: 0
   currentHealth: 0
   isDead: 0
+  statusList: 
   isBind: 0
-  isSlowC: 0
-  isSlowE: 0
-  isPoison: 0
+  isSlow: 0
   isKnockBack: 0
   isFreeze: 0
-  isFreezeE: 0
-  isBurnG: 0
-  isBurnH: 0
+  isStun: 0
+  isPoison: 0
+  isBurn: 0
   isBleed: 0
 --- !u!1 &348132021
 GameObject:
@@ -8918,6 +8917,11 @@ MonoBehaviour:
   fireAttackSpeedBoost: 0
   fireProjectileSpeedIncrease: 0
   fireProjectileBounceIncrease: 0
+  poison2StunToChance: 0
+  poison2RangeBoost: 0
+  poison2DotDamageBoost: 0
+  poison2StunTimeBoost: 0
+  poison2SpawnPoisonArea: 0
   addRow: 0
   slowCount: 0
   diagonalMovement: 0

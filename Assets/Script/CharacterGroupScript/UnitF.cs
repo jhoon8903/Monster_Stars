@@ -102,6 +102,10 @@ namespace Script.CharacterGroupScript
                 4 => 2f,
                 _ => 2.3f
             };
+            var increaseDotDamage = EnforceManager.Instance.poisonDotDamageBoost ? 0.3f : 0.2f;
+            dotDamage = DefaultDamage * increaseDotDamage;
+            var effectTime = EnforceManager.Instance.poisonPerHitEffect ? 3f : 0f;
+            poisonTime = effectTime + (EnforceManager.Instance.poisonDurationBoost ? 2f : 0f);
             var increaseRateBoost = 1f - EnforceManager.Instance.poisonAttackSpeedIncrease; 
             defaultAtkRate = 1.2f * increaseRateBoost;
             projectileSpeed = 1f;

@@ -102,6 +102,9 @@ namespace Script.CharacterGroupScript
                 4 => 2f,
                 _ => 2.3f
             };
+            effectStack = 1;
+            dotDamage = DefaultDamage * 0.2f;
+            burnTime = EnforceManager.Instance.fire2BurnDurationBoost ? 5f:3f;
             var increaseRateBoost = EnforceManager.Instance.fire2RateBoost ? 0.85f : 1f;
             defaultAtkRate = 1f * increaseRateBoost;
             swingSpeed = 1f * increaseRateBoost;

@@ -110,6 +110,11 @@ namespace Script.CharacterGroupScript
                 4 => 2f,
                 _ => 2.3f
             };
+            knockBackTime = 0.2f;
+            knockBackPower = 1f;
+            slowTime = 1f;
+            slowPower = 0.8f; 
+            effectChance = 10;
             defaultAtkRate = 1.2f * (1f - EnforceManager.Instance.darkAttackSpeedBoost);
             projectileSpeed = 1f;
             UnitAtkType = UnitAtkTypes.Projectile;

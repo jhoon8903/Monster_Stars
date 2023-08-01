@@ -6,25 +6,36 @@ using UnityEngine;
 
 namespace Script.WeaponScriptGroup
 {
-    public class B : WeaponBase
+    public class J : WeaponBase
     {
         private float _distance;
         private Vector3 _enemyTransform;
         private List<GameObject> _enemyTransforms = new List<GameObject>();
         private int _bounceCount;
+        private Rigidbody2D _rigidBody2D;
+        private new void Awake()
+        {
+            _rigidBody2D = GetComponent<Rigidbody2D>();
+        }
 
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
-            _enemyTransforms = CharacterBase.GetComponent<UnitB>().DetectEnemies();
+            _enemyTransforms = CharacterBase.GetComponent<UnitJ>().DetectEnemies();
+
+            if (CharacterBase.GetComponent<UnitJ>().atkCount % 5 == 0)
+            {
+                CharacterBase.GetComponent<UnitJ>().atkCount = 0;
+                Damage *= 2f;
+                var useTime = Distance / Speed;
+                _rigidBody2D.velocity = Vector2.up;
+                yield return new WaitForSeconds(useTime);
+                StopUseWeapon(gameObject);
+            }
+            
             foreach (var enemy in _enemyTransforms)
             {
                 _enemyTransform = enemy.transform.position;
-            }
-            if (CharacterBase.GetComponent<UnitB>().atkCount == 5)
-            {
-                Damage *= 2f;
-                CharacterBase.GetComponent<UnitB>().atkCount = 0;
             }
             while (Vector3.Distance(transform.position, _enemyTransform) > 0.1f)
             {

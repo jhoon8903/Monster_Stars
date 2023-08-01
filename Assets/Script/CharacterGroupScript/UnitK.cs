@@ -6,9 +6,9 @@ using UnityEngine;
 
 namespace Script.CharacterGroupScript
 {
-    public class UnitA : CharacterBase
+    public class UnitK : CharacterBase
     {
-        [SerializeField] private Sprite level1Sprite;
+[SerializeField] private Sprite level1Sprite;
         [SerializeField] private Sprite level2Sprite;
         [SerializeField] private Sprite level3Sprite;
         [SerializeField] private Sprite level4Sprite; 
@@ -24,10 +24,10 @@ namespace Script.CharacterGroupScript
         public override void Initialize()
         {
             base.Initialize();
-            unitGroup = UnitGroups.A;
-            UnitProperty = UnitProperties.Divine;
-            UnitGrade = UnitGrades.Blue;
-            UnitDesc = "유닛A 입니다.";
+            unitGroup = UnitGroups.K;
+            UnitProperty = UnitProperties.Darkness;
+            UnitGrade = UnitGrades.Purple;
+            UnitDesc = "유닛K 입니다.";
             SetLevel(1);
         }
         public override Sprite GetSpriteForLevel(int characterObjectLevel)
@@ -88,24 +88,24 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = unitPieceLevel > 1 ? unitPieceLevel * 2f + 1f : 0f;
+            UnitLevelDamage = unitPieceLevel > 1 ? unitPieceLevel * 5f - 1f : 0f;
             Type = Types.Character;
-            unitGroup = UnitGroups.A;
-            DefaultDamage = UnitLevelDamage + 29f * level switch
+            unitGroup = UnitGroups.K;
+            DefaultDamage = UnitLevelDamage + 34f * level switch
             {
                 <=  2 => 1f,
                 3 => 1.7f,
                 4 => 2f,
                 _ => 2.3f
             };
-            defaultAtkRate = 1.2f * (1f - EnforceManager.Instance.divineRateBoost);
-            bindTime = EnforceManager.Instance.divineBindDurationBoost? 1f : 1.5f;
-            effectChance = EnforceManager.Instance.divineBindChanceBoost ? 50 : 30;
+            poisonTime = 3f;
+            dotDamage = DefaultDamage * 0.2f;
+            defaultAtkRate = 1f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             UnitAtkType = UnitAtkTypes.Projectile;
-            UnitProperty = UnitProperties.Divine;
-            UnitEffect = UnitEffects.Bind;
+            UnitProperty = UnitProperties.Darkness;
+            UnitEffect = UnitEffects.None;
         }
     }
 }

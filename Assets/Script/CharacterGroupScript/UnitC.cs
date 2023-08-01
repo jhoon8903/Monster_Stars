@@ -98,6 +98,10 @@ namespace Script.CharacterGroupScript
                 4 => 2f,
                 _ => 2.3f
             };
+            slowTime = 1f + EnforceManager.Instance.waterSlowDurationBoost;
+            slowPower = EnforceManager.Instance.waterSlowCPowerBoost ? 0.55f : 0.7f;
+            freezeTime = 1f;
+            effectChance = EnforceManager.Instance.waterFreezeChance ? 15 : 25;
             defaultAtkRate = 0.8f * (1f - EnforceManager.Instance.waterAttackRateBoost);
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
