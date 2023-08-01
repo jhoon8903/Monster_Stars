@@ -11484,6 +11484,7 @@ MonoBehaviour:
   coinBtn: {fileID: 7196134908141924821, guid: b7e3560b6c46c4ac1bf72a53c6b2d026, type: 3}
   staminaBtn: {fileID: 7196134908141924821, guid: b7e3560b6c46c4ac1bf72a53c6b2d026, type: 3}
   gemBtn: {fileID: 7196134908141924821, guid: b7e3560b6c46c4ac1bf72a53c6b2d026, type: 3}
+  rewardedRetryAttempt: 0
 --- !u!1 &1161825382
 GameObject:
   m_ObjectHideFlags: 0
@@ -13552,7 +13553,6 @@ MonoBehaviour:
   numberOfPanels: 3
   initialPanelPosY: 205
   panelSpacing: 400
-  adsManager: {fileID: 1161648338}
   goodsNames:
   - COIN
   - GEM

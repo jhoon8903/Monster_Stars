@@ -69,7 +69,7 @@ namespace Script.UIManager
         private static void YesRetry()
         {
             AdsManager.Instance.ShowRewardedAd();
-            RewardManager.Instance.RewardButtonClicked("Retry");
+            AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Retry;
             ClickRetry = true;
         }
 

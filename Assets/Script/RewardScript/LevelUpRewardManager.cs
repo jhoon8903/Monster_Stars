@@ -761,13 +761,13 @@ namespace Script.RewardScript
             expButton.onClick.RemoveAllListeners();
             expShuffle.onClick.RemoveAllListeners();
             expButton.onClick.AddListener(() => Selected(powerUp));
-            expShuffle.onClick.AddListener(() => ShuffleExpReward());
+            expShuffle.onClick.AddListener(ShuffleExpReward);
         }
 
         private void ShuffleExpReward()
         {
             AdsManager.Instance.ShowRewardedAd();
-            RewardManager.Instance.RewardButtonClicked("ExpShuffle");
+            AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.LevelUp;
             expShuffle.gameObject.SetActive(false);
         }
     }

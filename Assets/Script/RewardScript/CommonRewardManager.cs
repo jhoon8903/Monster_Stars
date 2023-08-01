@@ -443,7 +443,7 @@ namespace Script.RewardScript
         private void ShuffleCommonReward()
         {
             AdsManager.Instance.ShowRewardedAd();
-            RewardManager.Instance.RewardButtonClicked("CommonShuffle");
+            AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Common;
             commonShuffle.gameObject.SetActive(false);
         }
     }

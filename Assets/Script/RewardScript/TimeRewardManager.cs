@@ -35,7 +35,7 @@ namespace Script.RewardScript
         private TimeSpan _timePassed;
         private int _coinReward;
         private int _unitPieceReward;
-        private Dictionary<CharacterBase, int> _unitPieceDic = new Dictionary<CharacterBase, int>();
+        private readonly Dictionary<CharacterBase, int> _unitPieceDic = new Dictionary<CharacterBase, int>();
         private Goods _coinObject;
         private Goods _unitPieceObject;
         private const int MaxHours = 16;

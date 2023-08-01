@@ -226,17 +226,17 @@ namespace Script.RobbyScript.StoreMenuGroup
         private static void GreenAds()
         {
             AdsManager.Instance.ShowRewardedAd();
-            RewardManager.Instance.RewardButtonClicked("Green");
+            AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Green;
         }
         private static void BlueAds()
         {
             AdsManager.Instance.ShowRewardedAd();
-            RewardManager.Instance.RewardButtonClicked("Blue");
+            AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Blue;
         }
         private static void PurpleAds()
         {
             AdsManager.Instance.ShowRewardedAd();
-            RewardManager.Instance.RewardButtonClicked("Purple");
+            AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Purple;
         }
         private void CalculateCoinReward(BoxGrade boxTypes, int openCount)
         {

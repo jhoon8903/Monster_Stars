@@ -1115,8 +1115,7 @@ public class MaxSdkUnityEditor : MaxSdkBase
         RemoveReadyAdUnit(adUnitIdentifier);
 
         if (_showStubAds)
-        { 
-            Debug.Log(" 여긴가!");
+        {
             ShowStubRewardedAd(adUnitIdentifier);
         }
     }
