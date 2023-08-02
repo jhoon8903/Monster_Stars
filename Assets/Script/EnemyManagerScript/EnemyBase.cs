@@ -162,6 +162,7 @@ namespace Script.EnemyManagerScript
             StartCoroutine(bleedAttack);
             StartCoroutine(FlickerEffect(originColor, bleedColor));
         }
+       
         public virtual void Initialize()
         {
             _hpSlider = GetComponentInChildren<Slider>(true);
@@ -234,13 +235,13 @@ namespace Script.EnemyManagerScript
             lock (Lock)
             {
                 var receiveDamage = (int)damage;
+                Debug.Log($"damage: {receiveDamage} / unit: {atkUnit.unitGroup}");
                 if (isDead) return;
                 currentHealth -= receiveDamage;
                 if (!gameObject.activeInHierarchy) return;
                 StartCoroutine(DamageTextPopup(receiveDamage));
                 _updateSlider = true;
                 if (currentHealth > 0f || isDead) return;
-                StopCoroutine(DamageTextPopup(receiveDamage));
                 isDead = true;
                 ExpManager.Instance.HandleEnemyKilled(reason);
                 if (EnforceManager.Instance.divineShackledExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.A)
@@ -336,6 +337,7 @@ namespace Script.EnemyManagerScript
             }
             var enemyPool = FindObjectOfType<EnemyPool>();
             StageManager.Instance.EnemyDestroyEvent(detectedEnemy);
+            detectedEnemy.isDead = false;
             detectedEnemy.statusList.Clear();
             detectedEnemy.IsBind.Clear();
             detectedEnemy.AlreadyBind.Clear();

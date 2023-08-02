@@ -5,6 +5,7 @@ using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Script.PuzzleManagerGroup
 {
@@ -24,7 +25,8 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private MatchManager matchManager;
         [SerializeField] private CommonRewardManager rewardManager;
         [SerializeField] private EnforceManager enforceManager;
-
+        [SerializeField] private GameObject pressObject;
+         
         // CountManager를 요청하여 캐릭터의 이동 허용 여부를 확인합니다.
         private bool CanMove()  
         {
@@ -72,7 +74,40 @@ namespace Script.PuzzleManagerGroup
             _startObject.GetComponent<CharacterBase>().IsClicked = true;
             _firstTouchPosition = point2D;
             StartCoroutine(CheckSoon());
+            StartCoroutine(CheckForLongPress());
         }
+
+        private IEnumerator CheckForLongPress()
+        {
+            yield return new WaitForSecondsRealtime(1f);
+
+            if (_startObject == null || !_startObject.GetComponent<CharacterBase>().IsClicked)
+                yield break; // _startObject가 null이거나 더 이상 클릭되지 않은 경우 코루틴 종료
+
+            var pressObjectInstance = Instantiate(pressObject, new Vector3(_startObject.transform.position.x, _startObject.transform.position.y + 0.5f, _startObject.transform.position.z), Quaternion.identity);
+            var frontObject = pressObjectInstance.transform.GetChild(0).GetChild(0); 
+            var fillImage = frontObject.GetComponent<Image>();
+
+            var timer = 0f;
+
+            while (_startObject != null && _startObject.GetComponent<CharacterBase>().IsClicked)
+            {
+                timer += Time.deltaTime;
+                fillImage.fillAmount = timer / 2f; // fillAmount를 0에서 1까지 조정
+
+                if (timer >= 2f) // 눌러진 상태를 2초 동안 확인
+                {
+                    CharacterPool.ReturnToPool(_startObject);
+                    StartCoroutine(spawnManager.PositionUpCharacterObject());
+                    break;
+                }
+                yield return null;
+            }
+            countManager.DecreaseMoveCount();
+            fillImage.fillAmount = 0f; // fillAmount를 초기화
+            Destroy(pressObjectInstance); // 인스턴스를 파괴
+        }
+
 
         private readonly WaitForSeconds _checkSoonWait = new WaitForSeconds(0.5f);
 

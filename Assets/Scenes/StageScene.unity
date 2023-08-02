@@ -861,6 +861,7 @@ MonoBehaviour:
   matchManager: {fileID: 149521966}
   rewardManager: {fileID: 2120144519}
   enforceManager: {fileID: 1595735486}
+  pressObject: {fileID: 905448899372057052, guid: e3578fad2cf1749a4ba4bf5405784f9d, type: 3}
 --- !u!114 &149521966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6445,6 +6446,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterManager: {fileID: 149521963}
   poolSize: 15
+  _pooledCharacters: []
   theFirst: 0
 --- !u!4 &1097818335
 Transform:
@@ -8526,7 +8528,7 @@ MonoBehaviour:
     - {fileID: 5457084779571031275, guid: f0e642efb12f04a6ba5e9299226fb6f8, type: 3}
     - {fileID: 1449720510264382049, guid: a68a978a2ffba49cdbfeefcac9a497b8, type: 3}
     - {fileID: 1525889226595552815, guid: 69e2d119eeda644549951bb0eb877ff3, type: 3}
-  weaponPoolCapacity: 30
+  weaponPoolCapacity: 20
 --- !u!4 &1537456865
 Transform:
   m_ObjectHideFlags: 0
