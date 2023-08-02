@@ -783,6 +783,8 @@ MonoBehaviour:
   expManager: {fileID: 841622521}
   commonRewardManager: {fileID: 2120144519}
   stageText: {fileID: 553455374}
+  characterPool: {fileID: 1097818334}
+  characterList: []
   speedUp: 0
 --- !u!4 &149521959
 Transform:
@@ -6684,6 +6686,7 @@ MonoBehaviour:
   hpBar: {fileID: 430691236}
   hpText: {fileID: 2009872133}
   baseCastleHp: 1000
+  castleCrushBoost: 0
 --- !u!1 &1211532197
 GameObject:
   m_ObjectHideFlags: 0
@@ -8922,6 +8925,22 @@ MonoBehaviour:
   poison2DotDamageBoost: 0
   poison2StunTimeBoost: 0
   poison2SpawnPoisonArea: 0
+  poison2RateBoost: 0
+  poison2PoolTimeBoost: 0
+  physical2CastleCrushStatBoost: 0
+  physical2FifthBoost: 0
+  physical2BleedTimeBoost: 0
+  physical2PoisonDamageBoost: 0
+  physical2RangeBoost: 0
+  physical2RateBoost: 0
+  physical2BossBoost: 0
+  dark2BackBoost: 0
+  dark2DualAttack: 0
+  dark2StatusDamageBoost: 0
+  dark2ExplosionBoost: 0
+  dark2DoubleAttack: 0
+  dark2StatusPoison: 0
+  dark2SameEnemyBoost: 0
   addRow: 0
   slowCount: 0
   diagonalMovement: 0

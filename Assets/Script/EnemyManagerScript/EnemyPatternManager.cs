@@ -308,7 +308,7 @@ namespace Script.EnemyManagerScript
             enemyBase.GetComponent<SpriteRenderer>().color = originColor;
             enemyBase.AlreadyBind[enemyBase] = false;
             enemyBase.BindStatus(false, characterBase);
-            enemyBase.IsBind.Remove(characterBase);
+            if (!enemyBase.IsBind.ContainsKey(characterBase)) yield break;
             enemyBase.statusList.Remove(enemyBase.IsBind[characterBase]);
         }
         private static IEnumerator SlowEffect(EnemyBase enemyBase, CharacterBase characterBase)
@@ -331,7 +331,7 @@ namespace Script.EnemyManagerScript
             enemyBase.GetComponent<SpriteRenderer>().color = originColor;
             enemyBase.AlreadySlow[enemyBase] = false;
             enemyBase.SlowStatus(false, characterBase);
-            enemyBase.IsSlow.Remove(characterBase);
+            if (!enemyBase.IsSlow.ContainsKey(characterBase)) yield break;
             enemyBase.statusList.Remove(enemyBase.IsSlow[characterBase]);
         }
         private static IEnumerator KnockBackEffect(EnemyBase enemyBase, CharacterBase characterBase)
@@ -359,7 +359,7 @@ namespace Script.EnemyManagerScript
             enemyBase.moveSpeed = enemyBase.originSpeed;
             enemyBase.AlreadyKnockBack[enemyBase] = false;
             enemyBase.KnockBackStatus(false, characterBase);
-            enemyBase.IsKnockBack.Remove(characterBase);
+            if (!enemyBase.IsKnockBack.ContainsKey(characterBase)) yield break;
             enemyBase.statusList.Remove(enemyBase.IsKnockBack[characterBase]);
         }
         private IEnumerator FreezeEffect(EnemyBase enemyBase, CharacterBase characterBase)
@@ -387,7 +387,7 @@ namespace Script.EnemyManagerScript
             enemyBase.moveSpeed = enemyBase.originSpeed;
             enemyBase.AlreadyFreeze[enemyBase] = false;
             enemyBase.FreezeStatus(false, characterBase);
-            enemyBase.IsFreeze.Remove(characterBase);
+            if (!enemyBase.IsFreeze.ContainsKey(characterBase)) yield break;
             enemyBase.statusList.Remove(enemyBase.IsFreeze[characterBase]);
         }
         private GameObject GetFreezeEffectFromPool()
@@ -443,7 +443,7 @@ namespace Script.EnemyManagerScript
             enemyBase.moveSpeed = enemyBase.originSpeed;
             enemyBase.AlreadyStun[enemyBase] = false;
             enemyBase.StunStatus(false, characterBase);
-            enemyBase.IsStun.Remove(characterBase);
+            if (!enemyBase.IsStun.ContainsKey(characterBase)) yield break;
             enemyBase.statusList.Remove(enemyBase.IsStun[characterBase]);
         }
     }

@@ -66,7 +66,7 @@ namespace Script.CharacterManagerScript
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 enemyList = unit.DetectEnemies();
-
+                unit.cover.SetActive(enemyList.Count <= 0);
                 if (enemyList.Count <= 0) continue;
 
                 var atkUnit = unit.gameObject; 
@@ -234,6 +234,7 @@ namespace Script.CharacterManagerScript
             }
             var weaponType = attackData.WeaponType;
             var weaponObject = weaponsPool.SpawnFromPool(weaponType, attackData.Unit.GetComponent<CharacterBase>().unitPuzzleLevel, unit.transform.position, unit.transform.rotation);
+            if (weaponObject == null) return null;
             var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
             if (weaponBase == null) return null;
             if (target != null)

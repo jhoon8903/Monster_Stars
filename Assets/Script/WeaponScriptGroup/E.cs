@@ -22,10 +22,10 @@ namespace Script.WeaponScriptGroup
             var enemyTransforms = CharacterBase.GetComponent<UnitE>().DetectEnemies();
             foreach (var unused in enemyTransforms.Where(enemy => enemy.transform.position.y < CharacterBase.transform.position.y))
             {
-                Speed = -Speed;
                 transform.rotation = Quaternion.Euler(0, 0, 180);
+                direction = Vector2.down;
             }
-            _rigidBody2D.velocity = new Vector2(0, Speed);
+            _rigidBody2D.velocity = direction == Vector2.down ? new Vector2(0, -Speed) : new Vector2(0, Speed);
             yield return new WaitForSeconds(useTime);
             StopUseWeapon(gameObject);
         }

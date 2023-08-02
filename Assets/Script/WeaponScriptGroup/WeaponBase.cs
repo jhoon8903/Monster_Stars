@@ -175,7 +175,7 @@ namespace Script.WeaponScriptGroup
         }
         protected internal float DamageCalculator(float damage,EnemyBase enemyBase, CharacterBase characterBase)
         {
-            if (enemyBase.IsFreeze[characterBase] == CharacterBase.UnitGroups.C)
+            if (enemyBase.IsFreeze.ContainsKey(characterBase) && enemyBase.IsFreeze[characterBase] == CharacterBase.UnitGroups.C)
             {
                 damage *= 1.15f;
             }
@@ -331,7 +331,7 @@ namespace Script.WeaponScriptGroup
             hitEnemy.GetComponent<SpriteRenderer>().DOColor(Color.white, 0.2f);
             hitEnemy.PoisonStatus(false, characterBase);
             hitEnemy.AlreadyPoison[hitEnemy] = false;
-            hitEnemy.IsPoison.Remove(characterBase);
+            if (!hitEnemy.IsPoison.ContainsKey(characterBase)) yield break;
             hitEnemy.statusList.Remove(hitEnemy.IsPoison[characterBase]);
         }
         public IEnumerator BurningEffect(EnemyBase hitEnemy, CharacterBase characterBase)
@@ -365,7 +365,7 @@ namespace Script.WeaponScriptGroup
             _burnStacks.Remove(hitEnemy);
             hitEnemy.AlreadyBurn[hitEnemy] = false;
             hitEnemy.BurnStatus(false, characterBase);
-            hitEnemy.IsBurn.Remove(characterBase);
+            if (!hitEnemy.IsBurn.ContainsKey(characterBase)) yield break;
             hitEnemy.statusList.Remove(hitEnemy.IsBurn[characterBase]);
         }
         public IEnumerator BleedEffect(EnemyBase hitEnemy, CharacterBase characterBase)
@@ -393,7 +393,7 @@ namespace Script.WeaponScriptGroup
             }
             hitEnemy.AlreadyBleed[hitEnemy] = false;
             hitEnemy.BleedStatus(false, characterBase);
-            hitEnemy.IsBleed.Remove(characterBase);
+            if (!hitEnemy.IsBleed.ContainsKey(characterBase)) yield break;
             hitEnemy.statusList.Remove(hitEnemy.IsBleed[characterBase]);
         }
         // protected static void InstantKill(EnemyBase target)

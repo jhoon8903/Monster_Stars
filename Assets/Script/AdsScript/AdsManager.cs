@@ -326,8 +326,6 @@ namespace Script.AdsScript
 
         private void RewardButtonClicked()
         {
-            Debug.Log("버튼타입 " + ButtonTypes);
-
             switch (ButtonTypes)
             {
                 case ButtonType.Coin:

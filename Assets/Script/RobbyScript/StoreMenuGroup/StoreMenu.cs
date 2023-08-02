@@ -9,6 +9,7 @@ using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
 using TMPro;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -26,33 +27,40 @@ namespace Script.RobbyScript.StoreMenuGroup
         [SerializeField] private List<CharacterBase> unitList = new List<CharacterBase>();
 
         public static StoreMenu Instance { get; private set; }
+
+        private const string ResetKey = "ResetKey";
+
+        private DateTime _lastDayCheck;
+        private const string LastDayKey = "LastDayKey";
+
+        private int _greenOpenCount;
         private const string GreenOpenCountKey = "GreenOpenCount";
-        private DateTime _lastDayCheck = DateTime.Now;
+        private const int GreenOpenMaxCount = 20;
+
+        private int _blueOpenCount;
         private const string BlueOpenCountKey = "BlueOpenCount";
+        private DateTime _blueOpenTime;
         private const string BlueOpenTimeKey = "BlueOpenTime";
-        private DateTime _blueTime = DateTime.MinValue;
         private TimeSpan _bluePassed;
+        private const int BlueOpenMaxCount = 7;
+        private const int BlueRewardCoolTime = 5;
+
+        private int _purpleOpenCount;
         private const string PurpleOpenCountKey = "PurpleOpenCount";
+        private DateTime _purpleOpenTime;
         private const string PurpleOpenTimeKey = "PurpleOpenTimeKey";
-        private DateTime _purpleTime = DateTime.MinValue;
         private TimeSpan _purplePassed;
+        private const int PurpleOpenMaxCount = 5;
+        private const int PurpleRewardCoolTime = 30;
+
         private int _coinReward;
         private int _unitPieceReward;
         private readonly Dictionary<CharacterBase, Tuple<int, Goods>> _unitPieceDict = new Dictionary<CharacterBase, Tuple<int, Goods>>();
         private Goods _coinObject;
         private Goods _unitPieceObject;
-        private const int GreenLimit = 20;
-        private int _greenOpenCount;
-        private bool _canGreenOpen;
-        private const int BlueRewardTime = 5;
-        private const int BlueLimit = 7;
-        private int _blueOpenCount;
-        private bool _canBlueOpen;
-        private const int PurpleRewardTime = 30;
-        private const int PurpleLimit = 5;
-        private int _purpleOpenCount;
-        private bool _canPurpleOpen;
+
         public enum BoxGrade { Green, Blue, Purple }
+        public bool isReset;
 
         private void Awake()
         {
@@ -64,107 +72,184 @@ namespace Script.RobbyScript.StoreMenuGroup
             {
                 Destroy(gameObject);
             }
-            CheckOpen();
-            StartCoroutine(CheckBox());
-            closeBtn.GetComponent<Button>().onClick.AddListener(ReceiveReward);
+            // Day Check
+            if (!PlayerPrefs.HasKey(LastDayKey))
+            {
+                _lastDayCheck = DateTime.Today;
+                PlayerPrefs.SetString(LastDayKey, _lastDayCheck.ToBinary().ToString());
+                PlayerPrefs.SetInt(ResetKey, 0); // 처음 실행하는 경우 리셋 상태를 0으로 설정합니다.
+                PlayerPrefs.Save();
+            }
+            // Green Count Check
+            if (PlayerPrefs.HasKey(GreenOpenCountKey))
+            {
+                _greenOpenCount = PlayerPrefs.GetInt(GreenOpenCountKey);
+            }
+            else
+            {
+                _greenOpenCount = 0;
+                PlayerPrefs.SetInt(GreenOpenCountKey, _greenOpenCount);
+            }
+
+            // Blue Count Check
+            if (PlayerPrefs.HasKey(BlueOpenCountKey))
+            {
+                _blueOpenCount = PlayerPrefs.GetInt(BlueOpenCountKey);
+            }
+            else
+            {
+                _blueOpenCount = 0;
+                PlayerPrefs.SetInt(BlueOpenCountKey, _blueOpenCount);
+            }
+
+            // Blue last Open Time Check
             if (PlayerPrefs.HasKey(BlueOpenTimeKey))
             {
-                var temp = Convert.ToInt64(PlayerPrefs.GetString(BlueOpenTimeKey));
-                _blueTime = DateTime.FromBinary(temp);
+                _blueOpenTime = DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString(BlueOpenTimeKey)));
             }
+            else
+            {
+                _blueOpenTime = DateTime.Now.AddMinutes(-BlueRewardCoolTime);
+                PlayerPrefs.SetString(BlueOpenTimeKey, _blueOpenTime.ToBinary().ToString());
+                PlayerPrefs.Save();
+            }
+
+
+            // Purple Count Check
+            if (PlayerPrefs.HasKey(PurpleOpenCountKey))
+            {
+                _purpleOpenCount = PlayerPrefs.GetInt(PurpleOpenCountKey);
+            }
+            else
+            {
+                _purpleOpenCount = 0;
+                PlayerPrefs.SetInt(PurpleOpenCountKey, _purpleOpenCount);
+            }
+            // Purple Last Open Check
             if (PlayerPrefs.HasKey(PurpleOpenTimeKey))
             {
-                var temp = Convert.ToInt64(PlayerPrefs.GetString(PurpleOpenTimeKey));
-                _purpleTime = DateTime.FromBinary(temp);
+                _purpleOpenTime = DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString(PurpleOpenTimeKey)));
             }
+            else
+            {
+                _purpleOpenTime = DateTime.Now.AddMinutes(-PurpleRewardCoolTime);
+                PlayerPrefs.SetString(PurpleOpenTimeKey, _purpleOpenTime.ToBinary().ToString());
+                PlayerPrefs.Save();
+            }
+
+            greenBtn.GetComponent<Button>().onClick.AddListener(GreenAds);
+            blueBtn.GetComponent<Button>().onClick.AddListener(BlueAds);
+            purpleBtn.GetComponent<Button>().onClick.AddListener(PurpleAds);
+            closeBtn.GetComponent<Button>().onClick.AddListener(ReceiveReward);
             gameObject.SetActive(false);
         }
-
         private void Update()
         {
-            if (DateTime.Now.Date > _lastDayCheck.Date)
+            Reset();
+            UpdateButtonState();
+        }
+        private void Reset()
+        {
+            if (DateTime.Today > _lastDayCheck.Date && PlayerPrefs.GetInt(ResetKey) == 0)
             {
+                Debug.Log("리셋?");
                 ResetButtonCounts();
-                _lastDayCheck = DateTime.Now;
+                _lastDayCheck = DateTime.Today;
+                PlayerPrefs.SetString(LastDayKey, _lastDayCheck.ToBinary().ToString());
+                PlayerPrefs.SetInt(ResetKey, 1); // 리셋 상태를 1로 설정하여 리셋이 발생했음을 저장합니다.
+                PlayerPrefs.Save();
             }
-            CheckOpen();
-            StartCoroutine(CheckBox());
+        }
+        private void ResetButtonCounts()
+        {
+            isReset = true;
+            _greenOpenCount = 0;
+
+            _blueOpenCount = 0;
+            _blueOpenTime = DateTime.Now.AddMinutes(-BlueRewardCoolTime);
+            PlayerPrefs.SetString(BlueOpenTimeKey, _blueOpenTime.ToBinary().ToString());
+            _purpleOpenCount = 0;
+            _purpleOpenTime = DateTime.Now.AddMinutes(-PurpleRewardCoolTime);
+            PlayerPrefs.SetString(PurpleOpenTimeKey, _purpleOpenTime.ToBinary().ToString());
+            
+            PlayerPrefs.SetInt(GreenOpenCountKey, _greenOpenCount);
+            PlayerPrefs.SetInt(BlueOpenCountKey, _blueOpenCount);
+            PlayerPrefs.SetInt(PurpleOpenCountKey, _purpleOpenCount);
+            PlayerPrefs.Save();
         }
 
-        private void CheckOpen()
+        private void UpdateButtonState()
         {
-            _greenOpenCount = PlayerPrefs.GetInt(GreenOpenCountKey, 0);
-            _canGreenOpen = _greenOpenCount < GreenLimit;
-            _blueOpenCount = PlayerPrefs.GetInt(BlueOpenCountKey, 0);
-           
-            _bluePassed = DateTime.UtcNow - _blueTime;
-            if (_blueOpenCount < BlueLimit && _bluePassed.TotalMinutes >= BlueRewardTime)
+            UpdateGreenButton();
+            UpdateBlueButton();
+            UpdatePurpleButton();
+        }
+        private void UpdateGreenButton()
+        {
+            if (isReset || _greenOpenCount < GreenOpenMaxCount)
             {
-                _canBlueOpen = true;
+                greenBtn.GetComponent<Button>().interactable = true;
+                greenBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"광고보고 \n 보상 열기 \n{_greenOpenCount} / {GreenOpenMaxCount}";
             }
             else
             {
-                _canBlueOpen = false;
-            }
-            _purpleOpenCount = PlayerPrefs.GetInt(PurpleOpenCountKey, 0);
-            _purplePassed = DateTime.UtcNow - _purpleTime;
-            if (_purpleOpenCount < PurpleLimit && _purplePassed.TotalMinutes >= PurpleRewardTime)
-            {
-                _canPurpleOpen = true;
-            }
-            else
-            {
-                _canPurpleOpen = false;
+                var resetTime = _lastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
+                greenBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"Reset: {resetTime}";
             }
         }
 
-        private IEnumerator CheckBox()
+        private void UpdateBlueButton()
         {
-            var buttonDict = new Dictionary<Button, Tuple<bool, Action, int, TimeSpan, int, int>>
+            _bluePassed = DateTime.Now - _blueOpenTime;
+            if (isReset || (_blueOpenCount < BlueOpenMaxCount && _bluePassed.TotalMinutes >= BlueRewardCoolTime))
             {
-                { greenBtn.GetComponent<Button>(), new Tuple<bool, Action, int, TimeSpan, int, int>(_canGreenOpen, GreenAds, _greenOpenCount, TimeSpan.Zero, 0, GreenLimit) },
-                { blueBtn.GetComponent<Button>(), new Tuple<bool, Action, int, TimeSpan, int, int>(_canBlueOpen, BlueAds, _blueOpenCount, _bluePassed, BlueRewardTime, BlueLimit) },
-                { purpleBtn.GetComponent<Button>(), new Tuple<bool, Action, int, TimeSpan, int, int>(_canPurpleOpen, PurpleAds, _purpleOpenCount, _purplePassed, PurpleRewardTime, PurpleLimit) }
-            };
-
-            foreach (var (button, (openTypes, actionTypes, leftCount, timePassed, coolTime, maxCount)) in buttonDict)
+                blueBtn.GetComponent<Button>().interactable = true;
+                blueBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"광고보고 \n 보상 열기 \n{_blueOpenCount} / {BlueOpenMaxCount}";
+            }
+            else
             {
-                if (openTypes)
+                blueBtn.GetComponent<Button>().interactable = false;
+                var remainingTime = TimeSpan.FromMinutes(BlueRewardCoolTime) - _bluePassed;
+                if (_blueOpenCount == BlueOpenMaxCount)
                 {
-                    button.interactable = true;
-                    button.GetComponentInChildren<TextMeshProUGUI>().text = $"광고보고 \n 보상 열기 \n{leftCount} / {maxCount}";
-                    button.onClick.AddListener(actionTypes.Invoke);
+                    var resetTime = _lastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
+                    blueBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"Reset: {resetTime}";
                 }
-                else
+                else if (remainingTime > TimeSpan.Zero)
                 {
-                    button.interactable = false;
-                    if (button == greenBtn.GetComponent<Button>())
-                    {
-                        var resetTime = DateTime.Today.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
-                        button.GetComponentInChildren<TextMeshProUGUI>().text = $"Reset: {resetTime}";
-                    }
-                    else
-                    {
-                        var remainingTime = TimeSpan.FromMinutes(coolTime) - timePassed;
-                        if (remainingTime > TimeSpan.Zero)
-                        {
-                            var remainingTimeText = remainingTime.ToString(@"mm\:ss");
-                            button.GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
-                        }
-                        else
-                        {
-                            var resetTime = DateTime.Today.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
-                            button.GetComponentInChildren<TextMeshProUGUI>().text = $"Reset: {resetTime}";
-                        }
-                    }
+                    var remainingTimeText = remainingTime.ToString(@"mm\:ss");
+                    blueBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
                 }
             }
-            yield return null;
+        }
+
+        private void UpdatePurpleButton()
+        {
+            _purplePassed = DateTime.Now - _purpleOpenTime;
+            if (isReset || (_purpleOpenCount < PurpleOpenMaxCount && _purplePassed.TotalMinutes >= PurpleRewardCoolTime))
+            {
+                purpleBtn.GetComponent<Button>().interactable = true;
+                purpleBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"광고보고 \n 보상 열기 \n{_purpleOpenCount} / {PurpleOpenMaxCount}";
+            }
+            else
+            {
+                purpleBtn.GetComponent<Button>().interactable = false;
+                var remainingTime = TimeSpan.FromMinutes(PurpleRewardCoolTime) - _purplePassed;
+                if (_purpleOpenCount == PurpleOpenMaxCount)
+                {
+                    var resetTime = _lastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
+                    purpleBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"Reset: {resetTime}";
+                }
+                else if (remainingTime > TimeSpan.Zero)
+                {
+                    var remainingTimeText = remainingTime.ToString(@"mm\:ss");
+                    purpleBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
+                }
+            }
         }
 
         public void Reward(BoxGrade boxTypes)
-        { 
-            Debug.Log(boxTypes);
+        {
             boxRewardPanel.SetActive(true);
             switch (boxTypes)
             {
@@ -172,6 +257,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                     _greenOpenCount = PlayerPrefs.GetInt(GreenOpenCountKey, 0);
                     CalculateCoinReward(boxTypes, _greenOpenCount);
                     CalculateUnitPieceReward(boxTypes, _greenOpenCount);
+                    if (_greenOpenCount == GreenOpenMaxCount) break;
                     _greenOpenCount++;
                     PlayerPrefs.SetInt(GreenOpenCountKey, _greenOpenCount);
                     break;
@@ -179,33 +265,25 @@ namespace Script.RobbyScript.StoreMenuGroup
                     _blueOpenCount = PlayerPrefs.GetInt(BlueOpenCountKey, 0);
                     CalculateCoinReward(boxTypes, _blueOpenCount);
                     CalculateUnitPieceReward(boxTypes, _blueOpenCount);
+                    if (_blueOpenCount == BlueOpenMaxCount) break;
                     _blueOpenCount++;
+                    _blueOpenTime = DateTime.Now;
                     PlayerPrefs.SetInt(BlueOpenCountKey, _blueOpenCount);
-                    _blueTime = DateTime.UtcNow;
-                    PlayerPrefs.SetString(BlueOpenTimeKey, _blueTime.ToBinary().ToString());
+                    PlayerPrefs.SetString(BlueOpenTimeKey, _blueOpenTime.ToBinary().ToString());
                     break;
                 case BoxGrade.Purple:
                     _purpleOpenCount = PlayerPrefs.GetInt(PurpleOpenCountKey, 0);
                     CalculateCoinReward(boxTypes, _purpleOpenCount);
                     CalculateUnitPieceReward(boxTypes, _purpleOpenCount);
+                    if (_purpleOpenCount == PurpleOpenMaxCount) break; 
                     _purpleOpenCount++;
+                    _purpleOpenTime = DateTime.Now;
                     PlayerPrefs.SetInt(PurpleOpenCountKey, _purpleOpenCount);
-                    _purpleTime = DateTime.UtcNow;
-                    PlayerPrefs.SetString(PurpleOpenTimeKey, _purpleTime.ToBinary().ToString());
+                    PlayerPrefs.SetString(PurpleOpenTimeKey, _purpleOpenTime.ToBinary().ToString());
                     break;
             }
+            isReset = false;
             PlayerPrefs.Save(); 
-        }
-
-        private void ResetButtonCounts()
-        {
-            _greenOpenCount = 0;
-            _blueOpenCount = 0;
-            _purpleOpenCount = 0;
-            PlayerPrefs.SetInt(GreenOpenCountKey, _greenOpenCount);
-            PlayerPrefs.SetInt(BlueOpenCountKey, _blueOpenCount);
-            PlayerPrefs.SetInt(PurpleOpenCountKey, _purpleOpenCount);
-            PlayerPrefs.Save();
         }
         private void ReceiveReward()
         { 
@@ -217,8 +295,6 @@ namespace Script.RobbyScript.StoreMenuGroup
                 HoldCharacterList.Instance.UpdateRewardPiece(unitReward.Key);
                 Destroy(unitReward.Value.Item2.gameObject);
             }
-            CheckOpen();
-            StartCoroutine(CheckBox());
             Destroy(_coinObject.gameObject);
             _unitPieceDict.Clear();
             boxRewardPanel.SetActive(false);
@@ -344,11 +420,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                 _unitPieceObject.goodsValue.text = $"{_unitPieceReward}";
                 _unitPieceObject.goodsValue.GetComponent<RectTransform>().localScale = new Vector3(2, 2, 0);
                 _unitPieceDict[unit] = new Tuple<int, Goods>(_unitPieceReward, _unitPieceObject);
-            } 
-            totalPiecesPerGrade.Clear();
-            pieceCountPerUnit.Clear();
-            selectedUnitIndices.Clear();
-            possibleIndices.Clear();
+            }
         }
         private static int GetUnitPieceReward(CharacterBase.UnitGrades unitGrade, BoxGrade boxGrade, int openCount)
         {
@@ -384,6 +456,5 @@ namespace Script.RobbyScript.StoreMenuGroup
               _ => throw new ArgumentOutOfRangeException(nameof(unitGrade), unitGrade, null)
             };
         }
-
     }
 }

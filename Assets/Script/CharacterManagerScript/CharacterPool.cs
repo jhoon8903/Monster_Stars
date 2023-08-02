@@ -8,7 +8,7 @@ namespace Script.CharacterManagerScript
     {
         [SerializeField] private CharacterManager characterManager;
         [SerializeField] private int poolSize;
-        private List<GameObject> _pooledCharacters;
+        public List<GameObject> _pooledCharacters;
         public bool theFirst;
 
         public void Awake()

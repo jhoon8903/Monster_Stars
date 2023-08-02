@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Script.CharacterManagerScript;
 using Script.RewardScript;
 using UnityEngine;
 
@@ -47,6 +48,10 @@ namespace Script.WeaponScriptGroup
                 return null;
             }
             var objectToSpawn = _poolDictionary[weaponType][puzzleLevel-2].Dequeue();
+            if (objectToSpawn == null)
+            {
+                return null;
+            }
             objectToSpawn.transform.position = position;
             objectToSpawn.transform.rotation = rotation;
             _pivotDSword = FindInChildren(objectToSpawn, $"D{puzzleLevel-1}(Clone)");

@@ -35,7 +35,7 @@ namespace Script.RewardScript
         private TimeSpan _timePassed;
         private int _coinReward;
         private int _unitPieceReward;
-        private readonly Dictionary<CharacterBase, int> _unitPieceDic = new Dictionary<CharacterBase, int>();
+        private readonly Dictionary<CharacterBase, Tuple<int, Goods>> _unitPieceDict = new Dictionary<CharacterBase, Tuple<int, Goods>>();
         private Goods _coinObject;
         private Goods _unitPieceObject;
         private const int MaxHours = 16;
@@ -63,30 +63,22 @@ namespace Script.RewardScript
             }
             else
             {
-                _latestOpenTime = DateTime.UtcNow;
+                _latestOpenTime = DateTime.Now;
                 PlayerPrefs.SetString(LatestOpenTimeKey, _latestOpenTime.ToBinary().ToString());
             }
+            timeRewardBtn.GetComponent<Button>().onClick.AddListener(ReceiveTimeReward);
         }
         public void OpenPanel()
         {
             timeRewardPanel.SetActive(true);
             ShowTimeReward();
             StartCoroutine(UpdateReward());
-            if (timeRewardContents.transform.childCount > 0)
-            {
-                timeRewardBtn.GetComponent<Button>().interactable = true;
-                timeRewardBtn.GetComponent<Button>().onClick.AddListener(ReceiveTimeReward);
-            }
-            else
-            {
-                timeRewardBtn.GetComponent<Button>().interactable = false;
-            }
-          
+            timeRewardBtn.GetComponent<Button>().interactable = timeRewardContents.transform.childCount > 0;
         }
         private void ShowTimeReward()
         {
             var latestStage = PlayerPrefs.GetInt("LatestStage", 1);
-            _timePassed = DateTime.UtcNow - _latestOpenTime;
+            _timePassed = DateTime.Now - _latestOpenTime;
             _timePassed = TimeSpan.FromHours(Math.Min(_timePassed.TotalHours, MaxHours));
             CalculateCoinReward(_timePassed, latestStage);
             CalculateUnitPieceReward(_timePassed, latestStage);
@@ -101,7 +93,7 @@ namespace Script.RewardScript
             _coinReward = coinValue * (int)(timePassed.TotalMinutes / CoinRewardTime);
             if (_coinReward == 0) return;
             _coinObject = Instantiate(rewardItem, timeRewardContents.transform);
-            _coinObject.goodsBack.GetComponent<Image>().color = Color.clear;
+            _coinObject.goodsBack.GetComponent<Image>().color = Color.gray;
             _coinObject.goodsValue.text = $"{_coinReward}";
         }
         private void CalculateUnitPieceReward(TimeSpan timePassed, int stage)
@@ -172,8 +164,10 @@ namespace Script.RewardScript
                     CharacterBase.UnitGrades.Blue => Color.blue,
                 };
                 _unitPieceObject.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPieceLevel);
+                _unitPieceObject.goodsSprite.GetComponent<RectTransform>().localScale = new Vector3(2, 2, 0);
                 _unitPieceObject.goodsValue.text = $"{_unitPieceReward}";
-                _unitPieceDic[unit] = _unitPieceReward;
+                _unitPieceObject.goodsValue.GetComponent<RectTransform>().localScale = new Vector3(2, 2, 0);
+                _unitPieceDict[unit] = new Tuple<int, Goods>(_unitPieceReward, _unitPieceObject);
             }
         }
         private static int GetUnitPieceReward(int stage, CharacterBase.UnitGrades unitGrade, TimeSpan timePassed)
@@ -201,7 +195,7 @@ namespace Script.RewardScript
         {
             while (timeRewardPanel.activeInHierarchy)
             {
-                var timePassed = DateTime.UtcNow - _latestOpenTime;
+                var timePassed = DateTime.Now - _latestOpenTime;
                 timePassed = TimeSpan.FromHours(Math.Min(timePassed.TotalHours, MaxHours));
                 _hour = timePassed.Hours;
                 _min = timePassed.Minutes;
@@ -213,21 +207,18 @@ namespace Script.RewardScript
         }
         private void ReceiveTimeReward()
         {
-            timeRewardBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             CoinsScript.Instance.Coin += _coinReward;
             CoinsScript.Instance.UpdateCoin();
-            foreach (var unitReward in _unitPieceDic)
-            {
-                unitReward.Key.CharacterPieceCount += unitReward.Value;
-                HoldCharacterList.Instance.UpdateRewardPiece(unitReward.Key);
-            }
-            _latestOpenTime = DateTime.UtcNow;
+            _latestOpenTime = DateTime.Now;
             PlayerPrefs.SetString(LatestOpenTimeKey, _latestOpenTime.ToBinary().ToString());
-            Destroy(_coinObject.gameObject);
-            if (_unitPieceObject != null)
+            foreach (var unitPiece in _unitPieceDict)
             {
-                Destroy(_unitPieceObject.gameObject);
+                unitPiece.Key.CharacterPieceCount += unitPiece.Value.Item1;
+                HoldCharacterList.Instance.UpdateRewardPiece(unitPiece.Key);
+                Destroy(unitPiece.Value.Item2.gameObject);
             }
+            Destroy(_coinObject.gameObject);
+            _unitPieceDict.Clear();
             timeRewardPanel.SetActive(false);
         }
         private void CloseTimeReward()

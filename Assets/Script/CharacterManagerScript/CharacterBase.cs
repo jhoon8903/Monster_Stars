@@ -10,14 +10,15 @@ namespace Script.CharacterManagerScript
 {
     public class CharacterBase : MonoBehaviour
     {
+        [SerializeField] public GameObject cover;
         public int unitPieceLevel = 1;
         protected internal int CharacterPieceCount { get; set; }
         protected internal int CharacterMaxPiece => CheckForMaxPiece();
         protected internal int CharacterLevelUpCoin => CheckForLevelUpCoin();
         public enum UnitGrades { Green, Blue, Purple }
         protected internal UnitGrades UnitGrade;
-        protected internal bool UnLock { get; private set; }
-        protected internal bool Selected { get; set; }
+        public bool unLock;
+        public bool selected;
         public int unitPuzzleLevel;
         public enum Types { Character, Treasure }
         protected internal Types Type; 
@@ -69,8 +70,7 @@ namespace Script.CharacterManagerScript
         
         public virtual void Initialize()
         {
-            UnLock = true;
-            Selected = false;
+            unLock = true;
             _spriteRenderer = GetComponent<SpriteRenderer>();
         }
         private int CheckForMaxPiece()

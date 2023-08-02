@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using DG.Tweening;
 using Script.CharacterGroupScript;
 using Script.CharacterManagerScript;
@@ -32,6 +33,8 @@ namespace Script
         [SerializeField] private ExpManager expManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private TextMeshProUGUI stageText;
+        [SerializeField] private CharacterPool characterPool;
+        public List<GameObject> characterList = new List<GameObject>(); 
         public static GameManager Instance { get; private set; }
         private readonly WaitForSecondsRealtime _waitOneSecRealtime = new WaitForSecondsRealtime(1f);
         private readonly WaitForSecondsRealtime _waitTwoSecRealtime = new WaitForSecondsRealtime(2f);
@@ -89,9 +92,11 @@ namespace Script
             yield return _waitOneSecRealtime;
             StartCoroutine(cameraManager.CameraBattleSizeChange());
             StartCoroutine(backgroundManager.ChangeBattleSize());
+            StartCoroutine(CoverUnit(true));
             yield return _waitTwoSecRealtime;
             StartCoroutine(AtkManager.Instance.CheckForAttack());
             StartCoroutine(StageManager.Instance.WaveController());
+
             // var allUnits = FindObjectsOfType<CharacterBase>();
             // foreach (var unit in allUnits)
             // {
@@ -101,6 +106,16 @@ namespace Script
             //     }
             // }
             GameSpeed();
+        }
+
+        public IEnumerator CoverUnit(bool value)
+        {
+            characterList = characterPool.UsePoolCharacterList();
+            foreach (var unit in characterList)
+            {
+                unit.GetComponent<CharacterBase>().cover.SetActive(value);
+            }
+            yield return null;
         }
         public IEnumerator ContinueOrLose()
         {
@@ -159,8 +174,10 @@ namespace Script
                 _bossSpawnArea = new Vector3Int(Random.Range(1, 5), 9, 0);
                 gridManager.ApplyBossSpawnColor(_bossSpawnArea);
             }
+            
             yield return StartCoroutine(backgroundManager.ChangePuzzleSize());
             yield return StartCoroutine(cameraManager.CameraPuzzleSizeChange());
+            
             enemyPool.ClearList();
             StageManager.Instance.isBossClear = false;
             castleManager.castleCrushBoost = false;
@@ -172,6 +189,10 @@ namespace Script
             {
                 AtkManager.Instance.groupFCount = 0;
                 FindObjectOfType<UnitF>().groupFDamage = 0f;
+            }
+            foreach (var unit in characterPool._pooledCharacters)
+            {
+                unit.GetComponent<CharacterBase>().cover.SetActive(false);
             }
         }
         private void LoseGame()

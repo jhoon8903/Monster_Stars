@@ -56,14 +56,14 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             foreach (var character in characterList)
             {           
                 character.Initialize();
-                if (character.UnLock)
+                if (character.unLock)
                 {
                     if (PlayerPrefs.HasKey(character.unitGroup.ToString()))
                     {
-                        character.Selected = true;
+                        character.selected = true;
                         SelectedUnitHolder.Instance.selectedUnit.Add(character);
                     }
-                    if (character.Selected)
+                    if (character.selected)
                     {
                         var selectedUnitInstance = Instantiate(unitIconPrefab, selectedContent.transform, false);
                         SetupUnitIcon(selectedUnitInstance, character);
@@ -116,7 +116,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             });
             unitInstance.removeBtn.onClick.AddListener(() =>
             {
-                character.Selected = false;
+                character.selected = false;
                 SelectedUnitHolder.Instance.selectedUnit.Remove(character);
                 PlayerPrefs.DeleteKey(character.unitGroup.ToString());
                 unitInstance.transform.SetParent(activateUnitContent.transform);
@@ -127,7 +127,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             {
                 if (SelectedUnitHolder.Instance.selectedUnit.Count < 4)
                 {
-                    character.Selected = true;
+                    character.selected = true;
                     SelectedUnitHolder.Instance.selectedUnit.Add(character);
                     PlayerPrefs.SetInt(character.unitGroup.ToString(), 1);
                     PlayerPrefs.Save();
@@ -197,12 +197,12 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 _activeStatusPanel = unitInstance.statusPanel;
             }
          
-            switch (characterBase.UnLock)
+            switch (characterBase.unLock)
             {
-                case true when characterBase.Selected:
+                case true when characterBase.selected:
                 {
                     unitInstance.infoBtn.gameObject.SetActive(true);
-                    if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece && CoinsScript.Instance.Coin >= characterBase.unitPieceLevel * 500)
+                    if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece && CoinsScript.Instance.Coin >= characterBase.CharacterLevelUpCoin)
                     {
                         unitInstance.levelUpBtn.gameObject.SetActive(true);
                         unitInstance.removeBtn.gameObject.SetActive(false);
@@ -216,10 +216,10 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     }
                     break;
                 }
-                case true when !characterBase.Selected:
+                case true when !characterBase.selected:
                 {
                     unitInstance.infoBtn.gameObject.SetActive(true);
-                    if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece && CoinsScript.Instance.Coin >= characterBase.unitPieceLevel * 500)
+                    if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece && CoinsScript.Instance.Coin >= characterBase.CharacterLevelUpCoin)
                     {
                         unitInstance.levelUpBtn.gameObject.SetActive(true);
                         unitInstance.removeBtn.gameObject.SetActive(false);
@@ -304,6 +304,5 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 unitIcon.unitPieceText.text = $"{characterBase.CharacterPieceCount}/{unitIcon.unitPieceSlider.maxValue}";
             }
         }
-
     }
 }
