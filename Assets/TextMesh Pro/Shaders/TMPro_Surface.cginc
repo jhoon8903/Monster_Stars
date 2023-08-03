@@ -66,7 +66,7 @@ void PixShader(Input input, inout SurfaceOutput o)
 					tex2D(_MainTex, input.uv_MainTex - delta.zy).a,
 					tex2D(_MainTex, input.uv_MainTex + delta.zy).a };
 
-	// Face Basic
+	// Face Normal
 	float3 n = GetSurfaceNormal(smp4x, input.param.x);
 
 	// Bumpmap

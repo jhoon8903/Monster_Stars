@@ -35,7 +35,7 @@ namespace Script.RobbyScript.MainMenuGroup
                     // Assemble 프리펩의 내부 컴포넌트에 접근하여 퀘스트 정보 설정
                     Assemble assembleScript = instantiatedAssemblePrefab.GetComponent<Assemble>();
                     assembleScript.questDesc.text = questData.name;
-                    //StartCoroutine(assembleScript.SetProgressText(questData.count, questData.num)); // 함수로 텍스트 설정 및 슬라이더 값 설정
+                    assembleScript.progressText.text = questData.count.ToString(); 
 
                     // 이미지가 코인 이미지인 경우
                     if (assembleScript.cardImage)
