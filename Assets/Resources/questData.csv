@@ -1,10 +1,11 @@
-Name,Count,Coin,Green,Blue,Purple,Total,Condition,Num
-골드 소모,600,500,6,0,0,6,Fix,1
-골드 획득,2000,500,9,3,0,12,Fix,2
-보물상자(상점) 오픈,1,1000,3,1,0,4,Rotation,3
-카드 획득하기,45,1000,3,1,0,4,Rotation,4
-적을 처치하기,150,1500,6,2,0,8,Rotation,5
-보스 처치하기,8,2000,3,0,0,3,Rotation,6
-광고 시청하기,1,1500,9,3,0,12,Rotation,7
-스테이지에서 상자 합성하기,10,2000,3,0,0,3,Rotation,8
-전투에서 승리하기,2,1000,3,0,0,3,Rotation,9
+QuestTypes,QuestGoal,RewardCoin,RewardGreenPiece,RewardBluePiece,RewardPurplePiece,QuestCondition,QuestDescKor,QuestDescEng
+AllClear,5,3000,60,5,1,Fix,모든 보상 획득하기,DailyQuest All Clear
+UseCoin,600,500,6,0,0,Fix,코인 소모,Using Coin
+GetCoin,2000,500,9,3,0,Fix,코인 획득 하기,Getting Coin
+OpenBox,1,1000,3,1,0,Rotation,보물(상점) 상자 열기,Treasure Box (Store) Open
+GetPiece,45,1000,3,1,0,Rotation,유닛 조각 획득하기,Getting Unit Pieces
+KillEnemy,150,1500,6,2,0,Rotation,적 처치하기,Killed Enemy
+KillBoss,8,2000,3,0,0,Rotation,보스 처치하기,Killed Boss
+ViewAds,1,1500,9,3,0,Rotation,광고 시청하기,Viewing Ads
+MatchCoin,10,2000,3,0,0,Rotation,퍼즐에서 강화상자 합성하기,Merge inGame PowerUP Box
+Victory,2,1000,3,0,0,Rotation,전투에서 승리하기,Victory Game
