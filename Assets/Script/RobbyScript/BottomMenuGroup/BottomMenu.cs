@@ -1,67 +1,86 @@
+using System;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.RobbyScript.BottomMenuGroup
 {
     public class BottomMenu : MonoBehaviour
     {
-        [SerializeField] private GameObject mainPanel;
-        [SerializeField] private GameObject unitPanel;
+        [SerializeField] private GameObject battlePanel;
+        [SerializeField] private GameObject battleUnClick;
+        [SerializeField] private GameObject battleUnClickNew;
+        [SerializeField] private GameObject battleClick;
+        [SerializeField] private GameObject battleClickNew;
+        [SerializeField] private GameObject cardPanel;
+        [SerializeField] private GameObject cardUnClick;
+        [SerializeField] private GameObject cardUnClickNew;
+        [SerializeField] private GameObject cardClick;
+        [SerializeField] private GameObject cardClickNew;
         [SerializeField] private GameObject storePanel;
-        [SerializeField] private Button mainBtn;
-        [SerializeField] private Button unitSelectBtn;
-        [SerializeField] private Button storeBtn;
-        [SerializeField] private HorizontalLayoutGroup layoutGroup;
+        [SerializeField] private GameObject storeUnClick;
+        [SerializeField] private GameObject storeUnClickNew;
+        [SerializeField] private GameObject storeClick;
+        [SerializeField] private GameObject storeClickNew;
 
-        private const float DefaultWidth = 820;
-        private const float SelectedWidth = 1300;
-
-        private readonly Color _selectedColor = new Color(0, 1, 0.2594f, 1);
-        private readonly Color _defaultColor = new Color(0.6603f, 0.6603f, 0.6603f, 1);
-
-        private void OnEnable()
+        private void Awake()
         {
-            mainBtn.onClick.AddListener(()=>
-            {
-                SetActivePanel(mainPanel);
-                SetSelectedButton(mainBtn);
-            });
-            unitSelectBtn.onClick.AddListener(()=>
-            {
-                SetActivePanel(unitPanel);
-                SetSelectedButton(unitSelectBtn);
-            });
-            storeBtn.onClick.AddListener(() =>
-            {
-                SetActivePanel(storePanel);
-                SetSelectedButton(storeBtn);
-            });
+            battlePanel.SetActive(true);
+            battleClick.SetActive(true);
+            battleUnClick.SetActive(false);
+            storeUnClick.SetActive(true);
+            cardUnClick.SetActive(true);
+
+            battleUnClick.GetComponent<Button>().onClick.AddListener(BattleClick);
+            storeUnClick.GetComponent<Button>().onClick.AddListener(StoreClick);
+            cardUnClick.GetComponent<Button>().onClick.AddListener(CardClick);
         }
 
-        private void Start()
+        private void BattleClick()
         {
-            SetSelectedButton(mainBtn);
-        }
-
-        private void SetActivePanel(GameObject panel)
-        {
-            mainPanel.SetActive(false);
-            unitPanel.SetActive(false);
+            
+            battlePanel.SetActive(true);
+            battleClick.SetActive(true);
+            battleUnClick.SetActive(false);
+            
             storePanel.SetActive(false);
-            panel.SetActive(true);
+            storeClick.SetActive(false);
+            storeUnClick.SetActive(true);
+            
+            cardPanel.SetActive(false);
+            cardClick.SetActive(false);
+            cardUnClick.SetActive(true);
         }
 
-        private void SetSelectedButton(Component selectedButton)
+        private void StoreClick()
         {
-            mainBtn.GetComponent<LayoutElement>().preferredWidth = DefaultWidth;
-            unitSelectBtn.GetComponent<LayoutElement>().preferredWidth = DefaultWidth;
-            storeBtn.GetComponent<LayoutElement>().preferredWidth = DefaultWidth;
-            mainBtn.GetComponent<Image>().color = _defaultColor;
-            unitSelectBtn.GetComponent<Image>().color = _defaultColor;
-            storeBtn.GetComponent<Image>().color = _defaultColor;
-            selectedButton.GetComponent<LayoutElement>().preferredWidth = SelectedWidth;
-            selectedButton.GetComponent<Image>().color = _selectedColor;
-            LayoutRebuilder.ForceRebuildLayoutImmediate(layoutGroup.GetComponent<RectTransform>());
+            storePanel.SetActive(true);
+            storeClick.SetActive(true);
+            storeUnClick.SetActive(false);
+            
+            battlePanel.SetActive(false);
+            battleClick.SetActive(false);
+            battleUnClick.SetActive(true);
+            
+            cardPanel.SetActive(false);
+            cardClick.SetActive(false);
+            cardUnClick.SetActive(true);
         }
+
+        private void CardClick()
+        {
+            cardPanel.SetActive(true);
+            cardClick.SetActive(true);
+            cardUnClick.SetActive(false);
+            
+            battlePanel.SetActive(false);
+            battleClick.SetActive(false);
+            battleUnClick.SetActive(true);
+            
+            storePanel.SetActive(false);
+            storeClick.SetActive(false);
+            storeUnClick.SetActive(true);
+        }
+
     }
 }

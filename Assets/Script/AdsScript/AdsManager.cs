@@ -299,7 +299,7 @@ namespace Script.AdsScript
 
         public enum ButtonType
         {
-            Coin, Stamina, Gem, Green, Blue, Purple, Retry, Common, LevelUp, None
+            Coin, Stamina, Gem, Green, Blue, Purple, Retry, Common, LevelUp, EnergyPackFreeStamina, GemPackFree,CoinPackFree, None
         }
 
         public StoreMenu.BoxGrade boxGrade;
@@ -311,19 +311,16 @@ namespace Script.AdsScript
             ShowRewardedAd();
             ButtonTypes = ButtonType.Coin;
         }
-
         public void Stamina()
         {
             ShowRewardedAd();
             ButtonTypes = ButtonType.Stamina;
         }
-
         public void Gem()
         {
             ShowRewardedAd();
             ButtonTypes = ButtonType.Gem;
         }
-
         private void RewardButtonClicked()
         {
             switch (ButtonTypes)
@@ -359,13 +356,21 @@ namespace Script.AdsScript
                 case ButtonType.LevelUp:
                     ExpShuffle();
                     break;
+                case ButtonType.EnergyPackFreeStamina:
+                     EnergyPackFree();
+                     break;
                 case ButtonType.None:
+                    break;
+                case ButtonType.GemPackFree:
+                    FreeGemPack();
+                    break;
+                case ButtonType.CoinPackFree:
+                    FreeCoinPack();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
-
         private static void GiveCoinReward()
         {
             Debug.Log("코인 보상을 제공합니다.");
@@ -374,7 +379,6 @@ namespace Script.AdsScript
                 CoinsScript.Instance.Coin += 1000;
             }
         }
-
         private static void GiveGemReward()
         {
             Debug.Log("재화 보상을 제공합니다.");
@@ -383,29 +387,41 @@ namespace Script.AdsScript
                 GemScript.Instance.Gem += 100;
             }
         }
-
         private static void GiveStaminaReward()
         {
             Debug.Log("스테미너 보상을 제공합니다.");
             StaminaScript.Instance.CurrentStamina += 5;
         }
-
         private void Retry()
         {
             if (!isRetry) return;
             SceneManager.LoadScene("StageScene");
             isRetry = false;
         }
-
         private static void CommonShuffle()
         {
             CommonRewardManager.Instance.ReEnqueueTreasure();
         }
-
         private static void ExpShuffle()
         {
             Debug.Log("레벨업 동작");
             LevelUpRewardManager.Instance.ReLevelUpReward();
+        }
+        private void EnergyPackFree()
+        {
+            Debug.Log("스테미나 10 지급");
+
+            StaminaScript.Instance.CurrentStamina += 10;
+        }
+
+        private void FreeGemPack()
+        {
+
+        }
+
+        private void FreeCoinPack()
+        {
+
         }
     }
 }
