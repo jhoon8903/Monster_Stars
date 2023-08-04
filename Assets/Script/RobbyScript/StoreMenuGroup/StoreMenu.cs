@@ -137,9 +137,9 @@ namespace Script.RobbyScript.StoreMenuGroup
                 PlayerPrefs.Save();
             }
 
-            greenBtn.GetComponent<Button>().onClick.AddListener(GreenAds);
-            blueBtn.GetComponent<Button>().onClick.AddListener(BlueAds);
-            purpleBtn.GetComponent<Button>().onClick.AddListener(PurpleAds);
+            // greenBtn.GetComponent<Button>().onClick.AddListener(GreenAds);
+            // blueBtn.GetComponent<Button>().onClick.AddListener(BlueAds);
+            // purpleBtn.GetComponent<Button>().onClick.AddListener(PurpleAds);
             closeBtn.GetComponent<Button>().onClick.AddListener(ReceiveReward);
             gameObject.SetActive(false);
         }
