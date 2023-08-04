@@ -189,7 +189,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             if (isReset || _greenOpenCount < GreenOpenMaxCount)
             {
                 greenBtn.GetComponent<Button>().interactable = true;
-                greenBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"광고보고 \n 보상 열기 \n{_greenOpenCount} / {GreenOpenMaxCount}";
+                greenBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{_greenOpenCount} / {GreenOpenMaxCount}";
             }
             else
             {
@@ -204,7 +204,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             if (isReset || (_blueOpenCount < BlueOpenMaxCount && _bluePassed.TotalMinutes >= BlueRewardCoolTime))
             {
                 blueBtn.GetComponent<Button>().interactable = true;
-                blueBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"광고보고 \n 보상 열기 \n{_blueOpenCount} / {BlueOpenMaxCount}";
+                blueBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{_blueOpenCount} / {BlueOpenMaxCount}";
             }
             else
             {
@@ -229,7 +229,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             if (isReset || (_purpleOpenCount < PurpleOpenMaxCount && _purplePassed.TotalMinutes >= PurpleRewardCoolTime))
             {
                 purpleBtn.GetComponent<Button>().interactable = true;
-                purpleBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"광고보고 \n 보상 열기 \n{_purpleOpenCount} / {PurpleOpenMaxCount}";
+                purpleBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{_purpleOpenCount} / {PurpleOpenMaxCount}";
             }
             else
             {

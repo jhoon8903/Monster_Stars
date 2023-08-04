@@ -27,7 +27,7 @@ Properties {
 	_Diffuse			("Diffuse", Range(0,1)) = 0.5
 	_Ambient			("Ambient", Range(1,0)) = 0.5
 
-	_BumpMap 			("Basic map", 2D) = "bump" {}
+	_BumpMap 			("Normal map", 2D) = "bump" {}
 	_BumpOutline		("Bump Outline", Range(0,1)) = 0
 	_BumpFace			("Bump Face", Range(0,1)) = 0
 
@@ -49,7 +49,7 @@ Properties {
 	_GlowOuter			("Outer", Range(0,1)) = 0.05
 	_GlowPower			("Falloff", Range(1, 0)) = 0.75
 
-	_WeightNormal		("Weight Basic", float) = 0
+	_WeightNormal		("Weight Normal", float) = 0
 	_WeightBold			("Weight Bold", float) = 0.5
 
 	_ShaderFlags		("Flags", float) = 0
