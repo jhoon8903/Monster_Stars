@@ -45,3 +45,15 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Unit
+    uniqueID: 1814182281
+    locked: 0
+  - name: TopMenu
+    uniqueID: 2734098963
+    locked: 0
+  - name: Top&Bottom
+    uniqueID: 3821205035
+    locked: 0
+  - name: Popup
+    uniqueID: 1864676647
+    locked: 0

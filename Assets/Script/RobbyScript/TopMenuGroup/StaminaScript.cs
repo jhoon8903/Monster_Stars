@@ -3,6 +3,7 @@ using System.Collections;
 using System.Globalization;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Script.RobbyScript.TopMenuGroup
 {
@@ -42,6 +43,7 @@ namespace Script.RobbyScript.TopMenuGroup
             StaminaUpdate();
             StartCoroutine(RecoveryStamina());
         }
+
         private void Update()
         {
             if (!Input.GetKeyDown(KeyCode.S)) return;
@@ -87,7 +89,12 @@ namespace Script.RobbyScript.TopMenuGroup
         {
             staminaText.text = $"{CurrentStamina}/{MaxStamina}";
         }
-        
+
+
+        public void StaminaReward(int stamina)
+        {
+            CurrentStamina += stamina;
+        }
         private void StaminaTimeUpdate()
         {
             var minutes = Mathf.FloorToInt(_currentCooldown / 60);

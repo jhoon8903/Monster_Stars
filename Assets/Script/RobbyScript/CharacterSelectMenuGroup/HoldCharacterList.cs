@@ -23,12 +23,15 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         [SerializeField] private GameObject informationPanelPrefab;
         [SerializeField] private GameObject warningPanel;
         [SerializeField] private TextMeshProUGUI messageText;
+        [SerializeField] private Sprite lockImage;
+        [SerializeField] private Sprite lockBack;
+        [SerializeField] private Sprite lockFrame;
+        
         private GameObject _activeStatusPanel;
         private static readonly Dictionary<UnitIcon, UnitIcon> UnitIconMapping = new Dictionary<UnitIcon, UnitIcon>();
         private InformationPanel _informationPanel;
         public static HoldCharacterList Instance { get; private set; }
         public bool update;
-
         private void Awake()
         {
             if (Instance == null)
@@ -42,20 +45,34 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             gameObject.SetActive(false);
             update = true;
         }
-
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
                 PlayerPrefs.DeleteAll();
             }
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit))
+                {
+                    GameObject target = hit.transform.gameObject;
+                    string layerName = LayerMask.LayerToName(target.layer);
+                    Debug.Log($"You clicked on {target.name} on layer {layerName}");
+                }
+            }
         }
 
         public void InstanceUnit()
         {
+            var sortingLayerOder = 10;
             foreach (var character in characterList)
             {           
                 character.Initialize();
+                UnitIcon instantiatedUnit = null;
                 if (character.unLock)
                 {
                     if (PlayerPrefs.HasKey(character.unitGroup.ToString()))
@@ -74,6 +91,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                         var activeUnitInstance = Instantiate(unitIconPrefab, selectedContent.transform, false);
                         activeUnitInstance.transform.SetParent(activateUnitContent.transform, false);
                         SetupUnitIcon(activeUnitInstance,character);
+                        instantiatedUnit = activeUnitInstance;
                     }
                 }
                 else
@@ -81,6 +99,15 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     var unitInstance = Instantiate(unitIconPrefab, inActivateUnitContent.transform, false);
                     SetupInActiveUnitIcon(unitInstance, character);
                 }
+
+                if (sortingLayerOder <= 0 || instantiatedUnit == null) continue;
+                var canvas = instantiatedUnit.unitCanvas;
+                if (canvas != null)
+                {
+                    canvas.sortingOrder = sortingLayerOder;
+                    canvas.sortingLayerName = "Unit";
+                }
+                sortingLayerOder--;
             }
         }
 
@@ -88,13 +115,12 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         {
             unitInstance.CharacterBase = character;
             UpdateUnit(unitInstance, character);
-            unitInstance.GetComponent<Button>().onClick.AddListener(() =>
-            {
-                OpenStatusPanel(unitInstance, character);
-            });
+            unitInstance.unitBtn.onClick.AddListener(() => {SwapBackGround(unitInstance, character);});
+
             unitInstance.infoBtn.onClick.AddListener(() =>
             {
-                unitInstance.statusPanel.SetActive(false);
+                unitInstance.normalBack.SetActive(true);
+                unitInstance.infoBack.SetActive(false);
                 _activeStatusPanel = null;
                 if (_informationPanel == null)
                 {
@@ -103,9 +129,11 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 _informationPanel.gameObject.SetActive(true);
                 _informationPanel.OpenInfoPanel(unitInstance, character);
             });
+
             unitInstance.levelUpBtn.onClick.AddListener(() =>
             {
-                unitInstance.statusPanel.SetActive(false);
+                unitInstance.normalBack.SetActive(true);
+                unitInstance.infoBack.SetActive(false);
                 _activeStatusPanel = null;
                 if (_informationPanel == null)
                 {
@@ -120,7 +148,8 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 SelectedUnitHolder.Instance.selectedUnit.Remove(character);
                 PlayerPrefs.DeleteKey(character.unitGroup.ToString());
                 unitInstance.transform.SetParent(activateUnitContent.transform);
-                unitInstance.statusPanel.SetActive(false);
+                unitInstance.normalBack.SetActive(true);
+                unitInstance.infoBack.SetActive(false);
                 UpdateMainUnitContent();
             });
             unitInstance.useBtn.onClick.AddListener(() =>
@@ -132,69 +161,84 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     PlayerPrefs.SetInt(character.unitGroup.ToString(), 1);
                     PlayerPrefs.Save();
                     unitInstance.transform.SetParent(selectedContent.transform);
-                    unitInstance.statusPanel.SetActive(false);
+                    unitInstance.normalBack.SetActive(true);
+                    unitInstance.infoBack.SetActive(false);
                     UpdateMainUnitContent();
                 }
                 else
                 { 
                     warningPanel.SetActive(true);
-                    messageText.text = "더이상 배치할 수 없습니다.";
+                    messageText.text = "No more can be placed.";
                 }
             });
         }
 
         public static void UpdateUnit(UnitIcon unitInstance, CharacterBase character)
         {
-            unitInstance.unitBackGround.GetComponent<Image>().color = character.UnitGrade switch
+            unitInstance.normalBack.GetComponent<Image>().sprite = character.UnitGrade switch
             {
-                CharacterBase.UnitGrades.Green => Color.green,
-                CharacterBase.UnitGrades.Blue => Color.blue,
-                CharacterBase.UnitGrades.Purple => Color.magenta,
-                _ => throw new ArgumentOutOfRangeException(nameof(character.UnitGrade))
+              CharacterBase.UnitGrades.Green => unitInstance.NormalBackSprite[0],
+              CharacterBase.UnitGrades.Blue => unitInstance.NormalBackSprite[1],
+              CharacterBase.UnitGrades.Purple => unitInstance.NormalBackSprite[2],
             };
-            
-            unitInstance.unit.GetComponent<Image>().sprite = character.GetSpriteForLevel(character.unitPieceLevel);
-            unitInstance.levelBack.color = character.UnitGrade switch
+            unitInstance.infoBack.GetComponent<Image>().sprite = character.UnitGrade switch
             {
-                CharacterBase.UnitGrades.Blue => new Color(0.1489f, 0f, 0.6226f, 1f),
-                CharacterBase.UnitGrades.Purple => new Color(0.5188f, 0.06162f, 0f, 1f),
-                CharacterBase.UnitGrades.Green => new Color(0f, 0.5566f, 0.1430f, 1f),
-                _ => throw new ArgumentOutOfRangeException(nameof(character.UnitProperty))
+                CharacterBase.UnitGrades.Green => unitInstance.InfoBackSprite[0],
+                CharacterBase.UnitGrades.Blue => unitInstance.InfoBackSprite[1],
+                CharacterBase.UnitGrades.Purple => unitInstance.InfoBackSprite[2],
             };
-            unitInstance.unitLevelText.text = $"레벨 {character.unitPieceLevel}";
+            unitInstance.unitFrame.GetComponent<Image>().sprite = character.UnitGrade switch
+            {
+                CharacterBase.UnitGrades.Green => unitInstance.FrameSprite[0],
+                CharacterBase.UnitGrades.Blue => unitInstance.FrameSprite[1],
+                CharacterBase.UnitGrades.Purple => unitInstance.FrameSprite[2],
+            };
+            unitInstance.unitProperty.GetComponent<Image>().sprite = character.UnitProperty switch
+            {
+              CharacterBase.UnitProperties.Divine => unitInstance.UnitPropertiesSprite[0],
+              CharacterBase.UnitProperties.Darkness => unitInstance.UnitPropertiesSprite[1],
+              CharacterBase.UnitProperties.Physics => unitInstance.UnitPropertiesSprite[2],
+              CharacterBase.UnitProperties.Water => unitInstance.UnitPropertiesSprite[3],
+              CharacterBase.UnitProperties.Poison => unitInstance.UnitPropertiesSprite[4],
+              CharacterBase.UnitProperties.Fire => unitInstance.UnitPropertiesSprite[5],
+            };
+
+            unitInstance.unitImage.GetComponent<Image>().sprite = character.GetSpriteForLevel(character.unitPieceLevel);
+            unitInstance.unitLevelText.text = $"Lv. {character.unitPieceLevel}";
             unitInstance.unitPieceSlider.maxValue = character.CharacterMaxPiece;
             unitInstance.unitPieceSlider.value = character.CharacterPieceCount;
             unitInstance.unitPieceText.text = $"{character.CharacterPieceCount}/{unitInstance.unitPieceSlider.maxValue}";
         }
+
         private void SetupInActiveUnitIcon(UnitIcon unitInstance, CharacterBase character)
         {
             unitInstance.CharacterBase = character;
-            unitInstance.unitBackGround.GetComponent<Image>().color = Color.gray;
-            unitInstance.unit.GetComponent<Image>().sprite = character.GetSpriteForLevel(1);
-            unitInstance.unit.GetComponent<Image>().color = Color.grey;
-            unitInstance.levelBack.color = new Color(0.4433f, 0.4433f, 0.4433f, 1f);
-            unitInstance.unitLevelText.text = "비활성화";
-            unitInstance.unitPieceSlider.maxValue = 5;
+            unitInstance.unitImage.GetComponent<Image>().sprite = lockImage;
+            unitInstance.normalBack.GetComponent<Image>().sprite = lockBack;
+            unitInstance.unitFrame.GetComponent<Image>().sprite = lockFrame;
+            unitInstance.unitLevelText.text = "InActivate";
+            unitInstance.unitPieceSlider.maxValue = 0;
             unitInstance.unitPieceSlider.value = 0;
             unitInstance.unitPieceText.text = $"{unitInstance.unitPieceSlider.value}/{unitInstance.unitPieceSlider.maxValue}";
             unitInstance.GetComponent<Button>().onClick.AddListener(() =>
             {
-                OpenStatusPanel(unitInstance, character);
+                SwapBackGround(unitInstance, character);
             });
 
         }
-        private void OpenStatusPanel(UnitIcon unitInstance, CharacterBase characterBase)
-        {
+        private void SwapBackGround(UnitIcon unitInstance, CharacterBase characterBase)
+        { 
+            Debug.Log("ClickBtn");
             if (_activeStatusPanel == null)
             {
-                unitInstance.statusPanel.SetActive(true);
-                _activeStatusPanel = unitInstance.statusPanel;
+                unitInstance.infoBack.SetActive(true);
+                _activeStatusPanel = unitInstance.infoBack;
             }
-            else if (_activeStatusPanel != null && _activeStatusPanel != unitInstance.statusPanel)
+            else if (_activeStatusPanel != null && _activeStatusPanel != unitInstance.infoBack)
             {
                 _activeStatusPanel.SetActive(false);
-                unitInstance.statusPanel.SetActive(true);
-                _activeStatusPanel = unitInstance.statusPanel;
+                unitInstance.infoBack.SetActive(true);
+                _activeStatusPanel = unitInstance.infoBack;
             }
          
             switch (characterBase.unLock)
@@ -254,9 +298,9 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 UnitIconMapping[originalUnit] = newUnit;
                 newUnit.CharacterBase = originalUnit.CharacterBase;
                 var newUnitBase = newUnit.CharacterBase;
-                newUnit.GetComponent<Button>().onClick.AddListener(() =>
+                newUnit.unitBtn.onClick.AddListener(() =>
                 {
-                    newUnit.statusPanel.SetActive(false);
+                    newUnit.infoBack.SetActive(false);
                     if (_informationPanel == null)
                     {
                         _informationPanel = Instantiate(informationPanelPrefab, gamePanel.transform).GetComponent<InformationPanel>();
@@ -276,7 +320,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     : pair.Key).FirstOrDefault();
             if (correspondingUnit == null) return;
             correspondingUnit.CharacterBase = unitBase;
-            correspondingUnit.statusPanel.SetActive(unitIcon.statusPanel.activeSelf);
+            correspondingUnit.infoBack.SetActive(unitIcon.infoBack.activeSelf);
             UpdateUnit(unitIcon, unitBase);
             UpdateUnit(correspondingUnit, unitBase);
         }
