@@ -6,6 +6,7 @@ using Script.RobbyScript.TopMenuGroup;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
 using Image = UnityEngine.UI.Image;
 
@@ -51,19 +52,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             {
                 PlayerPrefs.DeleteAll();
             }
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                RaycastHit hit;
-
-                if (Physics.Raycast(ray, out hit))
-                {
-                    GameObject target = hit.transform.gameObject;
-                    string layerName = LayerMask.LayerToName(target.layer);
-                    Debug.Log($"You clicked on {target.name} on layer {layerName}");
-                }
-            }
         }
 
         public void InstanceUnit()
@@ -72,7 +60,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             foreach (var character in characterList)
             {           
                 character.Initialize();
-                UnitIcon instantiatedUnit = null;
                 if (character.unLock)
                 {
                     if (PlayerPrefs.HasKey(character.unitGroup.ToString()))
@@ -85,29 +72,49 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                         var selectedUnitInstance = Instantiate(unitIconPrefab, selectedContent.transform, false);
                         SetupUnitIcon(selectedUnitInstance, character);
                         UpdateMainUnitContent();
+
+                        var canvas = selectedUnitInstance.unitCanvas;
+                        if (canvas != null && sortingLayerOder > 0)
+                        {
+                            canvas.sortingOrder = sortingLayerOder;
+                            canvas.sortingLayerName = "TopMenu"; // Use "TopMenu" for selected units
+                        }
+                        AdjustRectTransform(activateUnitContent.transform);
                     }
                     else
                     {
                         var activeUnitInstance = Instantiate(unitIconPrefab, selectedContent.transform, false);
                         activeUnitInstance.transform.SetParent(activateUnitContent.transform, false);
-                        SetupUnitIcon(activeUnitInstance,character);
-                        instantiatedUnit = activeUnitInstance;
+                        SetupUnitIcon(activeUnitInstance, character);
+
+                        var canvas = activeUnitInstance.unitCanvas;
+                        if (canvas != null && sortingLayerOder > 0)
+                        {
+                            canvas.sortingOrder = sortingLayerOder;
+                            canvas.sortingLayerName = "Unit"; // Use "Unit" for active but not selected units
+                        }
                     }
+                    sortingLayerOder--;
+                    AdjustRectTransform(activateUnitContent.transform);
                 }
                 else
                 {
                     var unitInstance = Instantiate(unitIconPrefab, inActivateUnitContent.transform, false);
                     SetupInActiveUnitIcon(unitInstance, character);
+                    AdjustRectTransform(activateUnitContent.transform);
                 }
+            }
+        }
 
-                if (sortingLayerOder <= 0 || instantiatedUnit == null) continue;
-                var canvas = instantiatedUnit.unitCanvas;
-                if (canvas != null)
-                {
-                    canvas.sortingOrder = sortingLayerOder;
-                    canvas.sortingLayerName = "Unit";
-                }
-                sortingLayerOder--;
+        private static void AdjustRectTransform(Transform parent)
+        {
+            var numberOfChildren = parent.childCount;
+            var numberOfRows = Mathf.CeilToInt((float)numberOfChildren / 4);
+            var newHeight = numberOfRows * 1100f + (numberOfRows - 1) * 65f;
+            var rectTransform = parent.GetComponent<RectTransform>();
+            if (rectTransform != null)
+            {
+                rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, newHeight);
             }
         }
 
@@ -142,16 +149,25 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 _informationPanel.gameObject.SetActive(true);
                 _informationPanel.OpenInfoPanel(unitInstance, character);
             });
+
             unitInstance.removeBtn.onClick.AddListener(() =>
             {
                 character.selected = false;
                 SelectedUnitHolder.Instance.selectedUnit.Remove(character);
                 PlayerPrefs.DeleteKey(character.unitGroup.ToString());
                 unitInstance.transform.SetParent(activateUnitContent.transform);
+                unitInstance.transform.SetAsLastSibling(); 
                 unitInstance.normalBack.SetActive(true);
                 unitInstance.infoBack.SetActive(false);
                 UpdateMainUnitContent();
+                var canvas = unitInstance.unitCanvas;
+                if (canvas == null) return;
+                canvas.sortingLayerName = "Unit";
+                SortChildrenBySortingLayer(activateUnitContent.transform);
+                AdjustRectTransform(activateUnitContent.transform);
+
             });
+
             unitInstance.useBtn.onClick.AddListener(() =>
             {
                 if (SelectedUnitHolder.Instance.selectedUnit.Count < 4)
@@ -161,9 +177,14 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     PlayerPrefs.SetInt(character.unitGroup.ToString(), 1);
                     PlayerPrefs.Save();
                     unitInstance.transform.SetParent(selectedContent.transform);
+                    unitInstance.transform.SetAsLastSibling(); 
                     unitInstance.normalBack.SetActive(true);
                     unitInstance.infoBack.SetActive(false);
                     UpdateMainUnitContent();
+                    AdjustRectTransform(activateUnitContent.transform);
+                    var canvas = unitInstance.unitCanvas;
+                    if (canvas == null) return;
+                    canvas.sortingLayerName = "TopMenu";
                 }
                 else
                 { 
@@ -171,6 +192,32 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     messageText.text = "No more can be placed.";
                 }
             });
+        }
+        private static void SortChildrenBySortingLayer(Transform parent)
+        {
+            var children = new List<Transform>();
+            for (var i = 0; i < parent.childCount; i++)
+            {
+                children.Add(parent.GetChild(i));
+            }
+    
+            children.Sort((a, b) =>
+            {
+                var canvasA = a.GetComponentInChildren<Canvas>();
+                var canvasB = b.GetComponentInChildren<Canvas>();
+        
+                if (canvasA != null && canvasB != null)
+                {
+                    return canvasB.sortingOrder.CompareTo(canvasA.sortingOrder);
+                }
+        
+                return 0;
+            });
+    
+            for (var i = 0; i < children.Count; i++)
+            {
+                children[i].SetSiblingIndex(i);
+            }
         }
 
         public static void UpdateUnit(UnitIcon unitInstance, CharacterBase character)
@@ -226,9 +273,9 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             });
 
         }
+
         private void SwapBackGround(UnitIcon unitInstance, CharacterBase characterBase)
-        { 
-            Debug.Log("ClickBtn");
+        {
             if (_activeStatusPanel == null)
             {
                 unitInstance.infoBack.SetActive(true);
