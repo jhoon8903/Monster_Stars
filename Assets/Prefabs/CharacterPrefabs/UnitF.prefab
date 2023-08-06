@@ -50,7 +50,7 @@ MonoBehaviour:
   cover: {fileID: 5845560610481226038}
   unitPieceLevel: 3
   unLock: 1
-  selected: 0
+  selected: 1
   unitPuzzleLevel: 1
   unitGroup: 5
   baseDamage: 48

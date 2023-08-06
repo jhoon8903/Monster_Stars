@@ -16,6 +16,7 @@ namespace Script
 {
     public class GameManager : MonoBehaviour
     {
+        [SerializeField] private TutorialManager tutorialManager;
         [SerializeField] private CountManager countManager;
         [SerializeField] private GridManager gridManager;
         [SerializeField] private SpawnManager spawnManager;
@@ -46,37 +47,45 @@ namespace Script
         {
             Instance = this;
             Application.targetFrameRate = 60;
-
         }
-
         private void Start()
         {
             StartCoroutine(LoadGame());
         }
-
         private IEnumerator LoadGame()
         {
-            swipeManager.isBusy = true; 
+            swipeManager.isBusy = true;
             gridManager.GenerateInitialGrid(PlayerPrefs.GetInt("GridHeight", 6));
-            if (PlayerPrefs.HasKey("unitState"))
+            if (LoadingManager.Instance.isFirstContact)
             {
-                StartCoroutine(spawnManager.LoadGameState());
-                EnforceManager.Instance.LoadEnforceData();
-                countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
-                expManager.LoadExp();
-                castleManager.LoadCastleHp();
-                if (StageManager.Instance.currentWave % 10 == 0)
-                {
-                    _bossSpawnArea = new Vector3Int(Random.Range(1, 5), 9, 0);
-                    gridManager.ApplyBossSpawnColor(_bossSpawnArea);
-                }
+                // 사용가능 무브 6회 [3match, 4match, 5match, nullSwap, PressDelete, commonReward match] 
+                 countManager.Initialize(6);
+                 // 튜토리얼용 매치 오브젝트 생성
+                 StartCoroutine(tutorialManager.TutorialState());
             }
             else
             {
-                countManager.Initialize(moveCount);
-                StartCoroutine(spawnManager.PositionUpCharacterObject());
-                castleManager.castleCrushBoost = false;
+                if (PlayerPrefs.HasKey("unitState"))
+                {
+                    StartCoroutine(spawnManager.LoadGameState());
+                    EnforceManager.Instance.LoadEnforceData();
+                    countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
+                    expManager.LoadExp();
+                    castleManager.LoadCastleHp();
+                    if (StageManager.Instance.currentWave % 10 == 0)
+                    {
+                        _bossSpawnArea = new Vector3Int(Random.Range(1, 5), 9, 0);
+                        gridManager.ApplyBossSpawnColor(_bossSpawnArea);
+                    }
+                }
+                else
+                {
+                    countManager.Initialize(moveCount);
+                    StartCoroutine(spawnManager.PositionUpCharacterObject());
+                    castleManager.castleCrushBoost = false;
+                }
             }
+
             castleManager.castleCrushBoost = false;
             StageManager.Instance.SelectedStages();
             StageManager.Instance.UpdateWaveText();
@@ -89,7 +98,10 @@ namespace Script
         public IEnumerator Count0Call()
         {
             IsBattle = true;
-            yield return _waitOneSecRealtime;
+            if (PlayerPrefs.GetInt("TutorialKey") == 1)
+            {
+                tutorialManager.EndTutorial();
+            }
             StartCoroutine(cameraManager.CameraBattleSizeChange());
             StartCoroutine(backgroundManager.ChangeBattleSize());
             StartCoroutine(CoverUnit(true));
@@ -107,8 +119,7 @@ namespace Script
             // }
             GameSpeed();
         }
-
-        public IEnumerator CoverUnit(bool value)
+        private IEnumerator CoverUnit(bool value)
         {
             characterList = characterPool.UsePoolCharacterList();
             foreach (var unit in characterList)
@@ -190,7 +201,7 @@ namespace Script
                 AtkManager.Instance.groupFCount = 0;
                 FindObjectOfType<UnitF>().groupFDamage = 0f;
             }
-            foreach (var unit in characterPool._pooledCharacters)
+            foreach (var unit in characterPool.pooledCharacters)
             {
                 unit.GetComponent<CharacterBase>().cover.SetActive(false);
             }

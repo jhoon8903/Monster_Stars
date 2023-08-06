@@ -8,26 +8,26 @@ namespace Script.CharacterManagerScript
     {
         [SerializeField] private CharacterManager characterManager;
         [SerializeField] private int poolSize;
-        public List<GameObject> _pooledCharacters;
+        public List<GameObject> pooledCharacters;
         public bool theFirst;
 
         public void Awake()
         {
-            _pooledCharacters = new List<GameObject>();
+            pooledCharacters = new List<GameObject>();
             foreach (var character in characterManager.characterList)
             {
                 for (var i = 0; i < poolSize; i++)
                 {
                     var obj = Instantiate(character.gameObject, transform, true);
                     obj.SetActive(false);
-                    _pooledCharacters.Add(obj);
+                    pooledCharacters.Add(obj);
                 }
             }
         }
 
         public List<GameObject> NotUsePoolCharacterList()
         {
-            var notUsedPoolList = _pooledCharacters.Where(t => !t.activeInHierarchy).ToList();
+            var notUsedPoolList = pooledCharacters.Where(t => !t.activeInHierarchy).ToList();
             if(theFirst)
             {
                 var noneGroupList = notUsedPoolList.Where(t => t.GetComponent<CharacterBase>().unitGroup == CharacterBase.UnitGroups.None && Random.value < 0.08f);
@@ -40,7 +40,7 @@ namespace Script.CharacterManagerScript
 
         public List<GameObject> UsePoolCharacterList()
         {
-            return _pooledCharacters.Where(t => t.activeInHierarchy).ToList();
+            return pooledCharacters.Where(t => t.activeInHierarchy).ToList();
         }
 
         public List<GameObject> SortPoolCharacterList()
@@ -49,7 +49,6 @@ namespace Script.CharacterManagerScript
                 .OrderBy(t => t.transform.position.y)
                 .ThenBy(t => t.transform.position.x)
                 .ToList();
-
             return sortedList;
         }
 
@@ -60,5 +59,11 @@ namespace Script.CharacterManagerScript
             obj.transform.localScale = Vector3.one;
             obj.SetActive(false);
         }
+
+        public List<GameObject> GetCharactersByUnitGroup(CharacterBase.UnitGroups unitGroup)
+        {
+            return NotUsePoolCharacterList().Where(t => t.GetComponent<CharacterBase>().unitGroup == unitGroup).ToList();
+        }
+
     }
 }

@@ -57,3 +57,6 @@ TagManager:
   - name: Popup
     uniqueID: 1864676647
     locked: 0
+  - name: Cover
+    uniqueID: 3834740853
+    locked: 0

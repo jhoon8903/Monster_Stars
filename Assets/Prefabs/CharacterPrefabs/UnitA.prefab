@@ -49,17 +49,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cover: {fileID: 5058609582279428484}
   unitPieceLevel: 3
-  unLock: 0
+  unLock: 1
   selected: 0
   unitPuzzleLevel: 1
   unitGroup: 0
-  baseDamage: 29
+  baseDamage: 36
   dotDamage: 0
-  effectChance: 0
+  effectChance: 30
   effectStack: 0
   slowTime: 0
   slowPower: 0
-  bindTime: 0
+  bindTime: 1.5
   freezeTime: 0
   knockBackPower: 0
   knockBackTime: 0

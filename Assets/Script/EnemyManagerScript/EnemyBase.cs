@@ -235,7 +235,6 @@ namespace Script.EnemyManagerScript
             lock (Lock)
             {
                 var receiveDamage = (int)damage;
-                Debug.Log($"damage: {receiveDamage} / unit: {atkUnit.unitGroup}");
                 if (isDead) return;
                 currentHealth -= receiveDamage;
                 if (!gameObject.activeInHierarchy) return;

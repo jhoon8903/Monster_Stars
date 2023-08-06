@@ -22,10 +22,28 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private EnforceManager enforceManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private SwipeManager swipeManager;
+        private Dictionary<CharacterBase.UnitGroups, List<GameObject>> _unitGroups;
         public bool isWave10Spawning;
         public bool isMatched;
         private float _totalPos;
         private bool _isMatchActivated;
+        private readonly Dictionary<string, CharacterBase.UnitGroups> _unitGroupMapping = new Dictionary<string, CharacterBase.UnitGroups>
+        {
+            { "A", CharacterBase.UnitGroups.A },
+            { "B", CharacterBase.UnitGroups.B },
+            { "C", CharacterBase.UnitGroups.C },
+            { "D", CharacterBase.UnitGroups.D },
+            { "E", CharacterBase.UnitGroups.E },
+            { "F", CharacterBase.UnitGroups.F },
+            { "G", CharacterBase.UnitGroups.G },
+            { "H", CharacterBase.UnitGroups.H },
+            { "I", CharacterBase.UnitGroups.I },
+            { "J", CharacterBase.UnitGroups.J },
+            { "K", CharacterBase.UnitGroups.K },
+            { "None", CharacterBase.UnitGroups.None }
+        };
+        private readonly string[] _unitGroupOrder = { "B", "B", "D", "B", "None", "F", "None", "F", "F", "D", "E", "E", "None" ,"B", "B"};
+        private int _currentGroupIndex;
 
         public GameObject CharacterObject(Vector3 spawnPosition)
         {
@@ -57,7 +75,6 @@ namespace Script.PuzzleManagerGroup
             yield return StartCoroutine(PerformMoves(moves));
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
             yield return StartCoroutine(CheckPosition());
-
             if (rewardManger.PendingTreasure.Count == 0)
             {
                 swipeManager.isBusy = false;
@@ -66,21 +83,17 @@ namespace Script.PuzzleManagerGroup
             {
                 rewardManger.EnqueueTreasure();
             }
-
             if (countManager.TotalMoveCount != 0 || gameManager.IsBattle) yield break;
-           
             while (commonRewardManager.isOpenBox)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 yield return new WaitForSeconds(0.5f);
             }
-
             if (countManager.TotalMoveCount == 0)
             {
                 yield return StartCoroutine(gameManager.Count0Call());
             }
         }
-
         private IEnumerator CheckPosition()
         {
             if (isMatched) yield break;
@@ -136,25 +149,38 @@ namespace Script.PuzzleManagerGroup
                         emptyCellCount++;
                     }
                     if (emptyCellCount <= 0) continue;
-                    var spawnPosition = new Vector3Int(currentPosition.x, -2-emptyCellCount, 0);
+                    var spawnPosition = new Vector3Int(currentPosition.x, -2 - emptyCellCount, 0);
                     var newCharacter = SpawnNewCharacter(spawnPosition);
                     if (newCharacter == null) continue;
                     var coroutine = StartCoroutine(MoveCharacter(newCharacter, currentPosition));
                     moveCoroutines.Add(coroutine);
                 }
             }
-            foreach(var coroutine in moveCoroutines)
+            // Wait for all coroutines to complete
+            foreach (var coroutine in moveCoroutines)
             {
                 yield return coroutine;
             }
         }
+
         private GameObject SpawnNewCharacter(Vector3Int position)
         {
+            var nextUnitGroupKey = _unitGroupOrder[_currentGroupIndex];
             var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
+
+            if (_unitGroupMapping.TryGetValue(nextUnitGroupKey, out var nextUnitGroup))
+            {
+                notUsePoolCharacterList = notUsePoolCharacterList
+                    .Where(character => character.GetComponent<CharacterBase>().unitGroup == nextUnitGroup)
+                    .ToList();
+            }
+
             if (notUsePoolCharacterList.Count <= 0) return null;
             var randomIndex = Random.Range(0, notUsePoolCharacterList.Count);
             var newCharacter = notUsePoolCharacterList[randomIndex];
+            Debug.Log(newCharacter.name);
             newCharacter.transform.position = position;
+
             if (EnforceManager.Instance.permanentGroupIndex.Count > 0)
             {
                 foreach (var dummy in EnforceManager.Instance.permanentGroupIndex
@@ -168,11 +194,82 @@ namespace Script.PuzzleManagerGroup
             {
                 newCharacter.GetComponent<CharacterBase>().Initialize();
             }
+
             newCharacter.SetActive(true);
             notUsePoolCharacterList.RemoveAt(randomIndex);
+            _currentGroupIndex = (_currentGroupIndex + 1) % _unitGroupOrder.Length; // Increment and loop the index
+
             return newCharacter;
         }
-        public IEnumerator BossStageClearRule()
+
+        private IEnumerator PerformMovesSequentially(List<(GameObject, Vector3Int)> moves)
+        {
+            foreach (var (o, targetPosition) in moves)
+            {
+                yield return StartCoroutine(MoveCharacter(o, targetPosition));
+            }
+        }
+        public void SaveUnitState()
+        {
+            if (PlayerPrefs.HasKey("unitState")) 
+            {
+                PlayerPrefs.DeleteKey("unitState");
+            }
+          
+            var poolCharacterList = characterPool.UsePoolCharacterList();
+            var unitState = "";
+            foreach (var character in poolCharacterList)
+            {
+                var characterBase = character.GetComponent<CharacterBase>();
+                var group = characterBase.unitGroup.ToString();
+                var level = characterBase.unitPuzzleLevel;
+                var position = Vector3Int.FloorToInt(character.transform.position);
+                unitState += group + "|" + level + "|" + position.x + "," + position.y + "," + position.z + ";";
+            }
+            PlayerPrefs.SetString("unitState", unitState);
+            PlayerPrefs.Save();
+        }
+        public IEnumerator LoadGameState()
+        {
+            characterPool.theFirst = false;
+            var useList = characterPool.UsePoolCharacterList();
+            foreach (var useUnit in useList)
+            {
+                CharacterPool.ReturnToPool(useUnit);
+            }
+
+            var unitState = PlayerPrefs.GetString("unitState", "");
+            var pieceData = unitState.Split(';');
+            var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
+            foreach (var data in pieceData)
+            {
+                if (string.IsNullOrEmpty(data)) continue;
+                var unit = data.Split('|');
+                if (unit.Length < 3) continue;
+                var group = unit[0];
+                var unitGroups = CharacterBase.UnitGroups.None;
+                if (Enum.TryParse(group, true, out CharacterBase.UnitGroups parsedGroup)) unitGroups = parsedGroup;
+                var level = unit[1];
+                var unitLevel = int.Parse(level);
+                var position = Vector3Int.zero;
+                var positionValue = unit[2].Split(',');
+                if (positionValue.Length < 3) continue;
+                position.x = int.Parse(positionValue[0]);
+                position.y = int.Parse(positionValue[1]);
+                position.z = int.Parse(positionValue[2]);
+                var setUnit = notUsePoolCharacterList.FirstOrDefault(t => t.GetComponent<CharacterBase>().unitGroup == unitGroups && t.activeSelf == false);
+                if (setUnit == null) continue;
+                var setUnitBase = setUnit.GetComponent<CharacterBase>();
+                setUnitBase.Initialize();
+                setUnitBase.unitGroup = unitGroups;
+                setUnitBase.unitPuzzleLevel = unitLevel;
+                setUnitBase.GetComponent<SpriteRenderer>().sprite = setUnitBase.GetSprite(unitLevel);
+                setUnitBase.transform.position = position;
+                setUnitBase.gameObject.SetActive(true);
+            }
+            yield return null;
+        }
+      public IEnumerator BossStageClearRule()
         {
             isWave10Spawning = true;
             yield return StartCoroutine(gameManager.WaitForPanelToClose());
@@ -220,75 +317,6 @@ namespace Script.PuzzleManagerGroup
             }
             yield return StartCoroutine(matchManager.CheckMatches());
             isWave10Spawning = false;
-        }
-        private IEnumerator PerformMovesSequentially(List<(GameObject, Vector3Int)> moves)
-        {
-            foreach (var (o, targetPosition) in moves)
-            {
-                yield return StartCoroutine(MoveCharacter(o, targetPosition));
-            }
-        }
-
-        public void SaveUnitState()
-        {
-            if (PlayerPrefs.HasKey("unitState")) 
-            {
-                PlayerPrefs.DeleteKey("unitState");
-            }
-          
-            var poolCharacterList = characterPool.UsePoolCharacterList();
-            var unitState = "";
-            foreach (var character in poolCharacterList)
-            {
-                var characterBase = character.GetComponent<CharacterBase>();
-                var group = characterBase.unitGroup.ToString();
-                var level = characterBase.unitPuzzleLevel;
-                var position = Vector3Int.FloorToInt(character.transform.position);
-                unitState += group + "|" + level + "|" + position.x + "," + position.y + "," + position.z + ";";
-            }
-            PlayerPrefs.SetString("unitState", unitState);
-            PlayerPrefs.Save();
-        }
-
-        public IEnumerator LoadGameState()
-        {
-            characterPool.theFirst = false;
-            var useList = characterPool.UsePoolCharacterList();
-            foreach (var useUnit in useList)
-            {
-                CharacterPool.ReturnToPool(useUnit);
-            }
-
-            var unitState = PlayerPrefs.GetString("unitState", "");
-            var pieceData = unitState.Split(';');
-            var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
-            foreach (var data in pieceData)
-            {
-                if (string.IsNullOrEmpty(data)) continue;
-                var unit = data.Split('|');
-                if (unit.Length < 3) continue;
-                var group = unit[0];
-                var unitGroups = CharacterBase.UnitGroups.None;
-                if (Enum.TryParse(group, true, out CharacterBase.UnitGroups parsedGroup)) unitGroups = parsedGroup;
-                var level = unit[1];
-                var unitLevel = int.Parse(level);
-                var position = Vector3Int.zero;
-                var positionValue = unit[2].Split(',');
-                if (positionValue.Length < 3) continue;
-                position.x = int.Parse(positionValue[0]);
-                position.y = int.Parse(positionValue[1]);
-                position.z = int.Parse(positionValue[2]);
-                var setUnit = notUsePoolCharacterList.FirstOrDefault(t => t.GetComponent<CharacterBase>().unitGroup == unitGroups && t.activeSelf == false);
-                if (setUnit == null) continue;
-                var setUnitBase = setUnit.GetComponent<CharacterBase>();
-                setUnitBase.Initialize();
-                setUnitBase.unitGroup = unitGroups;
-                setUnitBase.unitPuzzleLevel = unitLevel;
-                setUnitBase.GetComponent<SpriteRenderer>().sprite = setUnitBase.GetSprite(unitLevel);
-                setUnitBase.transform.position = position;
-                setUnitBase.gameObject.SetActive(true);
-            }
-            yield return null;
         }
     }
 }

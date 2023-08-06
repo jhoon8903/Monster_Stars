@@ -52,6 +52,7 @@ namespace Script.UIManager
 
         public void IncrementComboCount()
         {
+            if (PlayerPrefs.GetInt("TutorialKey") == 1) return;
             _comboCount++;
             IncreaseMoveCount(_comboCount);
             _comboCount = 0;

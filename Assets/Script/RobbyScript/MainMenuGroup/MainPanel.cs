@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
@@ -26,7 +28,6 @@ namespace Script.RobbyScript.MainMenuGroup
         [SerializeField] private GameObject continuePanel;
         [SerializeField] private GameObject confirmBtn;
         [SerializeField] private GameObject cancelBtn;
-
         private int LatestStage { get; set; }
         public int SelectStage { get; private set; }
         public int recordWave;
@@ -77,18 +78,21 @@ namespace Script.RobbyScript.MainMenuGroup
             ReturnRobby();
             continuePanel.SetActive(false);
         }
-        private void StartGame()
+        public void StartGame()
         {
-            if ( SelectedUnitHolder.Instance.selectedUnit.Count == 4)
+            if (SelectedUnitHolder.Instance.selectedUnit.Count == 4)
             {
                 if (staminaScript.CurrentStamina >= 5)
                 {
                     if (PlayerPrefs.HasKey("Retry"))
                     {
                         PlayerPrefs.SetInt("Retry", 1);
-                    } 
+                    }
 
-                    staminaScript.CurrentStamina -= 5;
+                    if (!LoadingManager.Instance.isFirstContact)
+                    {
+                        staminaScript.CurrentStamina -= 5;
+                    }
                     staminaScript.StaminaUpdate();
                     staminaScript.SaveStaminaState();
                     SceneManager.LoadScene("StageScene");

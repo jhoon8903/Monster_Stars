@@ -32,7 +32,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         private static readonly Dictionary<UnitIcon, UnitIcon> UnitIconMapping = new Dictionary<UnitIcon, UnitIcon>();
         private InformationPanel _informationPanel;
         public static HoldCharacterList Instance { get; private set; }
-        public bool update;
         private void Awake()
         {
             if (Instance == null)
@@ -44,7 +43,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 Destroy(Instance.gameObject);
             }
             gameObject.SetActive(false);
-            update = true;
         }
         private void Update()
         {
@@ -62,11 +60,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 character.Initialize();
                 if (character.unLock)
                 {
-                    if (PlayerPrefs.HasKey(character.unitGroup.ToString()))
-                    {
-                        character.selected = true;
-                        SelectedUnitHolder.Instance.selectedUnit.Add(character);
-                    }
                     if (character.selected)
                     {
                         var selectedUnitInstance = Instantiate(unitIconPrefab, selectedContent.transform, false);
@@ -80,6 +73,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                             canvas.sortingLayerName = "TopMenu"; // Use "TopMenu" for selected units
                         }
                         AdjustRectTransform(activateUnitContent.transform);
+                        SelectedUnitHolder.Instance.selectedUnit.Add(character);
                     }
                     else
                     {

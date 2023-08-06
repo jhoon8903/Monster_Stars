@@ -41,6 +41,7 @@ namespace Script.RewardScript
         [SerializeField] private GameManager gameManager;
         [SerializeField] private CharacterManager characterManager;
         [SerializeField] private Language language; // 텍스트
+        [SerializeField] private TutorialManager tutorialManager;
         public static CommonRewardManager Instance;
         private void Awake()
         {
@@ -54,6 +55,9 @@ namespace Script.RewardScript
         private string _groupName;
         private int _bossRewardSelected;
         public bool isOpenBox;
+        public bool tutorialBoxOpenEvent;
+        public event Action OnRewardSelected;
+    
         
         // 1. 상자가 매치 되면 상자를 큐에 추가
         public void EnqueueTreasure()
@@ -208,6 +212,9 @@ namespace Script.RewardScript
                     case CommonData.Types.GroupLevelUp:
                         if (EnforceManager.Instance.permanentGroupIndex.Contains(powerUp.Property[0])) return false; // Do not display GroupLevelUp options for groups where LevelUpPattern is executed
                         break;
+                    case CommonData.Types.Step:
+                        if (PlayerPrefs.GetInt("TutorialKey") == 1) return false;
+                        break;
                 }
                 return true;
             }
@@ -308,16 +315,19 @@ namespace Script.RewardScript
             commonButton.onClick.RemoveAllListeners();
             commonShuffle.onClick.RemoveAllListeners();
             commonButton.onClick.AddListener(() => SelectCommonReward(powerUp));
-            commonShuffle.onClick.AddListener(() => ShuffleCommonReward());
+            commonShuffle.onClick.AddListener(ShuffleCommonReward);
         }
 
         // 9. 상자 오픈
-        public IEnumerator OpenBox(GameObject treasure)
+        private IEnumerator OpenBox(GameObject treasure)
         {
             Time.timeScale = 0; // 게임 일시 정지
+            if (PlayerPrefs.GetInt("TutorialKey") == 1)
+            {
+                tutorialBoxOpenEvent = true;
+            }
             commonRewardPanel.SetActive(true); // 보물 패널 활성화
             var treasureChestLevel = treasure.GetComponent<CharacterBase>().unitPuzzleLevel; // 보물 상자 이름
-
             switch(treasureChestLevel)
             {
                 case 1:
@@ -335,7 +345,6 @@ namespace Script.RewardScript
 
             yield return new WaitUntil(() => commonRewardPanel.activeSelf == false); // 보물 패널이 비활성화될 때까지 대기
             openBoxing = false;
-
             if (PendingTreasure.Count > 0)
             {
                 EnqueueTreasure();
@@ -347,6 +356,7 @@ namespace Script.RewardScript
         private void SelectCommonReward(CommonData selectedReward)
         {
             Selected(selectedReward);
+            OnRewardSelected?.Invoke();
         }
        
         // 11. 선택 처리
@@ -362,6 +372,7 @@ namespace Script.RewardScript
                 Time.timeScale = 1; // 게임 재개
             }
             CharacterPool.ReturnToPool(_currentTreasure); // 보물을 풀에 반환
+           
             if (!spawnManager.isWave10Spawning)
             {
                 StartCoroutine(spawnManager.PositionUpCharacterObject());
@@ -370,6 +381,7 @@ namespace Script.RewardScript
             {
                 _currentTreasure = null; // 현재 보물 없음
             }
+          
             ProcessCommonReward(selectedReward);
         }
 

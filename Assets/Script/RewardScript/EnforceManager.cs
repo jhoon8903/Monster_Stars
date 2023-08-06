@@ -130,14 +130,14 @@ namespace Script.RewardScript
         public bool addGold;
         public int addGoldCount;
         public List<int> permanentGroupIndex;
-
-    }
+    }                                      
     public class EnforceManager : MonoBehaviour
     {
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private GridManager gridManager;
         [SerializeField] private CharacterPool characterPool;
-        [RuntimeInitializeOnLoadMethod] private static void InitializeOnLoad()
+        [RuntimeInitializeOnLoadMethod] 
+        private static void InitializeOnLoad()
         {
             var existingInstance = FindObjectOfType<EnforceManager>();
             if (existingInstance == null)
@@ -147,6 +147,7 @@ namespace Script.RewardScript
         }
         public static EnforceManager Instance { get; private set; }
         public List<CharacterBase> characterList = new List<CharacterBase>();
+  
         private void Awake()
         {
             Instance = this;

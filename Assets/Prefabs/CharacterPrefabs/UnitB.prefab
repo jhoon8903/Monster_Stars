@@ -49,26 +49,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cover: {fileID: 7885803094888014625}
   unitPieceLevel: 1
-  unLock: 0
-  selected: 0
+  unLock: 1
+  selected: 1
   unitPuzzleLevel: 1
   unitGroup: 1
-  baseDamage: 152
+  baseDamage: 38
   dotDamage: 0
-  effectChance: 0
+  effectChance: 10
   effectStack: 0
-  slowTime: 0
-  slowPower: 0
+  slowTime: 1
+  slowPower: 0.8
   bindTime: 0
   freezeTime: 0
-  knockBackPower: 0
-  knockBackTime: 0
+  knockBackPower: 1
+  knockBackTime: 0.2
   bleedTime: 0
   poisonTime: 0
   burnTime: 0
   stunTime: 0
   poisonAreaTime: 0
-  defaultAtkRate: 1.4
+  defaultAtkRate: 1.2
   projectileSpeed: 1
   swingSpeed: 0
   defaultAtkDistance: 0

@@ -27,6 +27,10 @@ namespace Script.AdsScript
             {
                 Instance = this;
             }
+            else
+            {
+                Destroy(gameObject);
+            }
 
             DontDestroyOnLoad(gameObject);
             coinBtn.GetComponent<Button>().onClick.AddListener(Coin);

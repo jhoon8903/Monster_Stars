@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,6 @@ using UnityEngine;
 
 namespace Script.PuzzleManagerGroup
 {
-
     public sealed class MatchManager : MonoBehaviour
     {
         private struct MatchedPair
@@ -17,25 +17,25 @@ namespace Script.PuzzleManagerGroup
             public List<GameObject> RowList;
             public List<GameObject> ColumnList;
         }
-
         [SerializeField] private SpawnManager spawnManager;
         [SerializeField] private CharacterPool characterPool;
         [SerializeField] private CountManager countManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private EnforceManager enforceManager;
         [SerializeField] private SwipeManager swipeManager;
+        [SerializeField] private TutorialManager tutorialManager;
         private bool _isMatched;
         public bool isMatchActivated;
-
+        public event Action OnMatchFound;
+        private void TriggerOnMatchFound()
+        {
+            OnMatchFound?.Invoke();
+        }
         public bool IsMatched(GameObject swapCharacter)
         {
             var matchFound = false;
             var swapCharacterBase = swapCharacter.GetComponent<CharacterBase>();
-            if(swapCharacterBase.unitPuzzleLevel == 5)
-            {
-                // unitPuzzleLevel이 5인 캐릭터는 매치되지 않게 하기
-                return false;
-            }
+            if(swapCharacterBase.unitPuzzleLevel == 5)    return false;
             var swapCharacterGroup = swapCharacterBase.unitGroup;
             var swapCharPuzzleLevel = swapCharacterBase.unitPuzzleLevel;
             var swapCharacterPosition = swapCharacterBase.transform.position;
@@ -145,18 +145,12 @@ namespace Script.PuzzleManagerGroup
             if (_isMatched) yield break;
             _isMatched = true;
             FindConsecutiveTilesInColumn(characterPool.SortPoolCharacterList());
-            yield return new WaitForSeconds(0.2f);
-
             var characterList = characterPool.SortPoolCharacterList();
             var count = 0;
             isMatchActivated = false;
             foreach (var character in FindConsecutiveCharacters(characterList))
             {
-                if (character.GetComponent<CharacterBase>().unitPuzzleLevel == 5)
-                {
-                    continue;
-                }
-
+                if (character.GetComponent<CharacterBase>().unitPuzzleLevel == 5) continue;
                 yield return StartCoroutine(swipeManager.AllMatchesCheck(character));
                 count++;
                 if (count <= 1) continue;
@@ -165,6 +159,14 @@ namespace Script.PuzzleManagerGroup
             }
             yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
             _isMatched = false;
+            if (!isMatchActivated )
+            {
+                if (!commonRewardManager.tutorialBoxOpenEvent)
+                {
+                   TriggerOnMatchFound();
+                }
+                commonRewardManager.tutorialBoxOpenEvent = false;
+            }
         }
         private static void ReturnObject(GameObject character)
         {   

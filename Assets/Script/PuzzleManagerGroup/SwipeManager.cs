@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Linq;
 using DG.Tweening;
@@ -32,7 +33,6 @@ namespace Script.PuzzleManagerGroup
         {
             return countManager.CanMove();
         }
-
         // 프레임당 한 번씩 실행되는 Unity 콜백 메서드입니다. 특히 터치 다운, 터치 업 및 드래그 이벤트를 확인하여 사용자의 입력을 처리합니다.
         private void Update()
         {
@@ -51,32 +51,35 @@ namespace Script.PuzzleManagerGroup
                 HandleDrag(point2D);
             }
         }
-
         // 사용자의 터치 포인트 또는 마우스 클릭 포인트를 화면 좌표에서 세계 좌표로 변환합니다.
         private static Vector2 GetTouchPoint()
         {
             var worldPoint = Camera.main!.ScreenToWorldPoint(Input.mousePosition);
             return new Vector2(worldPoint.x, worldPoint.y);
         }
-
-
         // 선택된 게임 오브젝트를 식별하고 첫 번째 터치 위치를 저장하는 초기 터치 또는 클릭 이벤트를 처리합니다.
         private void HandleTouchDown(Vector2 point2D)
         {
-            if (isBusy || _isSoon)
-            {
-                return;
-            }
-            var hit = Physics2D.Raycast(point2D, Vector2.zero, Mathf.Infinity, characterLayer);
-            if (hit.collider == null) return;
-            _startObject = hit.collider.gameObject;
+            if (isBusy || _isSoon) return;
+            var coverLayerMask = LayerMask.GetMask("Cover");
+            var hitCover = Physics2D.Raycast(point2D, Vector2.zero, Mathf.Infinity, coverLayerMask);
+
+            // If a Cover object was hit, don't interact with the Character
+            if (hitCover.collider != null) return;
+
+            var characterLayerMask = LayerMask.GetMask("Character");
+            var hitCharacter = Physics2D.Raycast(point2D, Vector2.zero, Mathf.Infinity, characterLayerMask);
+    
+            // If no Character object was hit, return
+            if (hitCharacter.collider == null) return;
+
+            _startObject = hitCharacter.collider.gameObject;
             ScaleObject(_startObject, new Vector3(1.2f,1.2f,1.2f), 0.2f);
             _startObject.GetComponent<CharacterBase>().IsClicked = true;
             _firstTouchPosition = point2D;
             StartCoroutine(CheckSoon());
             StartCoroutine(CheckForLongPress());
         }
-
         private IEnumerator CheckForLongPress()
         {
             yield return new WaitForSecondsRealtime(1f);
@@ -87,7 +90,6 @@ namespace Script.PuzzleManagerGroup
             var pressObjectInstance = Instantiate(pressObject, new Vector3(_startObject.transform.position.x, _startObject.transform.position.y + 0.5f, _startObject.transform.position.z), Quaternion.identity);
             var frontObject = pressObjectInstance.transform.GetChild(0).GetChild(0); 
             var fillImage = frontObject.GetComponent<Image>();
-
             var timer = 0f;
 
             while (_startObject != null && _startObject.GetComponent<CharacterBase>().IsClicked)
@@ -107,10 +109,7 @@ namespace Script.PuzzleManagerGroup
             fillImage.fillAmount = 0f; // fillAmount를 초기화
             Destroy(pressObjectInstance); // 인스턴스를 파괴
         }
-
-
         private readonly WaitForSeconds _checkSoonWait = new WaitForSeconds(0.5f);
-
         private IEnumerator CheckSoon()
         {
             _isSoon = true;
@@ -274,23 +273,19 @@ namespace Script.PuzzleManagerGroup
             countManager.DecreaseMoveCount();
             yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
         }
-
         // 이 코루틴은 주어진 오브젝트가 MatchManager를 사용하여 매치의 일부인지 여부를 확인합니다.
         private IEnumerator MatchesCheck(GameObject characterObject)
         {
             if (characterObject == null) yield break;
-            if (!matchManager.IsMatched(characterObject))
-            {
-                yield break;
-            }
+            if (!matchManager.IsMatched(characterObject)) yield break;
             yield return null;
         }
-
         public IEnumerator AllMatchesCheck(GameObject characterObject)
         {
             if (characterObject == null) yield break;
             if (!matchManager.IsMatched(characterObject))
             {
+               
                 yield break;
             }
             yield return null;
