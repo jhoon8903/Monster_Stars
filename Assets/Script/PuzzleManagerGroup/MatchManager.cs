@@ -159,14 +159,13 @@ namespace Script.PuzzleManagerGroup
             }
             yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
             _isMatched = false;
-            if (!isMatchActivated )
+            if (PlayerPrefs.GetInt("TutorialKey") != 1) yield break;
+            if (isMatchActivated) yield break;
+            if (!commonRewardManager.tutorialBoxOpenEvent)
             {
-                if (!commonRewardManager.tutorialBoxOpenEvent)
-                {
-                   TriggerOnMatchFound();
-                }
-                commonRewardManager.tutorialBoxOpenEvent = false;
+                TriggerOnMatchFound();
             }
+            commonRewardManager.tutorialBoxOpenEvent = false;
         }
         private static void ReturnObject(GameObject character)
         {   
