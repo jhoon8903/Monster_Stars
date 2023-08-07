@@ -838,8 +838,10 @@ MonoBehaviour:
   enforceManager: {fileID: 1595735486}
   commonRewardManager: {fileID: 2120144519}
   swipeManager: {fileID: 149521965}
+  tutorialManager: {fileID: 149521970}
   isWave10Spawning: 0
   isMatched: 0
+  isTutorial: 0
 --- !u!114 &149521965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -882,7 +884,6 @@ MonoBehaviour:
   commonRewardManager: {fileID: 2120144519}
   enforceManager: {fileID: 1595735486}
   swipeManager: {fileID: 149521965}
-  tutorialManager: {fileID: 149521970}
   isMatchActivated: 0
 --- !u!114 &149521967
 MonoBehaviour:
@@ -950,7 +951,6 @@ MonoBehaviour:
   matchManager: {fileID: 149521966}
   commonRewardManager: {fileID: 2120144519}
   spawnManager: {fileID: 149521964}
-  swipeManager: {fileID: 149521965}
 --- !u!1 &192398160
 GameObject:
   m_ObjectHideFlags: 0
@@ -6469,7 +6469,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterManager: {fileID: 149521963}
-  poolSize: 15
+  poolSize: 20
   pooledCharacters: []
   theFirst: 0
 --- !u!4 &1097818335
@@ -10870,6 +10870,7 @@ MonoBehaviour:
   tutorialManager: {fileID: 149521970}
   openBoxing: 0
   isOpenBox: 0
+  tutorialBoxOpenEvent: 0
 --- !u!4 &2120144520
 Transform:
   m_ObjectHideFlags: 0

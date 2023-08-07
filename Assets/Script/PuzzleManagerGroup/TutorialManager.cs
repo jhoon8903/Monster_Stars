@@ -16,23 +16,38 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private TextMeshProUGUI textPopup;
         [SerializeField] private MatchManager matchManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
+        [SerializeField] private SpawnManager spawnManager;
 
         private readonly Dictionary<Vector2Int, GameObject> _covers = new Dictionary<Vector2Int, GameObject>();
         private Coroutine _pointerCoroutine;
         private GameObject _currentGuidePointer;
-        private Queue<TutorialStep> _tutorialSteps;
-        private TutorialStep _currentTutorialStep;
+        public Queue<TutorialStep> TutorialSteps;
+        public TutorialStep _currentTutorialStep;
         private TextMeshProUGUI _currentTextPopup;
-        public static readonly string[] UnitGroupOrder =
+        public static readonly CharacterBase.UnitGroups[] UnitGroupOrder =
         {
-            "B", "B", "D", "B", "None", "F", "None", "F", "F", "D", "None", "E", "None" ,"B", "B"
+            CharacterBase.UnitGroups.F,
+            CharacterBase.UnitGroups.B, 
+            CharacterBase.UnitGroups.E,
+            CharacterBase.UnitGroups.D,
+            CharacterBase.UnitGroups.B,
+            CharacterBase.UnitGroups.E,
+            CharacterBase.UnitGroups.D,
+            CharacterBase.UnitGroups.F,
+            CharacterBase.UnitGroups.E,
+            CharacterBase.UnitGroups.D,
+            CharacterBase.UnitGroups.E,
+            CharacterBase.UnitGroups.D,
+            CharacterBase.UnitGroups.B,
+            CharacterBase.UnitGroups.F,
+            CharacterBase.UnitGroups.B
         };
-        private struct TutorialStep
+        public struct TutorialStep
         {
             public readonly Vector2Int[] PositionsToRemove;
             public readonly Vector3 PointerStartPosition;
             public readonly Vector3 PointerEndPosition;
-            public readonly int TutorialStepCount;
+            public int TutorialStepCount;
             public readonly string PopupText;
 
             public TutorialStep(Vector2Int[] positionsToRemove, Vector3 pointerStartPosition, Vector3 pointerEndPosition, int tutorialStepCount, string popupText)
@@ -47,12 +62,12 @@ namespace Script.PuzzleManagerGroup
         private void Start()
         {
             if (PlayerPrefs.GetInt("TutorialKey") != 1) return;
-            matchManager.OnMatchFound += HandleMatchFound;
-            _tutorialSteps = new Queue<TutorialStep>();
+            spawnManager.OnMatchFound += HandleMatchFound;
+            TutorialSteps = new Queue<TutorialStep>();
             commonRewardManager.OnRewardSelected += HandleMatchFound;
             
             // 3Matched
-            _tutorialSteps.Enqueue(new TutorialStep(
+            TutorialSteps.Enqueue(new TutorialStep(
                 new[] { new Vector2Int(1, 4), new Vector2Int(2, 4), new Vector2Int(3, 4), new Vector2Int(4, 4) },
                 new Vector3(4, 4, 0),
                 new Vector3(3, 4, 0),
@@ -60,7 +75,7 @@ namespace Script.PuzzleManagerGroup
                 "Move units by swiping them")
             );
             // 4Matched
-            _tutorialSteps.Enqueue(new TutorialStep(
+            TutorialSteps.Enqueue(new TutorialStep(
                 new []{new Vector2Int(1,4), new Vector2Int(2,4), new Vector2Int(3,4), new Vector2Int(4,4), new Vector2Int(3,5)},
                 new Vector3(3,5,0), 
                 new Vector3(3,4,0),
@@ -68,7 +83,7 @@ namespace Script.PuzzleManagerGroup
                 "Swipe once more to combine units\nMerging 4 units will level up 2 units.")
             );
             // 5Matched
-            _tutorialSteps.Enqueue(new TutorialStep(
+            TutorialSteps.Enqueue(new TutorialStep(
                 new[] { new Vector2Int(0, 1), new Vector2Int(0, 2), new Vector2Int(0, 3), new Vector2Int(0, 4), new Vector2Int(0,5), new Vector2Int(1, 3) },
                 new Vector3(1, 3, 0),
                 new Vector3(0, 3, 0),
@@ -76,7 +91,7 @@ namespace Script.PuzzleManagerGroup
                 "Combining 5 makes a higher tier unit")
             );
             // Power Up Matched
-            _tutorialSteps.Enqueue(new TutorialStep(
+            TutorialSteps.Enqueue(new TutorialStep(
                 new []{new Vector2Int(1,5), new Vector2Int(2,5), new Vector2Int(3,5), new Vector2Int(4,5)},
                 new Vector3(4,5,0), 
                 new Vector3(3,5,0),
@@ -85,7 +100,7 @@ namespace Script.PuzzleManagerGroup
                 
             );
             // Choose Power Up
-            _tutorialSteps.Enqueue(new TutorialStep(
+            TutorialSteps.Enqueue(new TutorialStep(
                 new []{new Vector2Int(1,1), new Vector2Int(2,1), new Vector2Int(3,1), new Vector2Int(4,1)},
                 new Vector3(3,2,0), 
                 new Vector3(3,1.6f,0), 
@@ -93,7 +108,7 @@ namespace Script.PuzzleManagerGroup
                 "Strengthen your units by pressing the Enhance Select button.")
             );
             // Press Long Object
-            _tutorialSteps.Enqueue(new TutorialStep(
+            TutorialSteps.Enqueue(new TutorialStep(
                 new [] {new Vector2Int(5,3)},
                 new Vector3(5,4,0), 
                 new Vector3(5,3.4f, 0),
@@ -101,13 +116,13 @@ namespace Script.PuzzleManagerGroup
                 "Units can be removed by holding down the unit for 2 seconds.")
             );
             // Null Swap
-            _tutorialSteps.Enqueue(new TutorialStep(
+            TutorialSteps.Enqueue(new TutorialStep(
                 new []{new Vector2Int(5,4), new Vector2Int(6,4)},
                 new Vector3(5,4,0), new Vector3(6,4,0),
                 7,
                 "You can remove units by swiping off the tile.")
             );
-            ProcessTutorialStep(_tutorialSteps.Dequeue());
+            ProcessTutorialStep(TutorialSteps.Dequeue());
         }
         private void ProcessTutorialStep(TutorialStep step)
         {
@@ -119,7 +134,7 @@ namespace Script.PuzzleManagerGroup
         }
         private void OnDestroy()
         {
-            matchManager.OnMatchFound -= HandleMatchFound;
+            spawnManager.OnMatchFound -= HandleMatchFound;
             commonRewardManager.OnRewardSelected -= HandleMatchFound;
         }
         private void HandleMatchFound()
@@ -130,7 +145,7 @@ namespace Script.PuzzleManagerGroup
                 Destroy(_currentGuidePointer);
                 _currentGuidePointer = null;
             }
-            StartCoroutine(DelayedAction(ProcessNextTutorialStep));
+            ProcessNextTutorialStep();
         }
         public void EndTutorial()
         {
@@ -150,19 +165,14 @@ namespace Script.PuzzleManagerGroup
                 _currentTextPopup = null;
             }
             PlayerPrefs.SetInt("TutorialKey", 0);
+            spawnManager.isTutorial = false;
         }
         private void ProcessNextTutorialStep()
         {
-            if (_tutorialSteps.Count > 0)
+            if (TutorialSteps.Count > 0)
             {
-                ProcessTutorialStep(_tutorialSteps.Dequeue());
+                ProcessTutorialStep(TutorialSteps.Dequeue());
             }
-        }
-        private static IEnumerator DelayedAction(System.Action callback)
-        {
-            yield return new WaitForSeconds(1f);
-            Time.timeScale = 1f;// 1초 딜레이
-            callback?.Invoke(); // 딜레이 후 액션 실행
         }
         public IEnumerator TutorialState()
         {
@@ -215,6 +225,7 @@ namespace Script.PuzzleManagerGroup
                 while (Time.time - startTime <= 1)
                 {
                     var t = (Time.time - startTime) * speed;
+                    if (_currentGuidePointer == null) yield break;
                     _currentGuidePointer.transform.position = Vector3.Lerp(startPosition, endPosition, t);
                     yield return null;
                 }
@@ -223,6 +234,7 @@ namespace Script.PuzzleManagerGroup
                 while (Time.time - startTime <= 1)
                 {
                     var t = (Time.time - startTime) * speed;
+                    if (_currentGuidePointer == null) yield break;
                     _currentGuidePointer.transform.position = Vector3.Lerp(endPosition, startPosition, t);
                     yield return null;
                 }

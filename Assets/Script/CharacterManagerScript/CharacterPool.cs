@@ -59,11 +59,5 @@ namespace Script.CharacterManagerScript
             obj.transform.localScale = Vector3.one;
             obj.SetActive(false);
         }
-
-        public List<GameObject> GetCharactersByUnitGroup(CharacterBase.UnitGroups unitGroup)
-        {
-            return NotUsePoolCharacterList().Where(t => t.GetComponent<CharacterBase>().unitGroup == unitGroup).ToList();
-        }
-
     }
 }

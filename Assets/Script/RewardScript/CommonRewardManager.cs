@@ -325,6 +325,7 @@ namespace Script.RewardScript
             if (PlayerPrefs.GetInt("TutorialKey") == 1)
             {
                 tutorialBoxOpenEvent = true;
+                Time.timeScale = 1;
             }
             commonRewardPanel.SetActive(true); // 보물 패널 활성화
             var treasureChestLevel = treasure.GetComponent<CharacterBase>().unitPuzzleLevel; // 보물 상자 이름
