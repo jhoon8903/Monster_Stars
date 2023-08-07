@@ -38,7 +38,7 @@ namespace Script.UIManager
                 var goodsButton = goodsPanel.GetComponent<Button>();
                 if (goodsButton != null)
                 {
-                    goodsButton.onClick.AddListener(() => OnGoodsButtonClicked(newName));
+                    // goodsButton.onClick.AddListener(() => OnGoodsButtonClicked(newName));
                 }
             }
         }

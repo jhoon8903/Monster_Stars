@@ -303,7 +303,7 @@ namespace Script.AdsScript
 
         public enum ButtonType
         {
-            Coin, Stamina, Gem, Green, Blue, Purple, Retry, Common, LevelUp, EnergyPackFreeStamina, GemPackFree,CoinPackFree, None
+            Coin, Stamina, Gem, Bronze, Silver, Gold, Retry, Common, LevelUp, EnergyPackFreeStamina, GemPackFree,CoinPackFree, None
         }
 
         public StoreMenu.BoxGrade boxGrade;
@@ -330,28 +330,34 @@ namespace Script.AdsScript
             switch (ButtonTypes)
             {
                 case ButtonType.Coin:
+                    boxGrade = StoreMenu.BoxGrade.Coin;
+                    StoreMenu.Instance.Reward(boxGrade);
                     GiveCoinReward();
                     break;
                 case ButtonType.Gem:
+                    boxGrade = StoreMenu.BoxGrade.Gem;
+                    StoreMenu.Instance.Reward(boxGrade);
                     GiveGemReward();
                     break;
                 case ButtonType.Stamina:
+                    boxGrade = StoreMenu.BoxGrade.Stamina;
+                    StoreMenu.Instance.Reward(boxGrade);
                     GiveStaminaReward();
                     break;
                 case ButtonType.Retry:
                     isRetry = true;
                     Retry();
                     break;
-                case ButtonType.Green:
-                    boxGrade = StoreMenu.BoxGrade.Green;
+                case ButtonType.Bronze:
+                    boxGrade = StoreMenu.BoxGrade.Bronze;
                     StoreMenu.Instance.Reward(boxGrade);
                     break;
-                case ButtonType.Blue:
-                    boxGrade = StoreMenu.BoxGrade.Blue;
+                case ButtonType.Silver:
+                    boxGrade = StoreMenu.BoxGrade.Silver;
                     StoreMenu.Instance.Reward(boxGrade);
                     break;
-                case ButtonType.Purple:
-                    boxGrade = StoreMenu.BoxGrade.Purple;
+                case ButtonType.Gold:
+                    boxGrade = StoreMenu.BoxGrade.Gold;
                     StoreMenu.Instance.Reward(boxGrade);
                     break;
                 case ButtonType.Common:
@@ -388,13 +394,13 @@ namespace Script.AdsScript
             Debug.Log("재화 보상을 제공합니다.");
             if (GemScript.Instance != null)
             {
-                GemScript.Instance.Gem += 100;
+                GemScript.Instance.Gem += 200;
             }
         }
         private static void GiveStaminaReward()
         {
             Debug.Log("스테미너 보상을 제공합니다.");
-            StaminaScript.Instance.CurrentStamina += 5;
+            StaminaScript.Instance.CurrentStamina += 10;
         }
         private void Retry()
         {
