@@ -29,17 +29,10 @@ namespace Script.PuzzleManagerGroup
         private bool _isMatchActivated;
         private readonly Dictionary<string, CharacterBase.UnitGroups> _unitGroupMapping = new Dictionary<string, CharacterBase.UnitGroups>
         {
-            { "A", CharacterBase.UnitGroups.A },
             { "B", CharacterBase.UnitGroups.B },
-            { "C", CharacterBase.UnitGroups.C },
             { "D", CharacterBase.UnitGroups.D },
             { "E", CharacterBase.UnitGroups.E },
             { "F", CharacterBase.UnitGroups.F },
-            { "G", CharacterBase.UnitGroups.G },
-            { "H", CharacterBase.UnitGroups.H },
-            { "I", CharacterBase.UnitGroups.I },
-            { "J", CharacterBase.UnitGroups.J },
-            { "K", CharacterBase.UnitGroups.K },
             { "None", CharacterBase.UnitGroups.None }
         };
         private int _currentGroupIndex;
@@ -194,17 +187,13 @@ namespace Script.PuzzleManagerGroup
             var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
             if (_unitGroupMapping.TryGetValue(nextUnitGroupKey, out var nextUnitGroup))
             {
-                notUsePoolCharacterList = notUsePoolCharacterList
-                    .Where(character => character.GetComponent<CharacterBase>().unitGroup == nextUnitGroup)
-                    .ToList();
+                notUsePoolCharacterList = notUsePoolCharacterList.Where(character => character.GetComponent<CharacterBase>().unitGroup == nextUnitGroup).ToList();
             }
-            if (notUsePoolCharacterList.Count <= 0) return null;
-            var randomIndex = Random.Range(0, notUsePoolCharacterList.Count);
-            var newCharacter = notUsePoolCharacterList[randomIndex];
+            var newCharacter = notUsePoolCharacterList[0];
             newCharacter.transform.position = position;
             newCharacter.GetComponent<CharacterBase>().Initialize();
             newCharacter.SetActive(true);
-            notUsePoolCharacterList.RemoveAt(randomIndex);
+            notUsePoolCharacterList.RemoveAt(0);
             _currentGroupIndex++;
             return newCharacter;
         }
