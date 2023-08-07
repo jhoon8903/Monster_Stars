@@ -4,7 +4,6 @@ using Script.CharacterManagerScript;
 using UnityEngine;
 using System.Collections.Generic;
 using Script.RewardScript;
-using Script.RobbyScript.CharacterSelectMenuGroup;
 using TMPro;
 
 namespace Script.PuzzleManagerGroup
@@ -17,8 +16,6 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private TextMeshProUGUI textPopup;
         [SerializeField] private MatchManager matchManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
-        [SerializeField] private SpawnManager spawnManager;
-        [SerializeField] private SwipeManager swipeManager;
 
         private readonly Dictionary<Vector2Int, GameObject> _covers = new Dictionary<Vector2Int, GameObject>();
         private Coroutine _pointerCoroutine;
@@ -26,7 +23,10 @@ namespace Script.PuzzleManagerGroup
         private Queue<TutorialStep> _tutorialSteps;
         private TutorialStep _currentTutorialStep;
         private TextMeshProUGUI _currentTextPopup;
-
+        public static readonly string[] UnitGroupOrder =
+        {
+            "B", "B", "D", "B", "None", "F", "None", "F", "F", "D", "None", "E", "None" ,"B", "B"
+        };
         private struct TutorialStep
         {
             public readonly Vector2Int[] PositionsToRemove;
@@ -132,7 +132,6 @@ namespace Script.PuzzleManagerGroup
             }
             StartCoroutine(DelayedAction(ProcessNextTutorialStep));
         }
-
         public void EndTutorial()
         {
             foreach (var cover in _covers.Values)
@@ -140,13 +139,16 @@ namespace Script.PuzzleManagerGroup
                 Destroy(cover);
             }
             _covers.Clear();
-
             if (_currentGuidePointer != null)
             {
                 Destroy(_currentGuidePointer);
                 _currentGuidePointer = null;
             }
-            Destroy(_currentTextPopup);
+            if (_currentTextPopup != null)
+            {
+                Destroy(_currentTextPopup);
+                _currentTextPopup = null;
+            }
             PlayerPrefs.SetInt("TutorialKey", 0);
         }
         private void ProcessNextTutorialStep()

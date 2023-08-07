@@ -42,9 +42,7 @@ namespace Script.PuzzleManagerGroup
             { "K", CharacterBase.UnitGroups.K },
             { "None", CharacterBase.UnitGroups.None }
         };
-        private readonly string[] _unitGroupOrder = { "B", "B", "D", "B", "None", "F", "None", "F", "F", "D", "E", "E", "None" ,"B", "B"};
         private int _currentGroupIndex;
-
         public GameObject CharacterObject(Vector3 spawnPosition)
         {
             var spawnCharacters = characterPool.UsePoolCharacterList();
@@ -162,25 +160,17 @@ namespace Script.PuzzleManagerGroup
                 yield return coroutine;
             }
         }
-
         private GameObject SpawnNewCharacter(Vector3Int position)
         {
-            var nextUnitGroupKey = _unitGroupOrder[_currentGroupIndex];
+            return PlayerPrefs.GetInt("TutorialKey") == 1 ? SpawnTutorialCharacter(position) : SpawnMainGameCharacter(position);
+        }
+        private GameObject SpawnMainGameCharacter(Vector3Int position)
+        {
             var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
-
-            if (_unitGroupMapping.TryGetValue(nextUnitGroupKey, out var nextUnitGroup))
-            {
-                notUsePoolCharacterList = notUsePoolCharacterList
-                    .Where(character => character.GetComponent<CharacterBase>().unitGroup == nextUnitGroup)
-                    .ToList();
-            }
-
             if (notUsePoolCharacterList.Count <= 0) return null;
             var randomIndex = Random.Range(0, notUsePoolCharacterList.Count);
             var newCharacter = notUsePoolCharacterList[randomIndex];
-            Debug.Log(newCharacter.name);
             newCharacter.transform.position = position;
-
             if (EnforceManager.Instance.permanentGroupIndex.Count > 0)
             {
                 foreach (var dummy in EnforceManager.Instance.permanentGroupIndex
@@ -194,14 +184,30 @@ namespace Script.PuzzleManagerGroup
             {
                 newCharacter.GetComponent<CharacterBase>().Initialize();
             }
-
             newCharacter.SetActive(true);
             notUsePoolCharacterList.RemoveAt(randomIndex);
-            _currentGroupIndex = (_currentGroupIndex + 1) % _unitGroupOrder.Length; // Increment and loop the index
-
             return newCharacter;
         }
-
+        private GameObject SpawnTutorialCharacter(Vector3Int position)
+        {
+            var nextUnitGroupKey = TutorialManager.UnitGroupOrder[_currentGroupIndex];
+            var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
+            if (_unitGroupMapping.TryGetValue(nextUnitGroupKey, out var nextUnitGroup))
+            {
+                notUsePoolCharacterList = notUsePoolCharacterList
+                    .Where(character => character.GetComponent<CharacterBase>().unitGroup == nextUnitGroup)
+                    .ToList();
+            }
+            if (notUsePoolCharacterList.Count <= 0) return null;
+            var randomIndex = Random.Range(0, notUsePoolCharacterList.Count);
+            var newCharacter = notUsePoolCharacterList[randomIndex];
+            newCharacter.transform.position = position;
+            newCharacter.GetComponent<CharacterBase>().Initialize();
+            newCharacter.SetActive(true);
+            notUsePoolCharacterList.RemoveAt(randomIndex);
+            _currentGroupIndex++;
+            return newCharacter;
+        }
         private IEnumerator PerformMovesSequentially(List<(GameObject, Vector3Int)> moves)
         {
             foreach (var (o, targetPosition) in moves)
