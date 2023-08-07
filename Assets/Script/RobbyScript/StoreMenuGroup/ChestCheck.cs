@@ -33,7 +33,6 @@ namespace Script.RobbyScript.StoreMenuGroup
             {
                 Destroy(gameObject);
             }
-            
             chestCheckCloseBtn.GetComponent<Button>().onClick.AddListener(CloseChestCheck);
         }
 
@@ -42,9 +41,11 @@ namespace Script.RobbyScript.StoreMenuGroup
             chestCheckPanel.SetActive(true);
         }
 
-        private void CloseChestCheck()
+        public void CloseChestCheck()
         {
+            Debug.Log("확인 패널 닫기");
             chestCheckPanel.SetActive(false);
+            chestCheckCloseBtn.GetComponent<Button>().onClick.RemoveListener(CloseChestCheck);
         }
     }
 }

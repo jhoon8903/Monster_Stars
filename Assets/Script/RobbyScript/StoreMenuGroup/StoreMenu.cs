@@ -262,7 +262,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             coinAdsBtn.GetComponent<Button>().onClick.AddListener(CoinAds);
             staminaAdsBtn.GetComponent<Button>().onClick.AddListener(StaminaAds);
             gemAdsBtn.GetComponent<Button>().onClick.AddListener(GemAds);
-            // closeBtn.GetComponent<Button>().onClick.AddListener(ReceiveReward);
+            closeBtn.GetComponent<Button>().onClick.AddListener(ReceiveReward);
             gameObject.SetActive(false);
         }
         
