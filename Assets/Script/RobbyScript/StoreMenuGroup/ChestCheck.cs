@@ -43,9 +43,7 @@ namespace Script.RobbyScript.StoreMenuGroup
 
         public void CloseChestCheck()
         {
-            Debug.Log("확인 패널 닫기");
             chestCheckPanel.SetActive(false);
-            chestCheckCloseBtn.GetComponent<Button>().onClick.RemoveListener(CloseChestCheck);
         }
     }
 }
