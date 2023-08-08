@@ -10,13 +10,11 @@ namespace Script.RobbyScript.StoreMenuGroup
 {
     public class ChestCheck : MonoBehaviour
     {
-        [SerializeField] private GameObject chestCheckPanel;
         [SerializeField] private GameObject chestCheckCloseBtn;
-        [SerializeField] private GameObject chestCheckContents;
         
         // [SerializeField] private Goods rewardItem;
         // [SerializeField] private List<CharacterBase> unitList = new List<CharacterBase>();
-        
+        public GameObject chestCheckPanel;
         public TextMeshProUGUI chestCheckTopText;
         public TextMeshProUGUI chestCheckBtnText;
         public GameObject chestImage;
@@ -43,7 +41,9 @@ namespace Script.RobbyScript.StoreMenuGroup
 
         public void CloseChestCheck()
         {
+            ChestReward.Instance.ClearChests();
             chestCheckPanel.SetActive(false);
+            StoreMenu.Instance.DeleteEvent();
         }
     }
 }

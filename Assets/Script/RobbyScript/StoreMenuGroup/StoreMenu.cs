@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using Script.AdsScript;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
@@ -10,6 +11,7 @@ using Script.RobbyScript.TopMenuGroup;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -38,6 +40,13 @@ namespace Script.RobbyScript.StoreMenuGroup
         [SerializeField] private Sprite goldSprite;
         [SerializeField] private Sprite chestAdsBtnSprite;
         [SerializeField] private Sprite chestGemBtnSprite;
+       
+        [SerializeField] private GameObject chestRewardPanel;
+        [SerializeField] private Image chestBackLightImage;
+        [SerializeField] private Image chestParticleImage;
+        [SerializeField] private GameObject chestGrade;
+        [SerializeField] private GameObject chestOpenBtn;
+        
         public static StoreMenu Instance { get; private set; }
         
         private const string ResetKey = "ResetKey";
@@ -50,17 +59,29 @@ namespace Script.RobbyScript.StoreMenuGroup
         private const int BronzeOpenMaxCount = 20;
 
         private int _silverOpenCount;
-        private const string SilverOpenCountKey = "BlueOpenCount";
+
+        public int SilverAdsOpen
+        {
+            get { return _silverOpenCount; }
+            set { _silverOpenCount = value; }
+        }
+        private const string SilverOpenCountKey = "SilverOpenCount";
         private DateTime _silverOpenTime;
-        private const string SilverOpenTimeKey = "BlueOpenTime";
+        private const string SilverOpenTimeKey = "SilverOpenTime";
         private TimeSpan _silverPassed;
         private const int SilverOpenMaxCount = 7;
         private const int SilverRewardCoolTime = 5;
 
         private int _goldOpenCount;
-        private const string GoldOpenCountKey = "PurpleOpenCount";
+        
+        public int GoldAdsOpen
+        {
+            get { return _goldOpenCount; }
+            set { _goldOpenCount = value; }
+        }
+        private const string GoldOpenCountKey = "GoldOpenCount";
         private DateTime _goldOpenTime;
-        private const string GoldOpenTimeKey = "PurpleOpenTimeKey";
+        private const string GoldOpenTimeKey = "GoldOpenTimeKey";
         private TimeSpan _goldPassed;
         private const int GoldOpenMaxCount = 5;
         private const int GoldRewardCoolTime = 30;
@@ -100,15 +121,10 @@ namespace Script.RobbyScript.StoreMenuGroup
         public enum BoxGrade { Bronze, Silver, Gold, Coin, Stamina, Gem }
         public bool isReset;
 
-        private enum ButtonType
-        {
-            BronzeAds,
-            SilverAds,
-            GoldAds,
-            BronzeGem,
-            SilverGem,
-            GoldGem
-        }
+        public enum ButtonType { BronzeAds, SilverAds, GoldAds, BronzeGem, SilverGem, GoldGem }
+
+        private Vector3 originalPosition = new Vector3();
+        private Vector3 newPosition = new Vector3();
         
         private void Awake()
         {
@@ -264,6 +280,9 @@ namespace Script.RobbyScript.StoreMenuGroup
             gemAdsBtn.GetComponent<Button>().onClick.AddListener(GemAds);
             closeBtn.GetComponent<Button>().onClick.AddListener(ReceiveReward);
             gameObject.SetActive(false);
+            originalPosition = chestGrade.transform.position;
+            newPosition = originalPosition;
+
         }
         
         private void Update()
@@ -464,7 +483,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                 }
             }
         }
-
+        //>>><<<<
         public void Reward(BoxGrade boxTypes)
         {
             switch (boxTypes)
@@ -527,6 +546,8 @@ namespace Script.RobbyScript.StoreMenuGroup
         }
         private void ReceiveReward()
         { 
+            DeleteEvent();
+            boxRewardPanel.SetActive(false);
             CoinsScript.Instance.Coin += _coinReward;
             CoinsScript.Instance.UpdateCoin();
             foreach (var unitReward in _unitPieceDict)
@@ -541,17 +562,17 @@ namespace Script.RobbyScript.StoreMenuGroup
         private void BronzeAds()
         {
             AdsManager.Instance.ShowRewardedAd();
-            AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Bronze;
+            AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.BronzeAds;
         }
         private static void SilverAds()
         {
             AdsManager.Instance.ShowRewardedAd();
-            AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Silver;
+            AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.SilverAds;
         }
         private static void GoldAds()
         {
             AdsManager.Instance.ShowRewardedAd();
-            AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Gold;
+            AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.GoldAds;
         }
         private static void CoinAds()
         {
@@ -695,7 +716,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                     break;
                 case BoxGrade.Gold:
                     greenValue = 480;
-                    blueValue = 125 + 40 * (openCount - 1);
+                    blueValue = 165 + 40 * (openCount - 1);
                     purpleValue = openCount > 2 ? 6 + (openCount - 1) * 2 : 6;
                     break;
                 default:
@@ -723,6 +744,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = chestAdsBtnSprite;
                     ChestCheck.Instance.chestCheckBtnText.text = $"{_bronzeOpenCount} / {BronzeOpenMaxCount}";
                     
+                    ChestReward.Instance.SetStart(ButtonType.BronzeAds);
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.AddListener(BronzeAds);
                     break;
                 case ButtonType.SilverAds:
@@ -730,7 +752,8 @@ namespace Script.RobbyScript.StoreMenuGroup
                     ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = silverSprite;
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = chestAdsBtnSprite;
                     ChestCheck.Instance.chestCheckBtnText.text = $"{_silverOpenCount} / {SilverOpenMaxCount}";
-                    
+
+                    ChestReward.Instance.SetStart(ButtonType.SilverAds);
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.AddListener(SilverAds);
                     break;
                 case ButtonType.GoldAds:
@@ -738,7 +761,8 @@ namespace Script.RobbyScript.StoreMenuGroup
                     ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = goldSprite;
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = chestAdsBtnSprite;
                     ChestCheck.Instance.chestCheckBtnText.text = $"{_goldOpenCount} / {GoldOpenMaxCount}";
-                    
+
+                    ChestReward.Instance.SetStart(ButtonType.GoldAds);
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.AddListener(GoldAds);
                     break;
                 case ButtonType.BronzeGem:
@@ -746,23 +770,135 @@ namespace Script.RobbyScript.StoreMenuGroup
                     ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = bronzeSprite;
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = chestGemBtnSprite;
                     ChestCheck.Instance.chestCheckBtnText.text = "100";
+                    
+                    ChestReward.Instance.SetStart(ButtonType.BronzeGem);
+                    ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.AddListener(() => SommonChest(StoreMenu.ButtonType.BronzeGem));
                     break;
                 case ButtonType.SilverGem:
                     ChestCheck.Instance.chestCheckTopText.text = "Silver Chest";
                     ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = silverSprite;
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = chestGemBtnSprite;
                     ChestCheck.Instance.chestCheckBtnText.text = "500";
+                    
+                    ChestReward.Instance.SetStart(ButtonType.SilverGem);
+                    ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.AddListener(() => SommonChest(StoreMenu.ButtonType.SilverGem));
                     break;
                 case ButtonType.GoldGem:
                     ChestCheck.Instance.chestCheckTopText.text = "Gold Chest";
                     ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = goldSprite;
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = chestGemBtnSprite;
                     ChestCheck.Instance.chestCheckBtnText.text = "900";
+                    
+                    ChestReward.Instance.SetStart(ButtonType.GoldGem);
+                  
+                    ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.AddListener(() => SommonChest(StoreMenu.ButtonType.GoldGem));
                     break;
                 default:
                     Debug.Log("Unknown button is clicked!");
                     break;
             }
+        }
+
+        public void SommonChest(ButtonType chestType)
+        {
+            chestRewardPanel.SetActive(true);
+            chestOpenBtn.GetComponent<Button>().onClick.AddListener(() => OpenChest(chestType));
+            StartCoroutine(IncreaseBackLightAlpha(chestType));
+        }
+        private IEnumerator IncreaseBackLightAlpha(ButtonType chestType)
+        {
+            chestGrade.transform.position = newPosition;
+            Sprite chestSprite = null;
+            switch (chestType)
+            {
+                case ButtonType.BronzeAds:
+                    chestSprite = bronzeSprite;
+                    break;
+                case ButtonType.SilverAds:
+                    chestSprite = silverSprite;
+                    break;
+                case ButtonType.GoldAds:
+                    chestSprite = bronzeSprite;
+                    break;
+                case ButtonType.BronzeGem:
+                    chestSprite = bronzeSprite;
+                    break;
+                case ButtonType.SilverGem:
+                    chestSprite = silverSprite;
+                    break;
+                case ButtonType.GoldGem:
+                    chestSprite = goldSprite;
+                    break;
+            }
+            if (chestSprite != null)
+            {
+                chestGrade.GetComponentInChildren<Image>().sprite = chestSprite;
+            }
+            chestParticleImage.color = new Color(1f, 1f, 1f, 0f);
+            chestBackLightImage.color = new Color(1f, 1f, 1f, 0f); // 초기 알파 값을 0으로 설정
+
+            // 알파 값을 0에서 1로 서서히 증가시키는 애니메이션
+            var lightOn = chestBackLightImage.DOFade(1f, 1.5f);
+            
+            // goldGem 인 경우에만 파티클을 활성화
+            if (chestType == ButtonType.GoldGem)
+            {
+                // 파티클을 활성화하는 코드 추가 (예: particleObject.SetActive(true);)
+                var particleOn = chestParticleImage.DOFade(1f, 1.5f);
+            }
+
+            var moveDuration = 1.0f; // 이동 애니메이션의 지속 시간
+            var targetY = -0.5f; // 목표 Y 좌표
+            var initialScale = new Vector3(0f, 0f, 0f); // 초기 스케일 값
+            var targetScale = new Vector3(1f, 1f, 1f); // 목표 스케일 값
+
+            chestGrade.transform.localScale = initialScale; // 초기 스케일 값을 설정
+
+            // chestGrade 오브젝트를 현재 위치에서 (targetY, 현재 z 좌표)로 내려오는 애니메이션을 생성
+            var moveAnimation = chestGrade.transform.DOMove(new Vector3(chestGrade.transform.position.x, targetY, chestGrade.transform.position.z), moveDuration);
+
+            // chestGrade 오브젝트의 스케일을 목표 스케일로 변경하는 애니메이션을 생성
+            var scaleAnimation = chestGrade.transform.DOScale(targetScale, moveDuration);
+
+            // 두 개의 애니메이션이 모두 완료될 때까지 대기
+            yield return moveAnimation.WaitForCompletion();
+            yield return scaleAnimation.WaitForCompletion();
+
+            // 흔들리는 애니메이션을 실행
+            chestGrade.transform.DOShakeScale(2.0f, 0.5f, 4);
+        }
+
+        private void OpenChest(ButtonType chestType)
+        {
+            DeleteEvent();
+            // 상자 열기 동작 수행
+            Debug.Log("chestType :"+chestType);
+            ChestCheck.Instance.chestCheckPanel.SetActive(false);
+            chestRewardPanel.SetActive(false);
+            boxRewardPanel.SetActive(true);
+            BoxGrade boxGrade;
+            switch (chestType)
+            {
+                
+                case ButtonType.BronzeAds:
+                    boxGrade = BoxGrade.Bronze;
+                    Reward(boxGrade);
+                    break;
+                case ButtonType.SilverAds:
+                    boxGrade = BoxGrade.Silver;
+                    Reward(boxGrade);
+                    break;
+                case ButtonType.GoldAds:
+                    boxGrade = BoxGrade.Gold;
+                    Reward(boxGrade);
+                    break;
+            }
+        }
+        
+        public void DeleteEvent()
+        {
+            ChestReward.Instance.ClearChests();
+            ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.RemoveAllListeners();
         }
     }
 }

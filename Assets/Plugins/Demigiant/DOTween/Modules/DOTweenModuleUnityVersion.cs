@@ -87,7 +87,7 @@ namespace DG.Tweening
         /// It can be used inside a coroutine as a yield.
         /// <para>Example usage:</para><code>yield return myTween.WaitForCompletion(true);</code>
         /// </summary>
-        public static CustomYieldInstruction WaitForCompletion(this Tween t, bool returnCustomYieldInstruction)
+        public static CustomYieldInstruction WaitForCompletion(this Tween t, float returnCustomYieldInstruction)
         {
             if (!t.active) {
                 if (Debugger.logPriority > 0) Debugger.LogInvalidTween(t);

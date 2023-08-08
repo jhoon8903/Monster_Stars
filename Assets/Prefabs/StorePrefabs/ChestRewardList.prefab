@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 588304569187693077}
   - component: {fileID: 588304569187693076}
   m_Layer: 5
-  m_Name: ChestReward
+  m_Name: ChestRewardImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -87,6 +87,7 @@ GameObject:
   - component: {fileID: 588304569196474327}
   - component: {fileID: 588304569196474321}
   - component: {fileID: 588304569196474320}
+  - component: {fileID: 182385046117589012}
   m_Layer: 5
   m_Name: ChestRewardList
   m_TagString: Untagged
@@ -111,9 +112,9 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1000, y: -325}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 400, y: 400}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &588304569196474321
@@ -154,6 +155,20 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &182385046117589012
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 588304569196474326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec0a8799370db42a8bbc5e65216dec65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  chestRewardItem: {fileID: 588304569187693082}
+  chestRewardText: {fileID: 588304570028506424}
 --- !u!1 &588304570028506430
 GameObject:
   m_ObjectHideFlags: 0

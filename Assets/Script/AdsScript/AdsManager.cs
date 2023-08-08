@@ -303,7 +303,7 @@ namespace Script.AdsScript
 
         public enum ButtonType
         {
-            Coin, Stamina, Gem, Bronze, Silver, Gold, Retry, Common, LevelUp, EnergyPackFreeStamina, GemPackFree,CoinPackFree, None
+            Coin, Stamina, Gem, BronzeAds, SilverAds, GoldAds, Retry, Common, LevelUp, EnergyPackFreeStamina, GemPackFree,CoinPackFree, None
         }
 
         public StoreMenu.BoxGrade boxGrade;
@@ -327,6 +327,7 @@ namespace Script.AdsScript
         }
         private void RewardButtonClicked()
         {
+            StoreMenu.ButtonType chestType;
             switch (ButtonTypes)
             {
                 case ButtonType.Coin:
@@ -348,17 +349,17 @@ namespace Script.AdsScript
                     isRetry = true;
                     Retry();
                     break;
-                case ButtonType.Bronze:
-                    boxGrade = StoreMenu.BoxGrade.Bronze;
-                    StoreMenu.Instance.Reward(boxGrade);
+                case ButtonType.BronzeAds:
+                    chestType = StoreMenu.ButtonType.BronzeAds;
+                    StoreMenu.Instance.SommonChest(chestType);
                     break;
-                case ButtonType.Silver:
-                    boxGrade = StoreMenu.BoxGrade.Silver;
-                    StoreMenu.Instance.Reward(boxGrade);
+                case ButtonType.SilverAds:
+                    chestType = StoreMenu.ButtonType.SilverAds;
+                    StoreMenu.Instance.SommonChest(chestType);
                     break;
-                case ButtonType.Gold:
-                    boxGrade = StoreMenu.BoxGrade.Gold;
-                    StoreMenu.Instance.Reward(boxGrade);
+                case ButtonType.GoldAds:
+                    chestType = StoreMenu.ButtonType.GoldAds;
+                    StoreMenu.Instance.SommonChest(chestType);
                     break;
                 case ButtonType.Common:
                     CommonShuffle();
