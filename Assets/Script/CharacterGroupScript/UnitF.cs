@@ -91,7 +91,7 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = unitPieceLevel > 0 ? unitPieceLevel * 5 + 1f : 0f;
+            UnitLevelDamage = unitPeaceLevel > 0 ? unitPeaceLevel * 5 + 1f : 0f;
             Type = Types.Character;
             unitGroup = UnitGroups.F;
             var increaseDamage = EnforceManager.Instance.poisonDamageBoost ? 0.16f : 0f;

@@ -12,9 +12,7 @@ namespace Script.UIManager
         [SerializeField] private float expPoint ;
         [SerializeField] private int levelUpPoint = 5;
         [SerializeField] private Slider expBar;
-        [SerializeField] private TextMeshProUGUI expText;
         [SerializeField] private LevelUpRewardManager levelUpRewardManager;
-        [SerializeField] private TextMeshProUGUI levelText;
         [SerializeField] private EnforceManager enforceManager;
         private static readonly object Lock = new object();
         public int level;
@@ -24,8 +22,6 @@ namespace Script.UIManager
         {
             expBar.maxValue = levelUpPoint;
             expBar.value = expPoint;
-            UpdateExpText();
-            UpdateLevelText(level);
         }
 
         private void Awake()
@@ -50,7 +46,6 @@ namespace Script.UIManager
                 if (expPoint >= levelUpPoint)
                 {
                     level++;
-                    UpdateLevelText(level);
                     expPoint = 0;
                     if (level <= 14)
                     {
@@ -61,18 +56,7 @@ namespace Script.UIManager
                 }
                 expBar.value = expPoint;
                 expBar.DOValue(expPoint, 0.5f);
-                UpdateExpText();
             }
-        }
-
-        private void UpdateExpText()
-        {
-            expText.text = $"{expPoint} / {levelUpPoint}";
-        }
-
-        private void UpdateLevelText(int inGameLevel)
-        {
-            levelText.text = $"LV {inGameLevel}";
         }
 
         public void SaveExp()
@@ -87,8 +71,6 @@ namespace Script.UIManager
             level = PlayerPrefs.GetInt("inGameLevel");
             levelUpPoint = PlayerPrefs.GetInt("levelUpPoint");
             expPoint = PlayerPrefs.GetFloat("expPoint");
-            UpdateExpText();
-            UpdateLevelText(level);
         }
     }
 }

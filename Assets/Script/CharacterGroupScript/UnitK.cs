@@ -13,6 +13,8 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level3Sprite;
         [SerializeField] private Sprite level4Sprite; 
         [SerializeField] private Sprite level5Sprite;
+        [SerializeField] private Sprite level6Sprite;
+        [SerializeField] private Sprite level7Sprite;
         private const float DetectionWidth = 0.5f;
         private float _detectionHeight;
         public int atkCount;
@@ -82,13 +84,15 @@ namespace Script.CharacterGroupScript
                 2 => level2Sprite,
                 3 => level3Sprite,
                 4 => level4Sprite,
-                _ => level5Sprite
+                5 => level5Sprite,
+                6 => level6Sprite,
+                7 => level7Sprite
             };
         }
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = unitPieceLevel > 1 ? unitPieceLevel * 5f - 1f : 0f;
+            UnitLevelDamage = unitPeaceLevel > 1 ? unitPeaceLevel * 5f - 1f : 0f;
             Type = Types.Character;
             unitGroup = UnitGroups.K;
             DefaultDamage = UnitLevelDamage + 34f * level switch
@@ -96,7 +100,9 @@ namespace Script.CharacterGroupScript
                 <=  2 => 1f,
                 3 => 1.7f,
                 4 => 2f,
-                _ => 2.3f
+                5 => 2.3f,
+                6 => 2.6f,
+                7 => 2.9f
             };
             poisonTime = 3f;
             dotDamage = DefaultDamage * 0.2f;

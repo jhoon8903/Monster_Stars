@@ -1,21 +1,21 @@
 Type,Kor,Eng
 GroupDamage,전체 데미지 {p}% 증가,Increase total damage by {p}%.
 GroupAtkSpeed,전체 공격속도 {p}% 증가,Increase total attack speed by {p}%.
-LevelUpStep,다음 Wave 이동횟수 {p} 증가,Increase the number of moves in the next wave by {p}.
+NextStep,다음 Wave 이동횟수 {p} 증가,Increase the number of moves in the next wave by {p}.
 Step,이동횟수 {p} 증가,Increase the number of moves by {powerUp.Property[0]}.
 StepLimit,총 이동횟수 {p} 증가,Increase the total number of moves by {powerUp.Property[0]}.
 StepDirection,대각선 이동 가능,Diagonal movement is possible.
 RandomLevelUp,퍼즐상의 랜덤한 {p}개의 케릭터 1 레벨 증가,Increase the level of {powerUp.Property[0]} randomly selected characters on the puzzle by 1.
 GroupLevelUp,퍼즐상의 {_groupName} 그룹의 0레벨 케릭터 전체 레벨 1 증가,Increase the level of all level 0 characters in the {_groupName} group on the puzzle by 1.
 LevelUpPattern,이제부터 {_groupName} 그룹의 0레벨 케릭터는 1레벨로 등장,"From now on, level 0 characters from the {_groupName} group will appear as level 1."
-Exp,적 처치시 경험치 획득량 {p}% 증가||(현재 {EnforceManager.Instance.expPercentage}% 최대 30%),"Gain {p}% more experience points from defeating enemies (current: {EnforceManager.Instance.expPercentage}%, maximum: 30%)."
-CastleRecovery,웨이브 종료까지 피해를 입지 않으면 캐슬 체력 {p} 매 웨이브 마다 증가,"If no damage is taken until the end of the wave, castle HP will increase by {p} every wave."
+Exp,적 처치시 경험치 획득량 {p}% 증가||(현재 {EnforceManager.Instance.expPercentage}% 최대 30%),"Gain 5% more experience points from defeating enemies (current: {EnforceManager.Instance.expPercentage}%, maximum: 30%)."
+CastleRecovery,웨이브 종료까지 피해를 입지 않으면 캐슬 체력 200씩 매 웨이브 마다 증가,"If no damage is taken until the end of the wave, castle HP will increase by 200 every wave."
 CastleMaxHp,캐슬 최대체력 {p} 증가,Increase castle's maximum HP by {p}.
 Match5Upgrade,5개 매치시 가운데 케릭터의 레벨이 1 더 증가,"When matching 5 pieces, the center character's level increases by 1."
 Slow,다음 웨이브 부터는 적 이동속도 {p}% 감소||(현재 {15*EnforceManager.Instance.slowCount}% 최대 60%),"Starting from the next wave, reduce enemy movement speed by {p}% (current: {15*EnforceManager.Instance.slowCount}%, maximum: 60%)."
 NextStage,보스 스테이지 이후 {p} 개의 케릭터 추가 이동 (현재 {EnforceManager.Instance.highLevelCharacterCount}),"After the boss stage, add {p} characters to the movement (current: {EnforceManager.Instance.highLevelCharacterCount})."
 Gold,5 매치시 골드 1추가 획득,Obtain 1 additional gold when matching 5 pieces.
-AddRow,가로줄이 {p} 증가,Increase the number of rows by {powerUp.Property[0]}.
+AddRow,가로줄이 1줄 증가,Increase the number of rows by 1.
 DivineFifthAttackBoost,5번째 공격마다 데미지가 100% 증가된 투사체를 던집니다. (색 변경),5th_attack_damage_increase_projectile_throw_color_change
 DivineDualAttack,유닛 1)은 앞뒤로 동시에 공격합니다.,(Unit 1) attacks both forward and backward simultaneously.
 DivineBindDurationBoost,속박 지속시간 +0.5초,Bind duration +0.5 seconds.

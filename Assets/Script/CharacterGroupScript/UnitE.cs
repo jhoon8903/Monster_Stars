@@ -120,7 +120,7 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         { 
             base.SetLevel(level);
-            UnitLevelDamage = unitPieceLevel > 1 ? unitPieceLevel * 2f + 1f : 0f;
+            UnitLevelDamage = unitPeaceLevel > 1 ? unitPeaceLevel * 2f + 1f : 0f;
             Type = Types.Character;
             unitGroup = UnitGroups.E;
             var increaseDamage = 1f + EnforceManager.Instance.water2DamageBoost;

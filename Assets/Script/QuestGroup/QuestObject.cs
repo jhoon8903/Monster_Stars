@@ -110,7 +110,7 @@ namespace Script.QuestGroup
             foreach (var grade in totalPiecesPerGrade.Keys)
             {
                 var unitsOfThisGrade = selectedUnitIndices.Where(index =>
-                    unitList[index].UnitGrade == grade && unitList[index].unitPieceLevel < 14).ToList();
+                    unitList[index].UnitGrade == grade && unitList[index].unitPeaceLevel < 14).ToList();
                 var remainingPieces = totalPiecesPerGrade[grade];
                 foreach (var index in unitsOfThisGrade)
                 {
@@ -141,7 +141,7 @@ namespace Script.QuestGroup
             foreach (var index in selectedUnitIndices)
             {
                 var unit = unitList[index];
-                if (unit.unitPieceLevel >= 14) continue;
+                if (unit.unitPeaceLevel >= 14) continue;
                 unit.Initialize();
                 _unitPieceReward = pieceCountPerUnit[index];
                 if (_unitPieceReward == 0) continue;
@@ -152,7 +152,7 @@ namespace Script.QuestGroup
                     CharacterBase.UnitGrades.Blue => Color.blue,
                     CharacterBase.UnitGrades.Purple => Color.magenta
                 };
-                _unitPieceObject.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPieceLevel);
+                _unitPieceObject.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPeaceLevel);
                 _unitPieceObject.goodsSprite.GetComponent<RectTransform>().localScale = new Vector3(2, 2, 0);
                 _unitPieceObject.goodsValue.text = $"{_unitPieceReward}";
                 _unitPieceObject.goodsValue.GetComponent<RectTransform>().localScale = new Vector3(2, 2, 0);
@@ -179,7 +179,7 @@ namespace Script.QuestGroup
             CoinsScript.Instance.UpdateCoin();
             foreach (var unitPiece in _unitPieceDict)
             {
-                unitPiece.Key.CharacterPieceCount += unitPiece.Value.Item1;
+                unitPiece.Key.CharacterPeaceCount += unitPiece.Value.Item1;
                 HoldCharacterList.Instance.UpdateRewardPiece(unitPiece.Key);
                 Destroy(unitPiece.Value.Item2.gameObject);
             }

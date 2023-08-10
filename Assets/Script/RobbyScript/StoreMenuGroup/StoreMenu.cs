@@ -586,7 +586,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             boxRewardPanel.SetActive(false);
             foreach (var unitReward in _unitPieceDict)
             {
-                unitReward.Key.CharacterPieceCount += unitReward.Value.Item1;
+                unitReward.Key.CharacterPeaceCount += unitReward.Value.Item1;
                 HoldCharacterList.Instance.UpdateRewardPiece(unitReward.Key);
                 Destroy(unitReward.Value.Item2.gameObject);
             }
@@ -824,7 +824,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             foreach (var grade in totalPiecesPerGrade.Keys)
             {
                 var unitsOfThisGrade = selectedUnitIndices.Where(index =>
-                    unitList[index].UnitGrade == grade && unitList[index].unitPieceLevel < 14).ToList();
+                    unitList[index].UnitGrade == grade && unitList[index].unitPeaceLevel < 14).ToList();
                 var assignedUnits = new List<int>();
                 var remainingPieces = totalPiecesPerGrade[grade];
 
@@ -851,11 +851,12 @@ namespace Script.RobbyScript.StoreMenuGroup
             foreach (var index in selectedUnitIndices)
             {
                 var unit = unitList[index];
-                if (unit.unitPieceLevel >= 14) continue;
+                if (unit.unitPeaceLevel >= 14) continue;
                 unit.Initialize();
                 _unitPieceReward = pieceCountPerUnit[index];
                 if (_unitPieceReward == 0) continue;
                 _unitPieceObject = Instantiate(rewardItem, boxRewardContents.transform);
+<<<<<<< Updated upstream
                 // _unitPieceObject.goodsBack.GetComponent<Image>().color = unit.UnitGrade switch
                 // {
                 //     CharacterBase.UnitGrades.Green => Color.green,
@@ -865,6 +866,17 @@ namespace Script.RobbyScript.StoreMenuGroup
                 // };
                 _unitPieceObject.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPieceLevel);
                 _unitPieceObject.goodsSprite.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);
+=======
+                _unitPieceObject.goodsBack.GetComponent<Image>().color = unit.UnitGrade switch
+                {
+                    CharacterBase.UnitGrades.Green => Color.green,
+                    CharacterBase.UnitGrades.Blue => Color.blue,
+                    CharacterBase.UnitGrades.Purple => Color.magenta,
+                    _ => throw new ArgumentOutOfRangeException()
+                };
+                _unitPieceObject.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPeaceLevel);
+                _unitPieceObject.goodsSprite.GetComponent<RectTransform>().localScale = new Vector3(2, 2, 0);
+>>>>>>> Stashed changes
                 _unitPieceObject.goodsValue.text = $"{_unitPieceReward}";
                 _unitPieceObject.goodsValue.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);
                 _unitPieceDict[unit] = new Tuple<int, Goods>(_unitPieceReward, _unitPieceObject);

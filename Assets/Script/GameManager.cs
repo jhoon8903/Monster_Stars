@@ -10,6 +10,7 @@ using Script.UIManager;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace Script
@@ -27,17 +28,17 @@ namespace Script
         [SerializeField] private GameObject gamePanel;
         [SerializeField] private GameObject commonRewardPanel;
         [SerializeField] private GameObject expRewardPanel;
-        [SerializeField] private TextMeshProUGUI speedUpText;
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private EnemyPool enemyPool;
         [SerializeField] private LevelUpRewardManager levelUpRewardManager;
         [SerializeField] private ExpManager expManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private TextMeshProUGUI stageText;
-        [SerializeField] private CharacterPool characterPool;
+        [SerializeField] private Image speedUpImage;
+        [SerializeField] private Sprite normalSpeedImage;
+        [SerializeField] private Sprite doubleSpeedImage;
         public List<GameObject> characterList = new List<GameObject>(); 
         public static GameManager Instance { get; private set; }
-        private readonly WaitForSecondsRealtime _waitOneSecRealtime = new WaitForSecondsRealtime(1f);
         private readonly WaitForSecondsRealtime _waitTwoSecRealtime = new WaitForSecondsRealtime(2f);
         public bool speedUp;
         private Vector3Int _bossSpawnArea;
@@ -62,12 +63,13 @@ namespace Script
                  countManager.Initialize(6);
                  // 튜토리얼용 매치 오브젝트 생성
                  StartCoroutine(tutorialManager.TutorialState());
+                 swipeManager.isBusy = false;
             }
             else
             {
                 if (PlayerPrefs.HasKey("unitState"))
                 {
-                    StartCoroutine(spawnManager.LoadGameState());
+                    StartCoroutine(SpawnManager.LoadGameState());
                     EnforceManager.Instance.LoadEnforceData();
                     countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
                     expManager.LoadExp();
@@ -81,18 +83,18 @@ namespace Script
                 else
                 {
                     countManager.Initialize(moveCount);
-                    StartCoroutine(spawnManager.PositionUpCharacterObject());
                     castleManager.castleCrushBoost = false;
+                    
                 }
+                StartCoroutine(spawnManager.PositionUpCharacterObject());
             }
-
+   
             castleManager.castleCrushBoost = false;
             StageManager.Instance.SelectedStages();
             StageManager.Instance.UpdateWaveText();
             speedUp = true;
             GameSpeedSelect();
             stageText.text = $"{StageManager.Instance.selectStage} STAGE";
-            swipeManager.isBusy = false;
             yield return null;
         }
         public IEnumerator Count0Call()
@@ -121,7 +123,7 @@ namespace Script
         }
         private IEnumerator CoverUnit(bool value)
         {
-            characterList = characterPool.UsePoolCharacterList();
+            characterList = CharacterPool.Instance.UsePoolCharacterList();
             foreach (var unit in characterList)
             {
                 unit.GetComponent<CharacterBase>().cover.SetActive(value);
@@ -170,7 +172,7 @@ namespace Script
         private IEnumerator InitializeWave()
         {
             yield return StartCoroutine(KillMotion());
-            spawnManager.SaveUnitState();
+            SpawnManager.SaveUnitState();
             expManager.SaveExp();
             castleManager.SaveCastleHp();
             EnforceManager.Instance.SaveEnforceData();
@@ -201,7 +203,7 @@ namespace Script
                 AtkManager.Instance.groupFCount = 0;
                 FindObjectOfType<UnitF>().groupFDamage = 0f;
             }
-            foreach (var unit in characterPool.pooledCharacters)
+            foreach (var unit in CharacterPool.Instance.pooledCharacters)
             {
                 unit.GetComponent<CharacterBase>().cover.SetActive(false);
             }
@@ -237,13 +239,13 @@ namespace Script
             if (speedUp == false)
             {
                 speedUp = true;
-                speedUpText.text = "x2";
+                speedUpImage.sprite = doubleSpeedImage;
                 GameSpeed();
             }
             else
             {
                 speedUp = false;
-                speedUpText.text = "x1";
+                speedUpImage.sprite = normalSpeedImage;
                 GameSpeed();
             }
         }

@@ -14,15 +14,14 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private GameObject tutorialCoverPrefab;
         [SerializeField] private GameObject guidePointerPrefab;
         [SerializeField] private TextMeshProUGUI textPopup;
-        [SerializeField] private MatchManager matchManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private SpawnManager spawnManager;
 
         private readonly Dictionary<Vector2Int, GameObject> _covers = new Dictionary<Vector2Int, GameObject>();
         private Coroutine _pointerCoroutine;
         private GameObject _currentGuidePointer;
-        public Queue<TutorialStep> TutorialSteps;
-        public TutorialStep _currentTutorialStep;
+        private Queue<TutorialStep> _tutorialSteps;
+        public TutorialStep CurrentTutorialStep;
         private TextMeshProUGUI _currentTextPopup;
         public static readonly CharacterBase.UnitGroups[] UnitGroupOrder =
         {
@@ -63,11 +62,11 @@ namespace Script.PuzzleManagerGroup
         {
             if (PlayerPrefs.GetInt("TutorialKey") != 1) return;
             spawnManager.OnMatchFound += HandleMatchFound;
-            TutorialSteps = new Queue<TutorialStep>();
+            _tutorialSteps = new Queue<TutorialStep>();
             commonRewardManager.OnRewardSelected += HandleMatchFound;
             
             // 3Matched
-            TutorialSteps.Enqueue(new TutorialStep(
+            _tutorialSteps.Enqueue(new TutorialStep(
                 new[] { new Vector2Int(1, 4), new Vector2Int(2, 4), new Vector2Int(3, 4), new Vector2Int(4, 4) },
                 new Vector3(4, 4, 0),
                 new Vector3(3, 4, 0),
@@ -75,7 +74,7 @@ namespace Script.PuzzleManagerGroup
                 "Move units by swiping them")
             );
             // 4Matched
-            TutorialSteps.Enqueue(new TutorialStep(
+            _tutorialSteps.Enqueue(new TutorialStep(
                 new []{new Vector2Int(1,4), new Vector2Int(2,4), new Vector2Int(3,4), new Vector2Int(4,4), new Vector2Int(3,5)},
                 new Vector3(3,5,0), 
                 new Vector3(3,4,0),
@@ -83,7 +82,7 @@ namespace Script.PuzzleManagerGroup
                 "Swipe once more to combine units\nMerging 4 units will level up 2 units.")
             );
             // 5Matched
-            TutorialSteps.Enqueue(new TutorialStep(
+            _tutorialSteps.Enqueue(new TutorialStep(
                 new[] { new Vector2Int(0, 1), new Vector2Int(0, 2), new Vector2Int(0, 3), new Vector2Int(0, 4), new Vector2Int(0,5), new Vector2Int(1, 3) },
                 new Vector3(1, 3, 0),
                 new Vector3(0, 3, 0),
@@ -91,7 +90,7 @@ namespace Script.PuzzleManagerGroup
                 "Combining 5 makes a higher tier unit")
             );
             // Power Up Matched
-            TutorialSteps.Enqueue(new TutorialStep(
+            _tutorialSteps.Enqueue(new TutorialStep(
                 new []{new Vector2Int(1,5), new Vector2Int(2,5), new Vector2Int(3,5), new Vector2Int(4,5)},
                 new Vector3(4,5,0), 
                 new Vector3(3,5,0),
@@ -100,15 +99,25 @@ namespace Script.PuzzleManagerGroup
                 
             );
             // Choose Power Up
-            TutorialSteps.Enqueue(new TutorialStep(
-                new []{new Vector2Int(1,1), new Vector2Int(2,1), new Vector2Int(3,1), new Vector2Int(4,1)},
-                new Vector3(3,2,0), 
-                new Vector3(3,1.6f,0), 
+            _tutorialSteps.Enqueue(new TutorialStep(
+                new []
+                {
+                    new Vector2Int(-1,2), new Vector2Int(-1,3), 
+                    new Vector2Int(0,2), new Vector2Int(0,3), 
+                    new Vector2Int(1,2), new Vector2Int(1,3), 
+                    new Vector2Int(2,2), new Vector2Int(2,3),
+                    new Vector2Int(3,2), new Vector2Int(3,3),
+                    new Vector2Int(4,2), new Vector2Int(4,3),
+                    new Vector2Int(5,2), new Vector2Int(5,3),
+                    new Vector2Int(6,2), new Vector2Int(6,3)
+                },
+                new Vector3(3,3.5f,0), 
+                new Vector3(3,3f,0), 
                 5,
                 "Strengthen your units by pressing the Enhance Select button.")
             );
             // Press Long Object
-            TutorialSteps.Enqueue(new TutorialStep(
+            _tutorialSteps.Enqueue(new TutorialStep(
                 new [] {new Vector2Int(5,3)},
                 new Vector3(5,4,0), 
                 new Vector3(5,3.4f, 0),
@@ -116,17 +125,17 @@ namespace Script.PuzzleManagerGroup
                 "Units can be removed by holding down the unit for 2 seconds.")
             );
             // Null Swap
-            TutorialSteps.Enqueue(new TutorialStep(
+            _tutorialSteps.Enqueue(new TutorialStep(
                 new []{new Vector2Int(5,4), new Vector2Int(6,4)},
                 new Vector3(5,4,0), new Vector3(6,4,0),
                 7,
                 "You can remove units by swiping off the tile.")
             );
-            ProcessTutorialStep(TutorialSteps.Dequeue());
+            ProcessTutorialStep(_tutorialSteps.Dequeue());
         }
         private void ProcessTutorialStep(TutorialStep step)
         {
-            _currentTutorialStep = step;
+            CurrentTutorialStep = step;
             MatchCover(step.PositionsToRemove);
             var guidePointer = Instantiate(guidePointerPrefab, step.PointerStartPosition, Quaternion.identity);
             _pointerCoroutine = StartCoroutine(MoveGuidePointer(guidePointer, step.PointerStartPosition, step.PointerEndPosition, 2f, 0.5f));
@@ -169,9 +178,9 @@ namespace Script.PuzzleManagerGroup
         }
         private void ProcessNextTutorialStep()
         {
-            if (TutorialSteps.Count > 0)
+            if (_tutorialSteps.Count > 0)
             {
-                ProcessTutorialStep(TutorialSteps.Dequeue());
+                ProcessTutorialStep(_tutorialSteps.Dequeue());
             }
         }
         public IEnumerator TutorialState()

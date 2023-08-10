@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using Script.CharacterManagerScript;
 using Script.PuzzleManagerGroup;
@@ -9,6 +10,13 @@ using UnityEngine;
 
 namespace Script.RewardScript
 {
+    [Serializable]
+    public class SkillInstanceData
+    {
+        public PowerTypeManager.Types type;
+        public float? Value;
+    }
+
     [Serializable]
     public class EnforceData
     {
@@ -20,7 +28,7 @@ namespace Script.RewardScript
         public float divineRateBoost;
         public bool divineBindChanceBoost;
         public bool divineDualAttack;
-
+        
         //Darkness Unit B
         public bool darkFifthAttackDamageBoost;
         public float darkAttackSpeedBoost;
@@ -112,7 +120,6 @@ namespace Script.RewardScript
         public bool dark2StatusPoison;
         public bool dark2SameEnemyBoost;
 
-
         //common
         public bool addRow;
         public int slowCount;
@@ -127,15 +134,24 @@ namespace Script.RewardScript
         public float increaseAtkDamage;
         public float increaseAtkRate;
         public int rewardMoveCount;
-        public bool addGold;
         public int addGoldCount;
+        public bool addGold;
         public List<int> permanentGroupIndex;
-    }                                      
+
+        public List<SkillInstanceData> skillInstances;
+    }
+
     public class EnforceManager : MonoBehaviour
     {
+        // Skill Grid
+        [SerializeField] private GameObject skillGrid;
+        [SerializeField] private PauseSkillObjectScript skillPrefabs;
+        [SerializeField] private Language language;
+        
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private GridManager gridManager;
-        [SerializeField] private CharacterPool characterPool;
+        [SerializeField] private CountManager countManager;
+
         [RuntimeInitializeOnLoadMethod] 
         private static void InitializeOnLoad()
         {
@@ -147,7 +163,7 @@ namespace Script.RewardScript
         }
         public static EnforceManager Instance { get; private set; }
         public List<CharacterBase> characterList = new List<CharacterBase>();
-  
+
         private void Awake()
         {
             Instance = this;
@@ -181,7 +197,7 @@ namespace Script.RewardScript
         [Header("Purple / Lv11: 속박확률 20% 증가 (30% > 50%)")] 
         public bool divineBindChanceBoost;
         // 완료
-        [Header("Blue / 13Lv: 공격속도 9% 증가 (최대 4회)")] 
+        [Header("Blue / 13Lv: 공격속도 9% 증가 (최대 4회)")]
         public float divineRateBoost; 
         protected internal void DivineRateBoost()
         {   
@@ -201,7 +217,7 @@ namespace Script.RewardScript
         [Header("Purple / 5Lv: 사거리 1 증가")] 
         public bool darkRangeIncrease;
         // 완료
-        [Header("Green / 7Lv: 공격력 4% 증가 (최대 6회)")] 
+        [Header("Green / 7Lv: 공격력 4% 증가 (최대 6회)")]
         public float darkAttackPowerBoost; 
         protected internal void DarkAttackDamageBoost()
         {
@@ -212,7 +228,7 @@ namespace Script.RewardScript
         [Header("Purple / 9Lv: 상태이상 적 공격시 50% 확률로 50% 추가데미지")] 
         public bool darkStatusAilmentDamageBoost;
         // 완료
-        [Header("Blue / 11: 공격속도 9% 증가 (최대 4회)")] 
+        [Header("Blue / 11: 공격속도 9% 증가 (최대 4회)")]
         public float darkAttackSpeedBoost;
         protected internal void DarkAttackSpeedBoost()
         {
@@ -266,7 +282,7 @@ namespace Script.RewardScript
         [Header("Purple / 3Lv: 공격 시 검 한자루 추가")] 
         public bool physicalSwordAddition;
         // 완료
-        [Header("Blue / 5Lv: 공격속도 9% 증가 (최대 4회)")] 
+        [Header("Blue / 5Lv: 공격속도 9% 증가 (최대 4회)")]
         public float physicalAttackSpeedBoost; 
         protected internal void PhysicalAttackSpeedIncrease()
         {
@@ -343,7 +359,7 @@ namespace Script.RewardScript
         [Header("Blue / 9Lv: 중독 피해 10% 증가")] 
         public bool poisonDotDamageBoost;
         // 완료
-        [Header("Green / 11Lv: 공격속도 4% 증가 (최대 6회)")] 
+        [Header("Green / 11Lv: 공격속도 4% 증가 (최대 6회)")]
         public float poisonAttackSpeedIncrease; 
         protected internal void PoisonAttackSpeedIncrease()
         {
@@ -398,7 +414,7 @@ namespace Script.RewardScript
         [Header("Blue/ 7Lv: 화상에 걸린 적 제거시 주변 1칸 범위의 200% 폭발데미지 추가")] 
         public bool fireBurnedEnemyExplosion;
         // 완료
-        [Header("Green/ 9Lv: 공격속도 4% 증가 (최대 6회)")] 
+        [Header("Green/ 9Lv: 공격속도 4% 증가 (최대 6회)")]
         public float fireAttackSpeedBoost; 
         protected internal void FireAttackSpeedBoost()
         {
@@ -467,7 +483,6 @@ namespace Script.RewardScript
         // 완료
         [Header("Blue / 13Lv: 보스 데미지 30% 증가")] 
         public bool physical2BossBoost;
-
         [Header("\n\nK 어둠: Purple\n")] 
         // 완료
         [Header("Purple / 1Lv: 적의 뒤를 공격하면, 데미지 30% 증가")]
@@ -491,91 +506,155 @@ namespace Script.RewardScript
         [Header("Blue / 13Lv: 동일한 적을 타격할때마다 데미지가 5% 증가 (최대 10회)")]
         public bool dark2SameEnemyBoost;
 
+        private float _property;
+        private readonly Dictionary<(PowerTypeManager.Types Type, int Value), PauseSkillObjectScript> _instantiatedSkills = new Dictionary<(PowerTypeManager.Types Type, int Value), PauseSkillObjectScript>();
+        private PauseSkillObjectScript _skill;
+       
+        private string GetGroupNameFromValue(int value)
+        {
+            var unitName = value switch
+            {
+                0 => characterList[0].name,
+                1 => characterList[1].name,
+                2 => characterList[2].name,
+                3 => characterList[3].name,
+            };
+            return unitName;
+        }
+        
+        private void SkillInstance(Data data, float? value = null)
+        {
+            _property = value.GetValueOrDefault(); 
+            var translationKey = data.Type.ToString();
+            Debug.Log(translationKey);
+            var powerTextTranslation = language.GetTranslation(translationKey);
+            var finalPowerText = powerTextTranslation;
+            var placeholderValues = new Dictionary<PowerTypeManager.Types, Dictionary<string, float>>
+            {
+                { PowerTypeManager.Types.Slow , new Dictionary<string, float>{{"{15*EnforceManager.Instance.slowCount}", _property}}},
+                { PowerTypeManager.Types.StepLimit , new Dictionary<string, float>{{"powerUp.Property[0]", 1}}},
+                { PowerTypeManager.Types.GroupDamage , new Dictionary<string, float>{{"{p}", _property}}},
+                { PowerTypeManager.Types.GroupAtkSpeed , new Dictionary<string, float>{{"{p}", _property}}},
+                { PowerTypeManager.Types.Exp , new Dictionary<string, float>{{"{EnforceManager.Instance.expPercentage}", _property}}},
+                { PowerTypeManager.Types.CastleMaxHp, new Dictionary<string, float>{{"{p}", _property}}},
+            };
+
+            if (placeholderValues.TryGetValue(data.Type, out var placeholderValue))
+            {
+                finalPowerText = placeholderValue.Aggregate(finalPowerText, (current, placeholder) => current.Replace(placeholder.Key, placeholder.Value.ToString(CultureInfo.CurrentCulture)));
+            }
+
+            if (data.Type == PowerTypeManager.Types.NextStage)
+            {
+                finalPowerText = finalPowerText.Replace("{p}", _property.ToString(CultureInfo.CurrentCulture));
+                finalPowerText.Replace("{EnforceManager.Instance.highLevelCharacterCount}", highLevelCharacterCount.ToString(CultureInfo.CurrentCulture));
+            }
+            var finalTranslation = finalPowerText.Replace("||", "\n");
+         
+            
+            if (data.Type == PowerTypeManager.Types.LevelUpPattern)
+            {
+                var groupName = GetGroupNameFromValue((int)_property);
+                finalTranslation = finalPowerText.Replace("{_groupName}", groupName);
+                _skill.skillIcon.sprite = characterList[(int)_property].GetSpriteForLevel(characterList[(int)_property].unitPeaceLevel);
+                _skill.skillBackGround.sprite = characterList[(int)_property].UnitGrade switch
+                {
+                    CharacterBase.UnitGrades.Green => PowerTypeManager.Instance.green,
+                    CharacterBase.UnitGrades.Blue => PowerTypeManager.Instance.blue,
+                    CharacterBase.UnitGrades.Purple => PowerTypeManager.Instance.purple,
+                };
+
+                if (_instantiatedSkills.TryGetValue((PowerTypeManager.Types.LevelUpPattern, (int)_property), out var instantiatedSkill))
+                {
+                    _skill = instantiatedSkill;
+                }
+                else
+                {
+                    _skill = Instantiate(skillPrefabs, skillGrid.transform);
+                    _instantiatedSkills[(PowerTypeManager.Types.LevelUpPattern, (int)_property)] = _skill;
+                    _skill.desc.text = finalTranslation;
+                }
+            }
+            else
+            {
+                if (_instantiatedSkills.TryGetValue((data.Type,0), out var instantiatedSkill))
+                {
+                    _skill = instantiatedSkill;
+                }
+                else
+                {
+                    _skill = Instantiate(skillPrefabs, skillGrid.transform);
+                    _instantiatedSkills[(data.Type,0)] = _skill;
+                    _skill.skillBackGround.sprite = PowerTypeManager.Instance.purple;
+                    _skill.skillIcon.sprite = data.Icon;
+                    _skill.desc.text = finalTranslation;
+                }
+                if (value.HasValue)
+                {
+                    _skill.value.text = _property.ToString(CultureInfo.CurrentCulture);
+                }
+            }
+        }
 
         [Header("\n\n공통강화\n")] 
+
         [Header("가로줄 추가")] 
         public bool addRow;
-        protected internal void AddRow()
+        protected internal void AddRow(Data data)
         {
             addRow = true;
             gridManager.AddRow();
+            SkillInstance(data, 1);
         }
-        [Header("적 이동속도 감소 15%증가 (최대 45%)")] 
-        public int slowCount; 
-        protected internal void SlowCount()
-        {
-            slowCount++;
-            if (slowCount >= 4)
-            {
-                slowCount = 4;
-            }
-        }
-        [Header("대각선 이동")] 
-        public bool diagonalMovement;
-        [Header("Castle 체력회복 200")] 
-        public bool recoveryCastle;
-        [Header("Castle 최대체력 증가 (최대 2000)")] 
-        public float castleMaxHp; 
-        protected internal void IncreaseCastleMaxHp()
-        {
-            castleMaxHp += 200f;
-            castleManager.IncreaseMaxHp();
-        }
-        [Header("보드 초기화 케릭터")] 
-        public int highLevelCharacterCount = 6; 
-        public int selectedCount; 
-        protected internal void NextCharacterUpgrade(int moveCharacterCount)
-        {
-            highLevelCharacterCount += moveCharacterCount;
-            selectedCount += 1;
-        }
-        [Header("경험치 증가량")] 
-        public int expPercentage; 
-        protected internal void IncreaseExpBuff(int increaseAmount)
-        {
-            expPercentage += increaseAmount;
-        }
-        [Header("최대 이동횟수 증가")] 
-        public int permanentIncreaseMovementCount; 
-        protected internal void PermanentIncreaseMoveCount(int increaseStepAmount)
-        {
-            permanentIncreaseMovementCount += increaseStepAmount;
-        }
-        [Header("5매치 가운데 유닛 추가 레벨증가")] 
-        public bool match5Upgrade;
-        [Header("전체 공격력 증가 (%)")] 
-        public float increaseAtkDamage = 1f; 
-        protected internal void IncreaseGroupDamage(int increaseAmount)
+
+        [Header("전체 공격력 증가 (%)")]
+        public float increaseAtkDamage; 
+        protected internal void IncreaseGroupDamage(Data data, int increaseAmount)
         {
             increaseAtkDamage += increaseAmount;
+            SkillInstance(data, increaseAtkDamage);
         }
-        [Header("전체 공격속도 증가 (%)")] 
+
+        [Header("전체 공격속도 증가 (%)")]
         public float increaseAtkRate; 
-        protected internal void IncreaseGroupRate(float increaseRateAmount)
+        protected internal void IncreaseGroupRate(Data data, float increaseRateAmount)
         {
             increaseAtkRate += increaseRateAmount;
+            SkillInstance(data, increaseAtkRate);
         }
-        [Header("이동횟수 추가")] 
+
+        [Header("이동횟수 추가")]
         public int rewardMoveCount; 
         protected internal void RewardMoveCount(int moveCount)
         {
             rewardMoveCount += moveCount;
+            countManager.IncreaseMoveCount(rewardMoveCount);
+            rewardMoveCount = 0;
         }
-        [Header("추가코인")] 
-        public bool addGold; 
-        public int addGoldCount; 
-        protected internal void AddGold()
+
+        [Header("최대 이동횟수 증가")]
+        public int permanentIncreaseMovementCount; 
+        protected internal void PermanentIncreaseMoveCount(Data data, int increaseStepAmount)
         {
-            addGoldCount++;
+            permanentIncreaseMovementCount += increaseStepAmount;
+            SkillInstance(data, permanentIncreaseMovementCount );
         }
+
+        [Header("대각선 이동")] 
+        public bool diagonalMovement;
+        protected internal void DiagonalMovement(Data data)
+        {
+            diagonalMovement = true;
+            SkillInstance(data);
+        }
+
         // RandomUnitLevelUp
-        public void RandomCharacterLevelUp(int characterCount)
+        public static void RandomCharacterLevelUp(int characterCount)
         {
-            var activeCharacters = characterPool.UsePoolCharacterList();
+            var activeCharacters = CharacterPool.Instance.UsePoolCharacterList();
             if (activeCharacters.Count == 0) return;
             var rnd = new System.Random();
             var levelUpCount = 0;
-    
             var eligibleCharacters = activeCharacters.Where(character => 
                 character.GetComponent<CharacterBase>()?.unitPuzzleLevel < 5 && character.GetComponent<CharacterBase>().Type != CharacterBase.Types.Treasure).ToList();
             if (eligibleCharacters.Count == 0) return;
@@ -591,11 +670,12 @@ namespace Script.RewardScript
                     character.GetComponent<CharacterBase>()?.unitPuzzleLevel < 5).ToList();
             }
         }
+
         // Unit Group LevelUp
         public void CharacterGroupLevelUp(int characterListIndex)
         {
             var group = characterList[characterListIndex].unitGroup;
-            var activeCharacterGroup = characterPool.UsePoolCharacterList();
+            var activeCharacterGroup = CharacterPool.Instance.UsePoolCharacterList();
 
             foreach (var character in  activeCharacterGroup)
             {
@@ -606,19 +686,84 @@ namespace Script.RewardScript
                 }
             }
         }
-        // Unit Group PermanentLevelUp
-        public List<int> permanentGroupIndex = new List<int>();
 
-        public void PermanentIncreaseCharacter(int characterListIndex)
+        [Header("그룹 영구 레벨업")]
+        public List<int> index = new List<int>();
+        public void PermanentIncreaseCharacter(Data data, int characterListIndex)
         {
-            // 이미 해당 characterListIndex가 리스트에 있는지 확인
-            if (!permanentGroupIndex.Contains(characterListIndex))
-            {
-                // 아직 적용되지 않았으면 리스트에 추가
-                permanentGroupIndex.Add(characterListIndex);
-            }
+            if (index.Contains(characterListIndex)) return;
+            index.Add(characterListIndex);
+            SkillInstance(data, characterListIndex);
         }
 
+        [Header("경험치 증가량")]
+        public int expPercentage; 
+        protected internal void IncreaseExpBuff(Data data, int increaseAmount)
+        {
+            expPercentage += increaseAmount; 
+            SkillInstance(data, expPercentage);
+        }
+
+        [Header("Castle 체력회복 200")] 
+        public bool recoveryCastle;
+
+        protected internal void RecoveryCastle(Data data)
+        {
+            recoveryCastle = true;
+            SkillInstance(data);
+        }
+
+        [Header("Castle 최대체력 증가 (최대 2000)")]
+        public float castleMaxHp; 
+        protected internal void IncreaseCastleMaxHp(Data data)
+        {
+            castleMaxHp += 200f;
+            castleManager.IncreaseMaxHp();
+            SkillInstance(data, castleMaxHp);
+        }
+
+        [Header("5매치 가운데 유닛 추가 레벨증가")] 
+        public bool match5Upgrade;
+
+        protected internal void Match5Upgrade(Data data)
+        {
+            match5Upgrade = true;
+            SkillInstance(data);
+        }
+
+        [Header("적 이동속도 감소 15%증가 (최대 45%)")]
+        public int slowCount; 
+        protected internal void SlowCount(Data data)
+        {
+            slowCount++;
+            if (slowCount >= 4)
+            {
+                slowCount = 4;
+            }
+
+            var value = slowCount * 15f;
+            SkillInstance(data, value);
+        }
+
+        [Header("보드 초기화 케릭터")]
+        public int highLevelCharacterCount = 6; 
+        public int selectedCount; 
+        protected internal void NextCharacterUpgrade(Data data, int moveCharacterCount)
+        {
+            highLevelCharacterCount += moveCharacterCount;
+            selectedCount += 1;
+            SkillInstance(data, highLevelCharacterCount);
+        }
+
+        [Header("추가코인")] 
+        public bool addGold;
+        public int addGoldCount; 
+        protected internal void AddGold(Data data)
+        {
+            addGold = true;
+            SkillInstance(data, addGoldCount);
+        }
+        
         public void SaveEnforceData()
         {
             var data = new EnforceData
@@ -633,7 +778,7 @@ namespace Script.RewardScript
                 divineDualAttack = divineDualAttack,
                 //Darkness Unit B
                 darkFifthAttackDamageBoost = darkFifthAttackDamageBoost,
-                darkAttackSpeedBoost = darkAttackSpeedBoost,                        
+                darkAttackSpeedBoost = darkAttackSpeedBoost,
                 darkAttackPowerBoost = darkAttackPowerBoost,
                 darkKnockBackChance = darkKnockBackChance,
                 darkStatusAilmentDamageBoost = darkStatusAilmentDamageBoost,
@@ -679,7 +824,7 @@ namespace Script.RewardScript
                 fire2RangeBoost = fire2RangeBoost,
                 fire2RateBoost = fire2RateBoost, 
                 fire2BossDamageBoost = fire2BossDamageBoost,  
-
+        
                 //Fire1 Unit H
                 fireBurnPerAttackEffect = fireBurnPerAttackEffect,
                 fireStackOverlap = fireStackOverlap,
@@ -688,7 +833,7 @@ namespace Script.RewardScript
                 fireAttackSpeedBoost = fireAttackSpeedBoost,
                 fireProjectileSpeedIncrease = fireProjectileSpeedIncrease,
                 fireProjectileBounceIncrease = fireProjectileBounceIncrease,
-
+        
                 //Poison2 Unit I
                 poison2StunToChance = poison2StunToChance,
                 poison2RangeBoost = poison2RangeBoost,
@@ -697,7 +842,7 @@ namespace Script.RewardScript
                 poison2SpawnPoisonArea = poison2SpawnPoisonArea,
                 poison2RateBoost = poison2RateBoost,
                 poison2PoolTimeBoost = poison2PoolTimeBoost,
-
+        
                 //Physical2 Unit J
                 physical2CastleCrushStatBoost = physical2CastleCrushStatBoost,
                 physical2FifthBoost = physical2FifthBoost,
@@ -706,7 +851,7 @@ namespace Script.RewardScript
                 physical2RangeBoost = physical2RangeBoost,
                 physical2RateBoost = physical2RateBoost,
                 physical2BossBoost = physical2BossBoost,
-
+        
                 //Darkness Unit K
                 dark2BackBoost = dark2BackBoost,
                 dark2DualAttack = dark2DualAttack,
@@ -715,7 +860,7 @@ namespace Script.RewardScript
                 dark2DoubleAttack = dark2DoubleAttack,
                 dark2StatusPoison = dark2StatusPoison,
                 dark2SameEnemyBoost = dark2SameEnemyBoost,
-
+        
                 // Common
                 addRow = addRow,
                 slowCount = slowCount,
@@ -730,9 +875,13 @@ namespace Script.RewardScript
                 increaseAtkDamage = increaseAtkDamage,
                 increaseAtkRate = increaseAtkRate,
                 rewardMoveCount = rewardMoveCount,
-                addGold = addGold, 
                 addGoldCount = addGoldCount,
-                permanentGroupIndex = permanentGroupIndex
+                addGold = addGold,
+                permanentGroupIndex = index, 
+
+                skillInstances = _instantiatedSkills.Keys
+                    .Select(key => new SkillInstanceData { type = key.Item1, Value = key.Item2 })
+                    .ToList()
             };
             var json = JsonUtility.ToJson(data);
             PlayerPrefs.SetString("EnforceData", json);
@@ -743,7 +892,7 @@ namespace Script.RewardScript
             if (!PlayerPrefs.HasKey("EnforceData")) return;
             var json = PlayerPrefs.GetString("EnforceData");
             var data = JsonUtility.FromJson<EnforceData>(json);
-            
+
             // Divine Unit A
             divinePoisonDamageBoost = data.divinePoisonDamageBoost;
             divineBindDurationBoost = data.divineBindDurationBoost;
@@ -753,7 +902,7 @@ namespace Script.RewardScript
             divineDualAttack = data.divineDualAttack;
             divineRateBoost = data.divineRateBoost;
             //Darkness Unit B
-            darkFifthAttackDamageBoost = data.darkFifthAttackDamageBoost;
+            darkFifthAttackDamageBoost = data.darkFifthAttackDamageBoost; 
             darkAttackSpeedBoost = data.darkAttackSpeedBoost;
             darkAttackPowerBoost = data.darkAttackPowerBoost;
             darkKnockBackChance = data.darkKnockBackChance;
@@ -846,10 +995,25 @@ namespace Script.RewardScript
             increaseAtkDamage = data.increaseAtkDamage;
             increaseAtkRate = data.increaseAtkRate;
             rewardMoveCount = data.rewardMoveCount;
-            addGold = data.addGold;
             addGoldCount = data.addGoldCount;
-            permanentGroupIndex = new List<int>(data.permanentGroupIndex);
-        }                                  
+            addGold = data.addGold;
+            index = new List<int>(data.permanentGroupIndex);
+
+            foreach (var skillInfo in data.skillInstances)
+            {
+                var skillData = FindSkillDataByType(skillInfo.type);
+                if (skillData != null)
+                {
+                    SkillInstance(skillData, skillInfo.Value);
+                }
+            }
+        }          
+        private static Data FindSkillDataByType(PowerTypeManager.Types type)
+        {
+            return PowerTypeManager.Instance.GreenList.FirstOrDefault(data => data.Type == type) ??
+                   PowerTypeManager.Instance.BlueList.FirstOrDefault(data => data.Type == type) ??
+                   PowerTypeManager.Instance.PurpleList.FirstOrDefault(data => data.Type == type);
+        }
     }
 }
 

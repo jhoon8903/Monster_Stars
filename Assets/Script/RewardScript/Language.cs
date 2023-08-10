@@ -5,21 +5,11 @@ namespace Script.RewardScript
 {
     public class Language : MonoBehaviour
     {
-        public static Language Instance { get; set; }
         public enum LanguageType { Korean, English }
-        public LanguageType selectedLanguage = LanguageType.Korean;
+        public LanguageType selectedLanguage = LanguageType.English;
         private readonly Dictionary<string, Dictionary<string, string>> _translations = new Dictionary<string, Dictionary<string, string>>();
         public void Awake()
         {
-            if (Instance != null && Instance != this)
-            {
-                Destroy(gameObject);
-            } 
-            else 
-            {
-                Instance = this;
-            }
-
             if (PlayerPrefs.HasKey("Language"))
             {
                 var savedLanguage = PlayerPrefs.GetString("Language");
