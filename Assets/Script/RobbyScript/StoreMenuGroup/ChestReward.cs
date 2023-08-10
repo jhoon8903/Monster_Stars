@@ -19,9 +19,6 @@ namespace Script.RobbyScript.StoreMenuGroup
         [SerializeField] private ChestItem chestPrefabs;
         public ChestItem newChestRewardList;
         public static ChestReward Instance { get; private set; }
-
-        public int sliverAdsOpen;
-        public int goldAdsOpen;
         
         private void Awake()
         {

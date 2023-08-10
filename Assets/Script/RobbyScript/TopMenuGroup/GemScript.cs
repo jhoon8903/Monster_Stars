@@ -32,7 +32,7 @@ namespace Script.RobbyScript.TopMenuGroup
             UpdateGem();
         }
 
-        private void UpdateGem()
+        public void UpdateGem()
         {
             var gemValue = Gem switch
             {

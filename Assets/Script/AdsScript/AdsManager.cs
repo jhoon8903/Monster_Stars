@@ -333,17 +333,20 @@ namespace Script.AdsScript
                 case ButtonType.Coin:
                     boxGrade = StoreMenu.BoxGrade.Coin;
                     StoreMenu.Instance.Reward(boxGrade);
-                    GiveCoinReward();
+                    StoreMenu.Instance.OpenAds(boxGrade);
+                    GiveReward(ButtonType.Coin);
                     break;
                 case ButtonType.Gem:
                     boxGrade = StoreMenu.BoxGrade.Gem;
                     StoreMenu.Instance.Reward(boxGrade);
-                    GiveGemReward();
+                    StoreMenu.Instance.OpenAds(boxGrade);
+                    GiveReward(ButtonType.Gem);
                     break;
                 case ButtonType.Stamina:
                     boxGrade = StoreMenu.BoxGrade.Stamina;
                     StoreMenu.Instance.Reward(boxGrade);
-                    GiveStaminaReward();
+                    StoreMenu.Instance.OpenAds(boxGrade);
+                    GiveReward(ButtonType.Stamina);
                     break;
                 case ButtonType.Retry:
                     isRetry = true;
@@ -382,26 +385,31 @@ namespace Script.AdsScript
                     throw new ArgumentOutOfRangeException();
             }
         }
-        private static void GiveCoinReward()
+        private static void GiveReward(ButtonType buttonType)
         {
-            Debug.Log("코인 보상을 제공합니다.");
-            if (CoinsScript.Instance != null)
+            switch (buttonType)
             {
-                CoinsScript.Instance.Coin += 1000;
+                case ButtonType.Coin:
+                    Debug.Log("코인 보상을 제공합니다.");
+                    if (CoinsScript.Instance != null)
+                    {
+                        CoinsScript.Instance.Coin += 1000;
+                    }
+                    break;
+                case ButtonType.Gem:
+                    Debug.Log("재화 보상을 제공합니다.");
+                    if (GemScript.Instance != null)
+                    {
+                        GemScript.Instance.Gem += 200;
+                    }
+                    break;
+                case ButtonType.Stamina:
+                {
+                    Debug.Log("스테미너 보상을 제공합니다.");
+                    StaminaScript.Instance.CurrentStamina += 10;
+                }
+                    break;
             }
-        }
-        private static void GiveGemReward()
-        {
-            Debug.Log("재화 보상을 제공합니다.");
-            if (GemScript.Instance != null)
-            {
-                GemScript.Instance.Gem += 200;
-            }
-        }
-        private static void GiveStaminaReward()
-        {
-            Debug.Log("스테미너 보상을 제공합니다.");
-            StaminaScript.Instance.CurrentStamina += 10;
         }
         private void Retry()
         {
