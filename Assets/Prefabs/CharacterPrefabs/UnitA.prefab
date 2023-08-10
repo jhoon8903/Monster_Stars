@@ -48,11 +48,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cover: {fileID: 5058609582279428484}
-  unitPieceLevel: 3
+  unitPeaceLevel: 1
   unLock: 1
   selected: 0
   unitPuzzleLevel: 1
   unitGroup: 0
+  lv1: {fileID: 21300000, guid: 80c8c985d677b41388bbd79abbcf0641, type: 3}
+  lv3: {fileID: 21300000, guid: a2b15b142a2624f43ac94edec39747f0, type: 3}
+  lv5: {fileID: 21300000, guid: 867b189c878c448c08475b7d1fb771fc, type: 3}
+  lv7: {fileID: 21300000, guid: 6de763a8a3dd04c30b8b66b67e938393, type: 3}
+  lv9: {fileID: 21300000, guid: ce229b32c57f049df9f3be5ea87c72b0, type: 3}
+  lv11: {fileID: 21300000, guid: ee04c23c850b14ce6b43a87e39c1c768, type: 3}
+  lv13: {fileID: 21300000, guid: 098cf6650fcc5477bbe06bfc063d6272, type: 3}
   baseDamage: 36
   dotDamage: 0
   effectChance: 30
@@ -77,6 +84,7 @@ MonoBehaviour:
   level3Sprite: {fileID: 21300000, guid: 867b189c878c448c08475b7d1fb771fc, type: 3}
   level4Sprite: {fileID: 21300000, guid: 6de763a8a3dd04c30b8b66b67e938393, type: 3}
   level5Sprite: {fileID: 21300000, guid: ce229b32c57f049df9f3be5ea87c72b0, type: 3}
+  level6Sprite: {fileID: 21300000, guid: fc1db0ba68d034964af3749069e86b75, type: 3}
   atkCount: 0
 --- !u!212 &5992232989211166791
 SpriteRenderer:

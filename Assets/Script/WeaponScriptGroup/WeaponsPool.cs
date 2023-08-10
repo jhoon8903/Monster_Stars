@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Script.CharacterManagerScript;
 using Script.RewardScript;
 using UnityEngine;
 

@@ -100,12 +100,12 @@ namespace Script.PuzzleManagerGroup
                 if (timer >= 2f) // 눌러진 상태를 2초 동안 확인
                 {
                     CharacterPool.ReturnToPool(_startObject);
+                    countManager.DecreaseMoveCount();
                     StartCoroutine(spawnManager.PositionUpCharacterObject());
                     break;
                 }
                 yield return null;
             }
-            countManager.DecreaseMoveCount();
             fillImage.fillAmount = 0f; // fillAmount를 초기화
             Destroy(pressObjectInstance); // 인스턴스를 파괴
         }
@@ -222,8 +222,8 @@ namespace Script.PuzzleManagerGroup
                 }
             }
 
-            var startObject = spawnManager.CharacterObject(new Vector3(startX, startY, 0));
-            var endObject = spawnManager.CharacterObject(new Vector3(endX, endY, 0));
+            var startObject = SpawnManager.CharacterObject(new Vector3(startX, startY, 0));
+            var endObject = SpawnManager.CharacterObject(new Vector3(endX, endY, 0));
             if (startObject && endObject != null)
             {
                 StartCoroutine(SwitchAndMatches(startObject,endObject));
@@ -274,20 +274,10 @@ namespace Script.PuzzleManagerGroup
             yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
         }
         // 이 코루틴은 주어진 오브젝트가 MatchManager를 사용하여 매치의 일부인지 여부를 확인합니다.
-        private IEnumerator MatchesCheck(GameObject characterObject)
+        public IEnumerator MatchesCheck(GameObject characterObject)
         {
             if (characterObject == null) yield break;
             if (!matchManager.IsMatched(characterObject)) yield break;
-            yield return null;
-        }
-        public IEnumerator AllMatchesCheck(GameObject characterObject)
-        {
-            if (characterObject == null) yield break;
-            if (!matchManager.IsMatched(characterObject))
-            {
-               
-                yield break;
-            }
             yield return null;
         }
     }

@@ -15,6 +15,7 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level3Sprite;
         [SerializeField] private Sprite level4Sprite;
         [SerializeField] private Sprite level5Sprite;
+        [SerializeField] private Sprite level6Sprite;
         private Vector2 _detectionSize;
         public int atkCount;
         public override void Initialize()
@@ -79,7 +80,7 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = unitPieceLevel > 1 ? unitPieceLevel * 6 : 0f;
+            UnitLevelDamage = unitPeaceLevel > 1 ? unitPeaceLevel * 6 : 0f;
             Type = Types.Character;
             unitGroup = UnitGroups.J;
             var crushDamageBoost = CastleManager.Instance.castleCrushBoost ? 1.3f : 1f; 
@@ -88,7 +89,8 @@ namespace Script.CharacterGroupScript
                 <= 2 => 1f,
                 3 => 1.7f,
                 4 => 2f,
-                _ => 2.3f
+                5 => 2.3f,
+                6 => 2.6f
             };
             dotDamage = DefaultDamage * 0.2f;
             bleedTime = EnforceManager.Instance.physical2BleedTimeBoost ? 5f : 3f;
@@ -109,7 +111,8 @@ namespace Script.CharacterGroupScript
                 2 => level2Sprite,
                 3 => level3Sprite,
                 4 => level4Sprite,
-                _ => level5Sprite
+                5 => level5Sprite,
+                6 => level6Sprite
             };
         }
     }

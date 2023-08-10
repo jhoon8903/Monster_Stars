@@ -53,8 +53,15 @@ MonoBehaviour:
   selected: 1
   unitPuzzleLevel: 1
   unitGroup: 3
+  lv1: {fileID: 21300000, guid: 839512c7e5074443484353af99aa4716, type: 3}
+  lv3: {fileID: 21300000, guid: dada313516f624fe69bc4bab8590e8ed, type: 3}
+  lv5: {fileID: 21300000, guid: a1844507a19fb438893ad330f35d18d1, type: 3}
+  lv7: {fileID: 21300000, guid: f23d4b238c83f4c52a581aeeabfc8377, type: 3}
+  lv9: {fileID: 21300000, guid: 268b6ca3684d849608a79812c75c45fb, type: 3}
+  lv11: {fileID: 21300000, guid: 99a6ec84445054f00a1673bf601c31f3, type: 3}
+  lv13: {fileID: 21300000, guid: 69e0347d155094f008a3ed6761e138f4, type: 3}
   baseDamage: 23
-  dotDamage: 4.646
+  dotDamage: 4.6
   effectChance: 0
   effectStack: 0
   slowTime: 0

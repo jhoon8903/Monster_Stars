@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
@@ -6,7 +5,6 @@ using Script.RobbyScript.TopMenuGroup;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.UI;
 using Button = UnityEngine.UI.Button;
 using Image = UnityEngine.UI.Image;
 
@@ -95,7 +93,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 {
                     var unitInstance = Instantiate(unitIconPrefab, inActivateUnitContent.transform, false);
                     SetupInActiveUnitIcon(unitInstance, character);
-                    AdjustRectTransform(activateUnitContent.transform);
+                    AdjustRectTransform(inActivateUnitContent.transform);
                 }
             }
         }
@@ -218,37 +216,39 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         {
             unitInstance.normalBack.GetComponent<Image>().sprite = character.UnitGrade switch
             {
-              CharacterBase.UnitGrades.Green => unitInstance.NormalBackSprite[0],
-              CharacterBase.UnitGrades.Blue => unitInstance.NormalBackSprite[1],
-              CharacterBase.UnitGrades.Purple => unitInstance.NormalBackSprite[2],
+              CharacterBase.UnitGrades.Green => unitInstance.normalBackSprite[0],
+              CharacterBase.UnitGrades.Blue => unitInstance.normalBackSprite[1],
+              CharacterBase.UnitGrades.Purple => unitInstance.normalBackSprite[2],
+              _=> unitInstance.normalBackSprite[3]
             };
             unitInstance.infoBack.GetComponent<Image>().sprite = character.UnitGrade switch
             {
-                CharacterBase.UnitGrades.Green => unitInstance.InfoBackSprite[0],
-                CharacterBase.UnitGrades.Blue => unitInstance.InfoBackSprite[1],
-                CharacterBase.UnitGrades.Purple => unitInstance.InfoBackSprite[2],
+                CharacterBase.UnitGrades.Green => unitInstance.infoBackSprite[0],
+                CharacterBase.UnitGrades.Blue => unitInstance.infoBackSprite[1],
+                CharacterBase.UnitGrades.Purple => unitInstance.infoBackSprite[2],
             };
             unitInstance.unitFrame.GetComponent<Image>().sprite = character.UnitGrade switch
             {
-                CharacterBase.UnitGrades.Green => unitInstance.FrameSprite[0],
-                CharacterBase.UnitGrades.Blue => unitInstance.FrameSprite[1],
-                CharacterBase.UnitGrades.Purple => unitInstance.FrameSprite[2],
+                CharacterBase.UnitGrades.Green => unitInstance.frameSprite[0],
+                CharacterBase.UnitGrades.Blue => unitInstance.frameSprite[1],
+                CharacterBase.UnitGrades.Purple => unitInstance.frameSprite[2],
+                _=> unitInstance.frameSprite[3]
             };
             unitInstance.unitProperty.GetComponent<Image>().sprite = character.UnitProperty switch
             {
-              CharacterBase.UnitProperties.Divine => unitInstance.UnitPropertiesSprite[0],
-              CharacterBase.UnitProperties.Darkness => unitInstance.UnitPropertiesSprite[1],
-              CharacterBase.UnitProperties.Physics => unitInstance.UnitPropertiesSprite[2],
-              CharacterBase.UnitProperties.Water => unitInstance.UnitPropertiesSprite[3],
-              CharacterBase.UnitProperties.Poison => unitInstance.UnitPropertiesSprite[4],
-              CharacterBase.UnitProperties.Fire => unitInstance.UnitPropertiesSprite[5],
+              CharacterBase.UnitProperties.Divine => unitInstance.unitPropertiesSprite[0],
+              CharacterBase.UnitProperties.Darkness => unitInstance.unitPropertiesSprite[1],
+              CharacterBase.UnitProperties.Physics => unitInstance.unitPropertiesSprite[2],
+              CharacterBase.UnitProperties.Water => unitInstance.unitPropertiesSprite[3],
+              CharacterBase.UnitProperties.Poison => unitInstance.unitPropertiesSprite[4],
+              CharacterBase.UnitProperties.Fire => unitInstance.unitPropertiesSprite[5],
             };
 
-            unitInstance.unitImage.GetComponent<Image>().sprite = character.GetSpriteForLevel(character.unitPieceLevel);
-            unitInstance.unitLevelText.text = $"Lv. {character.unitPieceLevel}";
-            unitInstance.unitPieceSlider.maxValue = character.CharacterMaxPiece;
-            unitInstance.unitPieceSlider.value = character.CharacterPieceCount;
-            unitInstance.unitPieceText.text = $"{character.CharacterPieceCount}/{unitInstance.unitPieceSlider.maxValue}";
+            unitInstance.unitImage.GetComponent<Image>().sprite = character.GetSpriteForLevel(character.unitPeaceLevel);
+            unitInstance.unitLevelText.text = $"Lv. {character.unitPeaceLevel}";
+            unitInstance.unitPieceSlider.maxValue = character.CharacterMaxPeace;
+            unitInstance.unitPieceSlider.value = character.CharacterPeaceCount;
+            unitInstance.unitPieceText.text = $"{character.CharacterPeaceCount}/{unitInstance.unitPieceSlider.maxValue}";
         }
 
         private void SetupInActiveUnitIcon(UnitIcon unitInstance, CharacterBase character)
@@ -261,10 +261,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             unitInstance.unitPieceSlider.maxValue = 0;
             unitInstance.unitPieceSlider.value = 0;
             unitInstance.unitPieceText.text = $"{unitInstance.unitPieceSlider.value}/{unitInstance.unitPieceSlider.maxValue}";
-            unitInstance.GetComponent<Button>().onClick.AddListener(() =>
-            {
-                SwapBackGround(unitInstance, character);
-            });
 
         }
 
@@ -287,7 +283,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 case true when characterBase.selected:
                 {
                     unitInstance.infoBtn.gameObject.SetActive(true);
-                    if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece && CoinsScript.Instance.Coin >= characterBase.CharacterLevelUpCoin)
+                    if (characterBase.CharacterPeaceCount >= characterBase.CharacterMaxPeace && CoinsScript.Instance.Coin >= characterBase.CharacterLevelUpCoin)
                     {
                         unitInstance.levelUpBtn.gameObject.SetActive(true);
                         unitInstance.removeBtn.gameObject.SetActive(false);
@@ -304,7 +300,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 case true when !characterBase.selected:
                 {
                     unitInstance.infoBtn.gameObject.SetActive(true);
-                    if (characterBase.CharacterPieceCount >= characterBase.CharacterMaxPiece && CoinsScript.Instance.Coin >= characterBase.CharacterLevelUpCoin)
+                    if (characterBase.CharacterPeaceCount >= characterBase.CharacterMaxPeace && CoinsScript.Instance.Coin >= characterBase.CharacterLevelUpCoin)
                     {
                         unitInstance.levelUpBtn.gameObject.SetActive(true);
                         unitInstance.removeBtn.gameObject.SetActive(false);
@@ -384,9 +380,9 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             var matchingUnitIcons = allUnitIconInstances.Where(unitIcon => unitIcon.CharacterBase == characterBase).ToList();
             foreach (var unitIcon in matchingUnitIcons)
             {
-                unitIcon.unitPieceSlider.maxValue = characterBase.CharacterMaxPiece;
-                unitIcon.unitPieceSlider.value = characterBase.CharacterPieceCount;
-                unitIcon.unitPieceText.text = $"{characterBase.CharacterPieceCount}/{unitIcon.unitPieceSlider.maxValue}";
+                unitIcon.unitPieceSlider.maxValue = characterBase.CharacterMaxPeace;
+                unitIcon.unitPieceSlider.value = characterBase.CharacterPeaceCount;
+                unitIcon.unitPieceText.text = $"{characterBase.CharacterPeaceCount}/{unitIcon.unitPieceSlider.maxValue}";
             }
         }
     }

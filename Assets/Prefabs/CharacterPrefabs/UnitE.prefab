@@ -53,6 +53,13 @@ MonoBehaviour:
   selected: 1
   unitPuzzleLevel: 1
   unitGroup: 4
+  lv1: {fileID: 21300000, guid: 782984bc776b948b698e5e6475a43ebb, type: 3}
+  lv3: {fileID: 21300000, guid: d76e14dd6747040949c813bf034a4145, type: 3}
+  lv5: {fileID: 21300000, guid: 646cabb414b064993b016af51a4dbdd7, type: 3}
+  lv7: {fileID: 21300000, guid: 98a403a293b0e4db094e862eb51ccb7d, type: 3}
+  lv9: {fileID: 21300000, guid: f04a05f17ed1d47d98afa2405820232d, type: 3}
+  lv11: {fileID: 21300000, guid: 4c796496d5ae747e9a024888a9fb36ee, type: 3}
+  lv13: {fileID: 21300000, guid: c5f44c165c2f54005ab468639fd3a330, type: 3}
   baseDamage: 17
   dotDamage: 0
   effectChance: 10

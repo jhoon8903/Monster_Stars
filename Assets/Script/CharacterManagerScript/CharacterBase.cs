@@ -5,15 +5,16 @@ using DG.Tweening;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
 using Script.RobbyScript.TopMenuGroup;
+using UnityEngine.Serialization;
 
 namespace Script.CharacterManagerScript
 {
     public class CharacterBase : MonoBehaviour
     {
         [SerializeField] public GameObject cover;
-        public int unitPieceLevel = 1;
-        protected internal int CharacterPieceCount { get; set; }
-        protected internal int CharacterMaxPiece => CheckForMaxPiece();
+        public int unitPeaceLevel = 1;
+        protected internal int CharacterPeaceCount { get; set; }
+        protected internal int CharacterMaxPeace => CheckForMaxPeace();
         protected internal int CharacterLevelUpCoin => CheckForLevelUpCoin();
         public enum UnitGrades { Green, Blue, Purple }
         protected internal UnitGrades UnitGrade;
@@ -30,6 +31,14 @@ namespace Script.CharacterManagerScript
         protected internal UnitAtkTypes UnitAtkType = UnitAtkTypes.None;
         protected internal UnitProperties UnitProperty = UnitProperties.None;
         protected internal UnitEffects UnitEffect = UnitEffects.None;
+        protected internal Dictionary<int, Sprite> UnitSkillDict = new Dictionary<int, Sprite>();
+        [SerializeField] internal Sprite lv1;
+        [SerializeField] internal Sprite lv3;
+        [SerializeField] internal Sprite lv5;
+        [SerializeField] internal Sprite lv7;
+        [SerializeField] internal Sprite lv9;
+        [SerializeField] internal Sprite lv11;
+        [SerializeField] internal Sprite lv13;
         public int baseDamage;
         public float dotDamage;
         public int effectChance;
@@ -72,11 +81,12 @@ namespace Script.CharacterManagerScript
         {
             unLock = true;
             _spriteRenderer = GetComponent<SpriteRenderer>();
+            UnitSkillDict = new Dictionary<int, Sprite> { {1, lv1}, {3, lv3}, {5, lv5}, {7, lv7}, {9, lv9}, {11, lv11}, {13, lv13} };
         }
-        private int CheckForMaxPiece()
+        private int CheckForMaxPeace()
         {
             var maxPiece = 0;
-            switch (unitPieceLevel)
+            switch (unitPeaceLevel)
             {
                 case 1:
                 case 2:
@@ -182,7 +192,7 @@ namespace Script.CharacterManagerScript
         private int CheckForLevelUpCoin()
         {
             var coin = 0;
-            switch (unitPieceLevel)
+            switch (unitPeaceLevel)
             {
                 case 1:
                     coin = 0;
@@ -315,9 +325,9 @@ namespace Script.CharacterManagerScript
         }
         public IEnumerator UnitLevelUp()
         {
-            CharacterPieceCount -= CharacterMaxPiece;
+            CharacterPeaceCount -= CharacterMaxPeace;
             CoinsScript.Instance.Coin -= CharacterLevelUpCoin;
-            unitPieceLevel++;
+            unitPeaceLevel++;
             Initialize();
             yield return null;
         }
@@ -325,6 +335,7 @@ namespace Script.CharacterManagerScript
         {
             return null;
         }
+
         protected internal virtual void SetLevel(int level)
         {
             unitPuzzleLevel = level;

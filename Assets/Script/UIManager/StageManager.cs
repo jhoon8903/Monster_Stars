@@ -171,7 +171,6 @@ namespace Script.UIManager
             EnforceManager.Instance.addRow = false;
             characterPool.theFirst = false;
             ClearRewardManager.Instance.ClearReward(latestStage);
-            EnforceManager.Instance.addGold = false;
             EnforceManager.Instance.addGoldCount = 0;
             PlayerPrefs.SetInt($"{latestStage}Stage_ProgressWave", 1);
             PlayerPrefs.SetInt($"{latestStage}Stage_ClearWave", MaxWave());

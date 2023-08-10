@@ -14,7 +14,6 @@ namespace Script.PuzzleManagerGroup
 {
     public class SpawnManager : MonoBehaviour
     {
-        [SerializeField] private CharacterPool characterPool;
         [SerializeField] private GridManager gridManager;
         [SerializeField] private MatchManager matchManager;
         [SerializeField] private CommonRewardManager rewardManger;
@@ -25,13 +24,9 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private SwipeManager swipeManager;
         [SerializeField] private TutorialManager tutorialManager;
         public bool isWave10Spawning;
-        public bool isMatched;
         private float _totalPos;
-        private bool _isMatchActivated;
-        private int _currentGroupIndex = 0;
+        private int _currentGroupIndex;
         public bool isTutorial;
-        private bool _isWaitingForIdle = false;
-        private int _spawnCount = 0;
         private void Start()
         {
             if (!PlayerPrefs.HasKey("TutorialKey")) return;
@@ -45,16 +40,16 @@ namespace Script.PuzzleManagerGroup
         {
             OnMatchFound?.Invoke();
         }
-        public GameObject CharacterObject(Vector3 spawnPosition)
+        public static GameObject CharacterObject(Vector3 spawnPosition)
         {
-            var spawnCharacters = characterPool.UsePoolCharacterList();
+            var spawnCharacters = CharacterPool.Instance.UsePoolCharacterList();
             return (from character in spawnCharacters
                 where character.transform.position == spawnPosition
                 select character.gameObject).FirstOrDefault();
         }
         public IEnumerator PositionUpCharacterObject()
         {
-            yield return swipeManager.isBusy = true;
+            swipeManager.isBusy = true;
             var moves = new List<(GameObject, Vector3Int)>();
             for (var x = 0; x < gridManager.gridWidth; x++)
             {
@@ -75,68 +70,61 @@ namespace Script.PuzzleManagerGroup
             yield return StartCoroutine(PerformMoves(moves));
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
             yield return StartCoroutine(CheckPosition());
-
             if (rewardManger.PendingTreasure.Count != 0)
             {
                 rewardManger.EnqueueTreasure();
             }
-            StartCoroutine(CheckForIdleState());
+            swipeManager.isBusy = false;
+            if (isTutorial&&!swipeManager.isBusy)
+            {
+                yield return new WaitForSecondsRealtime(0.9f);
+                Debug.Log(tutorialManager.CurrentTutorialStep.TutorialStepCount);
+                switch (tutorialManager.CurrentTutorialStep.TutorialStepCount)
+                {
+                    case 3:
+                        tutorialManager.CurrentTutorialStep.TutorialStepCount = 0;
+                        break;
+                    case 6:
+                        tutorialManager.CurrentTutorialStep.TutorialStepCount = 0;
+                        break;
+                    case 7:
+                        tutorialManager.CurrentTutorialStep.TutorialStepCount = 0;
+                        break;
+                    default:
+                        TriggerOnMatchFound();
+                        break;
+                }
+            }
             if (countManager.TotalMoveCount != 0 || gameManager.IsBattle) yield break;
+            
             while (commonRewardManager.isOpenBox)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 yield return new WaitForSeconds(0.5f);
             }
+            
             if (countManager.TotalMoveCount == 0)
             {
                 yield return StartCoroutine(gameManager.Count0Call());
             }
+         
         }
-        private IEnumerator CheckForIdleState()
-        {
-            if (_isWaitingForIdle) yield break;
-            _isWaitingForIdle = true;
-            var currentSpawnCount = _spawnCount;
 
-            if (isTutorial)
-            {
-                yield return new WaitForSeconds(1f);
-                if (!isMatched && currentSpawnCount == _spawnCount)
-                {
-                    if (tutorialManager._currentTutorialStep.TutorialStepCount == 6)
-                    {
-                        tutorialManager._currentTutorialStep.TutorialStepCount = 7;
-                    }
-                    else
-                    {
-                        TriggerOnMatchFound();
-                    }
-                }
-            }
-            swipeManager.isBusy = false;
-            _isWaitingForIdle = false;
-        }
         private IEnumerator CheckPosition()
         {
-            if (isMatched) yield break;
-            var wait = new WaitForSeconds(0.1f);
-            var maxRows = characterPool.UsePoolCharacterList().Count / 6;
+            var wait = new WaitForSeconds(0.3f);
+            var maxRows = CharacterPool.Instance.UsePoolCharacterList().Count / 6;
             var maxCount = maxRows * (maxRows - 1) * 3;
-            _totalPos = characterPool.UsePoolCharacterList().Sum(t=> t.transform.position.y);
+            _totalPos = CharacterPool.Instance.UsePoolCharacterList().Sum(t=> t.transform.position.y);
             while (_totalPos < maxCount)
             {
-                while(characterPool.SortPoolCharacterList().Count < characterPool.UsePoolCharacterList().Count)
+                while(CharacterPool.Instance.SortPoolCharacterList().Count < CharacterPool.Instance.UsePoolCharacterList().Count)
                 {
                     yield return wait;
                 }
-                _totalPos = characterPool.UsePoolCharacterList().Sum(t => t.transform.position.y);
+                _totalPos = CharacterPool.Instance.UsePoolCharacterList().Sum(t => t.transform.position.y);
             }
             yield return StartCoroutine(matchManager.CheckMatches());
-            _isMatchActivated = matchManager.isMatchActivated;
-            if (rewardManger.openBoxing) yield break;
-            if (!_isMatchActivated) yield break;
-            _spawnCount++;
-            StartCoroutine(CheckPosition());
         }
         private static IEnumerator MoveCharacter(GameObject gameObject, Vector3Int targetPosition, float duration = 0.3f)
         {
@@ -190,16 +178,16 @@ namespace Script.PuzzleManagerGroup
         {
             return isTutorial ? SpawnTutorialCharacter(position) : SpawnMainGameCharacter(position);
         }
-        private GameObject SpawnMainGameCharacter(Vector3Int position)
+        private static GameObject SpawnMainGameCharacter(Vector3Int position)
         {
-            var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
-            if (notUsePoolCharacterList.Count <= 0) return null;
+            var notUsePoolCharacterList = CharacterPool.Instance.NotUsePoolCharacterList();
             var randomIndex = Random.Range(0, notUsePoolCharacterList.Count);
             var newCharacter = notUsePoolCharacterList[randomIndex];
             newCharacter.transform.position = position;
-            if (EnforceManager.Instance.permanentGroupIndex.Count > 0)
+            if (EnforceManager.Instance.index.Count > 0)
             {
-                foreach (var dummy in EnforceManager.Instance.permanentGroupIndex
+      
+                foreach (var dummy in EnforceManager.Instance.index
                              .Select(index => EnforceManager.Instance.characterList[index].unitGroup)
                              .Where(unitGroup => unitGroup == newCharacter.GetComponent<CharacterBase>().unitGroup))
                 {
@@ -224,14 +212,13 @@ namespace Script.PuzzleManagerGroup
                 var nextUnitGroupKey = TutorialManager.UnitGroupOrder[_currentGroupIndex];
                 _currentGroupIndex = (_currentGroupIndex + 1) % TutorialManager.UnitGroupOrder.Length; // Always increment the index
 
-                var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList()
+                var notUsePoolCharacterList = CharacterPool.Instance.NotUsePoolCharacterList()
                     .Where(character => character.GetComponent<CharacterBase>().unitGroup == nextUnitGroupKey && !character.activeInHierarchy)
                     .ToList();
                 if (notUsePoolCharacterList.Count > 0) {
                     var randomIndex = Random.Range(0, notUsePoolCharacterList.Count);
                     newCharacter = notUsePoolCharacterList[randomIndex];
                 }
-
                 attempts++;
             }
             if (newCharacter == null) return newCharacter;
@@ -247,14 +234,14 @@ namespace Script.PuzzleManagerGroup
                 yield return StartCoroutine(MoveCharacter(o, targetPosition));
             }
         }
-        public void SaveUnitState()
+        public static void SaveUnitState()
         {
             if (PlayerPrefs.HasKey("unitState")) 
             {
                 PlayerPrefs.DeleteKey("unitState");
             }
           
-            var poolCharacterList = characterPool.UsePoolCharacterList();
+            var poolCharacterList = CharacterPool.Instance.UsePoolCharacterList();
             var unitState = "";
             foreach (var character in poolCharacterList)
             {
@@ -267,10 +254,10 @@ namespace Script.PuzzleManagerGroup
             PlayerPrefs.SetString("unitState", unitState);
             PlayerPrefs.Save();
         }
-        public IEnumerator LoadGameState()
+        public static IEnumerator LoadGameState()
         {
-            characterPool.theFirst = false;
-            var useList = characterPool.UsePoolCharacterList();
+            CharacterPool.Instance.theFirst = false;
+            var useList = CharacterPool.Instance.UsePoolCharacterList();
             foreach (var useUnit in useList)
             {
                 CharacterPool.ReturnToPool(useUnit);
@@ -278,7 +265,7 @@ namespace Script.PuzzleManagerGroup
 
             var unitState = PlayerPrefs.GetString("unitState", "");
             var pieceData = unitState.Split(';');
-            var notUsePoolCharacterList = characterPool.NotUsePoolCharacterList();
+            var notUsePoolCharacterList = CharacterPool.Instance.NotUsePoolCharacterList();
             foreach (var data in pieceData)
             {
                 if (string.IsNullOrEmpty(data)) continue;
@@ -307,11 +294,11 @@ namespace Script.PuzzleManagerGroup
             }
             yield return null;
         }
-      public IEnumerator BossStageClearRule()
+        public IEnumerator BossStageClearRule()
         {
             isWave10Spawning = true;
             yield return StartCoroutine(gameManager.WaitForPanelToClose());
-            var saveCharacterList = characterPool.UsePoolCharacterList();
+            var saveCharacterList = CharacterPool.Instance.UsePoolCharacterList();
             var highLevelCharacters = saveCharacterList
                 .OrderByDescending(character => character.GetComponent<CharacterBase>().unitPuzzleLevel)
                 .Take(enforceManager.highLevelCharacterCount)

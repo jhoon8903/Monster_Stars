@@ -6,6 +6,7 @@ using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Script.PuzzleManagerGroup
 {
@@ -18,21 +19,25 @@ namespace Script.PuzzleManagerGroup
             public List<GameObject> ColumnList;
         }
         [SerializeField] private SpawnManager spawnManager;
-        [SerializeField] private CharacterPool characterPool;
         [SerializeField] private CountManager countManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private EnforceManager enforceManager;
         [SerializeField] private SwipeManager swipeManager;
-        private bool _isMatched;
-        public bool isMatchActivated;
         public bool IsMatched(GameObject swapCharacter)
         {
-            var matchFound = false;
+            var matched = false;
             var swapCharacterBase = swapCharacter.GetComponent<CharacterBase>();
-            if(swapCharacterBase.unitPuzzleLevel == 5)    return false;
             var swapCharacterGroup = swapCharacterBase.unitGroup;
             var swapCharPuzzleLevel = swapCharacterBase.unitPuzzleLevel;
-            var swapCharacterPosition = swapCharacterBase.transform.position;
+            switch (swapCharacterBase.UnitGrade)
+            {
+                case CharacterBase.UnitGrades.Green when swapCharPuzzleLevel == 5:
+                case CharacterBase.UnitGrades.Blue when swapCharPuzzleLevel == 6:
+                case CharacterBase.UnitGrades.Purple when swapCharPuzzleLevel == 7:
+                    return false;
+            }
+
+            var swapCharacterPosition = swapCharacterBase.transform.position;                      
             var directions = new[]
             {
                 (Vector3Int.left, Vector3Int.right, "Horizontal"), // Horizontal
@@ -51,7 +56,7 @@ namespace Script.PuzzleManagerGroup
                     var nextPosition = swapCharacterPosition + dir;
                     for (var i = 0; i < 2; i++)
                     {
-                        var nextCharacter = spawnManager.CharacterObject(nextPosition);
+                        var nextCharacter = SpawnManager.CharacterObject(nextPosition);
                         if (nextCharacter == null ||
                             (nextCharacter.GetComponent<CharacterBase>().unitGroup != swapCharacterGroup
                              || nextCharacter.GetComponent<CharacterBase>().unitPuzzleLevel != swapCharPuzzleLevel))
@@ -64,21 +69,12 @@ namespace Script.PuzzleManagerGroup
             
                 if (dirName == "Horizontal") horizontalMatchCount += matchCount;
                 else verticalMatchCount += matchCount;
-                switch (matchCount)
-                {
-                    case 1:
-                    case 2:
-                    case 3:
-                    case 4:
-                    case 5:
-                        break;
-                }
                 matchedCharacters.AddRange(matchedObjects);
             }
 
             if (horizontalMatchCount + verticalMatchCount == 8)
             {
-                matchFound = horizontalMatchCount switch
+                matched = horizontalMatchCount switch
                 {
                     3 => Matches3X5Case(matchedCharacters),
                     5 => Matches5X3Case(matchedCharacters),
@@ -88,71 +84,71 @@ namespace Script.PuzzleManagerGroup
 
             if (horizontalMatchCount + verticalMatchCount == 7)
             {
-                matchFound = horizontalMatchCount switch
+                matched = horizontalMatchCount switch
                 {
                     2 => Matches2X5Case(matchedCharacters),
                     3 => Matches3X4Case(matchedCharacters),
                     4 => Matches4X3Case(matchedCharacters),
                     5 => Matches5X2Case(matchedCharacters),
-                    _ => matchFound
+                    _ => false
                 };
             }
 
             if (horizontalMatchCount + verticalMatchCount == 6)
             {
-                matchFound = horizontalMatchCount switch
+                matched = horizontalMatchCount switch
                 {
                     1 => Matches5Case1(matchedCharacters),
                     2 => Matches4Case3(matchedCharacters),
                     3 => Matches3X3Case(matchedCharacters),
                     4 => Matches4Case4(matchedCharacters),
                     5 => Matches5Case2(matchedCharacters),
-                    _ => matchFound
+                    _ => false
                 };
             }
 
             if (horizontalMatchCount + verticalMatchCount == 5)
             {
-                matchFound = horizontalMatchCount switch
+                matched = horizontalMatchCount switch
                 {
                     1 => Matches4Case1(matchedCharacters),
                     2 => Matches3Case3(matchedCharacters),
                     3 => Matches3Case4(matchedCharacters),
                     4 => Matches4Case2(matchedCharacters),
-                    _ => matchFound
+                    _ => false
                 };
             }
 
             if (horizontalMatchCount + verticalMatchCount == 4)
             {
-                matchFound = horizontalMatchCount switch
+               matched = horizontalMatchCount switch
                 {
                     1 => Matches3Case1(matchedCharacters),
                     3 => Matches3Case2(matchedCharacters),
-                    _ => matchFound
+                    _ => false
                 };
             }
-            return matchFound;
+            return matched;
         }
         public IEnumerator CheckMatches()
         {
-            if (_isMatched) yield break;
-            _isMatched = true;
-            var characterList = characterPool.SortPoolCharacterList();
-            FindConsecutiveTilesInColumn(characterPool.SortPoolCharacterList());
+            var characterList = CharacterPool.Instance.SortPoolCharacterList();
             var count = 0;
-            isMatchActivated = false;
-            foreach (var character in FindConsecutiveCharacters(characterList).Where(character => character.GetComponent<CharacterBase>().unitPuzzleLevel != 5))
+            foreach (var character in FindConsecutiveCharacters(characterList))
             {
-                yield return StartCoroutine(swipeManager.AllMatchesCheck(character));
-                count++;
-                if (count <= 1) continue;
-                countManager.IncrementComboCount();
-                isMatchActivated = true;
+                if (IsMatched(character))
+                {
+                    count++;
+                    if (count >= 1)
+                    {
+                        countManager.IncrementComboCount();
+                    }
+              
+                }
+                yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
             }
-            yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
-            _isMatched = false;
         }
+
         private static List<List<GameObject>> FindConsecutiveTilesInRow(IReadOnlyList<GameObject> characters)
         {
             var result = new List<List<GameObject>>();
@@ -376,7 +372,6 @@ namespace Script.PuzzleManagerGroup
                 ReturnObject(matchedCharacters[2]); 
                 ReturnObject(matchedCharacters[3]);
                 matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-
             }
             return true;
         }
@@ -659,7 +654,7 @@ namespace Script.PuzzleManagerGroup
                 commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[1]);
                 if (EnforceManager.Instance.addGold)
                 {
-                    EnforceManager.Instance.AddGold();
+                    EnforceManager.Instance.addGoldCount++;
                 }
             }
             else
@@ -676,7 +671,7 @@ namespace Script.PuzzleManagerGroup
             }
             if (EnforceManager.Instance.addGold)
             {
-                EnforceManager.Instance.AddGold();
+                EnforceManager.Instance.addGoldCount++;
             }
             return true;
         }
@@ -707,7 +702,7 @@ namespace Script.PuzzleManagerGroup
             }
             if (EnforceManager.Instance.addGold)
             {
-                EnforceManager.Instance.AddGold();
+                EnforceManager.Instance.addGoldCount++;
             }
             return true;
         }
@@ -738,7 +733,7 @@ namespace Script.PuzzleManagerGroup
             }
             if (EnforceManager.Instance.addGold)
             {
-                EnforceManager.Instance.AddGold();
+                EnforceManager.Instance.addGoldCount++;
             }
             return true;
         }
@@ -770,7 +765,7 @@ namespace Script.PuzzleManagerGroup
             }
             if (EnforceManager.Instance.addGold)
             {
-                EnforceManager.Instance.AddGold();
+                EnforceManager.Instance.addGoldCount++;
             }
             return true;
         }
@@ -930,7 +925,7 @@ namespace Script.PuzzleManagerGroup
             }
             if (EnforceManager.Instance.addGold)
             {
-                EnforceManager.Instance.AddGold();
+                EnforceManager.Instance.addGoldCount++;
             }
             return true;
         }
@@ -966,7 +961,7 @@ namespace Script.PuzzleManagerGroup
             }
             if (EnforceManager.Instance.addGold)
             {
-                EnforceManager.Instance.AddGold();
+                EnforceManager.Instance.addGoldCount++;
             }
             return true;
         }

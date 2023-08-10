@@ -10,9 +10,11 @@ namespace Script.CharacterManagerScript
         [SerializeField] private int poolSize;
         public List<GameObject> pooledCharacters;
         public bool theFirst;
+        public static CharacterPool Instance;
 
         public void Awake()
         {
+            Instance = this;
             pooledCharacters = new List<GameObject>();
             foreach (var character in characterManager.characterList)
             {
