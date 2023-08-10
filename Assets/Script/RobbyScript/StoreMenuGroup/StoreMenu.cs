@@ -290,7 +290,6 @@ namespace Script.RobbyScript.StoreMenuGroup
             gameObject.SetActive(false);
             originalPosition = chestGrade.transform.position;
             newPosition = originalPosition;
-
         }
         
         private void Update()
