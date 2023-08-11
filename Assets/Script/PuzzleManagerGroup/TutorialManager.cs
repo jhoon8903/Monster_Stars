@@ -12,6 +12,7 @@ namespace Script.PuzzleManagerGroup
     {
         [SerializeField] private CharacterPool characterPool;
         [SerializeField] private GameObject tutorialCoverPrefab;
+        [SerializeField] private GameObject uiTransform;
         [SerializeField] private GameObject guidePointerPrefab;
         [SerializeField] private TextMeshProUGUI textPopup;
         [SerializeField] private CommonRewardManager commonRewardManager;
@@ -23,6 +24,7 @@ namespace Script.PuzzleManagerGroup
         private Queue<TutorialStep> _tutorialSteps;
         public TutorialStep CurrentTutorialStep;
         private TextMeshProUGUI _currentTextPopup;
+        
         public static readonly CharacterBase.UnitGroups[] UnitGroupOrder =
         {
             CharacterBase.UnitGroups.F,
@@ -46,7 +48,7 @@ namespace Script.PuzzleManagerGroup
             public readonly Vector2Int[] PositionsToRemove;
             public readonly Vector3 PointerStartPosition;
             public readonly Vector3 PointerEndPosition;
-            public int TutorialStepCount;
+            public readonly int TutorialStepCount;
             public readonly string PopupText;
 
             public TutorialStep(Vector2Int[] positionsToRemove, Vector3 pointerStartPosition, Vector3 pointerEndPosition, int tutorialStepCount, string popupText)
@@ -58,6 +60,9 @@ namespace Script.PuzzleManagerGroup
                 PopupText = popupText;
             }
         }
+        private float _nextTriggerTime; // 다음 트리거가 발생할 수 있는 시간
+        private const float TutorialTriggerCooldown = 1.5f;
+
         private void Start()
         {
             if (PlayerPrefs.GetInt("TutorialKey") != 1) return;
@@ -148,6 +153,7 @@ namespace Script.PuzzleManagerGroup
         }
         private void HandleMatchFound()
         {
+            if (Time.time < _nextTriggerTime) return;
             if (_pointerCoroutine != null)
             {
                 StopCoroutine(_pointerCoroutine);
@@ -155,6 +161,7 @@ namespace Script.PuzzleManagerGroup
                 _currentGuidePointer = null;
             }
             ProcessNextTutorialStep();
+            _nextTriggerTime = Time.time + TutorialTriggerCooldown;
         }
         public void EndTutorial()
         {

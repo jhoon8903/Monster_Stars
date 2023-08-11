@@ -77,3 +77,6 @@ Purple,15,LevelUpPattern,0 1 2 3
 Purple,10,Match5Upgrade,1
 Purple,16,AddRow,1
 Blue,5,GroupLevelUp,0 1 2 3
+Green,3,NextStep,3 4 5
+Blue,3,NextStep,9 10 11
+Purple,3,NextStep,14 15 16 17

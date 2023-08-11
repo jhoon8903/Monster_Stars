@@ -20,7 +20,7 @@ namespace Script.WeaponScriptGroup
             yield return base.UseWeapon();
             var useTime = Distance / Speed;
             var enemyTransforms = CharacterBase.GetComponent<UnitE>().DetectEnemies();
-            foreach (var unused in enemyTransforms.Where(enemy => enemy.transform.position.y < CharacterBase.transform.position.y))
+            foreach (var unused in enemyTransforms.Where(enemy => enemy.transform.position.y <= CharacterBase.transform.position.y))
             {
                 transform.rotation = Quaternion.Euler(0, 0, 180);
                 direction = Vector2.down;

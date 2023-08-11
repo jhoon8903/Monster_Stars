@@ -231,7 +231,6 @@ namespace Script.RewardScript
                 case PowerTypeManager.Types.Fire2BossDamageBoost:
                     EnforceManager.Instance.fire2BossDamageBoost = true;
                     break;
-
                 // H
                 case PowerTypeManager.Types.FireBurnPerAttackEffect:
                     EnforceManager.Instance.fireBurnPerAttackEffect = true;
@@ -254,7 +253,6 @@ namespace Script.RewardScript
                 case PowerTypeManager.Types.FireProjectileBounceDamage:
                     EnforceManager.Instance.fireProjectileBounceDamage = true;
                     break;
-
                 // I
                 case PowerTypeManager.Types.Poison2StunToChance:
                     EnforceManager.Instance.poison2StunToChance = true;
@@ -277,7 +275,6 @@ namespace Script.RewardScript
                 case PowerTypeManager.Types.Poison2PoolTimeBoost:
                     EnforceManager.Instance.poison2PoolTimeBoost = true;
                     break;
-
                 // J
                 case PowerTypeManager.Types.Physical2CastleCrushStatBoost:
                     EnforceManager.Instance.physical2CastleCrushStatBoost = true;
@@ -300,7 +297,6 @@ namespace Script.RewardScript
                 case PowerTypeManager.Types.Physical2BossBoost:
                     EnforceManager.Instance.physical2BossBoost = true;
                     break;
-
                 // K
                 case PowerTypeManager.Types.Dark2BackBoost:
                     EnforceManager.Instance.dark2BackBoost = true;
@@ -323,7 +319,9 @@ namespace Script.RewardScript
                 case PowerTypeManager.Types.Dark2SameEnemyBoost:
                     EnforceManager.Instance.dark2SameEnemyBoost = true;
                     break;
-
+                default:
+                    Debug.Log("Default Value" + selectedReward.Type);
+                    break;
             }
             selectedReward.ChosenProperty = null;
         }
@@ -732,7 +730,6 @@ namespace Script.RewardScript
                             if (!EnforceManager.Instance.fireProjectileBounceDamage) return false;
                             if (EnforceManager.Instance.fireProjectileBounceIncrease) return false;
                             break;
-
                         // Unit I
                         case PowerTypeManager.Types.Poison2StunToChance:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.I)) return false;
@@ -770,7 +767,6 @@ namespace Script.RewardScript
                             if (!EnforceManager.Instance.poison2SpawnPoisonArea) return false;
                             if (EnforceManager.Instance.poison2PoolTimeBoost) return false;
                             break;
-
                         // Unit J
                         case PowerTypeManager.Types.Physical2CastleCrushStatBoost:                         
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.J)) return false;
@@ -806,7 +802,6 @@ namespace Script.RewardScript
                             if (UnitPieceLevel(CharacterBase.UnitGroups.J) < 13) return false;
                             if (EnforceManager.Instance.physical2BossBoost) return false;
                             break;
-                
                         // Unit K
                         case PowerTypeManager.Types.Dark2BackBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.K)) return false;
@@ -842,6 +837,9 @@ namespace Script.RewardScript
                             if (UnitPieceLevel(CharacterBase.UnitGroups.K) < 13) return false;
                             if (EnforceManager.Instance.dark2SameEnemyBoost) return false;
                             break;
+                            default:
+                                Debug.Log("Default Value" + powerUp.Type);
+                                break;
                     }
                     return true;
             }
@@ -850,7 +848,7 @@ namespace Script.RewardScript
         private static Data SelectRandom(IEnumerable<Data> validOptions)
         {
             var commonDataList = validOptions.ToList();
-            var count = commonDataList.Count();
+            var count = commonDataList.Count;
             if (count == 0) return null;
             var randomIndex = Random.Range(0, count);
             return commonDataList.ElementAt(randomIndex);
@@ -943,7 +941,7 @@ namespace Script.RewardScript
                 PowerTypeManager.Types.Fire2ChangeProperty => finalTranslation,
                 PowerTypeManager.Types.Fire2DamageBoost => finalTranslation,
                 PowerTypeManager.Types.Fire2RangeBoost => finalTranslation,
-                PowerTypeManager.Types.Fire2RateBoost => finalTranslation, 
+                PowerTypeManager.Types.Fire2RateBoost => finalTranslation,
                 PowerTypeManager.Types.Fire2BossDamageBoost => finalTranslation,
                 PowerTypeManager.Types.FireBurnPerAttackEffect => finalTranslation,
                 PowerTypeManager.Types.FireStackOverlap => finalTranslation,
@@ -973,9 +971,8 @@ namespace Script.RewardScript
                 PowerTypeManager.Types.Dark2DoubleAttack => finalTranslation,
                 PowerTypeManager.Types.Dark2StatusPoison => finalTranslation,
                 PowerTypeManager.Types.Dark2SameEnemyBoost => finalTranslation,
-                _ => throw new ArgumentOutOfRangeException()
+                _=> "Default Value" + powerUp.Type
             };
- 
             expButton.onClick.RemoveAllListeners();
             expShuffle.onClick.RemoveAllListeners();
             expButton.onClick.AddListener(() => Selected(powerUp));

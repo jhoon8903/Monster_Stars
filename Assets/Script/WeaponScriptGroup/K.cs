@@ -24,7 +24,7 @@ namespace Script.WeaponScriptGroup
             if (!EnforceManager.Instance.dark2DualAttack)
             {
                 var enemyTransforms = CharacterBase.GetComponent<UnitK>().DetectEnemies();
-                foreach (var unused in enemyTransforms.Where(enemy => enemy.transform.position.y < CharacterBase.transform.position.y))
+                foreach (var unused in enemyTransforms.Where(enemy => enemy.transform.position.y <= CharacterBase.transform.position.y))
                 {
                     Speed = -Speed;
                     Damage *= 1.3f; 

@@ -21,7 +21,7 @@ namespace Script.WeaponScriptGroup
             yield return base.UseWeapon();
             var useTime = Distance / Speed;
             var enemyPosition = CharacterBase.GetComponent<UnitC>().DetectEnemies();
-            foreach (var unused in enemyPosition.Where(enemy => enemy.transform.position.y < CharacterBase.transform.position.y))
+            foreach (var unused in enemyPosition.Where(enemy => enemy.transform.position.y <= CharacterBase.transform.position.y))
             {
                 Speed = -Speed;
                 transform.rotation = Quaternion.Euler(0, 0, 180);

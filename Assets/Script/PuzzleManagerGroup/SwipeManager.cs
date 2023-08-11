@@ -27,6 +27,7 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private CommonRewardManager rewardManager;
         [SerializeField] private EnforceManager enforceManager;
         [SerializeField] private GameObject pressObject;
+        [SerializeField] private TutorialManager tutorialManager;
          
         // CountManager를 요청하여 캐릭터의 이동 허용 여부를 확인합니다.
         private bool CanMove()  
@@ -52,6 +53,8 @@ namespace Script.PuzzleManagerGroup
             }
         }
         // 사용자의 터치 포인트 또는 마우스 클릭 포인트를 화면 좌표에서 세계 좌표로 변환합니다.
+
+        // 사용자가 손가락을 떼거나 마우스 버튼을 놓을 때 처리합니다. 시작 개체의 크기를 조정하고 다음 스 와이프를 위해 무효화합니다.
         private static Vector2 GetTouchPoint()
         {
             var worldPoint = Camera.main!.ScreenToWorldPoint(Input.mousePosition);
@@ -78,45 +81,32 @@ namespace Script.PuzzleManagerGroup
             _startObject.GetComponent<CharacterBase>().IsClicked = true;
             _firstTouchPosition = point2D;
             StartCoroutine(CheckSoon());
-            StartCoroutine(CheckForLongPress());
-        }
-        private IEnumerator CheckForLongPress()
-        {
-            yield return new WaitForSecondsRealtime(1f);
-
-            if (_startObject == null || !_startObject.GetComponent<CharacterBase>().IsClicked)
-                yield break; // _startObject가 null이거나 더 이상 클릭되지 않은 경우 코루틴 종료
-
-            var pressObjectInstance = Instantiate(pressObject, new Vector3(_startObject.transform.position.x, _startObject.transform.position.y + 0.5f, _startObject.transform.position.z), Quaternion.identity);
-            var frontObject = pressObjectInstance.transform.GetChild(0).GetChild(0); 
-            var fillImage = frontObject.GetComponent<Image>();
-            var timer = 0f;
-
-            while (_startObject != null && _startObject.GetComponent<CharacterBase>().IsClicked)
+            if (spawnManager.isTutorial)
             {
-                timer += Time.deltaTime;
-                fillImage.fillAmount = timer / 2f; // fillAmount를 0에서 1까지 조정
-
-                if (timer >= 2f) // 눌러진 상태를 2초 동안 확인
+                switch (tutorialManager.CurrentTutorialStep.TutorialStepCount)
                 {
-                    CharacterPool.ReturnToPool(_startObject);
-                    countManager.DecreaseMoveCount();
-                    StartCoroutine(spawnManager.PositionUpCharacterObject());
-                    break;
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                    case 3:
+                        break;
+                    case 4:
+                        break;
+                    case 5 :
+                        break;
+                    case 7:
+                        break;
+                    default:
+                        StartCoroutine(CheckForLongPress());
+                        break;
                 }
-                yield return null;
             }
-            fillImage.fillAmount = 0f; // fillAmount를 초기화
-            Destroy(pressObjectInstance); // 인스턴스를 파괴
+            else
+            {
+                StartCoroutine(CheckForLongPress());
+            }
         }
-        private readonly WaitForSeconds _checkSoonWait = new WaitForSeconds(0.5f);
-        private IEnumerator CheckSoon()
-        {
-            _isSoon = true;
-            yield return _checkSoonWait;
-            _isSoon = false;
-        }
-        // 사용자가 손가락을 떼거나 마우스 버튼을 놓을 때 처리합니다. 시작 개체의 크기를 조정하고 다음 스 와이프를 위해 무효화합니다.
         private void HandleTouchUp()
         {
             ScaleObject(_startObject, Vector3.one, 0.2f);
@@ -142,24 +132,13 @@ namespace Script.PuzzleManagerGroup
             Swipe(swipe);
             HandleTouchUp(); // Release mouse input
         }
-
-        // 지정된 기간 동안 제공된 배율을 사용하여 주어진 객체의 크기를 조정합니다.
-        private static void ScaleObject(GameObject obj, Vector3 scale, float duration)
-        {
-            if (obj != null)
-            {
-                obj.transform.DOScale(scale, duration);
-            }
-        }
-
-         // 스와이프의 방향을 식별하고 스와이프의 시작 객체와 끝 객체를 결정합니다.
+        // 스와이프의 방향을 식별하고 스와이프의 시작 객체와 끝 객체를 결정합니다.
          // 개체가 식별되면 개체의 상태에 따라 SwitchAndMatches 코루틴 또는 NullSwap 코루틴을 시작합니다.
         private void Swipe(Vector2 swipe)
         {
             if (isBusy || isUp || rewardManager.openBoxing) return;
             if (!CanMove()) return;
             if (_startObject == null) return;
-
             var swipeAngle = Mathf.Atan2(swipe.y, swipe.x) * Mathf.Rad2Deg;
             swipeAngle = (swipeAngle < 0) ? swipeAngle + 360 : swipeAngle;
             var position = _startObject.transform.position;
@@ -167,7 +146,65 @@ namespace Script.PuzzleManagerGroup
             var startY = (int)position.y;
             var endX = startX;
             var endY = startY;
-
+            if (spawnManager.isTutorial)
+            {
+                switch (tutorialManager.CurrentTutorialStep.TutorialStepCount)
+                {
+                    case 1 when startX == 4 && startY == 4:
+                    {
+                        if (swipeAngle is < 135 or >= 225)
+                        {
+                            return;
+                        }
+                        break;
+                    }
+                    case 1:
+                        return;
+                    case 2 when startX == 3 && startY == 5:
+                    {
+                        if (swipeAngle is < 225 or >= 315)
+                        {
+                            return;
+                        }
+                        break;
+                    }
+                    case 2:
+                        return;
+                    case 3 when startX == 1 && startY == 3:
+                    {
+                        if (swipeAngle is < 135 or >= 225)
+                        {
+                            return;
+                        }
+                        break;
+                    }
+                    case 3:
+                        return;
+                    case 4 when startX == 4 && startY == 5:
+                    {
+                        if (swipeAngle is < 135 or >= 225)
+                        {
+                            return;
+                        }
+                        break;
+                    }             
+                    case 4:
+                        return;
+                    case 5 :
+                    case 6:
+                        return; 
+                    case 7 when startX == 5 && startY == 4:
+                    {
+                        if (swipeAngle is > 45 or >= 315)
+                        {
+                            return;
+                        }
+                        break;
+                    }
+                    case 7:
+                        return;
+                }
+            }
             // If diagonal movement is enabled, handle 8 directions
             if (enforceManager.diagonalMovement)
             {
@@ -233,6 +270,50 @@ namespace Script.PuzzleManagerGroup
             _startObject = null;
         }
 
+        private static void ScaleObject(GameObject obj, Vector3 scale, float duration)
+        {
+            if (obj != null)
+            {
+                obj.transform.DOScale(scale, duration);
+            }
+        }
+
+        private IEnumerator CheckForLongPress()
+        {
+            yield return new WaitForSecondsRealtime(1f);
+
+            if (_startObject == null || !_startObject.GetComponent<CharacterBase>().IsClicked)
+                yield break; // _startObject가 null이거나 더 이상 클릭되지 않은 경우 코루틴 종료
+
+            var pressObjectInstance = Instantiate(pressObject, new Vector3(_startObject.transform.position.x, _startObject.transform.position.y + 0.5f, _startObject.transform.position.z), Quaternion.identity);
+            var frontObject = pressObjectInstance.transform.GetChild(0).GetChild(0); 
+            var fillImage = frontObject.GetComponent<Image>();
+            var timer = 0f;
+
+            while (_startObject != null && _startObject.GetComponent<CharacterBase>().IsClicked)
+            {
+                timer += Time.deltaTime;
+                fillImage.fillAmount = timer / 2f; // fillAmount를 0에서 1까지 조정
+
+                if (timer >= 2f) // 눌러진 상태를 2초 동안 확인
+                {
+                    CharacterPool.ReturnToPool(_startObject);
+                    countManager.DecreaseMoveCount();
+                    StartCoroutine(spawnManager.PositionUpCharacterObject());
+                    break;
+                }
+                yield return null;
+            }
+            fillImage.fillAmount = 0f; // fillAmount를 초기화
+            Destroy(pressObjectInstance); // 인스턴스를 파괴
+        }
+        private readonly WaitForSeconds _checkSoonWait = new WaitForSeconds(0.5f);
+        private IEnumerator CheckSoon()
+        {
+            _isSoon = true;
+            yield return _checkSoonWait;
+            _isSoon = false;
+        }
         // 스와이프 끝에 빈 공간이 있는 null 스왑 시나리오를 처리합니다. 시작 개체는 빈 위치로 이동한 다음 개체 풀로 반환됩니다.
         private IEnumerator NullSwap(GameObject startObject, int endX, int endY)
         {
@@ -274,7 +355,7 @@ namespace Script.PuzzleManagerGroup
             yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
         }
         // 이 코루틴은 주어진 오브젝트가 MatchManager를 사용하여 매치의 일부인지 여부를 확인합니다.
-        public IEnumerator MatchesCheck(GameObject characterObject)
+        private IEnumerator MatchesCheck(GameObject characterObject)
         {
             if (characterObject == null) yield break;
             if (!matchManager.IsMatched(characterObject)) yield break;

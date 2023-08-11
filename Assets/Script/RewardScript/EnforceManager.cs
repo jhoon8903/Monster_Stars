@@ -507,7 +507,8 @@ namespace Script.RewardScript
         public bool dark2SameEnemyBoost;
 
         private float _property;
-        private readonly Dictionary<(PowerTypeManager.Types Type, int Value), PauseSkillObjectScript> _instantiatedSkills = new Dictionary<(PowerTypeManager.Types Type, int Value), PauseSkillObjectScript>();
+        private readonly Dictionary<(PowerTypeManager.Types Type, int Value), PauseSkillObjectScript> _instantiatedSkills = 
+            new Dictionary<(PowerTypeManager.Types Type, int Value), PauseSkillObjectScript>();
         private PauseSkillObjectScript _skill;
        
         private string GetGroupNameFromValue(int value)

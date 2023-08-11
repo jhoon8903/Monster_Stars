@@ -47,6 +47,7 @@ namespace Script
         private void Awake()
         {
             Instance = this;
+            Input.multiTouchEnabled = false;
             Application.targetFrameRate = 60;
         }
         private void Start()
@@ -236,6 +237,7 @@ namespace Script
         }
         public void GameSpeedSelect()
         {
+            if (spawnManager.isTutorial) return;
             if (speedUp == false)
             {
                 speedUp = true;

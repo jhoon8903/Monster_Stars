@@ -169,6 +169,7 @@ namespace Script.RewardScript
                 if (selectedCodes.Contains(powerUp.Code)) return false; // Do not select already selected reward codes again
                 switch (powerUp.Type)
                 {
+                    case PowerTypeManager.Types.NextStep:
                     case PowerTypeManager.Types.Water2Freeze:
                     case PowerTypeManager.Types.WaterFreeze:
                     case PowerTypeManager.Types.Dark2BackBoost:
@@ -290,6 +291,9 @@ namespace Script.RewardScript
                             case PowerTypeManager.Types.Step:
                                 if (PlayerPrefs.GetInt("TutorialKey") == 1) return false;
                                 break;
+                            case PowerTypeManager.Types.LevelUpPattern:if (PlayerPrefs.GetInt("TutorialKey") == 1) return false;
+                                if (PlayerPrefs.GetInt("TutorialKey") == 1) return false;
+                                break;
                         }
                         return true;
                 }
@@ -307,7 +311,17 @@ namespace Script.RewardScript
 
        // 7. 옵션값 출력
        private void CommonDisplay(IReadOnlyList<Data> powerUpsDisplayData)
-        {
+        {            
+            if (spawnManager.isTutorial)
+            {
+                common2Button.interactable = false;
+                common3Button.interactable = false;
+            }
+            else
+            {
+                common2Button.interactable = true;
+                common3Button.interactable = true;
+            }
             CommonDisplayText(common1Button, common1Text, icon1, common1BtnBadge ,powerUpsDisplayData[0], language);
             CommonDisplayText(common2Button, common2Text, icon2, common2BtnBadge, powerUpsDisplayData[1], language);
             CommonDisplayText(common3Button, common3Text, icon3, common3BtnBadge, powerUpsDisplayData[2], language);
@@ -323,7 +337,7 @@ namespace Script.RewardScript
            var placeholderValues = new Dictionary<string, Func<double>>
            {
                { "{p}", () => powerUp.Property[0]},
-               {"{powerUp.Property[0]}", () => powerUp.Property[0]},
+               { "{powerUp.Property[0]}", () => powerUp.Property[0]},
                { "{15*EnforceManager.Instance.slowCount}", () => 15 * EnforceManager.Instance.slowCount },
                { "{EnforceManager.Instance.expPercentage}", () => EnforceManager.Instance.expPercentage },
                { "{EnforceManager.Instance.highLevelCharacterCount}", () => EnforceManager.Instance.highLevelCharacterCount},
@@ -555,7 +569,8 @@ namespace Script.RewardScript
 
         private void ShuffleCommonReward()
         {
-            AdsManager.Instance.ShowRewardedAd();
+            if (spawnManager.isTutorial) return;
+                AdsManager.Instance.ShowRewardedAd();
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Common;
             commonShuffle.gameObject.SetActive(false);
         }

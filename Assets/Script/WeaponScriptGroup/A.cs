@@ -30,7 +30,7 @@ namespace Script.WeaponScriptGroup
             if (!EnforceManager.Instance.divineDualAttack)
             {
                 var enemyTransforms = CharacterBase.GetComponent<UnitA>().DetectEnemies();
-                foreach (var unused in enemyTransforms.Where(enemy => enemy.transform.position.y < CharacterBase.transform.position.y))
+                foreach (var unused in enemyTransforms.Where(enemy => enemy.transform.position.y <= CharacterBase.transform.position.y))
                 {
                     Speed = -Speed;
                     transform.rotation = Quaternion.Euler(0, 0, 180);

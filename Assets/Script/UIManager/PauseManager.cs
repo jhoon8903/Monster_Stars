@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Script.CharacterManagerScript;
+using Script.PuzzleManagerGroup;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,6 +11,7 @@ namespace Script.UIManager
     public class PauseManager : MonoBehaviour
     {
         [SerializeField] private CharacterManager characterManager;
+        [SerializeField] private SpawnManager spawnManager;
         //Pause Panel
         [SerializeField] private GameObject pausePanel;
         [SerializeField] private Button pauseBtn;
@@ -52,13 +54,16 @@ namespace Script.UIManager
             soundBtn.GetComponent<Button>().onClick.AddListener(SoundController);
             homeBtn.onClick.AddListener(Home);
             continueBtn.onClick.AddListener(Continue);
+   
             pauseBtn.onClick.AddListener(OnPausePanel);
-
         }
 
         private void OnPausePanel()
         {
+            if (spawnManager.isTutorial) return;
+            pausePanel.SetActive(true);
             UnitSkillView();
+            Time.timeScale = 0;
         }
 
         private void UpdateUnitSkillView(CharacterBase unit, Image unitBack, Image unitImage, Component unitSkillGrid)
@@ -73,7 +78,6 @@ namespace Script.UIManager
             };
             var unitSkillList = UnitSkills(unit);
             PopulateUnitSkillObject(unitSkillList, unit, unitSkillGrid);
-
         }
         private void PopulateUnitSkillObject(List<Dictionary<string, object>> skills, CharacterBase characterBase, Component unitSkillGrid)
         {

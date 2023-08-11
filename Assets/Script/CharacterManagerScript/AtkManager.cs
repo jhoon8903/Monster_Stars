@@ -7,6 +7,7 @@ using Script.EnemyManagerScript;
 using Script.RewardScript;
 using Script.WeaponScriptGroup;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Script.CharacterManagerScript
 {
@@ -28,7 +29,7 @@ namespace Script.CharacterManagerScript
         [SerializeField] private WeaponsPool weaponsPool;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private EnemyPatternManager enemyPatternManager;
-        private const float AttackRate = 1f;
+        public float attackRate;
         public float atkRate;
         public List<GameObject> enemyList = new List<GameObject>();
         public List<GameObject> weaponsList = new List<GameObject>();
@@ -60,7 +61,7 @@ namespace Script.CharacterManagerScript
         }
         private IEnumerator AtkMotion(CharacterBase unit)
         {
-            atkRate = unit.defaultAtkRate * (AttackRate - EnforceManager.Instance.increaseAtkRate / 100f);
+            atkRate = unit.defaultAtkRate * (attackRate - EnforceManager.Instance.increaseAtkRate / 100f);
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());

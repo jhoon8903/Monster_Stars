@@ -35,17 +35,19 @@ namespace Script.PuzzleManagerGroup
                 isTutorial = true;
             }
         }
-        public event Action OnMatchFound;
-        private void TriggerOnMatchFound()
-        {
-            OnMatchFound?.Invoke();
-        }
+
         public static GameObject CharacterObject(Vector3 spawnPosition)
         {
             var spawnCharacters = CharacterPool.Instance.UsePoolCharacterList();
             return (from character in spawnCharacters
                 where character.transform.position == spawnPosition
                 select character.gameObject).FirstOrDefault();
+        }
+
+        public event Action OnMatchFound;
+        private void TriggerOnMatchFound()
+        {
+            OnMatchFound?.Invoke();
         }
         public IEnumerator PositionUpCharacterObject()
         {
@@ -74,27 +76,14 @@ namespace Script.PuzzleManagerGroup
             {
                 rewardManger.EnqueueTreasure();
             }
-            swipeManager.isBusy = false;
-            if (isTutorial&&!swipeManager.isBusy)
+       
+            if (isTutorial)
             {
-                yield return new WaitForSecondsRealtime(0.9f);
-                Debug.Log(tutorialManager.CurrentTutorialStep.TutorialStepCount);
-                switch (tutorialManager.CurrentTutorialStep.TutorialStepCount)
-                {
-                    case 3:
-                        tutorialManager.CurrentTutorialStep.TutorialStepCount = 0;
-                        break;
-                    case 6:
-                        tutorialManager.CurrentTutorialStep.TutorialStepCount = 0;
-                        break;
-                    case 7:
-                        tutorialManager.CurrentTutorialStep.TutorialStepCount = 0;
-                        break;
-                    default:
-                        TriggerOnMatchFound();
-                        break;
-                }
+                yield return new WaitForSecondsRealtime(0.5f);
+                Debug.Log($"spawnManager.TutorialStepCount: {tutorialManager.CurrentTutorialStep.TutorialStepCount}");
+                TriggerOnMatchFound();
             }
+            swipeManager.isBusy = false;
             if (countManager.TotalMoveCount != 0 || gameManager.IsBattle) yield break;
             
             while (commonRewardManager.isOpenBox)
@@ -107,7 +96,6 @@ namespace Script.PuzzleManagerGroup
             {
                 yield return StartCoroutine(gameManager.Count0Call());
             }
-         
         }
 
         private IEnumerator CheckPosition()

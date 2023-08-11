@@ -89,7 +89,7 @@ namespace Script.CharacterGroupScript
             dotDamage = DefaultDamage * 0.2f;
             bleedTime = EnforceManager.Instance.physicalBleedDuration ? 5 : 3;
             defaultAtkRate = 1f * (1f - EnforceManager.Instance.physicalAttackSpeedBoost) * (1f - groupDAtkRate);
-            swingSpeed = defaultAtkRate; 
+            swingSpeed = swingSpeed = 1f / (defaultAtkRate * (1f - EnforceManager.Instance.physicalAttackSpeedBoost) * (1f - groupDAtkRate));
             UnitAtkType = UnitAtkTypes.Circle;
             UnitProperty = UnitProperties.Physics;
             UnitEffect = UnitEffects.Bleed;

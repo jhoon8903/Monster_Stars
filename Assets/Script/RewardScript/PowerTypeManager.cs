@@ -247,7 +247,7 @@ namespace Script.RewardScript
             Physical2RangeBoost,
             Physical2RateBoost,
             Physical2BossBoost,
-
+            
             //Darkness2 K
             Dark2BackBoost,
             Dark2DualAttack,
