@@ -727,7 +727,7 @@ GameObject:
   - component: {fileID: 4013127856514193487}
   - component: {fileID: 4013127856514193485}
   - component: {fileID: 4013127856514193484}
-  - component: {fileID: 3808652435571631201}
+  - component: {fileID: 1882536019995448527}
   m_Layer: 5
   m_Name: QuestPrefab
   m_TagString: Untagged
@@ -798,7 +798,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &3808652435571631201
+--- !u!114 &1882536019995448527
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -811,23 +811,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unitList: []
-  questDesc: {fileID: 126396430871836023}
-  rewardItem1: {fileID: 3210056824081603686}
-  rewardItem2: {fileID: 8545122906776331029}
-  rewardProgress: {fileID: 4013127855804292700}
-  progressText: {fileID: 4013127856518738588}
+  questDesc: {fileID: 0}
+  rewardItem1: {fileID: 0}
+  rewardItem2: {fileID: 0}
+  rewardProgress: {fileID: 0}
+  progressText: {fileID: 0}
   rewardBtn: {fileID: 0}
-  rewardPanel: {fileID: 0}
+  rewardPanel: {fileID: 4013127856514193486}
   rewardItem: {fileID: 0}
-  questCondition: 1
-  questType: 9
-  questGoal: 2
-  rewardCoin: 1000
-  rewardGreenPiece: 3
+  questCondition: 0
+  questType: 0
+  questGoal: 0
+  rewardCoin: 0
+  rewardGreenPiece: 0
   rewardBluePiece: 0
   rewardPurplePiece: 0
-  questDescKor: "\uC804\uD22C\uC5D0\uC11C \uC2B9\uB9AC\uD558\uAE30"
-  questDescEng: Victory Game
+  questDescKor: 
+  questDescEng: 
   selectedLanguage: 0
 --- !u!1 &4013127856518738590
 GameObject:
