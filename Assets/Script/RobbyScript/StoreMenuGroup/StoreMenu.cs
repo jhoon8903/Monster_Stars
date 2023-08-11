@@ -44,7 +44,13 @@ namespace Script.RobbyScript.StoreMenuGroup
         [SerializeField] private Sprite coinSprite;
         [SerializeField] private Sprite staminaSprite;
         [SerializeField] private Sprite gemSprite;
-       
+        [SerializeField] private Sprite errorGemSprite;
+        [SerializeField] private Sprite errorCoinSprite;
+        
+        [SerializeField] private TextMeshProUGUI BronzeGemBtnText;
+        [SerializeField] private TextMeshProUGUI SilverGemBtnText;
+        [SerializeField] private TextMeshProUGUI GoldGemBtnText;
+        
         [SerializeField] private GameObject chestRewardPanel;
         [SerializeField] private Image chestBackLightImage;
         [SerializeField] private Image chestParticleImage;
@@ -54,6 +60,8 @@ namespace Script.RobbyScript.StoreMenuGroup
         [SerializeField] private GameObject chestErrorPanel;
         [SerializeField] private GameObject chestErrorCloseBtn;
         [SerializeField] private GameObject getBackToStoreBtn;
+        [SerializeField] private GameObject errorContentsImage;
+        
         public static StoreMenu Instance { get; private set; }
         
         private const string ResetKey = "ResetKey";
@@ -94,29 +102,29 @@ namespace Script.RobbyScript.StoreMenuGroup
         private const int GoldRewardCoolTime = 30;
         
         //
-        private int _coinOpenCount;
-        private const string CoinOpenCountKey = "CoinOpenCount";
-        private DateTime _coinOpenTime;
-        private const string CoinOpenTimeKey = "CoinOpenTimeKey";
-        private TimeSpan _coinPassed;
-        private const int CoinOpenMaxCount = 10;
-        private const int CoinRewardCoolTime = 1;
-        
-        private int _staminaOpenCount;
-        private const string StaminaOpenCountKey = "StaminaOpenCount";
-        private DateTime _staminaOpenTime;
-        private const string StaminaOpenTimeKey = "StaminaOpenTimeKey";
-        private TimeSpan _staminaPassed;
-        private const int StaminaOpenMaxCount = 10;
-        private const int StaminaRewardCoolTime = 1;
-        
-        private int _gemOpenCount;
-        private const string GemOpenCountKey = "GemOpenCount";
-        private DateTime _gemOpenTime;
-        private const string GemOpenTimeKey = "GemOpenTimeKey";
-        private TimeSpan _gemPassed;
-        private const int GemOpenMaxCount = 10;
-        private const int GemRewardCoolTime = 1;
+        // private int _coinOpenCount;
+        // private const string CoinOpenCountKey = "CoinOpenCount";
+        // private DateTime _coinOpenTime;
+        // private const string CoinOpenTimeKey = "CoinOpenTimeKey";
+        // private TimeSpan _coinPassed;
+        // private const int CoinOpenMaxCount = 10;
+        // private const int CoinRewardCoolTime = 1;
+        //
+        // private int _staminaOpenCount;
+        // private const string StaminaOpenCountKey = "StaminaOpenCount";
+        // private DateTime _staminaOpenTime;
+        // private const string StaminaOpenTimeKey = "StaminaOpenTimeKey";
+        // private TimeSpan _staminaPassed;
+        // private const int StaminaOpenMaxCount = 10;
+        // private const int StaminaRewardCoolTime = 1;
+        //
+        // private int _gemOpenCount;
+        // private const string GemOpenCountKey = "GemOpenCount";
+        // private DateTime _gemOpenTime;
+        // private const string GemOpenTimeKey = "GemOpenTimeKey";
+        // private TimeSpan _gemPassed;
+        // private const int GemOpenMaxCount = 10;
+        // private const int GemRewardCoolTime = 1;
         //
         
         private int _coinReward;
@@ -132,6 +140,10 @@ namespace Script.RobbyScript.StoreMenuGroup
 
         private Vector3 originalPosition = new Vector3();
         private Vector3 newPosition = new Vector3();
+        
+        private const int BronzeGemText = 150;
+        private const int SilverGemText = 450;
+        private const int GoldGemText = 900;
         
         private void Awake()
         {
@@ -209,72 +221,72 @@ namespace Script.RobbyScript.StoreMenuGroup
             }
             
             // Coin Count Check
-            if (PlayerPrefs.HasKey(CoinOpenCountKey))
-            {
-                _coinOpenCount = PlayerPrefs.GetInt(CoinOpenCountKey);
-            }
-            else
-            {
-                _coinOpenCount = 0;
-                PlayerPrefs.SetInt(CoinOpenCountKey, _coinOpenCount);
-            }
-            // Coin Last Open Check
-            if (PlayerPrefs.HasKey(CoinOpenTimeKey))
-            {
-                _coinOpenTime = DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString(CoinOpenTimeKey)));
-            }
-            else
-            {
-                _coinOpenTime = DateTime.Now.AddMinutes(-CoinRewardCoolTime);
-                PlayerPrefs.SetString(CoinOpenTimeKey, _coinOpenTime.ToBinary().ToString());
-                PlayerPrefs.Save();
-            }
-            
-            
-            // Stamina Count Check
-            if (PlayerPrefs.HasKey(StaminaOpenCountKey))
-            {
-                _staminaOpenCount = PlayerPrefs.GetInt(StaminaOpenCountKey);
-            }
-            else
-            {
-                _staminaOpenCount = 0;
-                PlayerPrefs.SetInt(StaminaOpenCountKey, _staminaOpenCount);
-            }
-            // Stamina Last Open Check
-            if (PlayerPrefs.HasKey(StaminaOpenTimeKey))
-            {
-                _staminaOpenTime = DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString(StaminaOpenTimeKey)));
-            }
-            else
-            {
-                _staminaOpenTime = DateTime.Now.AddMinutes(-StaminaRewardCoolTime);
-                PlayerPrefs.SetString(StaminaOpenTimeKey, _staminaOpenTime.ToBinary().ToString());
-                PlayerPrefs.Save();
-            }
-            
-            
-            // Gem Count Check
-            if (PlayerPrefs.HasKey(GemOpenCountKey))
-            {
-                _gemOpenCount = PlayerPrefs.GetInt(GemOpenCountKey);
-            }
-            else
-            {
-                _gemOpenCount = 0;
-                PlayerPrefs.SetInt(GemOpenCountKey, _gemOpenCount);
-            }
-            // Gem Last Open Check
-            if (PlayerPrefs.HasKey(GemOpenTimeKey))
-            {
-                _gemOpenTime = DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString(GemOpenTimeKey)));
-            }
-            else
-            {
-                _gemOpenTime = DateTime.Now.AddMinutes(-GemRewardCoolTime);
-                PlayerPrefs.SetString(GemOpenTimeKey, _gemOpenTime.ToBinary().ToString());
-                PlayerPrefs.Save();
-            }
+            // if (PlayerPrefs.HasKey(CoinOpenCountKey))
+            // {
+            //     _coinOpenCount = PlayerPrefs.GetInt(CoinOpenCountKey);
+            // }
+            // else
+            // {
+            //     _coinOpenCount = 0;
+            //     PlayerPrefs.SetInt(CoinOpenCountKey, _coinOpenCount);
+            // }
+            // // Coin Last Open Check
+            // if (PlayerPrefs.HasKey(CoinOpenTimeKey))
+            // {
+            //     _coinOpenTime = DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString(CoinOpenTimeKey)));
+            // }
+            // else
+            // {
+            //     _coinOpenTime = DateTime.Now.AddMinutes(-CoinRewardCoolTime);
+            //     PlayerPrefs.SetString(CoinOpenTimeKey, _coinOpenTime.ToBinary().ToString());
+            //     PlayerPrefs.Save();
+            // }
+            //
+            //
+            // // Stamina Count Check
+            // if (PlayerPrefs.HasKey(StaminaOpenCountKey))
+            // {
+            //     _staminaOpenCount = PlayerPrefs.GetInt(StaminaOpenCountKey);
+            // }
+            // else
+            // {
+            //     _staminaOpenCount = 0;
+            //     PlayerPrefs.SetInt(StaminaOpenCountKey, _staminaOpenCount);
+            // }
+            // // Stamina Last Open Check
+            // if (PlayerPrefs.HasKey(StaminaOpenTimeKey))
+            // {
+            //     _staminaOpenTime = DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString(StaminaOpenTimeKey)));
+            // }
+            // else
+            // {
+            //     _staminaOpenTime = DateTime.Now.AddMinutes(-StaminaRewardCoolTime);
+            //     PlayerPrefs.SetString(StaminaOpenTimeKey, _staminaOpenTime.ToBinary().ToString());
+            //     PlayerPrefs.Save();
+            // }
+            //
+            //
+            // // Gem Count Check
+            // if (PlayerPrefs.HasKey(GemOpenCountKey))
+            // {
+            //     _gemOpenCount = PlayerPrefs.GetInt(GemOpenCountKey);
+            // }
+            // else
+            // {
+            //     _gemOpenCount = 0;
+            //     PlayerPrefs.SetInt(GemOpenCountKey, _gemOpenCount);
+            // }
+            // // Gem Last Open Check
+            // if (PlayerPrefs.HasKey(GemOpenTimeKey))
+            // {
+            //     _gemOpenTime = DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString(GemOpenTimeKey)));
+            // }
+            // else
+            // {
+            //     _gemOpenTime = DateTime.Now.AddMinutes(-GemRewardCoolTime);
+            //     PlayerPrefs.SetString(GemOpenTimeKey, _gemOpenTime.ToBinary().ToString());
+            //     PlayerPrefs.Save();
+            // }
             
             bronzeAdsBtn.GetComponent<Button>().onClick.AddListener(() => ChestCheckClick(ButtonType.BronzeAds));
             silverAdsBtn.GetComponent<Button>().onClick.AddListener(() => ChestCheckClick(ButtonType.SilverAds));
@@ -321,22 +333,22 @@ namespace Script.RobbyScript.StoreMenuGroup
             _goldOpenTime = DateTime.Now.AddMinutes(-GoldRewardCoolTime);
             PlayerPrefs.SetString(GoldOpenTimeKey, _goldOpenTime.ToBinary().ToString());
             
-            _coinOpenCount = 0;
-            _coinOpenTime = DateTime.Now.AddMinutes(-CoinRewardCoolTime);
-            PlayerPrefs.SetString(CoinOpenTimeKey, _coinOpenTime.ToBinary().ToString());
-            _staminaOpenCount = 0;
-            _staminaOpenTime = DateTime.Now.AddMinutes(-StaminaRewardCoolTime);
-            PlayerPrefs.SetString(StaminaOpenTimeKey, _staminaOpenTime.ToBinary().ToString());
-            _gemOpenCount = 0;
-            _gemOpenTime = DateTime.Now.AddMinutes(-GemRewardCoolTime);
-            PlayerPrefs.SetString(GemOpenTimeKey, _gemOpenTime.ToBinary().ToString());
+            // _coinOpenCount = 0;
+            // _coinOpenTime = DateTime.Now.AddMinutes(-CoinRewardCoolTime);
+            // PlayerPrefs.SetString(CoinOpenTimeKey, _coinOpenTime.ToBinary().ToString());
+            // _staminaOpenCount = 0;
+            // _staminaOpenTime = DateTime.Now.AddMinutes(-StaminaRewardCoolTime);
+            // PlayerPrefs.SetString(StaminaOpenTimeKey, _staminaOpenTime.ToBinary().ToString());
+            // _gemOpenCount = 0;
+            // _gemOpenTime = DateTime.Now.AddMinutes(-GemRewardCoolTime);
+            // PlayerPrefs.SetString(GemOpenTimeKey, _gemOpenTime.ToBinary().ToString());
             
             PlayerPrefs.SetInt(BronzeOpenCountKey, _bronzeOpenCount);
             PlayerPrefs.SetInt(SilverOpenCountKey, _silverOpenCount);
             PlayerPrefs.SetInt(GoldOpenCountKey, _goldOpenCount);
-            PlayerPrefs.SetInt(CoinOpenCountKey, _coinOpenCount);
-            PlayerPrefs.SetInt(StaminaOpenCountKey, _staminaOpenCount);
-            PlayerPrefs.SetInt(GemOpenCountKey, _gemOpenCount);
+            // PlayerPrefs.SetInt(CoinOpenCountKey, _coinOpenCount);
+            // PlayerPrefs.SetInt(StaminaOpenCountKey, _staminaOpenCount);
+            // PlayerPrefs.SetInt(GemOpenCountKey, _gemOpenCount);
             PlayerPrefs.Save();
         }
 
@@ -345,10 +357,12 @@ namespace Script.RobbyScript.StoreMenuGroup
             UpdateBronzeButton();
             UpdateSilverButton();
             UpdateGoldButton();
-            UpdateCoinButton();
-            UpdateStaminaButton();
-            UpdateGemButton();
+            // UpdateCoinButton();
+            // UpdateStaminaButton();
+            // UpdateGemButton();
+            UpdateGemButtonText();
         }
+        
         private void UpdateBronzeButton()
         {
             if (isReset || _bronzeOpenCount < BronzeOpenMaxCount)
@@ -361,7 +375,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                 var resetTime = _lastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
                 bronzeAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"Reset: {resetTime}";
             }
-            bronzeGemBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "100";
+            bronzeGemBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "150";
         }
 
         private void UpdateSilverButton()
@@ -387,7 +401,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                     silverAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
                 }
             }
-            silverGemBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "500";
+            silverGemBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "450";
         }
 
         private void UpdateGoldButton()
@@ -416,86 +430,121 @@ namespace Script.RobbyScript.StoreMenuGroup
             goldGemBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "900";
         }
         
-        private void UpdateCoinButton()
+        // private void UpdateCoinButton()
+        // {
+        //     _coinPassed = DateTime.Now - _coinOpenTime;
+        //     if (isReset || (_coinOpenCount < CoinOpenMaxCount && _coinPassed.TotalMinutes >= CoinRewardCoolTime))
+        //     {
+        //         coinAdsBtn.GetComponent<Button>().interactable = true;
+        //         coinAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{_coinOpenCount} / {CoinOpenMaxCount}";
+        //     }
+        //     else
+        //     {
+        //         coinAdsBtn.GetComponent<Button>().interactable = false;
+        //         var remainingTime = TimeSpan.FromMinutes(CoinRewardCoolTime) - _coinPassed;
+        //         if (_coinOpenCount == CoinOpenMaxCount)
+        //         {
+        //             var resetTime = _lastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
+        //             coinAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{resetTime}";
+        //             // $"Reset: {resetTime}";   
+        //         }
+        //         else if (remainingTime > TimeSpan.Zero)
+        //         {
+        //             var remainingTimeText = remainingTime.ToString(@"mm\:ss");
+        //             coinAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
+        //         }
+        //     }
+        // }
+        //
+        // private void UpdateStaminaButton()
+        // {
+        //     _staminaPassed = DateTime.Now - _staminaOpenTime;
+        //     if (isReset || (_staminaOpenCount < StaminaOpenMaxCount && _staminaPassed.TotalMinutes >= StaminaRewardCoolTime))
+        //     {
+        //         staminaAdsBtn.GetComponent<Button>().interactable = true;
+        //         staminaAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{_staminaOpenCount} / {StaminaOpenMaxCount}";
+        //     }
+        //     else
+        //     {
+        //         staminaAdsBtn.GetComponent<Button>().interactable = false;
+        //         var remainingTime = TimeSpan.FromMinutes(StaminaRewardCoolTime) - _staminaPassed;
+        //         if (_staminaOpenCount == StaminaOpenMaxCount)
+        //         {
+        //             var resetTime = _lastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
+        //             staminaAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{resetTime}";
+        //         }
+        //         else if (remainingTime > TimeSpan.Zero)
+        //         {
+        //             var remainingTimeText = remainingTime.ToString(@"mm\:ss");
+        //             staminaAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
+        //         }
+        //     }
+        // }
+        //
+        // private void UpdateGemButton()
+        // {
+        //     _gemPassed = DateTime.Now - _gemOpenTime;
+        //     if (isReset || (_gemOpenCount < GemOpenMaxCount && _gemPassed.TotalMinutes >= GemRewardCoolTime))
+        //     {
+        //         gemAdsBtn.GetComponent<Button>().interactable = true;
+        //         gemAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{_gemOpenCount} / {GemOpenMaxCount}";
+        //     }
+        //     else
+        //     {
+        //         gemAdsBtn.GetComponent<Button>().interactable = false;
+        //         var remainingTime = TimeSpan.FromMinutes(GemRewardCoolTime) - _gemPassed;
+        //         if (_gemOpenCount == GemOpenMaxCount)
+        //         {
+        //             var resetTime = _lastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
+        //             gemAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{resetTime}";
+        //         }
+        //         else if (remainingTime > TimeSpan.Zero)
+        //         {
+        //             var remainingTimeText = remainingTime.ToString(@"mm\:ss");
+        //             gemAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
+        //         }
+        //     }
+        // }
+
+        private void UpdateGemButtonText()
         {
-            _coinPassed = DateTime.Now - _coinOpenTime;
-            if (isReset || (_coinOpenCount < CoinOpenMaxCount && _coinPassed.TotalMinutes >= CoinRewardCoolTime))
+            int currentGemCount = GemScript.Instance.Gem;
+
+            if (BronzeGemText > currentGemCount)
             {
-                coinAdsBtn.GetComponent<Button>().interactable = true;
-                coinAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{_coinOpenCount} / {CoinOpenMaxCount}";
+                BronzeGemBtnText.color = Color.red;
             }
             else
             {
-                coinAdsBtn.GetComponent<Button>().interactable = false;
-                var remainingTime = TimeSpan.FromMinutes(CoinRewardCoolTime) - _coinPassed;
-                if (_coinOpenCount == CoinOpenMaxCount)
-                {
-                    var resetTime = _lastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
-                    coinAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{resetTime}";
-                    // $"Reset: {resetTime}";   
-                }
-                else if (remainingTime > TimeSpan.Zero)
-                {
-                    var remainingTimeText = remainingTime.ToString(@"mm\:ss");
-                    coinAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
-                }
+                BronzeGemBtnText.color = Color.white;
             }
-        }
-        
-        private void UpdateStaminaButton()
-        {
-            _staminaPassed = DateTime.Now - _staminaOpenTime;
-            if (isReset || (_staminaOpenCount < StaminaOpenMaxCount && _staminaPassed.TotalMinutes >= StaminaRewardCoolTime))
+
+            if (SilverGemText > currentGemCount)
             {
-                staminaAdsBtn.GetComponent<Button>().interactable = true;
-                staminaAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{_staminaOpenCount} / {StaminaOpenMaxCount}";
+                SilverGemBtnText.color = Color.red;
             }
             else
             {
-                staminaAdsBtn.GetComponent<Button>().interactable = false;
-                var remainingTime = TimeSpan.FromMinutes(StaminaRewardCoolTime) - _staminaPassed;
-                if (_staminaOpenCount == StaminaOpenMaxCount)
-                {
-                    var resetTime = _lastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
-                    staminaAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{resetTime}";
-                }
-                else if (remainingTime > TimeSpan.Zero)
-                {
-                    var remainingTimeText = remainingTime.ToString(@"mm\:ss");
-                    staminaAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
-                }
+                SilverGemBtnText.color = Color.white;
+            }
+
+            if (GoldGemText > currentGemCount)
+            {
+                GoldGemBtnText.color = Color.red;
+            }
+            else
+            {
+                GoldGemBtnText.color = Color.white;
             }
         }
 
-        private void UpdateGemButton()
-        {
-            _gemPassed = DateTime.Now - _gemOpenTime;
-            if (isReset || (_gemOpenCount < GemOpenMaxCount && _gemPassed.TotalMinutes >= GemRewardCoolTime))
-            {
-                gemAdsBtn.GetComponent<Button>().interactable = true;
-                gemAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{_gemOpenCount} / {GemOpenMaxCount}";
-            }
-            else
-            {
-                gemAdsBtn.GetComponent<Button>().interactable = false;
-                var remainingTime = TimeSpan.FromMinutes(GemRewardCoolTime) - _gemPassed;
-                if (_gemOpenCount == GemOpenMaxCount)
-                {
-                    var resetTime = _lastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
-                    gemAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{resetTime}";
-                }
-                else if (remainingTime > TimeSpan.Zero)
-                {
-                    var remainingTimeText = remainingTime.ToString(@"mm\:ss");
-                    gemAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
-                }
-            }
-        }
+
         //!!!!!!!!!!!!!!!!!!!!!
         public void Reward(BoxGrade boxTypes)
         {
             adsRewardBtn.SetActive(true);
             closeBtn.SetActive(true);
+            Debug.Log("boxTypes :"+boxTypes );
             switch (boxTypes)
             {
                 case BoxGrade.Bronze:
@@ -530,33 +579,33 @@ namespace Script.RobbyScript.StoreMenuGroup
                     adsRewardBtn.SetActive(false);
                     break;
                 case BoxGrade.Coin:
-                    _coinOpenCount = PlayerPrefs.GetInt(CoinOpenCountKey, 0);
-                    CalculateAdsReward(boxTypes, _coinOpenCount);
-                    if (_coinOpenCount == CoinOpenMaxCount) break; 
-                    _coinOpenCount++;
-                    _coinOpenTime = DateTime.Now;
-                    PlayerPrefs.SetInt(CoinOpenCountKey, _coinOpenCount);
-                    PlayerPrefs.SetString(CoinOpenTimeKey, _coinOpenTime.ToBinary().ToString());
+                    // _coinOpenCount = PlayerPrefs.GetInt(CoinOpenCountKey, 0);
+                    // if (_coinOpenCount == CoinOpenMaxCount) break; 
+                    // _coinOpenCount++;
+                    // _coinOpenTime = DateTime.Now;
+                    // PlayerPrefs.SetInt(CoinOpenCountKey, _coinOpenCount);
+                    // PlayerPrefs.SetString(CoinOpenTimeKey, _coinOpenTime.ToBinary().ToString());
+                    CalculateAdsReward(boxTypes);
                     closeBtn.SetActive(false);
                     break;
                 case BoxGrade.Stamina:
-                    _staminaOpenCount = PlayerPrefs.GetInt(StaminaOpenCountKey, 0);
-                    CalculateAdsReward(boxTypes, _staminaOpenCount);
-                    if (_staminaOpenCount == StaminaOpenMaxCount) break; 
-                    _staminaOpenCount++;
-                    _staminaOpenTime = DateTime.Now;
-                    PlayerPrefs.SetInt(StaminaOpenCountKey, _staminaOpenCount);
-                    PlayerPrefs.SetString(StaminaOpenTimeKey, _staminaOpenTime.ToBinary().ToString());
+                    // _staminaOpenCount = PlayerPrefs.GetInt(StaminaOpenCountKey, 0);
+                    // if (_staminaOpenCount == StaminaOpenMaxCount) break; 
+                    // _staminaOpenCount++;
+                    // _staminaOpenTime = DateTime.Now;
+                    // PlayerPrefs.SetInt(StaminaOpenCountKey, _staminaOpenCount);
+                    // PlayerPrefs.SetString(StaminaOpenTimeKey, _staminaOpenTime.ToBinary().ToString());
+                    CalculateAdsReward(boxTypes);
                     closeBtn.SetActive(false);
                     break;
                 case BoxGrade.Gem:
-                    _gemOpenCount = PlayerPrefs.GetInt(GemOpenCountKey, 0);
-                    CalculateAdsReward(boxTypes, _gemOpenCount);
-                    if (_gemOpenCount == GemOpenMaxCount) break; 
-                    _gemOpenCount++;
-                    _gemOpenTime = DateTime.Now;
-                    PlayerPrefs.SetInt(GemOpenCountKey, _gemOpenCount);
-                    PlayerPrefs.SetString(GemOpenTimeKey, _gemOpenTime.ToBinary().ToString());
+                    // _gemOpenCount = PlayerPrefs.GetInt(GemOpenCountKey, 0);
+                    // if (_gemOpenCount == GemOpenMaxCount) break; 
+                    // _gemOpenCount++;
+                    // _gemOpenTime = DateTime.Now;
+                    // PlayerPrefs.SetInt(GemOpenCountKey, _gemOpenCount);
+                    // PlayerPrefs.SetString(GemOpenTimeKey, _gemOpenTime.ToBinary().ToString());
+                    CalculateAdsReward(boxTypes);
                     closeBtn.SetActive(false);
                     break;
                 case BoxGrade.BronzeGem:
@@ -632,13 +681,14 @@ namespace Script.RobbyScript.StoreMenuGroup
             AdsManager.Instance.ShowRewardedAd();
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Stamina;
         }
-        private static void GemAds()
+        private void GemAds()
         {
+            AllPanelClose();
             AdsManager.Instance.ShowRewardedAd();
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Gem;
         }
         
-        private void CalculateAdsReward(BoxGrade boxTypes, int openCount)
+        private void CalculateAdsReward(BoxGrade boxTypes)
         {
             if (_coinObject != null)
             {
@@ -969,7 +1019,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                     ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = goldSprite;
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = chestAdsBtnSprite;
                     ChestCheck.Instance.chestCheckBtnText.text = $"{_goldOpenCount} / {GoldOpenMaxCount}";
-
+                    
                     ChestReward.Instance.SetStart(ButtonType.GoldAds);
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.AddListener(GoldAds);
                     break;
@@ -977,7 +1027,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                     ChestCheck.Instance.chestCheckTopText.text = "Bronze Chest";
                     ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = bronzeSprite;
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = chestGemBtnSprite;
-                    ChestCheck.Instance.chestCheckBtnText.text = "100";
+                    ChestCheck.Instance.chestCheckBtnText.text = "150";
                     ChestReward.Instance.SetStart(ButtonType.BronzeGem);
                     
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.AddListener(() => CheckAndSummonChest(StoreMenu.ButtonType.BronzeGem));
@@ -986,8 +1036,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                     ChestCheck.Instance.chestCheckTopText.text = "Silver Chest";
                     ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = silverSprite;
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = chestGemBtnSprite;
-                    ChestCheck.Instance.chestCheckBtnText.text = "500";
-                    
+                    ChestCheck.Instance.chestCheckBtnText.text = "450";
                     ChestReward.Instance.SetStart(ButtonType.SilverGem);
                    
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.AddListener(() => CheckAndSummonChest(StoreMenu.ButtonType.SilverGem));
@@ -997,7 +1046,6 @@ namespace Script.RobbyScript.StoreMenuGroup
                     ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = goldSprite;
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = chestGemBtnSprite;
                     ChestCheck.Instance.chestCheckBtnText.text = "900";
-                    
                     ChestReward.Instance.SetStart(ButtonType.GoldGem);
                   
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.AddListener(() => CheckAndSummonChest(StoreMenu.ButtonType.GoldGem));
@@ -1020,7 +1068,9 @@ namespace Script.RobbyScript.StoreMenuGroup
             {
                 chestErrorPanel.SetActive(true);
                 chestErrorCloseBtn.GetComponent<Button>().onClick.AddListener(ErrorClose);
-                getBackToStoreBtn.GetComponent<Button>().onClick.AddListener(AllPanelClose);
+                getBackToStoreBtn.GetComponent<Button>().onClick.AddListener(GemAds);
+                errorContentsImage.GetComponent<Image>().sprite = errorGemSprite;
+                errorContentsImage.GetComponent<RectTransform>().localScale = new Vector3(0.8f, 1f, 0);
             }
         }
         

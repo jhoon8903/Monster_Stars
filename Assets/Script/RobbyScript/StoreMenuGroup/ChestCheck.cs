@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Script.RobbyScript.TopMenuGroup;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -31,7 +32,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             }
             chestCheckCloseBtn.GetComponent<Button>().onClick.AddListener(CloseChestCheck);
         }
-
+        
         public void OpenPanel()
         {
             chestCheckPanel.SetActive(true);
