@@ -74,3 +74,9 @@ Assets/Firebase/Plugins/x86_64/FirebaseCppApp-11_2_0.bundle.meta
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+
+# Firebase SDK
+Assets/Firebase/*
+Assets/Plugins/Android/Firebase/*
+Assets/PlayServicesResolver/*
