@@ -97,6 +97,7 @@ namespace Script
             speedUp = true;
             GameSpeedSelect();
             stageText.text = $"{StageManager.Instance.selectStage} STAGE";
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("stage", "play_" + StageManager.Instance.selectStage, StageManager.Instance.selectStage);
             yield return null;
         }
         public IEnumerator Count0Call()
@@ -213,6 +214,7 @@ namespace Script
         }
         private void LoseGame()
         {
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("stage",$"fail_{StageManager.Instance.selectStage}", StageManager.Instance.currentWave );
             Time.timeScale = 0;
             StartCoroutine(KillMotion());
             gamePanel.SetActive(true);

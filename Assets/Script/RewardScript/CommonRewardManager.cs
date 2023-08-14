@@ -555,7 +555,8 @@ namespace Script.RewardScript
         private void ShuffleCommonReward()
         {
         if (spawnManager.isTutorial) return;
-            AdsManager.Instance.ShowRewardedAd();
+        AdsManager.Instance.ShowRewardedAd();
+        Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_refresh");
         AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Common;
         commonShuffle.gameObject.SetActive(false);
         }

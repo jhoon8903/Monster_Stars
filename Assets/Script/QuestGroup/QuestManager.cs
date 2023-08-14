@@ -99,18 +99,18 @@ namespace Script.QuestGroup
                     {
                         case QuestTypes.ViewAds:
                             adsDesc.text = desc;
-                            adsValue = PlayerPrefs.GetInt(questKey, 0);
-                            adsProgress.value = adsValue;
                             adsGoal = goal;
                             adsProgress.maxValue = adsGoal;
+                            adsValue = PlayerPrefs.GetInt(questKey, 0);
+                            adsProgress.value = adsValue;
                             adsProgressText.text = $"{adsValue} / {adsGoal}";
                             break;
                         case QuestTypes.AllClear:
                             allClearDesc.text = desc;
-                            allClearValue = PlayerPrefs.GetInt(questKey, 0);
-                            allClearProgress.value = allClearValue;
                             allClearGoal = goal;
                             allClearProgress.maxValue = allClearGoal;
+                            allClearValue = PlayerPrefs.GetInt(questKey, 0);
+                            allClearProgress.value = allClearValue;
                             allClearProgressText.text = $"{allClearValue} / {allClearGoal}";
                             break;
                     }
@@ -121,11 +121,11 @@ namespace Script.QuestGroup
                     fixQuestObject.questType = questType;
                     fixQuestObject.questCondition = condition;
                     fixQuestObject.questDesc.text = desc;
-                    fixQuestObject.questKey = questKey; 
+                    fixQuestObject.questKey = questKey;
+                    fixQuestObject.questGoal = PlayerPrefs.GetInt(fixQuestObject.questKey + "_goal", goal);
+                    fixQuestObject.questProgress.maxValue = fixQuestObject.questGoal;
                     fixQuestObject.questValue = PlayerPrefs.GetInt(fixQuestObject.questKey + "_value", 0);
                     fixQuestObject.questProgress.value = fixQuestObject.questValue;
-                    fixQuestObject.questGoal = PlayerPrefs.GetInt(fixQuestObject.questKey + "_goal", 0);
-                    fixQuestObject.questProgress.maxValue = fixQuestObject.questGoal;
                     fixQuestObject.questProgressText.text = $"{fixQuestObject.questValue} / {fixQuestObject.questGoal}";
                     fixQuestObject.item1Value.text = item1RewardValue.ToString();
                     fixQuestObject.item2Value.text = (item2GreenPiece + item2BluePiece + item2PurplePiece).ToString();
@@ -180,10 +180,10 @@ namespace Script.QuestGroup
                         rotationQuestObject.questCondition = condition;
                         rotationQuestObject.questDesc.text = desc;
                         rotationQuestObject.questKey = questKey; 
-                        rotationQuestObject.questValue = PlayerPrefs.GetInt( rotationQuestObject.questKey, 0);
-                        rotationQuestObject.questProgress.value = rotationQuestObject.questValue;
-                        rotationQuestObject.questGoal = goal;
+                        rotationQuestObject.questGoal = PlayerPrefs.GetInt( rotationQuestObject.questKey + "_goal", goal);
                         rotationQuestObject.questProgress.maxValue = rotationQuestObject.questGoal;
+                        rotationQuestObject.questValue = PlayerPrefs.GetInt( rotationQuestObject.questKey + "_value", 0);
+                        rotationQuestObject.questProgress.value = rotationQuestObject.questValue;
                         rotationQuestObject.questProgressText.text = $"{rotationQuestObject.questValue} / {rotationQuestObject.questGoal}";
                         rotationQuestObject.item1Value.text = item1RewardValue.ToString();
                         rotationQuestObject.item2Value.text = (item2GreenPiece + item2BluePiece + item2PurplePiece).ToString();
@@ -237,15 +237,17 @@ namespace Script.QuestGroup
                 questObject.questType = questType;
                 questObject.questDesc.text = PlayerPrefs.GetString(questType + "_desc");
                 questObject.questKey = questKey;
-                questObject.questValue = PlayerPrefs.GetInt(questKey + "_value");
                 questObject.questGoal = PlayerPrefs.GetInt(questKey + "_goal");
-                questObject.questProgress.value = questObject.questValue;
+                questObject.questValue = PlayerPrefs.GetInt(questKey + "_value");
                 questObject.questProgress.maxValue = questObject.questGoal;
+                questObject.questProgress.value = questObject.questValue;
                 questObject.questProgressText.text = $"{questObject.questValue} / {questObject.questGoal}";
                 questObject.item1Value.text = PlayerPrefs.GetString(questType + "_item1Value");
                 questObject.item2Value.text = PlayerPrefs.GetString(questType + "_item2Value");
                 if (questObject.isCompleted && questObject.isReceived)
                 {
+                    questObject.shuffleBtn.SetActive(false);
+                    questObject.receiveBtn.SetActive(true);
                     questObject.receiveBtn.GetComponent<Button>().interactable = false;
                     questObject.receiveBtnText.text = "Completed";
                     questObject.questValue = questObject.questGoal;
@@ -254,11 +256,14 @@ namespace Script.QuestGroup
                 }
                 else if (questObject.isCompleted && !questObject.isReceived)
                 {
+                    questObject.shuffleBtn.SetActive(false);
+                    questObject.receiveBtn.SetActive(true);
                     questObject.receiveBtn.GetComponent<Button>().interactable = true;
                     questObject.receiveBtnText.text = "Receive";
                     questObject.questValue = questObject.questGoal;
                     questObject.questProgress.value = questObject.questValue;
                     questObject.questProgressText.text = $"{questObject.questValue} / {questObject.questGoal}";
+                    questObject.receiveBtn.GetComponent<Button>().onClick.AddListener(() => ReceiveQuestReward(questObject));
                 }
                 else if (questObject.isShuffled && !questObject.isCompleted && !questObject.isReceived)
                 {
@@ -281,6 +286,12 @@ namespace Script.QuestGroup
             if (_fixQuestList.Contains(quest) || _rotationQuestList.Contains(quest))
             {
                 quest.questValue += value;
+
+                if (quest.questValue >= quest.questGoal)
+                {
+                    quest.isCompleted = true;
+                    PlayerPrefs.SetInt(quest.questType + "_isCompleted", 1);
+                }
                 if (_fixQuestList.Contains(quest))
                 {
                     SaveFixQuestList(_fixQuestList);
@@ -316,7 +327,7 @@ namespace Script.QuestGroup
                 PlayerPrefs.SetString(quest.item2Value + "_item2Value", quest.item2Value.text);
                 PlayerPrefs.SetInt(quest.questType + "_isShuffled", quest.isShuffled ? 1 : 0);
                 PlayerPrefs.SetInt(quest.questType + "_isCompleted", quest.isCompleted ? 1 : 0);
-                PlayerPrefs.SetInt(quest.isReceived + "_isReceived", quest.isReceived ? 1 : 0);
+                PlayerPrefs.SetInt(quest.questType + "_isReceived", quest.isReceived ? 1 : 0);
             }
         }
         public void ShuffleQuest()
@@ -374,10 +385,10 @@ namespace Script.QuestGroup
             rotationQuestObject.questType = questType;
             rotationQuestObject.questCondition = condition;
             rotationQuestObject.questDesc.text = desc;
-            rotationQuestObject.questValue = PlayerPrefs.GetInt(questKey, 0);
-            rotationQuestObject.questProgress.value = rotationQuestObject.questValue;
-            rotationQuestObject.questGoal = goal;
+            rotationQuestObject.questGoal = PlayerPrefs.GetInt(questKey + "_goal", goal);
             rotationQuestObject.questProgress.maxValue = rotationQuestObject.questGoal;
+            rotationQuestObject.questValue = PlayerPrefs.GetInt(questKey + "_value", 0);
+            rotationQuestObject.questProgress.value = rotationQuestObject.questValue;
             rotationQuestObject.questProgressText.text = $"{rotationQuestObject.questValue} / {rotationQuestObject.questGoal}";
             rotationQuestObject.item1Value.text = item1RewardValue.ToString();
             rotationQuestObject.item2Value.text = (item2GreenPiece + item2BluePiece + item2PurplePiece).ToString();
@@ -417,8 +428,8 @@ namespace Script.QuestGroup
                     break;
             }
            AllClearQuest();
-           PlayerPrefs.SetInt(quest.questType + "_isCompleted", 1);
-           quest.isCompleted = true;
+           quest.isReceived = true;
+           PlayerPrefs.SetInt(quest.questType + "isReceived", 1);
            quest.receiveBtn.GetComponent<Button>().interactable = false;
            quest.receiveBtnText.text = "Completed";
            PlayerPrefs.Save();

@@ -659,16 +659,19 @@ namespace Script.RobbyScript.StoreMenuGroup
         private void BronzeAds()
         {
             AdsManager.Instance.ShowRewardedAd();
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_box", "green_box", "green_box");
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.BronzeAds;
         }
         private static void SilverAds()
         {
             AdsManager.Instance.ShowRewardedAd();
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_box", "blue_box", "blue_box");
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.SilverAds;
         }
         private static void GoldAds()
         {
             AdsManager.Instance.ShowRewardedAd();
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_box", "gold_box", "gold_box");
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.GoldAds;
         }
         private static void CoinAds()

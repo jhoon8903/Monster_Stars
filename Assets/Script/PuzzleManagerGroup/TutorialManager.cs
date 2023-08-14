@@ -182,6 +182,7 @@ namespace Script.PuzzleManagerGroup
             }
             PlayerPrefs.SetInt("TutorialKey", 0);
             spawnManager.isTutorial = false;
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("tutorial_complete");
         }
         private void ProcessNextTutorialStep()
         {

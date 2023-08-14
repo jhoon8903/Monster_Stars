@@ -1027,8 +1027,8 @@ MonoBehaviour:
   m_Direction: 0
   m_MinValue: 0
   m_MaxValue: 10
-  m_WholeNumbers: 0
-  m_Value: 10
+  m_WholeNumbers: 1
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -1275,6 +1275,10 @@ MonoBehaviour:
   questCondition: 0
   questValue: 0
   questGoal: 0
+  isShuffled: 0
+  isCompleted: 0
+  isReceived: 0
+  questKey: 
 --- !u!1 &4426519706555036017
 GameObject:
   m_ObjectHideFlags: 0

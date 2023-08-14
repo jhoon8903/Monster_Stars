@@ -315,16 +315,19 @@ namespace Script.AdsScript
         public void Coin()
         {
             ShowRewardedAd();
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_gold");
             ButtonTypes = ButtonType.Coin;
         }
         public void Stamina()
         {
             ShowRewardedAd();
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_stamina");
             ButtonTypes = ButtonType.Stamina;
         }
         public void Gem()
         {
             ShowRewardedAd();
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_gem");
             ButtonTypes = ButtonType.Gem;
         }
         private void RewardButtonClicked()
@@ -415,6 +418,13 @@ namespace Script.AdsScript
                 }
                     break;
             }
+        }
+
+        public void RetryAds()
+        {
+            ShowRewardedAd();
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_revive");
+            ButtonTypes = ButtonType.Retry;
         }
         private void Retry()
         {

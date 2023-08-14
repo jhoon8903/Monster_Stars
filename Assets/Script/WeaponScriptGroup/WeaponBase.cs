@@ -318,7 +318,8 @@ namespace Script.WeaponScriptGroup
             if (isAlreadyPoison) yield break;
             hitEnemy.AlreadyPoison[hitEnemy] = true;
             for (var i = 0; i < venomDuration; i++)
-            {
+            { 
+                if (hitEnemy.isDead) yield break;
                 hitEnemy.ReceiveDamage(hitEnemy,(int)poisonDotDamage, characterBase);
                 yield return new WaitForSeconds(1f);
             }
@@ -351,6 +352,7 @@ namespace Script.WeaponScriptGroup
             var burningDuration = characterBase.burnTime; 
             for (var i = 0; i < burningDuration; i++)
             {
+                if (hitEnemy.isDead) yield break;
                 hitEnemy.ReceiveDamage(hitEnemy, (int)burnDotDamage , characterBase);
                 yield return new WaitForSeconds(1f);
             }
@@ -382,6 +384,7 @@ namespace Script.WeaponScriptGroup
             hitEnemy.AlreadyBleed[hitEnemy] = true;
             for(var i = 0; i < bleedDuration; i++)
             {
+                if (hitEnemy.isDead) yield break;
                 hitEnemy.ReceiveDamage(hitEnemy, (int)bleedDotDamage, characterBase);
                 yield return new WaitForSeconds(1f);
             }

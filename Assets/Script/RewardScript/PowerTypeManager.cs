@@ -97,9 +97,7 @@ namespace Script.RewardScript
         GreenList = new List<Data>();
         BlueList = new List<Data>();
         PurpleList = new List<Data>();
-
         var csvData = csvFile.text.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-
         for (var i = 1; i < csvData.Length; i++)
         {
             var data = csvData[i].Split(',');

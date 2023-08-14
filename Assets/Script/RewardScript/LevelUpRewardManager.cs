@@ -981,6 +981,7 @@ namespace Script.RewardScript
         private void ShuffleExpReward()
         {
             AdsManager.Instance.ShowRewardedAd();
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_refresh");
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.LevelUp;
             expShuffle.gameObject.SetActive(false);
         }
