@@ -5,6 +5,7 @@ using Script.CharacterGroupScript;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.PuzzleManagerGroup;
+using Script.QuestGroup;
 using Script.RewardScript;
 using Script.UIManager;
 using TMPro;
@@ -208,6 +209,7 @@ namespace Script
             {
                 unit.GetComponent<CharacterBase>().cover.SetActive(false);
             }
+            QuestManager.Instance.VictoryQuest();
         }
         private void LoseGame()
         {

@@ -13,12 +13,14 @@ namespace Script.QuestGroup
         [SerializeField] internal TextMeshProUGUI item1Value;
         [SerializeField] internal Image item2Sprite;
         [SerializeField] internal TextMeshProUGUI item2Value;
-        [SerializeField] internal Button receiveBtn;
+        [SerializeField] internal GameObject receiveBtn;
         [SerializeField] internal TextMeshProUGUI receiveBtnText;
-        [SerializeField] internal Button shuffleBtn;
+        [SerializeField] internal GameObject shuffleBtn;
         public QuestManager.QuestTypes questType;
         public QuestManager.QuestCondition questCondition;
         public int questValue;
         public int questGoal;
-    }
+        public bool isShuffled;
+        public bool isCompleted;
+    }                           
 }

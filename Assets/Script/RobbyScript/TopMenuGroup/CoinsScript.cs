@@ -1,3 +1,4 @@
+using Script.QuestGroup;
 using TMPro;
 using UnityEngine;
 
@@ -14,8 +15,10 @@ namespace Script.RobbyScript.TopMenuGroup
             get => PlayerPrefs.GetInt(CoinKey, 0);
             set
             {
+                var getCoins = value - Coin;
                 PlayerPrefs.SetInt(CoinKey, value);
                 UpdateCoin();
+                QuestManager.Instance.GetCoinQuest(getCoins);
             }
         }
 

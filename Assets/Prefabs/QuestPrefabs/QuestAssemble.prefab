@@ -1268,9 +1268,9 @@ MonoBehaviour:
   item1Value: {fileID: 4426519706188988852}
   item2Sprite: {fileID: 4426519706847590585}
   item2Value: {fileID: 4426519704739648272}
-  receiveBtn: {fileID: 917630492743120111}
+  receiveBtn: {fileID: 2414390146092849660}
   receiveBtnText: {fileID: 4363657113027491130}
-  shuffleBtn: {fileID: 8763970869212618075}
+  shuffleBtn: {fileID: 4426519705265827606}
   questType: 0
   questCondition: 0
   questValue: 0

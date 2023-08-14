@@ -1,4 +1,5 @@
 using System;
+using Script.QuestGroup;
 using Script.RewardScript;
 using Script.RobbyScript.StoreMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
@@ -222,6 +223,7 @@ namespace Script.AdsScript
         private void OnRewardedAdDismissedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
             RewardButtonClicked();
+            QuestManager.Instance.AdsViewQuest();
             LoadRewardedAd();
         }
 
@@ -303,7 +305,7 @@ namespace Script.AdsScript
 
         public enum ButtonType
         {
-            Coin, Stamina, Gem, BronzeAds, SilverAds, GoldAds, Retry, Common, LevelUp, EnergyPackFreeStamina, GemPackFree,CoinPackFree, None
+            Coin, Stamina, Gem, BronzeAds, SilverAds, GoldAds, Retry, Common, LevelUp, EnergyPackFreeStamina, GemPackFree,CoinPackFree, ShuffleQuest, None
         }
 
         public StoreMenu.BoxGrade boxGrade;
@@ -380,6 +382,9 @@ namespace Script.AdsScript
                     break;
                 case ButtonType.CoinPackFree:
                     FreeCoinPack();
+                    break;
+                case ButtonType.ShuffleQuest:
+                    QuestManager.Instance.ShuffleQuest();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

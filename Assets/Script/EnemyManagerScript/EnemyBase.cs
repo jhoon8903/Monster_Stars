@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using Script.CharacterManagerScript;
+using Script.QuestGroup;
 using Script.RewardScript;
 using Script.UIManager;
 using Script.WeaponScriptGroup;
@@ -369,6 +370,7 @@ namespace Script.EnemyManagerScript
                 characterBase.DetectEnemies().Remove(detectedEnemy.gameObject);
                 characterBase.AttackCounts.Remove(detectedEnemy);
             }
+            QuestManager.Instance.KillEnemyQuest();
             enemyPool.ReturnToPool(detectedEnemy);
         }
         private IEnumerator UpdateHpSlider()

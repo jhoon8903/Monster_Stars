@@ -7,12 +7,12 @@ using DG.Tweening;
 using Script.AdsScript;
 using Script.CharacterManagerScript;
 using Script.PuzzleManagerGroup;
+using Script.QuestGroup;
 using Script.UIManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
-
 
 namespace Script.RewardScript
 {
@@ -38,11 +38,6 @@ namespace Script.RewardScript
         [SerializeField] private CharacterManager characterManager;
         [SerializeField] private Language language; // 텍스트
         public static CommonRewardManager Instance;
-        private void Awake()
-        {
-            Instance = this;
-        }
-
         public readonly Queue<GameObject> PendingTreasure = new Queue<GameObject>(); // 보류 중인 보물 큐
         private GameObject _currentTreasure; // 현재 보물
         public bool openBoxing = true;
@@ -51,8 +46,10 @@ namespace Script.RewardScript
         private int _bossRewardSelected;
         public bool isOpenBox;
         public event Action OnRewardSelected;
-    
-        
+        private void Awake()
+        {
+            Instance = this;
+        }
         // 1. 상자가 매치 되면 상자를 큐에 추가
         public void EnqueueTreasure()
         {
@@ -68,13 +65,11 @@ namespace Script.RewardScript
                 StartCoroutine(OpenBox(_currentTreasure));
             });
         }
-
         // 1-1. 다시 섞기
         public void ReEnqueueTreasure()
         {
             StartCoroutine(OpenBox(_currentTreasure));
         }
-
         // 2. 상자마다의 확률 분배
         private IEnumerator CommonChance(int greenChance, int blueChance, int purpleChance, string forcedColor)
         {
@@ -94,9 +89,8 @@ namespace Script.RewardScript
                 yield return null;
             }
         }
-
         // 3. 확률별로 선택 옵션 계산
-        private List<Data> CommonPowerList(int greenChance, int blueChance, int purpleChance, string forcedColor)
+        private static List<Data> CommonPowerList(int greenChance, int blueChance, int purpleChance, string forcedColor)
         {
             var commonPowerUps = new List<Data>();
             var selectedCodes = new HashSet<int>();
@@ -155,16 +149,14 @@ namespace Script.RewardScript
             }
             return commonPowerUps;
         }
-
         // 4. 코드 중복검사
         private static Data CommonUnique(IEnumerable<Data> powerUpsData, ICollection<int> selectedCodes)
         {
             var validOptions = powerUpsData.Where(p => IsValidOption(p, selectedCodes));
             return SelectRandom(validOptions);
         }
-
         // 5. case별 예외처리
-       private static bool IsValidOption(Data powerUp, ICollection<int> selectedCodes)
+        private static bool IsValidOption(Data powerUp, ICollection<int> selectedCodes)
             {
                 if (selectedCodes.Contains(powerUp.Code)) return false; // Do not select already selected reward codes again
                 switch (powerUp.Type)
@@ -298,19 +290,17 @@ namespace Script.RewardScript
                         return true;
                 }
             }
-
-       // 6. 예외처리되고 처리 된 옵션값 리턴
-       private static Data SelectRandom(IEnumerable<Data> validOptions)
-       {
+        // 6. 예외처리되고 처리 된 옵션값 리턴
+        private static Data SelectRandom(IEnumerable<Data> validOptions)
+        {
            var commonDataList = validOptions.ToList();
            var count = commonDataList.Count();
            if (count == 0) return null;
            var randomIndex = Random.Range(0, count);
            return commonDataList.ElementAt(randomIndex);
-       }
-
-       // 7. 옵션값 출력
-       private void CommonDisplay(IReadOnlyList<Data> powerUpsDisplayData)
+        }
+        // 7. 옵션값 출력
+        private void CommonDisplay(IReadOnlyList<Data> powerUpsDisplayData)
         {            
             if (spawnManager.isTutorial)
             {
@@ -326,10 +316,9 @@ namespace Script.RewardScript
             CommonDisplayText(common2Button, common2Text, icon2, common2BtnBadge, powerUpsDisplayData[1], language);
             CommonDisplayText(common3Button, common3Text, icon3, common3BtnBadge, powerUpsDisplayData[2], language);
         }
-
-       // 8. 옵션 텍스트
-       private void CommonDisplayText(Button commonButton, TMP_Text powerText, Image icon, Image btnBadge, Data powerUp, Language languages)
-       {
+        // 8. 옵션 텍스트
+        private void CommonDisplayText(Button commonButton, TMP_Text powerText, Image icon, Image btnBadge, Data powerUp, Language languages)
+        {
            var translationKey = powerUp.Type.ToString();
            var powerTextTranslation = languages.GetTranslation(translationKey);
            var finalPowerText = powerTextTranslation;
@@ -432,147 +421,143 @@ namespace Script.RewardScript
            commonButton.onClick.AddListener(() => SelectCommonReward(powerUp));
            commonShuffle.onClick.AddListener(ShuffleCommonReward);
         }
-
         // 9. 상자 오픈
         private IEnumerator OpenBox(GameObject treasure)
         {
-            Time.timeScale = 0; // 게임 일시 정지
-            if (PlayerPrefs.GetInt("TutorialKey") == 1)
-            {
-                Time.timeScale = 1;
-            }
-            commonRewardPanel.SetActive(true); // 보물 패널 활성화
-            var treasureChestLevel = treasure.GetComponent<CharacterBase>().unitPuzzleLevel; // 보물 상자 이름
-            switch(treasureChestLevel)
-            {
-                case 1:
-                    break;
-                case 2:
-                    yield return StartCoroutine(CommonChance(80, 17, 3, null));
-                    break;
-                case 3:
-                    yield return StartCoroutine(CommonChance(60, 35, 5, "blue"));
-                    break;
-                case 4:
-                    yield return StartCoroutine(CommonChance(0, 80, 20, "purple"));
-                    break;
-            }
-
-            yield return new WaitUntil(() => commonRewardPanel.activeSelf == false); // 보물 패널이 비활성화될 때까지 대기
-            openBoxing = false;
-            if (PendingTreasure.Count > 0)
-            {
-                EnqueueTreasure();
-            }
-            isOpenBox = false;
+        Time.timeScale = 0; // 게임 일시 정지
+        if (PlayerPrefs.GetInt("TutorialKey") == 1)
+        {
+            Time.timeScale = 1;
+        }
+        commonRewardPanel.SetActive(true); // 보물 패널 활성화
+        var treasureChestLevel = treasure.GetComponent<CharacterBase>().unitPuzzleLevel; // 보물 상자 이름
+        switch(treasureChestLevel)
+        {
+            case 1:
+                break;
+            case 2:
+                yield return StartCoroutine(CommonChance(80, 17, 3, null));
+                break;
+            case 3:
+                yield return StartCoroutine(CommonChance(60, 35, 5, "blue"));
+                break;
+            case 4:
+                yield return StartCoroutine(CommonChance(0, 80, 20, "purple"));
+                break;
         }
 
+        yield return new WaitUntil(() => commonRewardPanel.activeSelf == false); // 보물 패널이 비활성화될 때까지 대기
+        openBoxing = false;
+        if (PendingTreasure.Count > 0)
+        {
+            EnqueueTreasure();
+        }
+        isOpenBox = false;
+        }
         // 10. 상자 선택
         private void SelectCommonReward(Data selectedReward)
         {
-            Selected(selectedReward);
-            OnRewardSelected?.Invoke();
+        Selected(selectedReward);
+        QuestManager.Instance.MatchCoinQuest();
+        OnRewardSelected?.Invoke();
         }
-       
         // 11. 선택 처리
         private void Selected(Data selectedReward)
         {
-            commonRewardPanel.SetActive(false);
-            if (countManager.TotalMoveCount == 0)
-            {
-                gameManager.GameSpeed();
-            }
-            else
-            {
-                Time.timeScale = 1; // 게임 재개
-            }
-            CharacterPool.ReturnToPool(_currentTreasure); // 보물을 풀에 반환
-           
-            if (!spawnManager.isWave10Spawning)
-            {
-                StartCoroutine(spawnManager.PositionUpCharacterObject());
-            }
-            else
-            {
-                _currentTreasure = null; // 현재 보물 없음
-            }
-          
-            ProcessCommonReward(selectedReward);
+        commonRewardPanel.SetActive(false);
+        if (countManager.TotalMoveCount == 0)
+        {
+            gameManager.GameSpeed();
+        }
+        else
+        {
+            Time.timeScale = 1; // 게임 재개
+        }
+        CharacterPool.ReturnToPool(_currentTreasure); // 보물을 풀에 반환
+
+        if (!spawnManager.isWave10Spawning)
+        {
+            StartCoroutine(spawnManager.PositionUpCharacterObject());
+        }
+        else
+        {
+            _currentTreasure = null; // 현재 보물 없음
         }
 
+        ProcessCommonReward(selectedReward);
+        }
         // 12. 선택된 버프 적용 
         private static void ProcessCommonReward(Data selectedReward)
         {
-            switch (selectedReward.Type)
-            {
-                case PowerTypeManager.Types.AddRow:
-                    EnforceManager.Instance.AddRow(selectedReward);
-                    break; // Row 추가 강화 효과
-                case PowerTypeManager.Types.GroupDamage:
-                    EnforceManager.Instance.IncreaseGroupDamage(selectedReward,selectedReward.Property[0]); 
-                    break;     // 전체 데미지 증가 효과
-                case PowerTypeManager.Types.GroupAtkSpeed:
-                    EnforceManager.Instance.IncreaseGroupRate(selectedReward,selectedReward.Property[0]); 
-                    break;  // 전체 공격 속도 증가 효과
-                case PowerTypeManager.Types.Step: 
-                    EnforceManager.Instance.RewardMoveCount(selectedReward.Property[0]);
-                    break; // 카운트 증가
-                case PowerTypeManager.Types.StepLimit:
-                    EnforceManager.Instance.PermanentIncreaseMoveCount(selectedReward,selectedReward.Property[0]);
-                    break; // 영구적 카운트 증가
-                case PowerTypeManager.Types.StepDirection:
-                    EnforceManager.Instance.DiagonalMovement(selectedReward);
-                    break;    // 대각선 이동
-                case PowerTypeManager.Types.RandomLevelUp:
-                    EnforceManager.RandomCharacterLevelUp(selectedReward.Property[0]); 
-                    break;// 랜덤 케릭터 레벨업
-                case PowerTypeManager.Types.GroupLevelUp: 
-                    EnforceManager.Instance.CharacterGroupLevelUp(selectedReward.Property[0]); 
-                    break;  // 케릭터 그룹 레벨업
-                case PowerTypeManager.Types.LevelUpPattern:
-                    EnforceManager.Instance.PermanentIncreaseCharacter(selectedReward, selectedReward.Property[0]);
-                    break; // 기본 2레벨 케릭터 생성
-                case PowerTypeManager.Types.Exp:
-                    EnforceManager.Instance.IncreaseExpBuff(selectedReward, selectedReward.Property[0]);
-                    break;  // 경험치 5% 증가
-                case PowerTypeManager.Types.CastleRecovery:
-                    EnforceManager.Instance.RecoveryCastle(selectedReward);
-                    break;  // 성 체력 회복
-                case PowerTypeManager.Types.CastleMaxHp:
-                    EnforceManager.Instance.IncreaseCastleMaxHp(selectedReward);
-                    break;  
-                case PowerTypeManager.Types.Match5Upgrade: 
-                    EnforceManager.Instance.Match5Upgrade(selectedReward);
-                    break;     // 5매치 패턴 업그레이드
-                case PowerTypeManager.Types.Slow:
-                    EnforceManager.Instance.SlowCount(selectedReward);
-                    break; // 적 이동속도 감소 
-                case PowerTypeManager.Types.NextStage:
-                    EnforceManager.Instance.NextCharacterUpgrade(selectedReward, selectedReward.Property[0]);
-                    break; // 보드 초기화 시 케릭터 상속되는 케릭터 Count 증가
-                case PowerTypeManager.Types.Gold:
-                    EnforceManager.Instance.AddGold(selectedReward);
-                    break;
-                default: Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}"); 
-                    break;
-            }
-            selectedReward.ChosenProperty = null;
+        switch (selectedReward.Type)
+        {
+            case PowerTypeManager.Types.AddRow:
+                EnforceManager.Instance.AddRow(selectedReward);
+                break; // Row 추가 강화 효과
+            case PowerTypeManager.Types.GroupDamage:
+                EnforceManager.Instance.IncreaseGroupDamage(selectedReward,selectedReward.Property[0]); 
+                break;     // 전체 데미지 증가 효과
+            case PowerTypeManager.Types.GroupAtkSpeed:
+                EnforceManager.Instance.IncreaseGroupRate(selectedReward,selectedReward.Property[0]); 
+                break;  // 전체 공격 속도 증가 효과
+            case PowerTypeManager.Types.Step: 
+                EnforceManager.Instance.RewardMoveCount(selectedReward.Property[0]);
+                break; // 카운트 증가
+            case PowerTypeManager.Types.StepLimit:
+                EnforceManager.Instance.PermanentIncreaseMoveCount(selectedReward,selectedReward.Property[0]);
+                break; // 영구적 카운트 증가
+            case PowerTypeManager.Types.StepDirection:
+                EnforceManager.Instance.DiagonalMovement(selectedReward);
+                break;    // 대각선 이동
+            case PowerTypeManager.Types.RandomLevelUp:
+                EnforceManager.RandomCharacterLevelUp(selectedReward.Property[0]); 
+                break;// 랜덤 케릭터 레벨업
+            case PowerTypeManager.Types.GroupLevelUp: 
+                EnforceManager.Instance.CharacterGroupLevelUp(selectedReward.Property[0]); 
+                break;  // 케릭터 그룹 레벨업
+            case PowerTypeManager.Types.LevelUpPattern:
+                EnforceManager.Instance.PermanentIncreaseCharacter(selectedReward, selectedReward.Property[0]);
+                break; // 기본 2레벨 케릭터 생성
+            case PowerTypeManager.Types.Exp:
+                EnforceManager.Instance.IncreaseExpBuff(selectedReward, selectedReward.Property[0]);
+                break;  // 경험치 5% 증가
+            case PowerTypeManager.Types.CastleRecovery:
+                EnforceManager.Instance.RecoveryCastle(selectedReward);
+                break;  // 성 체력 회복
+            case PowerTypeManager.Types.CastleMaxHp:
+                EnforceManager.Instance.IncreaseCastleMaxHp(selectedReward);
+                break;  
+            case PowerTypeManager.Types.Match5Upgrade: 
+                EnforceManager.Instance.Match5Upgrade(selectedReward);
+                break;     // 5매치 패턴 업그레이드
+            case PowerTypeManager.Types.Slow:
+                EnforceManager.Instance.SlowCount(selectedReward);
+                break; // 적 이동속도 감소 
+            case PowerTypeManager.Types.NextStage:
+                EnforceManager.Instance.NextCharacterUpgrade(selectedReward, selectedReward.Property[0]);
+                break; // 보드 초기화 시 케릭터 상속되는 케릭터 Count 증가
+            case PowerTypeManager.Types.Gold:
+                EnforceManager.Instance.AddGold(selectedReward);
+                break;
+            default: Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}"); 
+                break;
+        }
+        selectedReward.ChosenProperty = null;
         }
         // # 보스 웨이브 클리어 별도 보상
         public IEnumerator WaveRewardChance()
         {
-            if (StageManager.Instance.latestStage == 1) yield break;
-            Time.timeScale = 0;
-            commonRewardPanel.SetActive(true);
-            yield return StartCoroutine(CommonChance(30, 55, 15, null));
+        if (StageManager.Instance.latestStage == 1) yield break;
+        Time.timeScale = 0;
+        commonRewardPanel.SetActive(true);
+        yield return StartCoroutine(CommonChance(30, 55, 15, null));
         }
-
         private void ShuffleCommonReward()
         {
-            if (spawnManager.isTutorial) return;
-                AdsManager.Instance.ShowRewardedAd();
-            AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Common;
-            commonShuffle.gameObject.SetActive(false);
+        if (spawnManager.isTutorial) return;
+            AdsManager.Instance.ShowRewardedAd();
+        AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Common;
+        commonShuffle.gameObject.SetActive(false);
         }
     }
 }

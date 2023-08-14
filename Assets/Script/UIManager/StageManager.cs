@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
+using Script.QuestGroup;
 using Script.RewardScript;
 using Script.RobbyScript.MainMenuGroup;
 using TMPro;
@@ -153,6 +154,7 @@ namespace Script.UIManager
                 if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
                 {
                     isBossClear = true;
+                    QuestManager.Instance.KillBossQuest();
                 }
             }
             if (currentWave == MaxWave() && isBossClear )
