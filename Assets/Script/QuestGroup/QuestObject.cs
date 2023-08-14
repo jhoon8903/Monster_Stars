@@ -22,5 +22,7 @@ namespace Script.QuestGroup
         public int questGoal;
         public bool isShuffled;
         public bool isCompleted;
+        public bool isReceived;
+        public string questKey;
     }                           
 }

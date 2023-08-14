@@ -189,6 +189,8 @@ namespace Script.UIManager
             PlayerPrefs.DeleteKey("unitState");
             PlayerPrefs.DeleteKey("moveCount");
             PlayerPrefs.DeleteKey("GridHeight");
+            PlayerPrefs.SetInt($"{StageManager.Instance.latestStage}Stage_ProgressWave",1);
+            PlayerPrefs.Save();
             SceneManager.LoadScene("SelectScene");
         }
         private void Continue()

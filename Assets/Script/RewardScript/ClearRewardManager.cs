@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
+using Script.QuestGroup;
 using Script.RobbyScript.TopMenuGroup;
 using Script.UIManager;
 using UnityEngine;
@@ -45,6 +46,7 @@ namespace Script.RewardScript
         {
             var coin = StageManager.Instance.isStageClear ? 100 : 50;
             var getCoin = coin + EnforceManager.Instance.addGoldCount;
+            QuestManager.Instance.GetCoinQuest(getCoin);
             CoinsScript.Instance.Coin += getCoin;
             CoinsScript.Instance.UpdateCoin();
             goods.goodsValue.text = $"{getCoin}";

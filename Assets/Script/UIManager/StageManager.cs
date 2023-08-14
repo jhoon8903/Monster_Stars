@@ -124,7 +124,7 @@ namespace Script.UIManager
         {
             var zones = new List<EnemyBase.SpawnZones>();
             var cleanedZoneString = zoneString.Replace("\"", "");
-            var zoneStrings = cleanedZoneString.Split(' '); // 공백으로 구분
+            var zoneStrings = cleanedZoneString.Split(' ');
             foreach (var zone in zoneStrings)
             {
                 if (Enum.TryParse(typeof(EnemyBase.SpawnZones), zone, out var parsedZone))

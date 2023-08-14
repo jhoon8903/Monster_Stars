@@ -76,26 +76,24 @@ namespace Script.PuzzleManagerGroup
             {
                 rewardManger.EnqueueTreasure();
             }
-       
             if (isTutorial)
             {
                 yield return new WaitForSecondsRealtime(0.5f);
                 Debug.Log($"spawnManager.TutorialStepCount: {tutorialManager.CurrentTutorialStep.TutorialStepCount}");
                 TriggerOnMatchFound();
             }
-            swipeManager.isBusy = false;
-            if (countManager.TotalMoveCount != 0 || gameManager.IsBattle) yield break;
-            
             while (commonRewardManager.isOpenBox)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 yield return new WaitForSeconds(0.5f);
             }
-            
+            // if (countManager.TotalMoveCount != 0 || gameManager.IsBattle) yield break;
+
             if (countManager.TotalMoveCount == 0)
             {
                 yield return StartCoroutine(gameManager.Count0Call());
             }
+            swipeManager.isBusy = false;
         }
 
         private IEnumerator CheckPosition()
