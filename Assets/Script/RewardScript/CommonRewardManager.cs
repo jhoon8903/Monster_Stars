@@ -489,60 +489,60 @@ namespace Script.RewardScript
         // 12. 선택된 버프 적용 
         private static void ProcessCommonReward(Data selectedReward)
         {
-        switch (selectedReward.Type)
-        {
-            case PowerTypeManager.Types.AddRow:
-                EnforceManager.Instance.AddRow(selectedReward);
-                break; // Row 추가 강화 효과
-            case PowerTypeManager.Types.GroupDamage:
-                EnforceManager.Instance.IncreaseGroupDamage(selectedReward,selectedReward.Property[0]); 
-                break;     // 전체 데미지 증가 효과
-            case PowerTypeManager.Types.GroupAtkSpeed:
-                EnforceManager.Instance.IncreaseGroupRate(selectedReward,selectedReward.Property[0]); 
-                break;  // 전체 공격 속도 증가 효과
-            case PowerTypeManager.Types.Step: 
-                EnforceManager.Instance.RewardMoveCount(selectedReward.Property[0]);
-                break; // 카운트 증가
-            case PowerTypeManager.Types.StepLimit:
-                EnforceManager.Instance.PermanentIncreaseMoveCount(selectedReward,selectedReward.Property[0]);
-                break; // 영구적 카운트 증가
-            case PowerTypeManager.Types.StepDirection:
-                EnforceManager.Instance.DiagonalMovement(selectedReward);
-                break;    // 대각선 이동
-            case PowerTypeManager.Types.RandomLevelUp:
-                EnforceManager.RandomCharacterLevelUp(selectedReward.Property[0]); 
-                break;// 랜덤 케릭터 레벨업
-            case PowerTypeManager.Types.GroupLevelUp: 
-                EnforceManager.Instance.CharacterGroupLevelUp(selectedReward.Property[0]); 
-                break;  // 케릭터 그룹 레벨업
-            case PowerTypeManager.Types.LevelUpPattern:
-                EnforceManager.Instance.PermanentIncreaseCharacter(selectedReward, selectedReward.Property[0]);
-                break; // 기본 2레벨 케릭터 생성
-            case PowerTypeManager.Types.Exp:
-                EnforceManager.Instance.IncreaseExpBuff(selectedReward, selectedReward.Property[0]);
-                break;  // 경험치 5% 증가
-            case PowerTypeManager.Types.CastleRecovery:
-                EnforceManager.Instance.RecoveryCastle(selectedReward);
-                break;  // 성 체력 회복
-            case PowerTypeManager.Types.CastleMaxHp:
-                EnforceManager.Instance.IncreaseCastleMaxHp(selectedReward);
-                break;  
-            case PowerTypeManager.Types.Match5Upgrade: 
-                EnforceManager.Instance.Match5Upgrade(selectedReward);
-                break;     // 5매치 패턴 업그레이드
-            case PowerTypeManager.Types.Slow:
-                EnforceManager.Instance.SlowCount(selectedReward);
-                break; // 적 이동속도 감소 
-            case PowerTypeManager.Types.NextStage:
-                EnforceManager.Instance.NextCharacterUpgrade(selectedReward, selectedReward.Property[0]);
-                break; // 보드 초기화 시 케릭터 상속되는 케릭터 Count 증가
-            case PowerTypeManager.Types.Gold:
-                EnforceManager.Instance.AddGold(selectedReward);
-                break;
-            default: Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}"); 
-                break;
-        }
-        selectedReward.ChosenProperty = null;
+            switch (selectedReward.Type)
+            {
+                case PowerTypeManager.Types.AddRow:
+                    EnforceManager.Instance.AddRow(selectedReward);
+                    break; // Row 추가 강화 효과
+                case PowerTypeManager.Types.GroupDamage:
+                    EnforceManager.Instance.IncreaseGroupDamage(selectedReward,selectedReward.Property[0]); 
+                    break;     // 전체 데미지 증가 효과
+                case PowerTypeManager.Types.GroupAtkSpeed:
+                    EnforceManager.Instance.IncreaseGroupRate(selectedReward,selectedReward.Property[0]); 
+                    break;  // 전체 공격 속도 증가 효과
+                case PowerTypeManager.Types.Step: 
+                    EnforceManager.Instance.RewardMoveCount(selectedReward.Property[0]);
+                    break; // 카운트 증가
+                case PowerTypeManager.Types.StepLimit:
+                    EnforceManager.Instance.PermanentIncreaseMoveCount(selectedReward,selectedReward.Property[0]);
+                    break; // 영구적 카운트 증가
+                case PowerTypeManager.Types.StepDirection:
+                    EnforceManager.Instance.DiagonalMovement(selectedReward);
+                    break;    // 대각선 이동
+                case PowerTypeManager.Types.RandomLevelUp:
+                    EnforceManager.RandomCharacterLevelUp(selectedReward.Property[0]); 
+                    break;// 랜덤 케릭터 레벨업
+                case PowerTypeManager.Types.GroupLevelUp: 
+                    EnforceManager.Instance.CharacterGroupLevelUp(selectedReward.Property[0]); 
+                    break;  // 케릭터 그룹 레벨업
+                case PowerTypeManager.Types.LevelUpPattern:
+                    EnforceManager.Instance.PermanentIncreaseCharacter(selectedReward, selectedReward.Property[0]);
+                    break; // 기본 2레벨 케릭터 생성
+                case PowerTypeManager.Types.Exp:
+                    EnforceManager.Instance.IncreaseExpBuff(selectedReward, selectedReward.Property[0]);
+                    break;  // 경험치 5% 증가
+                case PowerTypeManager.Types.CastleRecovery:
+                    EnforceManager.Instance.RecoveryCastle(selectedReward);
+                    break;  // 성 체력 회복
+                case PowerTypeManager.Types.CastleMaxHp:
+                    EnforceManager.Instance.IncreaseCastleMaxHp(selectedReward);
+                    break;  
+                case PowerTypeManager.Types.Match5Upgrade: 
+                    EnforceManager.Instance.Match5Upgrade(selectedReward);
+                    break;     // 5매치 패턴 업그레이드
+                case PowerTypeManager.Types.Slow:
+                    EnforceManager.Instance.SlowCount(selectedReward);
+                    break; // 적 이동속도 감소 
+                case PowerTypeManager.Types.NextStage:
+                    EnforceManager.Instance.NextCharacterUpgrade(selectedReward, selectedReward.Property[0]);
+                    break; // 보드 초기화 시 케릭터 상속되는 케릭터 Count 증가
+                case PowerTypeManager.Types.Gold:
+                    EnforceManager.Instance.AddGold(selectedReward);
+                    break;
+                default: Debug.LogWarning($"Unhandled reward type: {selectedReward.Type}"); 
+                    break;
+            }
+            selectedReward.ChosenProperty = null;
         }
         // # 보스 웨이브 클리어 별도 보상
         public IEnumerator WaveRewardChance()

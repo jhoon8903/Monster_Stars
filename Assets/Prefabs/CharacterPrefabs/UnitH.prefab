@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cover: {fileID: 2641826980544604055}
   unitPeaceLevel: 1
-  unLock: 1
+  unLock: 0
   selected: 0
   unitPuzzleLevel: 1
   unitGroup: 7
@@ -60,8 +60,8 @@ MonoBehaviour:
   lv9: {fileID: 21300000, guid: e0b94d265de974a909ca89173f55d388, type: 3}
   lv11: {fileID: 21300000, guid: 933a4fe30b8914f6aaffb26084561385, type: 3}
   lv13: {fileID: 21300000, guid: 85661c791fc484d83a03988e834b88cd, type: 3}
-  baseDamage: 36
-  dotDamage: 3.6000001
+  baseDamage: 27
+  dotDamage: 2.7
   effectChance: 0
   effectStack: 1
   slowTime: 0

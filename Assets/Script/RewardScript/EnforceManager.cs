@@ -527,7 +527,6 @@ namespace Script.RewardScript
         {
             _property = value.GetValueOrDefault(); 
             var translationKey = data.Type.ToString();
-            Debug.Log(translationKey);
             var powerTextTranslation = language.GetTranslation(translationKey);
             var finalPowerText = powerTextTranslation;
             var placeholderValues = new Dictionary<PowerTypeManager.Types, Dictionary<string, float>>

@@ -659,19 +659,19 @@ namespace Script.RobbyScript.StoreMenuGroup
         private void BronzeAds()
         {
             AdsManager.Instance.ShowRewardedAd();
-            Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_box", "green_box", "green_box");
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_greenbox");
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.BronzeAds;
         }
         private static void SilverAds()
         {
             AdsManager.Instance.ShowRewardedAd();
-            Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_box", "blue_box", "blue_box");
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_bluebox");
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.SilverAds;
         }
         private static void GoldAds()
         {
             AdsManager.Instance.ShowRewardedAd();
-            Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_box", "gold_box", "gold_box");
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_goldbox");
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.GoldAds;
         }
         private static void CoinAds()
@@ -690,7 +690,6 @@ namespace Script.RobbyScript.StoreMenuGroup
             AdsManager.Instance.ShowRewardedAd();
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Gem;
         }
-        
         private void CalculateAdsReward(BoxGrade boxTypes)
         {
             if (_coinObject != null)
@@ -726,7 +725,6 @@ namespace Script.RobbyScript.StoreMenuGroup
                 BoxGrade.Gem =>  new Vector3(1, 1, 0),
             };
         }
-        
         private void CalculateCoinReward(BoxGrade boxTypes, int openCount)
         {
             if (_coinObject != null)
@@ -765,7 +763,6 @@ namespace Script.RobbyScript.StoreMenuGroup
             CoinsScript.Instance.Coin += _coinReward;
             CoinsScript.Instance.UpdateCoin();
         }
-        
         private void OpenChestWithGemForCoin(BoxGrade boxTypes)
         {
             if (_coinObject != null)
@@ -785,7 +782,6 @@ namespace Script.RobbyScript.StoreMenuGroup
             CoinsScript.Instance.Coin += _coinReward;
             CoinsScript.Instance.UpdateCoin();
         }
-        
         private void OpenChestWithGemForUnitPieceReward(BoxGrade boxTypes)
         {
             var possibleIndices = Enumerable.Range(0, unitList.Count).ToList();
@@ -849,7 +845,6 @@ namespace Script.RobbyScript.StoreMenuGroup
                 _unitPieceDict[unit] = new Tuple<int, Goods>(_unitPieceReward, _unitPieceObject);
             }
         }
-        
         private void CalculateUnitPieceReward(BoxGrade boxTypes, int openCount)
         {
             var possibleIndices = Enumerable.Range(0, unitList.Count).ToList();
@@ -922,7 +917,6 @@ namespace Script.RobbyScript.StoreMenuGroup
                 _unitPieceDict[unit] = new Tuple<int, Goods>(_unitPieceReward, _unitPieceObject);
             }
         }
-        
         private static int GetUnitPieceReward(CharacterBase.UnitGrades unitGrade, BoxGrade boxGrade, int openCount)
         {
             int greenValue;
@@ -957,7 +951,6 @@ namespace Script.RobbyScript.StoreMenuGroup
               _ => throw new ArgumentOutOfRangeException(nameof(unitGrade), unitGrade, null)
             };
         }
-        
         private static int GemUnitPieceReward(CharacterBase.UnitGrades unitGrade, BoxGrade boxGrade)
         {
             int greenValue;
@@ -992,7 +985,6 @@ namespace Script.RobbyScript.StoreMenuGroup
                 _ => throw new ArgumentOutOfRangeException(nameof(unitGrade), unitGrade, null)
             };
         }
-
         private void ChestCheckClick(ButtonType buttonType)
         {
             ChestCheck.Instance.OpenPanel();
@@ -1058,7 +1050,6 @@ namespace Script.RobbyScript.StoreMenuGroup
                     break;
             }
         }
-
         private void CheckAndSummonChest(ButtonType chestType)
         {
             if (GemScript.Instance.Gem >= int.Parse(ChestCheck.Instance.chestCheckBtnText.text))
@@ -1076,7 +1067,6 @@ namespace Script.RobbyScript.StoreMenuGroup
                 errorContentsImage.GetComponent<RectTransform>().localScale = new Vector3(0.8f, 1f, 0);
             }
         }
-        
         public void SommonChest(ButtonType chestType)
         {
             chestRewardPanel.SetActive(true);
@@ -1145,7 +1135,6 @@ namespace Script.RobbyScript.StoreMenuGroup
             // 흔들리는 애니메이션을 실행
             chestGrade.transform.DOShakeScale(2.0f, 0.5f, 4);
         }
-
         private void OpenChest(ButtonType chestType)
         {
             DeleteEvent();
@@ -1183,7 +1172,6 @@ namespace Script.RobbyScript.StoreMenuGroup
                     break;
             }
         }
-
         public void OpenAds(BoxGrade adsType)
         {
             // 상자 열기 동작 수행
@@ -1206,19 +1194,16 @@ namespace Script.RobbyScript.StoreMenuGroup
                     break;
             }
         }
-
         private void ErrorClose()
         {
             chestErrorPanel.SetActive(false);
         }
-
         private void AllPanelClose()
         {
             chestErrorPanel.SetActive(false);
             ChestCheck.Instance.chestCheckPanel.SetActive(false);
             DeleteEvent();
         }
-
         public void DeleteEvent()
         { 
             chestOpenBtn.GetComponent<Button>().onClick.RemoveAllListeners();
@@ -1240,7 +1225,6 @@ namespace Script.RobbyScript.StoreMenuGroup
             ChestReward.Instance.ClearChests();
             Reallocation();
         }
-
         public void DeleteExceptionEvent()
         {
             chestOpenBtn.GetComponent<Button>().onClick.RemoveAllListeners();
@@ -1261,7 +1245,6 @@ namespace Script.RobbyScript.StoreMenuGroup
             ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             Reallocation();
         }
-
         private void Reallocation()
         {
             bronzeAdsBtn.GetComponent<Button>().onClick.AddListener(() => ChestCheckClick(ButtonType.BronzeAds));

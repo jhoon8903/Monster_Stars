@@ -13,6 +13,7 @@ namespace Script.QuestGroup
         [SerializeField] private GameObject questPanel;
         [SerializeField] private Button questOpenBtn;
         [SerializeField] private Button questCloseBtn;
+        [SerializeField] private GameObject questRewardPanel;
 
         // Ads Quest
         [SerializeField] private TextMeshProUGUI adsDesc;
@@ -198,7 +199,7 @@ namespace Script.QuestGroup
         }
         private static void SaveSelectedQuestList(List<QuestObject> selectedQuests)
         {
-            var selectedQuestKeys = string.Join(",", selectedQuests.Select(q => q.questType.ToString() + ":" + q.questKey));
+            var selectedQuestKeys = string.Join(",", selectedQuests.Select(q => q.questType + ":" + q.questKey));
             PlayerPrefs.SetString(QuestLoadKey, selectedQuestKeys);
             foreach (var quest in selectedQuests)
             {
@@ -221,8 +222,6 @@ namespace Script.QuestGroup
             var quests = selectedQuestData.Split(',')
                 .Select(q => q.Split(':'))
                 .Select(parts => new { QuestType = parts[0], QuestKey = parts[1] });
-
-
             foreach (var questData in quests)
             {
                 var questType = (QuestTypes)Enum.Parse(typeof(QuestTypes), questData.QuestType);
@@ -291,6 +290,23 @@ namespace Script.QuestGroup
                 {
                     quest.isCompleted = true;
                     PlayerPrefs.SetInt(quest.questType + "_isCompleted", 1);
+                }
+
+                if (quest.questType == QuestTypes.AllClear)
+                {
+                    PlayerPrefs.SetInt(quest.questKey + "_value", quest.questValue);
+                    allClearProgress.maxValue = allClearGoal;
+                    allClearProgress.value = quest.questValue;
+                    allClearProgressText.text = $"{quest.questValue} / {allClearGoal}";
+                    PlayerPrefs.Save();
+                }
+                else if (quest.questType == QuestTypes.ViewAds)
+                {
+                    PlayerPrefs.SetInt(quest.questKey + "_value", quest.questValue);
+                    adsProgress.maxValue = adsGoal;
+                    adsProgress.value = quest.questValue;
+                    adsProgressText.text = $"{quest.questValue} / {adsGoal}";
+                    PlayerPrefs.Save();
                 }
                 if (_fixQuestList.Contains(quest))
                 {
@@ -404,34 +420,54 @@ namespace Script.QuestGroup
         }
         private void ReceiveQuestReward(QuestObject quest)
         {
-            switch (quest.questType)
-            {
-                case QuestTypes.ViewAds:
-                    break;
-                case QuestTypes.AllClear:
-                    break;
-                case QuestTypes.UseCoin:
-                    break;
-                case QuestTypes.GetCoin:
-                    break;
-                case QuestTypes.OpenBox:
-                    break;
-                case QuestTypes.GetPiece:
-                    break;
-                case QuestTypes.KillEnemy:
-                    break;
-                case QuestTypes.KillBoss:
-                    break;
-                case QuestTypes.MatchCoin:
-                    break;
-                case QuestTypes.Victory:
-                    break;
-            }
+            questRewardPanel.SetActive(true);
+            // switch (quest.questType)
+            // {
+            //     case QuestTypes.ViewAds:
+            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+            //
+            //         break;
+            //     case QuestTypes.AllClear:
+            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+            //         break;
+            //     case QuestTypes.UseCoin:
+            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+            //         break;
+            //     case QuestTypes.GetCoin:
+            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+            //         break;
+            //     case QuestTypes.OpenBox:
+            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+            //         break;
+            //     case QuestTypes.GetPiece:
+            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+            //         break;
+            //     case QuestTypes.KillEnemy:
+            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+            //         break;
+            //     case QuestTypes.KillBoss:
+            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+            //         break;
+            //     case QuestTypes.MatchCoin:
+            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+            //         break;
+            //     case QuestTypes.Victory:
+            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+            //         break;
+            // }
            AllClearQuest();
            quest.isReceived = true;
            PlayerPrefs.SetInt(quest.questType + "isReceived", 1);
            quest.receiveBtn.GetComponent<Button>().interactable = false;
            quest.receiveBtnText.text = "Completed";
+           if (_fixQuestList.Contains(quest))
+           {
+               SaveFixQuestList(_fixQuestList);
+           }
+           else if (_rotationQuestList.Contains(quest))
+           {
+               SaveRotationQuestList(_rotationQuestList);
+           }
            PlayerPrefs.Save();
         }
         // View Ads Quest (Fix)
@@ -461,7 +497,6 @@ namespace Script.QuestGroup
         // Kill Enemy Quest (Rotation)
         public void KillEnemyQuest()
         {
-            Debug.Log("Kill Enemy!");
             var killEnemyQuest = _rotationQuestList.FirstOrDefault(q => q.questType == QuestTypes.KillEnemy);
             UpdateQuest(killEnemyQuest, 1);
         }

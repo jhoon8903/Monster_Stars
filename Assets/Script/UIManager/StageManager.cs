@@ -176,7 +176,7 @@ namespace Script.UIManager
             EnforceManager.Instance.addGoldCount = 0;
             PlayerPrefs.SetInt($"{latestStage}Stage_ProgressWave", 1);
             PlayerPrefs.SetInt($"{latestStage}Stage_ClearWave", MaxWave());
-            Firebase.Analytics.FirebaseAnalytics.LogEvent("stage", $"success_{latestStage}", latestStage );
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("stage_success", "success", latestStage );
             latestStage++;
 
             if (latestStage > maxStageCount)

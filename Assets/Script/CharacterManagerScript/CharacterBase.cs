@@ -79,7 +79,6 @@ namespace Script.CharacterManagerScript
         
         public virtual void Initialize()
         {
-            unLock = true;
             _spriteRenderer = GetComponent<SpriteRenderer>();
             UnitSkillDict = new Dictionary<int, Sprite> { {1, lv1}, {3, lv3}, {5, lv5}, {7, lv7}, {9, lv9}, {11, lv11}, {13, lv13} };
         }

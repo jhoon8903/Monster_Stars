@@ -837,9 +837,6 @@ namespace Script.RewardScript
                             if (UnitPieceLevel(CharacterBase.UnitGroups.K) < 13) return false;
                             if (EnforceManager.Instance.dark2SameEnemyBoost) return false;
                             break;
-                            default:
-                                Debug.Log("Default Value" + powerUp.Type);
-                                break;
                     }
                     return true;
             }
