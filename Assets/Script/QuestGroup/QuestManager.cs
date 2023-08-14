@@ -280,25 +280,7 @@ namespace Script.QuestGroup
         {
             if (_fixQuestList.Contains(quest) || _rotationQuestList.Contains(quest))
             {
-
                 quest.questValue += value;
-                quest.questProgress.value = quest.questValue;
-                quest.questProgressText.text = $"{quest.questValue} / {quest.questGoal}";
-
-                if (quest.questType == QuestTypes.GetCoin)
-                {
-                    Debug.Log($"CoinValue: {quest.questValue} / {quest.questGoal} ");
-                }
-
-                if (quest.questValue >= quest.questGoal)
-                {
-                    quest.questValue = quest.questGoal;
-                    quest.questProgressText.text = $"{quest.questValue} / {quest.questGoal}";
-                    quest.shuffleBtn.SetActive(false);
-                    quest.receiveBtn.SetActive(true);
-                    quest.receiveBtnText.text = "Receive";
-                    quest.receiveBtn.GetComponent<Button>().onClick.AddListener(()=>ReceiveQuestReward(quest));
-                }
                 if (_fixQuestList.Contains(quest))
                 {
                     SaveFixQuestList(_fixQuestList);
