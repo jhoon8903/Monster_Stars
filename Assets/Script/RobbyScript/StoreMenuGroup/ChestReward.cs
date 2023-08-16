@@ -191,7 +191,6 @@ namespace Script.RobbyScript.StoreMenuGroup
                 Debug.Log("Unknown box grade!");
             }
         }
-
     }
 }
 

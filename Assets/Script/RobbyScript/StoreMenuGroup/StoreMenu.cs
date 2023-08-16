@@ -18,34 +18,18 @@ namespace Script.RobbyScript.StoreMenuGroup
 {
     public class StoreMenu : MonoBehaviour
     {
-        [SerializeField] private GameObject bronzeGemBtn;
-        [SerializeField] private GameObject silverGemBtn;
-        [SerializeField] private GameObject goldGemBtn;
-        [SerializeField] private GameObject bronzeAdsBtn;
-        [SerializeField] private GameObject silverAdsBtn;
-        [SerializeField] private GameObject goldAdsBtn;
-        [SerializeField] private GameObject coinAdsBtn;
-        [SerializeField] private GameObject staminaAdsBtn;
-        [SerializeField] private GameObject gemAdsBtn;
+        [SerializeField] private GameObject contents;
         [SerializeField] private GameObject boxRewardPanel;
         [SerializeField] private GameObject boxRewardContents;
         [SerializeField] private GameObject closeBtn;
         [SerializeField] private GameObject adsRewardBtn;
         [SerializeField] private Goods rewardItem;
+        [SerializeField] private TreasureChest chestItem;
+        [SerializeField] private SpecialOffer specialOffer;
+        [SerializeField] private DailyOffer dailyOffer;
         [SerializeField] private List<CharacterBase> unitList = new List<CharacterBase>();
-        [SerializeField] private Sprite bronzeSprite;
-        [SerializeField] private Sprite silverSprite;
-        [SerializeField] private Sprite goldSprite;
-        [SerializeField] private Sprite chestAdsBtnSprite;
-        [SerializeField] private Sprite chestGemBtnSprite;
-        [SerializeField] private Sprite coinSprite;
-        [SerializeField] private Sprite staminaSprite;
-        [SerializeField] private Sprite gemSprite;
         [SerializeField] private Sprite errorGemSprite;
         [SerializeField] private Sprite errorCoinSprite;
-        [SerializeField] private TextMeshProUGUI bronzeGemBtnText;
-        [SerializeField] private TextMeshProUGUI silverGemBtnText;
-        [SerializeField] private TextMeshProUGUI goldGemBtnText;
         [SerializeField] private GameObject chestRewardPanel;
         [SerializeField] private Image chestBackLightImage;
         [SerializeField] private Image chestParticleImage;
@@ -78,32 +62,6 @@ namespace Script.RobbyScript.StoreMenuGroup
         private const int GoldOpenMaxCount = 5;
         private const int GoldRewardCoolTime = 30;
         
-        //
-        // private int _coinOpenCount;
-        // private const string CoinOpenCountKey = "CoinOpenCount";
-        // private DateTime _coinOpenTime;
-        // private const string CoinOpenTimeKey = "CoinOpenTimeKey";
-        // private TimeSpan _coinPassed;
-        // private const int CoinOpenMaxCount = 10;
-        // private const int CoinRewardCoolTime = 1;
-        //
-        // private int _staminaOpenCount;
-        // private const string StaminaOpenCountKey = "StaminaOpenCount";
-        // private DateTime _staminaOpenTime;
-        // private const string StaminaOpenTimeKey = "StaminaOpenTimeKey";
-        // private TimeSpan _staminaPassed;
-        // private const int StaminaOpenMaxCount = 10;
-        // private const int StaminaRewardCoolTime = 1;
-        //
-        // private int _gemOpenCount;
-        // private const string GemOpenCountKey = "GemOpenCount";
-        // private DateTime _gemOpenTime;
-        // private const string GemOpenTimeKey = "GemOpenTimeKey";
-        // private TimeSpan _gemPassed;
-        // private const int GemOpenMaxCount = 10;
-        // private const int GemRewardCoolTime = 1;
-        //
-        
         private int _coinReward;
         private int _unitPieceReward;
         private readonly Dictionary<CharacterBase, Tuple<int, Goods>> _unitPieceDict = new Dictionary<CharacterBase, Tuple<int, Goods>>();
@@ -117,11 +75,11 @@ namespace Script.RobbyScript.StoreMenuGroup
 
         private Vector3 _originalPosition;
         private Vector3 _newPosition;
-        
-        private const int BronzeGemText = 150;
-        private const int SilverGemText = 450;
-        private const int GoldGemText = 900;
-        
+        private TreasureChest _chestObject;
+        private SpecialOffer _specialOffer;
+        private DailyOffer _dailyOffer;
+
+     
         private void Awake()
         {
             if (Instance == null)
@@ -196,87 +154,21 @@ namespace Script.RobbyScript.StoreMenuGroup
                 PlayerPrefs.SetString(GoldOpenTimeKey, _goldOpenTime.ToBinary().ToString());
                 PlayerPrefs.Save();
             }
-            
-            // Coin Count Check
-            // if (PlayerPrefs.HasKey(CoinOpenCountKey))
-            // {
-            //     _coinOpenCount = PlayerPrefs.GetInt(CoinOpenCountKey);
-            // }
-            // else
-            // {
-            //     _coinOpenCount = 0;
-            //     PlayerPrefs.SetInt(CoinOpenCountKey, _coinOpenCount);
-            // }
-            // // Coin Last Open Check
-            // if (PlayerPrefs.HasKey(CoinOpenTimeKey))
-            // {
-            //     _coinOpenTime = DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString(CoinOpenTimeKey)));
-            // }
-            // else
-            // {
-            //     _coinOpenTime = DateTime.Now.AddMinutes(-CoinRewardCoolTime);
-            //     PlayerPrefs.SetString(CoinOpenTimeKey, _coinOpenTime.ToBinary().ToString());
-            //     PlayerPrefs.Save();
-            // }
-            //
-            //
-            // // Stamina Count Check
-            // if (PlayerPrefs.HasKey(StaminaOpenCountKey))
-            // {
-            //     _staminaOpenCount = PlayerPrefs.GetInt(StaminaOpenCountKey);
-            // }
-            // else
-            // {
-            //     _staminaOpenCount = 0;
-            //     PlayerPrefs.SetInt(StaminaOpenCountKey, _staminaOpenCount);
-            // }
-            // // Stamina Last Open Check
-            // if (PlayerPrefs.HasKey(StaminaOpenTimeKey))
-            // {
-            //     _staminaOpenTime = DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString(StaminaOpenTimeKey)));
-            // }
-            // else
-            // {
-            //     _staminaOpenTime = DateTime.Now.AddMinutes(-StaminaRewardCoolTime);
-            //     PlayerPrefs.SetString(StaminaOpenTimeKey, _staminaOpenTime.ToBinary().ToString());
-            //     PlayerPrefs.Save();
-            // }
-            //
-            //
-            // // Gem Count Check
-            // if (PlayerPrefs.HasKey(GemOpenCountKey))
-            // {
-            //     _gemOpenCount = PlayerPrefs.GetInt(GemOpenCountKey);
-            // }
-            // else
-            // {
-            //     _gemOpenCount = 0;
-            //     PlayerPrefs.SetInt(GemOpenCountKey, _gemOpenCount);
-            // }
-            // // Gem Last Open Check
-            // if (PlayerPrefs.HasKey(GemOpenTimeKey))
-            // {
-            //     _gemOpenTime = DateTime.FromBinary(Convert.ToInt64(PlayerPrefs.GetString(GemOpenTimeKey)));
-            // }
-            // else
-            // {
-            //     _gemOpenTime = DateTime.Now.AddMinutes(-GemRewardCoolTime);
-            //     PlayerPrefs.SetString(GemOpenTimeKey, _gemOpenTime.ToBinary().ToString());
-            //     PlayerPrefs.Save();
-            // }
-            
-            bronzeAdsBtn.GetComponent<Button>().onClick.AddListener(() => ChestCheckClick(ButtonType.BronzeAds));
-            silverAdsBtn.GetComponent<Button>().onClick.AddListener(() => ChestCheckClick(ButtonType.SilverAds));
-            goldAdsBtn.GetComponent<Button>().onClick.AddListener(() => ChestCheckClick(ButtonType.GoldAds));
-            bronzeGemBtn.GetComponent<Button>().onClick.AddListener(() => ChestCheckClick(ButtonType.BronzeGem));
-            silverGemBtn.GetComponent<Button>().onClick.AddListener(() => ChestCheckClick(ButtonType.SilverGem));
-            goldGemBtn.GetComponent<Button>().onClick.AddListener(() => ChestCheckClick(ButtonType.GoldGem));
-            coinAdsBtn.GetComponent<Button>().onClick.AddListener(CoinAds);
-            staminaAdsBtn.GetComponent<Button>().onClick.AddListener(StaminaAds);
-            gemAdsBtn.GetComponent<Button>().onClick.AddListener(GemAds);
+            _chestObject = Instantiate(chestItem, contents.transform);
+            _specialOffer = Instantiate(specialOffer, contents.transform);
+            _dailyOffer = Instantiate(dailyOffer, contents.transform);
+            _specialOffer.transform.SetSiblingIndex(_chestObject.transform.GetSiblingIndex() + 1);
+            _dailyOffer.transform.SetSiblingIndex(_specialOffer.transform.GetSiblingIndex() + 1);
+        }
+        private void Start()
+        {
+            _chestObject.ChestBtnSet();
+            _specialOffer.SpecialBtnSet();
+           
             closeBtn.GetComponent<Button>().onClick.AddListener(ReceiveReward);
             adsRewardBtn.GetComponent<Button>().onClick.AddListener(AdsReceiveReward);
             gameObject.SetActive(false);
+            
             _originalPosition = chestGrade.transform.position;
             _newPosition = _originalPosition;
         }
@@ -309,23 +201,9 @@ namespace Script.RobbyScript.StoreMenuGroup
             GoldAdsOpen = 0;
             _goldOpenTime = DateTime.Now.AddMinutes(-GoldRewardCoolTime);
             PlayerPrefs.SetString(GoldOpenTimeKey, _goldOpenTime.ToBinary().ToString());
-            
-            // _coinOpenCount = 0;
-            // _coinOpenTime = DateTime.Now.AddMinutes(-CoinRewardCoolTime);
-            // PlayerPrefs.SetString(CoinOpenTimeKey, _coinOpenTime.ToBinary().ToString());
-            // _staminaOpenCount = 0;
-            // _staminaOpenTime = DateTime.Now.AddMinutes(-StaminaRewardCoolTime);
-            // PlayerPrefs.SetString(StaminaOpenTimeKey, _staminaOpenTime.ToBinary().ToString());
-            // _gemOpenCount = 0;
-            // _gemOpenTime = DateTime.Now.AddMinutes(-GemRewardCoolTime);
-            // PlayerPrefs.SetString(GemOpenTimeKey, _gemOpenTime.ToBinary().ToString());
-            
             PlayerPrefs.SetInt(BronzeOpenCountKey, _bronzeOpenCount);
             PlayerPrefs.SetInt(SilverOpenCountKey, SilverAdsOpen);
             PlayerPrefs.SetInt(GoldOpenCountKey, GoldAdsOpen);
-            // PlayerPrefs.SetInt(CoinOpenCountKey, _coinOpenCount);
-            // PlayerPrefs.SetInt(StaminaOpenCountKey, _staminaOpenCount);
-            // PlayerPrefs.SetInt(GemOpenCountKey, _gemOpenCount);
             PlayerPrefs.Save();
         }
         private void UpdateButtonState()
@@ -333,165 +211,78 @@ namespace Script.RobbyScript.StoreMenuGroup
             UpdateBronzeButton();
             UpdateSilverButton();
             UpdateGoldButton();
-            // UpdateCoinButton();
-            // UpdateStaminaButton();
-            // UpdateGemButton();
-            UpdateGemButtonText();
+            _chestObject.UpdateBtnColor();
         }
         private void UpdateBronzeButton()
         {
             if (isReset || _bronzeOpenCount < BronzeOpenMaxCount)
             {
-                bronzeAdsBtn.GetComponent<Button>().interactable = true;
-                bronzeAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{_bronzeOpenCount} / {BronzeOpenMaxCount}";
+                _chestObject.bronzeAdsBtn.GetComponent<Button>().interactable = true;
+                _chestObject.bronzeAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{_bronzeOpenCount} / {BronzeOpenMaxCount}";
             }
             else
             {
                 var resetTime = _lastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
-                bronzeAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"Reset: {resetTime}";
+                _chestObject.bronzeAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"Reset: {resetTime}";
             }
-            bronzeGemBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "150";
+            _chestObject.bronzeGemBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "150";
         }
         private void UpdateSilverButton()
         {
             _silverPassed = DateTime.Now - _silverOpenTime;
             if (isReset || (SilverAdsOpen < SilverOpenMaxCount && _silverPassed.TotalMinutes >= SilverRewardCoolTime))
             {
-                silverAdsBtn.GetComponent<Button>().interactable = true;
-                silverAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{SilverAdsOpen} / {SilverOpenMaxCount}";
+                _chestObject.silverAdsBtn.GetComponent<Button>().interactable = true;
+                _chestObject.silverAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{SilverAdsOpen} / {SilverOpenMaxCount}";
             }
             else
             {
-                silverAdsBtn.GetComponent<Button>().interactable = false;
+                _chestObject.silverAdsBtn.GetComponent<Button>().interactable = false;
                 var remainingTime = TimeSpan.FromMinutes(SilverRewardCoolTime) - _silverPassed;
                 if (SilverAdsOpen == SilverOpenMaxCount)
                 {
                     var resetTime = _lastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
-                    silverAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"Reset: {resetTime}";
+                    _chestObject.silverAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"Reset: {resetTime}";
                 }
                 else if (remainingTime > TimeSpan.Zero)
                 {
                     var remainingTimeText = remainingTime.ToString(@"mm\:ss");
-                    silverAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
+                    _chestObject.silverAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
                 }
             }
-            silverGemBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "450";
+            _chestObject.silverGemBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "450";
         }
         private void UpdateGoldButton()
         {
             _goldPassed = DateTime.Now - _goldOpenTime;
             if (isReset || (GoldAdsOpen < GoldOpenMaxCount && _goldPassed.TotalMinutes >= GoldRewardCoolTime))
             {
-                goldAdsBtn.GetComponent<Button>().interactable = true;
-                goldAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{GoldAdsOpen} / {GoldOpenMaxCount}";
+                _chestObject.goldAdsBtn.GetComponent<Button>().interactable = true;
+                _chestObject.goldAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{GoldAdsOpen} / {GoldOpenMaxCount}";
             }
             else
             {
-                goldAdsBtn.GetComponent<Button>().interactable = false;
+                _chestObject.goldAdsBtn.GetComponent<Button>().interactable = false;
                 var remainingTime = TimeSpan.FromMinutes(GoldRewardCoolTime) - _goldPassed;
                 if (GoldAdsOpen == GoldOpenMaxCount)
                 {
                     var resetTime = _lastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
-                    goldAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"Reset: {resetTime}";
+                    _chestObject.goldAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"Reset: {resetTime}";
                 }
                 else if (remainingTime > TimeSpan.Zero)
                 {
                     var remainingTimeText = remainingTime.ToString(@"mm\:ss");
-                    goldAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
+                    _chestObject.goldAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
                 }
             }
-            goldGemBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "900";
+            _chestObject.goldGemBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "900";
         }
-        
-        // private void UpdateCoinButton()
-        // {
-        //     _coinPassed = DateTime.Now - _coinOpenTime;
-        //     if (isReset || (_coinOpenCount < CoinOpenMaxCount && _coinPassed.TotalMinutes >= CoinRewardCoolTime))
-        //     {
-        //         coinAdsBtn.GetComponent<Button>().interactable = true;
-        //         coinAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{_coinOpenCount} / {CoinOpenMaxCount}";
-        //     }
-        //     else
-        //     {
-        //         coinAdsBtn.GetComponent<Button>().interactable = false;
-        //         var remainingTime = TimeSpan.FromMinutes(CoinRewardCoolTime) - _coinPassed;
-        //         if (_coinOpenCount == CoinOpenMaxCount)
-        //         {
-        //             var resetTime = _lastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
-        //             coinAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{resetTime}";
-        //             // $"Reset: {resetTime}";   
-        //         }
-        //         else if (remainingTime > TimeSpan.Zero)
-        //         {
-        //             var remainingTimeText = remainingTime.ToString(@"mm\:ss");
-        //             coinAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
-        //         }
-        //     }
-        // }
-        //
-        // private void UpdateStaminaButton()
-        // {
-        //     _staminaPassed = DateTime.Now - _staminaOpenTime;
-        //     if (isReset || (_staminaOpenCount < StaminaOpenMaxCount && _staminaPassed.TotalMinutes >= StaminaRewardCoolTime))
-        //     {
-        //         staminaAdsBtn.GetComponent<Button>().interactable = true;
-        //         staminaAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{_staminaOpenCount} / {StaminaOpenMaxCount}";
-        //     }
-        //     else
-        //     {
-        //         staminaAdsBtn.GetComponent<Button>().interactable = false;
-        //         var remainingTime = TimeSpan.FromMinutes(StaminaRewardCoolTime) - _staminaPassed;
-        //         if (_staminaOpenCount == StaminaOpenMaxCount)
-        //         {
-        //             var resetTime = _lastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
-        //             staminaAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{resetTime}";
-        //         }
-        //         else if (remainingTime > TimeSpan.Zero)
-        //         {
-        //             var remainingTimeText = remainingTime.ToString(@"mm\:ss");
-        //             staminaAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
-        //         }
-        //     }
-        // }
-        //
-        // private void UpdateGemButton()
-        // {
-        //     _gemPassed = DateTime.Now - _gemOpenTime;
-        //     if (isReset || (_gemOpenCount < GemOpenMaxCount && _gemPassed.TotalMinutes >= GemRewardCoolTime))
-        //     {
-        //         gemAdsBtn.GetComponent<Button>().interactable = true;
-        //         gemAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{_gemOpenCount} / {GemOpenMaxCount}";
-        //     }
-        //     else
-        //     {
-        //         gemAdsBtn.GetComponent<Button>().interactable = false;
-        //         var remainingTime = TimeSpan.FromMinutes(GemRewardCoolTime) - _gemPassed;
-        //         if (_gemOpenCount == GemOpenMaxCount)
-        //         {
-        //             var resetTime = _lastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
-        //             gemAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{resetTime}";
-        //         }
-        //         else if (remainingTime > TimeSpan.Zero)
-        //         {
-        //             var remainingTimeText = remainingTime.ToString(@"mm\:ss");
-        //             gemAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
-        //         }
-        //     }
-        // }
-
-        private void UpdateGemButtonText()
-        {
-            var currentGemCount = GemScript.Instance.Gem;
-            bronzeGemBtnText.color = BronzeGemText > currentGemCount ? Color.red : Color.white;
-            silverGemBtnText.color = SilverGemText > currentGemCount ? Color.red : Color.white;
-            goldGemBtnText.color = GoldGemText > currentGemCount ? Color.red : Color.white;
-        }
-        //!!!!!!!!!!!!!!!!!!!!!
         public void Reward(BoxGrade boxTypes)
         {
             adsRewardBtn.SetActive(true);
             closeBtn.SetActive(true);
             Debug.Log("boxTypes :"+boxTypes );
+            const int count = 0;
             switch (boxTypes)
             {
                 case BoxGrade.Bronze:
@@ -526,48 +317,30 @@ namespace Script.RobbyScript.StoreMenuGroup
                     adsRewardBtn.SetActive(false);
                     break;
                 case BoxGrade.Coin:
-                    // _coinOpenCount = PlayerPrefs.GetInt(CoinOpenCountKey, 0);
-                    // if (_coinOpenCount == CoinOpenMaxCount) break; 
-                    // _coinOpenCount++;
-                    // _coinOpenTime = DateTime.Now;
-                    // PlayerPrefs.SetInt(CoinOpenCountKey, _coinOpenCount);
-                    // PlayerPrefs.SetString(CoinOpenTimeKey, _coinOpenTime.ToBinary().ToString());
-                    CalculateAdsReward(boxTypes);
+                    CalculateCoinReward(boxTypes, count);
                     closeBtn.SetActive(false);
                     break;
                 case BoxGrade.Stamina:
-                    // _staminaOpenCount = PlayerPrefs.GetInt(StaminaOpenCountKey, 0);
-                    // if (_staminaOpenCount == StaminaOpenMaxCount) break; 
-                    // _staminaOpenCount++;
-                    // _staminaOpenTime = DateTime.Now;
-                    // PlayerPrefs.SetInt(StaminaOpenCountKey, _staminaOpenCount);
-                    // PlayerPrefs.SetString(StaminaOpenTimeKey, _staminaOpenTime.ToBinary().ToString());
-                    CalculateAdsReward(boxTypes);
+                    CalculateCoinReward(boxTypes, count);
                     closeBtn.SetActive(false);
                     break;
                 case BoxGrade.Gem:
-                    // _gemOpenCount = PlayerPrefs.GetInt(GemOpenCountKey, 0);
-                    // if (_gemOpenCount == GemOpenMaxCount) break; 
-                    // _gemOpenCount++;
-                    // _gemOpenTime = DateTime.Now;
-                    // PlayerPrefs.SetInt(GemOpenCountKey, _gemOpenCount);
-                    // PlayerPrefs.SetString(GemOpenTimeKey, _gemOpenTime.ToBinary().ToString());
-                    CalculateAdsReward(boxTypes);
+                    CalculateCoinReward(boxTypes, count);
                     closeBtn.SetActive(false);
                     break;
                 case BoxGrade.BronzeGem:
-                    OpenChestWithGemForCoin(boxTypes);
-                    OpenChestWithGemForUnitPieceReward(boxTypes);
+                    CalculateCoinReward(boxTypes, count);
+                    CalculateUnitPieceReward(boxTypes, count);
                     adsRewardBtn.SetActive(false);
                     break;
                 case BoxGrade.SilverGem:
-                    OpenChestWithGemForCoin(boxTypes);
-                    OpenChestWithGemForUnitPieceReward(boxTypes);
+                    CalculateCoinReward(boxTypes, count);
+                    CalculateUnitPieceReward(boxTypes, count);
                     adsRewardBtn.SetActive(false);
                     break;
                 case BoxGrade.GoldGem:
-                    OpenChestWithGemForCoin(boxTypes);
-                    OpenChestWithGemForUnitPieceReward(boxTypes);
+                    CalculateCoinReward(boxTypes, count);
+                    CalculateUnitPieceReward(boxTypes, count);
                     adsRewardBtn.SetActive(false);
                     break;
             }
@@ -618,56 +391,20 @@ namespace Script.RobbyScript.StoreMenuGroup
             Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_goldbox");
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.GoldAds;
         }
-        private static void CoinAds()
+        public void CoinAds()
         {
             AdsManager.Instance.ShowRewardedAd();
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Coin;
         }
-        private static void StaminaAds()
+        public void StaminaAds()
         {
             AdsManager.Instance.ShowRewardedAd();
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Stamina;
         }
-        private void GemAds()
+        public void GemAds()
         {
-            AllPanelClose();
             AdsManager.Instance.ShowRewardedAd();
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Gem;
-        }
-        private void CalculateAdsReward(BoxGrade boxTypes)
-        {
-            if (_coinObject != null)
-            {
-                Destroy(_coinObject.gameObject);
-            }
-            _coinReward = boxTypes switch
-            {
-                BoxGrade.Coin => 1000,
-                BoxGrade.Stamina => 10,
-                BoxGrade.Gem => 200,
-                _ => _coinReward
-            };
-            if (_coinReward == 0) return;
-            _coinObject = Instantiate(rewardItem, boxRewardContents.transform);
-            _coinObject.goodsSprite.GetComponent<Image>().sprite = boxTypes switch
-            {
-                BoxGrade.Coin => coinSprite,
-                BoxGrade.Stamina =>  staminaSprite,
-                BoxGrade.Gem => gemSprite
-            };
-            _coinObject.goodsSprite.GetComponent<RectTransform>().localScale = boxTypes switch
-            {
-                BoxGrade.Coin => new Vector3(1, 0.8f, 0),
-                BoxGrade.Stamina => new Vector3(0.8f, 0.9f, 0),
-                BoxGrade.Gem => new Vector3(1, 0.8f, 0),
-            };
-            _coinObject.goodsValue.text = $"{_coinReward}";
-            _coinObject.goodsValue.GetComponent<RectTransform>().localScale = boxTypes switch
-            {
-                BoxGrade.Coin =>  new Vector3(1, 1, 0),
-                BoxGrade.Stamina =>  new Vector3(1, 1, 0),
-                BoxGrade.Gem =>  new Vector3(1, 1, 0),
-            };
         }
         private void CalculateCoinReward(BoxGrade boxTypes, int openCount)
         {
@@ -698,96 +435,41 @@ namespace Script.RobbyScript.StoreMenuGroup
                     4 => 60000,
                     _ => _coinReward
                 },
+                BoxGrade.Coin => 1000,
+                BoxGrade.Stamina => 10,
+                BoxGrade.Gem => 200,
+                BoxGrade.BronzeGem => 500,
+                BoxGrade.SilverGem => 25000,
+                BoxGrade.GoldGem => 60000,
                 _ => _coinReward
             };
             if (_coinReward == 0) return;
             _coinObject = Instantiate(rewardItem, boxRewardContents.transform);
-            // _coinObject.goodsBack.GetComponent<Image>().color = Color.clear;
+            _coinObject.goodsBack.GetComponent<Image>().color = Color.white;
+            _coinObject.goodsSprite.GetComponent<Image>().sprite = boxTypes switch
+            {
+                BoxGrade.Coin => _specialOffer.coinSprite,
+                BoxGrade.Stamina => _specialOffer.staminaSprite,
+                BoxGrade.Gem => _specialOffer.gemSprite,
+                _ => _specialOffer.coinSprite
+            };
+            _coinObject.goodsSprite.GetComponent<RectTransform>().localScale = boxTypes switch
+            {
+                BoxGrade.Coin => new Vector3(1, 0.8f, 0),
+                BoxGrade.Stamina => new Vector3(0.8f, 0.9f, 0),
+                BoxGrade.Gem => new Vector3(1, 0.8f, 0),
+                _ => new Vector3(0.8f, 0.8f, 0)
+            };
             _coinObject.goodsValue.text = $"{_coinReward}";
+            _coinObject.goodsValue.GetComponent<RectTransform>().localScale = boxTypes switch
+            {
+                BoxGrade.Coin =>  new Vector3(1, 1, 0),
+                BoxGrade.Stamina =>  new Vector3(1, 1, 0),
+                BoxGrade.Gem =>  new Vector3(1, 1, 0),
+                _ =>   new Vector3(1, 1, 0)
+            };
             CoinsScript.Instance.Coin += _coinReward;
             CoinsScript.Instance.UpdateCoin();
-        }
-        private void OpenChestWithGemForCoin(BoxGrade boxTypes)
-        {
-            if (_coinObject != null)
-            {
-                Destroy(_coinObject.gameObject);
-            }
-            _coinReward = boxTypes switch
-            {
-                BoxGrade.BronzeGem => 500,
-                BoxGrade.SilverGem => 25000,
-                BoxGrade.GoldGem => 60000,
-            };
-            if (_coinReward == 0) return;
-            _coinObject = Instantiate(rewardItem, boxRewardContents.transform);
-            // _coinObject.goodsBack.GetComponent<Image>().color = Color.clear;
-            _coinObject.goodsValue.text = $"{_coinReward}";
-            CoinsScript.Instance.Coin += _coinReward;
-            CoinsScript.Instance.UpdateCoin();
-        }
-        private void OpenChestWithGemForUnitPieceReward(BoxGrade boxTypes)
-        {
-            var possibleIndices = Enumerable.Range(0, unitList.Count).ToList();
-            var selectedUnitIndices = new List<int>();
-            var pieceCountPerUnit = new Dictionary<int, int>();
-            foreach (var index in possibleIndices)
-            {
-                pieceCountPerUnit.TryAdd(index, 0);
-            }
-            while (possibleIndices.Count > 0)
-            {
-                var randomIndex = Random.Range(0, possibleIndices.Count);
-                selectedUnitIndices.Add(possibleIndices[randomIndex]);
-                possibleIndices.RemoveAt(randomIndex);
-            }
-
-            var totalPiecesPerGrade = new Dictionary<CharacterBase.UnitGrades, int>
-            {
-                { CharacterBase.UnitGrades.Green, GemUnitPieceReward(CharacterBase.UnitGrades.Green, boxTypes) },
-                { CharacterBase.UnitGrades.Blue, GemUnitPieceReward(CharacterBase.UnitGrades.Blue, boxTypes) },
-                { CharacterBase.UnitGrades.Purple, GemUnitPieceReward(CharacterBase.UnitGrades.Purple, boxTypes) }
-            };
-
-            foreach (var grade in totalPiecesPerGrade.Keys)
-            {
-                var unitsOfThisGrade = selectedUnitIndices.Where(index =>
-                    unitList[index].UnitGrade == grade && unitList[index].unitPeaceLevel < 14).ToList();
-                var assignedUnits = new List<int>();
-                var remainingPieces = totalPiecesPerGrade[grade];
-
-                while (remainingPieces > 0 && unitsOfThisGrade.Count > 0)
-                {
-                    var randomIndex = Random.Range(0, unitsOfThisGrade.Count);
-                    var maxPiecesPerUnit = Math.Max(1, (int)(remainingPieces / (float)unitsOfThisGrade.Count));
-                    var piecesForThisUnit = Random.Range(1, maxPiecesPerUnit + 1);
-
-                    pieceCountPerUnit[unitsOfThisGrade[randomIndex]] += piecesForThisUnit;
-                    remainingPieces -= piecesForThisUnit;
-                    assignedUnits.Add(unitsOfThisGrade[randomIndex]);
-                    unitsOfThisGrade.RemoveAt(randomIndex);
-                }
-
-                while (remainingPieces > 0 && assignedUnits.Count > 0)
-                {
-                    var randomIndex = Random.Range(0, assignedUnits.Count);
-                    pieceCountPerUnit[assignedUnits[randomIndex]] += 1;
-                    remainingPieces -= 1;
-                }
-            }
-
-            foreach (var index in selectedUnitIndices)
-            {
-                var unit = unitList[index];
-                if (unit.unitPeaceLevel >= 14) continue;
-                unit.Initialize();
-                _unitPieceReward = pieceCountPerUnit[index];
-                if (_unitPieceReward == 0) continue;
-                _unitPieceObject = Instantiate(rewardItem, boxRewardContents.transform);
-                _unitPieceObject.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPeaceLevel);
-                _unitPieceObject.goodsValue.text = $"{_unitPieceReward}";
-                _unitPieceDict[unit] = new Tuple<int, Goods>(_unitPieceReward, _unitPieceObject);
-            }
         }
         private void CalculateUnitPieceReward(BoxGrade boxTypes, int openCount)
         {
@@ -847,13 +529,6 @@ namespace Script.RobbyScript.StoreMenuGroup
                 _unitPieceReward = pieceCountPerUnit[index];
                 if (_unitPieceReward == 0) continue;
                 _unitPieceObject = Instantiate(rewardItem, boxRewardContents.transform);
-                // _unitPieceObject.goodsBack.GetComponent<Image>().color = unit.UnitGrade switch
-                // {
-                //     CharacterBase.UnitGrades.Green => Color.green,
-                //     CharacterBase.UnitGrades.Blue => Color.blue,
-                //     CharacterBase.UnitGrades.Purple => Color.magenta,
-                //     _ => throw new ArgumentOutOfRangeException()
-                // };
                 _unitPieceObject.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPeaceLevel);
                 _unitPieceObject.goodsSprite.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);
                 _unitPieceObject.goodsValue.text = $"{_unitPieceReward}";
@@ -883,25 +558,6 @@ namespace Script.RobbyScript.StoreMenuGroup
                     blueValue = 165 + 40 * (openCount - 1);
                     purpleValue = openCount > 2 ? 6 + (openCount - 1) * 2 : 6;
                     break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(boxGrade), boxGrade, null);
-            }
-
-            return unitGrade switch
-            {
-              CharacterBase.UnitGrades.Green =>  greenValue,
-              CharacterBase.UnitGrades.Blue => blueValue,
-              CharacterBase.UnitGrades.Purple => purpleValue,
-              _ => throw new ArgumentOutOfRangeException(nameof(unitGrade), unitGrade, null)
-            };
-        }
-        private static int GemUnitPieceReward(CharacterBase.UnitGrades unitGrade, BoxGrade boxGrade)
-        {
-            int greenValue;
-            int blueValue;
-            int purpleValue;
-            switch (boxGrade)
-            {
                 case BoxGrade.BronzeGem:
                     greenValue = 24;
                     blueValue = 0;
@@ -923,13 +579,13 @@ namespace Script.RobbyScript.StoreMenuGroup
 
             return unitGrade switch
             {
-                CharacterBase.UnitGrades.Green =>  greenValue,
-                CharacterBase.UnitGrades.Blue => blueValue,
-                CharacterBase.UnitGrades.Purple => purpleValue,
-                _ => throw new ArgumentOutOfRangeException(nameof(unitGrade), unitGrade, null)
+              CharacterBase.UnitGrades.Green =>  greenValue,
+              CharacterBase.UnitGrades.Blue => blueValue,
+              CharacterBase.UnitGrades.Purple => purpleValue,
+              _ => throw new ArgumentOutOfRangeException(nameof(unitGrade), unitGrade, null)
             };
         }
-        private void ChestCheckClick(ButtonType buttonType)
+        public void ChestCheckClick(ButtonType buttonType)
         {
             ChestCheck.Instance.OpenPanel();
 
@@ -937,8 +593,8 @@ namespace Script.RobbyScript.StoreMenuGroup
             {
                 case ButtonType.BronzeAds:
                     ChestCheck.Instance.chestCheckTopText.text = "Bronze Chest";
-                    ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = bronzeSprite;
-                    ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = chestAdsBtnSprite;
+                    ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = _chestObject.bronzeSprite;
+                    ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = _chestObject.chestAdsBtnSprite;
                     ChestCheck.Instance.chestCheckBtnText.text = $"{_bronzeOpenCount} / {BronzeOpenMaxCount}";
                     
                     ChestReward.Instance.SetStart(ButtonType.BronzeAds);
@@ -946,8 +602,8 @@ namespace Script.RobbyScript.StoreMenuGroup
                     break;
                 case ButtonType.SilverAds:
                     ChestCheck.Instance.chestCheckTopText.text = "Silver Chest";
-                    ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = silverSprite;
-                    ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = chestAdsBtnSprite;
+                    ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = _chestObject.silverSprite;
+                    ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = _chestObject.chestAdsBtnSprite;
                     ChestCheck.Instance.chestCheckBtnText.text = $"{SilverAdsOpen} / {SilverOpenMaxCount}";
 
                     ChestReward.Instance.SetStart(ButtonType.SilverAds);
@@ -955,8 +611,8 @@ namespace Script.RobbyScript.StoreMenuGroup
                     break;
                 case ButtonType.GoldAds:
                     ChestCheck.Instance.chestCheckTopText.text = "Gold Chest";
-                    ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = goldSprite;
-                    ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = chestAdsBtnSprite;
+                    ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = _chestObject.goldSprite;
+                    ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = _chestObject.chestAdsBtnSprite;
                     ChestCheck.Instance.chestCheckBtnText.text = $"{GoldAdsOpen} / {GoldOpenMaxCount}";
                     
                     ChestReward.Instance.SetStart(ButtonType.GoldAds);
@@ -964,8 +620,8 @@ namespace Script.RobbyScript.StoreMenuGroup
                     break;
                 case ButtonType.BronzeGem:
                     ChestCheck.Instance.chestCheckTopText.text = "Bronze Chest";
-                    ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = bronzeSprite;
-                    ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = chestGemBtnSprite;
+                    ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = _chestObject.bronzeSprite;
+                    ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = _chestObject.chestGemBtnSprite;
                     ChestCheck.Instance.chestCheckBtnText.text = "150";
                     ChestReward.Instance.SetStart(ButtonType.BronzeGem);
                     
@@ -973,8 +629,8 @@ namespace Script.RobbyScript.StoreMenuGroup
                     break;
                 case ButtonType.SilverGem:
                     ChestCheck.Instance.chestCheckTopText.text = "Silver Chest";
-                    ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = silverSprite;
-                    ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = chestGemBtnSprite;
+                    ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = _chestObject.silverSprite;
+                    ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = _chestObject.chestGemBtnSprite;
                     ChestCheck.Instance.chestCheckBtnText.text = "450";
                     ChestReward.Instance.SetStart(ButtonType.SilverGem);
                    
@@ -982,8 +638,8 @@ namespace Script.RobbyScript.StoreMenuGroup
                     break;
                 case ButtonType.GoldGem:
                     ChestCheck.Instance.chestCheckTopText.text = "Gold Chest";
-                    ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = goldSprite;
-                    ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = chestGemBtnSprite;
+                    ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = _chestObject.goldSprite;
+                    ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = _chestObject.chestGemBtnSprite;
                     ChestCheck.Instance.chestCheckBtnText.text = "900";
                     ChestReward.Instance.SetStart(ButtonType.GoldGem);
                   
@@ -1024,22 +680,22 @@ namespace Script.RobbyScript.StoreMenuGroup
             switch (chestType)
             {
                 case ButtonType.BronzeAds:
-                    chestSprite = bronzeSprite;
+                    chestSprite = _chestObject.bronzeSprite;
                     break;
                 case ButtonType.SilverAds:
-                    chestSprite = silverSprite;
+                    chestSprite = _chestObject.silverSprite;
                     break;
                 case ButtonType.GoldAds:
-                    chestSprite = goldSprite;
+                    chestSprite = _chestObject.goldSprite;
                     break;
                 case ButtonType.BronzeGem:
-                    chestSprite = bronzeSprite;
+                    chestSprite = _chestObject.bronzeSprite;
                     break;
                 case ButtonType.SilverGem:
-                    chestSprite = silverSprite;
+                    chestSprite = _chestObject.silverSprite;
                     break;
                 case ButtonType.GoldGem:
-                    chestSprite = goldSprite;
+                    chestSprite = _chestObject.goldSprite;
                     break;
             }
             if (chestSprite != null)
@@ -1082,7 +738,6 @@ namespace Script.RobbyScript.StoreMenuGroup
         }
         private void OpenChest(ButtonType chestType)
         {
-            DeleteEvent();
             // 상자 열기 동작 수행
             Debug.Log("chestType :"+chestType);
             ChestCheck.Instance.chestCheckPanel.SetActive(false);
@@ -1143,66 +798,40 @@ namespace Script.RobbyScript.StoreMenuGroup
         {
             chestErrorPanel.SetActive(false);
         }
-        private void AllPanelClose()
-        {
-            chestErrorPanel.SetActive(false);
-            ChestCheck.Instance.chestCheckPanel.SetActive(false);
-            DeleteEvent();
-        }
+
         public void DeleteEvent()
         { 
+            _specialOffer.SpecialBtnRemove();
+            _chestObject.ChestBtnRemove();
             chestOpenBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             closeBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             adsRewardBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            bronzeAdsBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            bronzeGemBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             chestOpenBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            coinAdsBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            silverAdsBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            gemAdsBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            goldAdsBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            goldGemBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            silverGemBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            staminaAdsBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             chestErrorCloseBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             getBackToStoreBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             ChestReward.Instance.ClearChests();
-            Reallocation();
+            ReBtnSet();
         }
         private void DeleteExceptionEvent()
         {
+            _specialOffer.SpecialBtnRemove();
+            _chestObject.ChestBtnRemove();
             chestOpenBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             closeBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             adsRewardBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            bronzeAdsBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            bronzeGemBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             chestOpenBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            coinAdsBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            silverAdsBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            gemAdsBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            goldAdsBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            goldGemBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            silverGemBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            staminaAdsBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             chestErrorCloseBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             getBackToStoreBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            Reallocation();
+            ReBtnSet();
         }
-        private void Reallocation()
+        private void ReBtnSet()
         {
-            bronzeAdsBtn.GetComponent<Button>().onClick.AddListener(() => ChestCheckClick(ButtonType.BronzeAds));
-            silverAdsBtn.GetComponent<Button>().onClick.AddListener(() => ChestCheckClick(ButtonType.SilverAds));
-            goldAdsBtn.GetComponent<Button>().onClick.AddListener(() => ChestCheckClick(ButtonType.GoldAds));
-            bronzeGemBtn.GetComponent<Button>().onClick.AddListener(() => ChestCheckClick(ButtonType.BronzeGem));
-            silverGemBtn.GetComponent<Button>().onClick.AddListener(() => ChestCheckClick(ButtonType.SilverGem));
-            goldGemBtn.GetComponent<Button>().onClick.AddListener(() => ChestCheckClick(ButtonType.GoldGem));
-            coinAdsBtn.GetComponent<Button>().onClick.AddListener(CoinAds);
-            staminaAdsBtn.GetComponent<Button>().onClick.AddListener(StaminaAds);
-            gemAdsBtn.GetComponent<Button>().onClick.AddListener(GemAds);
+            _chestObject.ChestBtnSet();
+            _specialOffer.SpecialBtnSet();
             closeBtn.GetComponent<Button>().onClick.AddListener(ReceiveReward);
-            adsRewardBtn.GetComponent<Button>().onClick.AddListener(ReceiveReward);
+            adsRewardBtn.GetComponent<Button>().onClick.AddListener(AdsReceiveReward);
         }
     }
 }

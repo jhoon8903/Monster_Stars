@@ -35,7 +35,6 @@ namespace Script.RobbyScript.StoreMenuGroup
 
         private void CloseChestCheck()
         {
-            // ChestReward.Instance.ClearChests();
             chestCheckPanel.SetActive(false);
             StoreMenu.Instance.DeleteEvent();
         }
