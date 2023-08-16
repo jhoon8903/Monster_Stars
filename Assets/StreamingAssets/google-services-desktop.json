@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "403418620004",
+    "project_id": "spirit-legion-55193196",
+    "storage_bucket": "spirit-legion-55193196.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:403418620004:android:24641b57aeb808cc8a7f71",
+        "android_client_info": {
+          "package_name": "com.towerdefense.spirit.legion"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "403418620004-8pncr73sidm7rp4l6pa7tvarcm56ts3c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.towerdefense.spirit.legion",
+            "certificate_hash": "5b5e723304618d9695770d9357a88144a4fffed3"
+          }
+        },
+        {
+          "client_id": "403418620004-5e892heqmv5hrvebhb7avd3oa6afirkj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA6pv1j-m4CEJ9Gpwzni8TsCT5ffwrP_GU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "403418620004-5e892heqmv5hrvebhb7avd3oa6afirkj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
