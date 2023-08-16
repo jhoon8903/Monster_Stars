@@ -44,6 +44,7 @@ namespace Script.QuestGroup
         private const string FixQuestLoadKey = "FixQuestLoadKey";
         private const string RotationQuestLoadKey = "RotationQuestLoadKey";
         public static QuestManager Instance;
+        private string[] _csvData;
         private void Awake()
         {
             Instance = this;
@@ -71,131 +72,132 @@ namespace Script.QuestGroup
         {
             var csvFile = Resources.Load<TextAsset>("QuestData");
             var csvText = csvFile.text;
-            var csvData = csvText.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            _csvData = csvText.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
             var rotationQuestData = targetCondition == QuestCondition.Rotation ? new List<string[]>() : null;
-            for (var i = 1; i < csvData.Length; i++)
+            for (var i = 1; i < _csvData.Length; i++)
             {
-                var line = csvData[i];
+                var line = _csvData[i];
                 if (string.IsNullOrEmpty(line)) continue;
                 var data = line.Split(',');
-                var questType = (QuestTypes)Enum.Parse(typeof(QuestTypes), data[0]);
-                var condition = (QuestCondition)Enum.Parse(typeof(QuestCondition), data[1]);
-                var desc = data[2];
-                var questKey = data[3];
-                var goal = int.Parse(data[4]);
-                var item1RewardValue = int.Parse(data[5]);
-                var item2GreenPiece = int.Parse(data[6]);
-                var item2BluePiece = int.Parse(data[7]);
-                var item2PurplePiece = int.Parse(data[8]);
+                var questType = ParseQuestType(data[0]);
+                var condition = ParseQuestCondition(data[1]);
                 if (condition != targetCondition) continue;
-                
-                if (targetCondition == QuestCondition.Rotation)
-                {
-                    rotationQuestData?.Add(data);
-                    continue;
-                }
-                if (questType is QuestTypes.ViewAds or QuestTypes.AllClear)
-                {
-                    switch (questType)
-                    {
-                        case QuestTypes.ViewAds:
-                            adsDesc.text = desc;
-                            adsGoal = goal;
-                            adsProgress.maxValue = adsGoal;
-                            adsValue = PlayerPrefs.GetInt(questKey, 0);
-                            adsProgress.value = adsValue;
-                            adsProgressText.text = $"{adsValue} / {adsGoal}";
-                            break;
-                        case QuestTypes.AllClear:
-                            allClearDesc.text = desc;
-                            allClearGoal = goal;
-                            allClearProgress.maxValue = allClearGoal;
-                            allClearValue = PlayerPrefs.GetInt(questKey, 0);
-                            allClearProgress.value = allClearValue;
-                            allClearProgressText.text = $"{allClearValue} / {allClearGoal}";
-                            break;
-                    }
-                }
-                else
-                {
-                    var fixQuestObject = Instantiate(questPrefab, questTransform.transform);
-                    fixQuestObject.questType = questType;
-                    fixQuestObject.questCondition = condition;
-                    fixQuestObject.questDesc.text = desc;
-                    fixQuestObject.questKey = questKey;
-                    fixQuestObject.questGoal = PlayerPrefs.GetInt(fixQuestObject.questKey + "_goal", goal);
-                    fixQuestObject.questProgress.maxValue = fixQuestObject.questGoal;
-                    fixQuestObject.questValue = PlayerPrefs.GetInt(fixQuestObject.questKey + "_value", 0);
-                    fixQuestObject.questProgress.value = fixQuestObject.questValue;
-                    fixQuestObject.questProgressText.text = $"{fixQuestObject.questValue} / {fixQuestObject.questGoal}";
-                    fixQuestObject.item1Value.text = item1RewardValue.ToString();
-                    fixQuestObject.item2Value.text = (item2GreenPiece + item2BluePiece + item2PurplePiece).ToString();
-                    fixQuestObject.receiveBtn.SetActive(true);
-                    if (fixQuestObject.isCompleted && fixQuestObject.isReceived)
-                    {
-                        fixQuestObject.receiveBtn.GetComponent<Button>().interactable = false;
-                        fixQuestObject.receiveBtnText.text = "Completed";
-                        fixQuestObject.questValue = fixQuestObject.questGoal;
-                        fixQuestObject.questProgress.value = fixQuestObject.questValue;
-                        fixQuestObject.questProgressText.text = $"{fixQuestObject.questValue} / {fixQuestObject.questGoal}";
-
-                    }
-                    else if (fixQuestObject.isCompleted && !fixQuestObject.isReceived)
-                    {
-                        fixQuestObject.receiveBtn.GetComponent<Button>().interactable = true;
-                        fixQuestObject.receiveBtnText.text = "Receive";
-                        fixQuestObject.questValue = fixQuestObject.questGoal;
-                        fixQuestObject.questProgress.value = fixQuestObject.questValue;
-                        fixQuestObject.questProgressText.text = $"{fixQuestObject.questValue} / {fixQuestObject.questGoal}";
-                        fixQuestObject.receiveBtn.GetComponent<Button>().onClick.AddListener(()=>ReceiveQuestReward(fixQuestObject));
-
-                    }
-                    else
-                    {
-                        fixQuestObject.receiveBtn.GetComponent<Button>().interactable = false;
-                        fixQuestObject.receiveBtnText.text = "Proceeding";
-                    }
-                    _fixQuestList.Add(fixQuestObject);
-                }
+                HandleQuest(targetCondition, data, questType, rotationQuestData);
             }
-
-            if (targetCondition != QuestCondition.Rotation) return;
+            HandleRotationQuest(targetCondition, rotationQuestData);
+        }
+        public void ResetQuest()
+        {
+            foreach (var quest in _fixQuestList)
             {
-                if (rotationQuestData != null)
+                switch (quest.questType)
                 {
-                    var selectedQuestData = rotationQuestData.OrderBy(q => UnityEngine.Random.value).Take(MaxRotationQuests).ToList();
-
-                    foreach (var data in selectedQuestData)
-                    {
-                        var questType = (QuestTypes)Enum.Parse(typeof(QuestTypes), data[0]);
-                        var condition = (QuestCondition)Enum.Parse(typeof(QuestCondition), data[1]);
-                        var desc = data[2];
-                        var questKey = data[3];
-                        var goal = int.Parse(data[4]);
-                        var item1RewardValue = int.Parse(data[5]);
-                        var item2GreenPiece = int.Parse(data[6]);
-                        var item2BluePiece = int.Parse(data[7]);
-                        var item2PurplePiece = int.Parse(data[8]);
-                        var rotationQuestObject = Instantiate(questPrefab, questTransform.transform);
-                        rotationQuestObject.questType = questType;
-                        rotationQuestObject.questCondition = condition;
-                        rotationQuestObject.questDesc.text = desc;
-                        rotationQuestObject.questKey = questKey; 
-                        rotationQuestObject.questGoal = PlayerPrefs.GetInt( rotationQuestObject.questKey + "_goal", goal);
-                        rotationQuestObject.questProgress.maxValue = rotationQuestObject.questGoal;
-                        rotationQuestObject.questValue = PlayerPrefs.GetInt( rotationQuestObject.questKey + "_value", 0);
-                        rotationQuestObject.questProgress.value = rotationQuestObject.questValue;
-                        rotationQuestObject.questProgressText.text = $"{rotationQuestObject.questValue} / {rotationQuestObject.questGoal}";
-                        rotationQuestObject.item1Value.text = item1RewardValue.ToString();
-                        rotationQuestObject.item2Value.text = (item2GreenPiece + item2BluePiece + item2PurplePiece).ToString();
-                        rotationQuestObject.receiveBtn.SetActive(false);
-                        rotationQuestObject.shuffleBtn.SetActive(true);
-                        rotationQuestObject.shuffleBtn.GetComponent<Button>().onClick.AddListener(CallShuffleAds);
-                        _rotationQuestList.Add(rotationQuestObject);
-                    }
+                    case QuestTypes.AllClear:
+                    case QuestTypes.ViewAds:
+                    case QuestTypes.GetCoin:
+                    case QuestTypes.UseCoin:
+                        quest.questValue = 0;
+                        PlayerPrefs.SetInt(quest.questKey + "_value", 0);
+                        quest.questProgress.value = 0;
+                        quest.questProgressText.text = $"0 / {quest.questGoal}";
+                        quest.isCompleted = false;
+                        PlayerPrefs.SetInt(quest.questType + "_isCompleted", 0);
+                        break;
                 }
-                SaveSelectedQuestList(_rotationQuestList);
             }
+            foreach (var quest in _rotationQuestList)
+            {
+                quest.questValue = 0;
+                PlayerPrefs.SetInt(quest.questKey + "_value", 0);
+                quest.questProgress.value = 0;
+                quest.questProgressText.text = $"0 / {quest.questGoal}";
+                quest.isCompleted = false;
+                PlayerPrefs.SetInt(quest.questType + "_isCompleted", 0);
+            }
+            ShuffleQuest();
+            SaveSelectedQuestList(_rotationQuestList);
+            PlayerPrefs.Save();
+        }
+        private static QuestTypes ParseQuestType(string type) => (QuestTypes)Enum.Parse(typeof(QuestTypes), type);
+        private static QuestCondition ParseQuestCondition(string condition) => (QuestCondition)Enum.Parse(typeof(QuestCondition), condition);
+        private void HandleQuest(QuestCondition targetCondition, string[] data, QuestTypes questType, ICollection<string[]> rotationQuestData)
+        {
+            if (targetCondition == QuestCondition.Rotation)
+                rotationQuestData?.Add(data);
+            else if (questType is QuestTypes.ViewAds or QuestTypes.AllClear)
+                HandleSpecialQuests(questType, data);
+            else
+                CreateAndAddQuest(data);
+        }
+        private void CreateAndAddQuest(IReadOnlyList<string> data)
+        {
+            var questObject = CreateQuestFromData(data);
+            questObject.receiveBtn.SetActive(true);
+            SetQuestButtonStates(questObject);
+            _fixQuestList.Add(questObject);
+        }
+        private void HandleSpecialQuests(QuestTypes questType, IReadOnlyList<string> data)
+        {
+            var desc = data[2];
+            var goal = int.Parse(data[4]);
+            var questKey = data[3];
+            var value = PlayerPrefs.GetInt(questKey + "_value", 0);
+    
+            switch (questType)
+            {
+                case QuestTypes.ViewAds:
+                    SetSpecialQuest(adsDesc, adsProgress, adsProgressText, desc, goal, value);
+                    break;
+                case QuestTypes.AllClear:
+                    SetSpecialQuest(allClearDesc, allClearProgress, allClearProgressText, desc, goal, value);
+                    break;
+            }
+        }
+        private static void SetSpecialQuest(TMP_Text descText, Slider progress, TMP_Text progressText, string desc, int goal, int value)
+        {
+            descText.text = desc;
+            progress.maxValue = goal;
+            progress.value = value;
+            progressText.text = $"{value} / {goal}";
+        }
+        private static void SetQuestButtonStates(QuestObject questObject)
+        {
+            switch (questObject.isCompleted)
+            {
+                case true when questObject.isReceived:
+                    SetButtonState(questObject, false, "Completed", questObject.questGoal);
+                    break;
+                case true when !questObject.isReceived:
+                    SetButtonState(questObject, true, "Receive", questObject.questGoal);
+                    break;
+                default:
+                    questObject.receiveBtn.GetComponent<Button>().interactable = false;
+                    break;
+            }
+        }
+        private static void SetButtonState(QuestObject questObject, bool interactable, string text, int value)
+        {
+            questObject.receiveBtn.GetComponent<Button>().interactable = interactable;
+            questObject.receiveBtnText.text = text;
+            questObject.questValue = value;
+            questObject.questProgress.value = questObject.questValue;
+            questObject.questProgressText.text = $"{questObject.questValue} / {questObject.questGoal}";
+        }
+        private void HandleRotationQuest(QuestCondition targetCondition, IReadOnlyCollection<string[]> rotationQuestData)
+        {
+            if (targetCondition != QuestCondition.Rotation) return;
+            if (rotationQuestData == null) return;
+            var selectedQuestData = rotationQuestData.OrderBy(_ => UnityEngine.Random.value).Take(MaxRotationQuests).ToList();
+            foreach (var data in selectedQuestData) CreateAndAddRotationQuest(data);
+            SaveSelectedQuestList(_rotationQuestList);
+        }
+        private void CreateAndAddRotationQuest(IReadOnlyList<string> data)
+        {
+            var rotationQuestObject = CreateQuestFromData(data);
+            rotationQuestObject.receiveBtn.SetActive(false);
+            rotationQuestObject.shuffleBtn.SetActive(true);
+            rotationQuestObject.shuffleBtn.GetComponent<Button>().onClick.AddListener(CallShuffleAds);
+            _rotationQuestList.Add(rotationQuestObject);
         }
         private static void SaveSelectedQuestList(List<QuestObject> selectedQuests)
         {
@@ -320,7 +322,6 @@ namespace Script.QuestGroup
         }
         private static void SaveRotationQuestList(List<QuestObject> rotationQuests)
         {
-
             PlayerPrefs.SetString(RotationQuestLoadKey, string.Join(",", rotationQuests.Select(q => q.questType.ToString())));
             SaveQuests(rotationQuests);
             PlayerPrefs.Save();
@@ -359,59 +360,44 @@ namespace Script.QuestGroup
                 var line = csvData[i];
                 if (string.IsNullOrEmpty(line)) continue;
                 var data = line.Split(',');
-                var questType = (QuestTypes)Enum.Parse(typeof(QuestTypes), data[0]);
-                var condition = (QuestCondition)Enum.Parse(typeof(QuestCondition), data[1]);
-                if (condition == QuestCondition.Rotation && !activeRotationQuestTypes.Contains(questType))
+                var questType = ParseQuestType(data[0]);
+                var condition = ParseQuestCondition(data[1]);
+                if (condition != QuestCondition.Rotation || activeRotationQuestTypes.Contains(questType)) continue;
+                if (PlayerPrefs.GetInt(questType + "_isCompleted", 0) == 0)
                 {
-                    if (PlayerPrefs.GetInt(questType + "_isCompleted", 0) == 0)
-                    {
-                        inactiveRotationQuestData.Add(data);
-                    }
+                    inactiveRotationQuestData.Add(data);
                 }
             }
 
-            var newQuestData = inactiveRotationQuestData.OrderBy(q => UnityEngine.Random.value).FirstOrDefault();
+            var newQuestData = inactiveRotationQuestData.OrderBy(_ => UnityEngine.Random.value).FirstOrDefault();
 
-            if (newQuestData != null)
+            if (newQuestData == null) return;
+            var newQuest = CreateQuestFromData(newQuestData);
+            var questToRemove = _rotationQuestList.FirstOrDefault();
+            if (questToRemove != null)
             {
-                var newQuest = CreateQuestFromData(newQuestData);
-                var questToRemove = _rotationQuestList.FirstOrDefault();
-                if (questToRemove != null)
-                {
-                    _rotationQuestList.Remove(questToRemove);
-                    Destroy(questToRemove.gameObject);
-                }
-                _rotationQuestList.Add(newQuest);
-                SaveSelectedQuestList(_rotationQuestList); 
+                _rotationQuestList.Remove(questToRemove);
+                Destroy(questToRemove.gameObject);
             }
-        }
+            _rotationQuestList.Add(newQuest);
+            SaveSelectedQuestList(_rotationQuestList);
+        }                               
         private QuestObject CreateQuestFromData(IReadOnlyList<string> data)
         {
-            var questType = (QuestTypes)Enum.Parse(typeof(QuestTypes), data[0]);
-            var condition = (QuestCondition)Enum.Parse(typeof(QuestCondition), data[1]);
-            var desc = data[2];
-            var questKey = data[3];
-            var goal = int.Parse(data[4]);
-            var item1RewardValue = int.Parse(data[5]);
-            var item2GreenPiece = int.Parse(data[6]);
-            var item2BluePiece = int.Parse(data[7]);
-            var item2PurplePiece = int.Parse(data[8]);
-            var rotationQuestObject = Instantiate(questPrefab, questTransform.transform);
-            rotationQuestObject.isShuffled = true; 
-            rotationQuestObject.questType = questType;
-            rotationQuestObject.questCondition = condition;
-            rotationQuestObject.questDesc.text = desc;
-            rotationQuestObject.questGoal = PlayerPrefs.GetInt(questKey + "_goal", goal);
-            rotationQuestObject.questProgress.maxValue = rotationQuestObject.questGoal;
-            rotationQuestObject.questValue = PlayerPrefs.GetInt(questKey + "_value", 0);
-            rotationQuestObject.questProgress.value = rotationQuestObject.questValue;
-            rotationQuestObject.questProgressText.text = $"{rotationQuestObject.questValue} / {rotationQuestObject.questGoal}";
-            rotationQuestObject.item1Value.text = item1RewardValue.ToString();
-            rotationQuestObject.item2Value.text = (item2GreenPiece + item2BluePiece + item2PurplePiece).ToString();
-            rotationQuestObject.receiveBtn.SetActive(true);
-            rotationQuestObject.receiveBtn.GetComponent<Button>().interactable = false;
-            rotationQuestObject.receiveBtnText.text = "Proceeding";
-            return rotationQuestObject;
+            var questObject = Instantiate(questPrefab, questTransform.transform);
+            questObject.questType = ParseQuestType(data[0]);
+            questObject.questCondition = ParseQuestCondition(data[1]);
+            questObject.questDesc.text = data[2];
+            questObject.questKey = data[3];
+            questObject.questGoal = PlayerPrefs.GetInt(questObject.questKey + "_goal", int.Parse(data[4]));
+            questObject.questProgress.maxValue = questObject.questGoal;
+            questObject.questValue = PlayerPrefs.GetInt(questObject.questKey + "_value", 0);
+            questObject.questProgress.value = questObject.questValue;
+            questObject.questProgressText.text = $"{questObject.questValue} / {questObject.questGoal}";
+            questObject.item1Value.text = data[5];
+            questObject.item2Value.text = (int.Parse(data[6]) + int.Parse(data[7]) + int.Parse(data[8])).ToString();
+
+            return questObject;
         }
         private static void CallShuffleAds()
         {

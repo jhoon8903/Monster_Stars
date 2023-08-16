@@ -5583,10 +5583,10 @@ RectTransform:
   m_Father: {fileID: 1542113635}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -61}
-  m_SizeDelta: {x: 1080, y: 1900}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &984538590
 MonoBehaviour:
@@ -6918,7 +6918,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -191}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 1080, y: 800}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1231737034
@@ -8498,6 +8498,12 @@ MonoBehaviour:
     - {fileID: 6803344351827666215, guid: eff4beb97cb2248a49362b8b6f1fe537, type: 3}
     - {fileID: 7965940349638506393, guid: 4d271a111ffe543ab82b89d9e28dd75a, type: 3}
   - weaponType: 8
+    weaponPrefabs:
+    - {fileID: 8363499375382729511, guid: e36c369107b0c40138371d6417bc66b1, type: 3}
+    - {fileID: 5457084779571031275, guid: f0e642efb12f04a6ba5e9299226fb6f8, type: 3}
+    - {fileID: 1449720510264382049, guid: a68a978a2ffba49cdbfeefcac9a497b8, type: 3}
+    - {fileID: 1525889226595552815, guid: 69e2d119eeda644549951bb0eb877ff3, type: 3}
+  - weaponType: 9
     weaponPrefabs:
     - {fileID: 8363499375382729511, guid: e36c369107b0c40138371d6417bc66b1, type: 3}
     - {fileID: 5457084779571031275, guid: f0e642efb12f04a6ba5e9299226fb6f8, type: 3}
@@ -10215,7 +10221,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uBA54\uC778\uD654\uBA74\uC73C\uB85C"
+  m_text: Return To Robby
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: ab47b3ea1bc084bb58890a488dedabf8, type: 2}
   m_sharedMaterial: {fileID: -8956775509540403330, guid: ab47b3ea1bc084bb58890a488dedabf8, type: 2}
@@ -10602,11 +10608,11 @@ RectTransform:
   m_Father: {fileID: 984538589}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0}
-  m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 0, y: -622}
-  m_SizeDelta: {x: 400, y: -1770.92}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: 0, y: 129}
+  m_SizeDelta: {x: 0, y: 387.07996}
+  m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1952921048
 MonoBehaviour:
   m_ObjectHideFlags: 0

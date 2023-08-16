@@ -123,6 +123,7 @@ namespace Script.EnemyManagerScript
             var originColor = gameObject.GetComponent<SpriteRenderer>();
             if (!gameObject.activeInHierarchy || !isPoison) return;
             StartCoroutine(poisonAttack);
+            if (!gameObject.activeInHierarchy || !isPoison) return;
             StartCoroutine(FlickerEffect(originColor, poisonColor));
         }
         // 화상 (Burn)
@@ -142,6 +143,7 @@ namespace Script.EnemyManagerScript
             var originColor = gameObject.GetComponent<SpriteRenderer>();
             if (!gameObject.activeInHierarchy || !isBurn) return;
             StartCoroutine(burningAttack);
+            if (!gameObject.activeInHierarchy || !isBurn) return;
             StartCoroutine(FlickerEffect(originColor, burningColor));
         }
         // 출혈 (Bleed)
@@ -161,6 +163,7 @@ namespace Script.EnemyManagerScript
             var bleedAttack = WeaponBase.Instance.BleedEffect(this, characterBase);
             if (!gameObject.activeInHierarchy || !isBleed) return;
             StartCoroutine(bleedAttack);
+            if (!gameObject.activeInHierarchy || !isBleed) return;
             StartCoroutine(FlickerEffect(originColor, bleedColor));
         }
        
@@ -392,6 +395,7 @@ namespace Script.EnemyManagerScript
             var elapsedTime = 0f;
             while ( isPoison || isBleed || isBurn)
             {
+                if (isDead) yield break;
                 var value = Mathf.Abs(Mathf.Sin(elapsedTime / 0.5f * Mathf.PI));
                 render.color = Color.Lerp(originalColor, targetColor, value);
                 elapsedTime += Time.deltaTime;

@@ -272,8 +272,9 @@ namespace Script
             StageManager.Instance.isStageClear = false;
             PlayerPrefs.DeleteKey("unitState");
             PlayerPrefs.DeleteKey("EnforceData");
-            PlayerPrefs.SetInt($"{StageManager.Instance.latestStage}Stage_ProgressWave",1);
             PlayerPrefs.SetInt("GridHeight", 6);
+            PlayerPrefs.SetInt($"{StageManager.Instance.latestStage}Stage_ProgressWave",1);
+           
             PlayerPrefs.Save();
             SceneManager.LoadScene("SelectScene");
         }

@@ -5,14 +5,12 @@ using System.Linq;
 using DG.Tweening;
 using Script.AdsScript;
 using Script.CharacterManagerScript;
+using Script.QuestGroup;
 using Script.RewardScript;
 using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Events;
-using UnityEngine.PlayerLoop;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -35,7 +33,6 @@ namespace Script.RobbyScript.StoreMenuGroup
         [SerializeField] private GameObject adsRewardBtn;
         [SerializeField] private Goods rewardItem;
         [SerializeField] private List<CharacterBase> unitList = new List<CharacterBase>();
-        
         [SerializeField] private Sprite bronzeSprite;
         [SerializeField] private Sprite silverSprite;
         [SerializeField] private Sprite goldSprite;
@@ -46,54 +43,34 @@ namespace Script.RobbyScript.StoreMenuGroup
         [SerializeField] private Sprite gemSprite;
         [SerializeField] private Sprite errorGemSprite;
         [SerializeField] private Sprite errorCoinSprite;
-        
-        [SerializeField] private TextMeshProUGUI BronzeGemBtnText;
-        [SerializeField] private TextMeshProUGUI SilverGemBtnText;
-        [SerializeField] private TextMeshProUGUI GoldGemBtnText;
-        
+        [SerializeField] private TextMeshProUGUI bronzeGemBtnText;
+        [SerializeField] private TextMeshProUGUI silverGemBtnText;
+        [SerializeField] private TextMeshProUGUI goldGemBtnText;
         [SerializeField] private GameObject chestRewardPanel;
         [SerializeField] private Image chestBackLightImage;
         [SerializeField] private Image chestParticleImage;
         [SerializeField] private GameObject chestGrade;
         [SerializeField] private GameObject chestOpenBtn;
-        
         [SerializeField] private GameObject chestErrorPanel;
         [SerializeField] private GameObject chestErrorCloseBtn;
         [SerializeField] private GameObject getBackToStoreBtn;
         [SerializeField] private GameObject errorContentsImage;
         
         public static StoreMenu Instance { get; private set; }
-        
         private const string ResetKey = "ResetKey";
-
         private DateTime _lastDayCheck;
         private const string LastDayKey = "LastDayKey";
-
         private int _bronzeOpenCount;
         private const string BronzeOpenCountKey = "BronzeOpenCount";
         private const int BronzeOpenMaxCount = 20;
-
-        private int _silverOpenCount;
-
-        public int SilverAdsOpen
-        {
-            get { return _silverOpenCount; }
-            set { _silverOpenCount = value; }
-        }
+        public int SilverAdsOpen { get; private set; }
         private const string SilverOpenCountKey = "SilverOpenCount";
         private DateTime _silverOpenTime;
         private const string SilverOpenTimeKey = "SilverOpenTime";
         private TimeSpan _silverPassed;
         private const int SilverOpenMaxCount = 7;
         private const int SilverRewardCoolTime = 5;
-
-        private int _goldOpenCount;
-        
-        public int GoldAdsOpen
-        {
-            get { return _goldOpenCount; }
-            set { _goldOpenCount = value; }
-        }
+        public int GoldAdsOpen { get; private set; }
         private const string GoldOpenCountKey = "GoldOpenCount";
         private DateTime _goldOpenTime;
         private const string GoldOpenTimeKey = "GoldOpenTimeKey";
@@ -138,8 +115,8 @@ namespace Script.RobbyScript.StoreMenuGroup
 
         public enum ButtonType { BronzeAds, SilverAds, GoldAds, BronzeGem, SilverGem, GoldGem }
 
-        private Vector3 originalPosition = new Vector3();
-        private Vector3 newPosition = new Vector3();
+        private Vector3 _originalPosition;
+        private Vector3 _newPosition;
         
         private const int BronzeGemText = 150;
         private const int SilverGemText = 450;
@@ -177,12 +154,12 @@ namespace Script.RobbyScript.StoreMenuGroup
             // Blue Count Check
             if (PlayerPrefs.HasKey(SilverOpenCountKey))
             {
-                _silverOpenCount = PlayerPrefs.GetInt(SilverOpenCountKey);
+                SilverAdsOpen = PlayerPrefs.GetInt(SilverOpenCountKey);
             }
             else
             {
-                _silverOpenCount = 0;
-                PlayerPrefs.SetInt(SilverOpenCountKey, _silverOpenCount);
+                SilverAdsOpen = 0;
+                PlayerPrefs.SetInt(SilverOpenCountKey, SilverAdsOpen);
             }
 
             // Blue last Open Time Check
@@ -201,12 +178,12 @@ namespace Script.RobbyScript.StoreMenuGroup
             // Purple Count Check
             if (PlayerPrefs.HasKey(GoldOpenCountKey))
             {
-                _goldOpenCount = PlayerPrefs.GetInt(GoldOpenCountKey);
+                GoldAdsOpen = PlayerPrefs.GetInt(GoldOpenCountKey);
             }
             else
             {
-                _goldOpenCount = 0;
-                PlayerPrefs.SetInt(GoldOpenCountKey, _goldOpenCount);
+                GoldAdsOpen = 0;
+                PlayerPrefs.SetInt(GoldOpenCountKey, GoldAdsOpen);
             }
             // Purple Last Open Check
             if (PlayerPrefs.HasKey(GoldOpenTimeKey))
@@ -300,10 +277,9 @@ namespace Script.RobbyScript.StoreMenuGroup
             closeBtn.GetComponent<Button>().onClick.AddListener(ReceiveReward);
             adsRewardBtn.GetComponent<Button>().onClick.AddListener(AdsReceiveReward);
             gameObject.SetActive(false);
-            originalPosition = chestGrade.transform.position;
-            newPosition = originalPosition;
+            _originalPosition = chestGrade.transform.position;
+            _newPosition = _originalPosition;
         }
-        
         private void Update()
         {
             Reset();
@@ -315,6 +291,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             {
                 Debug.Log("리셋?");
                 ResetButtonCounts();
+                QuestManager.Instance.ResetQuest();
                 _lastDayCheck = DateTime.Today;
                 PlayerPrefs.SetString(LastDayKey, _lastDayCheck.ToBinary().ToString());
                 PlayerPrefs.SetInt(ResetKey, 1); // 리셋 상태를 1로 설정하여 리셋이 발생했음을 저장합니다.
@@ -326,10 +303,10 @@ namespace Script.RobbyScript.StoreMenuGroup
             isReset = true;
             _bronzeOpenCount = 0;
 
-            _silverOpenCount = 0;
+            SilverAdsOpen = 0;
             _silverOpenTime = DateTime.Now.AddMinutes(-SilverRewardCoolTime);
             PlayerPrefs.SetString(SilverOpenTimeKey, _silverOpenTime.ToBinary().ToString());
-            _goldOpenCount = 0;
+            GoldAdsOpen = 0;
             _goldOpenTime = DateTime.Now.AddMinutes(-GoldRewardCoolTime);
             PlayerPrefs.SetString(GoldOpenTimeKey, _goldOpenTime.ToBinary().ToString());
             
@@ -344,14 +321,13 @@ namespace Script.RobbyScript.StoreMenuGroup
             // PlayerPrefs.SetString(GemOpenTimeKey, _gemOpenTime.ToBinary().ToString());
             
             PlayerPrefs.SetInt(BronzeOpenCountKey, _bronzeOpenCount);
-            PlayerPrefs.SetInt(SilverOpenCountKey, _silverOpenCount);
-            PlayerPrefs.SetInt(GoldOpenCountKey, _goldOpenCount);
+            PlayerPrefs.SetInt(SilverOpenCountKey, SilverAdsOpen);
+            PlayerPrefs.SetInt(GoldOpenCountKey, GoldAdsOpen);
             // PlayerPrefs.SetInt(CoinOpenCountKey, _coinOpenCount);
             // PlayerPrefs.SetInt(StaminaOpenCountKey, _staminaOpenCount);
             // PlayerPrefs.SetInt(GemOpenCountKey, _gemOpenCount);
             PlayerPrefs.Save();
         }
-
         private void UpdateButtonState()
         {
             UpdateBronzeButton();
@@ -362,7 +338,6 @@ namespace Script.RobbyScript.StoreMenuGroup
             // UpdateGemButton();
             UpdateGemButtonText();
         }
-        
         private void UpdateBronzeButton()
         {
             if (isReset || _bronzeOpenCount < BronzeOpenMaxCount)
@@ -377,20 +352,19 @@ namespace Script.RobbyScript.StoreMenuGroup
             }
             bronzeGemBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "150";
         }
-
         private void UpdateSilverButton()
         {
             _silverPassed = DateTime.Now - _silverOpenTime;
-            if (isReset || (_silverOpenCount < SilverOpenMaxCount && _silverPassed.TotalMinutes >= SilverRewardCoolTime))
+            if (isReset || (SilverAdsOpen < SilverOpenMaxCount && _silverPassed.TotalMinutes >= SilverRewardCoolTime))
             {
                 silverAdsBtn.GetComponent<Button>().interactable = true;
-                silverAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{_silverOpenCount} / {SilverOpenMaxCount}";
+                silverAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{SilverAdsOpen} / {SilverOpenMaxCount}";
             }
             else
             {
                 silverAdsBtn.GetComponent<Button>().interactable = false;
                 var remainingTime = TimeSpan.FromMinutes(SilverRewardCoolTime) - _silverPassed;
-                if (_silverOpenCount == SilverOpenMaxCount)
+                if (SilverAdsOpen == SilverOpenMaxCount)
                 {
                     var resetTime = _lastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
                     silverAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"Reset: {resetTime}";
@@ -403,20 +377,19 @@ namespace Script.RobbyScript.StoreMenuGroup
             }
             silverGemBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "450";
         }
-
         private void UpdateGoldButton()
         {
             _goldPassed = DateTime.Now - _goldOpenTime;
-            if (isReset || (_goldOpenCount < GoldOpenMaxCount && _goldPassed.TotalMinutes >= GoldRewardCoolTime))
+            if (isReset || (GoldAdsOpen < GoldOpenMaxCount && _goldPassed.TotalMinutes >= GoldRewardCoolTime))
             {
                 goldAdsBtn.GetComponent<Button>().interactable = true;
-                goldAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{_goldOpenCount} / {GoldOpenMaxCount}";
+                goldAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{GoldAdsOpen} / {GoldOpenMaxCount}";
             }
             else
             {
                 goldAdsBtn.GetComponent<Button>().interactable = false;
                 var remainingTime = TimeSpan.FromMinutes(GoldRewardCoolTime) - _goldPassed;
-                if (_goldOpenCount == GoldOpenMaxCount)
+                if (GoldAdsOpen == GoldOpenMaxCount)
                 {
                     var resetTime = _lastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
                     goldAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"Reset: {resetTime}";
@@ -508,37 +481,11 @@ namespace Script.RobbyScript.StoreMenuGroup
 
         private void UpdateGemButtonText()
         {
-            int currentGemCount = GemScript.Instance.Gem;
-
-            if (BronzeGemText > currentGemCount)
-            {
-                BronzeGemBtnText.color = Color.red;
-            }
-            else
-            {
-                BronzeGemBtnText.color = Color.white;
-            }
-
-            if (SilverGemText > currentGemCount)
-            {
-                SilverGemBtnText.color = Color.red;
-            }
-            else
-            {
-                SilverGemBtnText.color = Color.white;
-            }
-
-            if (GoldGemText > currentGemCount)
-            {
-                GoldGemBtnText.color = Color.red;
-            }
-            else
-            {
-                GoldGemBtnText.color = Color.white;
-            }
+            var currentGemCount = GemScript.Instance.Gem;
+            bronzeGemBtnText.color = BronzeGemText > currentGemCount ? Color.red : Color.white;
+            silverGemBtnText.color = SilverGemText > currentGemCount ? Color.red : Color.white;
+            goldGemBtnText.color = GoldGemText > currentGemCount ? Color.red : Color.white;
         }
-
-
         //!!!!!!!!!!!!!!!!!!!!!
         public void Reward(BoxGrade boxTypes)
         {
@@ -557,24 +504,24 @@ namespace Script.RobbyScript.StoreMenuGroup
                     adsRewardBtn.SetActive(false);
                     break;
                 case BoxGrade.Silver:
-                    _silverOpenCount = PlayerPrefs.GetInt(SilverOpenCountKey, 0);
-                    CalculateCoinReward(boxTypes, _silverOpenCount);
-                    CalculateUnitPieceReward(boxTypes, _silverOpenCount);
-                    if (_silverOpenCount == SilverOpenMaxCount) break;
-                    _silverOpenCount++;
+                    SilverAdsOpen = PlayerPrefs.GetInt(SilverOpenCountKey, 0);
+                    CalculateCoinReward(boxTypes, SilverAdsOpen);
+                    CalculateUnitPieceReward(boxTypes, SilverAdsOpen);
+                    if (SilverAdsOpen == SilverOpenMaxCount) break;
+                    SilverAdsOpen++;
                     _silverOpenTime = DateTime.Now;
-                    PlayerPrefs.SetInt(SilverOpenCountKey, _silverOpenCount);
+                    PlayerPrefs.SetInt(SilverOpenCountKey, SilverAdsOpen);
                     PlayerPrefs.SetString(SilverOpenTimeKey, _silverOpenTime.ToBinary().ToString());
                     adsRewardBtn.SetActive(false);
                     break;
                 case BoxGrade.Gold:
-                    _goldOpenCount = PlayerPrefs.GetInt(GoldOpenCountKey, 0);
-                    CalculateCoinReward(boxTypes, _goldOpenCount);
-                    CalculateUnitPieceReward(boxTypes, _goldOpenCount);
-                    if (_goldOpenCount == GoldOpenMaxCount) break; 
-                    _goldOpenCount++;
+                    GoldAdsOpen = PlayerPrefs.GetInt(GoldOpenCountKey, 0);
+                    CalculateCoinReward(boxTypes, GoldAdsOpen);
+                    CalculateUnitPieceReward(boxTypes, GoldAdsOpen);
+                    if (GoldAdsOpen == GoldOpenMaxCount) break; 
+                    GoldAdsOpen++;
                     _goldOpenTime = DateTime.Now;
-                    PlayerPrefs.SetInt(GoldOpenCountKey, _goldOpenCount);
+                    PlayerPrefs.SetInt(GoldOpenCountKey, GoldAdsOpen);
                     PlayerPrefs.SetString(GoldOpenTimeKey, _goldOpenTime.ToBinary().ToString());
                     adsRewardBtn.SetActive(false);
                     break;
@@ -627,7 +574,6 @@ namespace Script.RobbyScript.StoreMenuGroup
             isReset = false;
             PlayerPrefs.Save();
         }
-        
         private void ReceiveReward()
         {
             DeleteEvent();
@@ -641,7 +587,6 @@ namespace Script.RobbyScript.StoreMenuGroup
             Destroy(_coinObject.gameObject);
             _unitPieceDict.Clear();
         }
-
         private void AdsReceiveReward()
         {
             DeleteExceptionEvent();
@@ -655,8 +600,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             Destroy(_coinObject.gameObject);
             _unitPieceDict.Clear();
         }
-        
-        private void BronzeAds()
+        private static void BronzeAds()
         {
             AdsManager.Instance.ShowRewardedAd();
             Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_greenbox");
@@ -1004,7 +948,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                     ChestCheck.Instance.chestCheckTopText.text = "Silver Chest";
                     ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = silverSprite;
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = chestAdsBtnSprite;
-                    ChestCheck.Instance.chestCheckBtnText.text = $"{_silverOpenCount} / {SilverOpenMaxCount}";
+                    ChestCheck.Instance.chestCheckBtnText.text = $"{SilverAdsOpen} / {SilverOpenMaxCount}";
 
                     ChestReward.Instance.SetStart(ButtonType.SilverAds);
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.AddListener(SilverAds);
@@ -1013,7 +957,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                     ChestCheck.Instance.chestCheckTopText.text = "Gold Chest";
                     ChestCheck.Instance.chestImage.GetComponent<Image>().sprite = goldSprite;
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Image>().sprite = chestAdsBtnSprite;
-                    ChestCheck.Instance.chestCheckBtnText.text = $"{_goldOpenCount} / {GoldOpenMaxCount}";
+                    ChestCheck.Instance.chestCheckBtnText.text = $"{GoldAdsOpen} / {GoldOpenMaxCount}";
                     
                     ChestReward.Instance.SetStart(ButtonType.GoldAds);
                     ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.AddListener(GoldAds);
@@ -1025,7 +969,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                     ChestCheck.Instance.chestCheckBtnText.text = "150";
                     ChestReward.Instance.SetStart(ButtonType.BronzeGem);
                     
-                    ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.AddListener(() => CheckAndSummonChest(StoreMenu.ButtonType.BronzeGem));
+                    ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.AddListener(() => CheckAndSummonChest(ButtonType.BronzeGem));
                     break;
                 case ButtonType.SilverGem:
                     ChestCheck.Instance.chestCheckTopText.text = "Silver Chest";
@@ -1034,7 +978,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                     ChestCheck.Instance.chestCheckBtnText.text = "450";
                     ChestReward.Instance.SetStart(ButtonType.SilverGem);
                    
-                    ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.AddListener(() => CheckAndSummonChest(StoreMenu.ButtonType.SilverGem));
+                    ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.AddListener(() => CheckAndSummonChest(ButtonType.SilverGem));
                     break;
                 case ButtonType.GoldGem:
                     ChestCheck.Instance.chestCheckTopText.text = "Gold Chest";
@@ -1043,7 +987,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                     ChestCheck.Instance.chestCheckBtnText.text = "900";
                     ChestReward.Instance.SetStart(ButtonType.GoldGem);
                   
-                    ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.AddListener(() => CheckAndSummonChest(StoreMenu.ButtonType.GoldGem));
+                    ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.AddListener(() => CheckAndSummonChest(ButtonType.GoldGem));
                     break;
                 default:
                     Debug.Log("Unknown button is clicked!");
@@ -1056,7 +1000,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             {
                 GemScript.Instance.Gem -= int.Parse(ChestCheck.Instance.chestCheckBtnText.text);
                 GemScript.Instance.UpdateGem();
-                SommonChest(chestType);
+                SummonChest(chestType);
             }
             else
             {
@@ -1067,7 +1011,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                 errorContentsImage.GetComponent<RectTransform>().localScale = new Vector3(0.8f, 1f, 0);
             }
         }
-        public void SommonChest(ButtonType chestType)
+        public void SummonChest(ButtonType chestType)
         {
             chestRewardPanel.SetActive(true);
             chestOpenBtn.GetComponent<Button>().onClick.AddListener(() => OpenChest(chestType));
@@ -1075,7 +1019,7 @@ namespace Script.RobbyScript.StoreMenuGroup
         }
         private IEnumerator IncreaseBackLightAlpha(ButtonType chestType)
         {
-            chestGrade.transform.position = newPosition;
+            chestGrade.transform.position = _newPosition;
             Sprite chestSprite = null;
             switch (chestType)
             {
@@ -1123,7 +1067,8 @@ namespace Script.RobbyScript.StoreMenuGroup
             chestGrade.transform.localScale = initialScale; // 초기 스케일 값을 설정
 
             // chestGrade 오브젝트를 현재 위치에서 (targetY, 현재 z 좌표)로 내려오는 애니메이션을 생성
-            var moveAnimation = chestGrade.transform.DOMove(new Vector3(chestGrade.transform.position.x, targetY, chestGrade.transform.position.z), moveDuration);
+            var position = chestGrade.transform.position;
+            var moveAnimation = chestGrade.transform.DOMove(new Vector3(position.x, targetY, position.z), moveDuration);
 
             // chestGrade 오브젝트의 스케일을 목표 스케일로 변경하는 애니메이션을 생성
             var scaleAnimation = chestGrade.transform.DOScale(targetScale, moveDuration);
@@ -1225,7 +1170,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             ChestReward.Instance.ClearChests();
             Reallocation();
         }
-        public void DeleteExceptionEvent()
+        private void DeleteExceptionEvent()
         {
             chestOpenBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             closeBtn.GetComponent<Button>().onClick.RemoveAllListeners();

@@ -15,3 +15,5 @@ KOR,G,180,주변 1칸,1 회 / 초,칼,화상,2 초
 ENG,G,180,Around 1 Grid,1 Per / Sec,Sword,Burn,2 Sec
 KOR,H,80,세로전,1 회 / 초,투사체,화상,5 초
 ENG,H,80,Vertical,1 Per / Sec,Projectile,Burn,5 Sec
+KOR,I,42,주변 1칸,1.2 회 / 초,투사체,중독,5 초
+ENG,I,42,Around 1 Grid,1.2 Per / Sec,Projectile,Poison,5 Sec

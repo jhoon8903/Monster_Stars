@@ -48,7 +48,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         }
         public void OpenInfoPanel(UnitIcon unitInstance, CharacterBase characterBase)
         {
-            infoPanel.SetActive(true);
+            // infoPanel.SetActive(true);
             StartCoroutine(CheckForLevelUp(unitInstance, characterBase));
         }
         private IEnumerator CheckForLevelUp(UnitIcon unitInstance, CharacterBase characterBase)
@@ -161,10 +161,9 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 if (language != _selectLang) continue;
                 var unitDataDict = new Dictionary<string, object>
                 {
-                    {"Damage", data[2]},
+                    // {"Damage", data[2]},
                     {"Range", data[3]},
                     {"Rate", data[4]},
-                    {"Form", data[5]},
                     {"Effect", data[6]},
                     {"Time", data[7]},
                 };
@@ -186,20 +185,16 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     var instance = Instantiate(infoObject, unitInformationGrid.transform);
                     switch (unitData.Key)
                     {
-                        case "Damage":
-                            instance.infoTitle.text = _selectLang == "KOR" ? "공격력" : "Damage";
-                            instance.infoDesc.text = characterBase.unitPeaceLevel == 1 ? $"{unitData.Value}" : $"{unitData.Value} + {characterBase.UnitLevelDamage}";
-                            break;
+                        // case "Damage":
+                        //     instance.infoTitle.text = _selectLang == "KOR" ? "공격력" : "Damage";
+                        //     instance.infoDesc.text = characterBase.unitPeaceLevel == 1 ? $"{unitData.Value}" : $"{unitData.Value} + {characterBase.UnitLevelDamage}";
+                        //     break;
                         case "Range":
                             instance.infoTitle.text = _selectLang == "KOR" ? "공격범위" : "Range";
                             instance.infoDesc.text = unitData.Value as string;
                             break;
                         case "Rate":
                             instance.infoTitle.text = _selectLang == "KOR" ? "공격속도" : "Rate";
-                            instance.infoDesc.text = unitData.Value as string;
-                            break;
-                        case "Form":
-                            instance.infoTitle.text = _selectLang == "KOR" ? "공격형태" : "Form";
                             instance.infoDesc.text = unitData.Value as string;
                             break;
                         case "Effect":
@@ -287,7 +282,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         }
         public void ClosePanel()
         {
-            gameObject.SetActive(false);
+            Destroy(gameObject);
         }
     }
 }

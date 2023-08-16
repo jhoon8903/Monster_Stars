@@ -359,15 +359,15 @@ namespace Script.AdsScript
                     break;
                 case ButtonType.BronzeAds:
                     chestType = StoreMenu.ButtonType.BronzeAds;
-                    StoreMenu.Instance.SommonChest(chestType);
+                    StoreMenu.Instance.SummonChest(chestType);
                     break;
                 case ButtonType.SilverAds:
                     chestType = StoreMenu.ButtonType.SilverAds;
-                    StoreMenu.Instance.SommonChest(chestType);
+                    StoreMenu.Instance.SummonChest(chestType);
                     break;
                 case ButtonType.GoldAds:
                     chestType = StoreMenu.ButtonType.GoldAds;
-                    StoreMenu.Instance.SommonChest(chestType);
+                    StoreMenu.Instance.SummonChest(chestType);
                     break;
                 case ButtonType.Common:
                     CommonShuffle();

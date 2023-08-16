@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using Script.RobbyScript.TopMenuGroup;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -38,12 +33,11 @@ namespace Script.RobbyScript.StoreMenuGroup
             chestCheckPanel.SetActive(true);
         }
 
-        public void CloseChestCheck()
+        private void CloseChestCheck()
         {
             // ChestReward.Instance.ClearChests();
             chestCheckPanel.SetActive(false);
             StoreMenu.Instance.DeleteEvent();
         }
-        
     }
 }

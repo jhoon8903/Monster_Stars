@@ -60,8 +60,8 @@ MonoBehaviour:
   lv9: {fileID: 21300000, guid: b28756fb8071b48e78ac0ef605827f6f, type: 3}
   lv11: {fileID: 21300000, guid: a4f08d23b889f4f7bb96e7fc07863532, type: 3}
   lv13: {fileID: 21300000, guid: df48df201bc7142ebb35155c4d769999, type: 3}
-  baseDamage: 48
-  dotDamage: 9.6
+  baseDamage: 38
+  dotDamage: 7.6
   effectChance: 0
   effectStack: 0
   slowTime: 0
@@ -80,10 +80,10 @@ MonoBehaviour:
   swingSpeed: 0
   defaultAtkDistance: 0
   level1Sprite: {fileID: 21300000, guid: 57ad71cdca46d4e34906be0e136502e0, type: 3}
-  level2Sprite: {fileID: 21300000, guid: 34866a14923cb4a81897af6a03e91ac3, type: 3}
-  level3Sprite: {fileID: 21300000, guid: 59f57128fce1447699e3031e430b78bd, type: 3}
-  level4Sprite: {fileID: 21300000, guid: 2d1f3f26b26a041b588404338771aa72, type: 3}
-  level5Sprite: {fileID: 21300000, guid: b28756fb8071b48e78ac0ef605827f6f, type: 3}
+  level2Sprite: {fileID: 21300000, guid: b0d5f3052d68e4e97a105023cfdf69dc, type: 3}
+  level3Sprite: {fileID: 21300000, guid: 94c27dba2f9a24beabb8ed7f685adb13, type: 3}
+  level4Sprite: {fileID: 21300000, guid: 7ea8e23384d3c45efa5a87c1f39cf819, type: 3}
+  level5Sprite: {fileID: 21300000, guid: 3d4d12a7ff7c44c5fa47622a3c1bd3c3, type: 3}
   groupFDamage: 0
 --- !u!212 &8552942239932251841
 SpriteRenderer:

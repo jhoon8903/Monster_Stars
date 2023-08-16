@@ -80,10 +80,10 @@ MonoBehaviour:
   swingSpeed: 0
   defaultAtkDistance: 9
   level1Sprite: {fileID: 21300000, guid: 782984bc776b948b698e5e6475a43ebb, type: 3}
-  level2Sprite: {fileID: 21300000, guid: d76e14dd6747040949c813bf034a4145, type: 3}
-  level3Sprite: {fileID: 21300000, guid: 646cabb414b064993b016af51a4dbdd7, type: 3}
-  level4Sprite: {fileID: 21300000, guid: 98a403a293b0e4db094e862eb51ccb7d, type: 3}
-  level5Sprite: {fileID: 21300000, guid: f04a05f17ed1d47d98afa2405820232d, type: 3}
+  level2Sprite: {fileID: 21300000, guid: e88bc5ad0bb1145b487be1ad7f03ee84, type: 3}
+  level3Sprite: {fileID: 21300000, guid: f414a3c88141844e49688583577b9236, type: 3}
+  level4Sprite: {fileID: 21300000, guid: 80ee227535aee4b4ea272d4cc27cdfc8, type: 3}
+  level5Sprite: {fileID: 21300000, guid: 61a9b290f6fe747fd9d83044afca6aa2, type: 3}
 --- !u!212 &2093963163649565062
 SpriteRenderer:
   m_ObjectHideFlags: 0

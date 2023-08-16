@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cover: {fileID: 2641826980544604055}
   unitPeaceLevel: 1
-  unLock: 0
+  unLock: 1
   selected: 0
   unitPuzzleLevel: 1
   unitGroup: 7
@@ -80,10 +80,10 @@ MonoBehaviour:
   swingSpeed: 0
   defaultAtkDistance: 9
   level1Sprite: {fileID: 21300000, guid: 80864d9771c404f798dae0a6fb7931b9, type: 3}
-  level2Sprite: {fileID: 21300000, guid: 1967888404b4e499bb74b1c98b6c54a8, type: 3}
-  level3Sprite: {fileID: 21300000, guid: 117c7a06026aa4212b0e255a97a71970, type: 3}
-  level4Sprite: {fileID: 21300000, guid: df8db6081446d452cad31b6ee67d12c4, type: 3}
-  level5Sprite: {fileID: 21300000, guid: e0b94d265de974a909ca89173f55d388, type: 3}
+  level2Sprite: {fileID: 21300000, guid: 6935ca49e4049493380ac2b57d11f747, type: 3}
+  level3Sprite: {fileID: 21300000, guid: e7bc0996ee3604b41928d47815aa7260, type: 3}
+  level4Sprite: {fileID: 21300000, guid: 5f84abd81d31c4d4a8f3d3558766cb64, type: 3}
+  level5Sprite: {fileID: 21300000, guid: 3c6f6454a46bb4d368a08777e8d7a9a0, type: 3}
   level6Sprite: {fileID: 21300000, guid: f518f2046a37d48238e6ab08637c0859, type: 3}
 --- !u!212 &2775731209932646849
 SpriteRenderer:

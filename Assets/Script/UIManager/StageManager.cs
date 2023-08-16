@@ -176,7 +176,7 @@ namespace Script.UIManager
             EnforceManager.Instance.addGoldCount = 0;
             PlayerPrefs.SetInt($"{latestStage}Stage_ProgressWave", 1);
             PlayerPrefs.SetInt($"{latestStage}Stage_ClearWave", MaxWave());
-            Firebase.Analytics.FirebaseAnalytics.LogEvent("stage_success", "success", latestStage );
+            // Firebase.Analytics.FirebaseAnalytics.LogEvent("stage_success", "success", latestStage );
             latestStage++;
 
             if (latestStage > maxStageCount)
@@ -186,6 +186,9 @@ namespace Script.UIManager
 
             PlayerPrefs.SetInt("LatestStage",latestStage);
             PlayerPrefs.SetInt($"{latestStage}Stage_MaxWave", MaxWave());
+            PlayerPrefs.DeleteKey("unitState");
+            PlayerPrefs.DeleteKey("EnforceData");
+            PlayerPrefs.SetInt("GridHeight", 6);
             PlayerPrefs.Save();
             continueBtn.GetComponent<Button>().onClick.AddListener(GameManager.ReturnRobby);
         }

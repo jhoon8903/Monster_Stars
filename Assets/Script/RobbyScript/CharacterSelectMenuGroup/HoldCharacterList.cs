@@ -115,7 +115,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             unitInstance.CharacterBase = character;
             UpdateUnit(unitInstance, character);
             unitInstance.unitBtn.onClick.AddListener(() => {SwapBackGround(unitInstance, character);});
-
             unitInstance.infoBtn.onClick.AddListener(() =>
             {
                 unitInstance.normalBack.SetActive(true);
@@ -125,7 +124,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 {
                     _informationPanel = Instantiate(informationPanelPrefab, gamePanel.transform).GetComponent<InformationPanel>();
                 }
-                _informationPanel.gameObject.SetActive(true);
+                // _informationPanel.gameObject.SetActive(true);
                 _informationPanel.OpenInfoPanel(unitInstance, character);
             });
 
@@ -138,7 +137,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 {
                     _informationPanel = Instantiate(informationPanelPrefab, gamePanel.transform).GetComponent<InformationPanel>();
                 }
-                _informationPanel.gameObject.SetActive(true);
+                // _informationPanel.gameObject.SetActive(true);
                 _informationPanel.OpenInfoPanel(unitInstance, character);
             });
 
@@ -329,7 +328,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             }
             foreach (Transform child in selectedContent.transform)
             {
-                var newUnitInstance = Instantiate(child.gameObject, mainUnitContent.transform, false);
+                var newUnitInstance = Instantiate(child.gameObject, mainUnitContent.transform);
                 var newUnit = newUnitInstance.GetComponent<UnitIcon>();
                 var originalUnit = child.GetComponent<UnitIcon>();
                 UnitIconMapping[originalUnit] = newUnit;
