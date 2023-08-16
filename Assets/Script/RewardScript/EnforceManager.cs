@@ -7,6 +7,7 @@ using Script.PuzzleManagerGroup;
 using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.UIManager;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Script.RewardScript
 {
@@ -20,15 +21,15 @@ namespace Script.RewardScript
     [Serializable]
     public class EnforceData
     {
-        //Divine Unit A
-        public bool divinePoisonDamageBoost;
-        public bool divineBindDurationBoost;
-        public bool divineShackledExplosion;
-        public bool divineFifthAttackBoost;
-        public float divineRateBoost;
-        public bool divineBindChanceBoost;
-        public bool divineDualAttack;
-        
+        //Darkness3 Unit A
+        public bool dark3FifthAttackBoost;
+        public bool dark3BleedAttack;
+        public bool dark3PoisonDamageBoost;
+        public bool dark3ShackledExplosion;
+        public bool dark3BleedDurationBoost;
+        public bool dark3DamageBoost;
+        public float dark3RateBoost;
+
         //Darkness Unit B
         public bool darkFifthAttackDamageBoost;
         public float darkAttackSpeedBoost;
@@ -177,34 +178,34 @@ namespace Script.RewardScript
             }
         }
 
-        [Header("\n\nA 신성: Blue\n")]
+
+        [Header("\n\nA 어둠: Blue\n")]
         // 완료
         [Header("Blue / 1Lv: 5회 공격마다 100% 추가데미지 (투사체 컬러 변경)")] 
-        public bool divineFifthAttackBoost;
+        public bool dark3FifthAttackBoost;
         // 완료
-        [Header("Purple / 3Lv: 앞 뒤 동시공격")]
-        public bool divineDualAttack; 
+        [Header("Purple / 3Lv: 적을 공격하면, 초당 공격력의 20% 데미지를 주는 출혈을 3초간 발생시킵니다.")]
+        public bool dark3BleedAttack; 
         // 완료
-        [Header("Green / 5Lv: 속박지속시간 0.5초 증가")] 
-        public bool divineBindDurationBoost;
+        [Header("Green / 5Lv: 중독된 적 추가데미지 50%")] 
+        public bool dark3PoisonDamageBoost;
         // 완료
         [Header("Blue / 7Lv: 적 제거시 주변 1칸 범위의 100% 폭발데미지 추가")] 
-        public bool divineShackledExplosion;
+        public bool dark3ShackledExplosion;
         // 완료
-        [Header("Green / 9Lv: 중독된 적 추가데미지 25%")] 
-        public bool divinePoisonDamageBoost;
-        // 완료 
-        [Header("Purple / Lv11: 속박확률 20% 증가 (30% > 50%)")] 
-        public bool divineBindChanceBoost;
+        [Header("Green / 9Lv: 출혈지속시간 2초 증가")] 
+        public bool dark3BleedDurationBoost;
+        // 완료
+        [Header("Purple / 11Lv: 공력력 19% 증가")] 
+        public bool dark3DamageBoost;
         // 완료
         [Header("Blue / 13Lv: 공격속도 9% 증가 (최대 4회)")]
-        public float divineRateBoost; 
-        protected internal void DivineRateBoost()
+        public float dark3RateBoost; 
+        protected internal void Dark3RateBoost()
         {   
-            if (divineRateBoost >= 0.36f) return;
-            divineRateBoost+= 0.09f;
+            if (dark3RateBoost >= 0.36f) return;
+            dark3RateBoost+= 0.09f;
         }
-
 
         [Header("\n\nB 어둠: Green\n")]
         // 완료
@@ -629,7 +630,6 @@ namespace Script.RewardScript
         {
             rewardMoveCount += moveCount;
             countManager.IncreaseMoveCount(rewardMoveCount);
-            rewardMoveCount = 0;
         }
 
         [Header("최대 이동횟수 증가")]
@@ -768,14 +768,14 @@ namespace Script.RewardScript
         {
             var data = new EnforceData
             {
-                //Divine
-                divinePoisonDamageBoost = divinePoisonDamageBoost,
-                divineBindDurationBoost = divineBindDurationBoost,
-                divineShackledExplosion = divineShackledExplosion,
-                divineFifthAttackBoost = divineFifthAttackBoost,
-                divineRateBoost = divineRateBoost,
-                divineBindChanceBoost = divineBindChanceBoost,
-                divineDualAttack = divineDualAttack,
+                //Darkness3 Unit A
+                dark3FifthAttackBoost = dark3FifthAttackBoost,
+                dark3BleedAttack = dark3BleedAttack,
+                dark3PoisonDamageBoost = dark3PoisonDamageBoost,
+                dark3ShackledExplosion = dark3ShackledExplosion,
+                dark3BleedDurationBoost = dark3BleedDurationBoost,
+                dark3DamageBoost = dark3DamageBoost,
+                dark3RateBoost = dark3RateBoost,
                 //Darkness Unit B
                 darkFifthAttackDamageBoost = darkFifthAttackDamageBoost,
                 darkAttackSpeedBoost = darkAttackSpeedBoost,
@@ -894,13 +894,13 @@ namespace Script.RewardScript
             var data = JsonUtility.FromJson<EnforceData>(json);
 
             // Divine Unit A
-            divinePoisonDamageBoost = data.divinePoisonDamageBoost;
-            divineBindDurationBoost = data.divineBindDurationBoost;
-            divineShackledExplosion = data.divineShackledExplosion;
-            divineFifthAttackBoost = data.divineFifthAttackBoost;
-            divineBindChanceBoost = data.divineBindChanceBoost;                                                        
-            divineDualAttack = data.divineDualAttack;
-            divineRateBoost = data.divineRateBoost;
+            dark3FifthAttackBoost = data.dark3FifthAttackBoost;
+            dark3BleedAttack = data.dark3BleedAttack;
+            dark3PoisonDamageBoost = data.dark3PoisonDamageBoost;
+            dark3ShackledExplosion = data.dark3ShackledExplosion;
+            dark3BleedDurationBoost = data.dark3BleedDurationBoost;
+            dark3DamageBoost = data.dark3DamageBoost;
+            dark3RateBoost = data.dark3RateBoost;
             //Darkness Unit B
             darkFifthAttackDamageBoost = data.darkFifthAttackDamageBoost; 
             darkAttackSpeedBoost = data.darkAttackSpeedBoost;

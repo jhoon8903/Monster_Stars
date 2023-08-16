@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterGroupScript;
 using Script.EnemyManagerScript;
@@ -10,6 +11,8 @@ namespace Script.WeaponScriptGroup
     {
         private float _distance;
         private Rigidbody2D _rigidBody2D;
+        private List<GameObject> _enemyTransforms = new List<GameObject>();
+        private Vector3 _enemyTransform;
         private new void Awake()
         {
             _rigidBody2D = GetComponent<Rigidbody2D>();
@@ -18,7 +21,11 @@ namespace Script.WeaponScriptGroup
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
-
+            _enemyTransforms = CharacterBase.GetComponent<UnitA>().DetectEnemies();
+            foreach (var enemy in _enemyTransforms)
+            {
+                _enemyTransform = enemy.transform.position;
+            }
             if (CharacterBase.GetComponent<UnitA>().atkCount == 5)
             {
                 Sprite = GetComponent<SpriteRenderer>().color = Color.yellow;
@@ -26,18 +33,15 @@ namespace Script.WeaponScriptGroup
                 Damage *= 2f;
                 CharacterBase.GetComponent<UnitA>().atkCount = 0;                
             }
-            var useTime = Distance / Speed;
-            if (!EnforceManager.Instance.divineDualAttack)
+            while (Vector3.Distance(transform.position, _enemyTransform) > 0.1f)
             {
-                var enemyTransforms = CharacterBase.GetComponent<UnitA>().DetectEnemies();
-                foreach (var unused in enemyTransforms.Where(enemy => enemy.transform.position.y <= CharacterBase.transform.position.y))
-                {
-                    Speed = -Speed;
-                    transform.rotation = Quaternion.Euler(0, 0, 180);
-                }
+                var position = transform.position;
+                var upwards = (_enemyTransform - position).normalized;
+                transform.rotation = Quaternion.LookRotation(Vector3.forward, upwards);
+                position = Vector3.MoveTowards(position, _enemyTransform, Speed * Time.deltaTime);
+                transform.position = position;
+                yield return null;
             }
-            _rigidBody2D.velocity = direction == Vector2.down ? new Vector2(0, -Speed) : new Vector2(0, Speed);
-            yield return new WaitForSeconds(useTime);
             StopUseWeapon(gameObject);
         }
         private void OnTriggerEnter2D(Collider2D collision)

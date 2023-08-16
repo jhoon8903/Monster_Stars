@@ -156,14 +156,14 @@ namespace Script.RewardScript
             NextStage,
             Gold,
 
-            //Divine A
-            DivineFifthAttackBoost,
-            DivineDualAttack,
-            DivineBindDurationBoost,
-            DivineShackledExplosion,
-            DivinePoisonDamageBoost,
-            DivineBindChanceBoost,
-            DivineRateBoost,
+            //Darkness3 A
+            Dark3FifthAttackBoost,
+            Dark3BleedAttack,
+            Dark3PoisonDamageBoost,
+            Dark3ShackledExplosion,
+            Dark3BleedDurationBoost,
+            Dark3DamageBoost,
+            Dark3RateBoost,
 
             //Darkness B
             DarkFifthAttackDamageBoost,

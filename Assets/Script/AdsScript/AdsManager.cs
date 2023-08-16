@@ -55,7 +55,7 @@ namespace Script.AdsScript
                 // MaxSdk.ShowBanner(BannerAdUnitId);
             };
 
-            // MaxSdk.SetSdkKey(MaxSdkKey);
+            MaxSdk.SetSdkKey(MaxSdkKey);
             MaxSdk.SetTestDeviceAdvertisingIdentifiers(new string[]{"67ab33ef-93d8-4fe2-a3cc-44bd6b0e2a59"});
             MaxSdk.InitializeSdk();
         }

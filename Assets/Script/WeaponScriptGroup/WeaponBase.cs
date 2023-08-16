@@ -99,6 +99,12 @@ namespace Script.WeaponScriptGroup
                 case CharacterBase.UnitEffects.None:
                     switch (characterBase.unitGroup)
                     {
+                        case CharacterBase.UnitGroups.A:
+                            if (EnforceManager.Instance.dark3BleedAttack && Chance(20))
+                            {
+                                enemyObject.BleedStatus(true, characterBase);
+                            }
+                            break;
                         case CharacterBase.UnitGroups.B:
                             if (EnforceManager.Instance.darkKnockBackChance && Chance(characterBase.effectChance))
                             {
@@ -182,9 +188,9 @@ namespace Script.WeaponScriptGroup
             switch (characterBase.unitGroup)
             {
                 case CharacterBase.UnitGroups.A:
-                    if (EnforceManager.Instance.divinePoisonDamageBoost && enemyBase.isPoison)
+                    if (EnforceManager.Instance.dark3PoisonDamageBoost && enemyBase.isPoison)
                     {
-                        damage *= 1.25f;
+                        damage *= 1.5f;
                     }
                     if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Divine)
                     {

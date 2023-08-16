@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
@@ -14,7 +15,7 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level4Sprite; 
         [SerializeField] private Sprite level5Sprite;
         [SerializeField] private Sprite level6Sprite;
-        private const float DetectionWidth = 0.5f;
+        private float _detectionWidth;
         private float _detectionHeight;
         public int atkCount;
 
@@ -26,7 +27,7 @@ namespace Script.CharacterGroupScript
         {
             base.Initialize();
             unitGroup = UnitGroups.A;
-            UnitProperty = UnitProperties.Divine;
+            UnitProperty = UnitProperties.Darkness;
             UnitGrade = UnitGrades.Blue;
             UnitDesc = "유닛A 입니다.";
             SetLevel(1);
@@ -55,22 +56,23 @@ namespace Script.CharacterGroupScript
         }
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
-            _detectionHeight = defaultAtkDistance;
-            size = new Vector2(DetectionWidth, _detectionHeight * 2);
+            _detectionWidth = 7f;
+            _detectionHeight = 7f;
             center = transform.position;
+            size = new Vector2(_detectionWidth, _detectionHeight);
         }
+
+
         public override List<GameObject> DetectEnemies()
         {
             GetDetectionProperties(out var detectionSize, out var detectionCenter);
-            
-            var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize, 0f);
-            var currentlyDetectedEnemies = new List<GameObject>();
-            foreach (var enemyObject in colliders)
-            {
-                if (!enemyObject.gameObject.CompareTag("Enemy") || !enemyObject.gameObject.activeInHierarchy) continue;
-                var enemyBase = enemyObject.GetComponent<EnemyBase>();
-                currentlyDetectedEnemies.Add(enemyBase.gameObject);
-            }
+            var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize,0f);
+            var currentlyDetectedEnemies = (
+                from enemyObject in colliders 
+                where enemyObject.gameObject.CompareTag("Enemy") && enemyObject.gameObject.activeInHierarchy 
+                select enemyObject.GetComponent<EnemyBase>()
+                into enemyBase 
+                select enemyBase.gameObject).ToList();
             DetectedEnemies = currentlyDetectedEnemies;
             return DetectedEnemies;
         }
@@ -90,10 +92,10 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = unitPeaceLevel > 1 ? unitPeaceLevel * 2f + 1f : 0f;
+            UnitLevelDamage = unitPeaceLevel > 1 ? unitPeaceLevel * 5f - 1f : 0f;
             Type = Types.Character;
             unitGroup = UnitGroups.A;
-            DefaultDamage = UnitLevelDamage + 29f * level switch
+            DefaultDamage = UnitLevelDamage + 36f * (EnforceManager.Instance.dark3DamageBoost ? 1.19f : 1f) * level switch
             {
                 <=  2 => 1f,
                 3 => 1.7f,
@@ -101,14 +103,14 @@ namespace Script.CharacterGroupScript
                 5 => 2.3f,
                 6 => 2.6F
             };
-            defaultAtkRate = 1.2f * (1f - EnforceManager.Instance.divineRateBoost);
-            bindTime = EnforceManager.Instance.divineBindDurationBoost? 1f : 1.5f;
-            effectChance = EnforceManager.Instance.divineBindChanceBoost ? 50 : 30;
+            defaultAtkRate = 1f * (1f - EnforceManager.Instance.dark3RateBoost);
+            bleedTime = EnforceManager.Instance.dark3BleedDurationBoost? 5f : 3f;
+            dotDamage = DefaultDamage * 0.2f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;
             UnitAtkType = UnitAtkTypes.Projectile;
-            UnitProperty = UnitProperties.Divine;
-            UnitEffect = UnitEffects.Bind;
+            UnitProperty = UnitProperties.Darkness;
+            UnitEffect = UnitEffects.None;
         }
     }
 }

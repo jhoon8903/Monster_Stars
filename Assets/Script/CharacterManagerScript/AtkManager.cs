@@ -7,7 +7,6 @@ using Script.EnemyManagerScript;
 using Script.RewardScript;
 using Script.WeaponScriptGroup;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Script.CharacterManagerScript
 {
@@ -96,14 +95,7 @@ namespace Script.CharacterManagerScript
             switch (unitGroup)
             {
                 case CharacterBase.UnitGroups.A:
-                    if (EnforceManager.Instance.divineDualAttack)
-                    {
-                        StartCoroutine(DualAttack(new AttackData(unit, WeaponsPool.WeaponType.A)));
-                    }
-                    else
-                    {
-                        Attack(new AttackData(unit, WeaponsPool.WeaponType.A));
-                    }
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.A));
                     break;
                 case CharacterBase.UnitGroups.B:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.B));
@@ -181,7 +173,7 @@ namespace Script.CharacterManagerScript
             switch (unit.GetComponent<CharacterBase>().unitGroup)
             {
                case CharacterBase.UnitGroups.A:
-                   if (EnforceManager.Instance.divineFifthAttackBoost)
+                   if (EnforceManager.Instance.dark3FifthAttackBoost)
                    {
                        unit.GetComponent<UnitA>().atkCount++;
                    }
@@ -252,7 +244,7 @@ namespace Script.CharacterManagerScript
         private IEnumerator DualAttack(AttackData attackData)
         {
             var unit = attackData.Unit;
-            if (EnforceManager.Instance.divineFifthAttackBoost)
+            if (EnforceManager.Instance.dark3FifthAttackBoost)
             {
                 unit.GetComponent<UnitA>().atkCount++;
             }

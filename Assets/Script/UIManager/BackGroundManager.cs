@@ -24,9 +24,9 @@ namespace Script.UIManager
 
         public IEnumerator ChangeBattleSize()
         {
-            backGround.DOAnchorPos3D(new Vector3(0f,45f,0f), 1f);
-            castle.DOSizeDelta(new Vector2(1100f, 300f), 1f);
-            castle.DOAnchorPos3D(new Vector3(0f, 280f, 0f), 1f);
+            backGround.DOAnchorPos3D(Vector3.zero, 1f);
+            castle.DOSizeDelta(new Vector2(2950f, 1000f), 1f);
+            castle.DOAnchorPos3D(new Vector3(0f, 600f, 0f), 1f);
             yield return null;
         }
 

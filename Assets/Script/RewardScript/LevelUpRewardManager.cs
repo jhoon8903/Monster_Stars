@@ -78,27 +78,27 @@ namespace Script.RewardScript
                     EnforceManager.Instance.Match5Upgrade(selectedReward);
                     break;
                 // A
-                case PowerTypeManager.Types.DivineFifthAttackBoost:
-                    EnforceManager.Instance.divineFifthAttackBoost = true;
+                case PowerTypeManager.Types.Dark3FifthAttackBoost:
+                    EnforceManager.Instance.dark3FifthAttackBoost = true;
                     break;
-                case PowerTypeManager.Types.DivineDualAttack:
-                    EnforceManager.Instance.divineDualAttack = true;
+                case PowerTypeManager.Types.Dark3BleedAttack:
+                    EnforceManager.Instance.dark3BleedAttack = true;
                     break;
-                case PowerTypeManager.Types.DivineBindDurationBoost:
-                    EnforceManager.Instance.divineBindDurationBoost = true;
+                case PowerTypeManager.Types.Dark3PoisonDamageBoost:
+                    EnforceManager.Instance.dark3PoisonDamageBoost = true;
                     break;
-                case PowerTypeManager.Types.DivineShackledExplosion:
-                    EnforceManager.Instance.divineShackledExplosion = true;
+                case PowerTypeManager.Types.Dark3BleedDurationBoost:
+                    EnforceManager.Instance.dark3BleedDurationBoost = true;
                     break;
-               case PowerTypeManager.Types.DivinePoisonDamageBoost:
-                   EnforceManager.Instance.divinePoisonDamageBoost = true;
-                   break;
-                case PowerTypeManager.Types.DivineBindChanceBoost:
-                    EnforceManager.Instance.divineBindChanceBoost = true;
+                case PowerTypeManager.Types.Dark3ShackledExplosion:
+                    EnforceManager.Instance.dark3ShackledExplosion = true;
                     break;
-                case PowerTypeManager.Types.DivineRateBoost:
-                    EnforceManager.Instance.DivineRateBoost();
+                case PowerTypeManager.Types.Dark3DamageBoost:
+                    EnforceManager.Instance.dark3DamageBoost = true;
                     break;
+                 case PowerTypeManager.Types.Dark3RateBoost: 
+                     EnforceManager.Instance.Dark3RateBoost();
+                     break;
                 // B
                 case PowerTypeManager.Types.DarkFifthAttackDamageBoost:
                     EnforceManager.Instance.darkFifthAttackDamageBoost = true;
@@ -442,39 +442,39 @@ namespace Script.RewardScript
                             if (EnforceManager.Instance.castleMaxHp >= 1000) return false;
                             break;
                         // Unit A
-                        case PowerTypeManager.Types.DivineFifthAttackBoost:
+                        case PowerTypeManager.Types.Dark3FifthAttackBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
-                            if (EnforceManager.Instance.divineFifthAttackBoost) return false;
+                            if (EnforceManager.Instance.dark3FifthAttackBoost) return false;
                             break;
-                        case PowerTypeManager.Types.DivineDualAttack:
+                        case PowerTypeManager.Types.Dark3BleedAttack:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 3) return false;
-                            if (EnforceManager.Instance.divineDualAttack) return false;
+                            if (EnforceManager.Instance.dark3BleedAttack) return false;
                             break;
-                        case PowerTypeManager.Types.DivineBindDurationBoost:
+                        case PowerTypeManager.Types.Dark3PoisonDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 5) return false;
-                            if (EnforceManager.Instance.divineBindDurationBoost) return false;
+                            if (EnforceManager.Instance.dark3PoisonDamageBoost) return false;
                             break;
-                        case PowerTypeManager.Types.DivineShackledExplosion:
+                        case PowerTypeManager.Types.Dark3ShackledExplosion:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 7) return false;
-                            if (EnforceManager.Instance.divineShackledExplosion) return false;
+                            if (EnforceManager.Instance.dark3ShackledExplosion) return false;
                             break;
-                        case PowerTypeManager.Types.DivinePoisonDamageBoost:
+                        case PowerTypeManager.Types.Dark3BleedDurationBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 9) return false;
-                            if (EnforceManager.Instance.divinePoisonDamageBoost) return false;
+                            if (EnforceManager.Instance.dark3BleedDurationBoost) return false;
                             break;
-                        case PowerTypeManager.Types.DivineBindChanceBoost:
+                        case PowerTypeManager.Types.Dark3DamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 11) return false;
-                            if (EnforceManager.Instance.divineBindChanceBoost) return false;
+                            if (EnforceManager.Instance.dark3DamageBoost) return false;
                             break;
-                        case PowerTypeManager.Types.DivineRateBoost:
+                        case PowerTypeManager.Types.Dark3RateBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.A)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.A) < 13) return false;
-                            if (EnforceManager.Instance.divineRateBoost >= 0.36f) return false;
+                            if (EnforceManager.Instance.dark3RateBoost >= 0.36f) return false;
                             break;
                         // Unit B
                         case PowerTypeManager.Types.DarkFifthAttackDamageBoost:
@@ -891,13 +891,13 @@ namespace Script.RewardScript
                 PowerTypeManager.Types.NextStage => finalTranslation,
                 PowerTypeManager.Types.Gold => finalTranslation,
                 PowerTypeManager.Types.Match5Upgrade => finalTranslation,
-                PowerTypeManager.Types.DivinePoisonDamageBoost => finalTranslation,
-                PowerTypeManager.Types.DivineBindDurationBoost => finalTranslation,
-                PowerTypeManager.Types.DivineShackledExplosion => finalTranslation,
-                PowerTypeManager.Types.DivineFifthAttackBoost => finalTranslation,
-                PowerTypeManager.Types.DivineRateBoost => finalTranslation,
-                PowerTypeManager.Types.DivineBindChanceBoost => finalTranslation,
-                PowerTypeManager.Types.DivineDualAttack => finalTranslation,
+                PowerTypeManager.Types.Dark3FifthAttackBoost => finalTranslation,
+                PowerTypeManager.Types.Dark3BleedAttack => finalTranslation,
+                PowerTypeManager.Types.Dark3PoisonDamageBoost => finalTranslation,
+                PowerTypeManager.Types.Dark3BleedDurationBoost => finalTranslation,
+                PowerTypeManager.Types.Dark3ShackledExplosion => finalTranslation,
+                PowerTypeManager.Types.Dark3DamageBoost => finalTranslation,
+                PowerTypeManager.Types.Dark3RateBoost => finalTranslation,
                 PowerTypeManager.Types.DarkFifthAttackDamageBoost => finalTranslation,
                 PowerTypeManager.Types.DarkAttackSpeedBoost => finalTranslation,
                 PowerTypeManager.Types.DarkAttackPowerBoost => finalTranslation,

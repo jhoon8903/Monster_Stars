@@ -247,7 +247,7 @@ namespace Script.EnemyManagerScript
                 if (currentHealth > 0f || isDead) return;
                 isDead = true;
                 ExpManager.Instance.HandleEnemyKilled(reason);
-                if (EnforceManager.Instance.divineShackledExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.A)
+                if (EnforceManager.Instance.dark3ShackledExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.A)
                 {
                     StartCoroutine(ExplosionDamage(detectEnemy, damage, atkUnit));
                 }

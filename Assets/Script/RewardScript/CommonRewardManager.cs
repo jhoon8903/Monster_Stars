@@ -165,13 +165,13 @@ namespace Script.RewardScript
                     case PowerTypeManager.Types.Water2Freeze:
                     case PowerTypeManager.Types.WaterFreeze:
                     case PowerTypeManager.Types.Dark2BackBoost:
-                    case PowerTypeManager.Types.DivineFifthAttackBoost:
-                    case PowerTypeManager.Types.DivineDualAttack:
-                    case PowerTypeManager.Types.DivineBindDurationBoost:
-                    case PowerTypeManager.Types.DivineShackledExplosion:
-                    case PowerTypeManager.Types.DivinePoisonDamageBoost:
-                    case PowerTypeManager.Types.DivineBindChanceBoost:
-                    case PowerTypeManager.Types.DivineRateBoost:
+                    case PowerTypeManager.Types.Dark3FifthAttackBoost:
+                    case PowerTypeManager.Types.Dark3BleedDurationBoost:
+                    case PowerTypeManager.Types.Dark3ShackledExplosion:
+                    case PowerTypeManager.Types.Dark3PoisonDamageBoost:
+                    case PowerTypeManager.Types.Dark3RateBoost:
+                    case PowerTypeManager.Types.Dark3DamageBoost:
+                    case PowerTypeManager.Types.Dark3BleedAttack:
                     case PowerTypeManager.Types.DarkFifthAttackDamageBoost:
                     case PowerTypeManager.Types.DarkStatusAilmentSlowEffect:
                     case PowerTypeManager.Types.DarkRangeIncrease:
