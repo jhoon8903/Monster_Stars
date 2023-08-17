@@ -172,7 +172,7 @@ namespace Script.UIManager
             isStageClear = true;
             EnforceManager.Instance.addRow = false;
             characterPool.theFirst = false;
-            ClearRewardManager.Instance.ClearReward(latestStage);
+            ClearRewardManager.Instance.ClearReward(true);
             EnforceManager.Instance.addGoldCount = 0;
             PlayerPrefs.SetInt($"{latestStage}Stage_ProgressWave", 1);
             PlayerPrefs.SetInt($"{latestStage}Stage_ClearWave", MaxWave());
@@ -194,15 +194,17 @@ namespace Script.UIManager
         }
         public void UpdateWaveText()
         {
-            waveText.text = $"{currentWave}";
+            waveText.text = $"{currentWave}/{MaxWave()}";
         }
         private static void GameClear()
         {
             
         }
         public void SaveClearWave()
-        {      
+        {
             PlayerPrefs.SetInt($"{latestStage}Stage_ClearWave", currentWave);
+            ClearRewardManager.Instance.GetCoin(currentWave);
+            ClearRewardManager.Instance.RewardUnitPiece(latestStage, currentWave);
             currentWave++;
             PlayerPrefs.SetInt($"{latestStage}Stage_ProgressWave", currentWave);
             PlayerPrefs.Save();

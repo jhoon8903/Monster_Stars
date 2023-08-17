@@ -28,7 +28,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.E;
             UnitProperty = UnitProperties.Water;
             UnitGrade = UnitGrades.Green;
-            UnitDesc = "유닛E 입니다.";
+            UnitDesc = "Fishman Unit E / Green Grade";
             SetLevel(1);
         }
 

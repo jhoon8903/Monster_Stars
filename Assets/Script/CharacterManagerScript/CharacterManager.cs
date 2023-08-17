@@ -9,9 +9,11 @@ namespace Script.CharacterManagerScript
     {
         [SerializeField] private CharacterBase treasureBox;
         public List<CharacterBase> characterList = new List<CharacterBase>();
-
+        public static CharacterManager Instance;
         public void Awake()
         {
+            Instance = this;
+
             foreach (var unit in SelectedUnitHolder.Instance.selectedUnit.Where(unit => unit.selected))
             {
                 characterList.Add(unit);

@@ -28,7 +28,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.F;
             UnitProperty = UnitProperties.Poison;
             UnitGrade = UnitGrades.Green;
-            UnitDesc = "유닛F 입니다.";
+            UnitDesc = "Skeleton Unit F / Green Grade";
             SetLevel(1);
         }
         

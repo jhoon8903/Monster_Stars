@@ -15,13 +15,13 @@ Blue,9,CastleRecovery,200
 Blue,11,Slow,15
 Purple,13,StepDirection,1
 Purple,14,NextStage,1 2
-Green,100,DivineFifthAttackBoost,1
-Green,100,DivineDualAttack,1
-Blue,100,DivineBindDurationBoost,1
-Blue,100,DivineShackledExplosion,1
-Blue,100,DivinePoisonDamageBoost,1
-Purple,100,DivineBindChanceBoost,1
-Purple,100,DivineRateBoost,1
+Blue,100,Dark3FifthAttackBoost,1
+Purple,100,Dark3BleedAttack,1
+Green,100,Dark3PoisonDamageBoost,1
+Blue,100,Dark3ShackledExplosion,1
+Green,100,Dark3BleedDurationBoost,1
+Purple,100,Dark3DamageBoost,1
+Blue,100,Dark3RateBoost,1
 Green,200,DarkFifthAttackDamageBoost,1
 Green,200,DarkStatusAilmentSlowEffect,1
 Blue,200,DarkRangeIncrease,1

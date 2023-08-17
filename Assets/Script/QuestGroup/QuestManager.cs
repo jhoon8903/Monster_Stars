@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Script.AdsScript;
+using Script.RobbyScript.TopMenuGroup;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -407,40 +408,39 @@ namespace Script.QuestGroup
         private void ReceiveQuestReward(QuestObject quest)
         {
             questRewardPanel.SetActive(true);
-            // switch (quest.questType)
-            // {
-            //     case QuestTypes.ViewAds:
-            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
-            //
-            //         break;
-            //     case QuestTypes.AllClear:
-            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
-            //         break;
-            //     case QuestTypes.UseCoin:
-            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
-            //         break;
-            //     case QuestTypes.GetCoin:
-            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
-            //         break;
-            //     case QuestTypes.OpenBox:
-            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
-            //         break;
-            //     case QuestTypes.GetPiece:
-            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
-            //         break;
-            //     case QuestTypes.KillEnemy:
-            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
-            //         break;
-            //     case QuestTypes.KillBoss:
-            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
-            //         break;
-            //     case QuestTypes.MatchCoin:
-            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
-            //         break;
-            //     case QuestTypes.Victory:
-            //         CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
-            //         break;
-            // }
+            switch (quest.questType)
+            {
+                case QuestTypes.ViewAds:
+                    CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+                    break;
+                case QuestTypes.AllClear:
+                    CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+                    break;
+                case QuestTypes.UseCoin:
+                    CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+                    break;
+                case QuestTypes.GetCoin:
+                    CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+                    break;
+                case QuestTypes.OpenBox:
+                    CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+                    break;
+                case QuestTypes.GetPiece:
+                    CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+                    break;
+                case QuestTypes.KillEnemy:
+                    CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+                    break;
+                case QuestTypes.KillBoss:
+                    CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+                    break;
+                case QuestTypes.MatchCoin:
+                    CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+                    break;
+                case QuestTypes.Victory:
+                    CoinsScript.Instance.Coin += int.Parse(quest.item1Value.text);
+                    break;
+            }
            AllClearQuest();
            quest.isReceived = true;
            PlayerPrefs.SetInt(quest.questType + "isReceived", 1);

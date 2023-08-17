@@ -64,7 +64,10 @@ namespace Script.UIManager
             HpPoint = 0;
             hpBar.value = HpPoint;
             UpdateHpText();
-            StartCoroutine(GameManager.Instance.ContinueOrLose());
+            if (enemyBase.EnemyType != EnemyBase.EnemyTypes.Boss)
+            {
+                StartCoroutine(GameManager.Instance.ContinueOrLose());
+            }
         }
 
         public void IncreaseMaxHp()

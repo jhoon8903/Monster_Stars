@@ -28,7 +28,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.I;
             UnitProperty = UnitProperties.Poison;
             UnitGrade = UnitGrades.Blue;
-            UnitDesc = "유닛I 입니다.";
+            UnitDesc = "Cobra Unit I / Blue Grade";
             SetLevel(1);
         }
 

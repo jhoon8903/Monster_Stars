@@ -75,7 +75,6 @@ namespace Script.PuzzleManagerGroup
             _gridCells = newGridCells;
             _bossGridCells = newBossGridCells; // Assign the new array to _bossGridCells
             gridHeight = newGridHeight;
-            Debug.Log(gridHeight);
         }
 
         public void ApplyBossSpawnColor(Vector3Int bossArea)

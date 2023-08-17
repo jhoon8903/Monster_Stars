@@ -87,13 +87,12 @@ namespace Script.PuzzleManagerGroup
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 yield return new WaitForSeconds(0.5f);
             }
-            // if (countManager.TotalMoveCount != 0 || gameManager.IsBattle) yield break;
-
+            swipeManager.isBusy = false;
+            
             if (countManager.TotalMoveCount == 0)
             {
                 yield return StartCoroutine(gameManager.Count0Call());
             }
-            swipeManager.isBusy = false;
         }
 
         private IEnumerator CheckPosition()

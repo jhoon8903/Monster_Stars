@@ -16,6 +16,7 @@ namespace Script.CharacterManagerScript
         protected internal int CharacterPeaceCount { get; set; }
         protected internal int CharacterMaxPeace => CheckForMaxPeace();
         protected internal int CharacterLevelUpCoin => CheckForLevelUpCoin();
+        protected internal int CumulativeDamage;
         public enum UnitGrades { Green, Blue, Purple }
         protected internal UnitGrades UnitGrade;
         public bool unLock;

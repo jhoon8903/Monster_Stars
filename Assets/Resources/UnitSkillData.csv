@@ -1,11 +1,11 @@
 Group,Grade,Level,Type,Kor,Eng
-A,B,1,DivineFifthAttackBoost,5번째 공격마다 데미지가 100% 증가된 투사체를 던집니다. (색 변경),5th_attack_damage_increase_projectile_throw_color_change
-A,P,3,DivineDualAttack,유닛 1)은 앞뒤로 동시에 공격합니다.,(Unit 1) attacks both forward and backward simultaneously.
-A,G,5,DivineBindDurationBoost,속박 지속시간 +0.5초,Bind duration +0.5 seconds.
-A,B,7,DivineShackledExplosion,"이 유닛의 공격으로 죽으면 1칸 범위의 폭발을 일으킵니다. (공격력 100%, 데미지 증가 옵션 없음)","When this unit's attack kills an enemy, it causes a 1-tile range explosion (100% of attack power, no damage increase option)."
-A,G,9,DivinePoisonDamageBoost,독에 걸린 적을 공격 시 데미지가 25% 증가합니다.,Attacks on poisoned enemies deal 25% more damage.
-A,P,11,DivineBindChanceBoost,속박 확률 20% 증가 (30% -> 50%),Bind probability increased by 20% (30% -> 50%).
-A,B,13,DivineRateBoost,(유닛 1) 공격속도 +9% (최대 4회),(Unit 1) attack speed +9% (up to 4 times).
+A,B,1,Dark3FifthAttackBoost,5번째 공격마다 데미지가 100% 증가된 투사체를 던집니다. (색 변경),5th_attack_damage_increase_projectile_throw_color_change
+A,P,3,Dark3BleedAttack,유닛 1)은 앞뒤로 동시에 공격합니다.,(Unit 1) attacks both forward and backward simultaneously.
+A,G,5,Dark3PoisonDamageBoost,속박 지속시간 +0.5초,Bind duration +0.5 seconds.
+A,B,7,Dark3ShackledExplosion,"이 유닛의 공격으로 죽으면 1칸 범위의 폭발을 일으킵니다. (공격력 100%, 데미지 증가 옵션 없음)","When this unit's attack kills an enemy, it causes a 1-tile range explosion (100% of attack power, no damage increase option)."
+A,G,9,Dark3BleedDurationBoost,독에 걸린 적을 공격 시 데미지가 25% 증가합니다.,Attacks on poisoned enemies deal 25% more damage.
+A,P,11,Dark3DamageBoost,속박 확률 20% 증가 (30% -> 50%),Bind probability increased by 20% (30% -> 50%).
+A,B,13,Dark3RateBoost,(유닛 1) 공격속도 +9% (최대 4회),(Unit 1) attack speed +9% (up to 4 times).
 B,G,1,DarkFifthAttackDamageBoost,5번째 공격마다 데미지가 100% 증가한 투사체를 던집니다.,Every 5th attack throws a projectile with 100% increased damage.
 B,B,3,DarkStatusAilmentSlowEffect,상태이상에 걸린 적을 공격하면 1초동안 -20% 둔화를 부여합니다.,Attacks on enemies affected by status effects apply -20% Slow for 1 second.
 B,P,5,DarkRangeIncrease,사거리가 1칸 증가 합니다.,Range increased by 1 tile.

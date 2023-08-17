@@ -234,11 +234,19 @@ namespace Script.EnemyManagerScript
                 popup.SetActive(false);
             }
         }
+
+        private readonly Dictionary<CharacterBase.UnitGroups, int> _cumulativeDamageByGroup = new Dictionary<CharacterBase.UnitGroups, int>();
         public void ReceiveDamage(EnemyBase detectEnemy, float damage, CharacterBase atkUnit, KillReasons reason = KillReasons.ByPlayer)
         {
             lock (Lock)
             {
                 var receiveDamage = (int)damage;
+                if (_cumulativeDamageByGroup.ContainsKey(atkUnit.unitGroup))
+                    _cumulativeDamageByGroup[atkUnit.unitGroup] += receiveDamage;
+                else
+                    _cumulativeDamageByGroup[atkUnit.unitGroup] = receiveDamage;
+                PlayerPrefs.SetInt($"{atkUnit.unitGroup}DPS", _cumulativeDamageByGroup[atkUnit.unitGroup]);
+                PlayerPrefs.Save();
                 if (isDead) return;
                 currentHealth -= receiveDamage;
                 if (!gameObject.activeInHierarchy) return;

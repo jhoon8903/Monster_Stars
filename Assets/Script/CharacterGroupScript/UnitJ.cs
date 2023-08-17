@@ -24,7 +24,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.J;
             UnitProperty = UnitProperties.Physics;
             UnitGrade = UnitGrades.Blue;
-            UnitDesc = "유닛J 입니다.";
+            UnitDesc = "Berserker Unit J / Blue Grade";
             SetLevel(1);
         }
         public void Awake()

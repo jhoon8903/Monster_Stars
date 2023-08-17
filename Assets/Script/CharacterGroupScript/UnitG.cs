@@ -28,7 +28,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.G;
             UnitProperty = UnitProperties.Fire;
             UnitGrade = UnitGrades.Blue;
-            UnitDesc = "유닛G 입니다.";
+            UnitDesc = "Phoenix Unit G / Blue Grade";
             SetLevel(1);
         }
 

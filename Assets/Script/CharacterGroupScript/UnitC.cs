@@ -29,7 +29,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.C;
             UnitProperty = UnitProperties.Water;
             UnitGrade = UnitGrades.Purple;
-            UnitDesc = "This is Unit C";
+            UnitDesc = "Death Chiller Unit C / Purple Grade";
             SetLevel(1);
         }
         public override Sprite GetSpriteForLevel(int characterObjectLevel)

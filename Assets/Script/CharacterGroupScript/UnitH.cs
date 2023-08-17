@@ -26,7 +26,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.H;
             UnitProperty = UnitProperties.Fire;
             UnitGrade = UnitGrades.Blue;
-            UnitDesc = "유닛H 입니다.";
+            UnitDesc = "Beholder Unit H / Green Grade";
             SetLevel(1);
         }
 

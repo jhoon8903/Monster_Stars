@@ -29,18 +29,19 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.A;
             UnitProperty = UnitProperties.Darkness;
             UnitGrade = UnitGrades.Blue;
-            UnitDesc = "유닛A 입니다.";
+            UnitDesc = "Octopus Unit A / Blue Grade";
             SetLevel(1);
         }
         public override Sprite GetSpriteForLevel(int characterObjectLevel)
         {
             return characterObjectLevel switch
             {
-                <= 3 => level1Sprite,
-                <= 6 => level2Sprite,
-                <= 9 => level3Sprite,
-                <= 12 => level4Sprite,
-                _ => level5Sprite
+                <= 2 => level1Sprite,
+                <= 4 => level2Sprite,
+                <= 6 => level3Sprite,
+                <= 8 => level4Sprite,
+                <= 10 => level5Sprite,
+                _ => level6Sprite
             };
         }
 

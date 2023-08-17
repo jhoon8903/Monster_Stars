@@ -26,7 +26,6 @@ namespace Script
         [SerializeField] private SwipeManager swipeManager;
         [SerializeField] private CameraManager cameraManager;
         [SerializeField] private BackGroundManager backgroundManager;
-        [SerializeField] private GameObject gamePanel;
         [SerializeField] private GameObject commonRewardPanel;
         [SerializeField] private GameObject expRewardPanel;
         [SerializeField] private CastleManager castleManager;
@@ -34,7 +33,6 @@ namespace Script
         [SerializeField] private LevelUpRewardManager levelUpRewardManager;
         [SerializeField] private ExpManager expManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
-        [SerializeField] private TextMeshProUGUI stageText;
         [SerializeField] private Image speedUpImage;
         [SerializeField] private Sprite normalSpeedImage;
         [SerializeField] private Sprite doubleSpeedImage;
@@ -96,7 +94,6 @@ namespace Script
             StageManager.Instance.UpdateWaveText();
             speedUp = true;
             GameSpeedSelect();
-            stageText.text = $"{StageManager.Instance.selectStage} STAGE";
             Firebase.Analytics.FirebaseAnalytics.LogEvent("stage_play", "play", PlayerPrefs.GetInt("LatestStage", 1));
             yield return null;
         }
@@ -146,7 +143,6 @@ namespace Script
             // }
             if (castleManager.HpPoint > 0)
             {
-                ClearRewardManager.Instance.GetCoin();
                 StageManager.Instance.SaveClearWave();
                 if (StageManager.Instance.isBossClear)
                 {
@@ -218,7 +214,7 @@ namespace Script
             Firebase.Analytics.FirebaseAnalytics.LogEvent("stage_fail","wave", StageManager.Instance.currentWave );
             Time.timeScale = 0;
             StartCoroutine(KillMotion());
-            gamePanel.SetActive(true);
+            ClearRewardManager.Instance.ClearReward(false);
         }
         private static IEnumerator KillMotion()
         {
@@ -274,7 +270,6 @@ namespace Script
             PlayerPrefs.DeleteKey("EnforceData");
             PlayerPrefs.SetInt("GridHeight", 6);
             PlayerPrefs.SetInt($"{StageManager.Instance.latestStage}Stage_ProgressWave",1);
-           
             PlayerPrefs.Save();
             SceneManager.LoadScene("SelectScene");
         }
