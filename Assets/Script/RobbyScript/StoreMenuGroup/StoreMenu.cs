@@ -293,6 +293,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                     _bronzeOpenCount++;
                     PlayerPrefs.SetInt(BronzeOpenCountKey, _bronzeOpenCount);
                     adsRewardBtn.SetActive(false);
+                    QuestManager.Instance.OpenBoxQuest();
                     break;
                 case BoxGrade.Silver:
                     SilverAdsOpen = PlayerPrefs.GetInt(SilverOpenCountKey, 0);
@@ -304,6 +305,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                     PlayerPrefs.SetInt(SilverOpenCountKey, SilverAdsOpen);
                     PlayerPrefs.SetString(SilverOpenTimeKey, _silverOpenTime.ToBinary().ToString());
                     adsRewardBtn.SetActive(false);
+                    QuestManager.Instance.OpenBoxQuest();
                     break;
                 case BoxGrade.Gold:
                     GoldAdsOpen = PlayerPrefs.GetInt(GoldOpenCountKey, 0);
@@ -315,6 +317,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                     PlayerPrefs.SetInt(GoldOpenCountKey, GoldAdsOpen);
                     PlayerPrefs.SetString(GoldOpenTimeKey, _goldOpenTime.ToBinary().ToString());
                     adsRewardBtn.SetActive(false);
+                    QuestManager.Instance.OpenBoxQuest();
                     break;
                 case BoxGrade.Coin:
                     CalculateCoinReward(boxTypes, count);
@@ -332,16 +335,19 @@ namespace Script.RobbyScript.StoreMenuGroup
                     CalculateCoinReward(boxTypes, count);
                     CalculateUnitPieceReward(boxTypes, count);
                     adsRewardBtn.SetActive(false);
+                    QuestManager.Instance.OpenBoxQuest();
                     break;
                 case BoxGrade.SilverGem:
                     CalculateCoinReward(boxTypes, count);
                     CalculateUnitPieceReward(boxTypes, count);
                     adsRewardBtn.SetActive(false);
+                    QuestManager.Instance.OpenBoxQuest();
                     break;
                 case BoxGrade.GoldGem:
                     CalculateCoinReward(boxTypes, count);
                     CalculateUnitPieceReward(boxTypes, count);
                     adsRewardBtn.SetActive(false);
+                    QuestManager.Instance.OpenBoxQuest();
                     break;
             }
             isReset = false;
@@ -535,56 +541,59 @@ namespace Script.RobbyScript.StoreMenuGroup
                 _unitPieceObject.goodsValue.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);
                 _unitPieceDict[unit] = new Tuple<int, Goods>(_unitPieceReward, _unitPieceObject);
             }
+            var totalUnitPieces = pieceCountPerUnit.Values.Sum();
+            Debug.Log($"Total unit pieces: {totalUnitPieces}");
+            QuestManager.Instance.GetPieceQuest(totalUnitPieces);
         }
         private static int GetUnitPieceReward(CharacterBase.UnitGrades unitGrade, BoxGrade boxGrade, int openCount)
-        {
-            int greenValue;
-            int blueValue;
-            int purpleValue;
-            switch (boxGrade)
-            {
-                case BoxGrade.Bronze:
-                    greenValue = 24;
-                    blueValue = 0;
-                    purpleValue = 0;
-                    break;
-                case BoxGrade.Silver:
-                    greenValue = 180;
-                    blueValue = 24 + 15 * (openCount - 1);
-                    purpleValue = openCount > 2 ? openCount - 2 : 0;
-                    break;
-                case BoxGrade.Gold:
-                    greenValue = 480;
-                    blueValue = 165 + 40 * (openCount - 1);
-                    purpleValue = openCount > 2 ? 6 + (openCount - 1) * 2 : 6;
-                    break;
-                case BoxGrade.BronzeGem:
-                    greenValue = 24;
-                    blueValue = 0;
-                    purpleValue = 0;
-                    break;
-                case BoxGrade.SilverGem:
-                    greenValue = 180;
-                    blueValue = 114;
-                    purpleValue = 5;
-                    break;
-                case BoxGrade.GoldGem:
-                    greenValue = 480;
-                    blueValue = 285;
-                    purpleValue = 14;
-                    break;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(boxGrade), boxGrade, null);
-            }
-
-            return unitGrade switch
-            {
-              CharacterBase.UnitGrades.Green =>  greenValue,
-              CharacterBase.UnitGrades.Blue => blueValue,
-              CharacterBase.UnitGrades.Purple => purpleValue,
-              _ => throw new ArgumentOutOfRangeException(nameof(unitGrade), unitGrade, null)
-            };
-        }
+                 {
+                     int greenValue ;
+                     int blueValue;
+                     int purpleValue;
+                     switch (boxGrade)
+                     {
+                         case BoxGrade.Bronze:
+                             greenValue = 24;
+                             blueValue = 0;
+                             purpleValue = 0;
+                             break;
+                         case BoxGrade.Silver:
+                             greenValue = 180;
+                             blueValue = 24 + 15 * (openCount - 1);
+                             purpleValue = openCount > 2 ? openCount - 2 : 0;
+                             break;
+                         case BoxGrade.Gold:
+                             greenValue = 480;
+                             blueValue = 165 + 40 * (openCount - 1);
+                             purpleValue = openCount > 2 ? 6 + (openCount - 1) * 2 : 6;
+                             break;
+                         case BoxGrade.BronzeGem:
+                             greenValue = 24;
+                             blueValue = 0;
+                             purpleValue = 0;
+                             break;
+                         case BoxGrade.SilverGem:
+                             greenValue = 180;
+                             blueValue = 114;
+                             purpleValue = 5;
+                             break;
+                         case BoxGrade.GoldGem:
+                             greenValue = 480;
+                             blueValue = 285;
+                             purpleValue = 14;
+                             break;
+                         default:
+                             throw new ArgumentOutOfRangeException(nameof(boxGrade), boxGrade, null);
+                     }
+         
+                     return unitGrade switch
+                     {
+                       CharacterBase.UnitGrades.Green =>  greenValue,
+                       CharacterBase.UnitGrades.Blue => blueValue,
+                       CharacterBase.UnitGrades.Purple => purpleValue,
+                       _ => throw new ArgumentOutOfRangeException(nameof(unitGrade), unitGrade, null)
+                     };
+                 }
         public void ChestCheckClick(ButtonType buttonType)
         {
             ChestCheck.Instance.OpenPanel();
@@ -675,6 +684,7 @@ namespace Script.RobbyScript.StoreMenuGroup
         }
         private IEnumerator IncreaseBackLightAlpha(ButtonType chestType)
         {
+            chestGrade.gameObject.SetActive(true);
             chestGrade.transform.position = _newPosition;
             Sprite chestSprite = null;
             switch (chestType)
@@ -732,17 +742,24 @@ namespace Script.RobbyScript.StoreMenuGroup
             // 두 개의 애니메이션이 모두 완료될 때까지 대기
             yield return moveAnimation.WaitForCompletion();
             yield return scaleAnimation.WaitForCompletion();
-
+            
+            // 애니메이션 완료 후 중지
+            moveAnimation.Kill();
+            scaleAnimation.Kill();
+            
             // 흔들리는 애니메이션을 실행
-            chestGrade.transform.DOShakeScale(2.0f, 0.5f, 4);
+            var shakeAnimation = chestGrade.transform.DOShakeScale(2.0f, 0.5f, 4);
+    
+            // 흔들리는 애니메이션이 끝날 때까지 대기
+            yield return shakeAnimation.WaitForCompletion();
+            shakeAnimation.Kill();
         }
         private void OpenChest(ButtonType chestType)
         {
-            // 상자 열기 동작 수행
-            Debug.Log("chestType :"+chestType);
             ChestCheck.Instance.chestCheckPanel.SetActive(false);
             chestRewardPanel.SetActive(false);
             boxRewardPanel.SetActive(true);
+            chestGrade.gameObject.SetActive(false);
             BoxGrade boxGrade;
             switch (chestType)
             {
@@ -798,7 +815,6 @@ namespace Script.RobbyScript.StoreMenuGroup
         {
             chestErrorPanel.SetActive(false);
         }
-
         public void DeleteEvent()
         { 
             _specialOffer.SpecialBtnRemove();
