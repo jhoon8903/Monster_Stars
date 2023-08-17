@@ -166,7 +166,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             _specialOffer.SpecialBtnSet();
            
             closeBtn.GetComponent<Button>().onClick.AddListener(ReceiveReward);
-            adsRewardBtn.GetComponent<Button>().onClick.AddListener(AdsReceiveReward);
+            // adsRewardBtn.GetComponent<Button>().onClick.AddListener(AdsReceiveReward);
             gameObject.SetActive(false);
             
             _originalPosition = chestGrade.transform.position;
@@ -279,7 +279,6 @@ namespace Script.RobbyScript.StoreMenuGroup
         }
         public void Reward(BoxGrade boxTypes)
         {
-            adsRewardBtn.SetActive(true);
             closeBtn.SetActive(true);
             Debug.Log("boxTypes :"+boxTypes );
             const int count = 0;
@@ -292,7 +291,6 @@ namespace Script.RobbyScript.StoreMenuGroup
                     if (_bronzeOpenCount == BronzeOpenMaxCount) break;
                     _bronzeOpenCount++;
                     PlayerPrefs.SetInt(BronzeOpenCountKey, _bronzeOpenCount);
-                    adsRewardBtn.SetActive(false);
                     QuestManager.Instance.OpenBoxQuest();
                     break;
                 case BoxGrade.Silver:
@@ -304,7 +302,6 @@ namespace Script.RobbyScript.StoreMenuGroup
                     _silverOpenTime = DateTime.Now;
                     PlayerPrefs.SetInt(SilverOpenCountKey, SilverAdsOpen);
                     PlayerPrefs.SetString(SilverOpenTimeKey, _silverOpenTime.ToBinary().ToString());
-                    adsRewardBtn.SetActive(false);
                     QuestManager.Instance.OpenBoxQuest();
                     break;
                 case BoxGrade.Gold:
@@ -316,37 +313,30 @@ namespace Script.RobbyScript.StoreMenuGroup
                     _goldOpenTime = DateTime.Now;
                     PlayerPrefs.SetInt(GoldOpenCountKey, GoldAdsOpen);
                     PlayerPrefs.SetString(GoldOpenTimeKey, _goldOpenTime.ToBinary().ToString());
-                    adsRewardBtn.SetActive(false);
                     QuestManager.Instance.OpenBoxQuest();
                     break;
                 case BoxGrade.Coin:
                     CalculateCoinReward(boxTypes, count);
-                    closeBtn.SetActive(false);
                     break;
                 case BoxGrade.Stamina:
                     CalculateCoinReward(boxTypes, count);
-                    closeBtn.SetActive(false);
                     break;
                 case BoxGrade.Gem:
                     CalculateCoinReward(boxTypes, count);
-                    closeBtn.SetActive(false);
                     break;
                 case BoxGrade.BronzeGem:
                     CalculateCoinReward(boxTypes, count);
                     CalculateUnitPieceReward(boxTypes, count);
-                    adsRewardBtn.SetActive(false);
                     QuestManager.Instance.OpenBoxQuest();
                     break;
                 case BoxGrade.SilverGem:
                     CalculateCoinReward(boxTypes, count);
                     CalculateUnitPieceReward(boxTypes, count);
-                    adsRewardBtn.SetActive(false);
                     QuestManager.Instance.OpenBoxQuest();
                     break;
                 case BoxGrade.GoldGem:
                     CalculateCoinReward(boxTypes, count);
                     CalculateUnitPieceReward(boxTypes, count);
-                    adsRewardBtn.SetActive(false);
                     QuestManager.Instance.OpenBoxQuest();
                     break;
             }
@@ -355,20 +345,7 @@ namespace Script.RobbyScript.StoreMenuGroup
         }
         private void ReceiveReward()
         {
-            DeleteEvent();
-            boxRewardPanel.SetActive(false);
-            foreach (var unitReward in _unitPieceDict)
-            {
-                unitReward.Key.CharacterPeaceCount += unitReward.Value.Item1;
-                HoldCharacterList.Instance.UpdateRewardPiece(unitReward.Key);
-                Destroy(unitReward.Value.Item2.gameObject);
-            }
-            Destroy(_coinObject.gameObject);
-            _unitPieceDict.Clear();
-        }
-        private void AdsReceiveReward()
-        {
-            DeleteExceptionEvent();
+            ChestCheck.Instance.CloseChestCheck();
             boxRewardPanel.SetActive(false);
             foreach (var unitReward in _unitPieceDict)
             {
@@ -409,6 +386,7 @@ namespace Script.RobbyScript.StoreMenuGroup
         }
         public void GemAds()
         {
+            ErrorClose();
             AdsManager.Instance.ShowRewardedAd();
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Gem;
         }
@@ -829,25 +807,11 @@ namespace Script.RobbyScript.StoreMenuGroup
             ChestReward.Instance.ClearChests();
             ReBtnSet();
         }
-        private void DeleteExceptionEvent()
-        {
-            _specialOffer.SpecialBtnRemove();
-            _chestObject.ChestBtnRemove();
-            chestOpenBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            closeBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            adsRewardBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            chestOpenBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            chestErrorCloseBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            getBackToStoreBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            ChestCheck.Instance.chestCheckBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            ReBtnSet();
-        }
         private void ReBtnSet()
         {
             _chestObject.ChestBtnSet();
             _specialOffer.SpecialBtnSet();
             closeBtn.GetComponent<Button>().onClick.AddListener(ReceiveReward);
-            adsRewardBtn.GetComponent<Button>().onClick.AddListener(AdsReceiveReward);
         }
     }
 }

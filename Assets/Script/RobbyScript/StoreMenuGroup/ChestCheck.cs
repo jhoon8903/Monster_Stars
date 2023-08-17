@@ -33,7 +33,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             chestCheckPanel.SetActive(true);
         }
 
-        private void CloseChestCheck()
+        public void CloseChestCheck()
         {
             chestCheckPanel.SetActive(false);
             StoreMenu.Instance.DeleteEvent();
