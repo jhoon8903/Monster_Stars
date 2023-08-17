@@ -38,7 +38,7 @@ namespace Script.AdsScript
             staminaBtn.GetComponent<Button>().onClick.AddListener(Stamina);
             gemBtn.GetComponent<Button>().onClick.AddListener(Gem);
         }
-
+        
         public void Start()
         {
             // AppLovinMax 초기화
