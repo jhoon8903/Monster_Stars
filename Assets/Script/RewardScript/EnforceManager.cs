@@ -178,7 +178,6 @@ namespace Script.RewardScript
             }
         }
 
-
         [Header("\n\nA 어둠: Blue\n")]
         // 완료
         [Header("Blue / 1Lv: 5회 공격마다 100% 추가데미지 (투사체 컬러 변경)")] 
@@ -206,6 +205,7 @@ namespace Script.RewardScript
             if (dark3RateBoost >= 0.36f) return;
             dark3RateBoost+= 0.09f;
         }
+
 
         [Header("\n\nB 어둠: Green\n")]
         // 완료
@@ -239,7 +239,7 @@ namespace Script.RewardScript
         // 완료
         [Header("Blue / 13Lv: 10% 확률로 적 밀침 (0.5칸)")] 
         public bool darkKnockBackChance;
-
+        
 
         [Header("\n\nC 물: Purple\n")]
         // 완료
@@ -267,12 +267,13 @@ namespace Script.RewardScript
         public float waterAttackRateBoost;
         protected internal void WaterAttackRateBoost()
         {
-              if ( waterAttackRateBoost >= 0.24f) return;
-              waterAttackRateBoost += 0.06f;
+            if ( waterAttackRateBoost >= 0.24f) return;
+            waterAttackRateBoost += 0.06f;
         }
         // 완료
         [Header("Purple / 13Lv: 퍼즐위 모든 C 유닛의 공격 횟수의 합이 100이면 될 때마다 눈보라를 일으켜 보스를 제외한 모든 적을 빙결")]
         public bool waterGlobalFreeze;
+
 
 
         [Header("\n\nD 물리: Green\n")]
@@ -342,7 +343,6 @@ namespace Script.RewardScript
             water2SlowTimeBoost += 0.1f;
         }
 
-
         [Header("\n\nF 독: Green\n")]
         // 완료
         [Header("Purple / 1Lv: 초당 20% 데미지를 가하는 중독을 3초간 발생")] 
@@ -370,6 +370,7 @@ namespace Script.RewardScript
         // 완료
         [Header("Blue / 13Lv: 중족 지속시간 2초 증가")] 
         public bool poisonDurationBoost;
+
 
 
         [Header("\n\nG 불: Blue\n")] 
@@ -430,6 +431,7 @@ namespace Script.RewardScript
         public bool fireProjectileBounceIncrease;
 
 
+
         [Header("\n\nI 독: Blue\n")] 
         // 완료
         [Header("Purple / 1Lv: 타격시 50% 확률로 적을 0.4초간 기절 시킵니다.")]
@@ -484,6 +486,9 @@ namespace Script.RewardScript
         // 완료
         [Header("Blue / 13Lv: 보스 데미지 30% 증가")] 
         public bool physical2BossBoost;
+
+
+
         [Header("\n\nK 어둠: Purple\n")] 
         // 완료
         [Header("Purple / 1Lv: 적의 뒤를 공격하면, 데미지 30% 증가")]
@@ -506,6 +511,116 @@ namespace Script.RewardScript
         // 완료
         [Header("Blue / 13Lv: 동일한 적을 타격할때마다 데미지가 5% 증가 (최대 10회)")]
         public bool dark2SameEnemyBoost;
+
+
+        public Dictionary<int, bool> GetActivatedSkills(CharacterBase.UnitGroups unitGroup)
+        {
+            var activatedSkills = new Dictionary<int, bool>();
+        
+            switch (unitGroup)
+            {
+                case CharacterBase.UnitGroups.A:
+                    activatedSkills[1] = dark3FifthAttackBoost;
+                    activatedSkills[3] = dark3BleedAttack;
+                    activatedSkills[5] = dark3PoisonDamageBoost;
+                    activatedSkills[7] = dark3ShackledExplosion;
+                    activatedSkills[9] = dark3BleedDurationBoost;
+                    activatedSkills[11] = dark3DamageBoost;
+                    activatedSkills[13] = dark3RateBoost > 0;
+                    break;
+                case CharacterBase.UnitGroups.B:
+                    activatedSkills[1] = darkFifthAttackDamageBoost;
+                    activatedSkills[3] = darkStatusAilmentSlowEffect;
+                    activatedSkills[5] = darkRangeIncrease;
+                    activatedSkills[7] = darkAttackPowerBoost > 0;
+                    activatedSkills[9] = darkStatusAilmentDamageBoost;
+                    activatedSkills[11] = darkAttackSpeedBoost > 0; 
+                    activatedSkills[13] = darkKnockBackChance;
+                    break;
+                case CharacterBase.UnitGroups.C:
+                    activatedSkills[1] = waterFreeze;
+                    activatedSkills[3] = waterFreezeChance;
+                    activatedSkills[5] = waterSlowDurationBoost > 0;
+                    activatedSkills[7] = waterFreezeDamageBoost;
+                    activatedSkills[9] = waterSlowCPowerBoost;
+                    activatedSkills[11] = waterAttackRateBoost > 0; 
+                    activatedSkills[13] = waterGlobalFreeze;
+                    break;
+                case CharacterBase.UnitGroups.D:
+                    activatedSkills[1] = physicalSwordScaleIncrease;
+                    activatedSkills[3] = physicalSwordAddition;
+                    activatedSkills[5] = physicalAttackSpeedBoost > 0;
+                    activatedSkills[7] = physicalRatePerAttack;
+                    activatedSkills[9] = physicalBindBleed;
+                    activatedSkills[11] = physicalDamageBoost > 0; 
+                    activatedSkills[13] = physicalBleedDuration;
+                    break;
+                case CharacterBase.UnitGroups.E:
+                    activatedSkills[1] = water2Freeze;
+                    activatedSkills[3] = water2SlowPowerBoost;
+                    activatedSkills[5] = water2FreezeTimeBoost;
+                    activatedSkills[7] = water2DamageBoost > 0;
+                    activatedSkills[9] = water2FreezeChanceBoost;
+                    activatedSkills[11] =  water2FreezeDamageBoost;
+                    activatedSkills[13] = water2SlowTimeBoost > 0;
+                    break;
+                case CharacterBase.UnitGroups.F:
+                    activatedSkills[1] = poisonPerHitEffect;
+                    activatedSkills[3] = poisonBleedingEnemyDamageBoost;
+                    activatedSkills[5] = poisonDamagePerBoost;
+                    activatedSkills[7] = poisonDamageBoost;
+                    activatedSkills[9] = poisonDotDamageBoost;
+                    activatedSkills[11] = poisonAttackSpeedIncrease > 0; 
+                    activatedSkills[13] = poisonDurationBoost;
+                    break;
+                case CharacterBase.UnitGroups.G:
+                    activatedSkills[1] = fire2FreezeDamageBoost;
+                    activatedSkills[3] = fire2BurnDurationBoost;
+                    activatedSkills[5] = fire2ChangeProperty;
+                    activatedSkills[7] = fire2DamageBoost > 0;
+                    activatedSkills[9] = fire2RangeBoost;
+                    activatedSkills[11] = fire2RateBoost;
+                    activatedSkills[13] = fire2BossDamageBoost;
+                    break;
+                case CharacterBase.UnitGroups.H:
+                    activatedSkills[1] = fireBurnPerAttackEffect;
+                    activatedSkills[3] = fireStackOverlap;
+                    activatedSkills[5] = fireProjectileBounceDamage;
+                    activatedSkills[7] = fireBurnedEnemyExplosion;
+                    activatedSkills[9] = fireAttackSpeedBoost > 0;
+                    activatedSkills[11] = fireProjectileSpeedIncrease;
+                    activatedSkills[13] = fireProjectileBounceIncrease;
+                    break;
+                case CharacterBase.UnitGroups.I:
+                    activatedSkills[1] = poison2StunToChance;
+                    activatedSkills[3] = poison2RangeBoost;
+                    activatedSkills[5] = poison2DotDamageBoost;
+                    activatedSkills[7] = poison2StunTimeBoost > 0;
+                    activatedSkills[9] = poison2SpawnPoisonArea;
+                    activatedSkills[11] = poison2RateBoost;
+                    activatedSkills[13] = poison2PoolTimeBoost;
+                    break;
+                case CharacterBase.UnitGroups.J:
+                    activatedSkills[1] = physical2CastleCrushStatBoost;
+                    activatedSkills[3] = physical2FifthBoost;
+                    activatedSkills[5] = physical2BleedTimeBoost;
+                    activatedSkills[7] = physical2PoisonDamageBoost;
+                    activatedSkills[9] = physical2RangeBoost;
+                    activatedSkills[11] = physical2RateBoost > 0;
+                    activatedSkills[13] = physical2BossBoost;
+                    break;
+                case CharacterBase.UnitGroups.K:
+                    activatedSkills[1] = dark2BackBoost;
+                    activatedSkills[3] = dark2DualAttack;
+                    activatedSkills[5] = dark2StatusDamageBoost;
+                    activatedSkills[7] = dark2ExplosionBoost;
+                    activatedSkills[9] = dark2DoubleAttack;
+                    activatedSkills[11] = dark2StatusPoison;
+                    activatedSkills[13] = dark2SameEnemyBoost;
+                    break;
+            }
+            return activatedSkills;
+        }
 
         private float _property;
         private readonly Dictionary<(PowerTypeManager.Types Type, int Value), PauseSkillObjectScript> _instantiatedSkills = 

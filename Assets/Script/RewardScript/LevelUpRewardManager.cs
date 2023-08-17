@@ -402,7 +402,6 @@ namespace Script.RewardScript
             }
             return unitLevel;
         }
-
         private bool IsValidOption(Data powerUp, ICollection<int> selectedCodes)
         {
             if (selectedCodes.Contains(powerUp.Code)) return false;
@@ -841,7 +840,6 @@ namespace Script.RewardScript
                     return true;
             }
         }
-
         private static Data SelectRandom(IEnumerable<Data> validOptions)
         {
             var commonDataList = validOptions.ToList();
@@ -856,7 +854,6 @@ namespace Script.RewardScript
             LevelUpDisplayText(exp2Button, exp2Text, icon2, exp2BtnBadge, powerUps[1], language);
             LevelUpDisplayText(exp3Button, exp3Text, icon3, exp3BtnBadge, powerUps[2], language);
         }
-
         private void LevelUpDisplayText(Button expButton, TMP_Text powerText, Image icon, Image btnBadge, Data powerUp, Language selectedLanguage)
         {
             var translationKey = powerUp.Type.ToString();

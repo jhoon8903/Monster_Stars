@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Script.CharacterManagerScript;
 using Script.PuzzleManagerGroup;
+using Script.RewardScript;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -46,7 +47,6 @@ namespace Script.UIManager
         [SerializeField] private Button homeBtn;
         [SerializeField] private Button continueBtn;
 
-
         private void Start()
         {
             UnitSkillView();
@@ -57,7 +57,6 @@ namespace Script.UIManager
    
             pauseBtn.onClick.AddListener(OnPausePanel);
         }
-
         private void OnPausePanel()
         {
             if (spawnManager.isTutorial) return;
@@ -65,7 +64,6 @@ namespace Script.UIManager
             UnitSkillView();
             Time.timeScale = 0;
         }
-
         private void UpdateUnitSkillView(CharacterBase unit, Image unitBack, Image unitImage, Component unitSkillGrid)
         {
             unitImage.sprite = unit.GetSpriteForLevel(unit.unitPeaceLevel);
@@ -81,6 +79,7 @@ namespace Script.UIManager
         }
         private void PopulateUnitSkillObject(List<Dictionary<string, object>> skills, CharacterBase characterBase, Component unitSkillGrid)
         {
+            var activeSkills = EnforceManager.Instance.GetActivatedSkills(characterBase.unitGroup);
             foreach (Transform child in unitSkillGrid.transform)
             {
                 Destroy(child.gameObject);
@@ -93,25 +92,16 @@ namespace Script.UIManager
                     continue; // 해당 스킬이 조건을 만족하지 않으면 다음 스킬로 이동
                 }
 
-                var instance = Instantiate(unitSkillPrefabs, unitSkillGrid.transform);
-        
-                switch ((string)skill["Grade"])
-                {
-                    case "G":
-                        instance.GetComponent<Image>().sprite = gradeBack[0];
-                        break;
-                    case "B":
-                        instance.GetComponent<Image>().sprite = gradeBack[1];
-                        break;
-                    case "P":
-                        instance.GetComponent<Image>().sprite = gradeBack[2];
-                        break;
-                    default:
-                        Debug.LogError("Unexpected grade: " + skill["Grade"]);
-                        break;
-                }
-
                 var skillLevel = (int)skill["Level"];
+                var isActive = activeSkills.TryGetValue(skillLevel, out var active) && active;
+
+                var instance = Instantiate(unitSkillPrefabs, unitSkillGrid.transform);
+
+                instance.GetComponent<Image>().sprite = isActive
+                    ? gradeBack[(int)Enum.Parse(typeof(CharacterBase.UnitGrades), (string)skill["Grade"], true)]
+                    : gradeBack[3];
+ 
+                
                 if (characterBase.UnitSkillDict.TryGetValue(skillLevel, out var skillSprite))
                 {
                     instance.skillIcon.sprite = skillSprite;
@@ -120,8 +110,6 @@ namespace Script.UIManager
                 // instance.skillType.text = $"{skill["Type"]} / {skill["Level"]}";
             }
         }
-
-
         private static List<Dictionary<string, object>> UnitSkills(CharacterBase characterBase)
         {
             var unitSkillFile = Resources.Load<TextAsset>("UnitSkillData");
@@ -137,7 +125,6 @@ namespace Script.UIManager
                     { "Grade", data[1] },
                     { "Level", int.Parse(data[2]) },
                     { "Type", data[3] },
-                    { "KorDesc", data[4] },
                     { "EngDesc", data[5] }
                 };
                 skillList.Add(unitSkillDict);
@@ -148,7 +135,6 @@ namespace Script.UIManager
             });
             return skillList;
         }
-
         private void UnitSkillView()
         {
             var units = characterManager.characterList;
@@ -157,7 +143,6 @@ namespace Script.UIManager
             UpdateUnitSkillView(units[2], unit3Back, unit3Image, unit3SkillGrid.transform);
             UpdateUnitSkillView(units[3], unit4Back, unit4Image, unit4SkillGrid.transform);
         }
-
         private void VolumeController()
         {
             if (_volume)

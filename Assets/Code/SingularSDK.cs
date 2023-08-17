@@ -19,8 +19,8 @@ public delegate void ShortLinkCallback(string data, string error);
 
 public class SingularSDK : MonoBehaviour {
     // public properties
-    public string SingularAPIKey = "<YourAPIKey>";
-    public string SingularAPISecret = "<YourAPISecret>";
+    public string SingularAPIKey = "actionfit_adc62229";
+    public string SingularAPISecret = "b66e6176a31467e0841cf9caf4a901c1";
     public bool InitializeOnAwake = true;
 
     public bool autoIAPComplete = false;
