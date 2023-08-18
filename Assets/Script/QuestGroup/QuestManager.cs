@@ -216,6 +216,8 @@ namespace Script.QuestGroup
                 PlayerPrefs.SetInt(quest.questType + "_isCompleted", quest.isCompleted ? 1 : 0);
                 PlayerPrefs.SetInt(quest.isReceived + "_isReceived", quest.isReceived ? 1 : 0);
             }
+
+
             PlayerPrefs.Save();
         }
         private void LoadSelectedQuestList()
@@ -382,7 +384,8 @@ namespace Script.QuestGroup
             }
             _rotationQuestList.Add(newQuest);
             SaveSelectedQuestList(_rotationQuestList);
-        }                               
+        }                  
+        
         private QuestObject CreateQuestFromData(IReadOnlyList<string> data)
         {
             var questObject = Instantiate(questPrefab, questTransform.transform);
