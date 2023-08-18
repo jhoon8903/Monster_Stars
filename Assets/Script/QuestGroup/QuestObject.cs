@@ -13,6 +13,10 @@ namespace Script.QuestGroup
         [SerializeField] internal TextMeshProUGUI item1Value;
         [SerializeField] internal Image item2Sprite;
         [SerializeField] internal TextMeshProUGUI item2Value;
+        [SerializeField] internal Image item3Sprite;
+        [SerializeField] internal TextMeshProUGUI item3Value;
+        [SerializeField] internal Image item4Sprite;
+        [SerializeField] internal TextMeshProUGUI item4Value;
         [SerializeField] internal GameObject receiveBtn;
         [SerializeField] internal TextMeshProUGUI receiveBtnText;
         [SerializeField] internal GameObject shuffleBtn;

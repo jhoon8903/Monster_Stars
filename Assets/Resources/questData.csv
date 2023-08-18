@@ -1,11 +1,11 @@
 QuestTypes,QuestCondition,QuestDesc,QuestKey,QuestGoal,Item1_Coin,Item2_GreenPiece,Item2_BluePiece,Item2_PurplePiece
 AllClear,Fix,DailyQuest All Clear,AllClearKey,5,3000,60,5,1
-UseCoin,Fix,Using Coin,UseCoinKey,600,500,6,0,0
-GetCoin,Fix,Getting Coin,GetCoinKey,2000,500,9,3,0
-OpenBox,Rotation,Treasure Box (Store) Open,OpenBoxKey,1,1000,3,1,0
-GetPiece,Rotation,Getting Unit Pieces,GetPieceKey,45,1000,3,1,0
-KillEnemy,Rotation,Killed Enemy,KillEnemyKey,150,1500,6,2,0
+UseCoin,Fix,Using Coin,UseCoinKey,600,1000,6,0,0
+GetCoin,Fix,Getting Coin,GetCoinKey,2000,1000,9,0,0
+OpenBox,Rotation,Treasure Box (Store) Open,OpenBoxKey,1,0,3,1,0
+GetPiece,Rotation,Getting Unit Pieces,GetPieceKey,45,0,3,1,0
+KillEnemy,Rotation,Killed Enemy,KillEnemyKey,150,1500,0,3,0
 KillBoss,Rotation,Killed Boss,KillBossKey,8,2000,3,0,0
-ViewAds,Fix,Viewing Ads,ViewAdsKey,10,1500,9,3,0
+ViewAds,Fix,Viewing Ads,ViewAdsKey,1,1500,0,3,0
 MatchCoin,Rotation,Merge inGame PowerUP Box,MatchCoinKey,10,2000,3,0,0
 Victory,Rotation,Victory Game,VoctoryKey,2,1000,3,0,0

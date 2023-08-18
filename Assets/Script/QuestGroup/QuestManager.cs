@@ -383,6 +383,7 @@ namespace Script.QuestGroup
                 Destroy(questToRemove.gameObject);
             }
             _rotationQuestList.Add(newQuest);
+            SetQuestButtonStates(newQuest);
             SaveSelectedQuestList(_rotationQuestList);
         }                  
         
@@ -398,10 +399,30 @@ namespace Script.QuestGroup
             questObject.questValue = PlayerPrefs.GetInt(questObject.questKey + "_value", 0);
             questObject.questProgress.value = questObject.questValue;
             questObject.questProgressText.text = $"{questObject.questValue} / {questObject.questGoal}";
-            questObject.item1Value.text = data[5];
-            questObject.item2Value.text = (int.Parse(data[6]) + int.Parse(data[7]) + int.Parse(data[8])).ToString();
+            var item1Value = int.Parse(data[5]);
+            var item2Value = int.Parse(data[6]);
+            var item3Value = int.Parse(data[7]);
+            var item4Value = int.Parse(data[8]);
+            
+            SetActiveOrToggleParent(questObject.item1Value.transform.parent.gameObject, item1Value);
+            SetActiveOrToggleParent(questObject.item2Value.transform.parent.gameObject, item2Value);
+            SetActiveOrToggleParent(questObject.item3Value.transform.parent.gameObject, item3Value);
+            SetActiveOrToggleParent(questObject.item4Value.transform.parent.gameObject, item4Value);
 
             return questObject;
+
+            void SetActiveOrToggleParent(GameObject parentObject, int value)
+            {
+                if (value != 0)
+                {
+                    parentObject.SetActive(true); // 부모를 활성화
+                }
+                else
+                {
+                    parentObject.SetActive(false); // 부모를 비활성화
+                }
+            }
+
         }
         private static void CallShuffleAds()
         {
