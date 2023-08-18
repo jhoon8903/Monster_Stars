@@ -529,8 +529,8 @@ MonoBehaviour:
 
     MonsterMonsterMonsterMonsterMonster'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 26e8e85c8cb024a1382a125204e5ffd6, type: 2}
-  m_sharedMaterial: {fileID: 8690591861142563998, guid: 26e8e85c8cb024a1382a125204e5ffd6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: cf2136b962b784535bda857ac8ddceb7, type: 2}
+  m_sharedMaterial: {fileID: -2707212650878907388, guid: cf2136b962b784535bda857ac8ddceb7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1024,7 +1024,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.36078432}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2281,7 +2281,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9810126, g: 1, b: 0, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2517,7 +2517,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.3066038, b: 0.3066038, a: 0.78039217}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

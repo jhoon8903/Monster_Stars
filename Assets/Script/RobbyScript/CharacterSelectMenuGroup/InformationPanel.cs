@@ -256,13 +256,13 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 {
                     switch ((string)skill["Grade"])
                     {
-                        case "G":
+                        case "Green":
                             instance.GetComponent<Image>().sprite = skillGradeSpriteList[0];
                             break;
-                        case "B":
+                        case "Blue":
                             instance.GetComponent<Image>().sprite = skillGradeSpriteList[1];
                             break;
-                        case "P":
+                        case "Purple":
                             instance.GetComponent<Image>().sprite = skillGradeSpriteList[2];
                             break;
                         default:
