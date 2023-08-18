@@ -24,7 +24,7 @@ namespace Script.CharacterManagerScript
         public int unitPuzzleLevel;
         public enum Types { Character, Treasure }
         protected internal Types Type; 
-        public enum UnitGroups { A,B,C,D,E,F,G,H,I,J,K,None }
+        public enum UnitGroups { Octopus,Ogre,DeathChiller,Orc,Fishman,Skeleton,Phoenix,Beholder,Cobra,Berserker,DarkElf,None }
         public enum UnitAtkTypes {None, Projectile, GuideProjectile, Circle}
         public enum UnitProperties { Divine, Darkness, Physics, Water, Poison, Fire, None }
         public enum UnitEffects { Slow, Bleed, Poison, Burn, Bind, None } 

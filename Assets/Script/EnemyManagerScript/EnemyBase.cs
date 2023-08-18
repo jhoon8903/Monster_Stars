@@ -255,11 +255,11 @@ namespace Script.EnemyManagerScript
                 if (currentHealth > 0f || isDead) return;
                 isDead = true;
                 ExpManager.Instance.HandleEnemyKilled(reason);
-                if (EnforceManager.Instance.dark3ShackledExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.A)
+                if (EnforceManager.Instance.dark3ShackledExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.Octopus)
                 {
                     StartCoroutine(ExplosionDamage(detectEnemy, damage, atkUnit));
                 }
-                else if (EnforceManager.Instance.fireBurnedEnemyExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.H)
+                else if (EnforceManager.Instance.fireBurnedEnemyExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.Beholder)
                 {
                     StartCoroutine(ExplosionDamage(detectEnemy, damage, atkUnit));
                 }
@@ -269,7 +269,7 @@ namespace Script.EnemyManagerScript
                     StartCoroutine(PoisonArea(detectEnemy, damage, atkUnit));
                 }
 
-                if (EnforceManager.Instance.dark2ExplosionBoost && atkUnit.unitGroup == CharacterBase.UnitGroups.K)
+                if (EnforceManager.Instance.dark2ExplosionBoost && atkUnit.unitGroup == CharacterBase.UnitGroups.DarkElf)
                 {
                     if (detectEnemy.isBind || detectEnemy.isPoison || detectEnemy.isBleed || detectEnemy.isBurn ||
                         detectEnemy.isFreeze || detectEnemy.isSlow || detectEnemy.isStun || detectEnemy.isKnockBack)
@@ -323,12 +323,12 @@ namespace Script.EnemyManagerScript
         }
         private IEnumerator ExplosionDamage(EnemyBase detectEnemy, float damage, CharacterBase atkUnit)
         {
-            if (atkUnit.unitGroup is CharacterBase.UnitGroups.H)
+            if (atkUnit.unitGroup is CharacterBase.UnitGroups.Beholder)
             {
                 damage *= 2f;
             }
             var enemyPosition = detectEnemy.transform.position;
-            var explosionSize = atkUnit.unitGroup == CharacterBase.UnitGroups.K ? 2f : 1f;
+            var explosionSize = atkUnit.unitGroup == CharacterBase.UnitGroups.DarkElf ? 2f : 1f;
             var colliders = Physics2D.OverlapCircleAll(enemyPosition, explosionSize);
             foreach (var enemyObject in colliders)
             {

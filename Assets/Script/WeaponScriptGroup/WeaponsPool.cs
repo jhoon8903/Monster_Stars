@@ -49,7 +49,7 @@ namespace Script.WeaponScriptGroup
             var objectToSpawn = _poolDictionary[weaponType][puzzleLevel-2].Dequeue();
             objectToSpawn.transform.position = position;
             objectToSpawn.transform.rotation = rotation;
-            _pivotDSword = FindInChildren(objectToSpawn, $"D{puzzleLevel-1}(Clone)");
+            _pivotDSword = FindInChildren(objectToSpawn, $"OrcWeapon{puzzleLevel-1}(Clone)");
             if (EnforceManager.Instance.physicalSwordScaleIncrease)
             {
                 if (_pivotDSword != null)

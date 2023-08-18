@@ -114,7 +114,7 @@ namespace Script
             // var allUnits = FindObjectsOfType<CharacterBase>();
             // foreach (var unit in allUnits)
             // {
-            //     if (unit is UnitE unitE)
+            //     if (unit is Fishman unitE)
             //     {
             //         unitE.ApplyAttackSpeedBuffToAllies();
             //     }
@@ -137,7 +137,7 @@ namespace Script
             // var allUnits = FindObjectsOfType<CharacterBase>();
             // foreach (var unit in allUnits)
             // {
-            //     if (unit is not UnitE { HasAttackSpeedBuff: true } || !EnforceManager.Instance.water2AttackSpeedBuffToAdjacentAllies) continue;
+            //     if (unit is not Fishman { HasAttackSpeedBuff: true } || !EnforceManager.Instance.water2AttackSpeedBuffToAdjacentAllies) continue;
             //     unit.defaultAtkRate /= 0.9f;
             //     unit.HasAttackSpeedBuff = false;
             // }
@@ -193,14 +193,14 @@ namespace Script
             enemyPool.ClearList();
             StageManager.Instance.isBossClear = false;
             castleManager.castleCrushBoost = false;
-            if (levelUpRewardManager.HasUnitInGroup(CharacterBase.UnitGroups.D))
+            if (levelUpRewardManager.HasUnitInGroup(CharacterBase.UnitGroups.Orc))
             {
                 AtkManager.Instance.groupDAtkCount = 0;
-                FindObjectOfType<UnitD>().groupDAtkRate = 0f;
-            } else if (levelUpRewardManager.HasUnitInGroup(CharacterBase.UnitGroups.F))
+                FindObjectOfType<Orc>().groupDAtkRate = 0f;
+            } else if (levelUpRewardManager.HasUnitInGroup(CharacterBase.UnitGroups.Skeleton))
             {
                 AtkManager.Instance.groupFCount = 0;
-                FindObjectOfType<UnitF>().groupFDamage = 0f;
+                FindObjectOfType<Skeleton>().groupFDamage = 0f;
             }
             foreach (var unit in CharacterPool.Instance.pooledCharacters)
             {

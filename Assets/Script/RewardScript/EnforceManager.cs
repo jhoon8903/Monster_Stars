@@ -30,7 +30,7 @@ namespace Script.RewardScript
         public bool dark3DamageBoost;
         public float dark3RateBoost;
 
-        //Darkness Unit B
+        //Darkness Unit Ogre
         public bool darkFifthAttackDamageBoost;
         public float darkAttackSpeedBoost;
         public float darkAttackPowerBoost;
@@ -39,7 +39,7 @@ namespace Script.RewardScript
         public bool darkRangeIncrease;
         public bool darkStatusAilmentSlowEffect;
 
-        //Water1 Unit C
+        //Water1 Unit DeathChiller
         public bool waterFreeze;
         public bool waterFreezeChance;
         public float waterSlowDurationBoost;
@@ -48,7 +48,7 @@ namespace Script.RewardScript
         public float waterAttackRateBoost;
         public bool waterGlobalFreeze;
 
-        //Physical Unit D
+        //Physical Unit Orc
         public bool physicalSwordScaleIncrease;
         public bool physicalSwordAddition;
         public float physicalAttackSpeedBoost;
@@ -57,7 +57,7 @@ namespace Script.RewardScript
         public float physicalDamageBoost;
         public bool physicalBleedDuration;
 
-        //Water2 Unit E
+        //Water2 Unit Fishman
         public bool water2Freeze;
         public bool water2SlowPowerBoost;
         public bool water2FreezeTimeBoost;
@@ -66,7 +66,7 @@ namespace Script.RewardScript
         public bool water2FreezeDamageBoost;
         public float water2SlowTimeBoost;
 
-        //Poison Unit F
+        //Poison Unit Skeleton
         public bool poisonPerHitEffect;
         public bool poisonBleedingEnemyDamageBoost;
         public bool poisonDamagePerBoost;
@@ -75,7 +75,7 @@ namespace Script.RewardScript
         public float poisonAttackSpeedIncrease;
         public bool poisonDurationBoost;
 
-        //Fire2 Unit G
+        //Fire2 Unit Phoenix
         public bool fire2FreezeDamageBoost;
         public bool fire2BurnDurationBoost;
         public bool fire2ChangeProperty;
@@ -85,7 +85,7 @@ namespace Script.RewardScript
         public bool fire2BossDamageBoost;
 
 
-        //Fire1 Unit H
+        //Fire1 Unit Beholder
         public bool fireBurnPerAttackEffect;
         public bool fireStackOverlap;
         public bool fireProjectileBounceDamage;
@@ -94,7 +94,7 @@ namespace Script.RewardScript
         public bool fireProjectileSpeedIncrease;
         public bool fireProjectileBounceIncrease;
 
-        //Poison2 Unit I
+        //Poison2 Unit Cobra
         public bool poison2StunToChance;
         public bool poison2RangeBoost;
         public bool poison2DotDamageBoost;
@@ -112,7 +112,7 @@ namespace Script.RewardScript
         public float physical2RateBoost;
         public bool physical2BossBoost;
 
-        //Dark2 Unit K
+        //Dark2 Unit DarkElf
         public bool dark2BackBoost;
         public bool dark2DualAttack;
         public bool dark2StatusDamageBoost;
@@ -254,7 +254,7 @@ namespace Script.RewardScript
             waterSlowDurationBoost += 0.2f;
         }
         // 완료
-        [Header("Purple / 7Lv: C 유닛에게 빙결된 적은 받는 피해 15% 증가")]
+        [Header("Purple / 7Lv: DeathChiller 유닛에게 빙결된 적은 받는 피해 15% 증가")]
         public bool waterFreezeDamageBoost;
         // 완료
         [Header("Blue / 9Lv: 둔화강도 15% 증가")] 
@@ -268,7 +268,7 @@ namespace Script.RewardScript
             waterAttackRateBoost += 0.06f;
         }
         // 완료
-        [Header("Purple / 13Lv: 퍼즐위 모든 C 유닛의 공격 횟수의 합이 100이면 될 때마다 눈보라를 일으켜 보스를 제외한 모든 적을 빙결")]
+        [Header("Purple / 13Lv: 퍼즐위 모든 DeathChiller 유닛의 공격 횟수의 합이 100이면 될 때마다 눈보라를 일으켜 보스를 제외한 모든 적을 빙결")]
         public bool waterGlobalFreeze;
 
 
@@ -516,7 +516,7 @@ namespace Script.RewardScript
         
             switch (unitGroup)
             {
-                case CharacterBase.UnitGroups.A:
+                case CharacterBase.UnitGroups.Octopus:
                     activatedSkills[1] = dark3FifthAttackBoost;
                     activatedSkills[3] = dark3BleedAttack;
                     activatedSkills[5] = dark3PoisonDamageBoost;
@@ -525,7 +525,7 @@ namespace Script.RewardScript
                     activatedSkills[11] = dark3DamageBoost;
                     activatedSkills[13] = dark3RateBoost > 0;
                     break;
-                case CharacterBase.UnitGroups.B:
+                case CharacterBase.UnitGroups.Ogre:
                     activatedSkills[1] = darkFifthAttackDamageBoost;
                     activatedSkills[3] = darkStatusAilmentSlowEffect;
                     activatedSkills[5] = darkRangeIncrease;
@@ -534,7 +534,7 @@ namespace Script.RewardScript
                     activatedSkills[11] = darkAttackSpeedBoost > 0; 
                     activatedSkills[13] = darkKnockBackChance;
                     break;
-                case CharacterBase.UnitGroups.C:
+                case CharacterBase.UnitGroups.DeathChiller:
                     activatedSkills[1] = waterFreeze;
                     activatedSkills[3] = waterFreezeChance;
                     activatedSkills[5] = waterSlowDurationBoost > 0;
@@ -543,7 +543,7 @@ namespace Script.RewardScript
                     activatedSkills[11] = waterAttackRateBoost > 0; 
                     activatedSkills[13] = waterGlobalFreeze;
                     break;
-                case CharacterBase.UnitGroups.D:
+                case CharacterBase.UnitGroups.Orc:
                     activatedSkills[1] = physicalSwordScaleIncrease;
                     activatedSkills[3] = physicalSwordAddition;
                     activatedSkills[5] = physicalAttackSpeedBoost > 0;
@@ -552,7 +552,7 @@ namespace Script.RewardScript
                     activatedSkills[11] = physicalDamageBoost > 0; 
                     activatedSkills[13] = physicalBleedDuration;
                     break;
-                case CharacterBase.UnitGroups.E:
+                case CharacterBase.UnitGroups.Fishman:
                     activatedSkills[1] = water2Freeze;
                     activatedSkills[3] = water2SlowPowerBoost;
                     activatedSkills[5] = water2FreezeTimeBoost;
@@ -561,7 +561,7 @@ namespace Script.RewardScript
                     activatedSkills[11] =  water2FreezeDamageBoost;
                     activatedSkills[13] = water2SlowTimeBoost > 0;
                     break;
-                case CharacterBase.UnitGroups.F:
+                case CharacterBase.UnitGroups.Skeleton:
                     activatedSkills[1] = poisonPerHitEffect;
                     activatedSkills[3] = poisonBleedingEnemyDamageBoost;
                     activatedSkills[5] = poisonDamagePerBoost;
@@ -570,7 +570,7 @@ namespace Script.RewardScript
                     activatedSkills[11] = poisonAttackSpeedIncrease > 0; 
                     activatedSkills[13] = poisonDurationBoost;
                     break;
-                case CharacterBase.UnitGroups.G:
+                case CharacterBase.UnitGroups.Phoenix:
                     activatedSkills[1] = fire2FreezeDamageBoost;
                     activatedSkills[3] = fire2BurnDurationBoost;
                     activatedSkills[5] = fire2ChangeProperty;
@@ -579,7 +579,7 @@ namespace Script.RewardScript
                     activatedSkills[11] = fire2RateBoost;
                     activatedSkills[13] = fire2BossDamageBoost;
                     break;
-                case CharacterBase.UnitGroups.H:
+                case CharacterBase.UnitGroups.Beholder:
                     activatedSkills[1] = fireBurnPerAttackEffect;
                     activatedSkills[3] = fireStackOverlap;
                     activatedSkills[5] = fireProjectileBounceDamage;
@@ -588,7 +588,7 @@ namespace Script.RewardScript
                     activatedSkills[11] = fireProjectileSpeedIncrease;
                     activatedSkills[13] = fireProjectileBounceIncrease;
                     break;
-                case CharacterBase.UnitGroups.I:
+                case CharacterBase.UnitGroups.Cobra:
                     activatedSkills[1] = poison2StunToChance;
                     activatedSkills[3] = poison2RangeBoost;
                     activatedSkills[5] = poison2DotDamageBoost;
@@ -597,7 +597,7 @@ namespace Script.RewardScript
                     activatedSkills[11] = poison2RateBoost;
                     activatedSkills[13] = poison2PoolTimeBoost;
                     break;
-                case CharacterBase.UnitGroups.J:
+                case CharacterBase.UnitGroups.Berserker:
                     activatedSkills[1] = physical2CastleCrushStatBoost;
                     activatedSkills[3] = physical2FifthBoost;
                     activatedSkills[5] = physical2BleedTimeBoost;
@@ -606,7 +606,7 @@ namespace Script.RewardScript
                     activatedSkills[11] = physical2RateBoost > 0;
                     activatedSkills[13] = physical2BossBoost;
                     break;
-                case CharacterBase.UnitGroups.K:
+                case CharacterBase.UnitGroups.DarkElf:
                     activatedSkills[1] = dark2BackBoost;
                     activatedSkills[3] = dark2DualAttack;
                     activatedSkills[5] = dark2StatusDamageBoost;
@@ -888,7 +888,7 @@ namespace Script.RewardScript
                 dark3BleedDurationBoost = dark3BleedDurationBoost,
                 dark3DamageBoost = dark3DamageBoost,
                 dark3RateBoost = dark3RateBoost,
-                //Darkness Unit B
+                //Darkness Unit Ogre
                 darkFifthAttackDamageBoost = darkFifthAttackDamageBoost,
                 darkAttackSpeedBoost = darkAttackSpeedBoost,
                 darkAttackPowerBoost = darkAttackPowerBoost,
@@ -896,7 +896,7 @@ namespace Script.RewardScript
                 darkStatusAilmentDamageBoost = darkStatusAilmentDamageBoost,
                 darkRangeIncrease = darkRangeIncrease,
                 darkStatusAilmentSlowEffect = darkStatusAilmentSlowEffect,
-                //Water1 Unit C
+                //Water1 Unit DeathChiller
                 waterFreeze = waterFreeze,
                 waterFreezeChance = waterFreezeChance,
                 waterSlowDurationBoost = waterSlowDurationBoost,
@@ -904,7 +904,7 @@ namespace Script.RewardScript
                 waterSlowCPowerBoost =  waterSlowCPowerBoost,
                 waterAttackRateBoost = waterAttackRateBoost,
                 waterGlobalFreeze = waterGlobalFreeze, 
-                //Physical Unit D
+                //Physical Unit Orc
                 physicalAttackSpeedBoost = physicalAttackSpeedBoost,
                 physicalSwordAddition = physicalSwordAddition,
                 physicalSwordScaleIncrease = physicalSwordScaleIncrease,
@@ -912,7 +912,7 @@ namespace Script.RewardScript
                 physicalBindBleed = physicalBindBleed,
                 physicalDamageBoost = physicalDamageBoost,
                 physicalBleedDuration = physicalBleedDuration,
-                //Water2 Unit E
+                //Water2 Unit Fishman
                 water2Freeze = water2Freeze,
                 water2SlowPowerBoost = water2SlowPowerBoost,
                 water2FreezeTimeBoost = water2FreezeTimeBoost,
@@ -920,7 +920,7 @@ namespace Script.RewardScript
                 water2FreezeChanceBoost = water2FreezeChanceBoost,
                 water2FreezeDamageBoost = water2FreezeDamageBoost,
                 water2SlowTimeBoost = water2SlowTimeBoost,
-                //Poison Unit F
+                //Poison Unit Skeleton
                 poisonPerHitEffect = poisonPerHitEffect,
                 poisonBleedingEnemyDamageBoost = poisonBleedingEnemyDamageBoost,
                 poisonDamagePerBoost = poisonDamagePerBoost,
@@ -928,7 +928,7 @@ namespace Script.RewardScript
                 poisonDotDamageBoost = poisonDotDamageBoost,
                 poisonAttackSpeedIncrease = poisonAttackSpeedIncrease,
                 poisonDurationBoost = poisonDurationBoost,
-                //Fire2 Unit G
+                //Fire2 Unit Phoenix
                 fire2FreezeDamageBoost = fire2FreezeDamageBoost,
                 fire2BurnDurationBoost = fire2BurnDurationBoost,
                 fire2ChangeProperty = fire2ChangeProperty,
@@ -937,7 +937,7 @@ namespace Script.RewardScript
                 fire2RateBoost = fire2RateBoost, 
                 fire2BossDamageBoost = fire2BossDamageBoost,  
         
-                //Fire1 Unit H
+                //Fire1 Unit Beholder
                 fireBurnPerAttackEffect = fireBurnPerAttackEffect,
                 fireStackOverlap = fireStackOverlap,
                 fireProjectileBounceDamage = fireProjectileBounceDamage,
@@ -946,7 +946,7 @@ namespace Script.RewardScript
                 fireProjectileSpeedIncrease = fireProjectileSpeedIncrease,
                 fireProjectileBounceIncrease = fireProjectileBounceIncrease,
         
-                //Poison2 Unit I
+                //Poison2 Unit Cobra
                 poison2StunToChance = poison2StunToChance,
                 poison2RangeBoost = poison2RangeBoost,
                 poison2DotDamageBoost = poison2DotDamageBoost,
@@ -964,7 +964,7 @@ namespace Script.RewardScript
                 physical2RateBoost = physical2RateBoost,
                 physical2BossBoost = physical2BossBoost,
         
-                //Darkness Unit K
+                //Darkness Unit DarkElf
                 dark2BackBoost = dark2BackBoost,
                 dark2DualAttack = dark2DualAttack,
                 dark2StatusDamageBoost = dark2StatusDamageBoost,
@@ -1013,7 +1013,7 @@ namespace Script.RewardScript
             dark3BleedDurationBoost = data.dark3BleedDurationBoost;
             dark3DamageBoost = data.dark3DamageBoost;
             dark3RateBoost = data.dark3RateBoost;
-            //Darkness Unit B
+            //Darkness Unit Ogre
             darkFifthAttackDamageBoost = data.darkFifthAttackDamageBoost; 
             darkAttackSpeedBoost = data.darkAttackSpeedBoost;
             darkAttackPowerBoost = data.darkAttackPowerBoost;
@@ -1021,7 +1021,7 @@ namespace Script.RewardScript
             darkStatusAilmentDamageBoost = data.darkStatusAilmentDamageBoost;
             darkRangeIncrease = data.darkRangeIncrease;
             darkStatusAilmentSlowEffect = data.darkStatusAilmentSlowEffect;
-            //Water1 Unit C
+            //Water1 Unit DeathChiller
             waterFreeze = data.waterFreeze;
             waterFreezeChance = data.waterFreezeChance;
             waterSlowDurationBoost = data.waterSlowDurationBoost;
@@ -1029,7 +1029,7 @@ namespace Script.RewardScript
             waterSlowCPowerBoost =  data.waterSlowCPowerBoost;
             waterAttackRateBoost = data.waterAttackRateBoost;
             waterGlobalFreeze = data.waterGlobalFreeze;
-            //Physical Unit D
+            //Physical Unit Orc
             physicalAttackSpeedBoost = data.physicalAttackSpeedBoost;
             physicalSwordAddition = data.physicalSwordAddition;
             physicalSwordScaleIncrease = data.physicalSwordScaleIncrease;
@@ -1037,7 +1037,7 @@ namespace Script.RewardScript
             physicalBindBleed = data.physicalBindBleed;
             physicalDamageBoost = data.physicalDamageBoost;
             physicalBleedDuration = data.physicalBleedDuration;
-            //Water2 Unit E
+            //Water2 Unit Fishman
             water2Freeze = data.water2Freeze;
             water2SlowPowerBoost = data.water2SlowPowerBoost;
             water2FreezeTimeBoost = data.water2FreezeTimeBoost;
@@ -1045,7 +1045,7 @@ namespace Script.RewardScript
             water2FreezeChanceBoost = data.water2FreezeChanceBoost;
             water2FreezeDamageBoost = data.water2FreezeDamageBoost;
             water2SlowTimeBoost = data.water2SlowTimeBoost;
-            //Poison Unit F
+            //Poison Unit Skeleton
             poisonPerHitEffect = data.poisonPerHitEffect;
             poisonBleedingEnemyDamageBoost = data.poisonBleedingEnemyDamageBoost;
             poisonDamagePerBoost = data.poisonDamagePerBoost;
@@ -1053,7 +1053,7 @@ namespace Script.RewardScript
             poisonDotDamageBoost = data.poisonDotDamageBoost;
             poisonAttackSpeedIncrease = data.poisonAttackSpeedIncrease;
             poisonDurationBoost = data.poisonDurationBoost;
-            //Fire2 Unit G
+            //Fire2 Unit Phoenix
             fire2FreezeDamageBoost = data.fire2FreezeDamageBoost;
             fire2BurnDurationBoost = data.fire2BurnDurationBoost;
             fire2ChangeProperty = data.fire2ChangeProperty;
@@ -1061,7 +1061,7 @@ namespace Script.RewardScript
             fire2RangeBoost = data.fire2RangeBoost;
             fire2RateBoost = data.fire2RateBoost; 
             fire2BossDamageBoost = data.fire2BossDamageBoost;  
-            //Fire1 Unit H
+            //Fire1 Unit Beholder
             fireBurnPerAttackEffect = data.fireBurnPerAttackEffect;
             fireStackOverlap = data.fireStackOverlap;
             fireProjectileBounceDamage = data.fireProjectileBounceDamage;
@@ -1069,7 +1069,7 @@ namespace Script.RewardScript
             fireAttackSpeedBoost = data.fireAttackSpeedBoost;
             fireProjectileSpeedIncrease = data.fireProjectileSpeedIncrease;                            
             fireProjectileBounceIncrease = data.fireProjectileBounceIncrease;
-            //Poison2 Unit I
+            //Poison2 Unit Cobra
             poison2StunToChance = data.poison2StunToChance;
             poison2RangeBoost = data.poison2RangeBoost;
             poison2DotDamageBoost = data.poison2DotDamageBoost;
@@ -1085,7 +1085,7 @@ namespace Script.RewardScript
             physical2RangeBoost = data.physical2RangeBoost;
             physical2RateBoost = data.physical2RateBoost;
             physical2BossBoost = data.physical2BossBoost;
-            //Darkness Unit K
+            //Darkness Unit DarkElf
             dark2BackBoost = data.dark2BackBoost;
             dark2DualAttack = data.dark2DualAttack;
             dark2StatusDamageBoost = data.dark2StatusDamageBoost;

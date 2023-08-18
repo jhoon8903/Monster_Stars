@@ -156,7 +156,7 @@ namespace Script.RewardScript
             NextStage,
             Gold,
 
-            //Darkness3 A
+            //Darkness3 Octopus
             Dark3FifthAttackBoost,
             Dark3BleedAttack,
             Dark3PoisonDamageBoost,
@@ -165,7 +165,7 @@ namespace Script.RewardScript
             Dark3DamageBoost,
             Dark3RateBoost,
 
-            //Darkness B
+            //Darkness Ogre
             DarkFifthAttackDamageBoost,
             DarkStatusAilmentSlowEffect,
             DarkRangeIncrease,
@@ -174,7 +174,7 @@ namespace Script.RewardScript
             DarkAttackSpeedBoost,
             DarkKnockBackChance,
 
-            //Water1 C
+            //Water1 DeathChiller
             WaterFreeze,
             WaterFreezeChance,
             WaterSlowDurationBoost,
@@ -183,7 +183,7 @@ namespace Script.RewardScript
             WaterAttackRateBoost,
             WaterGlobalFreeze,
 
-            //Physical D
+            //Physical Orc
             PhysicalSwordScaleIncrease,
             PhysicalSwordAddition,
             PhysicalAttackSpeedBoost,
@@ -192,7 +192,7 @@ namespace Script.RewardScript
             PhysicalDamageBoost,
             PhysicalBleedDuration,
 
-            //Water2 E
+            //Water2 Fishman
             Water2Freeze,
             Water2SlowPowerBoost,
             Water2FreezeTimeBoost,
@@ -201,7 +201,7 @@ namespace Script.RewardScript
             Water2FreezeDamageBoost,
             Water2SlowTimeBoost,
 
-            //Poison F
+            //Poison Skeleton
             PoisonPerHitEffect,
             PoisonBleedingEnemyDamageBoost,
             PoisonDamagePerBoost,
@@ -210,7 +210,7 @@ namespace Script.RewardScript
             PoisonAttackSpeedIncrease,
             PoisonDurationBoost,
 
-            //Fire2 G
+            //Fire2 Phoenix
             Fire2FreezeDamageBoost,
             Fire2BurnDurationBoost,
             Fire2ChangeProperty,
@@ -219,7 +219,7 @@ namespace Script.RewardScript
             Fire2RateBoost,
             Fire2BossDamageBoost,
 
-            //Fire1 H
+            //Fire1 Beholder
             FireBurnPerAttackEffect,
             FireStackOverlap,
             FireProjectileBounceDamage,
@@ -228,7 +228,7 @@ namespace Script.RewardScript
             FireProjectileSpeedIncrease,
             FireProjectileBounceIncrease,
 
-            //Poison2 I
+            //Poison2 Cobra
             Poison2StunToChance,
             Poison2RangeBoost,
             Poison2DotDamageBoost,
@@ -237,7 +237,7 @@ namespace Script.RewardScript
             Poison2RateBoost,
             Poison2PoolTimeBoost,
 
-            //Physical2 J
+            //Physical2 Berserker
             Physical2CastleCrushStatBoost,
             Physical2FifthBoost,
             Physical2BleedTimeBoost,
@@ -246,7 +246,7 @@ namespace Script.RewardScript
             Physical2RateBoost,
             Physical2BossBoost,
             
-            //Darkness2 K
+            //Darkness2 DarkElf
             Dark2BackBoost,
             Dark2DualAttack,
             Dark2StatusDamageBoost,

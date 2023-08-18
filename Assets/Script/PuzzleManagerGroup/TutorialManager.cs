@@ -27,21 +27,21 @@ namespace Script.PuzzleManagerGroup
         
         public static readonly CharacterBase.UnitGroups[] UnitGroupOrder =
         {
-            CharacterBase.UnitGroups.F,
-            CharacterBase.UnitGroups.B, 
-            CharacterBase.UnitGroups.E,
-            CharacterBase.UnitGroups.D,
-            CharacterBase.UnitGroups.B,
-            CharacterBase.UnitGroups.E,
-            CharacterBase.UnitGroups.D,
-            CharacterBase.UnitGroups.F,
-            CharacterBase.UnitGroups.E,
-            CharacterBase.UnitGroups.D,
-            CharacterBase.UnitGroups.E,
-            CharacterBase.UnitGroups.D,
-            CharacterBase.UnitGroups.B,
-            CharacterBase.UnitGroups.F,
-            CharacterBase.UnitGroups.B
+            CharacterBase.UnitGroups.Skeleton,
+            CharacterBase.UnitGroups.Ogre, 
+            CharacterBase.UnitGroups.Fishman,
+            CharacterBase.UnitGroups.Orc,
+            CharacterBase.UnitGroups.Ogre,
+            CharacterBase.UnitGroups.Fishman,
+            CharacterBase.UnitGroups.Orc,
+            CharacterBase.UnitGroups.Skeleton,
+            CharacterBase.UnitGroups.Fishman,
+            CharacterBase.UnitGroups.Orc,
+            CharacterBase.UnitGroups.Fishman,
+            CharacterBase.UnitGroups.Orc,
+            CharacterBase.UnitGroups.Ogre,
+            CharacterBase.UnitGroups.Skeleton,
+            CharacterBase.UnitGroups.Ogre
         };
         public struct TutorialStep
         {
@@ -226,10 +226,10 @@ namespace Script.PuzzleManagerGroup
         {
             return groupChar switch
             {
-                'F' => CharacterBase.UnitGroups.F,
-                'B' => CharacterBase.UnitGroups.B,
-                'D' => CharacterBase.UnitGroups.D,
-                'E' => CharacterBase.UnitGroups.E,
+                'F' => CharacterBase.UnitGroups.Skeleton,
+                'B' => CharacterBase.UnitGroups.Ogre,
+                'D' => CharacterBase.UnitGroups.Orc,
+                'E' => CharacterBase.UnitGroups.Fishman,
                 'N' => CharacterBase.UnitGroups.None
             };
         }

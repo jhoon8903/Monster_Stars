@@ -7,6 +7,7 @@ using Script.EnemyManagerScript;
 using Script.RewardScript;
 using Script.WeaponScriptGroup;
 using UnityEngine;
+using Ogre = Script.CharacterGroupScript.Ogre;
 
 namespace Script.CharacterManagerScript
 {
@@ -95,25 +96,25 @@ namespace Script.CharacterManagerScript
         {
             switch (unitGroup)
             {
-                case CharacterBase.UnitGroups.A:
+                case CharacterBase.UnitGroups.Octopus:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.A));
                     break;
-                case CharacterBase.UnitGroups.B:
+                case CharacterBase.UnitGroups.Ogre:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.B));
                     break;
-                case CharacterBase.UnitGroups.C:
+                case CharacterBase.UnitGroups.DeathChiller:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.C));
                     break;
-                case CharacterBase.UnitGroups.E:
+                case CharacterBase.UnitGroups.Fishman:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.E));
                     break;
-                case CharacterBase.UnitGroups.H:
+                case CharacterBase.UnitGroups.Beholder:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.H));
                     break;
-                case CharacterBase.UnitGroups.J: 
+                case CharacterBase.UnitGroups.Berserker: 
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.J));
                     break;
-                case CharacterBase.UnitGroups.K:
+                case CharacterBase.UnitGroups.DarkElf:
                     if (EnforceManager.Instance.dark2DualAttack)
                     {
                         StartCoroutine(EnforceManager.Instance.dark2DoubleAttack
@@ -140,13 +141,13 @@ namespace Script.CharacterManagerScript
         {
             switch (unitGroup)
             {
-                case CharacterBase.UnitGroups.D:
+                case CharacterBase.UnitGroups.Orc:
                     if (unit.GetComponent<CharacterBase>().CurrentWeapon == null || unit.GetComponent<CharacterBase>().CurrentWeapon.activeSelf == false)
                     {
                         unit.GetComponent<CharacterBase>().CurrentWeapon = Attack(new AttackData(unit, WeaponsPool.WeaponType.D));
                     }
                     break;
-                case CharacterBase.UnitGroups.G:
+                case CharacterBase.UnitGroups.Phoenix:
                     if (unit.GetComponent<CharacterBase>().CurrentWeapon == null || unit.GetComponent<CharacterBase>().CurrentWeapon.activeSelf == false)
                     {
                         unit.GetComponent<CharacterBase>().CurrentWeapon = Attack(new AttackData(unit, WeaponsPool.WeaponType.G));
@@ -160,10 +161,10 @@ namespace Script.CharacterManagerScript
         {
             switch (unitGroup)
             {
-                case CharacterBase.UnitGroups.F:
+                case CharacterBase.UnitGroups.Skeleton:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.F)); 
                     break;
-                case CharacterBase.UnitGroups.I:
+                case CharacterBase.UnitGroups.Cobra:
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.I));
                     break;
             }
@@ -173,19 +174,19 @@ namespace Script.CharacterManagerScript
             var unit = attackData.Unit;
             switch (unit.GetComponent<CharacterBase>().unitGroup)
             {
-               case CharacterBase.UnitGroups.A:
+               case CharacterBase.UnitGroups.Octopus:
                    if (EnforceManager.Instance.dark3FifthAttackBoost)
                    {
-                       unit.GetComponent<UnitA>().atkCount++;
+                       unit.GetComponent<Octopus>().atkCount++;
                    }
                    break;
-               case CharacterBase.UnitGroups.B:
+               case CharacterBase.UnitGroups.Ogre:
                    if (EnforceManager.Instance.darkFifthAttackDamageBoost)
                    {
-                       unit.GetComponent<UnitB>().atkCount++;
+                       unit.GetComponent<Ogre>().atkCount++;
                    }
                    break;
-               case CharacterBase.UnitGroups.C:
+               case CharacterBase.UnitGroups.DeathChiller:
                    if (EnforceManager.Instance.waterGlobalFreeze)
                    {
                        groupCAtkCount++;
@@ -195,33 +196,33 @@ namespace Script.CharacterManagerScript
                        }
                    }
                    break;
-               case CharacterBase.UnitGroups.D:
+               case CharacterBase.UnitGroups.Orc:
                    if (EnforceManager.Instance.physicalRatePerAttack)
                    {
                        groupDAtkCount++;
                        if (groupDAtkCount % 3 == 0)
                        {
-                           if (unit.GetComponent<UnitD>().groupDAtkRate < 0.6f)
+                           if (unit.GetComponent<Orc>().groupDAtkRate < 0.6f)
                            {
-                               unit.GetComponent<UnitD>().groupDAtkRate += 0.01f;
+                               unit.GetComponent<Orc>().groupDAtkRate += 0.01f;
                            }
                        }
                    }
                    break;
-               case CharacterBase.UnitGroups.F:
+               case CharacterBase.UnitGroups.Skeleton:
                    if (EnforceManager.Instance.poisonDamagePerBoost)
                    {
                        groupFCount++;
-                       if (groupFCount % 5 == 0 && unit.GetComponent<UnitF>().groupFDamage < 0.6f)
+                       if (groupFCount % 5 == 0 && unit.GetComponent<Skeleton>().groupFDamage < 0.6f)
                        {
-                           unit.GetComponent<UnitF>().groupFDamage += 0.01f;
+                           unit.GetComponent<Skeleton>().groupFDamage += 0.01f;
                        }
                    }
                    break;
-               case CharacterBase.UnitGroups.J:
+               case CharacterBase.UnitGroups.Berserker:
                    if (EnforceManager.Instance.physical2FifthBoost)
                    {
-                       unit.GetComponent<UnitJ>().atkCount++;
+                       unit.GetComponent<Berserker>().atkCount++;
                    }
                    break;
             }
@@ -247,7 +248,7 @@ namespace Script.CharacterManagerScript
             var unit = attackData.Unit;
             if (EnforceManager.Instance.dark3FifthAttackBoost)
             {
-                unit.GetComponent<UnitA>().atkCount++;
+                unit.GetComponent<Octopus>().atkCount++;
             }
             var weaponType = attackData.WeaponType;
             var unitPosition = unit.transform.position;
@@ -326,7 +327,7 @@ namespace Script.CharacterManagerScript
         // {
         //     var unit = attackData.Unit;
         //     var weaponType = attackData.WeaponType;
-        //     var enemies = unit.GetComponent<UnitF>().DetectEnemies();
+        //     var enemies = unit.GetComponent<Skeleton>().DetectEnemies();
         //     if (enemies.Count == 0) yield break;
         //     Attack(new AttackData(unit, weaponType), enemies[0]);
         //     Attack(new AttackData(unit, weaponType), enemies.Count > 1 ? enemies[1] : enemies[0]);
