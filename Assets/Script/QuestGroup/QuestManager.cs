@@ -459,7 +459,6 @@ namespace Script.QuestGroup
         // View Ads Quest (Fix)
         public void AdsViewQuest()
         {
-            Debug.Log("광고봄");
             var adsViewQuest = _fixQuestList.FirstOrDefault(q => q.questType == QuestTypes.ViewAds);
             UpdateQuest(adsViewQuest, 1);
         }
@@ -490,7 +489,6 @@ namespace Script.QuestGroup
         // Open Box (Store) Quest (Rotation)
         public void OpenBoxQuest()
         {
-            Debug.Log("상자열림");
             var openBoxQuest = _rotationQuestList.FirstOrDefault(q => q.questType == QuestTypes.OpenBox);
             UpdateQuest(openBoxQuest, 1);
         }
@@ -515,7 +513,6 @@ namespace Script.QuestGroup
         // Get Piece Quest (Rotation)
         public void GetPieceQuest(int getPiece)
         {
-            Debug.Log("getPiece :"+getPiece);
             var getPieceQuest = _rotationQuestList.FirstOrDefault(q => q.questType == QuestTypes.GetPiece);
             UpdateQuest(getPieceQuest, getPiece);
         }

@@ -4,8 +4,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
 using Script.RobbyScript.CharacterSelectMenuGroup;
+using Script.RobbyScript.StoreMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -81,6 +83,31 @@ namespace Script.RewardScript
             _timePassed = DateTime.Now - _latestOpenTime;
             _timePassed = TimeSpan.FromHours(Math.Min(_timePassed.TotalHours, MaxHours));
             CalculateCoinReward(_timePassed, latestStage);
+
+            // 기존 딕셔너리에 있는 보상 정보 업데이트
+            foreach (var unitPiece in _unitPieceDict)
+            {
+                unitPiece.Key.CharacterPeaceCount += unitPiece.Value.Item1;
+            }
+
+            // 보상 정보 불러오기 및 업데이트
+            foreach (var unit in unitList)
+            {
+                int savedRewardCount = PlayerPrefs.GetInt($"UnitReward_{unit.unitGroup}", 0);
+                Debug.Log($"PlayerPrefs key: UnitReward_{unit.unitGroup}, savedRewardCount: {savedRewardCount}");
+
+                if (savedRewardCount > 0)
+                {
+                    if (_unitPieceDict.ContainsKey(unit))
+                    {
+                        _unitPieceDict[unit] = new Tuple<int, Goods>(savedRewardCount, null); 
+                    }
+                    else
+                    {
+                        _unitPieceDict.Add(unit, new Tuple<int, Goods>(savedRewardCount, null));
+                    }
+                }
+            }
             CalculateUnitPieceReward(_timePassed, latestStage);
         }
         private void CalculateCoinReward(TimeSpan timePassed, int stage)
@@ -93,7 +120,8 @@ namespace Script.RewardScript
             _coinReward = coinValue * (int)(timePassed.TotalMinutes / CoinRewardTime);
             if (_coinReward == 0) return;
             _coinObject = Instantiate(rewardItem, timeRewardContents.transform);
-            _coinObject.goodsBack.GetComponent<Image>().color = Color.gray;
+            _coinObject.goodsBack.GetComponent<Image>().color = Color.white;
+            _coinObject.goodsSprite.GetComponent<Image>().sprite = StoreMenu.Instance.specialOffer.coinSprite;
             _coinObject.goodsValue.text = $"{_coinReward}";
         }
         private void CalculateUnitPieceReward(TimeSpan timePassed, int stage)
@@ -158,15 +186,10 @@ namespace Script.RewardScript
                 _unitPieceReward = pieceCountPerUnit[index];
                 if (_unitPieceReward == 0) continue;
                 _unitPieceObject = Instantiate(rewardItem, timeRewardContents.transform);
-                _unitPieceObject.goodsBack.GetComponent<Image>().color = unit.UnitGrade switch
-                {
-                    CharacterBase.UnitGrades.Green => Color.green,
-                    CharacterBase.UnitGrades.Blue => Color.blue,
-                };
                 _unitPieceObject.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPeaceLevel);
-                _unitPieceObject.goodsSprite.GetComponent<RectTransform>().localScale = new Vector3(2, 2, 0);
+                _unitPieceObject.goodsSprite.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);
                 _unitPieceObject.goodsValue.text = $"{_unitPieceReward}";
-                _unitPieceObject.goodsValue.GetComponent<RectTransform>().localScale = new Vector3(2, 2, 0);
+                _unitPieceObject.goodsValue.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);
                 _unitPieceDict[unit] = new Tuple<int, Goods>(_unitPieceReward, _unitPieceObject);
             }
         }
@@ -223,6 +246,27 @@ namespace Script.RewardScript
         }
         private void CloseTimeReward()
         {
+            // 저장된 유닛 보상 정보 제거
+            foreach (var unit in unitList)
+            {
+                // 보상 정보 저장
+                if (_unitPieceDict.ContainsKey(unit))
+                {
+                    PlayerPrefs.SetInt($"UnitReward_{unit.unitGroup}", _unitPieceDict[unit]?.Item1 ?? 0);
+                }
+            }
+
+            // 보상 객체들 삭제
+            foreach (var unitPiece in _unitPieceDict)
+            {
+                if (unitPiece.Value.Item2 != null)
+                {
+                    Destroy(unitPiece.Value.Item2.gameObject);
+                }
+            }
+
+            // 유닛 보상 딕셔너리 초기화
+            _unitPieceDict.Clear();
             timeRewardBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             timeRewardPanel.SetActive(false);
         }

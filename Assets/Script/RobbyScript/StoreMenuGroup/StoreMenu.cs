@@ -25,7 +25,6 @@ namespace Script.RobbyScript.StoreMenuGroup
         [SerializeField] private GameObject adsRewardBtn;
         [SerializeField] private Goods rewardItem;
         [SerializeField] private TreasureChest chestItem;
-        [SerializeField] private SpecialOffer specialOffer;
         [SerializeField] private DailyOffer dailyOffer;
         [SerializeField] private List<CharacterBase> unitList = new List<CharacterBase>();
         [SerializeField] private Sprite errorGemSprite;
@@ -41,6 +40,7 @@ namespace Script.RobbyScript.StoreMenuGroup
         [SerializeField] private GameObject errorContentsImage;
         
         public static StoreMenu Instance { get; private set; }
+        public SpecialOffer specialOffer;
         private const string ResetKey = "ResetKey";
         private DateTime _lastDayCheck;
         private const string LastDayKey = "LastDayKey";
