@@ -49,8 +49,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cover: {fileID: 4679517600283520585}
   unitPeaceLevel: 1
-  unLock: 0
-  selected: 0
+  unLock: 1
+  selected: 1
   unitPuzzleLevel: 1
   unitGroup: 2
   lv1: {fileID: 21300000, guid: cb3c87caa8d4d40988c8fba81635d8d7, type: 3}
@@ -80,12 +80,12 @@ MonoBehaviour:
   swingSpeed: 0
   defaultAtkDistance: 9
   level1Sprite: {fileID: 21300000, guid: cb3c87caa8d4d40988c8fba81635d8d7, type: 3}
-  level2Sprite: {fileID: 21300000, guid: 81466e957c3524190b268f288761f0e7, type: 3}
-  level3Sprite: {fileID: 21300000, guid: 565dfa39b28b14526a467d91e83fbda7, type: 3}
-  level4Sprite: {fileID: 21300000, guid: 9be03cbf9a78e473791106680b2d4aff, type: 3}
-  level5Sprite: {fileID: 21300000, guid: 5b436dff98cc64ff5a788061112c0529, type: 3}
-  level6Sprite: {fileID: 21300000, guid: 8e44e02f06d90447a88e9d81d0c2d83f, type: 3}
-  level7Sprite: {fileID: 21300000, guid: 21a17f33d4a49471ebe0303b9fc5490e, type: 3}
+  level2Sprite: {fileID: 21300000, guid: 54ca7e66103ed48cdb87d5961656ee33, type: 3}
+  level3Sprite: {fileID: 21300000, guid: f5c8c930eb3b045cc89ed7c8d52f17ac, type: 3}
+  level4Sprite: {fileID: 21300000, guid: cce7e5261a66d4982b77e42c49aee9e8, type: 3}
+  level5Sprite: {fileID: 21300000, guid: 6721f0778d25c433e876a81adb25f12c, type: 3}
+  level6Sprite: {fileID: 21300000, guid: f3b0bb53a4de646f7a82008139cacb5e, type: 3}
+  level7Sprite: {fileID: 21300000, guid: cf88b3438d27c49c68cc45ec789609ff, type: 3}
 --- !u!212 &7725269076765781264
 SpriteRenderer:
   m_ObjectHideFlags: 0
