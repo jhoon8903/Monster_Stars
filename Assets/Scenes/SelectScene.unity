@@ -5341,6 +5341,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 258430524}
     m_Modifications:
+    - target: {fileID: 504583015385499397, guid: 642408cd4a9d64291bc25c8d471493d6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 504583015986161425, guid: 642408cd4a9d64291bc25c8d471493d6, type: 3}
       propertyPath: m_Name
       value: AdsQuestPanel
@@ -9670,7 +9674,7 @@ MonoBehaviour:
   m_text: Mission
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a33f3eeb56c604c65be3a337dec56e67, type: 2}
-  m_sharedMaterial: {fileID: -6360588970910393389, guid: 586f0feb8cd6440f59f26deae76c3b40, type: 2}
+  m_sharedMaterial: {fileID: 2517202264660172603, guid: a33f3eeb56c604c65be3a337dec56e67, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -9733,7 +9737,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &764038674
@@ -11699,6 +11703,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 150719442}
     m_Modifications:
+    - target: {fileID: 2899101476881520697, guid: 39c773a11cdc342ffa380ce9344b0ffb, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2899101477115027888, guid: 39c773a11cdc342ffa380ce9344b0ffb, type: 3}
       propertyPath: m_Name
       value: AllClearAssemble

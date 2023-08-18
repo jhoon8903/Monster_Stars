@@ -71,7 +71,7 @@ namespace Script.QuestGroup
         }
         private void LoadQuests(QuestCondition targetCondition)
         {
-            var csvFile = Resources.Load<TextAsset>("QuestData");
+            var csvFile = Resources.Load<TextAsset>("questData");
             var csvText = csvFile.text;
             _csvData = csvText.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
             var rotationQuestData = targetCondition == QuestCondition.Rotation ? new List<string[]>() : null;
@@ -189,8 +189,7 @@ namespace Script.QuestGroup
             if (targetCondition != QuestCondition.Rotation) return;
             if (rotationQuestData == null) return;
             var selectedQuestData = rotationQuestData.OrderBy(_ => UnityEngine.Random.value).Take(MaxRotationQuests).ToList();
-            foreach (var data in selectedQuestData) CreateAndAddRotationQuest(data);
-            SaveSelectedQuestList(_rotationQuestList);
+            foreach (var data in selectedQuestData)CreateAndAddRotationQuest(data);
         }
         private void CreateAndAddRotationQuest(IReadOnlyList<string> data)
         {
@@ -199,6 +198,7 @@ namespace Script.QuestGroup
             rotationQuestObject.shuffleBtn.SetActive(true);
             rotationQuestObject.shuffleBtn.GetComponent<Button>().onClick.AddListener(CallShuffleAds);
             _rotationQuestList.Add(rotationQuestObject);
+            SaveSelectedQuestList(_rotationQuestList);
         }
         private static void SaveSelectedQuestList(List<QuestObject> selectedQuests)
         {
@@ -212,12 +212,12 @@ namespace Script.QuestGroup
                 PlayerPrefs.SetInt(key + "_goal", quest.questGoal); 
                 PlayerPrefs.SetString(quest.item1Value + "_item1Value", quest.item1Value.text);
                 PlayerPrefs.SetString(quest.item2Value + "_item2Value", quest.item2Value.text);
+                PlayerPrefs.SetString(quest.item3Value + "_item3Value", quest.item3Value.text);
+                PlayerPrefs.SetString(quest.item4Value + "_item4Value", quest.item4Value.text);
                 PlayerPrefs.SetInt(quest.questType + "_isShuffled", quest.isShuffled ? 1 : 0);
                 PlayerPrefs.SetInt(quest.questType + "_isCompleted", quest.isCompleted ? 1 : 0);
                 PlayerPrefs.SetInt(quest.isReceived + "_isReceived", quest.isReceived ? 1 : 0);
             }
-
-
             PlayerPrefs.Save();
         }
         private void LoadSelectedQuestList()
@@ -345,6 +345,8 @@ namespace Script.QuestGroup
                 PlayerPrefs.SetInt(key + "_goal", quest.questGoal); 
                 PlayerPrefs.SetString(quest.item1Value + "_item1Value", quest.item1Value.text);
                 PlayerPrefs.SetString(quest.item2Value + "_item2Value", quest.item2Value.text);
+                PlayerPrefs.SetString(quest.item3Value + "_item3Value", quest.item3Value.text);
+                PlayerPrefs.SetString(quest.item4Value + "_item4Value", quest.item4Value.text);
                 PlayerPrefs.SetInt(quest.questType + "_isShuffled", quest.isShuffled ? 1 : 0);
                 PlayerPrefs.SetInt(quest.questType + "_isCompleted", quest.isCompleted ? 1 : 0);
                 PlayerPrefs.SetInt(quest.questType + "_isReceived", quest.isReceived ? 1 : 0);
@@ -403,27 +405,27 @@ namespace Script.QuestGroup
             var item2Value = int.Parse(data[6]);
             var item3Value = int.Parse(data[7]);
             var item4Value = int.Parse(data[8]);
-            
-            SetActiveOrToggleParent(questObject.item1Value.transform.parent.gameObject, item1Value);
-            SetActiveOrToggleParent(questObject.item2Value.transform.parent.gameObject, item2Value);
-            SetActiveOrToggleParent(questObject.item3Value.transform.parent.gameObject, item3Value);
-            SetActiveOrToggleParent(questObject.item4Value.transform.parent.gameObject, item4Value);
+            SetActiveOrToggleParent(questObject.item1Value.transform.parent.gameObject, item1Value, questObject.item1Value);
+            SetActiveOrToggleParent(questObject.item2Value.transform.parent.gameObject, item2Value, questObject.item2Value);
+            SetActiveOrToggleParent(questObject.item3Value.transform.parent.gameObject, item3Value, questObject.item3Value);
+            SetActiveOrToggleParent(questObject.item4Value.transform.parent.gameObject, item4Value, questObject.item4Value);
 
             return questObject;
-
-            void SetActiveOrToggleParent(GameObject parentObject, int value)
-            {
-                if (value != 0)
-                {
-                    parentObject.SetActive(true); // 부모를 활성화
-                }
-                else
-                {
-                    parentObject.SetActive(false); // 부모를 비활성화
-                }
-            }
-
         }
+        
+        private static void SetActiveOrToggleParent(GameObject parentObject, int value, TextMeshProUGUI textUI)
+        {
+            if (value != 0)
+            {
+                textUI.text = value.ToString();
+                parentObject.SetActive(true); // 부모를 활성화
+            }
+            else
+            {
+                parentObject.SetActive(false); // 부모를 비활성화
+            }
+        }
+        
         private static void CallShuffleAds()
         {
             AdsManager.Instance.ShowRewardedAd();
