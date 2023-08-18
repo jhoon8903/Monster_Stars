@@ -168,9 +168,6 @@ namespace Script.RewardScript
         private void Awake()
         {
             Instance = this;
-        }
-        private void Start()
-        {
             var selectUnitList = SelectedUnitHolder.Instance.selectedUnit;
             foreach (var unit in selectUnitList)
             {

@@ -65,7 +65,8 @@ namespace Script.CharacterManagerScript
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 enemyList = unit.DetectEnemies();
-                unit.cover.SetActive(enemyList.Count <= 0);
+                unit.GetComponent<SpriteRenderer>().sortingOrder = enemyList.Count <= 0 ? 1 : 2;
+                unit.cover.GetComponent<SpriteRenderer>().sortingOrder = enemyList.Count <= 0 ? 2 : 1;
                 if (enemyList.Count <= 0) continue;
 
                 var atkUnit = unit.gameObject; 

@@ -265,7 +265,6 @@ namespace Script
         }
         public static void ReturnRobby()
         {
-            StageManager.Instance.isStageClear = false;
             PlayerPrefs.DeleteKey("unitState");
             PlayerPrefs.DeleteKey("EnforceData");
             PlayerPrefs.SetInt("GridHeight", 6);

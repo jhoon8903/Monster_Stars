@@ -20,13 +20,15 @@ namespace Script.UIManager
         [SerializeField] private EnemyPool enemyPool;
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private CharacterPool characterPool;
+        [SerializeField] private GameObject descPanel;
+        [SerializeField] private Image enemySprite;
+        [SerializeField] private TextMeshProUGUI enemyDesc;
         public static StageManager Instance;
         private int _setCount;
         public int maxWaveCount;
         public int maxStageCount;
         public int latestStage;
         public int currentWave;
-        public bool isStageClear;
         public bool isBossClear;
         public int selectStage;
         private void Awake()
@@ -53,6 +55,8 @@ namespace Script.UIManager
         }
         public IEnumerator WaveController()
         {
+
+
             var (group1,group1Zone, group2, group2Zone,group3,group3Zone) = GetSpawnCountForWave(selectStage, currentWave);
             const int sets = 2;
             if (currentWave % 10 == 0)
@@ -71,6 +75,15 @@ namespace Script.UIManager
                 }
             }
         }
+
+        private IEnumerator EnemyDesc(EnemyBase enemyBase)
+        {
+            enemySprite.sprite = enemyBase.transform.Find("Sprite").GetComponent<SpriteRenderer>().sprite;
+            descPanel.SetActive(true);
+            yield return new WaitForSecondsRealtime(2f);
+            descPanel.SetActive(false);
+        }
+
         private static Dictionary<string, Dictionary<int, (int group1, List<EnemyBase.SpawnZones> group1Zone, int group2, List<EnemyBase.SpawnZones> group2Zone, int group3, List<EnemyBase.SpawnZones> group3Zone)>> LoadCsvData(string filename)
         {
             var data = new Dictionary<string, Dictionary<int, (int group1, List<EnemyBase.SpawnZones> group1Zone, int group2, List<EnemyBase.SpawnZones> group2Zone, int group3, List<EnemyBase.SpawnZones> group3Zone)>>();
@@ -169,7 +182,6 @@ namespace Script.UIManager
         }
         private void StageClear()
         {
-            isStageClear = true;
             EnforceManager.Instance.addRow = false;
             characterPool.theFirst = false;
             ClearRewardManager.Instance.ClearReward(true);

@@ -79,7 +79,6 @@ namespace Script.PuzzleManagerGroup
             if (isTutorial)
             {
                 yield return new WaitForSecondsRealtime(0.5f);
-                Debug.Log($"spawnManager.TutorialStepCount: {tutorialManager.CurrentTutorialStep.TutorialStepCount}");
                 TriggerOnMatchFound();
             }
             while (commonRewardManager.isOpenBox)

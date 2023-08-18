@@ -61,15 +61,60 @@ namespace Script.EnemyManagerScript
             }
             yield return null;
         }
+
+        private static IEnumerator WalkingEffect(Transform childTransform)
+        {
+            var originalScale = childTransform.localScale;
+            var originalLocalPosition = childTransform.localPosition;
+            const float verticalScaleAmount = 0.07f; // 세로 크기 변화량
+            const float horizontalScaleAmount = 0.05f; // 가로 크기 변화량
+            const float positionOffset = 0.15f; // 위치 변화량
+            const float positionChangeSpeed = 5f; // 포지션 변화 속도
+
+            var targetYPosition = originalLocalPosition.y - positionOffset; // 목표 위치를 아래로 설정
+            var currentYPosition = originalLocalPosition.y;
+
+            while (true)
+            {
+                var delta = targetYPosition - currentYPosition;
+                if (Mathf.Abs(delta) < 0.01f)
+                {
+                    // 목표 위치를 원래 위치와 아래 위치 사이에서 전환
+                    targetYPosition = targetYPosition == originalLocalPosition.y ? originalLocalPosition.y - positionOffset : originalLocalPosition.y;
+                }
+                else
+                {
+                    currentYPosition += delta * positionChangeSpeed * Time.deltaTime;
+                    var newLocalPosition = new Vector3(originalLocalPosition.x, currentYPosition, originalLocalPosition.z);
+                    childTransform.localPosition = newLocalPosition;
+
+                    var scaleValue = Mathf.Abs(currentYPosition - originalLocalPosition.y) / positionOffset;
+                    var newScale = new Vector3(originalScale.x + scaleValue * horizontalScaleAmount, originalScale.y - scaleValue * verticalScaleAmount, originalScale.z);
+                    childTransform.localScale = newScale;
+                }
+
+                yield return null;
+            }
+            // ReSharper disable once IteratorNeverReturns
+        }
+
         private IEnumerator Rain(EnemyBase enemyBase)
         {
             _rb = enemyBase.GetComponent<Rigidbody2D>();
             _enemyRigidbodies[enemyBase] = _rb;
             
             var targetPosition = new Vector2(_enemyRigidbodies[enemyBase].transform.position.x, _endY);
+            var childTransform = enemyBase.transform.Find("Sprite"); // 자식 객체의 이름으로 찾기
+            StartCoroutine(WalkingEffect(childTransform));
+
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
+                if (enemyBase.isDead)
+                {
+                    StopCoroutine(WalkingEffect(childTransform));
+                    yield break;
+                }
                 _slowCount = EnforceManager.Instance.slowCount;
                 _speedReductionFactor = 1f - _slowCount * 0.15f;
                 if (_speedReductionFactor == 0)
@@ -100,10 +145,15 @@ namespace Script.EnemyManagerScript
 
             var endX = enemyBase.SpawnZone == EnemyBase.SpawnZones.B ? Random.Range(4, 7) : Random.Range(-1, 2);
             var targetPosition = new Vector2(endX, _endY);
-
+            // var walkingEffectCoroutine = StartCoroutine(WalkingEffect(enemyBase));
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
+                // if (enemyBase.isDead)
+                // {
+                //     StopCoroutine(walkingEffectCoroutine);
+                //     yield break;
+                // }
                 _slowCount = EnforceManager.Instance.slowCount;
                 _speedReductionFactor = 1f - _slowCount * 0.15f;
                 if (_speedReductionFactor == 0)
@@ -135,10 +185,15 @@ namespace Script.EnemyManagerScript
                 direction *= -1;
             }
             var waypointIndex = 0;
-
+            // var walkingEffectCoroutine = StartCoroutine(WalkingEffect(enemyBase));
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
+                // if (enemyBase.isDead)
+                // {
+                //     StopCoroutine(walkingEffectCoroutine);
+                //     yield break;
+                // }
                 var targetPosition = waypoints[waypointIndex];
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
 
@@ -176,10 +231,15 @@ namespace Script.EnemyManagerScript
             var targetPosition = _enemyRigidbodies[enemyBase].transform.position.x <= 2 
                 ? new Vector2(-1, _enemyRigidbodies[enemyBase].transform.position.y) 
                 : new Vector2(6, _enemyRigidbodies[enemyBase].transform.position.y);
-
+            // var walkingEffectCoroutine = StartCoroutine(WalkingEffect(enemyBase));
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
+                // if (enemyBase.isDead)
+                // {
+                //     StopCoroutine(walkingEffectCoroutine);
+                //     yield break;
+                // }
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
                 _slowCount = EnforceManager.Instance.slowCount;
                 _speedReductionFactor = 1f - _slowCount * 0.15f;
@@ -221,12 +281,16 @@ namespace Script.EnemyManagerScript
                 var randomX = Random.Range(0, 3);
                 targetPosition = new Vector3(randomX, _enemyRigidbodies[enemyBase].transform.position.y);
             }
-
+            // var walkingEffectCoroutine = StartCoroutine(WalkingEffect(enemyBase));
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
-                
+                // if (enemyBase.isDead)
+                // {
+                //     StopCoroutine(walkingEffectCoroutine);
+                //     yield break;
+                // }
                 _slowCount = EnforceManager.Instance.slowCount;
                 _speedReductionFactor = 1f - _slowCount * 0.15f;
                 if (_speedReductionFactor == 0)
@@ -252,6 +316,7 @@ namespace Script.EnemyManagerScript
                 
             }
         }
+        
         private IEnumerator Effect(EnemyBase enemyBase)
         {
             if (enemyBase.isBind)
@@ -288,7 +353,6 @@ namespace Script.EnemyManagerScript
             }
             yield return null;
         }
-
         private static IEnumerator BindEffect(EnemyBase enemyBase, CharacterBase characterBase)
         {
             var restrainColor = new Color(1, 0.5f, 0);

@@ -283,7 +283,8 @@ namespace Script.RewardScript
                             case PowerTypeManager.Types.Step:
                                 if (PlayerPrefs.GetInt("TutorialKey") == 1) return false;
                                 break;
-                            case PowerTypeManager.Types.LevelUpPattern:if (PlayerPrefs.GetInt("TutorialKey") == 1) return false;
+                            case PowerTypeManager.Types.LevelUpPattern:
+                                if (PlayerPrefs.GetInt("TutorialKey") == 1) return false;
                                 if (PlayerPrefs.GetInt("TutorialKey") == 1) return false;
                                 break;
                         }

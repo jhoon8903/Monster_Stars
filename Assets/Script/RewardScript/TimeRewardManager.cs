@@ -73,8 +73,8 @@ namespace Script.RewardScript
         public void OpenPanel()
         {
             timeRewardPanel.SetActive(true);
-            ShowTimeReward();
             StartCoroutine(UpdateReward());
+            ShowTimeReward();
             timeRewardBtn.GetComponent<Button>().interactable = timeRewardContents.transform.childCount > 0;
         }
         private void ShowTimeReward()

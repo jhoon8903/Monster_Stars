@@ -96,17 +96,16 @@ namespace Script.UIManager
                 var isActive = activeSkills.TryGetValue(skillLevel, out var active) && active;
 
                 var instance = Instantiate(unitSkillPrefabs, unitSkillGrid.transform);
-
+                if (instance == null) continue;
                 instance.GetComponent<Image>().sprite = isActive
                     ? gradeBack[(int)Enum.Parse(typeof(CharacterBase.UnitGrades), (string)skill["Grade"], true)]
                     : gradeBack[3];
- 
-                
                 if (characterBase.UnitSkillDict.TryGetValue(skillLevel, out var skillSprite))
                 {
                     instance.skillIcon.sprite = skillSprite;
                 }
                 instance.skillDesc.text = (string)skill["EngDesc"];
+
                 // instance.skillType.text = $"{skill["Type"]} / {skill["Level"]}";
             }
         }
@@ -137,7 +136,7 @@ namespace Script.UIManager
         }
         private void UnitSkillView()
         {
-            var units = characterManager.characterList;
+            var units = EnforceManager.Instance.characterList;
             UpdateUnitSkillView(units[0], unit1Back, unit1Image, unit1SkillGrid.transform);
             UpdateUnitSkillView(units[1], unit2Back, unit2Image, unit2SkillGrid.transform);
             UpdateUnitSkillView(units[2], unit3Back, unit3Image, unit3SkillGrid.transform);
