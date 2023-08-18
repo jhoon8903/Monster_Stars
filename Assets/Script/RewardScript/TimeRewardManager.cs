@@ -74,48 +74,64 @@ namespace Script.RewardScript
         {
             timeRewardPanel.SetActive(true);
             StartCoroutine(UpdateReward());
+            LoadRewardInfo(); 
             ShowTimeReward();
             timeRewardBtn.GetComponent<Button>().interactable = timeRewardContents.transform.childCount > 0;
+            SaveRewardInfo();
         }
+        private void CloseTimeReward()
+        {
+            if (_coinObject != null)
+            {
+                Destroy(_coinObject.gameObject);
+                _coinObject = null;
+            }
+            foreach (var unitPiece in _unitPieceDict.Values)
+            {
+                Destroy(unitPiece.Item2.gameObject);                           
+            }
+            _unitPieceDict.Clear();
+            SaveRewardInfo();
+            timeRewardBtn.GetComponent<Button>().onClick.RemoveAllListeners();
+            timeRewardPanel.SetActive(false);
+        }
+
+        private void ReceiveTimeReward()
+        {
+            CoinsScript.Instance.Coin += _coinReward;
+            CoinsScript.Instance.UpdateCoin();
+            _latestOpenTime = DateTime.Now;
+            PlayerPrefs.SetString(LatestOpenTimeKey, _latestOpenTime.ToBinary().ToString());
+            foreach (var unitPiece in _unitPieceDict)
+            {
+                unitPiece.Key.CharacterPeaceCount += unitPiece.Value.Item1;
+                HoldCharacterList.Instance.UpdateRewardPiece(unitPiece.Key);
+                Destroy(unitPiece.Value.Item2.gameObject);
+            }
+            Destroy(_coinObject.gameObject);
+            _unitPieceDict.Clear();
+            DeleteRewardInfo();
+            timeRewardPanel.SetActive(false);
+        }
+
+
         private void ShowTimeReward()
         {
             var latestStage = PlayerPrefs.GetInt("LatestStage", 1);
             _timePassed = DateTime.Now - _latestOpenTime;
             _timePassed = TimeSpan.FromHours(Math.Min(_timePassed.TotalHours, MaxHours));
-            CalculateCoinReward(_timePassed, latestStage);
-
-            // 기존 딕셔너리에 있는 보상 정보 업데이트
-            foreach (var unitPiece in _unitPieceDict)
+            if (_coinReward == 0)
             {
-                unitPiece.Key.CharacterPeaceCount += unitPiece.Value.Item1;
+                CalculateCoinReward(_timePassed, latestStage);
             }
-
-            // 보상 정보 불러오기 및 업데이트
-            foreach (var unit in unitList)
+            if (_unitPieceDict.Count == 0)
             {
-                int savedRewardCount = PlayerPrefs.GetInt($"UnitReward_{unit.unitGroup}", 0);
-                Debug.Log($"PlayerPrefs key: UnitReward_{unit.unitGroup}, savedRewardCount: {savedRewardCount}");
-
-                if (savedRewardCount > 0)
-                {
-                    if (_unitPieceDict.ContainsKey(unit))
-                    {
-                        _unitPieceDict[unit] = new Tuple<int, Goods>(savedRewardCount, null); 
-                    }
-                    else
-                    {
-                        _unitPieceDict.Add(unit, new Tuple<int, Goods>(savedRewardCount, null));
-                    }
-                }
+                CalculateUnitPieceReward(_timePassed, latestStage);
             }
-            CalculateUnitPieceReward(_timePassed, latestStage);
         }
+
         private void CalculateCoinReward(TimeSpan timePassed, int stage)
         {
-            if (_coinObject != null)
-            {
-                Destroy(_coinObject.gameObject);
-            }
             var coinValue = stage * 5 + 20;
             _coinReward = coinValue * (int)(timePassed.TotalMinutes / CoinRewardTime);
             if (_coinReward == 0) return;
@@ -214,6 +230,57 @@ namespace Script.RewardScript
               CharacterBase.UnitGrades.Blue => blueReward * (int)(timePassed.TotalHours / BluePieceRewardTime),
             };
         }
+
+        private void SaveRewardInfo()
+        {
+            PlayerPrefs.SetInt("CoinReward", _coinReward);
+
+            foreach (var unitPiece in _unitPieceDict)
+            {
+                var unitKey = unitPiece.Key.name;
+                var unitReward = unitPiece.Value.Item1;
+                PlayerPrefs.SetInt(unitKey, unitReward);
+            }
+        }
+
+        private void LoadRewardInfo()
+        {
+            _coinReward = PlayerPrefs.GetInt("CoinReward", 0);
+
+            if (_coinReward > 0)
+            {
+                CalculateCoinReward(_timePassed, PlayerPrefs.GetInt("LatestStage", 1));
+            }
+
+            foreach (var unit in unitList)
+            {
+                var unitKey = unit.name;
+                var unitReward = PlayerPrefs.GetInt(unitKey, 0);
+                if (unitReward > 0)
+                {
+                    var index = unitList.IndexOf(unit);
+                    unit.Initialize();
+                    _unitPieceReward = unitReward;
+                    _unitPieceObject = Instantiate(rewardItem, timeRewardContents.transform);
+                    _unitPieceObject.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPeaceLevel);
+                    _unitPieceObject.goodsSprite.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);
+                    _unitPieceObject.goodsValue.text = $"{_unitPieceReward}";
+                    _unitPieceObject.goodsValue.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);
+                    _unitPieceDict[unit] = new Tuple<int, Goods>(_unitPieceReward, _unitPieceObject);
+                }
+            }
+        }
+
+        private void DeleteRewardInfo()
+        {
+            PlayerPrefs.DeleteKey("CoinReward");
+            foreach (var unit in unitList)
+            {
+                var unitKey = unit.name;
+                PlayerPrefs.DeleteKey(unitKey);
+            }
+        }
+
         private IEnumerator UpdateReward()
         {
             while (timeRewardPanel.activeInHierarchy)
@@ -227,48 +294,6 @@ namespace Script.RewardScript
                 _rewardTimeText.text = $"보상누적 [{_hour:D2}:{_min:D2}:{_sec:D2}]";
                 yield return new WaitForSecondsRealtime(1f);
             }
-        }
-        private void ReceiveTimeReward()
-        {
-            CoinsScript.Instance.Coin += _coinReward;
-            CoinsScript.Instance.UpdateCoin();
-            _latestOpenTime = DateTime.Now;
-            PlayerPrefs.SetString(LatestOpenTimeKey, _latestOpenTime.ToBinary().ToString());
-            foreach (var unitPiece in _unitPieceDict)
-            {
-                unitPiece.Key.CharacterPeaceCount += unitPiece.Value.Item1;
-                HoldCharacterList.Instance.UpdateRewardPiece(unitPiece.Key);
-                Destroy(unitPiece.Value.Item2.gameObject);
-            }
-            Destroy(_coinObject.gameObject);
-            _unitPieceDict.Clear();
-            timeRewardPanel.SetActive(false);
-        }
-        private void CloseTimeReward()
-        {
-            // 저장된 유닛 보상 정보 제거
-            foreach (var unit in unitList)
-            {
-                // 보상 정보 저장
-                if (_unitPieceDict.ContainsKey(unit))
-                {
-                    PlayerPrefs.SetInt($"UnitReward_{unit.unitGroup}", _unitPieceDict[unit]?.Item1 ?? 0);
-                }
-            }
-
-            // 보상 객체들 삭제
-            foreach (var unitPiece in _unitPieceDict)
-            {
-                if (unitPiece.Value.Item2 != null)
-                {
-                    Destroy(unitPiece.Value.Item2.gameObject);
-                }
-            }
-
-            // 유닛 보상 딕셔너리 초기화
-            _unitPieceDict.Clear();
-            timeRewardBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            timeRewardPanel.SetActive(false);
         }
     }   
 }

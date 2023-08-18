@@ -329,7 +329,7 @@ namespace Script.WeaponScriptGroup
                 hitEnemy.ReceiveDamage(hitEnemy,(int)poisonDotDamage, characterBase);
                 yield return new WaitForSeconds(1f);
             }
-            hitEnemy.GetComponent<SpriteRenderer>().DOColor(Color.white, 0.2f);
+            hitEnemy.GetComponentInChildren<SpriteRenderer>().DOColor(Color.white, 0.2f);
             hitEnemy.PoisonStatus(false, characterBase);
             hitEnemy.AlreadyPoison[hitEnemy] = false;
             if (!hitEnemy.IsPoison.ContainsKey(characterBase)) yield break;

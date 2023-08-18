@@ -66,12 +66,12 @@ namespace Script.EnemyManagerScript
         {
             var originalScale = childTransform.localScale;
             var originalLocalPosition = childTransform.localPosition;
-            const float verticalScaleAmount = 0.07f; // 세로 크기 변화량
-            const float horizontalScaleAmount = 0.05f; // 가로 크기 변화량
-            const float positionOffset = 0.15f; // 위치 변화량
-            const float positionChangeSpeed = 5f; // 포지션 변화 속도
+            const float verticalScaleAmount = 0.07f;
+            const float horizontalScaleAmount = 0.05f;
+            const float positionOffset = 0.15f;
+            const float positionChangeSpeed = 5f;
 
-            var targetYPosition = originalLocalPosition.y - positionOffset; // 목표 위치를 아래로 설정
+            var targetYPosition = originalLocalPosition.y - positionOffset;
             var currentYPosition = originalLocalPosition.y;
 
             while (true)
@@ -79,8 +79,7 @@ namespace Script.EnemyManagerScript
                 var delta = targetYPosition - currentYPosition;
                 if (Mathf.Abs(delta) < 0.01f)
                 {
-                    // 목표 위치를 원래 위치와 아래 위치 사이에서 전환
-                    targetYPosition = targetYPosition == originalLocalPosition.y ? originalLocalPosition.y - positionOffset : originalLocalPosition.y;
+                    targetYPosition = targetYPosition >= originalLocalPosition.y ? originalLocalPosition.y - positionOffset : originalLocalPosition.y;
                 }
                 else
                 {
@@ -104,7 +103,7 @@ namespace Script.EnemyManagerScript
             _enemyRigidbodies[enemyBase] = _rb;
             
             var targetPosition = new Vector2(_enemyRigidbodies[enemyBase].transform.position.x, _endY);
-            var childTransform = enemyBase.transform.Find("Sprite"); // 자식 객체의 이름으로 찾기
+            var childTransform = enemyBase.transform.Find("Sprite");
             StartCoroutine(WalkingEffect(childTransform));
 
             while (gameManager.IsBattle)
@@ -145,15 +144,16 @@ namespace Script.EnemyManagerScript
 
             var endX = enemyBase.SpawnZone == EnemyBase.SpawnZones.B ? Random.Range(4, 7) : Random.Range(-1, 2);
             var targetPosition = new Vector2(endX, _endY);
-            // var walkingEffectCoroutine = StartCoroutine(WalkingEffect(enemyBase));
+            var childTransform = enemyBase.transform.Find("Sprite");
+            StartCoroutine(WalkingEffect(childTransform));
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
-                // if (enemyBase.isDead)
-                // {
-                //     StopCoroutine(walkingEffectCoroutine);
-                //     yield break;
-                // }
+                if (enemyBase.isDead)
+                {
+                    StopCoroutine(WalkingEffect(childTransform));
+                    yield break;
+                }
                 _slowCount = EnforceManager.Instance.slowCount;
                 _speedReductionFactor = 1f - _slowCount * 0.15f;
                 if (_speedReductionFactor == 0)
@@ -185,15 +185,16 @@ namespace Script.EnemyManagerScript
                 direction *= -1;
             }
             var waypointIndex = 0;
-            // var walkingEffectCoroutine = StartCoroutine(WalkingEffect(enemyBase));
+            var childTransform = enemyBase.transform.Find("Sprite");
+            StartCoroutine(WalkingEffect(childTransform));
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
-                // if (enemyBase.isDead)
-                // {
-                //     StopCoroutine(walkingEffectCoroutine);
-                //     yield break;
-                // }
+                if (enemyBase.isDead)
+                {
+                    StopCoroutine(WalkingEffect(childTransform));
+                    yield break;
+                }
                 var targetPosition = waypoints[waypointIndex];
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
 
@@ -231,15 +232,16 @@ namespace Script.EnemyManagerScript
             var targetPosition = _enemyRigidbodies[enemyBase].transform.position.x <= 2 
                 ? new Vector2(-1, _enemyRigidbodies[enemyBase].transform.position.y) 
                 : new Vector2(6, _enemyRigidbodies[enemyBase].transform.position.y);
-            // var walkingEffectCoroutine = StartCoroutine(WalkingEffect(enemyBase));
+            var childTransform = enemyBase.transform.Find("Sprite");
+            StartCoroutine(WalkingEffect(childTransform));
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
-                // if (enemyBase.isDead)
-                // {
-                //     StopCoroutine(walkingEffectCoroutine);
-                //     yield break;
-                // }
+                if (enemyBase.isDead)
+                {
+                    StopCoroutine(WalkingEffect(childTransform));
+                    yield break;
+                }
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
                 _slowCount = EnforceManager.Instance.slowCount;
                 _speedReductionFactor = 1f - _slowCount * 0.15f;
@@ -281,16 +283,17 @@ namespace Script.EnemyManagerScript
                 var randomX = Random.Range(0, 3);
                 targetPosition = new Vector3(randomX, _enemyRigidbodies[enemyBase].transform.position.y);
             }
-            // var walkingEffectCoroutine = StartCoroutine(WalkingEffect(enemyBase));
+            var childTransform = enemyBase.transform.Find("Sprite");
+            StartCoroutine(WalkingEffect(childTransform));
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
-                // if (enemyBase.isDead)
-                // {
-                //     StopCoroutine(walkingEffectCoroutine);
-                //     yield break;
-                // }
+                if (enemyBase.isDead)
+                {
+                    StopCoroutine(WalkingEffect(childTransform));
+                    yield break;
+                }
                 _slowCount = EnforceManager.Instance.slowCount;
                 _speedReductionFactor = 1f - _slowCount * 0.15f;
                 if (_speedReductionFactor == 0)
@@ -365,11 +368,11 @@ namespace Script.EnemyManagerScript
             }
             if  (isAlreadyBind) yield break;
             enemyBase.AlreadyBind[enemyBase] = true;
-            enemyBase.GetComponent<SpriteRenderer>().color = restrainColor;
+            enemyBase.GetComponentInChildren<SpriteRenderer>().color = restrainColor;
             enemyBase.moveSpeed = 0;
             yield return new WaitForSeconds(restrainTime);
             enemyBase.moveSpeed = enemyBase.originSpeed;
-            enemyBase.GetComponent<SpriteRenderer>().color = originColor;
+            enemyBase.GetComponentInChildren<SpriteRenderer>().color = originColor;
             enemyBase.AlreadyBind[enemyBase] = false;
             enemyBase.BindStatus(false, characterBase);
             if (!enemyBase.IsBind.ContainsKey(characterBase)) yield break;
@@ -388,11 +391,11 @@ namespace Script.EnemyManagerScript
             }
             if (isAlreadySlow) yield break;
             enemyBase.AlreadySlow[enemyBase] = true;
-            enemyBase.GetComponent<SpriteRenderer>().color = slowColor;
+            enemyBase.GetComponentInChildren<SpriteRenderer>().color = slowColor;
             enemyBase.moveSpeed *= slowPower;
             yield return new WaitForSeconds(slowTime);
             enemyBase.moveSpeed = enemyBase.originSpeed;
-            enemyBase.GetComponent<SpriteRenderer>().color = originColor;
+            enemyBase.GetComponentInChildren<SpriteRenderer>().color = originColor;
             enemyBase.AlreadySlow[enemyBase] = false;
             enemyBase.SlowStatus(false, characterBase);
             if (!enemyBase.IsSlow.ContainsKey(characterBase)) yield break;
@@ -491,7 +494,7 @@ namespace Script.EnemyManagerScript
         private IEnumerator StunEffect(EnemyBase enemyBase, CharacterBase characterBase)
         {
             var stunColor = new Color(1f, 0.3f, 0);
-            var originColor = enemyBase.GetComponent<SpriteRenderer>();
+            var originColor = enemyBase.GetComponentInChildren<SpriteRenderer>();
             var stunTime = characterBase.stunTime;
             if (!enemyBase.AlreadyStun.TryGetValue(enemyBase, out var isAlreadyStun))
             {

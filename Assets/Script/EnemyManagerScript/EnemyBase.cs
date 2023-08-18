@@ -120,7 +120,7 @@ namespace Script.EnemyManagerScript
             statusList.Add(IsPoison[characterBase]);
             var poisonAttack = WeaponBase.Instance.PoisonEffect(this, characterBase);
             var poisonColor = new Color(0.18f, 1f, 0.1f);
-            var originColor = gameObject.GetComponent<SpriteRenderer>();
+            var originColor = gameObject.GetComponentInChildren<SpriteRenderer>();
             if (!gameObject.activeInHierarchy || !isPoison) return;
             StartCoroutine(poisonAttack);
             if (!gameObject.activeInHierarchy || !isPoison) return;
@@ -140,7 +140,7 @@ namespace Script.EnemyManagerScript
             statusList.Add(IsBurn[characterBase]);
             var burningAttack = WeaponBase.Instance.BurningEffect(this, characterBase);
             var burningColor = new Color(1f, 0, 0.4f);
-            var originColor = gameObject.GetComponent<SpriteRenderer>();
+            var originColor = gameObject.GetComponentInChildren<SpriteRenderer>();
             if (!gameObject.activeInHierarchy || !isBurn) return;
             StartCoroutine(burningAttack);
             if (!gameObject.activeInHierarchy || !isBurn) return;
@@ -159,7 +159,7 @@ namespace Script.EnemyManagerScript
             Character = characterBase;
             statusList.Add(IsBleed[characterBase]);
             var bleedColor = new Color(1f, 0, 0.4f);
-            var originColor = gameObject.GetComponent<SpriteRenderer>();
+            var originColor = gameObject.GetComponentInChildren<SpriteRenderer>();
             var bleedAttack = WeaponBase.Instance.BleedEffect(this, characterBase);
             if (!gameObject.activeInHierarchy || !isBleed) return;
             StartCoroutine(bleedAttack);
@@ -367,7 +367,7 @@ namespace Script.EnemyManagerScript
             detectedEnemy.IsBleed.Clear();
             detectedEnemy.AlreadyBleed.Clear();
             detectedEnemy.transform.localScale = Vector3.one;
-            detectedEnemy.GetComponent<SpriteRenderer>().color = Color.white;
+            detectedEnemy.GetComponentInChildren<SpriteRenderer>().color = Color.white;
             detectedEnemy.BindStatus(false, characterBase);
             detectedEnemy.SlowStatus(false, characterBase);
             detectedEnemy.KnockBackStatus(false, characterBase);
