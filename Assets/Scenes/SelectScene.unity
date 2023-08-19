@@ -579,6 +579,7 @@ MonoBehaviour:
   chestErrorCloseBtn: {fileID: 566064104}
   getBackToStoreBtn: {fileID: 2028722647}
   errorContentsImage: {fileID: 66309831}
+  questManager: {fileID: 0}
   specialOffer: {fileID: 5865400185949221611, guid: 902bbaf6e404045ffa6e75d0e5fa09b3, type: 3}
   isReset: 0
 --- !u!114 &44203098
@@ -4273,6 +4274,7 @@ GameObject:
   - component: {fileID: 337770384}
   - component: {fileID: 337770385}
   - component: {fileID: 337770386}
+  - component: {fileID: 337770387}
   m_Layer: 5
   m_Name: Battle
   m_TagString: Untagged
@@ -4432,6 +4434,8 @@ MonoBehaviour:
   questOpenBtn: {fileID: 118422474}
   questCloseBtn: {fileID: 285102740}
   questRewardPanel: {fileID: 692986212}
+  questObject: {fileID: 4898787409224745602, guid: fa42b76988f2d467db359d1630ef6f10, type: 3}
+  questTransform: {fileID: 150719442}
   adsDesc: {fileID: 1782057477}
   adsProgress: {fileID: 427586481}
   adsProgressText: {fileID: 230674010}
@@ -4444,8 +4448,19 @@ MonoBehaviour:
   allClearRewardBtn: {fileID: 1315576543}
   allClearValue: 0
   allClearGoal: 0
-  questPrefab: {fileID: 4898787409224745602, guid: fa42b76988f2d467db359d1630ef6f10, type: 3}
-  questTransform: {fileID: 150719441}
+--- !u!114 &337770387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 337770379}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 189fb5623b6d459487d5f112b1e567a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  questManager: {fileID: 337770386}
 --- !u!1 &356145296
 GameObject:
   m_ObjectHideFlags: 0
@@ -13445,6 +13460,7 @@ MonoBehaviour:
   coinBtn: {fileID: 7196134908141924821, guid: b7e3560b6c46c4ac1bf72a53c6b2d026, type: 3}
   staminaBtn: {fileID: 7196134908141924821, guid: b7e3560b6c46c4ac1bf72a53c6b2d026, type: 3}
   gemBtn: {fileID: 7196134908141924821, guid: b7e3560b6c46c4ac1bf72a53c6b2d026, type: 3}
+  questManager: {fileID: 337770386}
   rewardedRetryAttempt: 0
   boxGrade: 0
   isRetry: 0

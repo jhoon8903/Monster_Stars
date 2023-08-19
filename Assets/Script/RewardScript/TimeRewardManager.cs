@@ -7,7 +7,6 @@ using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.RobbyScript.StoreMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -25,7 +24,7 @@ namespace Script.RewardScript
         [SerializeField] private GameObject timeRewardBtn;
         [SerializeField] private GameObject timeRewardCloseBtn;
         [SerializeField] private Goods rewardItem;
-        [SerializeField] private List<CharacterBase> unitList = new List<CharacterBase>();
+        [SerializeField] public List<CharacterBase> unitList = new List<CharacterBase>();
         public static TimeRewardManager Instance { get; private set; }
         private TextMeshProUGUI _rewardLevelText;
         private TextMeshProUGUI _rewardTimeText;
@@ -95,7 +94,6 @@ namespace Script.RewardScript
             timeRewardBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             timeRewardPanel.SetActive(false);
         }
-
         private void ReceiveTimeReward()
         {
             CoinsScript.Instance.Coin += _coinReward;
@@ -113,8 +111,6 @@ namespace Script.RewardScript
             DeleteRewardInfo();
             timeRewardPanel.SetActive(false);
         }
-
-
         private void ShowTimeReward()
         {
             var latestStage = PlayerPrefs.GetInt("LatestStage", 1);
@@ -129,7 +125,6 @@ namespace Script.RewardScript
                 CalculateUnitPieceReward(_timePassed, latestStage);
             }
         }
-
         private void CalculateCoinReward(TimeSpan timePassed, int stage)
         {
             var coinValue = stage * 5 + 20;
@@ -230,7 +225,6 @@ namespace Script.RewardScript
               CharacterBase.UnitGrades.Blue => blueReward * (int)(timePassed.TotalHours / BluePieceRewardTime),
             };
         }
-
         private void SaveRewardInfo()
         {
             PlayerPrefs.SetInt("CoinReward", _coinReward);
@@ -242,7 +236,6 @@ namespace Script.RewardScript
                 PlayerPrefs.SetInt(unitKey, unitReward);
             }
         }
-
         private void LoadRewardInfo()
         {
             _coinReward = PlayerPrefs.GetInt("CoinReward", 0);
@@ -270,7 +263,6 @@ namespace Script.RewardScript
                 }
             }
         }
-
         private void DeleteRewardInfo()
         {
             PlayerPrefs.DeleteKey("CoinReward");
@@ -280,7 +272,6 @@ namespace Script.RewardScript
                 PlayerPrefs.DeleteKey(unitKey);
             }
         }
-
         private IEnumerator UpdateReward()
         {
             while (timeRewardPanel.activeInHierarchy)

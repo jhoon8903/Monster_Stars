@@ -1625,19 +1625,13 @@ MonoBehaviour:
   questDesc: {fileID: 4426519704750226040}
   questProgress: {fileID: 4426519706095828640}
   questProgressText: {fileID: 4426519706555036019}
-  item1Sprite: {fileID: 4426519705156510838}
-  item1Value: {fileID: 4426519706188988852}
-  item2Sprite: {fileID: 4426519706847590585}
-  item2Value: {fileID: 4426519704739648272}
-  item3Sprite: {fileID: 2330009427717526739}
-  item3Value: {fileID: 8175636824508422416}
-  item4Sprite: {fileID: 7363434397601226539}
-  item4Value: {fileID: 1405453361318917078}
+  coinValue: {fileID: 4426519706188988852}
+  greenPieceValue: {fileID: 4426519704739648272}
+  bluePieceValue: {fileID: 8175636824508422416}
+  purplePieceValue: {fileID: 1405453361318917078}
   receiveBtn: {fileID: 2414390146092849660}
   receiveBtnText: {fileID: 4363657113027491130}
   shuffleBtn: {fileID: 4426519705265827606}
-  questType: 0
-  questCondition: 0
   questValue: 0
   questGoal: 0
   isShuffled: 0
