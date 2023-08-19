@@ -54,6 +54,11 @@ namespace Script.RobbyScript.MainMenuGroup
             confirmBtn.GetComponent<Button>().onClick.AddListener(ContinueGame);
             cancelBtn.GetComponent<Button>().onClick.AddListener(CancelContinue);
             timeRewardBtn.GetComponent<Button>().onClick.AddListener(OpenTimeReward);
+            if (LatestStage == 1)
+            {
+                previousStageBtn.SetActive(false);
+                nextStageBtn.SetActive(false);
+            }
         }
         private void Update()
         {
@@ -144,16 +149,19 @@ namespace Script.RobbyScript.MainMenuGroup
             }
             else
             {
-                warningPanel.SetActive(true);
-                messageText.text = $"먼저 스테이지 {SelectStage}을/를 클리어 하셔야 합니다.";
+                nextStageBtn.SetActive(false);
             }
         }
         private void PreviousStage()
         {
-            if (SelectStage <= 1) return;
+            if (SelectStage <= 1)
+            {
+                previousStageBtn.SetActive(false);
+            }
             SelectStage--;
             var (maxWave, clearWave) = GetStageWave(SelectStage);
             UpdateProgress(SelectStage, maxWave, clearWave);
+            nextStageBtn.SetActive(true);
         }
         private void ReturnRobby()
         {

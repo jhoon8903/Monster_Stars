@@ -50,7 +50,7 @@ MonoBehaviour:
   cover: {fileID: 4679517600283520585}
   unitPeaceLevel: 1
   unLock: 1
-  selected: 1
+  selected: 0
   unitPuzzleLevel: 1
   unitGroup: 2
   lv1: {fileID: 21300000, guid: cb3c87caa8d4d40988c8fba81635d8d7, type: 3}

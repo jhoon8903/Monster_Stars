@@ -116,7 +116,6 @@ namespace Script.QuestGroup
                 PlayerPrefs.SetInt(quest.questType + "_isCompleted", 0);
             }
             ShuffleQuest();
-            SaveSelectedQuestList(_rotationQuestList);
             PlayerPrefs.Save();
         }
         private static QuestTypes ParseQuestType(string type) => (QuestTypes)Enum.Parse(typeof(QuestTypes), type);
