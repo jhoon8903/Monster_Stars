@@ -167,7 +167,7 @@ namespace Script.UIManager
                 if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
                 {
                     isBossClear = true;
-                    QuestManager.Instance.KillBossQuest();
+                    Quest.Instance.KillBossQuest();
                 }
             }
             if (currentWave == MaxWave() && isBossClear )

@@ -381,7 +381,7 @@ namespace Script.EnemyManagerScript
                 characterBase.DetectEnemies().Remove(detectedEnemy.gameObject);
                 characterBase.AttackCounts.Remove(detectedEnemy);
             }
-            QuestManager.Instance.KillEnemyQuest();
+            Quest.Instance.KillEnemyQuest();
             enemyPool.ReturnToPool(detectedEnemy);
         }
         private IEnumerator UpdateHpSlider()

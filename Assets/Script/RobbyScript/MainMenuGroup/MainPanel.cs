@@ -54,11 +54,9 @@ namespace Script.RobbyScript.MainMenuGroup
             confirmBtn.GetComponent<Button>().onClick.AddListener(ContinueGame);
             cancelBtn.GetComponent<Button>().onClick.AddListener(CancelContinue);
             timeRewardBtn.GetComponent<Button>().onClick.AddListener(OpenTimeReward);
-            if (LatestStage == 1)
-            {
-                previousStageBtn.SetActive(false);
-                nextStageBtn.SetActive(false);
-            }
+            if (LatestStage != 1) return;
+            previousStageBtn.SetActive(false);
+            nextStageBtn.SetActive(false);
         }
         private void Update()
         {

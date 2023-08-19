@@ -116,7 +116,7 @@ namespace Script.RewardScript
         {
             var rewardCoin = wave * 50;
             var getCoin = rewardCoin + EnforceManager.Instance.addGoldCount;
-            QuestManager.Instance.GetCoinQuest(getCoin);
+            Quest.Instance.GetCoinQuest(getCoin);
             CoinsScript.Instance.Coin += getCoin;
             cumulativeCoin += getCoin;
             CoinsScript.Instance.UpdateCoin();

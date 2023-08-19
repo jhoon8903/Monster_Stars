@@ -206,7 +206,7 @@ namespace Script
             {
                 unit.GetComponent<CharacterBase>().cover.SetActive(false);
             }
-            QuestManager.Instance.VictoryQuest();
+            Quest.Instance.VictoryQuest();
         }
         private void LoseGame()
         {

@@ -459,7 +459,7 @@ namespace Script.RewardScript
         private void SelectCommonReward(Data selectedReward)
         {
         Selected(selectedReward);
-        QuestManager.Instance.MatchCoinQuest();
+        Quest.Instance.MatchCoinQuest();
         OnRewardSelected?.Invoke();
         }
         // 11. 선택 처리

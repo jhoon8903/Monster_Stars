@@ -15,6 +15,7 @@ namespace Script.AdsScript
         [SerializeField] private GameObject coinBtn;
         [SerializeField] private GameObject staminaBtn;
         [SerializeField] private GameObject gemBtn;
+        [SerializeField] private QuestManager questManager;
         public static AdsManager Instance { get; private set; }
         private const string MaxSdkKey = "EG4dCO2mV2THPcolJ7UkHmIGIfTqtwfpRaimZ-lyk-OV5RSBpi4KMT6P3FnnemsgdzXD-3swcClOldu3";
         private const string BannerAdUnitId = "BannerAdUnitId";
@@ -223,7 +224,7 @@ namespace Script.AdsScript
         private void OnRewardedAdDismissedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
             RewardButtonClicked();
-            QuestManager.Instance.AdsViewQuest();
+            Quest.Instance.AdsViewQuest();
             LoadRewardedAd();
         }
 
@@ -387,7 +388,7 @@ namespace Script.AdsScript
                     FreeCoinPack();
                     break;
                 case ButtonType.ShuffleQuest:
-                    QuestManager.Instance.ShuffleQuest();
+                    questManager.ShuffleQuest();
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();

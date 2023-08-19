@@ -38,6 +38,7 @@ namespace Script.RobbyScript.StoreMenuGroup
         [SerializeField] private GameObject chestErrorCloseBtn;
         [SerializeField] private GameObject getBackToStoreBtn;
         [SerializeField] private GameObject errorContentsImage;
+        [SerializeField] private QuestManager questManager;
         
         public static StoreMenu Instance { get; private set; }
         public SpecialOffer specialOffer;
@@ -183,7 +184,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             {
                 Debug.Log("리셋?");
                 ResetButtonCounts();
-                QuestManager.Instance.ResetQuest();
+                questManager.ResetQuest();
                 _lastDayCheck = DateTime.Today;
                 PlayerPrefs.SetString(LastDayKey, _lastDayCheck.ToBinary().ToString());
                 PlayerPrefs.SetInt(ResetKey, 1); // 리셋 상태를 1로 설정하여 리셋이 발생했음을 저장합니다.
@@ -280,7 +281,6 @@ namespace Script.RobbyScript.StoreMenuGroup
         public void Reward(BoxGrade boxTypes)
         {
             closeBtn.SetActive(true);
-            Debug.Log("boxTypes :"+boxTypes );
             const int count = 0;
             switch (boxTypes)
             {
@@ -291,7 +291,6 @@ namespace Script.RobbyScript.StoreMenuGroup
                     if (_bronzeOpenCount == BronzeOpenMaxCount) break;
                     _bronzeOpenCount++;
                     PlayerPrefs.SetInt(BronzeOpenCountKey, _bronzeOpenCount);
-                    QuestManager.Instance.OpenBoxQuest();
                     break;
                 case BoxGrade.Silver:
                     SilverAdsOpen = PlayerPrefs.GetInt(SilverOpenCountKey, 0);
@@ -302,7 +301,6 @@ namespace Script.RobbyScript.StoreMenuGroup
                     _silverOpenTime = DateTime.Now;
                     PlayerPrefs.SetInt(SilverOpenCountKey, SilverAdsOpen);
                     PlayerPrefs.SetString(SilverOpenTimeKey, _silverOpenTime.ToBinary().ToString());
-                    QuestManager.Instance.OpenBoxQuest();
                     break;
                 case BoxGrade.Gold:
                     GoldAdsOpen = PlayerPrefs.GetInt(GoldOpenCountKey, 0);
@@ -313,32 +311,23 @@ namespace Script.RobbyScript.StoreMenuGroup
                     _goldOpenTime = DateTime.Now;
                     PlayerPrefs.SetInt(GoldOpenCountKey, GoldAdsOpen);
                     PlayerPrefs.SetString(GoldOpenTimeKey, _goldOpenTime.ToBinary().ToString());
-                    QuestManager.Instance.OpenBoxQuest();
                     break;
                 case BoxGrade.Coin:
-                    CalculateCoinReward(boxTypes, count);
-                    break;
                 case BoxGrade.Stamina:
-                    CalculateCoinReward(boxTypes, count);
-                    break;
                 case BoxGrade.Gem:
                     CalculateCoinReward(boxTypes, count);
                     break;
                 case BoxGrade.BronzeGem:
-                    CalculateCoinReward(boxTypes, count);
-                    CalculateUnitPieceReward(boxTypes, count);
-                    QuestManager.Instance.OpenBoxQuest();
-                    break;
                 case BoxGrade.SilverGem:
-                    CalculateCoinReward(boxTypes, count);
-                    CalculateUnitPieceReward(boxTypes, count);
-                    QuestManager.Instance.OpenBoxQuest();
-                    break;
                 case BoxGrade.GoldGem:
                     CalculateCoinReward(boxTypes, count);
                     CalculateUnitPieceReward(boxTypes, count);
-                    QuestManager.Instance.OpenBoxQuest();
                     break;
+            }
+
+            if (boxTypes is not (BoxGrade.Coin and BoxGrade.Stamina and BoxGrade.Gem))
+            {
+                Quest.Instance.OpenBoxQuest();
             }
             isReset = false;
             PlayerPrefs.Save();
@@ -521,7 +510,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             }
             var totalUnitPieces = pieceCountPerUnit.Values.Sum();
             Debug.Log($"Total unit pieces: {totalUnitPieces}");
-            QuestManager.Instance.GetPieceQuest(totalUnitPieces);
+            Quest.Instance.GetPieceQuest(totalUnitPieces);
         }
         private static int GetUnitPieceReward(CharacterBase.UnitGrades unitGrade, BoxGrade boxGrade, int openCount)
                  {
