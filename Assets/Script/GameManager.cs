@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using Script.AdsScript;
 using Script.CharacterGroupScript;
 using Script.CharacterManagerScript;
 using Script.EnemyManagerScript;
@@ -42,6 +43,7 @@ namespace Script
         public bool speedUp;
         private Vector3Int _bossSpawnArea;
         public bool IsBattle { get; private set; }
+       
 
         private void Awake()
         {
@@ -82,9 +84,9 @@ namespace Script
                 }
                 else
                 {
-                    countManager.Initialize(moveCount);
+                    countManager.Initialize(moveCount + AdsManager.Instance.adsMoveCount);
                     castleManager.castleCrushBoost = false;
-                    
+                    AdsManager.Instance.adsMoveCount = 0;
                 }
                 StartCoroutine(spawnManager.PositionUpCharacterObject());
             }

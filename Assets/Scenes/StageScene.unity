@@ -386,7 +386,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 100}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 2700, y: 2800}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &56398207
@@ -409,8 +409,8 @@ MonoBehaviour:
   m_ChildAlignment: 2
   m_StartCorner: 0
   m_StartAxis: 1
-  m_CellSize: {x: 2400, y: 550}
-  m_Spacing: {x: 0, y: 200}
+  m_CellSize: {x: 2400, y: 520}
+  m_Spacing: {x: 0, y: 250}
   m_Constraint: 1
   m_ConstraintCount: 1
 --- !u!114 &56398208
@@ -571,10 +571,10 @@ RectTransform:
   m_Father: {fileID: 56398206}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 29.999878, y: -486.77795}
-  m_SizeDelta: {x: 2400, y: 700}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 2700, y: -1800}
+  m_SizeDelta: {x: 2400, y: 520}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &112156904
 MonoBehaviour:
@@ -1678,7 +1678,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -100, y: 180}
+  m_AnchoredPosition: {x: -120, y: 220}
   m_SizeDelta: {x: 1000, y: 400}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!222 &267531864
@@ -2967,7 +2967,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0.5}
   m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: -100, y: 180}
+  m_AnchoredPosition: {x: -120, y: 220}
   m_SizeDelta: {x: 1000, y: 400}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &478384769
@@ -4400,17 +4400,22 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Increase total damage by 4%.
+  m_text: 'Increase total damage by 4%.
+
+    Increase total damage by 4%.
+
+    Increase
+    total damage by 4%.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: cf2136b962b784535bda857ac8ddceb7, type: 2}
-  m_sharedMaterial: {fileID: 2517202264660172603, guid: a33f3eeb56c604c65be3a337dec56e67, type: 2}
+  m_sharedMaterial: {fileID: -2707212650878907388, guid: cf2136b962b784535bda857ac8ddceb7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -4466,7 +4471,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &815241483
@@ -4675,7 +4680,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &824982952
@@ -5904,7 +5909,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 100}
+  m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 2700, y: 2800}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &1022991679
@@ -5927,8 +5932,8 @@ MonoBehaviour:
   m_ChildAlignment: 2
   m_StartCorner: 0
   m_StartAxis: 1
-  m_CellSize: {x: 2400, y: 550}
-  m_Spacing: {x: 0, y: 200}
+  m_CellSize: {x: 2400, y: 520}
+  m_Spacing: {x: 0, y: 250}
   m_Constraint: 1
   m_ConstraintCount: 1
 --- !u!114 &1022991680
@@ -6171,17 +6176,22 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Increase total damage by 4%.
+  m_text: 'Increase total damage by 4%.
+
+    Increase total damage by 4%.
+
+    Increase
+    total damage by 4%.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: cf2136b962b784535bda857ac8ddceb7, type: 2}
-  m_sharedMaterial: {fileID: 2517202264660172603, guid: a33f3eeb56c604c65be3a337dec56e67, type: 2}
+  m_sharedMaterial: {fileID: -2707212650878907388, guid: cf2136b962b784535bda857ac8ddceb7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -6237,7 +6247,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1081107831
@@ -6332,10 +6342,10 @@ RectTransform:
   m_Father: {fileID: 56398206}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 29.999878, y: 413.22205}
-  m_SizeDelta: {x: 2400, y: 700}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 2700, y: -1030}
+  m_SizeDelta: {x: 2400, y: 520}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1109530508
 MonoBehaviour:
@@ -10621,10 +10631,10 @@ RectTransform:
   m_Father: {fileID: 56398206}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0.5}
-  m_AnchorMax: {x: 1, y: 0.5}
-  m_AnchoredPosition: {x: 29.999878, y: 1313.2222}
-  m_SizeDelta: {x: 2400, y: 700}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 2700, y: -260}
+  m_SizeDelta: {x: 2400, y: 520}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &1937335248
 MonoBehaviour:
@@ -10887,17 +10897,22 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Increase total damage by 4%.
+  m_text: 'Increase total damage by 4%.
+
+    Increase total damage by 4%.
+
+    Increase
+    total damage by 4%.'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: cf2136b962b784535bda857ac8ddceb7, type: 2}
-  m_sharedMaterial: {fileID: 2517202264660172603, guid: a33f3eeb56c604c65be3a337dec56e67, type: 2}
+  m_sharedMaterial: {fileID: -2707212650878907388, guid: cf2136b962b784535bda857ac8ddceb7, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+    rgba: 4278190080
+  m_fontColor: {r: 0, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -10953,7 +10968,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &2003692061
@@ -11507,7 +11522,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 1
+  m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &2065008594

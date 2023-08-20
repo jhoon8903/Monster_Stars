@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Script.AdsScript;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.RobbyScript.CharacterSelectMenuGroup;
@@ -16,6 +17,7 @@ namespace Script.RobbyScript.MainMenuGroup
         [SerializeField] private HoldCharacterList holdCharacterList;
         [SerializeField] private StaminaScript staminaScript;
         [SerializeField] private GameObject startBtn;
+        [SerializeField] private GameObject startAdsBtn;
         [SerializeField] private GameObject warningPanel;
         [SerializeField] private TextMeshProUGUI messageText;
         [SerializeField] private GameObject nextStageBtn;
@@ -54,6 +56,7 @@ namespace Script.RobbyScript.MainMenuGroup
             confirmBtn.GetComponent<Button>().onClick.AddListener(ContinueGame);
             cancelBtn.GetComponent<Button>().onClick.AddListener(CancelContinue);
             timeRewardBtn.GetComponent<Button>().onClick.AddListener(OpenTimeReward);
+            startAdsBtn.GetComponent<Button>().onClick.AddListener(AdsStart);
             if (LatestStage != 1) return;
             previousStageBtn.SetActive(false);
             nextStageBtn.SetActive(false);
@@ -170,10 +173,14 @@ namespace Script.RobbyScript.MainMenuGroup
             PlayerPrefs.Save();
             SceneManager.LoadScene("SelectScene");
         }
-
         private static void OpenTimeReward()
         {
             TimeRewardManager.Instance.OpenPanel();
+        }
+        private static void AdsStart()
+        {
+            AdsManager.Instance.ShowRewardedAd();
+            AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.AdsStart;
         }
     }
 }

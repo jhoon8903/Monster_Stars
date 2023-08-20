@@ -90,7 +90,7 @@ namespace Script.RewardScript
             }
         }
         // 3. 확률별로 선택 옵션 계산
-        private static List<Data> CommonPowerList(int greenChance, int blueChance, int purpleChance, string forcedColor)
+        private List<Data> CommonPowerList(int greenChance, int blueChance, int purpleChance, string forcedColor)
         {
             var commonPowerUps = new List<Data>();
             var selectedCodes = new HashSet<int>();
@@ -150,13 +150,13 @@ namespace Script.RewardScript
             return commonPowerUps;
         }
         // 4. 코드 중복검사
-        private static Data CommonUnique(IEnumerable<Data> powerUpsData, ICollection<int> selectedCodes)
+        private Data CommonUnique(IEnumerable<Data> powerUpsData, ICollection<int> selectedCodes)
         {
             var validOptions = powerUpsData.Where(p => IsValidOption(p, selectedCodes));
             return SelectRandom(validOptions);
         }
         // 5. case별 예외처리
-        private static bool IsValidOption(Data powerUp, ICollection<int> selectedCodes)
+        private bool IsValidOption(Data powerUp, ICollection<int> selectedCodes)
             {
                 if (selectedCodes.Contains(powerUp.Code)) return false; // Do not select already selected reward codes again
                 switch (powerUp.Type)
@@ -264,6 +264,7 @@ namespace Script.RewardScript
                                 if (EnforceManager.Instance.selectedCount > 3) return false; // Only use up to 3 next stage character upgrades
                                 break;
                             case PowerTypeManager.Types.StepDirection:
+                                if (spawnManager.isTutorial) return false;
                                 if (EnforceManager.Instance.diagonalMovement)return false;
                                 if (!StageManager.Instance.isBossClear) return false;
                                 if (StageManager.Instance.currentWave % 10 != 0 ) return false;
@@ -278,14 +279,17 @@ namespace Script.RewardScript
                                 if (EnforceManager.Instance.recoveryCastle) return false; // Castle recovery can only be used once
                                 break;
                             case PowerTypeManager.Types.GroupLevelUp:
+                                if (spawnManager.isTutorial) return false;
                                 if (EnforceManager.Instance.index.Contains(powerUp.Property[0])) return false; // Do not display GroupLevelUp options for groups where LevelUpPattern is executed
                                 break;
                             case PowerTypeManager.Types.Step:
-                                if (PlayerPrefs.GetInt("TutorialKey") == 1) return false;
+                                if (spawnManager.isTutorial) return false;
                                 break;
                             case PowerTypeManager.Types.LevelUpPattern:
-                                if (PlayerPrefs.GetInt("TutorialKey") == 1) return false;
-                                if (PlayerPrefs.GetInt("TutorialKey") == 1) return false;
+                                if (spawnManager.isTutorial) return false;
+                                break;
+                            case PowerTypeManager.Types.RandomLevelUp:
+                                if (spawnManager.isTutorial) return false;
                                 break;
                         }
                         return true;

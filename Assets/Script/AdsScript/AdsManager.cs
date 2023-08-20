@@ -1,8 +1,10 @@
 using System;
 using Script.QuestGroup;
 using Script.RewardScript;
+using Script.RobbyScript.MainMenuGroup;
 using Script.RobbyScript.StoreMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
+using Script.UIManager;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -23,6 +25,7 @@ namespace Script.AdsScript
         private const string InterstitialAdUnitId = "InterstitialAdUnitId";
         private int _interstitialRetryAttempt;
         public int rewardedRetryAttempt;
+        public int adsMoveCount;
         private void Awake()
         {
             if (Instance == null)
@@ -306,7 +309,21 @@ namespace Script.AdsScript
 
         public enum ButtonType
         {
-            Coin, Stamina, Gem, BronzeAds, SilverAds, GoldAds, Retry, Common, LevelUp, EnergyPackFreeStamina, GemPackFree,CoinPackFree, ShuffleQuest, None
+            Coin, 
+            Stamina, 
+            Gem, 
+            BronzeAds, 
+            SilverAds, 
+            GoldAds, 
+            Retry, 
+            Common, 
+            LevelUp, 
+            EnergyPackFreeStamina, 
+            GemPackFree,
+            CoinPackFree, 
+            ShuffleQuest, 
+            AdsStart,
+            None
         }
 
         public StoreMenu.BoxGrade boxGrade;
@@ -390,6 +407,10 @@ namespace Script.AdsScript
                 case ButtonType.ShuffleQuest:
                     questManager.ShuffleQuest();
                     break;
+                case ButtonType.AdsStart:
+                    adsMoveCount += 6;
+                    MainPanel.Instance.StartGame();
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
@@ -445,7 +466,6 @@ namespace Script.AdsScript
         private void EnergyPackFree()
         {
             Debug.Log("스테미나 10 지급");
-
             StaminaScript.Instance.CurrentStamina += 10;
         }
 

@@ -101,7 +101,6 @@ namespace Script.PuzzleManagerGroup
                 new Vector3(3,5,0),
                 4,
                 "By combining coins, you can obtain a reinforcement box.")
-                
             );
             // Choose Power Up
             _tutorialSteps.Enqueue(new TutorialStep(

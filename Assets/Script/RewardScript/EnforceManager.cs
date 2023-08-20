@@ -148,11 +148,9 @@ namespace Script.RewardScript
         [SerializeField] private GameObject skillGrid;
         [SerializeField] private PauseSkillObjectScript skillPrefabs;
         [SerializeField] private Language language;
-        
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private GridManager gridManager;
         [SerializeField] private CountManager countManager;
-
         [RuntimeInitializeOnLoadMethod] 
         private static void InitializeOnLoad()
         {
@@ -164,7 +162,7 @@ namespace Script.RewardScript
         }
         public static EnforceManager Instance { get; private set; }
         public List<CharacterBase> characterList = new List<CharacterBase>();
-
+       
         private void Awake()
         {
             Instance = this;
