@@ -56,8 +56,6 @@ namespace Script.RobbyScript.StoreMenuGroup
         [SerializeField] private QuestManager questManager;
         
         public static StoreMenu Instance { get; private set; }
-        public DateTime LastDayCheck;
-        private const string LastDayKey = "LastDayKey";
         private int _coinReward;
         private int _unitPieceReward;
         private readonly Dictionary<CharacterBase, Tuple<int, Goods>> _unitPieceDict = new Dictionary<CharacterBase, Tuple<int, Goods>>();
@@ -79,24 +77,10 @@ namespace Script.RobbyScript.StoreMenuGroup
             {
                 Destroy(gameObject);
             }
-            // Day Check
-            if (PlayerPrefs.HasKey(LastDayKey))
-            {
-                var binaryDate = Convert.ToInt64(PlayerPrefs.GetString(LastDayKey));
-                LastDayCheck = DateTime.FromBinary(binaryDate);
-            }
-            else
-            {
-                LastDayCheck = DateTime.Today;
-                PlayerPrefs.SetString(LastDayKey, LastDayCheck.ToBinary().ToString());
-                // PlayerPrefs.SetInt(ResetKey, 0); // 처음 실행하는 경우 리셋 상태를 0으로 설정합니다.
-                PlayerPrefs.Save();
-            }
             treasureChest.InstanceTreasureChest();
             specialOffer.InstanceSpecialOffer();
             dailyOffer.InstanceDailyOffer();
             closeBtn.GetComponent<Button>().onClick.AddListener(ReceiveReward);
-            Reset();
         }
         private void Start()
         {
@@ -107,20 +91,10 @@ namespace Script.RobbyScript.StoreMenuGroup
         }
         private void Update()
         {
-            Reset();
             treasureChest.UpdateButtonState();
         }
-        private void Reset()
-        {
-            if (DateTime.Today <= LastDayCheck.Date) return;
-            Debug.Log("리셋?");
-            ResetButtonCounts();
-            questManager.ResetQuest();
-            LastDayCheck = DateTime.Today;
-            PlayerPrefs.SetString(LastDayKey, LastDayCheck.ToBinary().ToString());
-            PlayerPrefs.Save();
-        }
-        private void ResetButtonCounts()
+
+        public void ResetButtonCounts()
         {
             isReset = true;
             treasureChest.ResetTreasureChest();

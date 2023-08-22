@@ -5,6 +5,7 @@ using Script.AdsScript;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.RobbyScript.TopMenuGroup;
+using Script.UIManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
@@ -168,7 +169,8 @@ namespace Script.RobbyScript.StoreMenuGroup
             }
             else
             {
-                var resetTime = StoreMenu.Instance.LastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
+                bronzeAdsBtn.GetComponent<Button>().interactable = false;
+                var resetTime = TimeManager.Instance.LastDate.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
                 bronzeAdsText.text = $"{resetTime}";
             }
             bronzeGemBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "150";
@@ -189,7 +191,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                 var remainingTime = TimeSpan.FromMinutes(SilverRewardCoolTime) - SilverPassed;
                 if (SilverOpenCount == SilverOpenMaxCount)
                 {
-                    var resetTime = StoreMenu.Instance.LastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
+                    var resetTime = TimeManager.Instance.LastDate.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
                     silverAdsText.text = $"{resetTime}";
                 }
                 else if (remainingTime > TimeSpan.Zero)
@@ -216,7 +218,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                 var remainingTime = TimeSpan.FromMinutes(GoldRewardCoolTime) - GoldPassed;
                 if (GoldOpenCount == GoldOpenMaxCount)
                 {
-                    var resetTime = StoreMenu.Instance.LastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
+                    var resetTime = TimeManager.Instance.LastDate.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
                     goldAdsText.text = $"{resetTime}";
                 }
                 else if (remainingTime > TimeSpan.Zero)

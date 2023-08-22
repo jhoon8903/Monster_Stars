@@ -7,6 +7,7 @@ using Script.RewardScript;
 using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.RobbyScript.StoreMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
+using Script.UIManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -389,7 +390,7 @@ namespace Script.QuestGroup
 
         private void Timer()
         {
-            var resetTime = StoreMenu.Instance.LastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
+            var resetTime = TimeManager.Instance.LastDate.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
             timer.text = $"Ends in : {resetTime}";
         }
     }   
