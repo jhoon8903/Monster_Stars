@@ -87,6 +87,8 @@ namespace Script.QuestGroup
         }
         public static void SetQuestButtonStates(QuestObject questObject)
         {
+            // questObject.isCompleted = PlayerPrefs.GetInt(questObject.QuestType + "_isCompleted") == 1;
+            // questObject.isReceived = PlayerPrefs.GetInt(questObject.QuestType + "isReceived") == 1;
             switch (questObject.isCompleted)
             {
                 case true when questObject.isReceived:

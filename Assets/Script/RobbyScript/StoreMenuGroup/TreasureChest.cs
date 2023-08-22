@@ -18,8 +18,11 @@ namespace Script.RobbyScript.StoreMenuGroup
         public GameObject silverGemBtn;
         public GameObject goldGemBtn;
         public GameObject bronzeAdsBtn;
+        public TMP_Text bronzeAdsText;
         public GameObject silverAdsBtn;
+        public TextMeshProUGUI silverAdsText;
         public GameObject goldAdsBtn;
+        public TextMeshProUGUI goldAdsText;
         public Sprite bronzeSprite;
         public Sprite silverSprite;
         public Sprite goldSprite;
@@ -51,8 +54,6 @@ namespace Script.RobbyScript.StoreMenuGroup
         private TimeSpan GoldPassed { get; set; }
         public const int GoldOpenMaxCount = 5;
         private const int GoldRewardCoolTime = 30;
-
-        public TreasureChest TreasureInstance { get; private set; }
 
         public void InstanceTreasureChest()
         {
@@ -108,8 +109,8 @@ namespace Script.RobbyScript.StoreMenuGroup
                 PlayerPrefs.SetString(GoldOpenTimeKey, GoldOpenTime.ToBinary().ToString());
                 PlayerPrefs.Save();
             }
-            TreasureInstance = Instantiate(this, StoreMenu.Instance.treasureLayer);
-            TreasureInstance.ChestBtnSet();
+            // Instantiate(gameObject, StoreMenu.Instance.treasureLayer);
+            ChestBtnSet();
         }
         public void ResetTreasureChest()
         {
@@ -163,13 +164,12 @@ namespace Script.RobbyScript.StoreMenuGroup
             if (StoreMenu.Instance.isReset || BronzeOpenCount < BronzeOpenMaxCount)
             {
                 bronzeAdsBtn.GetComponent<Button>().interactable = true;
-                bronzeAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{BronzeOpenCount} / {BronzeOpenMaxCount}";
+                bronzeAdsText.text = $"{BronzeOpenCount} / {BronzeOpenMaxCount}";
             }
             else
             {
                 var resetTime = StoreMenu.Instance.LastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
-                Debug.Log(StoreMenu.Instance.LastDayCheck);
-                bronzeAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{resetTime}";
+                bronzeAdsText.text = $"{resetTime}";
             }
             bronzeGemBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "150";
         }
@@ -181,7 +181,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             if (StoreMenu.Instance.isReset || (SilverOpenCount < SilverOpenMaxCount && SilverPassed.TotalMinutes >= SilverRewardCoolTime))
             {
                 silverAdsBtn.GetComponent<Button>().interactable = true;
-                silverAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{SilverOpenCount} / {SilverOpenMaxCount}";
+                silverAdsText.text = $"{SilverOpenCount} / {SilverOpenMaxCount}";
             }
             else
             {
@@ -190,12 +190,12 @@ namespace Script.RobbyScript.StoreMenuGroup
                 if (SilverOpenCount == SilverOpenMaxCount)
                 {
                     var resetTime = StoreMenu.Instance.LastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
-                    silverAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{resetTime}";
+                    silverAdsText.text = $"{resetTime}";
                 }
                 else if (remainingTime > TimeSpan.Zero)
                 {
                     var remainingTimeText = remainingTime.ToString(@"mm\:ss");
-                    silverAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
+                    silverAdsText.text = remainingTimeText;
                 }
             }
             silverGemBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "450";
@@ -208,7 +208,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             if (StoreMenu.Instance.isReset || (GoldOpenCount < GoldOpenMaxCount && GoldPassed.TotalMinutes >= GoldRewardCoolTime))
             {
                 goldAdsBtn.GetComponent<Button>().interactable = true;
-                goldAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{GoldOpenCount} / {GoldOpenMaxCount}";
+                goldAdsText.text = $"{GoldOpenCount} / {GoldOpenMaxCount}";
             }
             else
             {
@@ -217,12 +217,12 @@ namespace Script.RobbyScript.StoreMenuGroup
                 if (GoldOpenCount == GoldOpenMaxCount)
                 {
                     var resetTime = StoreMenu.Instance.LastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
-                    goldAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = $"{resetTime}";
+                    goldAdsText.text = $"{resetTime}";
                 }
                 else if (remainingTime > TimeSpan.Zero)
                 {
                     var remainingTimeText = remainingTime.ToString(@"mm\:ss");
-                    goldAdsBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = remainingTimeText;
+                    goldAdsText.text = remainingTimeText;
                 }
             }
             goldGemBtn.GetComponent<Button>().GetComponentInChildren<TextMeshProUGUI>().text = "900";

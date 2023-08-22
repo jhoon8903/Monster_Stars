@@ -14,7 +14,6 @@ namespace Script.RobbyScript.StoreMenuGroup
        public Sprite coinSprite;
        public Sprite staminaSprite;
        public Sprite gemSprite;
-       public SpecialOffer specialOffer;
 
        public void SpecialBtnSet()
        {
@@ -32,9 +31,9 @@ namespace Script.RobbyScript.StoreMenuGroup
 
        public void InstanceSpecialOffer()
        {
-           specialOffer = Instantiate(this, StoreMenu.Instance.specialOfferLayer);
-           specialOffer.transform.SetSiblingIndex(specialOffer.transform.GetSiblingIndex() + 1);
-           specialOffer.SpecialBtnSet();
+           // specialOffer = Instantiate(this, StoreMenu.Instance.specialOfferLayer);
+           transform.SetSiblingIndex(transform.GetSiblingIndex() + 1);
+           SpecialBtnSet();
        }
 
        private static void CoinAds()

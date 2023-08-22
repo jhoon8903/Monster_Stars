@@ -9,7 +9,7 @@ namespace Script.RobbyScript.StoreMenuGroup
 
     public class ChestCheck : MonoBehaviour
     {
-        public struct ChestInfo
+        private struct ChestInfo
         {
             public readonly string Name;
             public readonly Sprite ChestSprite;
@@ -68,22 +68,22 @@ namespace Script.RobbyScript.StoreMenuGroup
             switch (buttonType)
             {
                 case StoreMenu.ButtonType.BronzeAds:
-                    chestInfo = new ChestInfo("Bronze Chest", treasureChest.TreasureInstance.bronzeSprite, treasureChest.TreasureInstance.adsBtn, $"{treasureChest.BronzeOpenCount} / {TreasureChest.BronzeOpenMaxCount}", TreasureChest.BronzeAds);
+                    chestInfo = new ChestInfo("Bronze Chest", treasureChest.bronzeSprite, treasureChest.adsBtn, $"{treasureChest.BronzeOpenCount} / {TreasureChest.BronzeOpenMaxCount}", TreasureChest.BronzeAds);
                     break;
                 case StoreMenu.ButtonType.SilverAds:
-                    chestInfo = new ChestInfo("Silver Chest", treasureChest.TreasureInstance.silverSprite, treasureChest.TreasureInstance.adsBtn, $"{treasureChest.SilverOpenCount} / {TreasureChest.SilverOpenMaxCount}", TreasureChest.SilverAds);
+                    chestInfo = new ChestInfo("Silver Chest", treasureChest.silverSprite, treasureChest.adsBtn, $"{treasureChest.SilverOpenCount} / {TreasureChest.SilverOpenMaxCount}", TreasureChest.SilverAds);
                     break;
                 case StoreMenu.ButtonType.GoldAds:
-                    chestInfo = new ChestInfo("Gold Chest", treasureChest.TreasureInstance.goldSprite, treasureChest.TreasureInstance.adsBtn, $"{treasureChest.GoldOpenCount} / {TreasureChest.GoldOpenMaxCount}", TreasureChest.GoldAds);
+                    chestInfo = new ChestInfo("Gold Chest", treasureChest.goldSprite, treasureChest.adsBtn, $"{treasureChest.GoldOpenCount} / {TreasureChest.GoldOpenMaxCount}", TreasureChest.GoldAds);
                     break;
                 case StoreMenu.ButtonType.BronzeGem:
-                    chestInfo = new ChestInfo("Bronze Chest", treasureChest.TreasureInstance.bronzeSprite, treasureChest.TreasureInstance.gemBtn, "150", () => StoreMenu.Instance.CheckAndSummonChest(StoreMenu.ButtonType.BronzeGem));
+                    chestInfo = new ChestInfo("Bronze Chest", treasureChest.bronzeSprite, treasureChest.gemBtn, "150", () => StoreMenu.Instance.CheckAndSummonChest(StoreMenu.ButtonType.BronzeGem));
                     break;
                 case StoreMenu.ButtonType.SilverGem:
-                    chestInfo = new ChestInfo("Silver Chest", treasureChest.TreasureInstance.silverSprite, treasureChest.TreasureInstance.gemBtn, "450", () => StoreMenu.Instance.CheckAndSummonChest(StoreMenu.ButtonType.SilverGem));
+                    chestInfo = new ChestInfo("Silver Chest", treasureChest.silverSprite, treasureChest.gemBtn, "450", () => StoreMenu.Instance.CheckAndSummonChest(StoreMenu.ButtonType.SilverGem));
                     break;
                 case StoreMenu.ButtonType.GoldGem:
-                    chestInfo = new ChestInfo("Gold Chest", treasureChest.TreasureInstance.goldSprite, treasureChest.TreasureInstance.gemBtn, "900", () => StoreMenu.Instance.CheckAndSummonChest(StoreMenu.ButtonType.GoldGem));
+                    chestInfo = new ChestInfo("Gold Chest", treasureChest.goldSprite, treasureChest.gemBtn, "900", () => StoreMenu.Instance.CheckAndSummonChest(StoreMenu.ButtonType.GoldGem));
                     break;
             }
             chestCheckTopText.text = chestInfo.Name;

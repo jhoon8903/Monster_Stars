@@ -160,6 +160,7 @@ namespace Script.QuestGroup
                 PlayerPrefs.SetInt(quest.QuestType + "_isShuffled", quest.isShuffled ? 1 : 0);
                 PlayerPrefs.SetInt(quest.QuestType + "_isCompleted", quest.isCompleted ? 1 : 0);
                 PlayerPrefs.SetInt(quest.isReceived + "_isReceived", quest.isReceived ? 1 : 0);
+                QuestObject.SetQuestButtonStates(quest);
             }
             PlayerPrefs.Save();
         }

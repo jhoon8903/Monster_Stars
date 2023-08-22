@@ -511,8 +511,11 @@ MonoBehaviour:
   silverGemBtn: {fileID: 1390732376843561145}
   goldGemBtn: {fileID: 1390732376198321227}
   bronzeAdsBtn: {fileID: 1390732374977420112}
+  bronzeAdsText: {fileID: 1390732376580135409}
   silverAdsBtn: {fileID: 1390732376252891147}
+  silverAdsText: {fileID: 1390732377015830045}
   goldAdsBtn: {fileID: 1390732375988068322}
+  goldAdsText: {fileID: 1390732376847355771}
   bronzeSprite: {fileID: 21300000, guid: b84fa278a01a8495a90b617b8c146edd, type: 3}
   silverSprite: {fileID: 21300000, guid: b29ed473d0fd14f7fa4d65a9de5c2e0e, type: 3}
   goldSprite: {fileID: 21300000, guid: f3535bde333e342e297afe36d060c315, type: 3}

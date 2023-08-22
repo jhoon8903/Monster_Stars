@@ -80,17 +80,17 @@ namespace Script.RobbyScript.StoreMenuGroup
                 Destroy(gameObject);
             }
             // Day Check
-            if (!PlayerPrefs.HasKey(LastDayKey))
+            if (PlayerPrefs.HasKey(LastDayKey))
+            {
+                var binaryDate = Convert.ToInt64(PlayerPrefs.GetString(LastDayKey));
+                LastDayCheck = DateTime.FromBinary(binaryDate);
+            }
+            else
             {
                 LastDayCheck = DateTime.Today;
                 PlayerPrefs.SetString(LastDayKey, LastDayCheck.ToBinary().ToString());
                 // PlayerPrefs.SetInt(ResetKey, 0); // 처음 실행하는 경우 리셋 상태를 0으로 설정합니다.
                 PlayerPrefs.Save();
-            }
-            else
-            {
-                var binaryDate = Convert.ToInt64(PlayerPrefs.GetString(LastDayKey));
-                LastDayCheck = DateTime.FromBinary(binaryDate);
             }
             treasureChest.InstanceTreasureChest();
             specialOffer.InstanceSpecialOffer();
@@ -375,22 +375,22 @@ namespace Script.RobbyScript.StoreMenuGroup
             switch (chestType)
             {
                 case ButtonType.BronzeAds:
-                    chestSprite = treasureChest.TreasureInstance.bronzeSprite;
+                    chestSprite = treasureChest.bronzeSprite;
                     break;
                 case ButtonType.SilverAds:
-                    chestSprite =treasureChest.TreasureInstance.silverSprite;
+                    chestSprite =treasureChest.silverSprite;
                     break;
                 case ButtonType.GoldAds:
-                    chestSprite = treasureChest.TreasureInstance.goldSprite;
+                    chestSprite = treasureChest.goldSprite;
                     break;
                 case ButtonType.BronzeGem:
-                    chestSprite = treasureChest.TreasureInstance.bronzeSprite;
+                    chestSprite = treasureChest.bronzeSprite;
                     break;
                 case ButtonType.SilverGem:
-                    chestSprite = treasureChest.TreasureInstance.silverSprite;
+                    chestSprite = treasureChest.silverSprite;
                     break;
                 case ButtonType.GoldGem:
-                    chestSprite = treasureChest.TreasureInstance.goldSprite;
+                    chestSprite = treasureChest.goldSprite;
                     break;
             }
             if (chestSprite != null)
