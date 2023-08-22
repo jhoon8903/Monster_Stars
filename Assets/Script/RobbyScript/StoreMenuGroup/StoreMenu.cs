@@ -120,7 +120,6 @@ namespace Script.RobbyScript.StoreMenuGroup
                     if (treasureChest.SilverOpenCount == TreasureChest.SilverOpenMaxCount) break;
                     treasureChest.SilverOpenCount++;
                     treasureChest.SilverOpenTime = DateTime.Now;
-                    Debug.Log($"실버 오픈 타임 {treasureChest.SilverOpenTime} / 오픈 카운트 {treasureChest.SilverOpenCount}");
                     PlayerPrefs.SetInt(TreasureChest.SilverOpenCountKey, treasureChest.SilverOpenCount);
                     PlayerPrefs.SetString(TreasureChest.SilverOpenTimeKey, treasureChest.SilverOpenTime.ToBinary().ToString());
                     break;

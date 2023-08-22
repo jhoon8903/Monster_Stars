@@ -40,12 +40,13 @@ namespace Script.UIManager
 
         private void Update()
         {
+            LeftNextDay();
             var today = DateTime.Today;
             if (LastDate >= today) return;
             Reset();
             SaveTodayAsLastSavedDate();
         }
-        private void SaveTodayAsLastSavedDate()
+        private static void SaveTodayAsLastSavedDate()
         {
             PlayerPrefs.SetString(LastSavedDateKey, DateTime.Today.ToString("yyyy-MM-dd"));
             PlayerPrefs.Save();
@@ -59,6 +60,17 @@ namespace Script.UIManager
             LastDate= DateTime.Today;
             PlayerPrefs.SetString(LastSavedDateKey, LastDate.ToBinary().ToString());
             PlayerPrefs.Save();
+        }
+
+        private void LeftNextDay()
+        {
+            QuestTimer();
+        }
+
+        private void QuestTimer()
+        {
+            var resetTime = LastDate.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
+            QuestManager.Instance.timer.text = $"Ends in : {resetTime}";
         }
     }
 }

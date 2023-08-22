@@ -72,11 +72,6 @@ namespace Script.QuestGroup
             LoadQuests(QuestCondition.Fix);
             LoadQuests(QuestCondition.Rotation);
         }
-
-        private void Update()
-        {
-            Timer();
-        }
         private void LoadQuests(QuestCondition targetCondition)
         {
             var csvFile = Resources.Load<TextAsset>("questData");
@@ -132,14 +127,16 @@ namespace Script.QuestGroup
         {
             if (targetCondition != QuestCondition.Rotation) return;
             if (rotationQuestData == null) return;
-            var selectedQuestData = rotationQuestData.OrderBy(_ => UnityEngine.Random.value).Take(MaxRotationQuests).ToList();
-            foreach (var data in selectedQuestData)CreateAndAddRotationQuest(data);
+            var selectedQuestData = rotationQuestData.OrderBy(_ => Random.value).Take(MaxRotationQuests).ToList();
+            foreach (var data in selectedQuestData)
+            {
+                CreateAndAddRotationQuest(data);
+            }
         }
         private void CreateAndAddRotationQuest(string[] data)
         {
             var rotationQuestObject = questObject.CreateQuestFromData(data);
-            rotationQuestObject.receiveBtn.SetActive(false);
-            rotationQuestObject.shuffleBtn.SetActive(true);
+            QuestObject.SetQuestButtonStates(rotationQuestObject);
             rotationQuestObject.shuffleBtn.GetComponent<Button>().onClick.AddListener(CallShuffleAds);
             RotationQuestList.Add(rotationQuestObject);
             SaveSelectedQuestList(RotationQuestList);
@@ -161,7 +158,6 @@ namespace Script.QuestGroup
                 PlayerPrefs.SetInt(quest.QuestType + "_isShuffled", quest.isShuffled ? 1 : 0);
                 PlayerPrefs.SetInt(quest.QuestType + "_isCompleted", quest.isCompleted ? 1 : 0);
                 PlayerPrefs.SetInt(quest.isReceived + "_isReceived", quest.isReceived ? 1 : 0);
-                QuestObject.SetQuestButtonStates(quest);
             }
             PlayerPrefs.Save();
         }
@@ -254,8 +250,7 @@ namespace Script.QuestGroup
                 }
             }
 
-            var newQuestData = inactiveRotationQuestData.OrderBy(_ => UnityEngine.Random.value).FirstOrDefault();
-
+            var newQuestData = inactiveRotationQuestData.OrderBy(_ => Random.value).FirstOrDefault();
             if (newQuestData == null) return;
             var newQuest = questObject.CreateQuestFromData(newQuestData);
             var questToRemove = RotationQuestList.FirstOrDefault();
@@ -265,10 +260,9 @@ namespace Script.QuestGroup
                 Destroy(questToRemove.gameObject);
             }
             RotationQuestList.Add(newQuest);
-            QuestObject.SetQuestButtonStates(newQuest);
             SaveSelectedQuestList(RotationQuestList);
         }
-        private static void CallShuffleAds()
+        public static void CallShuffleAds()
         {
             AdsManager.Instance.ShowRewardedAd();
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.ShuffleQuest;
@@ -280,7 +274,7 @@ namespace Script.QuestGroup
             CalculateUnitPieceReward(quest);
             Quest.Instance.AllClearQuest();
             quest.isReceived = true;
-            PlayerPrefs.SetInt(quest.QuestType + "isReceived", 1);
+            PlayerPrefs.SetInt(quest.QuestType + "_isReceived", 1);
             quest.receiveBtn.GetComponent<Button>().interactable = false;
             quest.receiveBtnText.text = "Completed";
             if (FixQuestList.Contains(quest))
@@ -386,12 +380,6 @@ namespace Script.QuestGroup
                 HoldCharacterList.Instance.UpdateRewardPiece(unitPiece.Key);
             }
             _unitPieceDict.Clear();
-        }
-
-        private void Timer()
-        {
-            var resetTime = TimeManager.Instance.LastDate.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
-            timer.text = $"Ends in : {resetTime}";
         }
     }   
 }

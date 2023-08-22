@@ -28,9 +28,18 @@ namespace Script.QuestGroup
 
         public void HandleQuest(QuestManager.QuestCondition targetCondition, string[] data, QuestManager.QuestTypes questType, ICollection<string[]> rotationQuestData)
         {
-            if (targetCondition == QuestManager.QuestCondition.Rotation) rotationQuestData?.Add(data);
-            else if (questType is QuestManager.QuestTypes.ViewAds or QuestManager.QuestTypes.AllClear) HandleSpecialQuests(questType, data);
-            else CreateAndAddQuest(data);
+            if (targetCondition == QuestManager.QuestCondition.Rotation)
+            {
+                rotationQuestData?.Add(data);
+            }
+            else if (questType is QuestManager.QuestTypes.ViewAds or QuestManager.QuestTypes.AllClear)
+            {
+                HandleSpecialQuests(questType, data);
+            }
+            else
+            {
+                CreateAndAddQuest(data);
+            }
         }
         private static void HandleSpecialQuests(QuestManager.QuestTypes questType, IReadOnlyList<string> data)
         {
@@ -59,7 +68,6 @@ namespace Script.QuestGroup
         private void CreateAndAddQuest(string[] data)
         {
             var questObject = CreateQuestFromData(data);
-            questObject.receiveBtn.SetActive(true);
             SetQuestButtonStates(questObject);
             QuestManager.Instance.FixQuestList.Add(questObject);
         }
@@ -86,34 +94,60 @@ namespace Script.QuestGroup
             return questObject;
         }
         public static void SetQuestButtonStates(QuestObject questObject)
-        {
-            // questObject.isCompleted = PlayerPrefs.GetInt(questObject.QuestType + "_isCompleted") == 1;
-            // questObject.isReceived = PlayerPrefs.GetInt(questObject.QuestType + "isReceived") == 1;
-            switch (questObject.isCompleted)
+        { 
+            switch (questObject.isReceived)
             {
-                case true when questObject.isReceived:
-                    SetButtonState(questObject, false, "Completed", questObject.questGoal);
+                case true:
+                    SetButtonState(questObject, false, "Completed", questObject.questValue);
                     break;
-                case true when !questObject.isReceived:
-                    SetButtonState(questObject, true, "Receive", questObject.questGoal);
-                    break;
-                default:
-                    questObject.receiveBtn.GetComponent<Button>().interactable = false;
+                case false:
+                    switch (questObject.isCompleted)
+                    {
+                        case true:
+                            SetButtonState(questObject, true, "Receive", questObject.questValue);
+                            break;
+                        case false:
+                            switch (questObject.isShuffled)
+                            {
+                                case true:
+                                    SetButtonState(questObject, false, "Receive", questObject.questValue);
+                                    break;
+                                case false when questObject.QuestCondition != QuestManager.QuestCondition.Fix:
+                                    SetButtonState(questObject, true, "Shuffle", questObject.questValue);
+                                    break;
+                                case false when questObject.QuestCondition == QuestManager.QuestCondition.Fix:
+                                    SetButtonState(questObject, false, "Receive", questObject.questValue);
+                                    break;
+                            }
+                            break;
+                    }
                     break;
             }
         }
         private static void SetButtonState(QuestObject questObject, bool interactable, string text, int value)
         {
-            questObject.receiveBtn.GetComponent<Button>().interactable = interactable;
-            questObject.receiveBtnText.text = text;
             questObject.questValue = value;
             questObject.questProgress.value = questObject.questValue;
             questObject.questProgressText.text = $"{questObject.questValue} / {questObject.questGoal}";
-            if (interactable)
+            if (text != "Shuffle")
             {
-                questObject.receiveBtn.GetComponent<Button>().onClick.AddListener(() => QuestManager.Instance.ReceiveQuestReward(questObject));
+                questObject.receiveBtn.GetComponent<Button>().interactable = interactable;
+                questObject.receiveBtnText.text = text;
+                if (interactable)
+                {
+                    questObject.receiveBtn.GetComponent<Button>().onClick.AddListener(() => QuestManager.Instance.ReceiveQuestReward(questObject));
+                }
+            }
+            else
+            {
+                if (questObject.QuestCondition == QuestManager.QuestCondition.Fix) return;
+                questObject.shuffleBtn.SetActive(true);
+                questObject.receiveBtn.SetActive(false);
+                questObject.shuffleBtn.GetComponent<Button>().interactable = true;
+                questObject.shuffleBtn.GetComponent<Button>().onClick.AddListener(QuestManager.CallShuffleAds);
             }
         }
+
         private static void SetActiveOrToggleParent(GameObject parentObject, int value, TMP_Text textUI)
         {
             if (value != 0)
