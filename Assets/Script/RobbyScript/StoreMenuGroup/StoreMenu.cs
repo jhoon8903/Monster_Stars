@@ -56,7 +56,7 @@ namespace Script.RobbyScript.StoreMenuGroup
         [SerializeField] private QuestManager questManager;
         
         public static StoreMenu Instance { get; private set; }
-        private const string ResetKey = "ResetKey";
+        // private const string ResetKey = "ResetKey";
         public DateTime LastDayCheck;
         private const string LastDayKey = "LastDayKey";
         private int _coinReward;
@@ -85,13 +85,19 @@ namespace Script.RobbyScript.StoreMenuGroup
             {
                 LastDayCheck = DateTime.Today;
                 PlayerPrefs.SetString(LastDayKey, LastDayCheck.ToBinary().ToString());
-                PlayerPrefs.SetInt(ResetKey, 0); // 처음 실행하는 경우 리셋 상태를 0으로 설정합니다.
+                // PlayerPrefs.SetInt(ResetKey, 0); // 처음 실행하는 경우 리셋 상태를 0으로 설정합니다.
                 PlayerPrefs.Save();
+            }
+            else
+            {
+                var binaryDate = Convert.ToInt64(PlayerPrefs.GetString(LastDayKey));
+                LastDayCheck = DateTime.FromBinary(binaryDate);
             }
             treasureChest.InstanceTreasureChest();
             specialOffer.InstanceSpecialOffer();
             dailyOffer.InstanceDailyOffer();
             closeBtn.GetComponent<Button>().onClick.AddListener(ReceiveReward);
+            Reset();
         }
         private void Start()
         {
@@ -107,14 +113,15 @@ namespace Script.RobbyScript.StoreMenuGroup
         }
         private void Reset()
         {
-            if (DateTime.Today > LastDayCheck.Date && PlayerPrefs.GetInt(ResetKey) == 0)
+            // Debug.Log(PlayerPrefs.GetInt(ResetKey));
+            if (DateTime.Today > LastDayCheck.Date)
             {
                 Debug.Log("리셋?");
                 ResetButtonCounts();
                 questManager.ResetQuest();
                 LastDayCheck = DateTime.Today;
                 PlayerPrefs.SetString(LastDayKey, LastDayCheck.ToBinary().ToString());
-                PlayerPrefs.SetInt(ResetKey, 1); // 리셋 상태를 1로 설정하여 리셋이 발생했음을 저장합니다.
+                // PlayerPrefs.SetInt(ResetKey, 1); // 리셋 상태를 1로 설정하여 리셋이 발생했음을 저장합니다.
                 PlayerPrefs.Save();
             }
         }
@@ -144,6 +151,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                     if (treasureChest.SilverOpenCount == TreasureChest.SilverOpenMaxCount) break;
                     treasureChest.SilverOpenCount++;
                     treasureChest.SilverOpenTime = DateTime.Now;
+                    Debug.Log($"실버 오픈 타임 {treasureChest.SilverOpenTime} / 오픈 카운트 {treasureChest.SilverOpenCount}");
                     PlayerPrefs.SetInt(TreasureChest.SilverOpenCountKey, treasureChest.SilverOpenCount);
                     PlayerPrefs.SetString(TreasureChest.SilverOpenTimeKey, treasureChest.SilverOpenTime.ToBinary().ToString());
                     break;
