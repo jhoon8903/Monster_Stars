@@ -56,7 +56,6 @@ namespace Script.RobbyScript.StoreMenuGroup
         [SerializeField] private QuestManager questManager;
         
         public static StoreMenu Instance { get; private set; }
-        // private const string ResetKey = "ResetKey";
         public DateTime LastDayCheck;
         private const string LastDayKey = "LastDayKey";
         private int _coinReward;
@@ -109,21 +108,17 @@ namespace Script.RobbyScript.StoreMenuGroup
         private void Update()
         {
             Reset();
-            // treasureChest.UpdateButtonState();
+            treasureChest.UpdateButtonState();
         }
         private void Reset()
         {
-            // Debug.Log(PlayerPrefs.GetInt(ResetKey));
-            if (DateTime.Today > LastDayCheck.Date)
-            {
-                Debug.Log("리셋?");
-                ResetButtonCounts();
-                questManager.ResetQuest();
-                LastDayCheck = DateTime.Today;
-                PlayerPrefs.SetString(LastDayKey, LastDayCheck.ToBinary().ToString());
-                // PlayerPrefs.SetInt(ResetKey, 1); // 리셋 상태를 1로 설정하여 리셋이 발생했음을 저장합니다.
-                PlayerPrefs.Save();
-            }
+            if (DateTime.Today <= LastDayCheck.Date) return;
+            Debug.Log("리셋?");
+            ResetButtonCounts();
+            questManager.ResetQuest();
+            LastDayCheck = DateTime.Today;
+            PlayerPrefs.SetString(LastDayKey, LastDayCheck.ToBinary().ToString());
+            PlayerPrefs.Save();
         }
         private void ResetButtonCounts()
         {

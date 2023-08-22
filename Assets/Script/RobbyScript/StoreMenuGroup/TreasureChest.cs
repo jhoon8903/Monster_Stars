@@ -40,24 +40,20 @@ namespace Script.RobbyScript.StoreMenuGroup
         public const string SilverOpenCountKey = "SilverOpenCount";
         public DateTime SilverOpenTime;
         public const string SilverOpenTimeKey = "SilverOpenTime";
-        public TimeSpan SilverPassed;
+        private TimeSpan SilverPassed { get; set; }
         public const int SilverOpenMaxCount = 7;
-        public const int SilverRewardCoolTime = 5;
+        private const int SilverRewardCoolTime = 5;
 
         public int GoldOpenCount { get; set; }
         public const string GoldOpenCountKey = "GoldOpenCount";
         public DateTime GoldOpenTime;
         public const string GoldOpenTimeKey = "GoldOpenTimeKey";
-        public TimeSpan GoldPassed;
+        private TimeSpan GoldPassed { get; set; }
         public const int GoldOpenMaxCount = 5;
-        public const int GoldRewardCoolTime = 30;
+        private const int GoldRewardCoolTime = 30;
 
         public TreasureChest TreasureInstance { get; private set; }
 
-        public void Update()
-        {
-            UpdateButtonState();
-        }
         public void InstanceTreasureChest()
         {
             // Green Count Check
