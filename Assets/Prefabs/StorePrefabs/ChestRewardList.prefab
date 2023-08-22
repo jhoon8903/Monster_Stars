@@ -169,6 +169,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   chestRewardItem: {fileID: 588304569187693082}
   chestRewardText: {fileID: 588304570028506424}
+  goodsObject: {fileID: 3094762634428683866, guid: dccbcae767e944a48a11b819fcc0423d, type: 3}
+  specialOffer: {fileID: 5865400185949221611, guid: 902bbaf6e404045ffa6e75d0e5fa09b3, type: 3}
 --- !u!1 &588304570028506430
 GameObject:
   m_ObjectHideFlags: 0

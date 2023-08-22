@@ -16,15 +16,15 @@ namespace Script.WeaponScriptGroup
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
-            _enemyTransforms = CharacterBase.GetComponent<CharacterGroupScript.Ogre>().DetectEnemies();
+            _enemyTransforms = CharacterBase.GetComponent<Ogre>().DetectEnemies();
             foreach (var enemy in _enemyTransforms)
             {
                 _enemyTransform = enemy.transform.position;
             }
-            if (CharacterBase.GetComponent<CharacterGroupScript.Ogre>().atkCount == 5)
+            if (CharacterBase.GetComponent<Ogre>().atkCount == 3)
             {
                 Damage *= 2f;
-                CharacterBase.GetComponent<CharacterGroupScript.Ogre>().atkCount = 0;
+                CharacterBase.GetComponent<Ogre>().atkCount = 0;
             }
             while (Vector3.Distance(transform.position, _enemyTransform) > 0.1f)
             {

@@ -23,7 +23,7 @@ namespace Script.WeaponScriptGroup
             yield return base.UseWeapon();
             _enemyTransforms = CharacterBase.GetComponent<Berserker>().DetectEnemies();
 
-            if (CharacterBase.GetComponent<Berserker>().atkCount % 5 == 0)
+            if (CharacterBase.GetComponent<Berserker>().atkCount % 3 == 0)
             {
                 CharacterBase.GetComponent<Berserker>().atkCount = 0;
                 Damage *= 2f;

@@ -27,8 +27,8 @@ namespace Script.CharacterGroupScript
             base.Initialize();
             unitGroup = UnitGroups.Fishman;
             UnitProperty = UnitProperties.Water;
-            UnitGrade = UnitGrades.Green;
-            UnitDesc = "Fishman Unit E / Green Grade";
+            UnitGrade = UnitGrades.G;
+            UnitDesc = "Fishman Unit E / G Grade";
             SetLevel(1);
         }
 
@@ -132,9 +132,9 @@ namespace Script.CharacterGroupScript
                 _ => 2.3f
             };
             slowTime = 1.5f + EnforceManager.Instance.water2SlowTimeBoost;
-            freezeTime = EnforceManager.Instance.water2FreezeTimeBoost ? 1.5f : 1f;
-            slowPower = EnforceManager.Instance.water2SlowPowerBoost ? 0.6f : 0.7f;
-            effectChance = EnforceManager.Instance.water2FreezeChanceBoost ? 20 : 10;
+            freezeTime = EnforceManager.Instance.fishmanFreezeTimeBoost ? 1.5f : 1f;
+            slowPower = EnforceManager.Instance.fishmanSlowPowerBoost ? 0.6f : 0.7f;
+            effectChance = EnforceManager.Instance.fishmanFreezeChanceBoost ? 20 : 10;
             defaultAtkRate = 1f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;

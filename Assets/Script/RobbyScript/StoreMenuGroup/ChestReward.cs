@@ -7,6 +7,7 @@ namespace Script.RobbyScript.StoreMenuGroup
 {
     public class ChestReward : MonoBehaviour
     {
+        [SerializeField] private TreasureChest treasureChest;
         [SerializeField] private Transform chestCheckContents;
         [SerializeField] private Sprite coinSprite;
         [SerializeField] private Sprite greenSprite;
@@ -66,10 +67,10 @@ namespace Script.RobbyScript.StoreMenuGroup
                 case StoreMenu.ButtonType.SilverAds:
                     var silverAdsSprites = new Dictionary<Sprite, int>
                     {   
-                        { coinSprite, CalculateSilverAdsCoinReward(StoreMenu.Instance.SilverAdsOpen) },
+                        { coinSprite, CalculateSilverAdsCoinReward(treasureChest.SilverOpenCount) },
                         { greenSprite, 180 },
-                        { blueSprite, 24 + 15 * (StoreMenu.Instance.SilverAdsOpen - 1) },
-                        { purpleSprite, StoreMenu.Instance.SilverAdsOpen > 2 ? StoreMenu.Instance.SilverAdsOpen - 2 : 0 },
+                        { blueSprite, 24 + 15 * (treasureChest.SilverOpenCount - 1) },
+                        { purpleSprite, treasureChest.SilverOpenCount > 2 ? treasureChest.SilverOpenCount - 2 : 0 },
                     };
                     _chestReward.Add(StoreMenu.ButtonType.SilverAds, silverAdsSprites);
                     break;
@@ -86,10 +87,10 @@ namespace Script.RobbyScript.StoreMenuGroup
                 case StoreMenu.ButtonType.GoldAds:
                     var goldAdsSprites = new Dictionary<Sprite, int>
                     {
-                        { coinSprite, CalculateGoldAdsCoinReward(StoreMenu.Instance.GoldAdsOpen) },
+                        { coinSprite, CalculateGoldAdsCoinReward(treasureChest.GoldOpenCount) },
                         { greenSprite, 480 },
-                        { blueSprite, 165 + 40 * (StoreMenu.Instance.GoldAdsOpen - 1) },
-                        { purpleSprite, StoreMenu.Instance.GoldAdsOpen > 2 ? 6 + (StoreMenu.Instance.GoldAdsOpen - 1) * 2 : 6 },
+                        { blueSprite, 165 + 40 * (treasureChest.GoldOpenCount - 1) },
+                        { purpleSprite, treasureChest.GoldOpenCount > 2 ? 6 + (treasureChest.GoldOpenCount - 1) * 2 : 6 },
                     };
                     _chestReward.Add(StoreMenu.ButtonType.GoldAds, goldAdsSprites);
                     break;

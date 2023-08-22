@@ -26,7 +26,7 @@ namespace Script.WeaponScriptGroup
             {
                 _enemyTransform = enemy.transform.position;
             }
-            if (CharacterBase.GetComponent<Octopus>().atkCount == 5)
+            if (CharacterBase.GetComponent<Octopus>().atkCount == 3)
             {
                 Sprite = GetComponent<SpriteRenderer>().color = Color.yellow;
                 transform.localScale = new Vector3(1.5f, 1.5f, 0);

@@ -142,8 +142,8 @@ namespace Script.RewardScript
 
             var totalPiecesPerGrade = new Dictionary<CharacterBase.UnitGrades, int>()
             {
-                { CharacterBase.UnitGrades.Green, GetUnitPieceReward(stage,wave, CharacterBase.UnitGrades.Green) },
-                { CharacterBase.UnitGrades.Blue, GetUnitPieceReward(stage,wave, CharacterBase.UnitGrades.Blue) }
+                { CharacterBase.UnitGrades.G, GetUnitPieceReward(stage,wave, CharacterBase.UnitGrades.G) },
+                { CharacterBase.UnitGrades.B, GetUnitPieceReward(stage,wave, CharacterBase.UnitGrades.B) }
             };
 
             foreach (var grade in totalPiecesPerGrade.Keys)
@@ -309,8 +309,8 @@ namespace Script.RewardScript
 
             return unitGrade switch
             {
-                CharacterBase.UnitGrades.Green => greenReward,
-                CharacterBase.UnitGrades.Blue => blueReward,
+                CharacterBase.UnitGrades.G => greenReward,
+                CharacterBase.UnitGrades.B => blueReward,
                 _ => 0
             };
         }

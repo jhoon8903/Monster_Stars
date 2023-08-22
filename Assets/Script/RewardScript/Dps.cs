@@ -29,7 +29,7 @@ namespace Script.RewardScript
             {
                 var groupDamage = 0;
                 Sprite unitIcon = null;
-                var unitGrades = CharacterBase.UnitGrades.Green;
+                var unitGrades = CharacterBase.UnitGrades.G;
                 foreach (var unit in group)
                 {
                     var damage = PlayerPrefs.GetInt($"{unit.unitGroup}DPS", 0);
@@ -51,9 +51,9 @@ namespace Script.RewardScript
         {
             var boxColor = unitGrade switch
             {
-                CharacterBase.UnitGrades.Green => greenBack,
-                CharacterBase.UnitGrades.Blue => blueBack,
-                CharacterBase.UnitGrades.Purple => purpleBack,
+                CharacterBase.UnitGrades.G => greenBack,
+                CharacterBase.UnitGrades.B => blueBack,
+                CharacterBase.UnitGrades.P => purpleBack,
                 _ => null
             };
             return boxColor;

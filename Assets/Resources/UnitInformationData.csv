@@ -1,19 +1,12 @@
 Language,UnitGroup,Damage,Range,Rate,Form,Effect,EffectTime
-KOR,Octopus,100,세로전체,1 회 / 초,투사체,속박,1 초
 ENG,Octopus,100,Vertical,1 Per / Sec,Projectile,Bind,1 Sec
-KOR,Ogre,120,주변 1칸,1.4 회 / 초,투사체,Null,Null
 ENG,Ogre,120,Around 1 Grid,1.4 Per / Sec,Projectile,Null,Null
-KOR,DeathChiller,60,세로전체,0.8 회 / 초,투사체,둔화,3 초
 ENG,DeathChiller,60,Vertical,0.8 Per / Sec,Projectile,Slow,3 Sec
-KOR,Orc,100,주변 1칸,1 회 / 초,칼,출혈,2 초
 ENG,Orc,100,Around 1 Grid,1 Per / Sec,Sword,Bleed,2 Sec
-KOR,Fishman,60,세로전체,1 회 / 초,투사체,둔화,1.5 초
 ENG,Fishman,60,Vertical,1 Per / Sec,Projectile,Slow,1.5 Sec
-KOR,Skeleton,100,주변 1칸,1.2 회 / 초,유도투사체,중독,4 초
 ENG,Skeleton,100,Around 1 Grid,1.2 Per / Sec,Guide Projectile,Poison,4 Sec
-KOR,Phoenix,180,주변 1칸,1 회 / 초,칼,화상,2 초
 ENG,Phoenix,180,Around 1 Grid,1 Per / Sec,Sword,Burn,2 Sec
-KOR,Beholder,80,세로전,1 회 / 초,투사체,화상,5 초
 ENG,Beholder,80,Vertical,1 Per / Sec,Projectile,Burn,5 Sec
-KOR,Cobra,42,주변 1칸,1.2 회 / 초,투사체,중독,5 초
 ENG,Cobra,42,Around 1 Grid,1.2 Per / Sec,Projectile,Poison,5 Sec
+ENG,Berserker,49,Around 1 Grid,1 Per / Sec,Projectile,Bleed,3 Sec
+ENG,DarkElf,34,Vertical,1 Per / Sec,Projectile,Null,Null

@@ -27,8 +27,8 @@ namespace Script.CharacterGroupScript
             base.Initialize();
             unitGroup = UnitGroups.Phoenix;
             UnitProperty = UnitProperties.Fire;
-            UnitGrade = UnitGrades.Blue;
-            UnitDesc = "Phoenix Unit G / Blue Grade";
+            UnitGrade = UnitGrades.B;
+            UnitDesc = "Phoenix Unit G / B Grade";
             SetLevel(1);
         }
 
@@ -59,7 +59,7 @@ namespace Script.CharacterGroupScript
         private void GetDetectionProperties(out float size, out Vector2 center)
         {
             center = transform.position;
-            size = EnforceManager.Instance.fire2RangeBoost ? 2.5f : 1.5f;
+            size = EnforceManager.Instance.phoenixRangeBoost ? 2.5f : 1.5f;
         }
 
         public override List<GameObject> DetectEnemies()
@@ -96,7 +96,7 @@ namespace Script.CharacterGroupScript
             Type = Types.Character;
             unitGroup = UnitGroups.Phoenix;
             var damageBoost = 1f + EnforceManager.Instance.fire2DamageBoost;
-            var propertyDamage = EnforceManager.Instance.fire2ChangeProperty ? 1.5f : 1f;
+            var propertyDamage = EnforceManager.Instance.phoenixChangeProperty ? 1.5f : 1f;
             DefaultDamage = UnitLevelDamage + 29f * damageBoost * propertyDamage * level switch
             {
                 <= 2 => 1f,
@@ -107,13 +107,13 @@ namespace Script.CharacterGroupScript
             };
             effectStack = 1;
             dotDamage = DefaultDamage * 0.2f;
-            burnTime = EnforceManager.Instance.fire2BurnDurationBoost ? 5f:3f;
-            var increaseRateBoost = EnforceManager.Instance.fire2RateBoost ? 0.85f : 1f;
+            burnTime = EnforceManager.Instance.phoenixBurnDurationBoost ? 5f:3f;
+            var increaseRateBoost = EnforceManager.Instance.phoenixRateBoost ? 0.85f : 1f;
             defaultAtkRate = 1f * increaseRateBoost;
             swingSpeed = 1f * increaseRateBoost;
             UnitAtkType = UnitAtkTypes.Circle;
             UnitProperty = UnitProperties.Fire;
-            UnitEffect = EnforceManager.Instance.fire2ChangeProperty? UnitEffects.None : UnitEffects.Burn;
+            UnitEffect = EnforceManager.Instance.phoenixChangeProperty? UnitEffects.None : UnitEffects.Burn;
         }
     }
 }

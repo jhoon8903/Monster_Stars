@@ -1,0 +1,100 @@
+Group,Level,Code,Name,Grade,Kor,ENG DESC,PopUpDESC,Property
+Octopus,1,100,OctopusThirdAttackBoost,B,3회 공격마다 100% 추가데미지 (투사체 컬러 변경),Octopus deals 100% bonus damage every 3 attacks.,Octopus deals 100% bonus damage every 3 attacks.,1
+Octopus,3,100,OctopusPoisonAttack,P,적을 공격하면  초당 공격력의 20% 데미지를 주는 중독을 3초간 발생시킵니다.,Octopus attack inflicts 20% poison damage/sec for 3s.,Octopus attack inflicts 20% poison damage/sec for 3s.,1
+Octopus,5,100,OctopusBleedDamageBoost,G,출혈중인 적 추가데미지 50%,Octopus deals +{50%} damage to bleeding enemies,Octopus deals +{50%} damage to bleeding enemies,1
+Octopus,7,100,OctopusShackledExplosion,B,적 제거시 주변 1칸 범위의 100% 폭발데미지 추가,Octopus deals 100% damage in 1-cell radius upon enemy defeat,Octopus deals 100% damage in 1-cell radius upon enemy defeat,1
+Octopus,9,100,OctopusBleedDurationBoost,G,출혈지속시간 2초 증가,Bleeding from Octopus lasts 2s longer,Bleeding from Octopus lasts 2s longer,1
+Octopus,11,100,OctopusDamageBoost,P,공력력 19% 증가,Octupus's damage increases by +{19%},Octupus's damage increases by +{19%},1
+Octopus,13,100,OctopusRateBoost,B,공격속도 9% 증가 (최대 4회),Octopus's attack speed increases by +{9%},Octopus's attack speed increases by +{9%},1
+Ogre,1,200,OgreThirdAttackDamageBoost,G,3회 공격마다 100% 추가 데미지,For every 3 attacks  Ogre throws a big rock to deal +{100%} damage,Every 3rd attack  Ogre hurls a powerful rock,1
+Ogre,3,200,OgreStatusAilmentSlowEffect,B,상태이상 적 공격시 1초 이동속도 20% 감소,Ogre reduces debuffed enemy's movement speed by 20% for 1 second on attack,Ogre slows down debuffed enemies,1
+Ogre,5,200,OgreRangeIncrease,P,사거리 1 증가,Ogre's attack range increases by 1cell radius,Ogre's attack range increases by 1cell radius,1
+Ogre,7,200,OgreAttackPowerBoost,G,공격력 4% 증가 (최대 6회),Ogre's damage increases by +{4%},Ogre's damage increases by +{4%},1
+Ogre,9,200,OgreStatusAilmentDamageBoost,P,상태이상 적 공격시 50% 확률로 50% 추가데미지,Attacking debuffed foes  Ogre has a 50% chance to deal 50% extra damage.,Ogre can strike debuffed enemies more powerfully,1
+Ogre,11,200,OgreAttackSpeedBoost,B,공격속도 9% 증가 (최대 4회),Ogre's attack speed increases by +{9%},Ogre's attack speed increases by +{9%},1
+Ogre,13,200,OgreKnockBackChance,B,10% 확률로 적 밀침 (0.5칸),Ogre's attacks have a 10% chance to push enemies back by 0.5-cell radius,Ogre has a 10% chance to push enemies backward,1
+DeathChiller,1,300,DeathChillerFreeze,B,15% 확률로 적을 1초간 빙결(이동불가)시킵니다.,Deathchiller has a +{15%} chance to freeze them for 1s,Deathchiller has a +{15%} chance to freeze them for 1s,1
+DeathChiller,3,300,DeathChillerFreezeChance,B,빙결 확률이 10% 증가합니다.,Deathchiller freezing chance +{15%},Deathchiller freezing chance +{15%},1
+DeathChiller,5,300,DeathChillerSlowDurationBoost,G,둔화 지속시간 0.2초 증가 (최대 5회 / 1초),Deathchiller's slowing lasts {0.2s} longer,Deathchiller's slowing lasts {0.2s} longer,1
+DeathChiller,7,300,DeathChillerFreezeDamageBoost,P,C 유닛에게 빙결된 적은 받는 피해 15% 증가,Enemies freezed by Deathchiller take 20% more damage,Enemies freezed by Deathchiller take 20% more damage,1
+DeathChiller,9,300,DeathChillerSlowCPowerBoost,B,둔화강도 15% 증가,Deathchiller's slowing effect +{15%},Deathchiller's slowing effect +{15%},1
+DeathChiller,11,300,DeathChillerAttackRateBoost,G,공격속도 4% 증가 (최대 6회),Deathchiller's attack speed inceases by +{4%},Deathchiller's attack speed inceases by +{4%},1
+DeathChiller,13,300,DeathChillerGlobalFreeze,P,퍼즐위 모든 C 유닛의 공격 횟수의 합이 100이면 될 때마다 눈보라를 일으켜 보스를 제외한 모든 적을 빙결,For every 100 attacks Deathchiller performed  a blizzard freezes all enemies except the boss,Every 100 attacks  Deatchiller summons a blizzard,1
+Orc,1,400,OrcSwordScaleIncrease,P,검의 크기가 100% 증가,Orc's sword becomes 100% larger,Orc's sword becomes 100% larger,1
+Orc,3,400,OrcSwordAddition,P,공격 시 검 한자루 추가,Orcs's attack grants 1 more sword,Orcs's attack grants 1 more sword,1
+Orc,5,400,OrcAttackSpeedBoost,B,공격속도 9% 증가 (최대 4회),Orc's attack speed increases by +{9%},Orc's attack speed increases by +{9%},1
+Orc,7,400,OrcRatePerAttack,B,해당 웨이브에서 유닛 3회 공격당 공속 1% 증가 (최대 60%),Orc gains 1% attack speed every 3 attacks  reset at the start of each round.,Orc's attack speed increases every 3 attacks,1
+Orc,9,400,OrcBindBleed,B,속박에 걸린적을 공격하면 초당 20% 데미지의 3초간 출혈 발생,Orc inflicts 20% damage per second bleed for 3s on attacking bound foes.,When Orc attacks a bound enemy  it causes bleeding,1
+Orc,11,400,OrcDamageBoost,G,공격력 3% 증가 (최대 6회),Orc's Damage increases by +{3%},Orc's Damage increases by +{3%},1
+Orc,13,400,OrcBleedDuration,G,출혈 지속시간 2초 증가,Bleeding from Orc lasts 2s longer,Bleeding from Orc lasts 2s longer,1
+Fishman,1,500,FishmanFreeze,B,타격시 10% 확률로 적을 1초간 빙결 (이동불가),Fishman's attack has a 10% chance to freeze enemies for 1 second.,Fishman has a 10% chance to freeze enemies,1
+Fishman,3,500,FishmanSlowPowerBoost,P,둔화강도가 10% 증가합니다,Fishman slows down enemies by an additional 10%,Fishman slows down enemies by an additional 10%,1
+Fishman,5,500,FishmanFreezeTimeBoost,B,빙결지속시간 0.5초 증가,Fishman's slowing lasts {0.5}s longer,Fishman's slowing lasts {0.5}s longer,1
+Fishman,7,500,FishmanDamageBoost,G,공격력 4% 증가 (최대 6회),Fishman's damage increases by +{4%},Fishman's damage increases by +{4%},1
+Fishman,9,500,FishmanFreezeChanceBoost,P,빙결확률 10% 증가,Fishman's freezing change +{10%},Fishman's freezing change +{10%},1
+Fishman,11,500,FishmanFreezeDamageBoost,B,빙결당한적은 받는 피해가 15% 증가,Enemies slowed by Fishman take {15%} more damage,Enemies slowed by Fishman take {15%} more damage,1
+Fishman,13,500,FishmanSlowTimeBoost,G,둔화지속시간 0.1초 증가 (최대 0.5초),Fishman's slowing lasts{0.1s} longer,Fishman's slowing lasts{0.1s} longer,1
+Skeleton,1,600,SkeletonPerHitEffect,P,초당 20% 데미지를 가하는 중독을 3초간 발생,Skeleton's attacks apply 20% damage per second poison for 3 seconds,Skeleton's attacks apply 20% damage per second poison for 3 seconds,1
+Skeleton,3,600,SkeletonBleedingEnemyDamageBoost,G,출혈중인 적 공격시 80% 데미지 증가,When Skeleton attacks a bleeding enemy  its damage increases by 80%,When Skeleton attacks a bleeding enemy  its damage increases by 80%,1
+Skeleton,5,600,SkeletonDamagePerBoost,B,유닛 C가 5회 공격마다 공격력 1% 증가  웨이브마다 초기화 (최대 60%),Skeleton's damage increases by 1% every 5 attacks  reset at the start of each round,Skeleton's damage increases every 5 attacks,1
+Skeleton,7,600,SkeletonDamageBoost,P,공격력 16% 증가,Skeleton's damage increases by +{4%},Skeleton's damage increases by +{4%},1
+Skeleton,9,600,SkeletonDotDamageBoost,B,중독 피해 10% 증가,Skeleton's poison damage per second increases by 10%,Skeleton's poison damage per second increases by 10%,1
+Skeleton,11,600,SkeletonAttackSpeedIncrease,G,공격속도 4% 증가 (최대 6회),Skeleton's attack speed increases by +{4%},Skeleton's attack speed increases by +{4%},1
+Skeleton,13,600,SkeletonDurationBoost,B,중족 지속시간 2초 증가,Skeleton's poison duration increases by 2 seconds,Skeleton's poison duration increases by 2 seconds,1
+Phoenix,1,700,PhoenixFreezeDamageBoost,P,빙결된 적에게 가하는 추가데미지 200%,The additional damage dealt by Phoenix to frozen enemies increases by 200%,The additional damage dealt by Phoenix to frozen enemies increases by 200%,1
+Phoenix,3,700,PhoenixBurnDurationBoost,G,화상지속시간 2초 증가,The burn duration caused by Phoenix increases by 2 seconds,The burn duration caused by Phoenix increases by 2 seconds,1
+Phoenix,5,700,PhoenixChangeProperty,B,화상 비활성화 데미지 150% 증가,Phoenix no longer inflicts burn but gains a 150% damage increase,Phoenix no longer inflicts burn but gains a 150% damage increase,1
+Phoenix,7,700,PhoenixDamageBoost,G,공격력 4% 증가 (최대 6회),Phoenix's damage increases by +{4%},Phoenix's damage increases by +{4%},1
+Phoenix,9,700,PhoenixRangeBoost,B,사거리가 1 증가합니다.,Phoenix's attack range increases by 1-cell radius,Phoenix's attack range increases by 1-cell radius,1
+Phoenix,11,700,PhoenixRateBoost,P,공격속도 15% 증가,Phoenix attack speed +{15%},Phoenix attack speed +{15%},1
+Phoenix,13,700,PhoenixBossDamageBoost,B,보스 데미지 30% 증가,Phoenix deals 30% increased damage to bosses,Phoenix deals 30% increased damage to bosses,1
+Beholder,1,800,BeholderBurnPerAttackEffect,P,적을 공격하면 5초간 화상 초당 10% 데미지,Beholder's attacks cause a 5-second burn dealing 10% damage per second,Beholder's attacks cause a 5-second burn dealing 10% damage per second,1
+Beholder,3,800,BeholderStackOverlap,B,화상 중첩수 3회 증가,Beholder's burn can stack an additional 3 times,Beholder's burn can stack an additional 3 times,1
+Beholder,5,800,BeholderProjectileBounceDamage,P,적 적중시 가장 가까운적에게 투사체 튕김,Beholder's attack projectiles bounce to the nearest enemy on hit,Beholder's attack projectiles bounce to the nearest enemy on hit,1
+Beholder,7,800,BeholderBurnedEnemyExplosion,B,화상에 걸린 적 제거시 주변 1칸 범위의 200% 폭발데미지 추가,When Beholder defeats a burning enemy  it deals 200% explosive damage in a 1-cell radius,If Beholder kills a burning enemy  it explodes,1
+Beholder,9,800,BeholderAttackSpeedBoost,G,공격속도 4% 증가 (최대 6회),Beholder's attack speed increases by +{4%},Beholder's attack speed increases by +{4%},1
+Beholder,11,800,BeholderProjectileSpeedIncrease,G,투사체 속도가 100% 증가  반드시 명중,Beholder's projectiles fly 100% faster and are guaranteed to hit,Beholder's projectiles fly 100% faster and are guaranteed to hit,1
+Beholder,13,800,BeholderProjectileBounceIncrease,P,투사체가 튕기는 횟수 증가,Beholder's projectiles bounce one additional time,Beholder's projectiles bounce one additional time,1
+Cobra,1,900,CobraStunToChance,P,타격시 50% 확률로 적을 0.4초간 기절 시킵니다.,When Cobra attacks an enemy  there's a 50% chance to stun them for 0.4 seconds,Cobra gains the ability to stun enemies,1
+Cobra,3,900,CobraRangeBoost,P,사거리 1칸 증가,Cobra's range increases by 1 cell,Cobra's range increases by 1 cell,1
+Cobra,5,900,CobraDotDamageBoost,B,중독 데미지가 10% 증가,Cobra's poison damage per second increases by 10%,Cobra's poison damage per second increases by 10%,1
+Cobra,7,900,CobraStunTimeBoost,G,기절 시간 0.1초 증가 (최대 5회 / 0.5초),Cobra's stun duration on hit increases by 0.1 seconds,Cobra's stun duration on hit increases by 0.1 seconds,1
+Cobra,9,900,CobraSpawnPoisonArea,B,중독 된 적이 죽으면  그 자리에 2초간 독 웅덩이가 초당 200% 데미지를 입힘,A poisoned enemy's demise from Cobra creates a 2-second toxic puddle dealing 200% damage per second.,Enemies poisoned by Cobra leave behind a toxic puddle upon death,1
+Cobra,11,900,CobraRateBoost,P,공격속도 20% 증가,Cobra's attack speed +{20%},Cobra's attack speed +{20%},1
+Cobra,13,900,CobraPoolTimeBoost,B,독 웅덩이 지속시간 1초 증가,Cobra's toxic puddle duration increases by 1 second,Cobra's toxic puddle duration increases by 1 second,1
+Berserker,1,1000,BerserkerCastleCrushStatBoost,P,성이 데미지를 받을 경우 해당 웨이브동안 사거리가 1 증가  데미지 30% 증가,When castle takes damage  Berserker gains +1 range and +30% damage for the round,When the castle is attacked  Berserker becomes even stronger,1
+Berserker,3,1000,BerserkerThirdBoost,P,3회 공격마다 공격력의 200% 데미지 투사체 전방 발사,Berserker deals 200% bonus damage every 3 attacks.,Berserker deals 200% bonus damage every 3 attacks.,1
+Berserker,5,1000,BerserkerBleedTimeBoost,G,출혈 지속시간 2초 증가,Berserker's attack bleed duration increases by 2 seconds,Berserker's attack bleed duration increases by 2 seconds,1
+Berserker,7,1000,BerserkerPoisonDamageBoost,B,중독상태의 적 공격시 데미지 60% 증가,Berserker deals +{60%} damage to poisoned enemies,Berserker deals +{60%} damage to poisoned enemies,1
+Berserker,9,1000,BerserkerRangeBoost,P,사거리가 1 증가합니다,Berserker's attack range increases by 1-cell radius,Berserker's attack range increases by 1-cell radius,1
+Berserker,11,1000,BerserkerRateBoost,B,공격속도 9% 증가 (최대 4회),Berserker's attack speed +{9%},Berserker's attack speed +{9%},1
+Berserker,13,1000,BerserkerBossBoost,B,보스 데미지 30% 증가,Berserker attack damage +{30%} against bosses only,Berserker attack damage +{30%} against bosses only,1
+DarkElf,1,1100,DarkElfBackBoost,P,적의 뒤를 공격하면  데미지 30% 증가,The Dark Elf deals +30% increased damage when attacking from behind,The Dark Elf deals +30% increased damage when attacking from behind,1
+DarkElf,3,1100,DarkElfDualAttack,P,앞 뒤 동시공격,The Dark Elf attacks forward and backward at the same time,The Dark Elf attacks forward and backward at the same time,1
+DarkElf,5,1100,DarkElfStatusDamageBoost,B,적에게 걸린 상태이상 갯수 마다 15% 데미지 증가 (최대 5개),Dark Elf deals +{15%} more damage per enemy unit's debuff stack,Dark Elf deals +{15%} more damage per enemy unit's debuff stack,1
+DarkElf,7,1100,DarkElfExplosionBoost,B,상태이상적을 처치하면 주변 2칸을 100% 추가데미지,When Dark Elf kills a debuffed enemy  she deals 100% damage to 2 squares around them,When Dark Elf kills a debuffed enemy  it explodes,1
+DarkElf,9,1100,DarkElfDoubleAttack,P,발사하는 투사체 갯수 1개 증가,Dark Elf fires 1 additional projectile,Dark Elf fires 1 additional projectile,1
+DarkElf,11,1100,DarkElfStatusPoison,G,적이 상태이상에 걸리지 않았을때  초당 공격력의 20%의 중독을 3초간 발생시킵니다.,If no debuffs on foe  Dark Elves apply 3s poison: 20% attack damage/sec.,If no debuffs on foe  Dark Elves apply 3s poison: 20% attack damage/sec.,1
+DarkElf,13,1100,DarkElfSameEnemyBoost,B,동일한 적을 타격할때마다 데미지가 5% 증가 (최대 10회),Dark Elves deal 5% more damage to the same enemy with each hit  up to a max 50% increase.,Dark Elf's damage increases when attacking the same enemy,1
+None,1,1,GroupDamage,G,전체 데미지 {p}% 증가,All units' damage increases by +{p}%,All units' damage increases by +{p}%,4
+None,1,1,GroupDamage,B,전체 데미지 {p}% 증가,All units' damage increases by +{p}%,All units' damage increases by +{p}%,6 7 8 9 10
+None,1,1,GroupDamage,P,전체 데미지 {p}% 증가,All units' damage increases by +{p}%,All units' damage increases by +{p}%,18
+None,1,2,GroupAtkSpeed,G,전체 공격속도 {p}% 증가,All units' attack speed increases by +{p}%,All units' attack speed increases by +{p}%,3 4 5
+None,1,2,GroupAtkSpeed,B,전체 공격속도 {p}% 증가,All units' attack speed increases by +{p}%,All units' attack speed increases by +{p}%,10 11 12
+None,1,2,GroupAtkSpeed,P,전체 공격속도 {p}% 증가,All units' attack speed increases by +{p}%,All units' attack speed increases by +{p}%,19
+None,1,3,Step,G,이동횟수 {p} 증가,Movement count increased by {p},Movement count increased by {p},3 4 5
+None,1,3,Step,B,이동횟수 {p} 증가,Movement count increased by {p},Movement count increased by {p},9 10 11
+None,1,3,Step,P,이동횟수 {p} 증가,Movement count increased by {p},Movement count increased by {p},14 15 16 17
+None,1,4,RandomLevelUp,G,퍼즐상의 랜덤한 {p}개의 케릭터 1 레벨 증가,Random {p} characters on the cell level up,Random {p} characters on the cell level up,2 3
+None,1,5,GroupLevelUp,B,셀 상의 모든 {0level_unit_N}이 {unit_N}으로 변합니다.,All {0level_unit_N}s on the cell become {unit_N}s,All {0level_unit_N}s on the cell become {unit_N}s,0 1 2 3
+None,1,6,Exp,G,적 처치시 경험치 획득량 {p}% 증가||(현재 {EnforceManager.Instance.expPercentage}% 최대 30%),Experience gained from defeating enemies is increased by {p}%,Experience gained from defeating enemies is increased by {p}%,5
+None,1,7,Gold,B,5 매치시 골드 1추가 획득,Matching 5 pieces creates 1 gold,Matching 5 pieces creates 1 gold,1
+None,1,8,CastleMaxHp,B,캐슬 최대체력 {p} 증가,Castle's max health increased by {p},Castle's max health increased by {p},200
+None,1,9,CastleRecovery,B,웨이브 종료까지 피해를 입지 않으면 캐슬 체력 200씩 매 웨이브 마다 증가,Castle restores 200 HP if it does not take any damage in a day,Castle restores 200 HP if it does not take any damage in a day,200
+None,1,10,Match5Upgrade,P,5개 매치시 가운데 케릭터의 레벨이 1 더 증가,Matching 5 pieces increases the level of the center unit by 1,Matching 5 pieces increases the level of the center unit by 1,1
+None,1,11,Slow,B,다음 웨이브 부터는 적 이동속도 {p}% 감소||(현재 {15*EnforceManager.Instance.slowCount}% 최대 60%),A horizontal row is added to the cell,A horizontal row is added to the cell,15
+None,1,12,StepLimit,P,총 이동횟수 {p} 증가,Movement count increases by {p} each wave,Movement count increases by {p} each wave,1
+None,1,13,StepDirection,P,대각선 이동 가능,Pieces can be moved diagonally,Pieces can be moved diagonally,1
+None,1,14,NextStage,P,보스 스테이지 이후 {p} 개의 케릭터 추가 이동 (현재 {EnforceManager.Instance.highLevelCharacterCount}),After defeating the boss  you can move {p} additional units,After defeating the boss  you can move {p} additional units,1 2
+None,1,15,LevelUpPattern,P,이제부터 {0level_unit_N}은 처음부터 {unit_N}으로 등장합니다.,From now on  {0level_unit_N} will appear as {unit_N} from the start,From now on  {0level_unit_N} will appear as {unit_N} from the start,0 1 2 3
+None,1,16,AddRow,P,가로줄이 1줄 증가,The cell gains an additional row,The cell gains an additional row,1

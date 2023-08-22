@@ -21,7 +21,7 @@ namespace Script.WeaponScriptGroup
         {
             yield return base.UseWeapon();
             var useTime = Distance / Speed;
-            if (!EnforceManager.Instance.dark2DualAttack)
+            if (!EnforceManager.Instance.darkElfDualAttack)
             {
                 var enemyTransforms = CharacterBase.GetComponent<DarkElf>().DetectEnemies();
                 foreach (var unused in enemyTransforms.Where(enemy => enemy.transform.position.y <= CharacterBase.transform.position.y))

@@ -147,7 +147,6 @@ namespace Script.RewardScript
         // Skill Grid
         [SerializeField] private GameObject skillGrid;
         [SerializeField] private PauseSkillObjectScript skillPrefabs;
-        [SerializeField] private Language language;
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private GridManager gridManager;
         [SerializeField] private CountManager countManager;
@@ -173,339 +172,340 @@ namespace Script.RewardScript
             }
         }
 
-        [Header("\n\nA 어둠: Blue\n")]
+        [Header("\n\nA 어둠: B\n")]
         // 완료
-        [Header("Blue / 1Lv: 5회 공격마다 100% 추가데미지 (투사체 컬러 변경)")] 
-        public bool dark3FifthAttackBoost;
+        [Header("B / 1Lv: 3회 공격마다 100% 추가데미지 (투사체 컬러 변경)")] 
+        public bool octopusThirdAttackBoost;
         // 완료
-        [Header("Purple / 3Lv: 적을 공격하면, 초당 공격력의 20% 데미지를 주는 출혈을 3초간 발생시킵니다.")]
-        public bool dark3BleedAttack; 
+        [Header("P / 3Lv: 적을 공격하면, 초당 공격력의 20% 데미지를 주는 중독을 3초간 발생시킵니다.")]
+        public bool octopusPoisonAttack; 
         // 완료
-        [Header("Green / 5Lv: 중독된 적 추가데미지 50%")] 
-        public bool dark3PoisonDamageBoost;
+        [Header("G / 5Lv: 출혈중인 적 추가데미지 50%")] 
+        public bool octopusBleedDamageBoost;
         // 완료
-        [Header("Blue / 7Lv: 적 제거시 주변 1칸 범위의 100% 폭발데미지 추가")] 
-        public bool dark3ShackledExplosion;
+         [Header("B / 7Lv: 적 제거시 주변 1칸 범위의 100% 폭발데미지 추가")] 
+        public bool octopusShackledExplosion;
         // 완료
-        [Header("Green / 9Lv: 출혈지속시간 2초 증가")] 
-        public bool dark3BleedDurationBoost;
+        [Header("G / 9Lv: 출혈지속시간 2초 증가")] 
+        public bool octopusBleedDurationBoost;
         // 완료
-        [Header("Purple / 11Lv: 공력력 19% 증가")] 
-        public bool dark3DamageBoost;
+        [Header("P / 11Lv: 공력력 19% 증가")] 
+        public bool octopusDamageBoost;
         // 완료
-        [Header("Blue / 13Lv: 공격속도 9% 증가 (최대 4회)")]
+        [Header("B / 13Lv: 공격속도 9% 증가 (최대 4회)")]
         public float dark3RateBoost; 
-        protected internal void Dark3RateBoost()
+        protected internal void OctopusRateBoost()
         {   
             if (dark3RateBoost >= 0.36f) return;
             dark3RateBoost+= 0.09f;
         }
 
 
-        [Header("\n\nB 어둠: Green\n")]
+        [Header("\n\nB 어둠: G\n")]
         // 완료
-        [Header("Green / 1Lv: 5회 공격마다 100% 추가 데미지")] 
-        public bool darkFifthAttackDamageBoost;
+        [Header("G / 1Lv: 3회 공격마다 100% 추가 데미지")] 
+        public bool ogreThirdAttackDamageBoost;
         // 완료
-        [Header("Blue / 3Lv: 상태이상 적 공격시 1초 이동속도 20% 감소")] 
-        public bool darkStatusAilmentSlowEffect;
+       [Header("B / 3Lv: 상태이상 적 공격시 1초 이동속도 20% 감소")] 
+        public bool ogreStatusAilmentSlowEffect;
         // 완료
-        [Header("Purple / 5Lv: 사거리 1 증가")] 
-        public bool darkRangeIncrease;
+        [Header("P / 5Lv: 사거리 1 증가")] 
+        public bool ogreRangeIncrease;
         // 완료
-        [Header("Green / 7Lv: 공격력 4% 증가 (최대 6회)")]
+        [Header("G / 7Lv: 공격력 4% 증가 (최대 6회)")]
         public float darkAttackPowerBoost; 
-        protected internal void DarkAttackDamageBoost()
+        protected internal void OgreAttackDamageBoost()
         {
             if (darkAttackPowerBoost >= 0.24f) return;
             darkAttackPowerBoost += 0.04f;
         }
         // 완료
-        [Header("Purple / 9Lv: 상태이상 적 공격시 50% 확률로 50% 추가데미지")] 
-        public bool darkStatusAilmentDamageBoost;
+      [Header("P / 9Lv: 상태이상 적 공격시 50% 확률로 50% 추가데미지")] 
+        public bool ogreStatusAilmentDamageBoost;
         // 완료
-        [Header("Blue / 11: 공격속도 9% 증가 (최대 4회)")]
+        [Header("B / 11: 공격속도 9% 증가 (최대 4회)")]
         public float darkAttackSpeedBoost;
-        protected internal void DarkAttackSpeedBoost()
+        protected internal void OgreAttackSpeedBoost()
         {
             if(darkAttackSpeedBoost >= 0.36f) return;
             darkAttackSpeedBoost += 0.09f;
         }
         // 완료
-        [Header("Blue / 13Lv: 10% 확률로 적 밀침 (0.5칸)")] 
-        public bool darkKnockBackChance;
+        [Header("B / 13Lv: 10% 확률로 적 밀침 (0.5칸)")] 
+        public bool ogreKnockBackChance;
         
 
-        [Header("\n\nC 물: Purple\n")]
+
+        [Header("\n\nC 물: P\n")]
         // 완료
-        [Header("Blue / 1Lv: 15% 확률로 적을 1초간 빙결(이동불가)시킵니다.")]
-        public bool waterFreeze;
+        [Header("B / 1Lv: 15% 확률로 적을 1초간 빙결(이동불가)시킵니다.")]
+        public bool deathChillerFreeze;
         // 완료
-        [Header("Blue / 3Lv: 빙결 확률이 10% 증가합니다.")]
-        public bool waterFreezeChance;
+        [Header("B / 3Lv: 빙결 확률이 10% 증가합니다.")]
+        public bool deathChillerFreezeChance;
         // 완료
-        [Header("Green / 5Lv: 둔화 지속시간 0.2초 증가 (최대 5회 / 1초)")]
+        [Header("G / 5Lv: 둔화 지속시간 0.2초 증가 (최대 5회 / 1초)")]
         public float waterSlowDurationBoost;
-        protected internal void WaterSlowDurationBoost()
+        protected internal void DeathChillerSlowDurationBoost()
         {
             if (waterSlowDurationBoost >= 1f) return;
             waterSlowDurationBoost += 0.2f;
         }
         // 완료
-        [Header("Purple / 7Lv: DeathChiller 유닛에게 빙결된 적은 받는 피해 15% 증가")]
-        public bool waterFreezeDamageBoost;
+[Header("P / 7Lv: DeathChiller 유닛에게 빙결된 적은 받는 피해 15% 증가")]
+        public bool deathChillerFreezeDamageBoost;
         // 완료
-        [Header("Blue / 9Lv: 둔화강도 15% 증가")] 
-        public bool waterSlowCPowerBoost;
+[Header("B / 9Lv: 둔화강도 15% 증가")] 
+        public bool deathChillerSlowCPowerBoost;
         // 완료
-        [Header("Green / 11Lv: 공격속도 4% 증가 (최대 6회)")]
+        [Header("G / 11Lv: 공격속도 4% 증가 (최대 6회)")]
         public float waterAttackRateBoost;
-        protected internal void WaterAttackRateBoost()
+        protected internal void DeathChillerAttackRateBoost()
         {
             if ( waterAttackRateBoost >= 0.24f) return;
             waterAttackRateBoost += 0.06f;
         }
         // 완료
-        [Header("Purple / 13Lv: 퍼즐위 모든 DeathChiller 유닛의 공격 횟수의 합이 100이면 될 때마다 눈보라를 일으켜 보스를 제외한 모든 적을 빙결")]
-        public bool waterGlobalFreeze;
+[Header("P / 13Lv: 퍼즐위 모든 DeathChiller 유닛의 공격 횟수의 합이 100이면 될 때마다 눈보라를 일으켜 보스를 제외한 모든 적을 빙결")]
+        public bool deathChillerGlobalFreeze;
 
 
 
-        [Header("\n\nD 물리: Green\n")]
+        [Header("\n\nD 물리: G\n")]
         // 완료
-        [Header("Purple / 1Lv: 검의 크기가 100% 증가")] 
-        public bool physicalSwordScaleIncrease;
+        [Header("P / 1Lv: 검의 크기가 100% 증가")] 
+        public bool orcSwordScaleIncrease;
         // 완료
-        [Header("Purple / 3Lv: 공격 시 검 한자루 추가")] 
-        public bool physicalSwordAddition;
+[Header("P / 3Lv: 공격 시 검 한자루 추가")] 
+        public bool orcSwordAddition;
         // 완료
-        [Header("Blue / 5Lv: 공격속도 9% 증가 (최대 4회)")]
+        [Header("B / 5Lv: 공격속도 9% 증가 (최대 4회)")]
         public float physicalAttackSpeedBoost; 
-        protected internal void PhysicalAttackSpeedIncrease()
+        protected internal void OrcAttackSpeedIncrease()
         {
             if (physicalAttackSpeedBoost >= 0.36f) return;
             physicalAttackSpeedBoost += 0.09f;
         }
         // 완료
-        [Header("Blue / 7Lv: 해당 웨이브에서 유닛 3회 공격당 공속 1% 증가 (최대 60%)")]
-        public bool physicalRatePerAttack;
+[Header("B / 7Lv: 해당 웨이브에서 유닛 3회 공격당 공속 1% 증가 (최대 60%)")]
+        public bool orcRatePerAttack;
         // 완료
-        [Header("Blue / 9Lv: 속박에 걸린적을 공격하면 초당 20% 데미지의 3초간 출혈 발생")]
-        public bool physicalBindBleed;
+[Header("B / 9Lv: 속박에 걸린적을 공격하면 초당 20% 데미지의 3초간 출혈 발생")]
+        public bool orcBindBleed;
         // 완료
-        [Header("Green / 11Lv: 공격력 3% 증가 (최대 6회)")]
+        [Header("G / 11Lv: 공격력 3% 증가 (최대 6회)")]
         public float physicalDamageBoost;
-        protected internal void PhysicalDamageBoost()
+        protected internal void OrcDamageBoost()
         {
             if (physicalDamageBoost >= 0.18f) return;
             physicalDamageBoost += 0.06f;
         }
         // 완료
-        [Header("Green / 13Lv: 출혈 지속시간 2초 증가")]
-        public bool physicalBleedDuration;
+[Header("G / 13Lv: 출혈 지속시간 2초 증가")]
+        public bool orcBleedDuration;
 
 
-        [Header("\n\nE 물: Green\n")]
+
+        [Header("\n\nE 물: G\n")]
         // 완료
-        [Header("Blue / 1Lv: 타격시 10% 확률로 적을 1초간 빙결 (이동불가)")]
-        public bool water2Freeze;
+        [Header("B / 1Lv: 타격시 10% 확률로 적을 1초간 빙결 (이동불가)")]
+        public bool fishmanFreeze;
         // 완료
-        [Header("Purple / 3Lv: 둔화강도가 10% 증가합니다.")]
-        public bool water2SlowPowerBoost;
+[Header("P / 3Lv: 둔화강도가 10% 증가합니다.")]
+        public bool fishmanSlowPowerBoost;
         // 완료
-        [Header("Blue / 5Lv: 빙결지속시간 0.5초 증가")] 
-        public bool water2FreezeTimeBoost;
+[Header("B / 5Lv: 빙결지속시간 0.5초 증가")] 
+        public bool fishmanFreezeTimeBoost;
         // 완료
-        [Header("Green / 7Lv: 공격력 4% 증가 (최대 6회)")]
+        [Header("G / 7Lv: 공격력 4% 증가 (최대 6회)")]
         public float water2DamageBoost;
-        protected internal void Water2DamageBoost()
+        protected internal void FishmanDamageBoost()
         {
             if (water2DamageBoost >= 0.24f) return;
             water2DamageBoost += 0.04f;
         }
         // 완료
-        [Header("Purple / 9Lv: 빙결확률 10% 증가")] 
-        public bool water2FreezeChanceBoost;
+        [Header("P / 9Lv: 빙결확률 10% 증가")] 
+        public bool fishmanFreezeChanceBoost;
         // 완료 
-        [Header("Blue / 11Lv: 빙결당한적은 받는 피해가 15% 증가")]
-        public bool water2FreezeDamageBoost;
+        [Header("B / 11Lv: 빙결당한적은 받는 피해가 15% 증가")]
+        public bool fishmanFreezeDamageBoost;
         // 완료
-        [Header("Green / 13Lv: 둔화지속시간 0.1초 증가 (최대 0.5초)")]
+        [Header("G / 13Lv: 둔화지속시간 0.1초 증가 (최대 0.5초)")]
         public float water2SlowTimeBoost;
-        protected internal void Water2SlowTimeBoost()
+        protected internal void fishmanSlowTimeBoost()
         {
             if (water2SlowTimeBoost >= 0.5f) return;
             water2SlowTimeBoost += 0.1f;
         }
 
-        [Header("\n\nF 독: Green\n")]
+        [Header("\n\nF 독: G\n")]
         // 완료
-        [Header("Purple / 1Lv: 초당 20% 데미지를 가하는 중독을 3초간 발생")] 
-        public bool poisonPerHitEffect;
+        [Header("P / 1Lv: 초당 20% 데미지를 가하는 중독을 3초간 발생")] 
+        public bool skeletonPerHitEffect;
         // 완료
-        [Header("Green / 3Lv: 출혈중인 적 공격시 80% 데미지 증가")] 
-        public bool poisonBleedingEnemyDamageBoost;
+        [Header("G / 3Lv: 출혈중인 적 공격시 80% 데미지 증가")] 
+        public bool skeletonBleedingEnemyDamageBoost;
         // 완료
-        [Header("Blue / 5Lv: 유닛 C가 5회 공격마다 공격력 1% 증가, 웨이브마다 초기화 (최대 60%)")]
-        public bool poisonDamagePerBoost;
+       [Header("B / 5Lv: 유닛 C가 5회 공격마다 공격력 1% 증가, 웨이브마다 초기화 (최대 60%)")]
+        public bool skeletonDamagePerBoost;
         // 완료
-        [Header("Purple / 7Lv: 공격력 16% 증가")] 
-        public bool poisonDamageBoost;
+      [Header("P / 7Lv: 공격력 16% 증가")] 
+        public bool skeletonDamageBoost;
         // 완료
-        [Header("Blue / 9Lv: 중독 피해 10% 증가")] 
-        public bool poisonDotDamageBoost;
+        [Header("B / 9Lv: 중독 피해 10% 증가")] 
+        public bool skeletonDotDamageBoost;
         // 완료
-        [Header("Green / 11Lv: 공격속도 4% 증가 (최대 6회)")]
+        [Header("G / 11Lv: 공격속도 4% 증가 (최대 6회)")]
         public float poisonAttackSpeedIncrease; 
-        protected internal void PoisonAttackSpeedIncrease()
+        protected internal void SkeletonAttackSpeedIncrease()
         {
             if(poisonAttackSpeedIncrease >= 0.24f) return;
             poisonAttackSpeedIncrease += 0.04f;
         }
         // 완료
-        [Header("Blue / 13Lv: 중족 지속시간 2초 증가")] 
-        public bool poisonDurationBoost;
+       [Header("B / 13Lv: 중족 지속시간 2초 증가")] 
+        public bool skeletonDurationBoost;
 
 
-
-        [Header("\n\nG 불: Blue\n")] 
+        [Header("\n\nG 불: B\n")] 
         // 완료
-        [Header("Purple / 1Lv: 빙결된 적에게 가하는 추가데미지 200%")]
-        public bool fire2FreezeDamageBoost;
+        [Header("P / 1Lv: 빙결된 적에게 가하는 추가데미지 200%")]
+        public bool phoenixFreezeDamageBoost;
         // 완료
-        [Header("Green / 3Lv: 화상지속시간 2초 증가")] 
-        public bool fire2BurnDurationBoost;
+        [Header("G / 3Lv: 화상지속시간 2초 증가")] 
+        public bool phoenixBurnDurationBoost;
         // 완료
-        [Header("Blue / 5Lv: 화상 비활성화 데미지 150% 증가")]
-        public bool fire2ChangeProperty;
+       [Header("B / 5Lv: 화상 비활성화 데미지 150% 증가")]
+        public bool phoenixChangeProperty;
         // 완료
-        [Header("Green / 7Lv: 공격력 4% 증가 (최대 6회)")]
+        [Header("G / 7Lv: 공격력 4% 증가 (최대 6회)")]
         public float fire2DamageBoost;
-        protected internal void Fire2DamageBoost()
+        protected internal void PhoenixDamageBoost()
         {
             if (fire2DamageBoost >= 0.24f) return;
             fire2DamageBoost += 0.04f;
         }
         // 완료
-        [Header("Blue / 7Lv: 사거리가 1 증가합니다. ")] 
-        public bool fire2RangeBoost;
+       [Header("B / 7Lv: 사거리가 1 증가합니다. ")] 
+        public bool phoenixRangeBoost;
         // 완료
-        [Header("Purple / 11Lv: 공격속도 15% 증가")] 
-        public bool fire2RateBoost;
+       [Header("P / 11Lv: 공격속도 15% 증가")] 
+        public bool phoenixRateBoost;
         // 완료
-        [Header("Blue / 13Lv: 보스 데미지 30% 증가")] 
-        public bool fire2BossDamageBoost;
+        [Header("B / 13Lv: 보스 데미지 30% 증가")] 
+        public bool phoenixBossDamageBoost;
 
 
-        [Header("\n\nH 불: Blue\n")]
+
+        [Header("\n\nH 불: B\n")]
         // 완료
-        [Header("Purple/ 1Lv: 적을 공격하면 5초간 화상 초당 10% 데미지")] 
-        public bool fireBurnPerAttackEffect;
+        [Header("P/ 1Lv: 적을 공격하면 5초간 화상 초당 10% 데미지")] 
+        public bool beholderBurnPerAttackEffect;
         // 완료
-        [Header("Blue/ 3Lv: 화상 중첩수 3회 증기")] 
-        public bool fireStackOverlap;
+       [Header("B/ 3Lv: 화상 중첩수 3회 증기")] 
+        public bool beholderStackOverlap;
         // 완료
-        [Header("Purple/ 5Lv: 적 적중시 가장 가까운적에게 투사체 튕김")] 
-        public bool fireProjectileBounceDamage;
+       [Header("P/ 5Lv: 적 적중시 가장 가까운적에게 투사체 튕김")] 
+        public bool beholderProjectileBounceDamage;
         // 완료
-        [Header("Blue/ 7Lv: 화상에 걸린 적 제거시 주변 1칸 범위의 200% 폭발데미지 추가")] 
-        public bool fireBurnedEnemyExplosion;
+      [Header("B/ 7Lv: 화상에 걸린 적 제거시 주변 1칸 범위의 200% 폭발데미지 추가")] 
+        public bool beholderBurnedEnemyExplosion;
         // 완료
-        [Header("Green/ 9Lv: 공격속도 4% 증가 (최대 6회)")]
+        [Header("G/ 9Lv: 공격속도 4% 증가 (최대 6회)")]
         public float fireAttackSpeedBoost; 
-        protected internal void FireAttackSpeedBoost()
+        protected internal void BeholderAttackSpeedBoost()
         {
             if (fireAttackSpeedBoost >= 0.24f) return;
             fireAttackSpeedBoost += 0.06f;
         }
         // 완료
-        [Header("Green / 11Lv: 투사체 속도가 100% 증가, 반드시 명중")] 
-        public bool fireProjectileSpeedIncrease;
+      [Header("G / 11Lv: 투사체 속도가 100% 증가, 반드시 명중")] 
+        public bool beholderProjectileSpeedIncrease;
         // 완료
-        [Header("Purple/ 13Lv: 투사체가 튕기는 횟수 증가")] 
-        public bool fireProjectileBounceIncrease;
+       [Header("P/ 13Lv: 투사체가 튕기는 횟수 증가")] 
+        public bool beholderProjectileBounceIncrease;
 
 
 
-        [Header("\n\nI 독: Blue\n")] 
+        [Header("\n\nI 독: B\n")] 
         // 완료
-        [Header("Purple / 1Lv: 타격시 50% 확률로 적을 0.4초간 기절 시킵니다.")]
-        public bool poison2StunToChance;
+        [Header("P / 1Lv: 타격시 50% 확률로 적을 0.4초간 기절 시킵니다.")]
+        public bool cobra2StunToChance;
         // 완료
-        [Header("Purple / 3Lv: 사거리 1칸 증가")] 
-        public bool poison2RangeBoost;
+        [Header("P / 3Lv: 사거리 1칸 증가")] 
+        public bool cobraRangeBoost;
         // 완료
-        [Header("Blue / 5Lv: 중독 데미지가 10% 증가")]
-        public bool poison2DotDamageBoost;
+        [Header("B / 5Lv: 중독 데미지가 10% 증가")]
+        public bool cobraDotDamageBoost;
         // 완료
-        [Header("Green / 7Lv: 기절 시간 0.1초 증가 (최대 5회 / 0.5초)")]
+        [Header("G / 7Lv: 기절 시간 0.1초 증가 (최대 5회 / 0.5초)")]
         public float poison2StunTimeBoost;
-        protected internal void Poison2StunTimeBoost()
+        protected internal void CobraStunTimeBoost()
         {
             poison2StunTimeBoost += 0.1f;
         }
         // 완료
-        [Header("Blue / 9Lv: 중독 된 적이 죽으면, 그 자리에 2초간 독 웅덩이가 초당 200% 데미지를 입힘")]
-        public bool poison2SpawnPoisonArea;
+       [Header("B / 9Lv: 중독 된 적이 죽으면, 그 자리에 2초간 독 웅덩이가 초당 200% 데미지를 입힘")]
+        public bool cobraSpawnPoisonArea;
         // 완료
-        [Header("Purple / 11Lv: 공격속도 20% 증가")] 
-        public bool poison2RateBoost;
+       [Header("P / 11Lv: 공격속도 20% 증가")] 
+        public bool cobraRateBoost;
         // 완료
-        [Header("Blue / 13Lv: 독 웅덩이 지속시간 1초 증가")]
-        public bool poison2PoolTimeBoost;
+        [Header("B / 13Lv: 독 웅덩이 지속시간 1초 증가")]
+        public bool cobraPoolTimeBoost;
 
 
-        [Header("\n\nJ 물리: Blue\n")] 
+        [Header("\n\nJ 물리: B\n")] 
         // 완료
-        [Header("Purple / 1Lv: 성이 데미지를 받을 경우 해당 웨이브동안 사거리가 1 증가, 데미지 30% 증가")]
-        public bool physical2CastleCrushStatBoost;
+        [Header("P / 1Lv: 성이 데미지를 받을 경우 해당 웨이브동안 사거리가 1 증가, 데미지 30% 증가")]
+        public bool berserkerCastleCrushStatBoost;
         // 완료 
-        [Header("Purple / 3Lv: 5회 공격마다 공격력의 200% 데미지 투사체 전방 발사")]
-        public bool physical2FifthBoost;
+        [Header("P / 3Lv: 3회 공격마다 공격력의 200% 데미지 투사체 전방 발사")]
+        public bool berserkerThirdBoost;
         // 완료
-        [Header("Green / 5Lv: 출혈 지속시간 2초 증가")] 
-        public bool physical2BleedTimeBoost;
+        [Header("G / 5Lv: 출혈 지속시간 2초 증가")] 
+        public bool berserkerBleedTimeBoost;
         // 완료
-        [Header("Blue / 7Lv: 중독상태의 적 공격시 데미지 60% 증가")]
-        public bool physical2PoisonDamageBoost;
+        [Header("B / 7Lv: 중독상태의 적 공격시 데미지 60% 증가")]
+        public bool berserkerPoisonDamageBoost;
         // 완료
-        [Header("Purple / 9Lv: 사거리가 1 증가합니다.")]
-        public bool physical2RangeBoost;
+        [Header("P / 9Lv: 사거리가 1 증가합니다.")]
+        public bool berserkerRangeBoost;
         // 완료
-        [Header("Blue / 11Lv: 공격속도 9% 증가 (최대 4회)")]
+        [Header("B / 11Lv: 공격속도 9% 증가 (최대 4회)")]
         public float physical2RateBoost;
-        protected internal void Physical2RateBoost()
+        protected internal void BerserkerRateBoost()
         {
             physical2RateBoost += 0.09f;
         }
         // 완료
-        [Header("Blue / 13Lv: 보스 데미지 30% 증가")] 
-        public bool physical2BossBoost;
+        [Header("B / 13Lv: 보스 데미지 30% 증가")] 
+        public bool berserkerBossBoost;
 
 
-
-        [Header("\n\nK 어둠: Purple\n")] 
+        [Header("\n\nK 어둠: P\n")] 
         // 완료
-        [Header("Purple / 1Lv: 적의 뒤를 공격하면, 데미지 30% 증가")]
-        public bool dark2BackBoost;
+        [Header("P / 1Lv: 적의 뒤를 공격하면, 데미지 30% 증가")]
+        public bool darkElfBackBoost;
         // 완료
-        [Header("Purple / 3Lv: 앞 뒤 동시공격")]
-        public bool dark2DualAttack;
+        [Header("P / 3Lv: 앞 뒤 동시공격")]
+        public bool darkElfDualAttack;
         // 완료
-        [Header("Blue / 5Lv: 적에게 걸린 상태이상 갯수 마다 15% 데미지 증가 (최대 5개)")]
-        public bool dark2StatusDamageBoost;
+        [Header("B / 5Lv: 적에게 걸린 상태이상 갯수 마다 15% 데미지 증가 (최대 5개)")]
+        public bool darkElfStatusDamageBoost;
         // 완료
-        [Header("Blue / 7Lv: 상태이상적을 처치하면 주변 2칸을 100% 추가데미지")]
-        public bool dark2ExplosionBoost;
+        [Header("B / 7Lv: 상태이상적을 처치하면 주변 2칸을 100% 추가데미지")]
+        public bool darkElfExplosionBoost;
         // 완료
-        [Header("Purple / 9Lv: 발사하는 투사체 갯수 1개 증가")]
-        public bool dark2DoubleAttack;
+       [Header("P / 9Lv: 발사하는 투사체 갯수 1개 증가")]
+        public bool darkElfDoubleAttack;
         // 완료
-        [Header("Green / 11Lv: 적이 상태이상에 걸리지 않았을때, 초당 공격력의 20%의 중독을 3초간 발생시킵니다.")]
-        public bool dark2StatusPoison;
+        [Header("G / 11Lv: 적이 상태이상에 걸리지 않았을때, 초당 공격력의 20%의 중독을 3초간 발생시킵니다.")]
+        public bool darkElfStatusPoison;
         // 완료
-        [Header("Blue / 13Lv: 동일한 적을 타격할때마다 데미지가 5% 증가 (최대 10회)")]
-        public bool dark2SameEnemyBoost;
+        [Header("B / 13Lv: 동일한 적을 타격할때마다 데미지가 5% 증가 (최대 10회)")]
+        public bool darkElfSameEnemyBoost;
 
 
         public Dictionary<int, bool> GetActivatedSkills(CharacterBase.UnitGroups unitGroup)
@@ -515,103 +515,103 @@ namespace Script.RewardScript
             switch (unitGroup)
             {
                 case CharacterBase.UnitGroups.Octopus:
-                    activatedSkills[1] = dark3FifthAttackBoost;
-                    activatedSkills[3] = dark3BleedAttack;
-                    activatedSkills[5] = dark3PoisonDamageBoost;
-                    activatedSkills[7] = dark3ShackledExplosion;
-                    activatedSkills[9] = dark3BleedDurationBoost;
-                    activatedSkills[11] = dark3DamageBoost;
+                    activatedSkills[1] = octopusThirdAttackBoost;
+                    activatedSkills[3] = octopusPoisonAttack;
+                    activatedSkills[5] = octopusBleedDamageBoost;
+                    activatedSkills[7] = octopusShackledExplosion;
+                    activatedSkills[9] = octopusBleedDurationBoost;
+                    activatedSkills[11] = octopusDamageBoost;
                     activatedSkills[13] = dark3RateBoost > 0;
                     break;
                 case CharacterBase.UnitGroups.Ogre:
-                    activatedSkills[1] = darkFifthAttackDamageBoost;
-                    activatedSkills[3] = darkStatusAilmentSlowEffect;
-                    activatedSkills[5] = darkRangeIncrease;
+                    activatedSkills[1] = ogreThirdAttackDamageBoost;
+                    activatedSkills[3] = ogreStatusAilmentSlowEffect;
+                    activatedSkills[5] = ogreRangeIncrease;
                     activatedSkills[7] = darkAttackPowerBoost > 0;
-                    activatedSkills[9] = darkStatusAilmentDamageBoost;
+                    activatedSkills[9] = ogreStatusAilmentDamageBoost;
                     activatedSkills[11] = darkAttackSpeedBoost > 0; 
-                    activatedSkills[13] = darkKnockBackChance;
+                    activatedSkills[13] = ogreKnockBackChance;
                     break;
                 case CharacterBase.UnitGroups.DeathChiller:
-                    activatedSkills[1] = waterFreeze;
-                    activatedSkills[3] = waterFreezeChance;
+                    activatedSkills[1] = deathChillerFreeze;
+                    activatedSkills[3] = deathChillerFreezeChance;
                     activatedSkills[5] = waterSlowDurationBoost > 0;
-                    activatedSkills[7] = waterFreezeDamageBoost;
-                    activatedSkills[9] = waterSlowCPowerBoost;
+                    activatedSkills[7] = deathChillerFreezeDamageBoost;
+                    activatedSkills[9] = deathChillerSlowCPowerBoost;
                     activatedSkills[11] = waterAttackRateBoost > 0; 
-                    activatedSkills[13] = waterGlobalFreeze;
+                    activatedSkills[13] = deathChillerGlobalFreeze;
                     break;
                 case CharacterBase.UnitGroups.Orc:
-                    activatedSkills[1] = physicalSwordScaleIncrease;
-                    activatedSkills[3] = physicalSwordAddition;
+                    activatedSkills[1] = orcSwordScaleIncrease;
+                    activatedSkills[3] = orcSwordAddition;
                     activatedSkills[5] = physicalAttackSpeedBoost > 0;
-                    activatedSkills[7] = physicalRatePerAttack;
-                    activatedSkills[9] = physicalBindBleed;
+                    activatedSkills[7] = orcRatePerAttack;
+                    activatedSkills[9] = orcBindBleed;
                     activatedSkills[11] = physicalDamageBoost > 0; 
-                    activatedSkills[13] = physicalBleedDuration;
+                    activatedSkills[13] = orcBleedDuration;
                     break;
                 case CharacterBase.UnitGroups.Fishman:
-                    activatedSkills[1] = water2Freeze;
-                    activatedSkills[3] = water2SlowPowerBoost;
-                    activatedSkills[5] = water2FreezeTimeBoost;
+                    activatedSkills[1] = fishmanFreeze;
+                    activatedSkills[3] = fishmanSlowPowerBoost;
+                    activatedSkills[5] = fishmanFreezeTimeBoost;
                     activatedSkills[7] = water2DamageBoost > 0;
-                    activatedSkills[9] = water2FreezeChanceBoost;
-                    activatedSkills[11] =  water2FreezeDamageBoost;
+                    activatedSkills[9] = fishmanFreezeChanceBoost;
+                    activatedSkills[11] =  fishmanFreezeDamageBoost;
                     activatedSkills[13] = water2SlowTimeBoost > 0;
                     break;
                 case CharacterBase.UnitGroups.Skeleton:
-                    activatedSkills[1] = poisonPerHitEffect;
-                    activatedSkills[3] = poisonBleedingEnemyDamageBoost;
-                    activatedSkills[5] = poisonDamagePerBoost;
-                    activatedSkills[7] = poisonDamageBoost;
-                    activatedSkills[9] = poisonDotDamageBoost;
+                    activatedSkills[1] = skeletonPerHitEffect;
+                    activatedSkills[3] = skeletonBleedingEnemyDamageBoost;
+                    activatedSkills[5] = skeletonDamagePerBoost;
+                    activatedSkills[7] = skeletonDamageBoost;
+                    activatedSkills[9] = skeletonDotDamageBoost;
                     activatedSkills[11] = poisonAttackSpeedIncrease > 0; 
-                    activatedSkills[13] = poisonDurationBoost;
+                    activatedSkills[13] = skeletonDurationBoost;
                     break;
                 case CharacterBase.UnitGroups.Phoenix:
-                    activatedSkills[1] = fire2FreezeDamageBoost;
-                    activatedSkills[3] = fire2BurnDurationBoost;
-                    activatedSkills[5] = fire2ChangeProperty;
+                    activatedSkills[1] = phoenixFreezeDamageBoost;
+                    activatedSkills[3] = phoenixBurnDurationBoost;
+                    activatedSkills[5] = phoenixChangeProperty;
                     activatedSkills[7] = fire2DamageBoost > 0;
-                    activatedSkills[9] = fire2RangeBoost;
-                    activatedSkills[11] = fire2RateBoost;
-                    activatedSkills[13] = fire2BossDamageBoost;
+                    activatedSkills[9] = phoenixRangeBoost;
+                    activatedSkills[11] = phoenixRateBoost;
+                    activatedSkills[13] = phoenixBossDamageBoost;
                     break;
                 case CharacterBase.UnitGroups.Beholder:
-                    activatedSkills[1] = fireBurnPerAttackEffect;
-                    activatedSkills[3] = fireStackOverlap;
-                    activatedSkills[5] = fireProjectileBounceDamage;
-                    activatedSkills[7] = fireBurnedEnemyExplosion;
+                    activatedSkills[1] = beholderBurnPerAttackEffect;
+                    activatedSkills[3] = beholderStackOverlap;
+                    activatedSkills[5] = beholderProjectileBounceDamage;
+                    activatedSkills[7] = beholderBurnedEnemyExplosion;
                     activatedSkills[9] = fireAttackSpeedBoost > 0;
-                    activatedSkills[11] = fireProjectileSpeedIncrease;
-                    activatedSkills[13] = fireProjectileBounceIncrease;
+                    activatedSkills[11] = beholderProjectileSpeedIncrease;
+                    activatedSkills[13] = beholderProjectileBounceIncrease;
                     break;
                 case CharacterBase.UnitGroups.Cobra:
-                    activatedSkills[1] = poison2StunToChance;
-                    activatedSkills[3] = poison2RangeBoost;
-                    activatedSkills[5] = poison2DotDamageBoost;
+                    activatedSkills[1] = cobra2StunToChance;
+                    activatedSkills[3] = cobraRangeBoost;
+                    activatedSkills[5] = cobraDotDamageBoost;
                     activatedSkills[7] = poison2StunTimeBoost > 0;
-                    activatedSkills[9] = poison2SpawnPoisonArea;
-                    activatedSkills[11] = poison2RateBoost;
-                    activatedSkills[13] = poison2PoolTimeBoost;
+                    activatedSkills[9] = cobraSpawnPoisonArea;
+                    activatedSkills[11] = cobraRateBoost;
+                    activatedSkills[13] = cobraPoolTimeBoost;
                     break;
                 case CharacterBase.UnitGroups.Berserker:
-                    activatedSkills[1] = physical2CastleCrushStatBoost;
-                    activatedSkills[3] = physical2FifthBoost;
-                    activatedSkills[5] = physical2BleedTimeBoost;
-                    activatedSkills[7] = physical2PoisonDamageBoost;
-                    activatedSkills[9] = physical2RangeBoost;
+                    activatedSkills[1] = berserkerCastleCrushStatBoost;
+                    activatedSkills[3] = berserkerThirdBoost;
+                    activatedSkills[5] = berserkerBleedTimeBoost;
+                    activatedSkills[7] = berserkerPoisonDamageBoost;
+                    activatedSkills[9] = berserkerRangeBoost;
                     activatedSkills[11] = physical2RateBoost > 0;
-                    activatedSkills[13] = physical2BossBoost;
+                    activatedSkills[13] = berserkerBossBoost;
                     break;
                 case CharacterBase.UnitGroups.DarkElf:
-                    activatedSkills[1] = dark2BackBoost;
-                    activatedSkills[3] = dark2DualAttack;
-                    activatedSkills[5] = dark2StatusDamageBoost;
-                    activatedSkills[7] = dark2ExplosionBoost;
-                    activatedSkills[9] = dark2DoubleAttack;
-                    activatedSkills[11] = dark2StatusPoison;
-                    activatedSkills[13] = dark2SameEnemyBoost;
+                    activatedSkills[1] = darkElfBackBoost;
+                    activatedSkills[3] = darkElfDualAttack;
+                    activatedSkills[5] = darkElfStatusDamageBoost;
+                    activatedSkills[7] = darkElfExplosionBoost;
+                    activatedSkills[9] = darkElfDoubleAttack;
+                    activatedSkills[11] = darkElfStatusPoison;
+                    activatedSkills[13] = darkElfSameEnemyBoost;
                     break;
             }
             return activatedSkills;
@@ -636,14 +636,12 @@ namespace Script.RewardScript
         
         private void SkillInstance(Data data, float? value = null)
         {
-            _property = value.GetValueOrDefault(); 
-            var translationKey = data.Type.ToString();
-            var powerTextTranslation = language.GetTranslation(translationKey);
-            var finalPowerText = powerTextTranslation;
+            _property = value.GetValueOrDefault();
+            var finalDesc = data.Desc;
             var placeholderValues = new Dictionary<PowerTypeManager.Types, Dictionary<string, float>>
             {
                 { PowerTypeManager.Types.Slow , new Dictionary<string, float>{{"{15*EnforceManager.Instance.slowCount}", _property}}},
-                { PowerTypeManager.Types.StepLimit , new Dictionary<string, float>{{"powerUp.Property[0]", 1}}},
+                { PowerTypeManager.Types.StepLimit , new Dictionary<string, float>{{"{p}", 1}}},
                 { PowerTypeManager.Types.GroupDamage , new Dictionary<string, float>{{"{p}", _property}}},
                 { PowerTypeManager.Types.GroupAtkSpeed , new Dictionary<string, float>{{"{p}", _property}}},
                 { PowerTypeManager.Types.Exp , new Dictionary<string, float>{{"{EnforceManager.Instance.expPercentage}", _property}}},
@@ -652,27 +650,30 @@ namespace Script.RewardScript
 
             if (placeholderValues.TryGetValue(data.Type, out var placeholderValue))
             {
-                finalPowerText = placeholderValue.Aggregate(finalPowerText, (current, placeholder) => current.Replace(placeholder.Key, placeholder.Value.ToString(CultureInfo.CurrentCulture)));
+                finalDesc = placeholderValue.Aggregate(finalDesc, (current, placeholder) => current.Replace(placeholder.Key, placeholder.Value.ToString(CultureInfo.CurrentCulture)));
             }
 
             if (data.Type == PowerTypeManager.Types.NextStage)
             {
-                finalPowerText = finalPowerText.Replace("{p}", _property.ToString(CultureInfo.CurrentCulture));
-                finalPowerText.Replace("{EnforceManager.Instance.highLevelCharacterCount}", highLevelCharacterCount.ToString(CultureInfo.CurrentCulture));
+                finalDesc = finalDesc.Replace("{p}", _property.ToString(CultureInfo.CurrentCulture));
+                finalDesc.Replace("{EnforceManager.Instance.highLevelCharacterCount}", highLevelCharacterCount.ToString(CultureInfo.CurrentCulture));
             }
-            var finalTranslation = finalPowerText.Replace("||", "\n");
+            var finalTranslation = finalDesc.Replace("||", "\n");
          
             
             if (data.Type == PowerTypeManager.Types.LevelUpPattern)
             {
-                var groupName = GetGroupNameFromValue((int)_property);
-                finalTranslation = finalPowerText.Replace("{_groupName}", groupName);
+                if (CommonRewardManager.Instance._levelUpDict.TryGetValue(characterList[(int)_property].unitGroup, out var levelUpInfo))
+                {
+                    finalTranslation = levelUpInfo.Aggregate(finalTranslation, (current, item) => current.Replace("{0level_unit_N}", item.Value)
+                        .Replace("{unit_N}", item.Key));
+                }
                 _skill.skillIcon.sprite = characterList[(int)_property].GetSpriteForLevel(characterList[(int)_property].unitPeaceLevel);
                 _skill.skillBackGround.sprite = characterList[(int)_property].UnitGrade switch
                 {
-                    CharacterBase.UnitGrades.Green => PowerTypeManager.Instance.green,
-                    CharacterBase.UnitGrades.Blue => PowerTypeManager.Instance.blue,
-                    CharacterBase.UnitGrades.Purple => PowerTypeManager.Instance.purple,
+                    CharacterBase.UnitGrades.G => PowerTypeManager.Instance.green,
+                    CharacterBase.UnitGrades.B => PowerTypeManager.Instance.blue,
+                    CharacterBase.UnitGrades.P => PowerTypeManager.Instance.purple,
                 };
 
                 if (_instantiatedSkills.TryGetValue((PowerTypeManager.Types.LevelUpPattern, (int)_property), out var instantiatedSkill))
@@ -879,97 +880,97 @@ namespace Script.RewardScript
             var data = new EnforceData
             {
                 //Darkness3 Unit A
-                dark3FifthAttackBoost = dark3FifthAttackBoost,
-                dark3BleedAttack = dark3BleedAttack,
-                dark3PoisonDamageBoost = dark3PoisonDamageBoost,
-                dark3ShackledExplosion = dark3ShackledExplosion,
-                dark3BleedDurationBoost = dark3BleedDurationBoost,
-                dark3DamageBoost = dark3DamageBoost,
+                dark3FifthAttackBoost = octopusThirdAttackBoost,
+                dark3BleedAttack = octopusPoisonAttack,
+                dark3PoisonDamageBoost = octopusBleedDamageBoost,
+                dark3ShackledExplosion = octopusShackledExplosion,
+                dark3BleedDurationBoost = octopusBleedDurationBoost,
+                dark3DamageBoost = octopusDamageBoost,
                 dark3RateBoost = dark3RateBoost,
                 //Darkness Unit Ogre
-                darkFifthAttackDamageBoost = darkFifthAttackDamageBoost,
+                darkFifthAttackDamageBoost = ogreThirdAttackDamageBoost,
                 darkAttackSpeedBoost = darkAttackSpeedBoost,
                 darkAttackPowerBoost = darkAttackPowerBoost,
-                darkKnockBackChance = darkKnockBackChance,
-                darkStatusAilmentDamageBoost = darkStatusAilmentDamageBoost,
-                darkRangeIncrease = darkRangeIncrease,
-                darkStatusAilmentSlowEffect = darkStatusAilmentSlowEffect,
+                darkKnockBackChance = ogreKnockBackChance,
+                darkStatusAilmentDamageBoost = ogreStatusAilmentDamageBoost,
+                darkRangeIncrease = ogreRangeIncrease,
+                darkStatusAilmentSlowEffect = ogreStatusAilmentSlowEffect,
                 //Water1 Unit DeathChiller
-                waterFreeze = waterFreeze,
-                waterFreezeChance = waterFreezeChance,
+                waterFreeze = deathChillerFreeze,
+                waterFreezeChance = deathChillerFreezeChance,
                 waterSlowDurationBoost = waterSlowDurationBoost,
-                waterFreezeDamageBoost = waterFreezeDamageBoost,
-                waterSlowCPowerBoost =  waterSlowCPowerBoost,
+                waterFreezeDamageBoost = deathChillerFreezeDamageBoost,
+                waterSlowCPowerBoost =  deathChillerSlowCPowerBoost,
                 waterAttackRateBoost = waterAttackRateBoost,
-                waterGlobalFreeze = waterGlobalFreeze, 
+                waterGlobalFreeze = deathChillerGlobalFreeze, 
                 //Physical Unit Orc
                 physicalAttackSpeedBoost = physicalAttackSpeedBoost,
-                physicalSwordAddition = physicalSwordAddition,
-                physicalSwordScaleIncrease = physicalSwordScaleIncrease,
-                physicalRatePerAttack = physicalRatePerAttack, 
-                physicalBindBleed = physicalBindBleed,
+                physicalSwordAddition = orcSwordAddition,
+                physicalSwordScaleIncrease = orcSwordScaleIncrease,
+                physicalRatePerAttack = orcRatePerAttack, 
+                physicalBindBleed = orcBindBleed,
                 physicalDamageBoost = physicalDamageBoost,
-                physicalBleedDuration = physicalBleedDuration,
+                physicalBleedDuration = orcBleedDuration,
                 //Water2 Unit Fishman
-                water2Freeze = water2Freeze,
-                water2SlowPowerBoost = water2SlowPowerBoost,
-                water2FreezeTimeBoost = water2FreezeTimeBoost,
+                water2Freeze = fishmanFreeze,
+                water2SlowPowerBoost = fishmanSlowPowerBoost,
+                water2FreezeTimeBoost = fishmanFreezeTimeBoost,
                 water2DamageBoost = water2DamageBoost,
-                water2FreezeChanceBoost = water2FreezeChanceBoost,
-                water2FreezeDamageBoost = water2FreezeDamageBoost,
+                water2FreezeChanceBoost = fishmanFreezeChanceBoost,
+                water2FreezeDamageBoost = fishmanFreezeDamageBoost,
                 water2SlowTimeBoost = water2SlowTimeBoost,
                 //Poison Unit Skeleton
-                poisonPerHitEffect = poisonPerHitEffect,
-                poisonBleedingEnemyDamageBoost = poisonBleedingEnemyDamageBoost,
-                poisonDamagePerBoost = poisonDamagePerBoost,
-                poisonDamageBoost = poisonDamageBoost,
-                poisonDotDamageBoost = poisonDotDamageBoost,
+                poisonPerHitEffect = skeletonPerHitEffect,
+                poisonBleedingEnemyDamageBoost = skeletonBleedingEnemyDamageBoost,
+                poisonDamagePerBoost = skeletonDamagePerBoost,
+                poisonDamageBoost = skeletonDamageBoost,
+                poisonDotDamageBoost = skeletonDotDamageBoost,
                 poisonAttackSpeedIncrease = poisonAttackSpeedIncrease,
-                poisonDurationBoost = poisonDurationBoost,
+                poisonDurationBoost = skeletonDurationBoost,
                 //Fire2 Unit Phoenix
-                fire2FreezeDamageBoost = fire2FreezeDamageBoost,
-                fire2BurnDurationBoost = fire2BurnDurationBoost,
-                fire2ChangeProperty = fire2ChangeProperty,
+                fire2FreezeDamageBoost = phoenixFreezeDamageBoost,
+                fire2BurnDurationBoost = phoenixBurnDurationBoost,
+                fire2ChangeProperty = phoenixChangeProperty,
                 fire2DamageBoost =  fire2DamageBoost,
-                fire2RangeBoost = fire2RangeBoost,
-                fire2RateBoost = fire2RateBoost, 
-                fire2BossDamageBoost = fire2BossDamageBoost,  
+                fire2RangeBoost = phoenixRangeBoost,
+                fire2RateBoost = phoenixRateBoost, 
+                fire2BossDamageBoost = phoenixBossDamageBoost,  
         
                 //Fire1 Unit Beholder
-                fireBurnPerAttackEffect = fireBurnPerAttackEffect,
-                fireStackOverlap = fireStackOverlap,
-                fireProjectileBounceDamage = fireProjectileBounceDamage,
-                fireBurnedEnemyExplosion = fireBurnedEnemyExplosion,
+                fireBurnPerAttackEffect = beholderBurnPerAttackEffect,
+                fireStackOverlap = beholderStackOverlap,
+                fireProjectileBounceDamage = beholderProjectileBounceDamage,
+                fireBurnedEnemyExplosion = beholderBurnedEnemyExplosion,
                 fireAttackSpeedBoost = fireAttackSpeedBoost,
-                fireProjectileSpeedIncrease = fireProjectileSpeedIncrease,
-                fireProjectileBounceIncrease = fireProjectileBounceIncrease,
+                fireProjectileSpeedIncrease = beholderProjectileSpeedIncrease,
+                fireProjectileBounceIncrease = beholderProjectileBounceIncrease,
         
                 //Poison2 Unit Cobra
-                poison2StunToChance = poison2StunToChance,
-                poison2RangeBoost = poison2RangeBoost,
-                poison2DotDamageBoost = poison2DotDamageBoost,
+                poison2StunToChance = cobra2StunToChance,
+                poison2RangeBoost = cobraRangeBoost,
+                poison2DotDamageBoost = cobraDotDamageBoost,
                 poison2StunTimeBoost = poison2StunTimeBoost,
-                poison2SpawnPoisonArea = poison2SpawnPoisonArea,
-                poison2RateBoost = poison2RateBoost,
-                poison2PoolTimeBoost = poison2PoolTimeBoost,
+                poison2SpawnPoisonArea = cobraSpawnPoisonArea,
+                poison2RateBoost = cobraRateBoost,
+                poison2PoolTimeBoost = cobraPoolTimeBoost,
         
                 //Physical2 Unit J
-                physical2CastleCrushStatBoost = physical2CastleCrushStatBoost,
-                physical2FifthBoost = physical2FifthBoost,
-                physical2BleedTimeBoost = physical2BleedTimeBoost,
-                physical2PoisonDamageBoost = physical2PoisonDamageBoost,       
-                physical2RangeBoost = physical2RangeBoost,
+                physical2CastleCrushStatBoost = berserkerCastleCrushStatBoost,
+                physical2FifthBoost = berserkerThirdBoost,
+                physical2BleedTimeBoost = berserkerBleedTimeBoost,
+                physical2PoisonDamageBoost = berserkerPoisonDamageBoost,       
+                physical2RangeBoost = berserkerRangeBoost,
                 physical2RateBoost = physical2RateBoost,
-                physical2BossBoost = physical2BossBoost,
+                physical2BossBoost = berserkerBossBoost,
         
                 //Darkness Unit DarkElf
-                dark2BackBoost = dark2BackBoost,
-                dark2DualAttack = dark2DualAttack,
-                dark2StatusDamageBoost = dark2StatusDamageBoost,
-                dark2ExplosionBoost = dark2ExplosionBoost,
-                dark2DoubleAttack = dark2DoubleAttack,
-                dark2StatusPoison = dark2StatusPoison,
-                dark2SameEnemyBoost = dark2SameEnemyBoost,
+                dark2BackBoost = darkElfBackBoost,
+                dark2DualAttack = darkElfDualAttack,
+                dark2StatusDamageBoost = darkElfStatusDamageBoost,
+                dark2ExplosionBoost = darkElfExplosionBoost,
+                dark2DoubleAttack = darkElfDoubleAttack,
+                dark2StatusPoison = darkElfStatusPoison,
+                dark2SameEnemyBoost = darkElfSameEnemyBoost,
         
                 // Common
                 addRow = addRow,
@@ -1004,93 +1005,93 @@ namespace Script.RewardScript
             var data = JsonUtility.FromJson<EnforceData>(json);
 
             // Divine Unit A
-            dark3FifthAttackBoost = data.dark3FifthAttackBoost;
-            dark3BleedAttack = data.dark3BleedAttack;
-            dark3PoisonDamageBoost = data.dark3PoisonDamageBoost;
-            dark3ShackledExplosion = data.dark3ShackledExplosion;
-            dark3BleedDurationBoost = data.dark3BleedDurationBoost;
-            dark3DamageBoost = data.dark3DamageBoost;
+            octopusThirdAttackBoost = data.dark3FifthAttackBoost;
+            octopusPoisonAttack = data.dark3BleedAttack;
+            octopusBleedDamageBoost = data.dark3PoisonDamageBoost;
+            octopusShackledExplosion = data.dark3ShackledExplosion;
+            octopusBleedDurationBoost = data.dark3BleedDurationBoost;
+            octopusDamageBoost = data.dark3DamageBoost;
             dark3RateBoost = data.dark3RateBoost;
             //Darkness Unit Ogre
-            darkFifthAttackDamageBoost = data.darkFifthAttackDamageBoost; 
+            ogreThirdAttackDamageBoost = data.darkFifthAttackDamageBoost; 
             darkAttackSpeedBoost = data.darkAttackSpeedBoost;
             darkAttackPowerBoost = data.darkAttackPowerBoost;
-            darkKnockBackChance = data.darkKnockBackChance;
-            darkStatusAilmentDamageBoost = data.darkStatusAilmentDamageBoost;
-            darkRangeIncrease = data.darkRangeIncrease;
-            darkStatusAilmentSlowEffect = data.darkStatusAilmentSlowEffect;
+            ogreKnockBackChance = data.darkKnockBackChance;
+            ogreStatusAilmentDamageBoost = data.darkStatusAilmentDamageBoost;
+            ogreRangeIncrease = data.darkRangeIncrease;
+            ogreStatusAilmentSlowEffect = data.darkStatusAilmentSlowEffect;
             //Water1 Unit DeathChiller
-            waterFreeze = data.waterFreeze;
-            waterFreezeChance = data.waterFreezeChance;
+            deathChillerFreeze = data.waterFreeze;
+            deathChillerFreezeChance = data.waterFreezeChance;
             waterSlowDurationBoost = data.waterSlowDurationBoost;
-            waterFreezeDamageBoost = data.waterFreezeDamageBoost;
-            waterSlowCPowerBoost =  data.waterSlowCPowerBoost;
+            deathChillerFreezeDamageBoost = data.waterFreezeDamageBoost;
+            deathChillerSlowCPowerBoost =  data.waterSlowCPowerBoost;
             waterAttackRateBoost = data.waterAttackRateBoost;
-            waterGlobalFreeze = data.waterGlobalFreeze;
+            deathChillerGlobalFreeze = data.waterGlobalFreeze;
             //Physical Unit Orc
             physicalAttackSpeedBoost = data.physicalAttackSpeedBoost;
-            physicalSwordAddition = data.physicalSwordAddition;
-            physicalSwordScaleIncrease = data.physicalSwordScaleIncrease;
-            physicalRatePerAttack = data.physicalRatePerAttack; 
-            physicalBindBleed = data.physicalBindBleed;
+            orcSwordAddition = data.physicalSwordAddition;
+            orcSwordScaleIncrease = data.physicalSwordScaleIncrease;
+            orcRatePerAttack = data.physicalRatePerAttack; 
+            orcBindBleed = data.physicalBindBleed;
             physicalDamageBoost = data.physicalDamageBoost;
-            physicalBleedDuration = data.physicalBleedDuration;
+            orcBleedDuration = data.physicalBleedDuration;
             //Water2 Unit Fishman
-            water2Freeze = data.water2Freeze;
-            water2SlowPowerBoost = data.water2SlowPowerBoost;
-            water2FreezeTimeBoost = data.water2FreezeTimeBoost;
+            fishmanFreeze = data.water2Freeze;
+            fishmanSlowPowerBoost = data.water2SlowPowerBoost;
+            fishmanFreezeTimeBoost = data.water2FreezeTimeBoost;
             water2DamageBoost = data.water2DamageBoost;
-            water2FreezeChanceBoost = data.water2FreezeChanceBoost;
-            water2FreezeDamageBoost = data.water2FreezeDamageBoost;
+            fishmanFreezeChanceBoost = data.water2FreezeChanceBoost;
+            fishmanFreezeDamageBoost = data.water2FreezeDamageBoost;
             water2SlowTimeBoost = data.water2SlowTimeBoost;
             //Poison Unit Skeleton
-            poisonPerHitEffect = data.poisonPerHitEffect;
-            poisonBleedingEnemyDamageBoost = data.poisonBleedingEnemyDamageBoost;
-            poisonDamagePerBoost = data.poisonDamagePerBoost;
-            poisonDamageBoost = data.poisonDamageBoost;
-            poisonDotDamageBoost = data.poisonDotDamageBoost;
+            skeletonPerHitEffect = data.poisonPerHitEffect;
+            skeletonBleedingEnemyDamageBoost = data.poisonBleedingEnemyDamageBoost;
+            skeletonDamagePerBoost = data.poisonDamagePerBoost;
+            skeletonDamageBoost = data.poisonDamageBoost;
+            skeletonDotDamageBoost = data.poisonDotDamageBoost;
             poisonAttackSpeedIncrease = data.poisonAttackSpeedIncrease;
-            poisonDurationBoost = data.poisonDurationBoost;
+            skeletonDurationBoost = data.poisonDurationBoost;
             //Fire2 Unit Phoenix
-            fire2FreezeDamageBoost = data.fire2FreezeDamageBoost;
-            fire2BurnDurationBoost = data.fire2BurnDurationBoost;
-            fire2ChangeProperty = data.fire2ChangeProperty;
+            phoenixFreezeDamageBoost = data.fire2FreezeDamageBoost;
+            phoenixBurnDurationBoost = data.fire2BurnDurationBoost;
+            phoenixChangeProperty = data.fire2ChangeProperty;
             fire2DamageBoost =  data.fire2DamageBoost;
-            fire2RangeBoost = data.fire2RangeBoost;
-            fire2RateBoost = data.fire2RateBoost; 
-            fire2BossDamageBoost = data.fire2BossDamageBoost;  
+            phoenixRangeBoost = data.fire2RangeBoost;
+            phoenixRateBoost = data.fire2RateBoost; 
+            phoenixBossDamageBoost = data.fire2BossDamageBoost;  
             //Fire1 Unit Beholder
-            fireBurnPerAttackEffect = data.fireBurnPerAttackEffect;
-            fireStackOverlap = data.fireStackOverlap;
-            fireProjectileBounceDamage = data.fireProjectileBounceDamage;
-            fireBurnedEnemyExplosion = data.fireBurnedEnemyExplosion;
+            beholderBurnPerAttackEffect = data.fireBurnPerAttackEffect;
+            beholderStackOverlap = data.fireStackOverlap;
+            beholderProjectileBounceDamage = data.fireProjectileBounceDamage;
+            beholderBurnedEnemyExplosion = data.fireBurnedEnemyExplosion;
             fireAttackSpeedBoost = data.fireAttackSpeedBoost;
-            fireProjectileSpeedIncrease = data.fireProjectileSpeedIncrease;                            
-            fireProjectileBounceIncrease = data.fireProjectileBounceIncrease;
+            beholderProjectileSpeedIncrease = data.fireProjectileSpeedIncrease;                            
+            beholderProjectileBounceIncrease = data.fireProjectileBounceIncrease;
             //Poison2 Unit Cobra
-            poison2StunToChance = data.poison2StunToChance;
-            poison2RangeBoost = data.poison2RangeBoost;
-            poison2DotDamageBoost = data.poison2DotDamageBoost;
+            cobra2StunToChance = data.poison2StunToChance;
+            cobraRangeBoost = data.poison2RangeBoost;
+            cobraDotDamageBoost = data.poison2DotDamageBoost;
             poison2StunTimeBoost = data.poison2StunTimeBoost;
-            poison2SpawnPoisonArea = data.poison2SpawnPoisonArea;
-            poison2RateBoost = data.poison2RateBoost;
-            poison2PoolTimeBoost = data.poison2PoolTimeBoost;
+            cobraSpawnPoisonArea = data.poison2SpawnPoisonArea;
+            cobraRateBoost = data.poison2RateBoost;
+            cobraPoolTimeBoost = data.poison2PoolTimeBoost;
             //Physical2 Unit J
-            physical2CastleCrushStatBoost = data.physical2CastleCrushStatBoost;
-            physical2FifthBoost = data.physical2FifthBoost;
-            physical2BleedTimeBoost = data.physical2BleedTimeBoost;
-            physical2PoisonDamageBoost = data.physical2PoisonDamageBoost;       
-            physical2RangeBoost = data.physical2RangeBoost;
+            berserkerCastleCrushStatBoost = data.physical2CastleCrushStatBoost;
+            berserkerThirdBoost = data.physical2FifthBoost;
+            berserkerBleedTimeBoost = data.physical2BleedTimeBoost;
+            berserkerPoisonDamageBoost = data.physical2PoisonDamageBoost;       
+            berserkerRangeBoost = data.physical2RangeBoost;
             physical2RateBoost = data.physical2RateBoost;
-            physical2BossBoost = data.physical2BossBoost;
+            berserkerBossBoost = data.physical2BossBoost;
             //Darkness Unit DarkElf
-            dark2BackBoost = data.dark2BackBoost;
-            dark2DualAttack = data.dark2DualAttack;
-            dark2StatusDamageBoost = data.dark2StatusDamageBoost;
-            dark2ExplosionBoost = data.dark2ExplosionBoost;
-            dark2DoubleAttack = data.dark2DoubleAttack;              
-            dark2StatusPoison = data.dark2StatusPoison;
-            dark2SameEnemyBoost = data.dark2SameEnemyBoost;
+            darkElfBackBoost = data.dark2BackBoost;
+            darkElfDualAttack = data.dark2DualAttack;
+            darkElfStatusDamageBoost = data.dark2StatusDamageBoost;
+            darkElfExplosionBoost = data.dark2ExplosionBoost;
+            darkElfDoubleAttack = data.dark2DoubleAttack;              
+            darkElfStatusPoison = data.dark2StatusPoison;
+            darkElfSameEnemyBoost = data.dark2SameEnemyBoost;
             // Common
             addRow = data.addRow;
             slowCount = data.slowCount;

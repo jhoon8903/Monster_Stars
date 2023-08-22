@@ -350,24 +350,25 @@ namespace Script.AdsScript
         }
         private void RewardButtonClicked()
         {
+
             StoreMenu.ButtonType chestType;
             switch (ButtonTypes)
             {
                 case ButtonType.Coin:
                     boxGrade = StoreMenu.BoxGrade.Coin;
-                    StoreMenu.Instance.Reward(boxGrade);
+                    // StoreMenu.Instance.Reward(boxGrade);
                     StoreMenu.Instance.OpenAds(boxGrade);
                     GiveReward(ButtonType.Coin);
                     break;
                 case ButtonType.Gem:
                     boxGrade = StoreMenu.BoxGrade.Gem;
-                    StoreMenu.Instance.Reward(boxGrade);
+                    // StoreMenu.Instance.Reward(boxGrade);
                     StoreMenu.Instance.OpenAds(boxGrade);
                     GiveReward(ButtonType.Gem);
                     break;
                 case ButtonType.Stamina:
                     boxGrade = StoreMenu.BoxGrade.Stamina;
-                    StoreMenu.Instance.Reward(boxGrade);
+                    // StoreMenu.Instance.Reward(boxGrade);
                     StoreMenu.Instance.OpenAds(boxGrade);
                     GiveReward(ButtonType.Stamina);
                     break;

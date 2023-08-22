@@ -110,15 +110,24 @@ namespace Script.PuzzleManagerGroup
             }
             yield return StartCoroutine(matchManager.CheckMatches());
         }
-        private static IEnumerator MoveCharacter(GameObject gameObject, Vector3Int targetPosition, float duration = 0.3f)
+        private static IEnumerator MoveCharacter(GameObject gameObject, Vector3 targetPosition, float duration = 0.35f)
         {
             if (gameObject == null) yield break;
 
-            var moveTween 
-                = gameObject.transform.DOMove(targetPosition, duration).SetEase(Ease.Linear);
-    
-            yield return moveTween.WaitForCompletion();
+            Vector3 startPosition = gameObject.transform.position;
+            float elapsedTime = 0;
+
+            while (elapsedTime < duration)
+            {
+                float percentage = elapsedTime / duration;
+                gameObject.transform.position = Vector3.Lerp(startPosition, targetPosition, percentage);
+                elapsedTime += Time.deltaTime;
+                yield return null; // 다음 프레임까지 기다립니다.
+            }
+
+            gameObject.transform.position = targetPosition; // 마지막으로 정확한 목표 위치로 설정합니다.
         }
+
         private IEnumerator PerformMoves(IEnumerable<(GameObject, Vector3Int)> moves)
         {
             var moveCoroutines
@@ -148,11 +157,12 @@ namespace Script.PuzzleManagerGroup
                     var spawnPosition = new Vector3Int(currentPosition.x, -2 - emptyCellCount, 0);
                     var newCharacter = SpawnNewCharacter(spawnPosition);
                     if (newCharacter == null) continue;
+                   
                     var coroutine = StartCoroutine(MoveCharacter(newCharacter, currentPosition));
                     moveCoroutines.Add(coroutine);
                 }
             }
-            // Wait for all coroutines to complete
+
             foreach (var coroutine in moveCoroutines)
             {
                 yield return coroutine;
@@ -170,7 +180,6 @@ namespace Script.PuzzleManagerGroup
             newCharacter.transform.position = position;
             if (EnforceManager.Instance.index.Count > 0)
             {
-      
                 foreach (var dummy in EnforceManager.Instance.index
                              .Select(index => EnforceManager.Instance.characterList[index].unitGroup)
                              .Where(unitGroup => unitGroup == newCharacter.GetComponent<CharacterBase>().unitGroup))

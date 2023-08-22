@@ -17,7 +17,7 @@ namespace Script.CharacterManagerScript
         protected internal int CharacterMaxPeace => CheckForMaxPeace();
         protected internal int CharacterLevelUpCoin => CheckForLevelUpCoin();
         protected internal int CumulativeDamage;
-        public enum UnitGrades { Green, Blue, Purple }
+        public enum UnitGrades { G, B, P }
         protected internal UnitGrades UnitGrade;
         public bool unLock;
         public bool selected;
@@ -75,7 +75,7 @@ namespace Script.CharacterManagerScript
         protected static List<GameObject> DetectedEnemies = new List<GameObject>();
         private SpriteRenderer _spriteRenderer;
         protected internal string UnitDesc { get; protected set; }
-        protected float UnitLevelDamage { get; set; }
+        public float UnitLevelDamage { get; set; }
         public Dictionary<EnemyBase, int> AttackCounts { get; set; } = new Dictionary<EnemyBase, int>();
         
         public virtual void Initialize()
@@ -95,95 +95,95 @@ namespace Script.CharacterManagerScript
                 case 3:
                     maxPiece = UnitGrade switch
                     {
-                        UnitGrades.Green => 10,
-                        UnitGrades.Blue => 5,
+                        UnitGrades.G => 10,
+                        UnitGrades.B => 5,
                     };
                     break;
                 case 4:
                     maxPiece = UnitGrade switch
                     {
-                        UnitGrades.Green => 25,
-                        UnitGrades.Blue => 5,
+                        UnitGrades.G => 25,
+                        UnitGrades.B => 5,
                     };
                     break;
                  case 5:
                      maxPiece = UnitGrade switch
                      {
-                       UnitGrades.Green => 50,
-                       UnitGrades.Blue => 10,
-                       UnitGrades.Purple => 3
+                       UnitGrades.G => 50,
+                       UnitGrades.B => 10,
+                       UnitGrades.P => 3
                      };
                      break;
                  case 6:
                      maxPiece = UnitGrade switch
                      {
-                         UnitGrades.Green => 100,
-                         UnitGrades.Blue => 25,
-                         UnitGrades.Purple => 5
+                         UnitGrades.G => 100,
+                         UnitGrades.B => 25,
+                         UnitGrades.P => 5
                      };
                      break;
                  case 7:
                      maxPiece = UnitGrade switch
                      {
-                         UnitGrades.Green => 200,
-                         UnitGrades.Blue => 50,
-                         UnitGrades.Purple => 10
+                         UnitGrades.G => 200,
+                         UnitGrades.B => 50,
+                         UnitGrades.P => 10
                      };
                      break;
                  case 8:
                      maxPiece = UnitGrade switch
                      {
-                         UnitGrades.Green => 500,
-                         UnitGrades.Blue => 100,
-                         UnitGrades.Purple => 20
+                         UnitGrades.G => 500,
+                         UnitGrades.B => 100,
+                         UnitGrades.P => 20
                      };
                      break;
                  case 9:
                      maxPiece = UnitGrade switch
                      {
-                         UnitGrades.Green => 1000,
-                         UnitGrades.Blue => 200,
-                         UnitGrades.Purple => 40
+                         UnitGrades.G => 1000,
+                         UnitGrades.B => 200,
+                         UnitGrades.P => 40
                      };
                      break;
                  case 10:
                      maxPiece = UnitGrade switch
                      {
-                         UnitGrades.Green => 2000,
-                         UnitGrades.Blue => 400,
-                         UnitGrades.Purple => 80
+                         UnitGrades.G => 2000,
+                         UnitGrades.B => 400,
+                         UnitGrades.P => 80
                      };
                      break;
                  case 11:
                      maxPiece = UnitGrade switch
                      {
-                         UnitGrades.Green => 4000,
-                         UnitGrades.Blue => 800,
-                         UnitGrades.Purple => 160
+                         UnitGrades.G => 4000,
+                         UnitGrades.B => 800,
+                         UnitGrades.P => 160
                      };
                      break;
                  case 12:
                      maxPiece = UnitGrade switch
                      {
-                         UnitGrades.Green => 6000,
-                         UnitGrades.Blue => 1600,
-                         UnitGrades.Purple => 320
+                         UnitGrades.G => 6000,
+                         UnitGrades.B => 1600,
+                         UnitGrades.P => 320
                      };
                      break;
                  case 13:
                      maxPiece = UnitGrade switch
                      {
-                         UnitGrades.Green => 8000,
-                         UnitGrades.Blue => 3200,
-                         UnitGrades.Purple => 480
+                         UnitGrades.G => 8000,
+                         UnitGrades.B => 3200,
+                         UnitGrades.P => 480
                      };
                      break;
                  case 14:
                      maxPiece = UnitGrade switch
                      {
-                         UnitGrades.Green => 8000,
-                         UnitGrades.Blue => 3200,
-                         UnitGrades.Purple => 480
+                         UnitGrades.G => 8000,
+                         UnitGrades.B => 3200,
+                         UnitGrades.P => 480
                      };
                      break;
             }
@@ -203,95 +203,95 @@ namespace Script.CharacterManagerScript
                 case 3:
                     coin = UnitGrade switch
                     {
-                        UnitGrades.Green => 250,
-                        UnitGrades.Blue => 0
+                        UnitGrades.G => 250,
+                        UnitGrades.B => 0
                     };
                     break;
                 case 4:
                     coin = UnitGrade switch
                     {
-                        UnitGrades.Green => 500,
-                        UnitGrades.Blue => 500
+                        UnitGrades.G => 500,
+                        UnitGrades.B => 500
                     };
                     break;
                  case 5:
                      coin = UnitGrade switch
                      {
-                       UnitGrades.Green => 1000,
-                       UnitGrades.Blue => 1000,
-                       UnitGrades.Purple => 0
+                       UnitGrades.G => 1000,
+                       UnitGrades.B => 1000,
+                       UnitGrades.P => 0
                      };
                      break;
                  case 6:
                      coin = UnitGrade switch
                      {
-                         UnitGrades.Green => 2500,
-                         UnitGrades.Blue => 1500,
-                         UnitGrades.Purple => 2500
+                         UnitGrades.G => 2500,
+                         UnitGrades.B => 1500,
+                         UnitGrades.P => 2500
                      };
                      break;
                  case 7:
                      coin = UnitGrade switch
                      {
-                         UnitGrades.Green => 5000,
-                         UnitGrades.Blue => 3000,
-                         UnitGrades.Purple => 7500
+                         UnitGrades.G => 5000,
+                         UnitGrades.B => 3000,
+                         UnitGrades.P => 7500
                      };
                      break;
                  case 8:
                      coin = UnitGrade switch
                      {
-                         UnitGrades.Green => 7500,
-                         UnitGrades.Blue => 6000,
-                         UnitGrades.Purple => 13000
+                         UnitGrades.G => 7500,
+                         UnitGrades.B => 6000,
+                         UnitGrades.P => 13000
                      };
                      break;
                  case 9:
                      coin = UnitGrade switch
                      {
-                         UnitGrades.Green => 10000,
-                         UnitGrades.Blue => 12000,
-                         UnitGrades.Purple => 26000
+                         UnitGrades.G => 10000,
+                         UnitGrades.B => 12000,
+                         UnitGrades.P => 26000
                      };
                      break;
                  case 10:
                      coin = UnitGrade switch
                      {
-                         UnitGrades.Green => 12500,
-                         UnitGrades.Blue => 24000,
-                         UnitGrades.Purple => 40000
+                         UnitGrades.G => 12500,
+                         UnitGrades.B => 24000,
+                         UnitGrades.P => 40000
                      };
                      break;
                  case 11:
                      coin = UnitGrade switch
                      {
-                         UnitGrades.Green => 15000,
-                         UnitGrades.Blue => 36000,
-                         UnitGrades.Purple => 20000
+                         UnitGrades.G => 15000,
+                         UnitGrades.B => 36000,
+                         UnitGrades.P => 20000
                      };
                      break;
                  case 12:
                      coin = UnitGrade switch
                      {
-                         UnitGrades.Green => 15000,
-                         UnitGrades.Blue => 48000,
-                         UnitGrades.Purple => 30000
+                         UnitGrades.G => 15000,
+                         UnitGrades.B => 48000,
+                         UnitGrades.P => 30000
                      };
                      break;
                  case 13:
                      coin = UnitGrade switch
                      {
-                         UnitGrades.Green => 15000,
-                         UnitGrades.Blue => 54000,
-                         UnitGrades.Purple => 40000
+                         UnitGrades.G => 15000,
+                         UnitGrades.B => 54000,
+                         UnitGrades.P => 40000
                      };
                      break;
                  case 14:
                      coin = UnitGrade switch
                      {
-                         UnitGrades.Green => 15000,
-                         UnitGrades.Blue => 66000,
-                         UnitGrades.Purple => 50000
+                         UnitGrades.G => 15000,
+                         UnitGrades.B => 66000,
+                         UnitGrades.P => 50000
                      };
                      break;
             }

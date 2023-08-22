@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Script.CharacterManagerScript;
 using UnityEngine;
 
 namespace Script.RewardScript
@@ -22,22 +23,38 @@ namespace Script.RewardScript
             }
         }
 
+        public CharacterBase.UnitGroups SkillGroup { get; set; }
+        public int SkillLevel { get; set; }
         public int Code { get; set; }
         public Sprite BtnColor { get; private set; }
         public Sprite BackGroundColor { get; private set; }
         public Sprite Icon { get; set; }
+        public string Desc { get; set; }
+        public string PopupDesc { get; set; }
 
-        protected Data(Sprite btnColor, Sprite backGroundColor, int code, PowerTypeManager.Types type, int[] property)
+        protected Data(
+            CharacterBase.UnitGroups skillGroup, 
+            int skillLevel, 
+            int code, 
+            PowerTypeManager.Types type, 
+            Sprite btnColor,
+            Sprite backGroundColor,
+            string desc, 
+            string popupDesc, 
+            int[] property)
         {
             foreach (var skill in PowerTypeManager.Instance.skills.Where(skill => skill.skillTypes == type))
             {
                 Icon = skill.skillIcon;
             }
-
+            SkillGroup = skillGroup;
+            SkillLevel = skillLevel;
             BtnColor = btnColor;
             BackGroundColor = backGroundColor;
             Code = code;
             Type = type;
+            Desc = desc;
+            PopupDesc = popupDesc;
             _property = property;
         }
 
@@ -50,25 +67,48 @@ namespace Script.RewardScript
 
     public class GreenData : Data
     {
-        public GreenData(Sprite btnColor, Sprite backGroundColor, int code, PowerTypeManager.Types type, int[] property)
-            : base(btnColor, backGroundColor, code, type, property)
+        public GreenData(CharacterBase.UnitGroups skillGroup, 
+            int skillLevel, 
+            int code, 
+            PowerTypeManager.Types type, 
+            Sprite btnColor,
+            Sprite backGroundColor,
+            string desc, 
+            string popupDesc, 
+            int[] property)
+            : base(skillGroup, skillLevel, code, type, btnColor, backGroundColor, desc, popupDesc, property)
         {
         }
     }
 
     public class BlueData : Data
     {
-        public BlueData(Sprite btnColor, Sprite backGroundColor, int code, PowerTypeManager.Types type, int[] property)
-            : base(btnColor, backGroundColor, code, type, property)
+        public BlueData(CharacterBase.UnitGroups skillGroup, 
+            int skillLevel, 
+            int code, 
+            PowerTypeManager.Types type, 
+            Sprite btnColor,
+            Sprite backGroundColor,
+            string desc, 
+            string popupDesc, 
+            int[] property)
+            : base(skillGroup, skillLevel, code, type, btnColor, backGroundColor, desc, popupDesc, property)
         {
         }
     }
 
     public class PurpleData : Data
     {
-        public PurpleData(Sprite btnColor, Sprite backGroundColor, int code, PowerTypeManager.Types type,
+        public PurpleData(CharacterBase.UnitGroups skillGroup, 
+            int skillLevel, 
+            int code, 
+            PowerTypeManager.Types type, 
+            Sprite btnColor,
+            Sprite backGroundColor,
+            string desc, 
+            string popupDesc, 
             int[] property)
-            : base(btnColor, backGroundColor, code, type, property)
+            : base(skillGroup, skillLevel, code, type, btnColor, backGroundColor, desc, popupDesc, property)
         {
         }
     }
@@ -76,12 +116,12 @@ namespace Script.RewardScript
     public class PowerTypeManager : MonoBehaviour
     {
         public static PowerTypeManager Instance;
-
+        public string[] skillData;
         private void Awake()
         {
             Instance = this;
 
-        var csvFile = Resources.Load<TextAsset>("data");
+        var csvFile = Resources.Load<TextAsset>("SkillData");
         if (csvFile == null)
         {
             Debug.LogError("File not found in Resources folder");
@@ -100,36 +140,39 @@ namespace Script.RewardScript
         var csvData = csvFile.text.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
         for (var i = 1; i < csvData.Length; i++)
         {
-            var data = csvData[i].Split(',');
+            skillData = csvData[i].Split(',');
 
-            Sprite color = null;
-            Sprite backGround = null;
+            Sprite btnColor;
+            Sprite backGroundColor;
+            var skillGroup = (CharacterBase.UnitGroups)Enum.Parse(typeof(CharacterBase.UnitGroups), skillData[0]);
+            var skillLevel = int.Parse(skillData[1]);
+            var code = int.Parse(skillData[2]);
+            var type = (Types)Enum.Parse(typeof(Types), skillData[3]);
+            var desc = skillData[6];
+            var popupDesc = skillData[7];
+            var property = skillData[8].Contains(" ")
+                ? Array.ConvertAll(skillData[8].Split(' '), int.Parse)
+                : new[] { int.Parse(skillData[8]) };
 
-            var code = int.Parse(data[1]);
-            var type = (Types)Enum.Parse(typeof(Types), data[2]);
-            var property = data[3].Contains(" ")
-                ? Array.ConvertAll(data[3].Split(' '), int.Parse)
-                : new[] { int.Parse(data[3]) };
-
-            switch (data[0])
+            switch (skillData[4])
             {
-                case "Green":
-                    color = g;
-                    backGround = gBack;
-                    GreenList.Add(new GreenData(color, backGround, code, type, property));
+                case "G":
+                    btnColor = g;
+                    backGroundColor = gBack;
+                    GreenList.Add(new GreenData(skillGroup, skillLevel, code, type, btnColor, backGroundColor, desc, popupDesc, property));
                     break;
-                case "Blue":
-                    color = b;
-                    backGround = bBack;
-                    BlueList.Add(new BlueData(color, backGround, code, type, property));
+                case "B":
+                    btnColor = b;
+                    backGroundColor = bBack;
+                    BlueList.Add(new BlueData(skillGroup, skillLevel, code, type, btnColor, backGroundColor, desc, popupDesc, property));
                     break;
-                case "Purple":
-                    color = p;
-                    backGround = pBack;
-                    PurpleList.Add(new PurpleData(color, backGround, code, type, property));
+                case "P":
+                    btnColor = p;
+                    backGroundColor = pBack;
+                    PurpleList.Add(new PurpleData(skillGroup, skillLevel, code, type, btnColor, backGroundColor, desc, popupDesc, property));
                     break;
                 default:
-                    Debug.LogWarning("Unknown color type: " + data[0]);
+                    Debug.LogWarning("Unknown color type: " + skillData[4]);
                     break;
             }
         }
@@ -139,7 +182,6 @@ namespace Script.RewardScript
         {
             // Common Property
             Step,
-            NextStep,
             StepLimit,
             RandomLevelUp,
             GroupLevelUp,
@@ -157,103 +199,103 @@ namespace Script.RewardScript
             Gold,
 
             //Darkness3 Octopus
-            Dark3FifthAttackBoost,
-            Dark3BleedAttack,
-            Dark3PoisonDamageBoost,
-            Dark3ShackledExplosion,
-            Dark3BleedDurationBoost,
-            Dark3DamageBoost,
-            Dark3RateBoost,
+            OctopusThirdAttackBoost,
+            OctopusPoisonAttack,
+            OctopusBleedDamageBoost,
+            OctopusShackledExplosion,
+            OctopusBleedDurationBoost,
+            OctopusDamageBoost,
+            OctopusRateBoost,
 
             //Darkness Ogre
-            DarkFifthAttackDamageBoost,
-            DarkStatusAilmentSlowEffect,
-            DarkRangeIncrease,
-            DarkAttackPowerBoost,
-            DarkStatusAilmentDamageBoost,
-            DarkAttackSpeedBoost,
-            DarkKnockBackChance,
+            OgreThirdAttackDamageBoost,
+            OgreStatusAilmentSlowEffect,
+            OgreRangeIncrease,
+            OgreAttackPowerBoost,
+            OgreStatusAilmentDamageBoost,
+            OgreAttackSpeedBoost,
+            OgreKnockBackChance,
 
             //Water1 DeathChiller
-            WaterFreeze,
-            WaterFreezeChance,
-            WaterSlowDurationBoost,
-            WaterFreezeDamageBoost,
-            WaterSlowCPowerBoost,
-            WaterAttackRateBoost,
-            WaterGlobalFreeze,
+            DeathChillerFreeze,
+            DeathChillerFreezeChance,
+            DeathChillerSlowDurationBoost,
+            DeathChillerFreezeDamageBoost,
+            DeathChillerSlowCPowerBoost,
+            DeathChillerAttackRateBoost,
+            DeathChillerGlobalFreeze,
 
             //Physical Orc
-            PhysicalSwordScaleIncrease,
-            PhysicalSwordAddition,
-            PhysicalAttackSpeedBoost,
-            PhysicalRatePerAttack,
-            PhysicalBindBleed,
-            PhysicalDamageBoost,
-            PhysicalBleedDuration,
+            OrcSwordScaleIncrease,
+            OrcSwordAddition,
+            OrcAttackSpeedBoost,
+            OrcRatePerAttack,
+            OrcBindBleed,
+            OrcDamageBoost,
+            OrcBleedDuration,
 
             //Water2 Fishman
-            Water2Freeze,
-            Water2SlowPowerBoost,
-            Water2FreezeTimeBoost,
-            Water2DamageBoost,
-            Water2FreezeChanceBoost,
-            Water2FreezeDamageBoost,
-            Water2SlowTimeBoost,
+            FishmanFreeze,
+            FishmanSlowPowerBoost,
+            FishmanFreezeTimeBoost,
+            FishmanDamageBoost,
+            FishmanFreezeChanceBoost,
+            FishmanFreezeDamageBoost,
+            FishmanSlowTimeBoost,
 
             //Poison Skeleton
-            PoisonPerHitEffect,
-            PoisonBleedingEnemyDamageBoost,
-            PoisonDamagePerBoost,
-            PoisonDamageBoost,
-            PoisonDotDamageBoost,
-            PoisonAttackSpeedIncrease,
-            PoisonDurationBoost,
+            SkeletonPerHitEffect,
+            SkeletonBleedingEnemyDamageBoost,
+            SkeletonDamagePerBoost,
+            SkeletonDamageBoost,
+            SkeletonDotDamageBoost,
+            SkeletonAttackSpeedIncrease,
+            SkeletonDurationBoost,
 
             //Fire2 Phoenix
-            Fire2FreezeDamageBoost,
-            Fire2BurnDurationBoost,
-            Fire2ChangeProperty,
-            Fire2DamageBoost,
-            Fire2RangeBoost,
-            Fire2RateBoost,
-            Fire2BossDamageBoost,
+            PhoenixFreezeDamageBoost,
+            PhoenixBurnDurationBoost,
+            PhoenixChangeProperty,
+            PhoenixDamageBoost,
+            PhoenixRangeBoost,
+            PhoenixRateBoost,
+            PhoenixBossDamageBoost,
 
             //Fire1 Beholder
-            FireBurnPerAttackEffect,
-            FireStackOverlap,
-            FireProjectileBounceDamage,
-            FireBurnedEnemyExplosion,
-            FireAttackSpeedBoost,
-            FireProjectileSpeedIncrease,
-            FireProjectileBounceIncrease,
+            BeholderBurnPerAttackEffect,
+            BeholderStackOverlap,
+            BeholderProjectileBounceDamage,
+            BeholderBurnedEnemyExplosion,
+            BeholderAttackSpeedBoost,
+            BeholderProjectileSpeedIncrease,
+            BeholderProjectileBounceIncrease,
 
             //Poison2 Cobra
-            Poison2StunToChance,
-            Poison2RangeBoost,
-            Poison2DotDamageBoost,
-            Poison2StunTimeBoost,
-            Poison2SpawnPoisonArea,
-            Poison2RateBoost,
-            Poison2PoolTimeBoost,
+            CobraStunToChance,
+            CobraRangeBoost,
+            CobraDotDamageBoost,
+            CobraStunTimeBoost,
+            CobraSpawnPoisonArea,
+            CobraRateBoost,
+            CobraPoolTimeBoost,
 
             //Physical2 Berserker
-            Physical2CastleCrushStatBoost,
-            Physical2FifthBoost,
-            Physical2BleedTimeBoost,
-            Physical2PoisonDamageBoost,
-            Physical2RangeBoost,
-            Physical2RateBoost,
-            Physical2BossBoost,
+            BerserkerCastleCrushStatBoost,
+            BerserkerThirdBoost,
+            BerserkerBleedTimeBoost,
+            BerserkerPoisonDamageBoost,
+            BerserkerRangeBoost,
+            BerserkerRateBoost,
+            BerserkerBossBoost,
             
             //Darkness2 DarkElf
-            Dark2BackBoost,
-            Dark2DualAttack,
-            Dark2StatusDamageBoost,
-            Dark2ExplosionBoost,
-            Dark2DoubleAttack,
-            Dark2StatusPoison,
-            Dark2SameEnemyBoost,
+            DarkElfBackBoost,
+            DarkElfDualAttack,
+            DarkElfStatusDamageBoost,
+            DarkElfExplosionBoost,
+            DarkElfDoubleAttack,
+            DarkElfStatusPoison,
+            DarkElfSameEnemyBoost,
 
         }
 

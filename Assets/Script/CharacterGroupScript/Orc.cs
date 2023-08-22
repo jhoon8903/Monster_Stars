@@ -20,8 +20,8 @@ namespace Script.CharacterGroupScript
             base.Initialize();
             unitGroup = UnitGroups.Orc;
             UnitProperty = UnitProperties.Physics;
-            UnitGrade = UnitGrades.Green;
-            UnitDesc = "Orc Unit D / Green Grade";
+            UnitGrade = UnitGrades.G;
+            UnitDesc = "Orc Unit D / G Grade";
             SetLevel(1);
         }
         public void Awake()
@@ -54,7 +54,7 @@ namespace Script.CharacterGroupScript
         private void GetDetectionProperties(out float size, out Vector2 center)
         {
             center = transform.position;
-            size = EnforceManager.Instance.physicalSwordScaleIncrease ? 2.5f : 1.5f;
+            size = EnforceManager.Instance.orcSwordScaleIncrease ? 2.5f : 1.5f;
         }
 
         public override List<GameObject> DetectEnemies()
@@ -87,7 +87,7 @@ namespace Script.CharacterGroupScript
                 _ => 2.3f
             };
             dotDamage = DefaultDamage * 0.2f;
-            bleedTime = EnforceManager.Instance.physicalBleedDuration ? 5 : 3;
+            bleedTime = EnforceManager.Instance.orcBleedDuration ? 5 : 3;
             defaultAtkRate = 1f * (1f - EnforceManager.Instance.physicalAttackSpeedBoost) * (1f - groupDAtkRate);
             swingSpeed = swingSpeed = 1f / (defaultAtkRate * (1f - EnforceManager.Instance.physicalAttackSpeedBoost) * (1f - groupDAtkRate));
             UnitAtkType = UnitAtkTypes.Circle;

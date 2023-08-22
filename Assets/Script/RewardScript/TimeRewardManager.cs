@@ -154,8 +154,8 @@ namespace Script.RewardScript
 
             var totalPiecesPerGrade = new Dictionary<CharacterBase.UnitGrades, int>
             {
-                { CharacterBase.UnitGrades.Green, GetUnitPieceReward(stage, CharacterBase.UnitGrades.Green, timePassed) },
-                { CharacterBase.UnitGrades.Blue, GetUnitPieceReward(stage, CharacterBase.UnitGrades.Blue, timePassed) }
+                { CharacterBase.UnitGrades.G, GetUnitPieceReward(stage, CharacterBase.UnitGrades.G, timePassed) },
+                { CharacterBase.UnitGrades.B, GetUnitPieceReward(stage, CharacterBase.UnitGrades.B, timePassed) }
             };
 
             foreach (var grade in totalPiecesPerGrade.Keys)
@@ -221,8 +221,8 @@ namespace Script.RewardScript
 
             return unitGrade switch
             {
-              CharacterBase.UnitGrades.Green => stage * (int)(timePassed.TotalMinutes / GreenPieceRewardTime),
-              CharacterBase.UnitGrades.Blue => blueReward * (int)(timePassed.TotalHours / BluePieceRewardTime),
+              CharacterBase.UnitGrades.G => stage * (int)(timePassed.TotalMinutes / GreenPieceRewardTime),
+              CharacterBase.UnitGrades.B => blueReward * (int)(timePassed.TotalHours / BluePieceRewardTime),
             };
         }
         private void SaveRewardInfo()

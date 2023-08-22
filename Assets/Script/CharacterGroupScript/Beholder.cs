@@ -25,8 +25,8 @@ namespace Script.CharacterGroupScript
             base.Initialize();
             unitGroup = UnitGroups.Beholder;
             UnitProperty = UnitProperties.Fire;
-            UnitGrade = UnitGrades.Blue;
-            UnitDesc = "Beholder Unit H / Green Grade";
+            UnitGrade = UnitGrades.B;
+            UnitDesc = "Beholder Unit H / G Grade";
             SetLevel(1);
         }
 
@@ -100,13 +100,13 @@ namespace Script.CharacterGroupScript
                 5 => 2.3f,
                 6 => 2.6f
             };
-            effectStack = EnforceManager.Instance.fireStackOverlap ? 4 : 1;
+            effectStack = EnforceManager.Instance.beholderStackOverlap ? 4 : 1;
             dotDamage = DefaultDamage * 0.1f;
             burnTime = 5f;
             var increaseRateBoost = 1f - EnforceManager.Instance.fireAttackSpeedBoost;
             defaultAtkRate = 1f * increaseRateBoost;
             defaultAtkDistance = 9f; 
-            var increaseProjectileBoost = EnforceManager.Instance.fireProjectileSpeedIncrease ? 1f : 0f;
+            var increaseProjectileBoost = EnforceManager.Instance.beholderProjectileSpeedIncrease ? 1f : 0f;
             projectileSpeed = 1f + increaseProjectileBoost;
             UnitAtkType = UnitAtkTypes.Projectile;
             UnitProperty = UnitProperties.Fire;

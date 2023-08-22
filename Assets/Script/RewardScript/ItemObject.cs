@@ -49,13 +49,13 @@ namespace Script.RewardScript
                 instantiatedItem.item.sprite = unit.GetSpriteForLevel(unit.unitPeaceLevel);
                 switch (unit.UnitGrade)
                 {
-                    case CharacterBase.UnitGrades.Green:
+                    case CharacterBase.UnitGrades.G:
                         instantiatedItem.gradeBack.sprite = greenBack;
                         break;
-                    case CharacterBase.UnitGrades.Blue:
+                    case CharacterBase.UnitGrades.B:
                         instantiatedItem.gradeBack.sprite = blueBack;
                         break;
-                    case CharacterBase.UnitGrades.Purple:
+                    case CharacterBase.UnitGrades.P:
                         instantiatedItem.gradeBack.sprite = purpleBack;
                         break;
                 }

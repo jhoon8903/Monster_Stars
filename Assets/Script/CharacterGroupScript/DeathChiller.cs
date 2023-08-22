@@ -28,8 +28,8 @@ namespace Script.CharacterGroupScript
             base.Initialize();
             unitGroup = UnitGroups.DeathChiller;
             UnitProperty = UnitProperties.Water;
-            UnitGrade = UnitGrades.Purple;
-            UnitDesc = "Death Chiller Unit C / Purple Grade";
+            UnitGrade = UnitGrades.P;
+            UnitDesc = "Death Chiller Unit C / P Grade";
             SetLevel(1);
         }
         public override Sprite GetSpriteForLevel(int characterObjectLevel)
@@ -105,9 +105,9 @@ namespace Script.CharacterGroupScript
                 7 => 2.9f
             };
             slowTime = 1f + EnforceManager.Instance.waterSlowDurationBoost;
-            slowPower = EnforceManager.Instance.waterSlowCPowerBoost ? 0.55f : 0.7f;
+            slowPower = EnforceManager.Instance.deathChillerSlowCPowerBoost ? 0.55f : 0.7f;
             freezeTime = 1f;
-            effectChance = EnforceManager.Instance.waterFreezeChance ? 15 : 25;
+            effectChance = EnforceManager.Instance.deathChillerFreezeChance ? 15 : 25;
             defaultAtkRate = 0.8f * (1f - EnforceManager.Instance.waterAttackRateBoost);
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;

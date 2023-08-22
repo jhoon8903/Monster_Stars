@@ -1,8 +1,7 @@
-using System;
 using Script.AdsScript;
+using Script.UIManager;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.RobbyScript.TopMenuGroup
@@ -16,7 +15,6 @@ namespace Script.RobbyScript.TopMenuGroup
         [SerializeField] private GameObject coin;
         [SerializeField] private GameObject getFree;
         [SerializeField] private GameObject buyToGem;
-
         [SerializeField] private GameObject item1;
         [SerializeField] private TextMeshProUGUI item1Value;
         [SerializeField] private GameObject item2;
@@ -28,15 +26,26 @@ namespace Script.RobbyScript.TopMenuGroup
         [SerializeField] public Sprite coinSprite;
         private TextMeshProUGUI _title;
 
-
         private enum RewardTypes { Stamina, Gem, Coin }
         private RewardTypes _rewardTypes;
 
         private void Awake()
         {
-            stamina.GetComponent<Button>().onClick.AddListener(OpenEnergyPack);
-            gem.GetComponent<Button>().onClick.AddListener(OpenGemPack);
-            coin.GetComponent<Button>().onClick.AddListener(OpenCoinPack);
+            stamina.GetComponent<Button>().onClick.AddListener(()=>
+            {
+                SoundManager.Instance.PlaySound(SoundManager.Instance.popupOpen);
+                OpenEnergyPack();
+            });
+            gem.GetComponent<Button>().onClick.AddListener(()=>
+            {
+                SoundManager.Instance.PlaySound(SoundManager.Instance.popupOpen);
+                OpenGemPack();
+            });
+            coin.GetComponent<Button>().onClick.AddListener(()=>
+            {
+                SoundManager.Instance.PlaySound(SoundManager.Instance.popupOpen);
+                OpenCoinPack();
+            });
             _title = packTitle.GetComponent<TextMeshProUGUI>();
             getFree.GetComponent<Button>().onClick.AddListener(CheckRewardType);
             buyToGem.GetComponent<Button>().onClick.AddListener(BuyToGem);
@@ -92,17 +101,15 @@ namespace Script.RobbyScript.TopMenuGroup
             {
                 case RewardTypes.Stamina:
                     AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.EnergyPackFreeStamina;
-                    AdsManager.Instance. ShowRewardedAd();
                     break;
                 case RewardTypes.Gem:
                     AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.GemPackFree;
-                    AdsManager.Instance. ShowRewardedAd();
                     break;
                 case RewardTypes.Coin:
                     AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.CoinPackFree;
-                    AdsManager.Instance. ShowRewardedAd();
                     break;
             }
+            AdsManager.Instance.ShowRewardedAd();
             packPanel.SetActive(false);
         }
 

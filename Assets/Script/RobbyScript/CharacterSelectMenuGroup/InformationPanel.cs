@@ -40,12 +40,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         [SerializeField] private TextMeshProUGUI levelUpText;
         private Sprite _skillSprite;
         private TextMeshProUGUI _skillNoticeText;
-        private string _selectLang;
 
-        private void Awake()
-        {
-            _selectLang = PlayerPrefs.GetString("Language","ENG");
-        }
         public void OpenInfoPanel(UnitIcon unitInstance, CharacterBase characterBase)
         {
             // infoPanel.SetActive(true);
@@ -89,15 +84,15 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             // unit Area-Unit Image
             switch (characterBase.UnitGrade)
             {
-                case CharacterBase.UnitGrades.Green:
+                case CharacterBase.UnitGrades.G:
                     unitBackGround.GetComponent<Image>().sprite = unitBackGroundSpriteList[0];
                     unitFrame.GetComponent<Image>().sprite = unitFrameSpriteList[0];
                     break;
-                case CharacterBase.UnitGrades.Blue:
+                case CharacterBase.UnitGrades.B:
                     unitBackGround.GetComponent<Image>().sprite = unitBackGroundSpriteList[1];
                     unitFrame.GetComponent<Image>().sprite = unitFrameSpriteList[1];
                     break;
-                case CharacterBase.UnitGrades.Purple:
+                case CharacterBase.UnitGrades.P:
                     unitBackGround.GetComponent<Image>().sprite = unitBackGroundSpriteList[2];
                     unitFrame.GetComponent<Image>().sprite = unitFrameSpriteList[2];
                     break;
@@ -147,7 +142,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             };
             return unit;
         }
-        private List<Dictionary<string, object>> UnitData(CharacterBase characterBase)
+        private static List<Dictionary<string, object>> UnitData(CharacterBase characterBase)
         {
             var result = new List<Dictionary<string, object>>();
             var unitInfoFile = Resources.Load<TextAsset>("UnitInformationData");
@@ -157,13 +152,12 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 var data = unitInfoData[i].Split(',');
                 var unitGroup = (CharacterBase.UnitGroups)Enum.Parse(typeof(CharacterBase.UnitGroups), data[1], true);
                 if (unitGroup != characterBase.unitGroup) continue;
-                var language = data[0];
-                if (language != _selectLang) continue;
                 var unitDataDict = new Dictionary<string, object>
                 {
-                    // {"Damage", data[2]},
+                    {"Damage", data[2]},
                     {"Range", data[3]},
                     {"Rate", data[4]},
+                    {"Form", data[5]},
                     {"Effect", data[6]},
                     {"Time", data[7]},
                 };
@@ -185,24 +179,28 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     var instance = Instantiate(infoObject, unitInformationGrid.transform);
                     switch (unitData.Key)
                     {
-                        // case "Damage":
-                        //     instance.infoTitle.text = _selectLang == "KOR" ? "공격력" : "Damage";
-                        //     instance.infoDesc.text = characterBase.unitPeaceLevel == 1 ? $"{unitData.Value}" : $"{unitData.Value} + {characterBase.UnitLevelDamage}";
-                        //     break;
+                        case "Damage":
+                            instance.infoTitle.text = "Damage";
+                            instance.infoDesc.text = characterBase.unitPeaceLevel == 1 ? $"{unitData.Value}" : $"{unitData.Value} + {characterBase.UnitLevelDamage}";
+                            break;
                         case "Range":
-                            instance.infoTitle.text = _selectLang == "KOR" ? "공격범위" : "Range";
+                            instance.infoTitle.text = "Range";
                             instance.infoDesc.text = unitData.Value as string;
                             break;
                         case "Rate":
-                            instance.infoTitle.text = _selectLang == "KOR" ? "공격속도" : "Rate";
+                            instance.infoTitle.text = "Rate";
+                            instance.infoDesc.text = unitData.Value as string;
+                            break;
+                        case "Form":
+                            instance.infoTitle.text = "Form";
                             instance.infoDesc.text = unitData.Value as string;
                             break;
                         case "Effect":
-                            instance.infoTitle.text = _selectLang == "KOR" ? "특수효과" : "Effect";
+                            instance.infoTitle.text = "Effect";
                             instance.infoDesc.text = unitData.Value as string;
                             break;
                         case "Time":
-                            instance.infoTitle.text = _selectLang == "KOR" ? "지속시간" : "Time";
+                            instance.infoTitle.text = "Time";
                             instance.infoDesc.text = unitData.Value as string;
                             break;
                     }
@@ -212,7 +210,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
 
         private static List<Dictionary<string, object>> UnitSkills(CharacterBase characterBase)
         {
-            var unitSkillFile = Resources.Load<TextAsset>("UnitSkillData");
+            var unitSkillFile = Resources.Load<TextAsset>("SkillData");
             var unitSkillData = unitSkillFile.text.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
             var skillList = new List<Dictionary<string, object>>();
             for (var i = 1; i < unitSkillData.Length; i++)
@@ -222,17 +220,17 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 if (unitGroup != characterBase.unitGroup) continue;
                 var unitSkillDict = new Dictionary<string, object>
                 {
-                    { "Grade", data[1] },
-                    { "Level", int.Parse(data[2]) },
+                    { "Grade", data[4] },
+                    { "Level", int.Parse(data[1]) },
                     { "Type", data[3] },
-                    { "KorDesc", data[4] },
-                    { "EngDesc", data[5] }
+                    { "EngDesc", data[6] },
+                    { "PopupDesc", data[7]}
                 };
                 skillList.Add(unitSkillDict);
             }
             skillList.Sort((a, b) => {
                 var levelComparison = ((int)a["Level"]).CompareTo((int)b["Level"]);
-                return levelComparison == 0 ? string.Compare(((string)a["Grade"]), (string)b["Grade"], StringComparison.Ordinal) : levelComparison;
+                return levelComparison == 0 ? string.Compare((string)a["Grade"], (string)b["Grade"], StringComparison.Ordinal) : levelComparison;
             });
             return skillList;
         }
@@ -256,13 +254,13 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 {
                     switch ((string)skill["Grade"])
                     {
-                        case "Green":
+                        case "G":
                             instance.GetComponent<Image>().sprite = skillGradeSpriteList[0];
                             break;
-                        case "Blue":
+                        case "B":
                             instance.GetComponent<Image>().sprite = skillGradeSpriteList[1];
                             break;
-                        case "Purple":
+                        case "P":
                             instance.GetComponent<Image>().sprite = skillGradeSpriteList[2];
                             break;
                         default:
@@ -276,12 +274,13 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     // instance.skillIcon.sprite = null;
                     instance.skillIcon.sprite = skillSprite;
                 }
-                instance.skillDesc.text = _selectLang == "KOR" ? (string)skill["KorDesc"] : (string)skill["EngDesc"];
+                instance.skillDesc.text = (string)skill["PopupDesc"];
                 // instance.skillType.text = $"{skill["Type"]} / {skill["Level"]}";
             }
         }
         public void ClosePanel()
         {
+            SoundManager.Instance.PlaySound(SoundManager.Instance.popupClose);
             Destroy(gameObject);
         }
     }

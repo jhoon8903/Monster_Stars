@@ -28,8 +28,8 @@ namespace Script.CharacterGroupScript
             base.Initialize();
             unitGroup = UnitGroups.DarkElf;
             UnitProperty = UnitProperties.Darkness;
-            UnitGrade = UnitGrades.Purple;
-            UnitDesc = "Dark Elf Unit K / Purple Grade";
+            UnitGrade = UnitGrades.P;
+            UnitDesc = "Dark Elf Unit K / P Grade";
             SetLevel(1);
         }
         public override Sprite GetSpriteForLevel(int characterObjectLevel)

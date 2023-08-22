@@ -5,6 +5,7 @@ using Script.AdsScript;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.RobbyScript.CharacterSelectMenuGroup;
+using Script.RobbyScript.StoreMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
 using TMPro;
 using UnityEngine;
@@ -15,12 +16,14 @@ namespace Script.QuestGroup
 { 
     public class QuestManager : MonoBehaviour
     {
+
         [SerializeField] private GameObject questPanel;
         [SerializeField] private Button questOpenBtn;
         [SerializeField] private Button questCloseBtn;
         [SerializeField] private GameObject questRewardPanel;
         [SerializeField] private QuestObject questObject;
         [SerializeField] public Transform questTransform;
+        [SerializeField] public TextMeshProUGUI timer;
 
         // Ads Quest
         [SerializeField] public TextMeshProUGUI adsDesc;
@@ -51,6 +54,7 @@ namespace Script.QuestGroup
         private readonly Dictionary<CharacterBase, int> _unitPieceDict = new Dictionary<CharacterBase, int>();
         private int _unitPieceReward;
 
+
         private void Awake()
         {
             if (Instance == null)
@@ -66,6 +70,11 @@ namespace Script.QuestGroup
             questCloseBtn.onClick.AddListener(() => questPanel.SetActive(false));
             LoadQuests(QuestCondition.Fix);
             LoadQuests(QuestCondition.Rotation);
+        }
+
+        private void Update()
+        {
+            Timer();
         }
         private void LoadQuests(QuestCondition targetCondition)
         {
@@ -300,9 +309,9 @@ namespace Script.QuestGroup
             }
             return unitGrade switch
             {
-                CharacterBase.UnitGrades.Green => greenPiece,
-                CharacterBase.UnitGrades.Blue => bluePiece,
-                CharacterBase.UnitGrades.Purple => purplePiece
+                CharacterBase.UnitGrades.G => greenPiece,
+                CharacterBase.UnitGrades.B => bluePiece,
+                CharacterBase.UnitGrades.P => purplePiece
             };
         }
         private void CalculateUnitPieceReward(QuestObject quest)
@@ -324,9 +333,9 @@ namespace Script.QuestGroup
 
             var totalPiecesPerGrade = new Dictionary<CharacterBase.UnitGrades, int>
             {
-                { CharacterBase.UnitGrades.Green, UnitPieceReceiveValue(CharacterBase.UnitGrades.Green, quest) },
-                { CharacterBase.UnitGrades.Blue, UnitPieceReceiveValue(CharacterBase.UnitGrades.Blue, quest) },
-                {CharacterBase.UnitGrades.Purple, UnitPieceReceiveValue(CharacterBase.UnitGrades.Purple, quest)}
+                { CharacterBase.UnitGrades.G, UnitPieceReceiveValue(CharacterBase.UnitGrades.G, quest) },
+                { CharacterBase.UnitGrades.B, UnitPieceReceiveValue(CharacterBase.UnitGrades.B, quest) },
+                {CharacterBase.UnitGrades.P, UnitPieceReceiveValue(CharacterBase.UnitGrades.P, quest)}
             };
 
             foreach (var grade in totalPiecesPerGrade.Keys)
@@ -375,6 +384,12 @@ namespace Script.QuestGroup
                 HoldCharacterList.Instance.UpdateRewardPiece(unitPiece.Key);
             }
             _unitPieceDict.Clear();
+        }
+
+        private void Timer()
+        {
+            var resetTime = StoreMenu.Instance.LastDayCheck.AddDays(1).Subtract(DateTime.Now).ToString(@"hh\:mm\:ss");
+            timer.text = $"Ends in : {resetTime}";
         }
     }   
 }

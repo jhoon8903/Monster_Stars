@@ -27,8 +27,8 @@ namespace Script.CharacterGroupScript
             base.Initialize();
             unitGroup = UnitGroups.Cobra;
             UnitProperty = UnitProperties.Poison;
-            UnitGrade = UnitGrades.Blue;
-            UnitDesc = "Cobra Unit I / Blue Grade";
+            UnitGrade = UnitGrades.B;
+            UnitDesc = "Cobra Unit I / B Grade";
             SetLevel(1);
         }
 
@@ -57,7 +57,7 @@ namespace Script.CharacterGroupScript
 
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
-            _detectionSize = EnforceManager.Instance.poison2RangeBoost ? new Vector2(5,5) :new Vector2(3, 3);
+            _detectionSize = EnforceManager.Instance.cobraRangeBoost ? new Vector2(5,5) :new Vector2(3, 3);
             center = transform.position;
             size = _detectionSize;
         }
@@ -105,12 +105,12 @@ namespace Script.CharacterGroupScript
             };
             effectChance = 50;
             poisonTime = 5f;
-            var dotDamageBoost = EnforceManager.Instance.poison2DotDamageBoost ? 0.2f : 0.1f;
+            var dotDamageBoost = EnforceManager.Instance.cobraDotDamageBoost ? 0.2f : 0.1f;
             dotDamage = DefaultDamage * dotDamageBoost;
             var timeBoost = EnforceManager.Instance.poison2StunTimeBoost;
             stunTime = 0.4f + timeBoost;
-            poisonAreaTime = EnforceManager.Instance.poison2PoolTimeBoost ? 3f : 2f;
-            defaultAtkRate = EnforceManager.Instance.poison2RateBoost ? 1.2f * 0.8f : 1.2f;
+            poisonAreaTime = EnforceManager.Instance.cobraPoolTimeBoost ? 3f : 2f;
+            defaultAtkRate = EnforceManager.Instance.cobraRateBoost ? 1.2f * 0.8f : 1.2f;
             projectileSpeed = 1f;
             UnitAtkType = UnitAtkTypes.GuideProjectile;
             UnitProperty = UnitProperties.Poison;

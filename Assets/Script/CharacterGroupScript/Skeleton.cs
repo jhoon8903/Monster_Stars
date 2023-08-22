@@ -27,8 +27,8 @@ namespace Script.CharacterGroupScript
             base.Initialize();
             unitGroup = UnitGroups.Skeleton;
             UnitProperty = UnitProperties.Poison;
-            UnitGrade = UnitGrades.Green;
-            UnitDesc = "Skeleton Unit F / Green Grade";
+            UnitGrade = UnitGrades.G;
+            UnitDesc = "Skeleton Unit F / G Grade";
             SetLevel(1);
         }
         
@@ -94,7 +94,7 @@ namespace Script.CharacterGroupScript
             UnitLevelDamage = unitPeaceLevel > 0 ? unitPeaceLevel * 5 + 1f : 0f;
             Type = Types.Character;
             unitGroup = UnitGroups.Skeleton;
-            var increaseDamage = EnforceManager.Instance.poisonDamageBoost ? 0.16f : 0f;
+            var increaseDamage = EnforceManager.Instance.skeletonDamageBoost ? 0.16f : 0f;
             DefaultDamage = UnitLevelDamage + 32f * (1f + groupFDamage) * (1f + increaseDamage) * level switch
             {
                 <=  2 => 1f,
@@ -102,10 +102,10 @@ namespace Script.CharacterGroupScript
                 4 => 2f,
                 _ => 2.3f
             };
-            var increaseDotDamage = EnforceManager.Instance.poisonDotDamageBoost ? 0.3f : 0.2f;
+            var increaseDotDamage = EnforceManager.Instance.skeletonDotDamageBoost ? 0.3f : 0.2f;
             dotDamage = DefaultDamage * increaseDotDamage;
-            var effectTime = EnforceManager.Instance.poisonPerHitEffect ? 3f : 0f;
-            poisonTime = effectTime + (EnforceManager.Instance.poisonDurationBoost ? 2f : 0f);
+            var effectTime = EnforceManager.Instance.skeletonPerHitEffect ? 3f : 0f;
+            poisonTime = effectTime + (EnforceManager.Instance.skeletonDurationBoost ? 2f : 0f);
             var increaseRateBoost = 1f - EnforceManager.Instance.poisonAttackSpeedIncrease; 
             defaultAtkRate = 1.2f * increaseRateBoost;
             projectileSpeed = 1f;

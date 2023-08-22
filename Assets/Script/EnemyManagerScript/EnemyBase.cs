@@ -255,21 +255,21 @@ namespace Script.EnemyManagerScript
                 if (currentHealth > 0f || isDead) return;
                 isDead = true;
                 ExpManager.Instance.HandleEnemyKilled(reason);
-                if (EnforceManager.Instance.dark3ShackledExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.Octopus)
+                if (EnforceManager.Instance.octopusShackledExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.Octopus)
                 {
                     StartCoroutine(ExplosionDamage(detectEnemy, damage, atkUnit));
                 }
-                else if (EnforceManager.Instance.fireBurnedEnemyExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.Beholder)
+                else if (EnforceManager.Instance.beholderBurnedEnemyExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.Beholder)
                 {
                     StartCoroutine(ExplosionDamage(detectEnemy, damage, atkUnit));
                 }
 
-                if (EnforceManager.Instance.poison2SpawnPoisonArea && detectEnemy.isPoison)
+                if (EnforceManager.Instance.cobraSpawnPoisonArea && detectEnemy.isPoison)
                 {
                     StartCoroutine(PoisonArea(detectEnemy, damage, atkUnit));
                 }
 
-                if (EnforceManager.Instance.dark2ExplosionBoost && atkUnit.unitGroup == CharacterBase.UnitGroups.DarkElf)
+                if (EnforceManager.Instance.darkElfExplosionBoost && atkUnit.unitGroup == CharacterBase.UnitGroups.DarkElf)
                 {
                     if (detectEnemy.isBind || detectEnemy.isPoison || detectEnemy.isBleed || detectEnemy.isBurn ||
                         detectEnemy.isFreeze || detectEnemy.isSlow || detectEnemy.isStun || detectEnemy.isKnockBack)

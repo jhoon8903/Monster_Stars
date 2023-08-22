@@ -828,7 +828,6 @@ GameObject:
   - component: {fileID: 149521967}
   - component: {fileID: 149521969}
   - component: {fileID: 149521970}
-  - component: {fileID: 149521971}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -1031,19 +1030,6 @@ MonoBehaviour:
   textPopup: {fileID: 2590900663692364049}
   commonRewardManager: {fileID: 2120144525}
   spawnManager: {fileID: 149521964}
---- !u!114 &149521971
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 149521957}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f611d65ad621a4c2da26d9fbd809698b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  selectedLanguage: 1
 --- !u!1 &180344267
 GameObject:
   m_ObjectHideFlags: 0
@@ -1487,7 +1473,7 @@ MonoBehaviour:
   m_text: 17
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a33f3eeb56c604c65be3a337dec56e67, type: 2}
-  m_sharedMaterial: {fileID: 8690591861142563998, guid: 8d34560b6d49c4469b2174ccd34ae34b, type: 2}
+  m_sharedMaterial: {fileID: 2517202264660172603, guid: a33f3eeb56c604c65be3a337dec56e67, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -9245,88 +9231,87 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   skillGrid: {fileID: 376291095}
   skillPrefabs: {fileID: 5730785966447247456, guid: a5e63280b91f54366a389b74e967c1be, type: 3}
-  language: {fileID: 149521971}
   castleManager: {fileID: 1177777546}
   gridManager: {fileID: 8808150501734532426}
   countManager: {fileID: 841622520}
   characterList: []
-  dark3FifthAttackBoost: 0
-  dark3BleedAttack: 0
-  dark3PoisonDamageBoost: 0
-  dark3ShackledExplosion: 0
-  dark3BleedDurationBoost: 0
-  dark3DamageBoost: 0
+  octopusFifthAttackBoost: 0
+  octopusBleedAttack: 0
+  octopusPoisonDamageBoost: 0
+  octopusShackledExplosion: 0
+  octopusBleedDurationBoost: 0
+  octopusDamageBoost: 0
   dark3RateBoost: 0
-  darkFifthAttackDamageBoost: 0
-  darkStatusAilmentSlowEffect: 0
-  darkRangeIncrease: 0
+  ogreFifthAttackDamageBoost: 0
+  ogreStatusAilmentSlowEffect: 0
+  ogreRangeIncrease: 0
   darkAttackPowerBoost: 0
-  darkStatusAilmentDamageBoost: 0
+  ogreStatusAilmentDamageBoost: 0
   darkAttackSpeedBoost: 0
-  darkKnockBackChance: 0
-  waterFreeze: 0
-  waterFreezeChance: 0
+  ogreKnockBackChance: 0
+  deathChillerFreeze: 0
+  deathChillerFreezeChance: 0
   waterSlowDurationBoost: 0
-  waterFreezeDamageBoost: 0
-  waterSlowCPowerBoost: 0
+  deathChillerFreezeDamageBoost: 0
+  deathChillerSlowCPowerBoost: 0
   waterAttackRateBoost: 0
-  waterGlobalFreeze: 0
-  physicalSwordScaleIncrease: 0
-  physicalSwordAddition: 0
+  deathChillerGlobalFreeze: 0
+  orcSwordScaleIncrease: 0
+  orcSwordAddition: 0
   physicalAttackSpeedBoost: 0
-  physicalRatePerAttack: 0
-  physicalBindBleed: 0
+  orcRatePerAttack: 0
+  orcBindBleed: 0
   physicalDamageBoost: 0
-  physicalBleedDuration: 0
-  water2Freeze: 0
-  water2SlowPowerBoost: 0
-  water2FreezeTimeBoost: 0
+  orcBleedDuration: 0
+  fishmanFreeze: 0
+  fishmanSlowPowerBoost: 0
+  fishmanFreezeTimeBoost: 0
   water2DamageBoost: 0
-  water2FreezeChanceBoost: 0
-  water2FreezeDamageBoost: 0
+  fishmanFreezeChanceBoost: 0
+  fishmanFreezeDamageBoost: 0
   water2SlowTimeBoost: 0
-  poisonPerHitEffect: 0
-  poisonBleedingEnemyDamageBoost: 0
-  poisonDamagePerBoost: 0
-  poisonDamageBoost: 0
-  poisonDotDamageBoost: 0
+  skeletonPerHitEffect: 0
+  skeletonBleedingEnemyDamageBoost: 0
+  skeletonDamagePerBoost: 0
+  skeletonDamageBoost: 0
+  skeletonDotDamageBoost: 0
   poisonAttackSpeedIncrease: 0
-  poisonDurationBoost: 0
-  fire2FreezeDamageBoost: 0
-  fire2BurnDurationBoost: 0
-  fire2ChangeProperty: 0
+  skeletonDurationBoost: 0
+  phoenixFreezeDamageBoost: 0
+  phoenixBurnDurationBoost: 0
+  phoenixChangeProperty: 0
   fire2DamageBoost: 0
-  fire2RangeBoost: 0
-  fire2RateBoost: 0
-  fire2BossDamageBoost: 0
-  fireBurnPerAttackEffect: 0
-  fireStackOverlap: 0
-  fireProjectileBounceDamage: 0
-  fireBurnedEnemyExplosion: 0
+  phoenixRangeBoost: 0
+  phoenixRateBoost: 0
+  phoenixBossDamageBoost: 0
+  beholderBurnPerAttackEffect: 0
+  beholderStackOverlap: 0
+  beholderProjectileBounceDamage: 0
+  beholderBurnedEnemyExplosion: 0
   fireAttackSpeedBoost: 0
-  fireProjectileSpeedIncrease: 0
-  fireProjectileBounceIncrease: 0
-  poison2StunToChance: 0
-  poison2RangeBoost: 0
-  poison2DotDamageBoost: 0
+  beholderProjectileSpeedIncrease: 0
+  beholderProjectileBounceIncrease: 0
+  cobra2StunToChance: 0
+  cobraRangeBoost: 0
+  cobraDotDamageBoost: 0
   poison2StunTimeBoost: 0
-  poison2SpawnPoisonArea: 0
-  poison2RateBoost: 0
-  poison2PoolTimeBoost: 0
-  physical2CastleCrushStatBoost: 0
-  physical2FifthBoost: 0
-  physical2BleedTimeBoost: 0
-  physical2PoisonDamageBoost: 0
-  physical2RangeBoost: 0
+  cobraSpawnPoisonArea: 0
+  cobraRateBoost: 0
+  cobraPoolTimeBoost: 0
+  berserkerCastleCrushStatBoost: 0
+  berserkerFifthBoost: 0
+  berserkerBleedTimeBoost: 0
+  berserkerPoisonDamageBoost: 0
+  berserkerRangeBoost: 0
   physical2RateBoost: 0
-  physical2BossBoost: 0
-  dark2BackBoost: 0
-  dark2DualAttack: 0
-  dark2StatusDamageBoost: 0
-  dark2ExplosionBoost: 0
-  dark2DoubleAttack: 0
-  dark2StatusPoison: 0
-  dark2SameEnemyBoost: 0
+  berserkerBossBoost: 0
+  darkElfBackBoost: 0
+  darkElfDualAttack: 0
+  darkElfStatusDamageBoost: 0
+  darkElfExplosionBoost: 0
+  darkElfDoubleAttack: 0
+  darkElfStatusPoison: 0
+  darkElfSameEnemyBoost: 0
   addRow: 0
   increaseAtkDamage: 0
   increaseAtkRate: 0
@@ -10368,7 +10353,7 @@ MonoBehaviour:
   m_text: 123.9k
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a33f3eeb56c604c65be3a337dec56e67, type: 2}
-  m_sharedMaterial: {fileID: 8690591861142563998, guid: 8d34560b6d49c4469b2174ccd34ae34b, type: 2}
+  m_sharedMaterial: {fileID: 2517202264660172603, guid: a33f3eeb56c604c65be3a337dec56e67, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -11597,7 +11582,6 @@ MonoBehaviour:
   expManager: {fileID: 841622521}
   gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
-  language: {fileID: 149521971}
 --- !u!114 &2120144523
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -11643,6 +11627,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 654c20d1066b84406a4abe53ec46d0c8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skillData: []
   skills:
   - skillTypes: 0
     skillIcon: {fileID: 21300000, guid: 5df2b4e28df3c437685cabde242cd80f, type: 3}
@@ -11826,8 +11811,6 @@ MonoBehaviour:
     skillIcon: {fileID: 21300000, guid: 4c9403bcd07e84de5a950f28204ea689, type: 3}
   - skillTypes: 92
     skillIcon: {fileID: 21300000, guid: e23fa7a2dc595431eb19e13a639795b9, type: 3}
-  - skillTypes: 93
-    skillIcon: {fileID: 21300000, guid: 2d8dd5b65758d495f94f29fd3907ebf3, type: 3}
   - skillTypes: 5
     skillIcon: {fileID: 21300000, guid: 0c8132544b83646539b1ee34bed0e06d, type: 3}
   green: {fileID: 21300000, guid: 7d87dfd92a4e042d791cc7cc235c6995, type: 3}
@@ -11866,7 +11849,6 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
-  language: {fileID: 149521971}
   openBoxing: 0
   isOpenBox: 0
 --- !u!1 &2124479364

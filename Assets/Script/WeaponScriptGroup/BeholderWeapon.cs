@@ -22,7 +22,7 @@ namespace Script.WeaponScriptGroup
         public override IEnumerator UseWeapon()
         {
             yield return base.UseWeapon();
-            if (!EnforceManager.Instance.fireProjectileSpeedIncrease)
+            if (!EnforceManager.Instance.beholderProjectileSpeedIncrease)
             {
                 while (isInUse)
                 {
@@ -93,8 +93,8 @@ namespace Script.WeaponScriptGroup
             AtkEffect(enemy, CharacterBase);
             var damage = DamageCalculator(Damage, enemy, CharacterBase); 
             enemy.ReceiveDamage(enemy,damage, CharacterBase);
-            var maxBounceCount = EnforceManager.Instance.fireProjectileBounceIncrease ? 2 : 1;
-            if (EnforceManager.Instance.fireProjectileBounceDamage && _bounceCount <= maxBounceCount)
+            var maxBounceCount = EnforceManager.Instance.beholderProjectileBounceIncrease ? 2 : 1;
+            if (EnforceManager.Instance.beholderProjectileBounceDamage && _bounceCount <= maxBounceCount)
             {
                 _bounceCount++;
                 StopCoroutine(UseWeapon());

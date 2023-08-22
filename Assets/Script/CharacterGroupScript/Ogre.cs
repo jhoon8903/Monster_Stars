@@ -27,8 +27,8 @@ namespace Script.CharacterGroupScript
             base.Initialize();
             unitGroup = UnitGroups.Ogre;
             UnitProperty = UnitProperties.Darkness;
-            UnitGrade = UnitGrades.Green;
-            UnitDesc = "Ogre Unit B / Blue Grade";
+            UnitGrade = UnitGrades.G;
+            UnitDesc = "Ogre Unit B / B Grade";
             SetLevel(1);
         }
 
@@ -56,7 +56,7 @@ namespace Script.CharacterGroupScript
 
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
-            if (EnforceManager.Instance.darkRangeIncrease)
+            if (EnforceManager.Instance.ogreRangeIncrease)
             {
                 _detectionWidth = 5f;
                 _detectionHeight = 5f;

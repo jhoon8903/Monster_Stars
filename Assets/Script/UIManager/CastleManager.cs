@@ -49,7 +49,7 @@ namespace Script.UIManager
         private void OnTriggerEnter2D(Collider2D collision)
         {
             if (!collision.gameObject.CompareTag("Enemy")) return;
-            if (EnforceManager.Instance.physical2CastleCrushStatBoost)
+            if (EnforceManager.Instance.berserkerCastleCrushStatBoost)
             {
                 castleCrushBoost = true;
             }

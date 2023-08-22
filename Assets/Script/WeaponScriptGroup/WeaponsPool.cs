@@ -50,7 +50,7 @@ namespace Script.WeaponScriptGroup
             objectToSpawn.transform.position = position;
             objectToSpawn.transform.rotation = rotation;
             _pivotDSword = FindInChildren(objectToSpawn, $"OrcWeapon{puzzleLevel-1}(Clone)");
-            if (EnforceManager.Instance.physicalSwordScaleIncrease)
+            if (EnforceManager.Instance.orcSwordScaleIncrease)
             {
                 if (_pivotDSword != null)
                 {

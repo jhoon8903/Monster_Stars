@@ -452,10 +452,10 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 1475, y: -1650}
-  m_SizeDelta: {x: 2950, y: 3300}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1390732375504637424
 CanvasRenderer:
@@ -516,8 +516,8 @@ MonoBehaviour:
   bronzeSprite: {fileID: 21300000, guid: b84fa278a01a8495a90b617b8c146edd, type: 3}
   silverSprite: {fileID: 21300000, guid: b29ed473d0fd14f7fa4d65a9de5c2e0e, type: 3}
   goldSprite: {fileID: 21300000, guid: f3535bde333e342e297afe36d060c315, type: 3}
-  chestAdsBtnSprite: {fileID: 21300000, guid: 0c608c6ee6a0a4d06bc54798131d64a8, type: 3}
-  chestGemBtnSprite: {fileID: 21300000, guid: cd995f28d64c64289ac2ee6d986d4cab, type: 3}
+  adsBtn: {fileID: 21300000, guid: 0c608c6ee6a0a4d06bc54798131d64a8, type: 3}
+  gemBtn: {fileID: 21300000, guid: cd995f28d64c64289ac2ee6d986d4cab, type: 3}
   bronzeGemBtnText: {fileID: 1390732375978262707}
   silverGemBtnText: {fileID: 1390732376805782652}
   goldGemBtnText: {fileID: 1390732376091843235}
@@ -934,7 +934,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 1, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1340,7 +1340,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 1, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -1924,7 +1924,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 12 / 20
+  m_text: 0 / 20
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a33f3eeb56c604c65be3a337dec56e67, type: 2}
   m_sharedMaterial: {fileID: 2517202264660172603, guid: a33f3eeb56c604c65be3a337dec56e67, type: 2}
@@ -2145,7 +2145,7 @@ MonoBehaviour:
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
+  m_fontColor: {r: 1, g: 0, b: 0, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2392,7 +2392,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 12 / 20
+  m_text: 0 / 5
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a33f3eeb56c604c65be3a337dec56e67, type: 2}
   m_sharedMaterial: {fileID: 2517202264660172603, guid: a33f3eeb56c604c65be3a337dec56e67, type: 2}
@@ -2603,7 +2603,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 12 / 20
+  m_text: 0 / 7
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: a33f3eeb56c604c65be3a337dec56e67, type: 2}
   m_sharedMaterial: {fileID: 2517202264660172603, guid: a33f3eeb56c604c65be3a337dec56e67, type: 2}

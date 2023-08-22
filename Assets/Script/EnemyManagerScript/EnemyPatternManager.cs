@@ -342,7 +342,7 @@ namespace Script.EnemyManagerScript
                 StartCoroutine(FreezeEffect(enemyBase, enemyBase.Character));
             }
 
-            if (EnforceManager.Instance.darkStatusAilmentSlowEffect)
+            if (EnforceManager.Instance.ogreStatusAilmentSlowEffect)
             {
                 if (enemyBase.isBind|| enemyBase.isSlow || enemyBase.isBleed || enemyBase.isBurn || enemyBase.isPoison || enemyBase.isFreeze || enemyBase.isStun)
                 {

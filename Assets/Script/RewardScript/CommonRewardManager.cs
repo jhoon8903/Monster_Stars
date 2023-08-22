@@ -36,19 +36,38 @@ namespace Script.RewardScript
         [SerializeField] private CountManager countManager;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private CharacterManager characterManager;
-        [SerializeField] private Language language; // 텍스트
         public static CommonRewardManager Instance;
         public readonly Queue<GameObject> PendingTreasure = new Queue<GameObject>(); // 보류 중인 보물 큐
         private GameObject _currentTreasure; // 현재 보물
         public bool openBoxing = true;
         private List<Data> _powerUps;
-        private string _groupName;
+        private string _zeroLevelUnitName;
+        private string _changeUnitName;
         private int _bossRewardSelected;
         public bool isOpenBox;
+
+        public Dictionary<CharacterBase.UnitGroups, Dictionary<string, string>> _levelUpDict =
+            new Dictionary<CharacterBase.UnitGroups, Dictionary<string, string>>();
+
         public event Action OnRewardSelected;
         private void Awake()
         {
             Instance = this;
+            _levelUpDict = new Dictionary<CharacterBase.UnitGroups, Dictionary<string, string>>
+            {
+                {CharacterBase.UnitGroups.Octopus, new Dictionary<string, string> {{"Octopus", "Tentacle"}}},
+                {CharacterBase.UnitGroups.Orc, new Dictionary<string, string> {{"Orc", "Sword"}}},
+                {CharacterBase.UnitGroups.Skeleton, new Dictionary<string, string> {{"Skeleton", "Bone"}}},
+                {CharacterBase.UnitGroups.Fishman, new Dictionary<string, string> {{"Fishman", "Net"}}},
+                {CharacterBase.UnitGroups.Phoenix, new Dictionary<string, string> {{"Phoenix", "Egg"}}},
+                {CharacterBase.UnitGroups.Beholder, new Dictionary<string, string> {{"Beholder", "Rune"}}},
+                {CharacterBase.UnitGroups.Ogre, new Dictionary<string, string> {{"Ogre", "Rock"}}},
+                {CharacterBase.UnitGroups.DeathChiller, new Dictionary<string, string> {{"DeathChiller", "Icicle"}}},
+                {CharacterBase.UnitGroups.Cobra, new Dictionary<string, string> {{"Cobra", "Fang"}}},
+                {CharacterBase.UnitGroups.Berserker, new Dictionary<string, string> {{"Berserker", "Axe"}}},
+                {CharacterBase.UnitGroups.DarkElf, new Dictionary<string, string> {{"DarkElf", "Arrow"}}}
+            };
+
         }
         // 1. 상자가 매치 되면 상자를 큐에 추가
         public void EnqueueTreasure()
@@ -89,6 +108,15 @@ namespace Script.RewardScript
                 yield return null;
             }
         }
+
+        private static (string desc, string popupDesc) GetSkillDesc(PowerTypeManager.Types type)
+        {
+            foreach (var data in PowerTypeManager.Instance.PurpleList.Where(data => data.Type == type))
+            {
+                return (data.Desc, data.PopupDesc);
+            }
+            return (null, null);
+        }
         // 3. 확률별로 선택 옵션 계산
         private List<Data> CommonPowerList(int greenChance, int blueChance, int purpleChance, string forcedColor)
         {
@@ -96,7 +124,9 @@ namespace Script.RewardScript
             var selectedCodes = new HashSet<int>();
             if (StageManager.Instance.isBossClear && !EnforceManager.Instance.addRow)
             {
-                var firstDesiredPowerUp = new PurpleData(PowerTypeManager.Instance.purple, PowerTypeManager.Instance.purpleBack, 16, PowerTypeManager.Types.AddRow, new[] { 1 });
+                const PowerTypeManager.Types type = PowerTypeManager.Types.AddRow;
+                var (desc, popupDesc) = GetSkillDesc(type);
+                var firstDesiredPowerUp = new PurpleData(CharacterBase.UnitGroups.None, 1, 16, PowerTypeManager.Types.AddRow,PowerTypeManager.Instance.purple, PowerTypeManager.Instance.purpleBack,   desc, popupDesc, new[] { 1 });
                 commonPowerUps.Add(firstDesiredPowerUp);
                 selectedCodes.Add(firstDesiredPowerUp.Code);
 
@@ -157,144 +187,62 @@ namespace Script.RewardScript
         }
         // 5. case별 예외처리
         private bool IsValidOption(Data powerUp, ICollection<int> selectedCodes)
-            {
-                if (selectedCodes.Contains(powerUp.Code)) return false; // Do not select already selected reward codes again
-                switch (powerUp.Type)
+        {
+            if (selectedCodes.Contains(powerUp.Code)) return false; // Do not select already selected reward codes again
+            if (powerUp.SkillGroup != CharacterBase.UnitGroups.None) return false;
+            switch (powerUp.Type)
                 {
-                    case PowerTypeManager.Types.NextStep:
-                    case PowerTypeManager.Types.Water2Freeze:
-                    case PowerTypeManager.Types.WaterFreeze:
-                    case PowerTypeManager.Types.Dark2BackBoost:
-                    case PowerTypeManager.Types.Dark3FifthAttackBoost:
-                    case PowerTypeManager.Types.Dark3BleedDurationBoost:
-                    case PowerTypeManager.Types.Dark3ShackledExplosion:
-                    case PowerTypeManager.Types.Dark3PoisonDamageBoost:
-                    case PowerTypeManager.Types.Dark3RateBoost:
-                    case PowerTypeManager.Types.Dark3DamageBoost:
-                    case PowerTypeManager.Types.Dark3BleedAttack:
-                    case PowerTypeManager.Types.DarkFifthAttackDamageBoost:
-                    case PowerTypeManager.Types.DarkStatusAilmentSlowEffect:
-                    case PowerTypeManager.Types.DarkRangeIncrease:
-                    case PowerTypeManager.Types.DarkAttackPowerBoost:
-                    case PowerTypeManager.Types.DarkStatusAilmentDamageBoost:
-                    case PowerTypeManager.Types.DarkAttackSpeedBoost:
-                    case PowerTypeManager.Types.DarkKnockBackChance:
-                    case PowerTypeManager.Types.WaterFreezeChance:
-                    case PowerTypeManager.Types.WaterSlowDurationBoost:
-                    case PowerTypeManager.Types.WaterFreezeDamageBoost:
-                    case PowerTypeManager.Types.WaterSlowCPowerBoost:
-                    case PowerTypeManager.Types.WaterAttackRateBoost:
-                    case PowerTypeManager.Types.WaterGlobalFreeze:
-                    case PowerTypeManager.Types.PhysicalSwordScaleIncrease:
-                    case PowerTypeManager.Types.PhysicalSwordAddition:
-                    case PowerTypeManager.Types.PhysicalAttackSpeedBoost:
-                    case PowerTypeManager.Types.PhysicalRatePerAttack:
-                    case PowerTypeManager.Types.PhysicalBindBleed:
-                    case PowerTypeManager.Types.PhysicalDamageBoost:
-                    case PowerTypeManager.Types.PhysicalBleedDuration:
-                    case PowerTypeManager.Types.Water2SlowPowerBoost:
-                    case PowerTypeManager.Types.Water2FreezeTimeBoost:
-                    case PowerTypeManager.Types.Water2DamageBoost:
-                    case PowerTypeManager.Types.Water2FreezeChanceBoost:
-                    case PowerTypeManager.Types.Water2FreezeDamageBoost:
-                    case PowerTypeManager.Types.Water2SlowTimeBoost:
-                    case PowerTypeManager.Types.PoisonPerHitEffect:
-                    case PowerTypeManager.Types.PoisonBleedingEnemyDamageBoost:
-                    case PowerTypeManager.Types.PoisonDamagePerBoost:
-                    case PowerTypeManager.Types.PoisonDamageBoost:
-                    case PowerTypeManager.Types.PoisonDotDamageBoost:
-                    case PowerTypeManager.Types.PoisonAttackSpeedIncrease:
-                    case PowerTypeManager.Types.PoisonDurationBoost:
-                    case PowerTypeManager.Types.Fire2FreezeDamageBoost:
-                    case PowerTypeManager.Types.Fire2BurnDurationBoost:
-                    case PowerTypeManager.Types.Fire2ChangeProperty:
-                    case PowerTypeManager.Types.Fire2DamageBoost:
-                    case PowerTypeManager.Types.Fire2RangeBoost:
-                    case PowerTypeManager.Types.Fire2RateBoost:
-                    case PowerTypeManager.Types.Fire2BossDamageBoost:
-                    case PowerTypeManager.Types.FireBurnPerAttackEffect:
-                    case PowerTypeManager.Types.FireStackOverlap:
-                    case PowerTypeManager.Types.FireProjectileBounceDamage:
-                    case PowerTypeManager.Types.FireBurnedEnemyExplosion:
-                    case PowerTypeManager.Types.FireAttackSpeedBoost:
-                    case PowerTypeManager.Types.FireProjectileSpeedIncrease:
-                    case PowerTypeManager.Types.FireProjectileBounceIncrease:
-                    case PowerTypeManager.Types.Poison2StunToChance:
-                    case PowerTypeManager.Types.Poison2RangeBoost:
-                    case PowerTypeManager.Types.Poison2DotDamageBoost:
-                    case PowerTypeManager.Types.Poison2StunTimeBoost:
-                    case PowerTypeManager.Types.Poison2SpawnPoisonArea:
-                    case PowerTypeManager.Types.Poison2RateBoost:
-                    case PowerTypeManager.Types.Poison2PoolTimeBoost:
-                    case PowerTypeManager.Types.Physical2CastleCrushStatBoost:
-                    case PowerTypeManager.Types.Physical2FifthBoost:
-                    case PowerTypeManager.Types.Physical2BleedTimeBoost:
-                    case PowerTypeManager.Types.Physical2PoisonDamageBoost:
-                    case PowerTypeManager.Types.Physical2RangeBoost:
-                    case PowerTypeManager.Types.Physical2RateBoost:
-                    case PowerTypeManager.Types.Physical2BossBoost:
-                    case PowerTypeManager.Types.Dark2DualAttack:
-                    case PowerTypeManager.Types.Dark2StatusDamageBoost:
-                    case PowerTypeManager.Types.Dark2ExplosionBoost:
-                    case PowerTypeManager.Types.Dark2DoubleAttack:
-                    case PowerTypeManager.Types.Dark2StatusPoison:
-                    case PowerTypeManager.Types.Dark2SameEnemyBoost:
-                        return false;
-                    default:
-                        switch (powerUp.Type)
-                        {
-                            case PowerTypeManager.Types.Gold:
-                                if (EnforceManager.Instance.addGold) return false;
-                                break;
-                            case PowerTypeManager.Types.CastleMaxHp:
-                                if (EnforceManager.Instance.castleMaxHp >= 1000) return false; // Make sure the max HP of the castle does not exceed 2000
-                                break;
-                            case PowerTypeManager.Types.Exp:
-                                if (EnforceManager.Instance.expPercentage >= 30) return false; // Make sure the EXP increment does not exceed 30%
-                                break;
-                            case PowerTypeManager.Types.AddRow:
-                                if (EnforceManager.Instance.addRow) return false;
-                                if (!StageManager.Instance.isBossClear) return false;
-                                if (StageManager.Instance.currentWave % 10 != 0 ) return false;// Show row extra reward only after boss stage, up to 2 times
-                                break;
-                            case PowerTypeManager.Types.Slow:
-                                if (EnforceManager.Instance.slowCount >= 4) return false; // Displays the enemy movement speed reduction effect up to 3 times
-                                break;
-                            case PowerTypeManager.Types.NextStage:
-                                if (EnforceManager.Instance.selectedCount > 3) return false; // Only use up to 3 next stage character upgrades
-                                break;
-                            case PowerTypeManager.Types.StepDirection:
-                                if (spawnManager.isTutorial) return false;
-                                if (EnforceManager.Instance.diagonalMovement)return false;
-                                if (!StageManager.Instance.isBossClear) return false;
-                                if (StageManager.Instance.currentWave % 10 != 0 ) return false;
-                                break;
-                            case PowerTypeManager.Types.Match5Upgrade:
-                                if (EnforceManager.Instance.match5Upgrade) return false; // Don't show this option if 5 matching upgrade option is enabled
-                                break;
-                            case PowerTypeManager.Types.StepLimit:
-                                if (EnforceManager.Instance.permanentIncreaseMovementCount > 1) return false; // don't show this option if permanent move count increment is enabled
-                                break;
-                            case PowerTypeManager.Types.CastleRecovery:
-                                if (EnforceManager.Instance.recoveryCastle) return false; // Castle recovery can only be used once
-                                break;
-                            case PowerTypeManager.Types.GroupLevelUp:
-                                if (spawnManager.isTutorial) return false;
-                                if (EnforceManager.Instance.index.Contains(powerUp.Property[0])) return false; // Do not display GroupLevelUp options for groups where LevelUpPattern is executed
-                                break;
-                            case PowerTypeManager.Types.Step:
-                                if (spawnManager.isTutorial) return false;
-                                break;
-                            case PowerTypeManager.Types.LevelUpPattern:
-                                if (spawnManager.isTutorial) return false;
-                                break;
-                            case PowerTypeManager.Types.RandomLevelUp:
-                                if (spawnManager.isTutorial) return false;
-                                break;
-                        }
-                        return true;
+                    case PowerTypeManager.Types.Gold:
+                        if (EnforceManager.Instance.addGold) return false;
+                        break;
+                    case PowerTypeManager.Types.CastleMaxHp:
+                        if (EnforceManager.Instance.castleMaxHp >= 1000) return false; // Make sure the max HP of the castle does not exceed 2000
+                        break;
+                    case PowerTypeManager.Types.Exp:
+                        if (EnforceManager.Instance.expPercentage >= 30) return false; // Make sure the EXP increment does not exceed 30%
+                        break;
+                    case PowerTypeManager.Types.AddRow:
+                        if (EnforceManager.Instance.addRow) return false;
+                        if (!StageManager.Instance.isBossClear) return false;
+                        if (StageManager.Instance.currentWave % 10 != 0 ) return false;// Show row extra reward only after boss stage, up to 2 times
+                        break;
+                    case PowerTypeManager.Types.Slow:
+                        if (EnforceManager.Instance.slowCount >= 4) return false; // Displays the enemy movement speed reduction effect up to 3 times
+                        break;
+                    case PowerTypeManager.Types.NextStage:
+                        if (EnforceManager.Instance.selectedCount > 3) return false; // Only use up to 3 next stage character upgrades
+                        break;
+                    case PowerTypeManager.Types.StepDirection:
+                        if (spawnManager.isTutorial) return false;
+                        if (EnforceManager.Instance.diagonalMovement)return false;
+                        if (!StageManager.Instance.isBossClear) return false;
+                        if (StageManager.Instance.currentWave % 10 != 0 ) return false;
+                        break;
+                    case PowerTypeManager.Types.Match5Upgrade:
+                        if (EnforceManager.Instance.match5Upgrade) return false; // Don't show this option if 5 matching upgrade option is enabled
+                        break;
+                    case PowerTypeManager.Types.StepLimit:
+                        if (EnforceManager.Instance.permanentIncreaseMovementCount > 1) return false; // don't show this option if permanent move count increment is enabled
+                        break;
+                    case PowerTypeManager.Types.CastleRecovery:
+                        if (EnforceManager.Instance.recoveryCastle) return false; // Castle recovery can only be used once
+                        break;
+                    case PowerTypeManager.Types.GroupLevelUp:
+                        if (spawnManager.isTutorial) return false;
+                        if (EnforceManager.Instance.index.Contains(powerUp.Property[0])) return false; // Do not display GroupLevelUp options for groups where LevelUpPattern is executed
+                        break;
+                    case PowerTypeManager.Types.Step:
+                        if (spawnManager.isTutorial) return false;
+                        break;
+                    case PowerTypeManager.Types.LevelUpPattern:
+                        if (spawnManager.isTutorial) return false;
+                        break;
+                    case PowerTypeManager.Types.RandomLevelUp:
+                        if (spawnManager.isTutorial) return false;
+                        break;
                 }
-            }
+                return true;
+    }
         // 6. 예외처리되고 처리 된 옵션값 리턴
         private static Data SelectRandom(IEnumerable<Data> validOptions)
         {
@@ -317,27 +265,24 @@ namespace Script.RewardScript
                 common2Button.interactable = true;
                 common3Button.interactable = true;
             }
-            CommonDisplayText(common1Button, common1Text, icon1, common1BtnBadge ,powerUpsDisplayData[0], language);
-            CommonDisplayText(common2Button, common2Text, icon2, common2BtnBadge, powerUpsDisplayData[1], language);
-            CommonDisplayText(common3Button, common3Text, icon3, common3BtnBadge, powerUpsDisplayData[2], language);
+            CommonDisplayText(common1Button, common1Text, icon1, common1BtnBadge ,powerUpsDisplayData[0]);
+            CommonDisplayText(common2Button, common2Text, icon2, common2BtnBadge, powerUpsDisplayData[1]);
+            CommonDisplayText(common3Button, common3Text, icon3, common3BtnBadge, powerUpsDisplayData[2]);
         }
         // 8. 옵션 텍스트
-        private void CommonDisplayText(Button commonButton, TMP_Text powerText, Image icon, Image btnBadge, Data powerUp, Language languages)
+        private void CommonDisplayText(Button commonButton, TMP_Text powerText, Image icon, Image btnBadge, Data powerUp)
         {
-           var translationKey = powerUp.Type.ToString();
-           var powerTextTranslation = languages.GetTranslation(translationKey);
-           var finalPowerText = powerTextTranslation;
-
-           var placeholderValues = new Dictionary<string, Func<double>>
+            var finalDesc = powerUp.Desc;
+            var placeholderValues = new Dictionary<string, Func<double>>
            {
                { "{p}", () => powerUp.Property[0]},
-               { "{powerUp.Property[0]}", () => powerUp.Property[0]},
                { "{15*EnforceManager.Instance.slowCount}", () => 15 * EnforceManager.Instance.slowCount },
                { "{EnforceManager.Instance.expPercentage}", () => EnforceManager.Instance.expPercentage },
                { "{EnforceManager.Instance.highLevelCharacterCount}", () => EnforceManager.Instance.highLevelCharacterCount},
            };
-           finalPowerText = placeholderValues.Aggregate(finalPowerText, (current, placeholder) => current.Replace(placeholder.Key, placeholder.Value().ToString(CultureInfo.CurrentCulture)));
-           var finalTranslation = finalPowerText.Replace("||", "\n");
+            finalDesc = placeholderValues.Aggregate(finalDesc, (current, placeholder) => current.Replace(placeholder.Key, placeholder.Value().ToString(CultureInfo.CurrentCulture)));
+            var finalTranslation = finalDesc.Replace("||", "\n");
+            
 
            if (powerUp.Type is PowerTypeManager.Types.GroupLevelUp or PowerTypeManager.Types.LevelUpPattern)
            {
@@ -346,15 +291,15 @@ namespace Script.RewardScript
 
                btnBadge.sprite = EnforceManager.Instance.characterList[powerUp.Property[0]].UnitGrade switch
                {
-                   CharacterBase.UnitGrades.Green => PowerTypeManager.Instance.green,
-                   CharacterBase.UnitGrades.Blue => PowerTypeManager.Instance.blue,
-                   CharacterBase.UnitGrades.Purple => PowerTypeManager.Instance.purple,
+                   CharacterBase.UnitGrades.G => PowerTypeManager.Instance.green,
+                   CharacterBase.UnitGrades.B => PowerTypeManager.Instance.blue,
+                   CharacterBase.UnitGrades.P => PowerTypeManager.Instance.purple,
                };
                commonButton.GetComponent<Image>().sprite = EnforceManager.Instance.characterList[powerUp.Property[0]].UnitGrade switch
                {
-                   CharacterBase.UnitGrades.Green => PowerTypeManager.Instance.greenBack,
-                   CharacterBase.UnitGrades.Blue => PowerTypeManager.Instance.blueBack,
-                   CharacterBase.UnitGrades.Purple => PowerTypeManager.Instance.purpleBack,
+                   CharacterBase.UnitGrades.G => PowerTypeManager.Instance.greenBack,
+                   CharacterBase.UnitGrades.B => PowerTypeManager.Instance.blueBack,
+                   CharacterBase.UnitGrades.P => PowerTypeManager.Instance.purpleBack,
                };
            }
            else
@@ -390,16 +335,28 @@ namespace Script.RewardScript
                     powerText.text = finalTranslation; 
                     break;
                 case PowerTypeManager.Types.GroupLevelUp:
-                    var groupUnit = characterManager.characterList[powerUp.Property[0]];
-                    _groupName = groupUnit.name;
-                    icon.sprite = groupUnit.GetSpriteForLevel(1);
-                    powerText.text = finalTranslation.Replace("{_groupName}", _groupName);
+                    var groupLevelUpKey = characterManager.characterList[powerUp.Property[0]];
+                    foreach (var item in _levelUpDict[groupLevelUpKey.unitGroup])
+                    {
+                        _changeUnitName = "{unit_N}";
+                        _zeroLevelUnitName = "{0level_unit_N}";
+                        finalTranslation = finalTranslation.Replace(_changeUnitName, item.Key)
+                            .Replace(_zeroLevelUnitName, item.Value);
+                    }
+                    icon.sprite = groupLevelUpKey.GetSpriteForLevel(1);
+                    powerText.text = finalTranslation;
                     break;
                 case PowerTypeManager.Types.LevelUpPattern:
-                    var unit = characterManager.characterList[powerUp.Property[0]];
-                    _groupName = unit.name;
-                    icon.sprite = unit.GetSpriteForLevel(1);
-                    powerText.text = finalTranslation.Replace("{_groupName}", _groupName);
+                    var levelUpPatternKey = characterManager.characterList[powerUp.Property[0]];
+                    foreach (var item in _levelUpDict[levelUpPatternKey.unitGroup])
+                    {
+                        _changeUnitName = "{unit_N}";
+                        _zeroLevelUnitName = "{0level_unit_N}";
+                        finalTranslation = finalTranslation.Replace(_changeUnitName, item.Key)
+                            .Replace(_zeroLevelUnitName, item.Value);
+                    }
+                    icon.sprite = levelUpPatternKey.GetSpriteForLevel(1);
+                    powerText.text = finalTranslation;
                     break;
                 case PowerTypeManager.Types.CastleRecovery: 
                     powerText.text = finalTranslation; 
@@ -420,7 +377,6 @@ namespace Script.RewardScript
                     powerText.text = finalTranslation; 
                     break;
             }
-           _groupName = null;
            commonButton.onClick.RemoveAllListeners();
            commonShuffle.onClick.RemoveAllListeners();
            commonButton.onClick.AddListener(() => SelectCommonReward(powerUp));

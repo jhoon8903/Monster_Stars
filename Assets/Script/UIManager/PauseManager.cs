@@ -69,9 +69,9 @@ namespace Script.UIManager
             unitImage.sprite = unit.GetSpriteForLevel(unit.unitPeaceLevel);
             unitBack.sprite = unit.UnitGrade switch
             {
-                CharacterBase.UnitGrades.Green => gradeBack[0],
-                CharacterBase.UnitGrades.Blue => gradeBack[1],
-                CharacterBase.UnitGrades.Purple => gradeBack[2],
+                CharacterBase.UnitGrades.G => gradeBack[0],
+                CharacterBase.UnitGrades.B => gradeBack[1],
+                CharacterBase.UnitGrades.P => gradeBack[2],
                 _ => gradeBack[3]
             };
             var unitSkillList = UnitSkills(unit);
@@ -104,14 +104,14 @@ namespace Script.UIManager
                 {
                     instance.skillIcon.sprite = skillSprite;
                 }
-                instance.skillDesc.text = (string)skill["EngDesc"];
+                instance.skillDesc.text = (string)skill["PopupDesc"];
 
                 // instance.skillType.text = $"{skill["Type"]} / {skill["Level"]}";
             }
         }
         private static List<Dictionary<string, object>> UnitSkills(CharacterBase characterBase)
         {
-            var unitSkillFile = Resources.Load<TextAsset>("UnitSkillData");
+            var unitSkillFile = Resources.Load<TextAsset>("SkillData");
             var unitSkillData = unitSkillFile.text.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
             var skillList = new List<Dictionary<string, object>>();
             for (var i = 1; i < unitSkillData.Length; i++)
@@ -121,10 +121,11 @@ namespace Script.UIManager
                 if (unitGroup != characterBase.unitGroup) continue;
                 var unitSkillDict = new Dictionary<string, object>
                 {
-                    { "Grade", data[1] },
-                    { "Level", int.Parse(data[2]) },
+                    { "Grade", data[4] },
+                    { "Level", int.Parse(data[1]) },
                     { "Type", data[3] },
-                    { "EngDesc", data[5] }
+                    { "EngDesc", data[6] },
+                    { "PopupDesc", data[7]}
                 };
                 skillList.Add(unitSkillDict);
             }

@@ -33,7 +33,6 @@ namespace Script.RewardScript
         [SerializeField] private ExpManager expManager;
         [SerializeField] private GameManager gameManager;
         [SerializeField] private CharacterManager characterManager;
-        [SerializeField] private Language language;
         private Data _selectedPowerUp;
         public static LevelUpRewardManager Instance;
         private void Awake()
@@ -49,9 +48,6 @@ namespace Script.RewardScript
                     break;
                 case PowerTypeManager.Types.GroupAtkSpeed:
                     EnforceManager.Instance.IncreaseGroupRate(selectedReward,selectedReward.Property[0]);
-                    break;
-                case PowerTypeManager.Types.NextStep:
-                    EnforceManager.Instance.RewardMoveCount(selectedReward.Property[0]);
                     break;
                 case PowerTypeManager.Types.StepDirection:
                     EnforceManager.Instance.DiagonalMovement(selectedReward);
@@ -78,246 +74,246 @@ namespace Script.RewardScript
                     EnforceManager.Instance.Match5Upgrade(selectedReward);
                     break;
                 // A
-                case PowerTypeManager.Types.Dark3FifthAttackBoost:
-                    EnforceManager.Instance.dark3FifthAttackBoost = true;
+                case PowerTypeManager.Types.OctopusThirdAttackBoost:
+                    EnforceManager.Instance.octopusThirdAttackBoost = true;
                     break;
-                case PowerTypeManager.Types.Dark3BleedAttack:
-                    EnforceManager.Instance.dark3BleedAttack = true;
+                case PowerTypeManager.Types.OctopusPoisonAttack:
+                    EnforceManager.Instance.octopusPoisonAttack = true;
                     break;
-                case PowerTypeManager.Types.Dark3PoisonDamageBoost:
-                    EnforceManager.Instance.dark3PoisonDamageBoost = true;
+                case PowerTypeManager.Types.OctopusBleedDamageBoost:
+                    EnforceManager.Instance.octopusBleedDamageBoost = true;
                     break;
-                case PowerTypeManager.Types.Dark3BleedDurationBoost:
-                    EnforceManager.Instance.dark3BleedDurationBoost = true;
+                case PowerTypeManager.Types.OctopusBleedDurationBoost:
+                    EnforceManager.Instance.octopusBleedDurationBoost = true;
                     break;
-                case PowerTypeManager.Types.Dark3ShackledExplosion:
-                    EnforceManager.Instance.dark3ShackledExplosion = true;
+                case PowerTypeManager.Types.OctopusShackledExplosion:
+                    EnforceManager.Instance.octopusShackledExplosion = true;
                     break;
-                case PowerTypeManager.Types.Dark3DamageBoost:
-                    EnforceManager.Instance.dark3DamageBoost = true;
+                case PowerTypeManager.Types.OctopusDamageBoost:
+                    EnforceManager.Instance.octopusDamageBoost = true;
                     break;
-                 case PowerTypeManager.Types.Dark3RateBoost: 
-                     EnforceManager.Instance.Dark3RateBoost();
+                 case PowerTypeManager.Types.OctopusRateBoost: 
+                     EnforceManager.Instance.OctopusRateBoost();
                      break;
                 // Ogre
-                case PowerTypeManager.Types.DarkFifthAttackDamageBoost:
-                    EnforceManager.Instance.darkFifthAttackDamageBoost = true;
+                case PowerTypeManager.Types.OgreThirdAttackDamageBoost:
+                    EnforceManager.Instance.ogreThirdAttackDamageBoost = true;
                     break;
-                case PowerTypeManager.Types.DarkStatusAilmentSlowEffect:
-                    EnforceManager.Instance.darkStatusAilmentSlowEffect = true;
+                case PowerTypeManager.Types.OgreStatusAilmentSlowEffect:
+                    EnforceManager.Instance.ogreStatusAilmentSlowEffect = true;
                     break;
-                case PowerTypeManager.Types.DarkRangeIncrease:
-                    EnforceManager.Instance.darkRangeIncrease = true;
+                case PowerTypeManager.Types.OgreRangeIncrease:
+                    EnforceManager.Instance.ogreRangeIncrease = true;
                     break;
-                case PowerTypeManager.Types.DarkAttackPowerBoost:
-                    EnforceManager.Instance.DarkAttackDamageBoost();
+                case PowerTypeManager.Types.OgreAttackPowerBoost:
+                    EnforceManager.Instance.OgreAttackDamageBoost();
                     break;
-                case PowerTypeManager.Types.DarkStatusAilmentDamageBoost:
-                    EnforceManager.Instance.darkStatusAilmentDamageBoost = true;
+                case PowerTypeManager.Types.OgreStatusAilmentDamageBoost:
+                    EnforceManager.Instance.ogreStatusAilmentDamageBoost = true;
                     break;
-                case PowerTypeManager.Types.DarkAttackSpeedBoost:
-                    EnforceManager.Instance.DarkAttackSpeedBoost();
+                case PowerTypeManager.Types.OgreAttackSpeedBoost:
+                    EnforceManager.Instance.OgreAttackSpeedBoost();
                     break;
-                case PowerTypeManager.Types.DarkKnockBackChance:
-                    EnforceManager.Instance.darkKnockBackChance = true;
+                case PowerTypeManager.Types.OgreKnockBackChance:
+                    EnforceManager.Instance.ogreKnockBackChance = true;
                     break;
                 // DeathChiller
-                case PowerTypeManager.Types.WaterFreeze:
-                    EnforceManager.Instance.waterFreeze = true;
+                case PowerTypeManager.Types.DeathChillerFreeze:
+                    EnforceManager.Instance.deathChillerFreeze = true;
                     break;
-                case PowerTypeManager.Types.WaterFreezeChance:
-                    EnforceManager.Instance.waterFreezeChance = true;
+                case PowerTypeManager.Types.DeathChillerFreezeChance:
+                    EnforceManager.Instance.deathChillerFreezeChance = true;
                     break;
-                case PowerTypeManager.Types.WaterSlowDurationBoost:
-                    EnforceManager.Instance.WaterSlowDurationBoost();
+                case PowerTypeManager.Types.DeathChillerSlowDurationBoost:
+                    EnforceManager.Instance.DeathChillerSlowDurationBoost();
                     break;
-                case PowerTypeManager.Types.WaterFreezeDamageBoost:
-                    EnforceManager.Instance.waterFreezeDamageBoost = true;
+                case PowerTypeManager.Types.DeathChillerFreezeDamageBoost:
+                    EnforceManager.Instance.deathChillerFreezeDamageBoost = true;
                     break;
-                case PowerTypeManager.Types.WaterSlowCPowerBoost:
-                    EnforceManager.Instance.waterSlowCPowerBoost = true;
+                case PowerTypeManager.Types.DeathChillerSlowCPowerBoost:
+                    EnforceManager.Instance.deathChillerSlowCPowerBoost = true;
                     break;
-                case PowerTypeManager.Types.WaterAttackRateBoost:
-                    EnforceManager.Instance.WaterAttackRateBoost();
+                case PowerTypeManager.Types.DeathChillerAttackRateBoost:
+                    EnforceManager.Instance.DeathChillerAttackRateBoost();
                     break;
-                case PowerTypeManager.Types.WaterGlobalFreeze:
-                    EnforceManager.Instance.waterGlobalFreeze = true;
+                case PowerTypeManager.Types.DeathChillerGlobalFreeze:
+                    EnforceManager.Instance.deathChillerGlobalFreeze = true;
                     break;
                 // Orc
-                case PowerTypeManager.Types.PhysicalSwordScaleIncrease:
-                    EnforceManager.Instance.physicalSwordScaleIncrease = true;
+                case PowerTypeManager.Types.OrcSwordScaleIncrease:
+                    EnforceManager.Instance.orcSwordScaleIncrease = true;
                     break;
-                case PowerTypeManager.Types.PhysicalSwordAddition:
-                    EnforceManager.Instance.physicalSwordAddition = true;
+                case PowerTypeManager.Types.OrcSwordAddition:
+                    EnforceManager.Instance.orcSwordAddition = true;
                     break;
-                case PowerTypeManager.Types.PhysicalAttackSpeedBoost:
-                    EnforceManager.Instance.PhysicalAttackSpeedIncrease();
+                case PowerTypeManager.Types.OrcAttackSpeedBoost:
+                    EnforceManager.Instance.OrcAttackSpeedIncrease();
                     break;
-                case PowerTypeManager.Types.PhysicalRatePerAttack:
-                    EnforceManager.Instance.physicalRatePerAttack = true;
+                case PowerTypeManager.Types.OrcRatePerAttack:
+                    EnforceManager.Instance.orcRatePerAttack = true;
                     break;
-                case PowerTypeManager.Types.PhysicalBindBleed:
-                    EnforceManager.Instance.physicalBindBleed = true;
+                case PowerTypeManager.Types.OrcBindBleed:
+                    EnforceManager.Instance.orcBindBleed = true;
                     break;
-                case PowerTypeManager.Types.PhysicalDamageBoost:
-                    EnforceManager.Instance.PhysicalDamageBoost();
+                case PowerTypeManager.Types.OrcDamageBoost:
+                    EnforceManager.Instance.OrcDamageBoost();
                     break;
-                case PowerTypeManager.Types.PhysicalBleedDuration:
-                    EnforceManager.Instance.physicalBleedDuration = true;
+                case PowerTypeManager.Types.OrcBleedDuration:
+                    EnforceManager.Instance.orcBleedDuration = true;
                     break;
                 // Fishman
-                case PowerTypeManager.Types.Water2Freeze:
-                    EnforceManager.Instance.water2Freeze = true;
+                case PowerTypeManager.Types.FishmanFreeze:
+                    EnforceManager.Instance.fishmanFreeze = true;
                     break;
-                case PowerTypeManager.Types.Water2SlowPowerBoost:
-                    EnforceManager.Instance.water2SlowPowerBoost = true;
+                case PowerTypeManager.Types.FishmanSlowPowerBoost:
+                    EnforceManager.Instance.fishmanSlowPowerBoost = true;
                     break;
-                case PowerTypeManager.Types.Water2FreezeTimeBoost:
-                    EnforceManager.Instance.water2FreezeTimeBoost = true;
+                case PowerTypeManager.Types.FishmanFreezeTimeBoost:
+                    EnforceManager.Instance.fishmanFreezeTimeBoost = true;
                     break;
-                case PowerTypeManager.Types.Water2DamageBoost:
-                    EnforceManager.Instance.Water2DamageBoost();
+                case PowerTypeManager.Types.FishmanDamageBoost:
+                    EnforceManager.Instance.FishmanDamageBoost();
                     break;
-                case PowerTypeManager.Types.Water2FreezeChanceBoost:
-                    EnforceManager.Instance.water2FreezeChanceBoost = true;
+                case PowerTypeManager.Types.FishmanFreezeChanceBoost:
+                    EnforceManager.Instance.fishmanFreezeChanceBoost = true;
                     break;
-                case PowerTypeManager.Types.Water2FreezeDamageBoost:
-                    EnforceManager.Instance.water2FreezeDamageBoost = true;
+                case PowerTypeManager.Types.FishmanFreezeDamageBoost:
+                    EnforceManager.Instance.fishmanFreezeDamageBoost = true;
                     break;
-                case PowerTypeManager.Types.Water2SlowTimeBoost:
-                    EnforceManager.Instance.Water2SlowTimeBoost();
+                case PowerTypeManager.Types.FishmanSlowTimeBoost:
+                    EnforceManager.Instance.fishmanSlowTimeBoost();
                     break;
                 // Skeleton
-                case PowerTypeManager.Types.PoisonPerHitEffect:
-                    EnforceManager.Instance.poisonPerHitEffect = true;
+                case PowerTypeManager.Types.SkeletonPerHitEffect:
+                    EnforceManager.Instance.skeletonPerHitEffect = true;
                     break;
-                case PowerTypeManager.Types.PoisonBleedingEnemyDamageBoost:
-                    EnforceManager.Instance.poisonBleedingEnemyDamageBoost = true;
+                case PowerTypeManager.Types.SkeletonBleedingEnemyDamageBoost:
+                    EnforceManager.Instance.skeletonBleedingEnemyDamageBoost = true;
                     break;
-                case PowerTypeManager.Types.PoisonDamagePerBoost:
-                    EnforceManager.Instance.poisonDamagePerBoost = true;
+                case PowerTypeManager.Types.SkeletonDamagePerBoost:
+                    EnforceManager.Instance.skeletonDamagePerBoost = true;
                     break;
-                case PowerTypeManager.Types.PoisonDamageBoost:
-                    EnforceManager.Instance.poisonDamageBoost = true;
+                case PowerTypeManager.Types.SkeletonDamageBoost:
+                    EnforceManager.Instance.skeletonDamageBoost = true;
                     break;
-                case PowerTypeManager.Types.PoisonDotDamageBoost:
-                    EnforceManager.Instance.poisonDotDamageBoost = true;
+                case PowerTypeManager.Types.SkeletonDotDamageBoost:
+                    EnforceManager.Instance.skeletonDotDamageBoost = true;
                     break;
-                case PowerTypeManager.Types.PoisonAttackSpeedIncrease:
-                    EnforceManager.Instance.PoisonAttackSpeedIncrease();
+                case PowerTypeManager.Types.SkeletonAttackSpeedIncrease:
+                    EnforceManager.Instance.SkeletonAttackSpeedIncrease();
                     break;
-                case PowerTypeManager.Types.PoisonDurationBoost:
-                    EnforceManager.Instance.poisonDurationBoost = true;
+                case PowerTypeManager.Types.SkeletonDurationBoost:
+                    EnforceManager.Instance.skeletonDurationBoost = true;
                     break;
                 // Phoenix
-                case PowerTypeManager.Types.Fire2FreezeDamageBoost:
-                    EnforceManager.Instance.fire2FreezeDamageBoost = true;
+                case PowerTypeManager.Types.PhoenixFreezeDamageBoost:
+                    EnforceManager.Instance.phoenixFreezeDamageBoost = true;
                     break;
-                case PowerTypeManager.Types.Fire2BurnDurationBoost:
-                    EnforceManager.Instance.fire2BurnDurationBoost = true;
+                case PowerTypeManager.Types.PhoenixBurnDurationBoost:
+                    EnforceManager.Instance.phoenixBurnDurationBoost = true;
                     break;
-                case PowerTypeManager.Types.Fire2ChangeProperty:
-                    EnforceManager.Instance.fire2ChangeProperty = true;
+                case PowerTypeManager.Types.PhoenixChangeProperty:
+                    EnforceManager.Instance.phoenixChangeProperty = true;
                     break;
-                case PowerTypeManager.Types.Fire2DamageBoost:
-                    EnforceManager.Instance.Fire2DamageBoost();
+                case PowerTypeManager.Types.PhoenixDamageBoost:
+                    EnforceManager.Instance.PhoenixDamageBoost();
                     break;
-                case PowerTypeManager.Types.Fire2RangeBoost:
-                    EnforceManager.Instance.fire2RangeBoost = true;
+                case PowerTypeManager.Types.PhoenixRangeBoost:
+                    EnforceManager.Instance.phoenixRangeBoost = true;
                     break;
-                case PowerTypeManager.Types.Fire2RateBoost:
-                    EnforceManager.Instance.fire2RateBoost = true;
+                case PowerTypeManager.Types.PhoenixRateBoost:
+                    EnforceManager.Instance.phoenixRateBoost = true;
                     break;
-                case PowerTypeManager.Types.Fire2BossDamageBoost:
-                    EnforceManager.Instance.fire2BossDamageBoost = true;
+                case PowerTypeManager.Types.PhoenixBossDamageBoost:
+                    EnforceManager.Instance.phoenixBossDamageBoost = true;
                     break;
                 // Beholder
-                case PowerTypeManager.Types.FireBurnPerAttackEffect:
-                    EnforceManager.Instance.fireBurnPerAttackEffect = true;
+                case PowerTypeManager.Types.BeholderBurnPerAttackEffect:
+                    EnforceManager.Instance.beholderBurnPerAttackEffect = true;
                     break;
-                case PowerTypeManager.Types.FireStackOverlap:
-                    EnforceManager.Instance.fireStackOverlap = true;
+                case PowerTypeManager.Types.BeholderStackOverlap:
+                    EnforceManager.Instance.beholderStackOverlap = true;
                     break;
-                case PowerTypeManager.Types.FireProjectileBounceIncrease:
-                    EnforceManager.Instance.fireProjectileBounceIncrease = true;
+                case PowerTypeManager.Types.BeholderProjectileBounceIncrease:
+                    EnforceManager.Instance.beholderProjectileBounceIncrease = true;
                     break;
-                case PowerTypeManager.Types.FireBurnedEnemyExplosion:
-                    EnforceManager.Instance.fireBurnedEnemyExplosion = true;
+                case PowerTypeManager.Types.BeholderBurnedEnemyExplosion:
+                    EnforceManager.Instance.beholderBurnedEnemyExplosion = true;
                     break;
-                case PowerTypeManager.Types.FireAttackSpeedBoost:
-                    EnforceManager.Instance.FireAttackSpeedBoost();
+                case PowerTypeManager.Types.BeholderAttackSpeedBoost:
+                    EnforceManager.Instance.BeholderAttackSpeedBoost();
                     break;
-                case PowerTypeManager.Types.FireProjectileSpeedIncrease:
-                    EnforceManager.Instance.fireProjectileSpeedIncrease = true;
+                case PowerTypeManager.Types.BeholderProjectileSpeedIncrease:
+                    EnforceManager.Instance.beholderProjectileSpeedIncrease = true;
                     break;
-                case PowerTypeManager.Types.FireProjectileBounceDamage:
-                    EnforceManager.Instance.fireProjectileBounceDamage = true;
+                case PowerTypeManager.Types.BeholderProjectileBounceDamage:
+                    EnforceManager.Instance.beholderProjectileBounceDamage = true;
                     break;
                 // Cobra
-                case PowerTypeManager.Types.Poison2StunToChance:
-                    EnforceManager.Instance.poison2StunToChance = true;
+                case PowerTypeManager.Types.CobraStunToChance:
+                    EnforceManager.Instance.cobra2StunToChance = true;
                     break;
-                case PowerTypeManager.Types.Poison2RangeBoost:
-                    EnforceManager.Instance.poison2RangeBoost = true;
+                case PowerTypeManager.Types.CobraRangeBoost:
+                    EnforceManager.Instance.cobraRangeBoost = true;
                     break;
-                case PowerTypeManager.Types.Poison2DotDamageBoost:
-                    EnforceManager.Instance.poison2DotDamageBoost = true;
+                case PowerTypeManager.Types.CobraDotDamageBoost:
+                    EnforceManager.Instance.cobraDotDamageBoost = true;
                     break;
-                case PowerTypeManager.Types.Poison2StunTimeBoost:
-                    EnforceManager.Instance.Poison2StunTimeBoost();
+                case PowerTypeManager.Types.CobraStunTimeBoost:
+                    EnforceManager.Instance.CobraStunTimeBoost();
                     break;
-                case PowerTypeManager.Types.Poison2SpawnPoisonArea:
-                    EnforceManager.Instance.poison2SpawnPoisonArea = true;
+                case PowerTypeManager.Types.CobraSpawnPoisonArea:
+                    EnforceManager.Instance.cobraSpawnPoisonArea = true;
                     break;
-                case PowerTypeManager.Types.Poison2RateBoost:
-                    EnforceManager.Instance.poison2RateBoost = true;
+                case PowerTypeManager.Types.CobraRateBoost:
+                    EnforceManager.Instance.cobraRateBoost = true;
                     break;
-                case PowerTypeManager.Types.Poison2PoolTimeBoost:
-                    EnforceManager.Instance.poison2PoolTimeBoost = true;
+                case PowerTypeManager.Types.CobraPoolTimeBoost:
+                    EnforceManager.Instance.cobraPoolTimeBoost = true;
                     break;
                 // J
-                case PowerTypeManager.Types.Physical2CastleCrushStatBoost:
-                    EnforceManager.Instance.physical2CastleCrushStatBoost = true;
+                case PowerTypeManager.Types.BerserkerCastleCrushStatBoost:
+                    EnforceManager.Instance.berserkerCastleCrushStatBoost = true;
                     break;
-                case PowerTypeManager.Types.Physical2FifthBoost:
-                    EnforceManager.Instance.physical2FifthBoost = true;
+                case PowerTypeManager.Types.BerserkerThirdBoost:
+                    EnforceManager.Instance.berserkerThirdBoost = true;
                     break;
-                case PowerTypeManager.Types.Physical2BleedTimeBoost:
-                    EnforceManager.Instance.physical2BleedTimeBoost = true;
+                case PowerTypeManager.Types.BerserkerBleedTimeBoost:
+                    EnforceManager.Instance.berserkerBleedTimeBoost = true;
                     break;
-                case PowerTypeManager.Types.Physical2PoisonDamageBoost:
-                    EnforceManager.Instance.physical2PoisonDamageBoost = true;
+                case PowerTypeManager.Types.BerserkerPoisonDamageBoost:
+                    EnforceManager.Instance.berserkerPoisonDamageBoost = true;
                     break;
-                case PowerTypeManager.Types.Physical2RangeBoost:
-                    EnforceManager.Instance.physical2RangeBoost = true;
+                case PowerTypeManager.Types.BerserkerRangeBoost:
+                    EnforceManager.Instance.berserkerRangeBoost = true;
                     break;
-                case PowerTypeManager.Types.Physical2RateBoost:
-                    EnforceManager.Instance.Physical2RateBoost();
+                case PowerTypeManager.Types.BerserkerRateBoost:
+                    EnforceManager.Instance.BerserkerRateBoost();
                     break;
-                case PowerTypeManager.Types.Physical2BossBoost:
-                    EnforceManager.Instance.physical2BossBoost = true;
+                case PowerTypeManager.Types.BerserkerBossBoost:
+                    EnforceManager.Instance.berserkerBossBoost = true;
                     break;
                 // DarkElf
-                case PowerTypeManager.Types.Dark2BackBoost:
-                    EnforceManager.Instance.dark2BackBoost = true;
+                case PowerTypeManager.Types.DarkElfBackBoost:
+                    EnforceManager.Instance.darkElfBackBoost = true;
                     break;
-                case PowerTypeManager.Types.Dark2DualAttack:
-                    EnforceManager.Instance.dark2DualAttack = true;
+                case PowerTypeManager.Types.DarkElfDualAttack:
+                    EnforceManager.Instance.darkElfDualAttack = true;
                     break;
-                case PowerTypeManager.Types.Dark2StatusDamageBoost:
-                    EnforceManager.Instance.dark2StatusDamageBoost = true;
+                case PowerTypeManager.Types.DarkElfStatusDamageBoost:
+                    EnforceManager.Instance.darkElfStatusDamageBoost = true;
                     break;
-                case PowerTypeManager.Types.Dark2ExplosionBoost:
-                    EnforceManager.Instance.dark2ExplosionBoost = true;
+                case PowerTypeManager.Types.DarkElfExplosionBoost:
+                    EnforceManager.Instance.darkElfExplosionBoost = true;
                     break;
-                case PowerTypeManager.Types.Dark2DoubleAttack:
-                    EnforceManager.Instance.dark2DoubleAttack = true;
+                case PowerTypeManager.Types.DarkElfDoubleAttack:
+                    EnforceManager.Instance.darkElfDoubleAttack = true;
                     break;
-                case PowerTypeManager.Types.Dark2StatusPoison:
-                    EnforceManager.Instance.dark2StatusPoison = true;
+                case PowerTypeManager.Types.DarkElfStatusPoison:
+                    EnforceManager.Instance.darkElfStatusPoison = true;
                     break;
-                case PowerTypeManager.Types.Dark2SameEnemyBoost:
-                    EnforceManager.Instance.dark2SameEnemyBoost = true;
+                case PowerTypeManager.Types.DarkElfSameEnemyBoost:
+                    EnforceManager.Instance.darkElfSameEnemyBoost = true;
                     break;
                 default:
                     Debug.Log("Default Value" + selectedReward.Type);
@@ -441,400 +437,400 @@ namespace Script.RewardScript
                             if (EnforceManager.Instance.castleMaxHp >= 1000) return false;
                             break;
                         // Unit A
-                        case PowerTypeManager.Types.Dark3FifthAttackBoost:
+                        case PowerTypeManager.Types.OctopusThirdAttackBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Octopus)) return false;
-                            if (EnforceManager.Instance.dark3FifthAttackBoost) return false;
+                            if (EnforceManager.Instance.octopusThirdAttackBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Dark3BleedAttack:
+                        case PowerTypeManager.Types.OctopusPoisonAttack:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Octopus)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Octopus) < 3) return false;
-                            if (EnforceManager.Instance.dark3BleedAttack) return false;
+                            if (EnforceManager.Instance.octopusPoisonAttack) return false;
                             break;
-                        case PowerTypeManager.Types.Dark3PoisonDamageBoost:
+                        case PowerTypeManager.Types.OctopusBleedDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Octopus)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Octopus) < 5) return false;
-                            if (EnforceManager.Instance.dark3PoisonDamageBoost) return false;
+                            if (EnforceManager.Instance.octopusBleedDamageBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Dark3ShackledExplosion:
+                        case PowerTypeManager.Types.OctopusShackledExplosion:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Octopus)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Octopus) < 7) return false;
-                            if (EnforceManager.Instance.dark3ShackledExplosion) return false;
+                            if (EnforceManager.Instance.octopusShackledExplosion) return false;
                             break;
-                        case PowerTypeManager.Types.Dark3BleedDurationBoost:
+                        case PowerTypeManager.Types.OctopusBleedDurationBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Octopus)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Octopus) < 9) return false;
-                            if (EnforceManager.Instance.dark3BleedDurationBoost) return false;
+                            if (EnforceManager.Instance.octopusBleedDurationBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Dark3DamageBoost:
+                        case PowerTypeManager.Types.OctopusDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Octopus)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Octopus) < 11) return false;
-                            if (EnforceManager.Instance.dark3DamageBoost) return false;
+                            if (EnforceManager.Instance.octopusDamageBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Dark3RateBoost:
+                        case PowerTypeManager.Types.OctopusRateBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Octopus)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Octopus) < 13) return false;
                             if (EnforceManager.Instance.dark3RateBoost >= 0.36f) return false;
                             break;
                         // Unit Ogre
-                        case PowerTypeManager.Types.DarkFifthAttackDamageBoost:
+                        case PowerTypeManager.Types.OgreThirdAttackDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Ogre)) return false;
-                            if (EnforceManager.Instance.darkFifthAttackDamageBoost) return false;
+                            if (EnforceManager.Instance.ogreThirdAttackDamageBoost) return false;
                             break;
-                        case PowerTypeManager.Types.DarkStatusAilmentSlowEffect:
+                        case PowerTypeManager.Types.OgreStatusAilmentSlowEffect:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Ogre)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Ogre) < 3) return false;
-                            if (EnforceManager.Instance.darkStatusAilmentSlowEffect) return false;
+                            if (EnforceManager.Instance.ogreStatusAilmentSlowEffect) return false;
                             break;
-                        case PowerTypeManager.Types.DarkRangeIncrease:
+                        case PowerTypeManager.Types.OgreRangeIncrease:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Ogre)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Ogre) < 5) return false;
-                            if (EnforceManager.Instance.darkRangeIncrease) return false;
+                            if (EnforceManager.Instance.ogreRangeIncrease) return false;
                             break;
-                        case PowerTypeManager.Types.DarkAttackPowerBoost:
+                        case PowerTypeManager.Types.OgreAttackPowerBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Ogre)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Ogre) < 7) return false;
                             if (EnforceManager.Instance.darkAttackPowerBoost >= 0.24f) return false;
                             break;
-                        case PowerTypeManager.Types.DarkStatusAilmentDamageBoost:
+                        case PowerTypeManager.Types.OgreStatusAilmentDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Ogre)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Ogre) < 9) return false;
-                            if (EnforceManager.Instance.darkStatusAilmentDamageBoost) return false;
+                            if (EnforceManager.Instance.ogreStatusAilmentDamageBoost) return false;
                             break;
-                        case PowerTypeManager.Types.DarkAttackSpeedBoost:
+                        case PowerTypeManager.Types.OgreAttackSpeedBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Ogre)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Ogre) < 11) return false;
                             if (EnforceManager.Instance.darkAttackSpeedBoost >= 0.36f) return false;
                             break;
-                        case PowerTypeManager.Types.DarkKnockBackChance:
+                        case PowerTypeManager.Types.OgreKnockBackChance:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Ogre)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Ogre) < 13) return false;
-                            if (EnforceManager.Instance.darkKnockBackChance) return false;
+                            if (EnforceManager.Instance.ogreKnockBackChance) return false;
                             break;
                         // Unit DeathChiller
-                        case PowerTypeManager.Types.WaterFreeze:
+                        case PowerTypeManager.Types.DeathChillerFreeze:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.DeathChiller)) return false;
-                            if (EnforceManager.Instance.waterFreeze) return false;
+                            if (EnforceManager.Instance.deathChillerFreeze) return false;
                             break;
-                        case PowerTypeManager.Types.WaterFreezeChance:
+                        case PowerTypeManager.Types.DeathChillerFreezeChance:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.DeathChiller)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.DeathChiller) < 3) return false;
-                            if (!EnforceManager.Instance.waterFreeze) return false;
+                            if (!EnforceManager.Instance.deathChillerFreeze) return false;
                             break;
-                        case PowerTypeManager.Types.WaterSlowDurationBoost:
+                        case PowerTypeManager.Types.DeathChillerSlowDurationBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.DeathChiller)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.DeathChiller) < 5) return false;
                             if (EnforceManager.Instance.waterSlowDurationBoost >= 1f) return false;
                             break;
-                        case PowerTypeManager.Types.WaterFreezeDamageBoost:
+                        case PowerTypeManager.Types.DeathChillerFreezeDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.DeathChiller)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.DeathChiller) < 7) return false;
-                            if (!EnforceManager.Instance.waterFreeze) return false;
-                            if (EnforceManager.Instance.waterFreezeDamageBoost) return false;
+                            if (!EnforceManager.Instance.deathChillerFreeze) return false;
+                            if (EnforceManager.Instance.deathChillerFreezeDamageBoost) return false;
                             break;
-                        case PowerTypeManager.Types.WaterSlowCPowerBoost:
+                        case PowerTypeManager.Types.DeathChillerSlowCPowerBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.DeathChiller)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.DeathChiller) < 9) return false;
-                            if (EnforceManager.Instance.waterSlowCPowerBoost) return false;
+                            if (EnforceManager.Instance.deathChillerSlowCPowerBoost) return false;
                             break;
-                        case PowerTypeManager.Types.WaterAttackRateBoost:
+                        case PowerTypeManager.Types.DeathChillerAttackRateBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.DeathChiller)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.DeathChiller) < 11) return false;
                             if (EnforceManager.Instance.waterAttackRateBoost >= 0.24f) return false;
                             break;
-                        case PowerTypeManager.Types.WaterGlobalFreeze:
+                        case PowerTypeManager.Types.DeathChillerGlobalFreeze:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.DeathChiller)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.DeathChiller) < 13) return false;
-                            if (EnforceManager.Instance.waterGlobalFreeze) return false;
+                            if (EnforceManager.Instance.deathChillerGlobalFreeze) return false;
                             break;
                         // Unit Orc
-                        case PowerTypeManager.Types.PhysicalSwordScaleIncrease:
+                        case PowerTypeManager.Types.OrcSwordScaleIncrease:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Orc)) return false;
-                            if (EnforceManager.Instance.physicalSwordScaleIncrease) return false;
+                            if (EnforceManager.Instance.orcSwordScaleIncrease) return false;
                             break;
-                        case PowerTypeManager.Types.PhysicalSwordAddition:
+                        case PowerTypeManager.Types.OrcSwordAddition:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Orc)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Orc) < 3) return false;
-                            if (EnforceManager.Instance.physicalSwordAddition) return false;
+                            if (EnforceManager.Instance.orcSwordAddition) return false;
                             break;
-                        case PowerTypeManager.Types.PhysicalAttackSpeedBoost:
+                        case PowerTypeManager.Types.OrcAttackSpeedBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Orc)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Orc) < 5) return false;
                             if (EnforceManager.Instance.physicalAttackSpeedBoost >= 0.36f) return false;
                             break;
-                        case PowerTypeManager.Types.PhysicalRatePerAttack:
+                        case PowerTypeManager.Types.OrcRatePerAttack:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Orc)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Orc) < 7) return false;
-                            if (EnforceManager.Instance.physicalRatePerAttack) return false;
+                            if (EnforceManager.Instance.orcRatePerAttack) return false;
                             break;
-                        case PowerTypeManager.Types.PhysicalBindBleed:
+                        case PowerTypeManager.Types.OrcBindBleed:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Orc)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Orc) < 9) return false;
-                            if (EnforceManager.Instance.physicalBindBleed) return false;
+                            if (EnforceManager.Instance.orcBindBleed) return false;
                             break;
-                        case PowerTypeManager.Types.PhysicalDamageBoost:
+                        case PowerTypeManager.Types.OrcDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Orc)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Orc) < 11) return false;
                             if (EnforceManager.Instance.physicalDamageBoost >= 0.18f) return false;
                             break;
-                        case PowerTypeManager.Types.PhysicalBleedDuration:
+                        case PowerTypeManager.Types.OrcBleedDuration:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Orc)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Orc) < 13) return false;
-                            if (!EnforceManager.Instance.physicalBindBleed) return false;
-                            if (EnforceManager.Instance.physicalBleedDuration) return false;
+                            if (!EnforceManager.Instance.orcBindBleed) return false;
+                            if (EnforceManager.Instance.orcBleedDuration) return false;
                             break;
                         // Unit Fishman
-                        case PowerTypeManager.Types.Water2Freeze:
+                        case PowerTypeManager.Types.FishmanFreeze:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Fishman)) return false;
-                            if (EnforceManager.Instance.water2Freeze) return false;
+                            if (EnforceManager.Instance.fishmanFreeze) return false;
                             break;
-                        case PowerTypeManager.Types.Water2SlowPowerBoost:
+                        case PowerTypeManager.Types.FishmanSlowPowerBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Fishman)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Fishman) < 3) return false;
-                            if (EnforceManager.Instance.water2SlowPowerBoost) return false;
+                            if (EnforceManager.Instance.fishmanSlowPowerBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Water2FreezeTimeBoost:
+                        case PowerTypeManager.Types.FishmanFreezeTimeBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Fishman)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Fishman) < 5) return false;
-                            if (!EnforceManager.Instance.water2Freeze) return false;
-                            if (EnforceManager.Instance.water2FreezeTimeBoost) return false;
+                            if (!EnforceManager.Instance.fishmanFreeze) return false;
+                            if (EnforceManager.Instance.fishmanFreezeTimeBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Water2DamageBoost:
+                        case PowerTypeManager.Types.FishmanDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Fishman)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Fishman) < 7) return false;
                             if (EnforceManager.Instance.water2DamageBoost >= 0.24f) return false;
                             break;
-                        case PowerTypeManager.Types.Water2FreezeChanceBoost:
+                        case PowerTypeManager.Types.FishmanFreezeChanceBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Fishman)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Fishman) < 9) return false;
-                            if (!EnforceManager.Instance.water2Freeze) return false;
-                            if (EnforceManager.Instance.water2FreezeChanceBoost) return false;
+                            if (!EnforceManager.Instance.fishmanFreeze) return false;
+                            if (EnforceManager.Instance.fishmanFreezeChanceBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Water2FreezeDamageBoost:
+                        case PowerTypeManager.Types.FishmanFreezeDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Fishman)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Fishman) < 11) return false;
-                            if (!EnforceManager.Instance.water2Freeze) return false;
-                            if (EnforceManager.Instance.water2FreezeDamageBoost) return false;
+                            if (!EnforceManager.Instance.fishmanFreeze) return false;
+                            if (EnforceManager.Instance.fishmanFreezeDamageBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Water2SlowTimeBoost:
+                        case PowerTypeManager.Types.FishmanSlowTimeBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Fishman)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Fishman) < 13) return false;
                             if (EnforceManager.Instance.water2SlowTimeBoost >= 0.5f) return false;
                             break;
                         //Unit Skeleton
-                        case PowerTypeManager.Types.PoisonPerHitEffect:
+                        case PowerTypeManager.Types.SkeletonPerHitEffect:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Skeleton)) return false;
-                            if (EnforceManager.Instance.poisonPerHitEffect) return false;
+                            if (EnforceManager.Instance.skeletonPerHitEffect) return false;
                             break;
-                        case PowerTypeManager.Types.PoisonBleedingEnemyDamageBoost:
+                        case PowerTypeManager.Types.SkeletonBleedingEnemyDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Skeleton)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Skeleton) < 3) return false;
-                            if (EnforceManager.Instance.poisonBleedingEnemyDamageBoost) return false;
+                            if (EnforceManager.Instance.skeletonBleedingEnemyDamageBoost) return false;
                             break;
-                        case PowerTypeManager.Types.PoisonDamagePerBoost:
+                        case PowerTypeManager.Types.SkeletonDamagePerBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Skeleton)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Skeleton) < 5) return false;
-                            if (EnforceManager.Instance.poisonDamagePerBoost) return false;
+                            if (EnforceManager.Instance.skeletonDamagePerBoost) return false;
                             break;
-                        case PowerTypeManager.Types.PoisonDamageBoost:
+                        case PowerTypeManager.Types.SkeletonDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Skeleton)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Skeleton) < 7) return false;
-                            if (EnforceManager.Instance.poisonDamageBoost) return false;
+                            if (EnforceManager.Instance.skeletonDamageBoost) return false;
                             break;
-                        case PowerTypeManager.Types.PoisonDotDamageBoost:
+                        case PowerTypeManager.Types.SkeletonDotDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Skeleton)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Skeleton) < 9) return false;
-                            if (!EnforceManager.Instance.poisonPerHitEffect) return false;
-                            if (EnforceManager.Instance.poisonDotDamageBoost) return false;
+                            if (!EnforceManager.Instance.skeletonPerHitEffect) return false;
+                            if (EnforceManager.Instance.skeletonDotDamageBoost) return false;
                             break;
-                        case PowerTypeManager.Types.PoisonAttackSpeedIncrease:
+                        case PowerTypeManager.Types.SkeletonAttackSpeedIncrease:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Skeleton)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Skeleton) < 11) return false;
                             if (EnforceManager.Instance.poisonAttackSpeedIncrease >= 0.24f) return false;
                             break;
-                        case PowerTypeManager.Types.PoisonDurationBoost:
+                        case PowerTypeManager.Types.SkeletonDurationBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Skeleton)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Skeleton) < 13) return false;
-                            if (!EnforceManager.Instance.poisonPerHitEffect) return false;
-                            if (EnforceManager.Instance.poisonDurationBoost) return false;
+                            if (!EnforceManager.Instance.skeletonPerHitEffect) return false;
+                            if (EnforceManager.Instance.skeletonDurationBoost) return false;
                             break;
                         //Unit Phoenix
-                        case PowerTypeManager.Types.Fire2FreezeDamageBoost:
+                        case PowerTypeManager.Types.PhoenixFreezeDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Phoenix)) return false;
-                            if (EnforceManager.Instance.fire2FreezeDamageBoost) return false;
+                            if (EnforceManager.Instance.phoenixFreezeDamageBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Fire2BurnDurationBoost:
+                        case PowerTypeManager.Types.PhoenixBurnDurationBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Phoenix)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Phoenix) < 3) return false;
-                            if (EnforceManager.Instance.fire2BurnDurationBoost) return false;
+                            if (EnforceManager.Instance.phoenixBurnDurationBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Fire2ChangeProperty:
+                        case PowerTypeManager.Types.PhoenixChangeProperty:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Phoenix)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Phoenix) < 5) return false;
-                            if (EnforceManager.Instance.fire2ChangeProperty) return false;
+                            if (EnforceManager.Instance.phoenixChangeProperty) return false;
                             break;
-                        case PowerTypeManager.Types.Fire2DamageBoost:
+                        case PowerTypeManager.Types.PhoenixDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Phoenix)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Phoenix) < 7) return false;
                             if (EnforceManager.Instance.fire2DamageBoost >= 0.24f) return false;
                             break;
-                        case PowerTypeManager.Types.Fire2RangeBoost:
+                        case PowerTypeManager.Types.PhoenixRangeBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Phoenix)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Phoenix) < 9) return false;
-                            if (EnforceManager.Instance.fire2RangeBoost) return false;
+                            if (EnforceManager.Instance.phoenixRangeBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Fire2RateBoost:
+                        case PowerTypeManager.Types.PhoenixRateBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Phoenix)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Phoenix) < 11) return false;
-                            if (EnforceManager.Instance.fire2RateBoost) return false;
+                            if (EnforceManager.Instance.phoenixRateBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Fire2BossDamageBoost:
+                        case PowerTypeManager.Types.PhoenixBossDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Phoenix)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Phoenix) < 13) return false;
-                            if (EnforceManager.Instance.fire2BossDamageBoost) return false;
+                            if (EnforceManager.Instance.phoenixBossDamageBoost) return false;
                             break;
                         //Unit Beholder
-                        case PowerTypeManager.Types.FireBurnPerAttackEffect:
+                        case PowerTypeManager.Types.BeholderBurnPerAttackEffect:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Beholder)) return false;
-                            if (EnforceManager.Instance.fireBurnPerAttackEffect) return false;
+                            if (EnforceManager.Instance.beholderBurnPerAttackEffect) return false;
                             break;
-                        case PowerTypeManager.Types.FireStackOverlap:
+                        case PowerTypeManager.Types.BeholderStackOverlap:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Beholder)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Beholder) < 3) return false;
-                            if (!EnforceManager.Instance.fireBurnPerAttackEffect) return false;
-                            if (EnforceManager.Instance.fireStackOverlap) return false;
+                            if (!EnforceManager.Instance.beholderBurnPerAttackEffect) return false;
+                            if (EnforceManager.Instance.beholderStackOverlap) return false;
                             break;
-                        case PowerTypeManager.Types.FireProjectileBounceDamage:
+                        case PowerTypeManager.Types.BeholderProjectileBounceDamage:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Beholder)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Beholder) < 5) return false;
-                            if (EnforceManager.Instance.fireProjectileBounceDamage) return false;
+                            if (EnforceManager.Instance.beholderProjectileBounceDamage) return false;
                             break;
-                        case PowerTypeManager.Types.FireBurnedEnemyExplosion:
+                        case PowerTypeManager.Types.BeholderBurnedEnemyExplosion:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Beholder)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Beholder) < 7) return false;
-                            if (EnforceManager.Instance.fireBurnedEnemyExplosion) return false;
+                            if (EnforceManager.Instance.beholderBurnedEnemyExplosion) return false;
                             break;
-                        case PowerTypeManager.Types.FireAttackSpeedBoost:
+                        case PowerTypeManager.Types.BeholderAttackSpeedBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Beholder)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Beholder) < 9) return false;
                             if (EnforceManager.Instance.fireAttackSpeedBoost >= 0.24f) return false;
                             break;
-                        case PowerTypeManager.Types.FireProjectileSpeedIncrease:
+                        case PowerTypeManager.Types.BeholderProjectileSpeedIncrease:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Beholder)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Beholder) < 11) return false;
-                            if (EnforceManager.Instance.fireProjectileSpeedIncrease) return false;
+                            if (EnforceManager.Instance.beholderProjectileSpeedIncrease) return false;
                             break;
-                        case PowerTypeManager.Types.FireProjectileBounceIncrease:
+                        case PowerTypeManager.Types.BeholderProjectileBounceIncrease:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Beholder)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Beholder) < 13) return false;
-                            if (!EnforceManager.Instance.fireProjectileBounceDamage) return false;
-                            if (EnforceManager.Instance.fireProjectileBounceIncrease) return false;
+                            if (!EnforceManager.Instance.beholderProjectileBounceDamage) return false;
+                            if (EnforceManager.Instance.beholderProjectileBounceIncrease) return false;
                             break;
                         // Unit Cobra
-                        case PowerTypeManager.Types.Poison2StunToChance:
+                        case PowerTypeManager.Types.CobraStunToChance:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Cobra)) return false;
-                            if (EnforceManager.Instance.poison2StunToChance) return false;
+                            if (EnforceManager.Instance.cobra2StunToChance) return false;
                             break;
-                        case PowerTypeManager.Types.Poison2RangeBoost:
+                        case PowerTypeManager.Types.CobraRangeBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Cobra)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Cobra) < 3) return false;
-                            if (EnforceManager.Instance.poison2RangeBoost) return false;
+                            if (EnforceManager.Instance.cobraRangeBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Poison2DotDamageBoost:
+                        case PowerTypeManager.Types.CobraDotDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Cobra)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Cobra) < 5) return false;
-                            if (EnforceManager.Instance.poison2DotDamageBoost) return false;
+                            if (EnforceManager.Instance.cobraDotDamageBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Poison2StunTimeBoost:
+                        case PowerTypeManager.Types.CobraStunTimeBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Cobra)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Cobra) < 7) return false;
-                            if (!EnforceManager.Instance.poison2StunToChance) return false;
+                            if (!EnforceManager.Instance.cobra2StunToChance) return false;
                             if (EnforceManager.Instance.poison2StunTimeBoost >= 0.5f) return false;
                             break;
-                        case PowerTypeManager.Types.Poison2SpawnPoisonArea:
+                        case PowerTypeManager.Types.CobraSpawnPoisonArea:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Cobra)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Cobra) < 9) return false;
-                            if (EnforceManager.Instance.poison2SpawnPoisonArea) return false;
+                            if (EnforceManager.Instance.cobraSpawnPoisonArea) return false;
                             break;
-                        case PowerTypeManager.Types.Poison2RateBoost:
+                        case PowerTypeManager.Types.CobraRateBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Cobra)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Cobra) < 11) return false;
-                            if (EnforceManager.Instance.poison2RateBoost) return false;
+                            if (EnforceManager.Instance.cobraRateBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Poison2PoolTimeBoost:
+                        case PowerTypeManager.Types.CobraPoolTimeBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Cobra)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Cobra) < 13) return false;
-                            if (!EnforceManager.Instance.poison2SpawnPoisonArea) return false;
-                            if (EnforceManager.Instance.poison2PoolTimeBoost) return false;
+                            if (!EnforceManager.Instance.cobraSpawnPoisonArea) return false;
+                            if (EnforceManager.Instance.cobraPoolTimeBoost) return false;
                             break;
                         // Unit J
-                        case PowerTypeManager.Types.Physical2CastleCrushStatBoost:                         
+                        case PowerTypeManager.Types.BerserkerCastleCrushStatBoost:                         
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Berserker)) return false;
-                            if (EnforceManager.Instance.physical2CastleCrushStatBoost) return false;
+                            if (EnforceManager.Instance.berserkerCastleCrushStatBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Physical2FifthBoost:
+                        case PowerTypeManager.Types.BerserkerThirdBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Berserker)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Berserker) < 3) return false;
-                            if (EnforceManager.Instance.physical2FifthBoost) return false;
+                            if (EnforceManager.Instance.berserkerThirdBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Physical2BleedTimeBoost:
+                        case PowerTypeManager.Types.BerserkerBleedTimeBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Berserker)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Berserker) < 5) return false;
-                            if (EnforceManager.Instance.physical2BleedTimeBoost) return false;
+                            if (EnforceManager.Instance.berserkerBleedTimeBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Physical2PoisonDamageBoost:
+                        case PowerTypeManager.Types.BerserkerPoisonDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Berserker)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Berserker) < 7) return false;
-                            if (EnforceManager.Instance.physical2PoisonDamageBoost) return false;
+                            if (EnforceManager.Instance.berserkerPoisonDamageBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Physical2RangeBoost:
+                        case PowerTypeManager.Types.BerserkerRangeBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Berserker)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Berserker) < 9) return false;
-                            if (EnforceManager.Instance.physical2RangeBoost) return false;
+                            if (EnforceManager.Instance.berserkerRangeBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Physical2RateBoost:
+                        case PowerTypeManager.Types.BerserkerRateBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Berserker)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Berserker) < 11) return false;
                             if (EnforceManager.Instance.physical2RateBoost >= 0.36f) return false;
                             break;
-                        case PowerTypeManager.Types.Physical2BossBoost:
+                        case PowerTypeManager.Types.BerserkerBossBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Berserker)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Berserker) < 13) return false;
-                            if (EnforceManager.Instance.physical2BossBoost) return false;
+                            if (EnforceManager.Instance.berserkerBossBoost) return false;
                             break;
                         // Unit DarkElf
-                        case PowerTypeManager.Types.Dark2BackBoost:
+                        case PowerTypeManager.Types.DarkElfBackBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.DarkElf)) return false;
-                            if (EnforceManager.Instance.dark2BackBoost) return false;
+                            if (EnforceManager.Instance.darkElfBackBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Dark2DualAttack:
+                        case PowerTypeManager.Types.DarkElfDualAttack:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.DarkElf)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.DarkElf) < 3) return false;
-                            if (EnforceManager.Instance.dark2DualAttack) return false;
+                            if (EnforceManager.Instance.darkElfDualAttack) return false;
                             break;
-                        case PowerTypeManager.Types.Dark2StatusDamageBoost:
+                        case PowerTypeManager.Types.DarkElfStatusDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.DarkElf)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.DarkElf) < 5) return false;
-                            if (EnforceManager.Instance.dark2StatusDamageBoost) return false;
+                            if (EnforceManager.Instance.darkElfStatusDamageBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Dark2ExplosionBoost:
+                        case PowerTypeManager.Types.DarkElfExplosionBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.DarkElf)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.DarkElf) < 7) return false;
-                            if (EnforceManager.Instance.dark2ExplosionBoost) return false;
+                            if (EnforceManager.Instance.darkElfExplosionBoost) return false;
                             break;
-                        case PowerTypeManager.Types.Dark2DoubleAttack:
+                        case PowerTypeManager.Types.DarkElfDoubleAttack:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.DarkElf)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.DarkElf) < 9) return false;
-                            if (EnforceManager.Instance.dark2DoubleAttack) return false;
+                            if (EnforceManager.Instance.darkElfDoubleAttack) return false;
                             break;
-                        case PowerTypeManager.Types.Dark2StatusPoison:
+                        case PowerTypeManager.Types.DarkElfStatusPoison:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.DarkElf)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.DarkElf) < 11) return false;
-                            if (EnforceManager.Instance.dark2StatusPoison) return false;
+                            if (EnforceManager.Instance.darkElfStatusPoison) return false;
                             break;
-                        case PowerTypeManager.Types.Dark2SameEnemyBoost:
+                        case PowerTypeManager.Types.DarkElfSameEnemyBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.DarkElf)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.DarkElf) < 13) return false;
-                            if (EnforceManager.Instance.dark2SameEnemyBoost) return false;
+                            if (EnforceManager.Instance.darkElfSameEnemyBoost) return false;
                             break;
                     }
                     return true;
@@ -850,26 +846,22 @@ namespace Script.RewardScript
         }
         private void LevelUpDisplay(IReadOnlyList<Data> powerUps)
         {
-            LevelUpDisplayText(exp1Button, exp1Text, icon1, exp1BtnBadge, powerUps[0], language);
-            LevelUpDisplayText(exp2Button, exp2Text, icon2, exp2BtnBadge, powerUps[1], language);
-            LevelUpDisplayText(exp3Button, exp3Text, icon3, exp3BtnBadge, powerUps[2], language);
+            LevelUpDisplayText(exp1Button, exp1Text, icon1, exp1BtnBadge, powerUps[0]);
+            LevelUpDisplayText(exp2Button, exp2Text, icon2, exp2BtnBadge, powerUps[1]);
+            LevelUpDisplayText(exp3Button, exp3Text, icon3, exp3BtnBadge, powerUps[2]);
         }
-        private void LevelUpDisplayText(Button expButton, TMP_Text powerText, Image icon, Image btnBadge, Data powerUp, Language selectedLanguage)
+        private void LevelUpDisplayText(Button expButton, TMP_Text powerText, Image icon, Image btnBadge, Data powerUp)
         {
-            var translationKey = powerUp.Type.ToString();
-            var powerTextTranslation = selectedLanguage.GetTranslation(translationKey);
-            var finalPowerText = powerTextTranslation;
-            var placeholderValues = new Dictionary<string, Func<double>> {
+            var finalDesc = powerUp.Desc;
+            var placeholderValues = new Dictionary<string, Func<double>>
+            {
                 { "{p}", () => powerUp.Property[0]},
-                { "{powerUp.Property[0]}",() => powerUp.Property[0]},
                 { "{15*EnforceManager.Instance.slowCount}", () => 15 * EnforceManager.Instance.slowCount },
                 { "{EnforceManager.Instance.expPercentage}", () => EnforceManager.Instance.expPercentage },
                 { "{EnforceManager.Instance.highLevelCharacterCount}", () => EnforceManager.Instance.highLevelCharacterCount},
-
             };
-            finalPowerText = placeholderValues.Aggregate(finalPowerText, (current, placeholder) 
-                => current.Replace(placeholder.Key, placeholder.Value().ToString(CultureInfo.CurrentCulture)));
-            var finalTranslation = finalPowerText.Replace("||", "\n");
+            finalDesc = placeholderValues.Aggregate(finalDesc, (current, placeholder) => current.Replace(placeholder.Key, placeholder.Value().ToString(CultureInfo.CurrentCulture)));
+            var finalTranslation = finalDesc.Replace("||", "\n");
 
             icon.sprite = powerUp.Icon;
             btnBadge.sprite = powerUp.BtnColor;
@@ -880,7 +872,6 @@ namespace Script.RewardScript
                 PowerTypeManager.Types.GroupDamage => finalTranslation,
                 PowerTypeManager.Types.GroupAtkSpeed => finalTranslation,
                 PowerTypeManager.Types.StepDirection => finalTranslation,
-                PowerTypeManager.Types.NextStep => finalTranslation,
                 PowerTypeManager.Types.Exp => finalTranslation,
                 PowerTypeManager.Types.CastleRecovery => finalTranslation,
                 PowerTypeManager.Types.CastleMaxHp => finalTranslation,
@@ -888,83 +879,83 @@ namespace Script.RewardScript
                 PowerTypeManager.Types.NextStage => finalTranslation,
                 PowerTypeManager.Types.Gold => finalTranslation,
                 PowerTypeManager.Types.Match5Upgrade => finalTranslation,
-                PowerTypeManager.Types.Dark3FifthAttackBoost => finalTranslation,
-                PowerTypeManager.Types.Dark3BleedAttack => finalTranslation,
-                PowerTypeManager.Types.Dark3PoisonDamageBoost => finalTranslation,
-                PowerTypeManager.Types.Dark3BleedDurationBoost => finalTranslation,
-                PowerTypeManager.Types.Dark3ShackledExplosion => finalTranslation,
-                PowerTypeManager.Types.Dark3DamageBoost => finalTranslation,
-                PowerTypeManager.Types.Dark3RateBoost => finalTranslation,
-                PowerTypeManager.Types.DarkFifthAttackDamageBoost => finalTranslation,
-                PowerTypeManager.Types.DarkAttackSpeedBoost => finalTranslation,
-                PowerTypeManager.Types.DarkAttackPowerBoost => finalTranslation,
-                PowerTypeManager.Types.DarkKnockBackChance => finalTranslation,
-                PowerTypeManager.Types.DarkStatusAilmentDamageBoost => finalTranslation,
-                PowerTypeManager.Types.DarkRangeIncrease => finalTranslation,
-                PowerTypeManager.Types.DarkStatusAilmentSlowEffect => finalTranslation,
-                PowerTypeManager.Types.WaterFreeze => finalTranslation,
-                PowerTypeManager.Types.WaterFreezeChance => finalTranslation,
-                PowerTypeManager.Types.WaterSlowDurationBoost => finalTranslation,
-                PowerTypeManager.Types.WaterFreezeDamageBoost => finalTranslation,
-                PowerTypeManager.Types.WaterSlowCPowerBoost => finalTranslation,
-                PowerTypeManager.Types.WaterAttackRateBoost => finalTranslation,
-                PowerTypeManager.Types.WaterGlobalFreeze => finalTranslation,
-                PowerTypeManager.Types.PhysicalSwordScaleIncrease => finalTranslation,
-                PowerTypeManager.Types.PhysicalSwordAddition => finalTranslation,
-                PowerTypeManager.Types.PhysicalAttackSpeedBoost => finalTranslation,
-                PowerTypeManager.Types.PhysicalRatePerAttack => finalTranslation,
-                PowerTypeManager.Types.PhysicalBindBleed => finalTranslation,
-                PowerTypeManager.Types.PhysicalDamageBoost => finalTranslation,
-                PowerTypeManager.Types.PhysicalBleedDuration => finalTranslation,
-                PowerTypeManager.Types.Water2Freeze => finalTranslation,
-                PowerTypeManager.Types.Water2SlowPowerBoost => finalTranslation,
-                PowerTypeManager.Types.Water2FreezeTimeBoost => finalTranslation,
-                PowerTypeManager.Types.Water2DamageBoost => finalTranslation,
-                PowerTypeManager.Types.Water2FreezeChanceBoost => finalTranslation,
-                PowerTypeManager.Types.Water2FreezeDamageBoost => finalTranslation,
-                PowerTypeManager.Types.Water2SlowTimeBoost => finalTranslation,
-                PowerTypeManager.Types.PoisonPerHitEffect => finalTranslation,
-                PowerTypeManager.Types.PoisonBleedingEnemyDamageBoost => finalTranslation,
-                PowerTypeManager.Types.PoisonDamagePerBoost => finalTranslation,
-                PowerTypeManager.Types.PoisonDamageBoost => finalTranslation,
-                PowerTypeManager.Types.PoisonDotDamageBoost => finalTranslation,
-                PowerTypeManager.Types.PoisonAttackSpeedIncrease => finalTranslation,
-                PowerTypeManager.Types.PoisonDurationBoost => finalTranslation,
-                PowerTypeManager.Types.Fire2FreezeDamageBoost => finalTranslation,
-                PowerTypeManager.Types.Fire2BurnDurationBoost => finalTranslation,
-                PowerTypeManager.Types.Fire2ChangeProperty => finalTranslation,
-                PowerTypeManager.Types.Fire2DamageBoost => finalTranslation,
-                PowerTypeManager.Types.Fire2RangeBoost => finalTranslation,
-                PowerTypeManager.Types.Fire2RateBoost => finalTranslation,
-                PowerTypeManager.Types.Fire2BossDamageBoost => finalTranslation,
-                PowerTypeManager.Types.FireBurnPerAttackEffect => finalTranslation,
-                PowerTypeManager.Types.FireStackOverlap => finalTranslation,
-                PowerTypeManager.Types.FireProjectileBounceDamage => finalTranslation,
-                PowerTypeManager.Types.FireBurnedEnemyExplosion => finalTranslation,
-                PowerTypeManager.Types.FireAttackSpeedBoost => finalTranslation,
-                PowerTypeManager.Types.FireProjectileSpeedIncrease => finalTranslation,
-                PowerTypeManager.Types.FireProjectileBounceIncrease => finalTranslation,
-                PowerTypeManager.Types.Poison2StunToChance => finalTranslation,
-                PowerTypeManager.Types.Poison2RangeBoost => finalTranslation,
-                PowerTypeManager.Types.Poison2DotDamageBoost => finalTranslation,
-                PowerTypeManager.Types.Poison2StunTimeBoost => finalTranslation,
-                PowerTypeManager.Types.Poison2SpawnPoisonArea => finalTranslation,
-                PowerTypeManager.Types.Poison2RateBoost => finalTranslation,
-                PowerTypeManager.Types.Poison2PoolTimeBoost => finalTranslation,
-                PowerTypeManager.Types.Physical2CastleCrushStatBoost => finalTranslation,
-                PowerTypeManager.Types.Physical2FifthBoost => finalTranslation,
-                PowerTypeManager.Types.Physical2BleedTimeBoost => finalTranslation,
-                PowerTypeManager.Types.Physical2PoisonDamageBoost => finalTranslation,
-                PowerTypeManager.Types.Physical2RangeBoost => finalTranslation,
-                PowerTypeManager.Types.Physical2RateBoost => finalTranslation,
-                PowerTypeManager.Types.Physical2BossBoost => finalTranslation,
-                PowerTypeManager.Types.Dark2BackBoost => finalTranslation,
-                PowerTypeManager.Types.Dark2DualAttack => finalTranslation,
-                PowerTypeManager.Types.Dark2StatusDamageBoost => finalTranslation,
-                PowerTypeManager.Types.Dark2ExplosionBoost => finalTranslation,
-                PowerTypeManager.Types.Dark2DoubleAttack => finalTranslation,
-                PowerTypeManager.Types.Dark2StatusPoison => finalTranslation,
-                PowerTypeManager.Types.Dark2SameEnemyBoost => finalTranslation,
+                PowerTypeManager.Types.OctopusThirdAttackBoost => finalTranslation,
+                PowerTypeManager.Types.OctopusPoisonAttack => finalTranslation,
+                PowerTypeManager.Types.OctopusBleedDamageBoost => finalTranslation,
+                PowerTypeManager.Types.OctopusBleedDurationBoost => finalTranslation,
+                PowerTypeManager.Types.OctopusShackledExplosion => finalTranslation,
+                PowerTypeManager.Types.OctopusDamageBoost => finalTranslation,
+                PowerTypeManager.Types.OctopusRateBoost => finalTranslation,
+                PowerTypeManager.Types.OgreThirdAttackDamageBoost => finalTranslation,
+                PowerTypeManager.Types.OgreAttackSpeedBoost => finalTranslation,
+                PowerTypeManager.Types.OgreAttackPowerBoost => finalTranslation,
+                PowerTypeManager.Types.OgreKnockBackChance => finalTranslation,
+                PowerTypeManager.Types.OgreStatusAilmentDamageBoost => finalTranslation,
+                PowerTypeManager.Types.OgreRangeIncrease => finalTranslation,
+                PowerTypeManager.Types.OgreStatusAilmentSlowEffect => finalTranslation,
+                PowerTypeManager.Types.DeathChillerFreeze => finalTranslation,
+                PowerTypeManager.Types.DeathChillerFreezeChance => finalTranslation,
+                PowerTypeManager.Types.DeathChillerSlowDurationBoost => finalTranslation,
+                PowerTypeManager.Types.DeathChillerFreezeDamageBoost => finalTranslation,
+                PowerTypeManager.Types.DeathChillerSlowCPowerBoost => finalTranslation,
+                PowerTypeManager.Types.DeathChillerAttackRateBoost => finalTranslation,
+                PowerTypeManager.Types.DeathChillerGlobalFreeze => finalTranslation,
+                PowerTypeManager.Types.OrcSwordScaleIncrease => finalTranslation,
+                PowerTypeManager.Types.OrcSwordAddition => finalTranslation,
+                PowerTypeManager.Types.OrcAttackSpeedBoost => finalTranslation,
+                PowerTypeManager.Types.OrcRatePerAttack => finalTranslation,
+                PowerTypeManager.Types.OrcDamageBoost => finalTranslation,
+                PowerTypeManager.Types.OrcBindBleed => finalTranslation,
+                PowerTypeManager.Types.OrcBleedDuration => finalTranslation,
+                PowerTypeManager.Types.FishmanFreeze => finalTranslation,
+                PowerTypeManager.Types.FishmanSlowPowerBoost => finalTranslation,
+                PowerTypeManager.Types.FishmanFreezeTimeBoost => finalTranslation,
+                PowerTypeManager.Types.FishmanDamageBoost => finalTranslation,
+                PowerTypeManager.Types.FishmanFreezeChanceBoost => finalTranslation,
+                PowerTypeManager.Types.FishmanFreezeDamageBoost => finalTranslation,
+                PowerTypeManager.Types.FishmanSlowTimeBoost => finalTranslation,
+                PowerTypeManager.Types.SkeletonPerHitEffect => finalTranslation,
+                PowerTypeManager.Types.SkeletonBleedingEnemyDamageBoost => finalTranslation,
+                PowerTypeManager.Types.SkeletonDamagePerBoost => finalTranslation,
+                PowerTypeManager.Types.SkeletonDamageBoost => finalTranslation,
+                PowerTypeManager.Types.SkeletonDotDamageBoost => finalTranslation,
+                PowerTypeManager.Types.SkeletonAttackSpeedIncrease => finalTranslation,
+                PowerTypeManager.Types.SkeletonDurationBoost => finalTranslation,
+                PowerTypeManager.Types.PhoenixFreezeDamageBoost => finalTranslation,
+                PowerTypeManager.Types.PhoenixBurnDurationBoost => finalTranslation,
+                PowerTypeManager.Types.PhoenixChangeProperty => finalTranslation,
+                PowerTypeManager.Types.PhoenixDamageBoost => finalTranslation,
+                PowerTypeManager.Types.PhoenixRangeBoost => finalTranslation,
+                PowerTypeManager.Types.PhoenixRateBoost => finalTranslation,
+                PowerTypeManager.Types.PhoenixBossDamageBoost => finalTranslation,
+                PowerTypeManager.Types.BeholderBurnPerAttackEffect => finalTranslation,
+                PowerTypeManager.Types.BeholderStackOverlap => finalTranslation,
+                PowerTypeManager.Types.BeholderProjectileBounceDamage => finalTranslation,
+                PowerTypeManager.Types.BeholderBurnedEnemyExplosion => finalTranslation,
+                PowerTypeManager.Types.BeholderAttackSpeedBoost => finalTranslation,
+                PowerTypeManager.Types.BeholderProjectileSpeedIncrease => finalTranslation,
+                PowerTypeManager.Types.BeholderProjectileBounceIncrease => finalTranslation,
+                PowerTypeManager.Types.CobraStunToChance => finalTranslation,
+                PowerTypeManager.Types.CobraRangeBoost => finalTranslation,
+                PowerTypeManager.Types.CobraDotDamageBoost => finalTranslation,
+                PowerTypeManager.Types.CobraStunTimeBoost => finalTranslation,
+                PowerTypeManager.Types.CobraSpawnPoisonArea => finalTranslation,
+                PowerTypeManager.Types.CobraRateBoost => finalTranslation,
+                PowerTypeManager.Types.CobraPoolTimeBoost => finalTranslation,
+                PowerTypeManager.Types.BerserkerCastleCrushStatBoost => finalTranslation,
+                PowerTypeManager.Types.BerserkerThirdBoost => finalTranslation,
+                PowerTypeManager.Types.BerserkerBleedTimeBoost => finalTranslation,
+                PowerTypeManager.Types.BerserkerPoisonDamageBoost => finalTranslation,
+                PowerTypeManager.Types.BerserkerRangeBoost => finalTranslation,
+                PowerTypeManager.Types.BerserkerRateBoost => finalTranslation,
+                PowerTypeManager.Types.BerserkerBossBoost => finalTranslation,
+                PowerTypeManager.Types.DarkElfBackBoost => finalTranslation,
+                PowerTypeManager.Types.DarkElfDualAttack => finalTranslation,
+                PowerTypeManager.Types.DarkElfStatusDamageBoost => finalTranslation,
+                PowerTypeManager.Types.DarkElfExplosionBoost => finalTranslation,
+                PowerTypeManager.Types.DarkElfDoubleAttack => finalTranslation,
+                PowerTypeManager.Types.DarkElfStatusPoison => finalTranslation,
+                PowerTypeManager.Types.DarkElfSameEnemyBoost => finalTranslation,
                 _=> "Default Value" + powerUp.Type
             };
             expButton.onClick.RemoveAllListeners();

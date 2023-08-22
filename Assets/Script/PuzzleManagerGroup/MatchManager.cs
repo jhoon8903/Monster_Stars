@@ -31,9 +31,9 @@ namespace Script.PuzzleManagerGroup
             var swapCharPuzzleLevel = swapCharacterBase.unitPuzzleLevel;
             switch (swapCharacterBase.UnitGrade)
             {
-                case CharacterBase.UnitGrades.Green when swapCharPuzzleLevel == 5:
-                case CharacterBase.UnitGrades.Blue when swapCharPuzzleLevel == 6:
-                case CharacterBase.UnitGrades.Purple when swapCharPuzzleLevel == 7:
+                case CharacterBase.UnitGrades.G when swapCharPuzzleLevel == 5:
+                case CharacterBase.UnitGrades.B when swapCharPuzzleLevel == 6:
+                case CharacterBase.UnitGrades.P when swapCharPuzzleLevel == 7:
                     return false;
             }
 

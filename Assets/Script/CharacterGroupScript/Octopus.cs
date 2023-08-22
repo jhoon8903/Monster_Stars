@@ -28,8 +28,8 @@ namespace Script.CharacterGroupScript
             base.Initialize();
             unitGroup = UnitGroups.Octopus;
             UnitProperty = UnitProperties.Darkness;
-            UnitGrade = UnitGrades.Blue;
-            UnitDesc = "Octopus Unit A / Blue Grade";
+            UnitGrade = UnitGrades.B;
+            UnitDesc = "Octopus Unit A / B Grade";
             SetLevel(1);
         }
         public override Sprite GetSpriteForLevel(int characterObjectLevel)
@@ -96,7 +96,7 @@ namespace Script.CharacterGroupScript
             UnitLevelDamage = unitPeaceLevel > 1 ? unitPeaceLevel * 5f - 1f : 0f;
             Type = Types.Character;
             unitGroup = UnitGroups.Octopus;
-            DefaultDamage = UnitLevelDamage + 36f * (EnforceManager.Instance.dark3DamageBoost ? 1.19f : 1f) * level switch
+            DefaultDamage = UnitLevelDamage + 36f * (EnforceManager.Instance.octopusDamageBoost ? 1.19f : 1f) * level switch
             {
                 <=  2 => 1f,
                 3 => 1.7f,
@@ -105,7 +105,7 @@ namespace Script.CharacterGroupScript
                 6 => 2.6F
             };
             defaultAtkRate = 1f * (1f - EnforceManager.Instance.dark3RateBoost);
-            bleedTime = EnforceManager.Instance.dark3BleedDurationBoost? 5f : 3f;
+            bleedTime = EnforceManager.Instance.octopusBleedDurationBoost? 5f : 3f;
             dotDamage = DefaultDamage * 0.2f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;

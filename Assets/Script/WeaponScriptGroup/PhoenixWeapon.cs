@@ -21,7 +21,7 @@ namespace Script.WeaponScriptGroup
 
             if (_pivotTween == null || _pivotTween.IsComplete())
             {
-                if (EnforceManager.Instance.physicalSwordAddition)
+                if (EnforceManager.Instance.orcSwordAddition)
                 {
                     secondSword.SetActive(true);
                     secondSword.GetComponent<WeaponBase>().InitializeWeapon(CharacterBase);

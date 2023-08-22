@@ -75,7 +75,7 @@ namespace Script.WeaponScriptGroup
                     switch (characterBase.unitGroup)
                     {
                        case CharacterBase.UnitGroups.Fishman:
-                           if (EnforceManager.Instance.water2Freeze && Chance(characterBase.effectChance))
+                           if (EnforceManager.Instance.fishmanFreeze && Chance(characterBase.effectChance))
                            {
                                enemyObject.FreezeStatus(true, characterBase);
                            }
@@ -85,7 +85,7 @@ namespace Script.WeaponScriptGroup
                            }
                            break;
                        case CharacterBase.UnitGroups.DeathChiller:
-                           if (EnforceManager.Instance.waterFreeze && Chance(characterBase.effectChance))
+                           if (EnforceManager.Instance.deathChillerFreeze && Chance(characterBase.effectChance))
                            {
                                enemyObject.FreezeStatus(true, characterBase);
                            }
@@ -100,19 +100,19 @@ namespace Script.WeaponScriptGroup
                     switch (characterBase.unitGroup)
                     {
                         case CharacterBase.UnitGroups.Octopus:
-                            if (EnforceManager.Instance.dark3BleedAttack && Chance(20))
+                            if (EnforceManager.Instance.octopusPoisonAttack && Chance(20))
                             {
-                                enemyObject.BleedStatus(true, characterBase);
+                                enemyObject.PoisonStatus(true, characterBase);
                             }
                             break;
                         case CharacterBase.UnitGroups.Ogre:
-                            if (EnforceManager.Instance.darkKnockBackChance && Chance(characterBase.effectChance))
+                            if (EnforceManager.Instance.ogreKnockBackChance && Chance(characterBase.effectChance))
                             {
                                 enemyObject.KnockBackStatus(true, characterBase);
                             }
                             break;
                         case CharacterBase.UnitGroups.DarkElf:
-                            if (EnforceManager.Instance.dark2StatusPoison)
+                            if (EnforceManager.Instance.darkElfStatusPoison)
                             {
                                 if (enemyObject.statusList.Count == 0)
                                 {
@@ -126,14 +126,14 @@ namespace Script.WeaponScriptGroup
                     switch (characterBase.unitGroup)
                     {
                         case CharacterBase.UnitGroups.Skeleton:
-                            if (EnforceManager.Instance.poisonPerHitEffect)
+                            if (EnforceManager.Instance.skeletonPerHitEffect)
                             {
                                 enemyObject.PoisonStatus(true, characterBase);
                             }
                             break;
                         case CharacterBase.UnitGroups.Cobra:
                             enemyObject.PoisonStatus(true, characterBase);
-                            if ( EnforceManager.Instance.poison2StunToChance && Chance(characterBase.effectChance))
+                            if ( EnforceManager.Instance.cobra2StunToChance && Chance(characterBase.effectChance))
                             {
                                 enemyObject.StunStatus(true, characterBase);
                             }
@@ -147,7 +147,7 @@ namespace Script.WeaponScriptGroup
                             enemyObject.BurnStatus(true, characterBase);
                             break;
                         case CharacterBase.UnitGroups.Beholder:
-                            if (EnforceManager.Instance.fireBurnPerAttackEffect)
+                            if (EnforceManager.Instance.beholderBurnPerAttackEffect)
                             {
                                 enemyObject.BurnStatus(true, characterBase);
                             }
@@ -158,7 +158,7 @@ namespace Script.WeaponScriptGroup
                     switch (characterBase.unitGroup)
                     {
                         case CharacterBase.UnitGroups.Orc:
-                            if (EnforceManager.Instance.physicalBindBleed && enemyObject.isBind)
+                            if (EnforceManager.Instance.orcBindBleed && enemyObject.isBind)
                             {
                                 enemyObject.BleedStatus(true, characterBase);
                             }
@@ -180,7 +180,7 @@ namespace Script.WeaponScriptGroup
                 damage *= 1.15f;
             }
 
-            if (enemyBase.isFreeze || EnforceManager.Instance.water2FreezeDamageBoost)
+            if (enemyBase.isFreeze || EnforceManager.Instance.fishmanFreezeDamageBoost)
             {
                 damage *= 1.15f;
             }
@@ -188,7 +188,7 @@ namespace Script.WeaponScriptGroup
             switch (characterBase.unitGroup)
             {
                 case CharacterBase.UnitGroups.Octopus:
-                    if (EnforceManager.Instance.dark3PoisonDamageBoost && enemyBase.isPoison)
+                    if (EnforceManager.Instance.octopusBleedDamageBoost && enemyBase.isBleed)
                     {
                         damage *= 1.5f;
                     }
@@ -200,7 +200,7 @@ namespace Script.WeaponScriptGroup
                 case CharacterBase.UnitGroups.Ogre:
                     if (enemyBase.isFreeze ||enemyBase.isBind || enemyBase.isSlow || enemyBase.isBleed || enemyBase.isBurn || enemyBase.isPoison)
                     {
-                        if (EnforceManager.Instance.darkStatusAilmentDamageBoost)
+                        if (EnforceManager.Instance.ogreStatusAilmentDamageBoost)
                         {
                             if (_random.Next(100) < 50)
                             {
@@ -232,7 +232,7 @@ namespace Script.WeaponScriptGroup
                    }
                    return damage;
                 case CharacterBase.UnitGroups.Skeleton:
-                   if (EnforceManager.Instance.poisonBleedingEnemyDamageBoost && enemyBase.isBleed )
+                   if (EnforceManager.Instance.skeletonBleedingEnemyDamageBoost && enemyBase.isBleed )
                    {
                        damage *= 1.8f;
                    }
@@ -242,17 +242,17 @@ namespace Script.WeaponScriptGroup
                    }
                    return damage;
                 case CharacterBase.UnitGroups.Phoenix:
-                    if (EnforceManager.Instance.fire2FreezeDamageBoost && enemyBase.isFreeze)
+                    if (EnforceManager.Instance.phoenixFreezeDamageBoost && enemyBase.isFreeze)
                     {
                         damage *= 2f;
                     }
-                    if (EnforceManager.Instance.fire2BossDamageBoost && enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
+                    if (EnforceManager.Instance.phoenixBossDamageBoost && enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
                     {
                         damage += 1.3f;
                     }
                     if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Burn)
                     {
-                        damage *= EnforceManager.Instance.fire2ChangeProperty ? 1f : 0.8f;
+                        damage *= EnforceManager.Instance.phoenixChangeProperty ? 1f : 0.8f;
                     }
                     return damage; 
                 case CharacterBase.UnitGroups.Beholder:
@@ -273,18 +273,18 @@ namespace Script.WeaponScriptGroup
                         damage *= 0.8f;
                     }
 
-                    if (enemyBase.isPoison && EnforceManager.Instance.physical2PoisonDamageBoost)
+                    if (enemyBase.isPoison && EnforceManager.Instance.berserkerPoisonDamageBoost)
                     {
                         damage *= 1.6f;
                     }
 
-                    if (EnforceManager.Instance.physical2BossBoost && enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
+                    if (EnforceManager.Instance.berserkerBossBoost && enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
                     {
                         damage *= 1.3f;
                     }
                     return damage;
                 case CharacterBase.UnitGroups.DarkElf:
-                    if (EnforceManager.Instance.dark2SameEnemyBoost)
+                    if (EnforceManager.Instance.darkElfSameEnemyBoost)
                     {
                         if (!characterBase.AttackCounts.TryGetValue(enemyBase, out var attackCount))
                         {
@@ -304,7 +304,7 @@ namespace Script.WeaponScriptGroup
                         damage *= 0.8f;
                     }
 
-                    if (!EnforceManager.Instance.dark2StatusDamageBoost) return damage;
+                    if (!EnforceManager.Instance.darkElfStatusDamageBoost) return damage;
                     if (enemyBase.statusList.Count <= 0) return damage;
                     damage *= enemyBase.statusList.Count >= 5 ? 5 * 1.15f : enemyBase.statusList.Count * 1.15f;
                     return damage; 
@@ -375,7 +375,7 @@ namespace Script.WeaponScriptGroup
             var dotDamage  = characterBase.dotDamage;
             if (hitEnemy.EnemyType == EnemyBase.EnemyTypes.Boss &&
                 characterBase.unitGroup == CharacterBase.UnitGroups.Berserker && 
-                EnforceManager.Instance.physical2BossBoost)
+                EnforceManager.Instance.berserkerBossBoost)
             {
                 dotDamage *= 0.7f;
             }

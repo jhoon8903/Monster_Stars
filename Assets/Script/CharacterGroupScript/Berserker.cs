@@ -23,8 +23,8 @@ namespace Script.CharacterGroupScript
             base.Initialize();
             unitGroup = UnitGroups.Berserker;
             UnitProperty = UnitProperties.Physics;
-            UnitGrade = UnitGrades.Blue;
-            UnitDesc = "Berserker Unit J / Blue Grade";
+            UnitGrade = UnitGrades.B;
+            UnitDesc = "Berserker Unit J / B Grade";
             SetLevel(1);
         }
         public void Awake()
@@ -56,7 +56,7 @@ namespace Script.CharacterGroupScript
 
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
-            var rangeBoost = EnforceManager.Instance.physical2RangeBoost ? 1 : 0;
+            var rangeBoost = EnforceManager.Instance.berserkerRangeBoost ? 1 : 0;
             _detectionSize = CastleManager.Instance.castleCrushBoost ? new Vector2(5+rangeBoost,5+rangeBoost) : new Vector2(3+rangeBoost, 3+rangeBoost);
             center = transform.position;
             size = _detectionSize;
@@ -93,7 +93,7 @@ namespace Script.CharacterGroupScript
                 6 => 2.6f
             };
             dotDamage = DefaultDamage * 0.2f;
-            bleedTime = EnforceManager.Instance.physical2BleedTimeBoost ? 5f : 3f;
+            bleedTime = EnforceManager.Instance.berserkerBleedTimeBoost ? 5f : 3f;
             var rateBoost = 1f - EnforceManager.Instance.physical2RateBoost;
             defaultAtkRate = 1f * rateBoost;
             projectileSpeed = 1f;

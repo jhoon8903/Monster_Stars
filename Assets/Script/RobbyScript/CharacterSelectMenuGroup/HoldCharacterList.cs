@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
 using Script.RobbyScript.TopMenuGroup;
+using Script.UIManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Button = UnityEngine.UI.Button;
 using Image = UnityEngine.UI.Image;
 
 namespace Script.RobbyScript.CharacterSelectMenuGroup
@@ -20,7 +20,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         [SerializeField] private UnitIcon unitIconPrefab;
         [SerializeField] private GameObject gamePanel;
         [SerializeField] private GameObject informationPanelPrefab;
-        [SerializeField] private GameObject warningPanel;
         [SerializeField] private TextMeshProUGUI messageText;
         [SerializeField] private Sprite lockImage;
         [SerializeField] private Sprite lockBack;
@@ -117,6 +116,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             unitInstance.unitBtn.onClick.AddListener(() => {SwapBackGround(unitInstance, character);});
             unitInstance.infoBtn.onClick.AddListener(() =>
             {
+                SoundManager.Instance.PlaySound(SoundManager.Instance.popupOpen);
                 unitInstance.normalBack.SetActive(true);
                 unitInstance.infoBack.SetActive(false);
                 _activeStatusPanel = null;
@@ -161,6 +161,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
 
             unitInstance.useBtn.onClick.AddListener(() =>
             {
+                SoundManager.Instance.PlaySound(SoundManager.Instance.unitSelect);
                 if (SelectedUnitHolder.Instance.selectedUnit.Count < 4)
                 {
                     character.selected = true;
@@ -176,11 +177,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     var canvas = unitInstance.unitCanvas;
                     if (canvas == null) return;
                     canvas.sortingLayerName = "TopMenu";
-                }
-                else
-                { 
-                    warningPanel.SetActive(true);
-                    messageText.text = "No more can be placed.";
                 }
             });
         }
@@ -215,22 +211,22 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         {
             unitInstance.normalBack.GetComponent<Image>().sprite = character.UnitGrade switch
             {
-              CharacterBase.UnitGrades.Green => unitInstance.normalBackSprite[0],
-              CharacterBase.UnitGrades.Blue => unitInstance.normalBackSprite[1],
-              CharacterBase.UnitGrades.Purple => unitInstance.normalBackSprite[2],
+              CharacterBase.UnitGrades.G => unitInstance.normalBackSprite[0],
+              CharacterBase.UnitGrades.B => unitInstance.normalBackSprite[1],
+              CharacterBase.UnitGrades.P => unitInstance.normalBackSprite[2],
               _=> unitInstance.normalBackSprite[3]
             };
             unitInstance.infoBack.GetComponent<Image>().sprite = character.UnitGrade switch
             {
-                CharacterBase.UnitGrades.Green => unitInstance.infoBackSprite[0],
-                CharacterBase.UnitGrades.Blue => unitInstance.infoBackSprite[1],
-                CharacterBase.UnitGrades.Purple => unitInstance.infoBackSprite[2],
+                CharacterBase.UnitGrades.G => unitInstance.infoBackSprite[0],
+                CharacterBase.UnitGrades.B => unitInstance.infoBackSprite[1],
+                CharacterBase.UnitGrades.P => unitInstance.infoBackSprite[2],
             };
             unitInstance.unitFrame.GetComponent<Image>().sprite = character.UnitGrade switch
             {
-                CharacterBase.UnitGrades.Green => unitInstance.frameSprite[0],
-                CharacterBase.UnitGrades.Blue => unitInstance.frameSprite[1],
-                CharacterBase.UnitGrades.Purple => unitInstance.frameSprite[2],
+                CharacterBase.UnitGrades.G => unitInstance.frameSprite[0],
+                CharacterBase.UnitGrades.B => unitInstance.frameSprite[1],
+                CharacterBase.UnitGrades.P => unitInstance.frameSprite[2],
                 _=> unitInstance.frameSprite[3]
             };
             unitInstance.unitProperty.GetComponent<Image>().sprite = character.UnitProperty switch
@@ -265,6 +261,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
 
         private void SwapBackGround(UnitIcon unitInstance, CharacterBase characterBase)
         {
+            SoundManager.Instance.PlaySound(SoundManager.Instance.unitSelect);
             if (_activeStatusPanel == null)
             {
                 unitInstance.infoBack.SetActive(true);
@@ -336,6 +333,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 var newUnitBase = newUnit.CharacterBase;
                 newUnit.unitBtn.onClick.AddListener(() =>
                 {
+                    SoundManager.Instance.PlaySound(SoundManager.Instance.popupOpen);
                     newUnit.infoBack.SetActive(false);
                     if (_informationPanel == null)
                     {

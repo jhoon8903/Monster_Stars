@@ -115,15 +115,15 @@ namespace Script.CharacterManagerScript
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.J));
                     break;
                 case CharacterBase.UnitGroups.DarkElf:
-                    if (EnforceManager.Instance.dark2DualAttack)
+                    if (EnforceManager.Instance.darkElfDualAttack)
                     {
-                        StartCoroutine(EnforceManager.Instance.dark2DoubleAttack
+                        StartCoroutine(EnforceManager.Instance.darkElfDoubleAttack
                             ? CombinedAttack(new AttackData(unit, WeaponsPool.WeaponType.K))
                             : DualAttack(new AttackData(unit, WeaponsPool.WeaponType.K)));
                     }
                     else
                     {
-                        if (EnforceManager.Instance.dark2DoubleAttack)
+                        if (EnforceManager.Instance.darkElfDoubleAttack)
                         {
                             StartCoroutine(DoubleFire(new AttackData(unit, WeaponsPool.WeaponType.K)));
                         }
@@ -175,19 +175,19 @@ namespace Script.CharacterManagerScript
             switch (unit.GetComponent<CharacterBase>().unitGroup)
             {
                case CharacterBase.UnitGroups.Octopus:
-                   if (EnforceManager.Instance.dark3FifthAttackBoost)
+                   if (EnforceManager.Instance.octopusThirdAttackBoost)
                    {
                        unit.GetComponent<Octopus>().atkCount++;
                    }
                    break;
                case CharacterBase.UnitGroups.Ogre:
-                   if (EnforceManager.Instance.darkFifthAttackDamageBoost)
+                   if (EnforceManager.Instance.ogreThirdAttackDamageBoost)
                    {
                        unit.GetComponent<Ogre>().atkCount++;
                    }
                    break;
                case CharacterBase.UnitGroups.DeathChiller:
-                   if (EnforceManager.Instance.waterGlobalFreeze)
+                   if (EnforceManager.Instance.deathChillerGlobalFreeze)
                    {
                        groupCAtkCount++;
                        if (groupCAtkCount == 100)
@@ -197,7 +197,7 @@ namespace Script.CharacterManagerScript
                    }
                    break;
                case CharacterBase.UnitGroups.Orc:
-                   if (EnforceManager.Instance.physicalRatePerAttack)
+                   if (EnforceManager.Instance.orcRatePerAttack)
                    {
                        groupDAtkCount++;
                        if (groupDAtkCount % 3 == 0)
@@ -210,7 +210,7 @@ namespace Script.CharacterManagerScript
                    }
                    break;
                case CharacterBase.UnitGroups.Skeleton:
-                   if (EnforceManager.Instance.poisonDamagePerBoost)
+                   if (EnforceManager.Instance.skeletonDamagePerBoost)
                    {
                        groupFCount++;
                        if (groupFCount % 5 == 0 && unit.GetComponent<Skeleton>().groupFDamage < 0.6f)
@@ -220,7 +220,7 @@ namespace Script.CharacterManagerScript
                    }
                    break;
                case CharacterBase.UnitGroups.Berserker:
-                   if (EnforceManager.Instance.physical2FifthBoost)
+                   if (EnforceManager.Instance.berserkerThirdBoost)
                    {
                        unit.GetComponent<Berserker>().atkCount++;
                    }
@@ -246,7 +246,7 @@ namespace Script.CharacterManagerScript
         private IEnumerator DualAttack(AttackData attackData)
         {
             var unit = attackData.Unit;
-            if (EnforceManager.Instance.dark3FifthAttackBoost)
+            if (EnforceManager.Instance.octopusThirdAttackBoost)
             {
                 unit.GetComponent<Octopus>().atkCount++;
             }
