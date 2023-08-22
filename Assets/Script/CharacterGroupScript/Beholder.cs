@@ -14,7 +14,6 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level3Sprite; 
         [SerializeField] private Sprite level4Sprite; 
         [SerializeField] private Sprite level5Sprite;
-        [SerializeField] private Sprite level6Sprite;
 
         public void Awake()
         {
@@ -82,7 +81,6 @@ namespace Script.CharacterGroupScript
                 3 => level3Sprite,
                 4 => level4Sprite,
                 5 => level5Sprite,
-                6 => level6Sprite,
             };
         }
 

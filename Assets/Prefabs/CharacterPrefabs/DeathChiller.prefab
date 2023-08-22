@@ -53,13 +53,13 @@ MonoBehaviour:
   selected: 0
   unitPuzzleLevel: 1
   unitGroup: 2
-  lv1: {fileID: 21300000, guid: cb3c87caa8d4d40988c8fba81635d8d7, type: 3}
-  lv3: {fileID: 21300000, guid: 81466e957c3524190b268f288761f0e7, type: 3}
-  lv5: {fileID: 21300000, guid: 565dfa39b28b14526a467d91e83fbda7, type: 3}
-  lv7: {fileID: 21300000, guid: 9be03cbf9a78e473791106680b2d4aff, type: 3}
-  lv9: {fileID: 21300000, guid: 5b436dff98cc64ff5a788061112c0529, type: 3}
-  lv11: {fileID: 21300000, guid: 0df83a37dd8074744a2b580065a9481d, type: 3}
-  lv13: {fileID: 21300000, guid: 2528940a4bdbd42e2bd9b1c453a46c88, type: 3}
+  lv1: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
+  lv3: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
+  lv5: {fileID: 21300000, guid: 97a9b711ea166413b8c359ab05b7dea0, type: 3}
+  lv7: {fileID: 21300000, guid: f6ca6c69bf5ac42d680520277a2c3e88, type: 3}
+  lv9: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
+  lv11: {fileID: 21300000, guid: 43e5f06a44ba44079a07d4269bd154be, type: 3}
+  lv13: {fileID: 21300000, guid: 10c4bc2ca34784eb88a0462e2f02bfa1, type: 3}
   baseDamage: 11
   dotDamage: 0
   effectChance: 25
@@ -79,7 +79,7 @@ MonoBehaviour:
   projectileSpeed: 1
   swingSpeed: 0
   defaultAtkDistance: 9
-  level1Sprite: {fileID: 21300000, guid: cb3c87caa8d4d40988c8fba81635d8d7, type: 3}
+  level1Sprite: {fileID: 21300000, guid: 54ca7e66103ed48cdb87d5961656ee33, type: 3}
   level2Sprite: {fileID: 21300000, guid: 54ca7e66103ed48cdb87d5961656ee33, type: 3}
   level3Sprite: {fileID: 21300000, guid: f5c8c930eb3b045cc89ed7c8d52f17ac, type: 3}
   level4Sprite: {fileID: 21300000, guid: cce7e5261a66d4982b77e42c49aee9e8, type: 3}

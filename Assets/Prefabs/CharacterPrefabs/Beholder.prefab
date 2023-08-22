@@ -79,7 +79,7 @@ MonoBehaviour:
   projectileSpeed: 1
   swingSpeed: 0
   defaultAtkDistance: 9
-  level1Sprite: {fileID: 21300000, guid: 80864d9771c404f798dae0a6fb7931b9, type: 3}
+  level1Sprite: {fileID: 21300000, guid: 9a3775d3211964fd7ae8b82ad96263d4, type: 3}
   level2Sprite: {fileID: 21300000, guid: 9a3775d3211964fd7ae8b82ad96263d4, type: 3}
   level3Sprite: {fileID: 21300000, guid: 667641ca26290481d9b3526e3ed68b5f, type: 3}
   level4Sprite: {fileID: 21300000, guid: aa5baa0ef51b94e87bc7e875d041e300, type: 3}

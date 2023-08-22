@@ -47,7 +47,6 @@ namespace Script.QuestGroup
             var goal = int.Parse(data[4]);
             var questKey = data[3];
             var value = PlayerPrefs.GetInt(questKey + "_value", 0);
-    
             switch (questType)
             {
                 case QuestManager.QuestTypes.ViewAds:

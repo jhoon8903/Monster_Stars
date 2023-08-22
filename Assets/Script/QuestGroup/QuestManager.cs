@@ -249,10 +249,13 @@ namespace Script.QuestGroup
                     inactiveRotationQuestData.Add(data);
                 }
             }
-
             var newQuestData = inactiveRotationQuestData.OrderBy(_ => Random.value).FirstOrDefault();
             if (newQuestData == null) return;
             var newQuest = questObject.CreateQuestFromData(newQuestData);
+            newQuest.isShuffled = true;
+            PlayerPrefs.SetInt(newQuest.QuestType + "_isShuffled", 1);
+            PlayerPrefs.Save();
+            QuestObject.SetQuestButtonStates(newQuest);
             var questToRemove = RotationQuestList.FirstOrDefault();
             if (questToRemove != null)
             {
