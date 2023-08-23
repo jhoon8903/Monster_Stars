@@ -28,7 +28,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.Fishman;
             UnitProperty = UnitProperties.Water;
             UnitGrade = UnitGrades.G;
-            UnitDesc = "Fishman Unit E / G Grade";
+            UnitDesc = "The fishman is innately good with water. \nThis allows him to slow and freeze his enemies.";
             SetLevel(1);
         }
 

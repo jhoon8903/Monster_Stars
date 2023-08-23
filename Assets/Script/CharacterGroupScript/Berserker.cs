@@ -24,7 +24,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.Berserker;
             UnitProperty = UnitProperties.Physics;
             UnitGrade = UnitGrades.B;
-            UnitDesc = "Berserker Unit J / B Grade";
+            UnitDesc = "Berserker feel threatened when their castle is attacked and exert more power.";
             SetLevel(1);
         }
         public void Awake()

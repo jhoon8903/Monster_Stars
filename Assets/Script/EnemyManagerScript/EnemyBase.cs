@@ -1,7 +1,5 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.QuestGroup;
@@ -26,17 +24,19 @@ namespace Script.EnemyManagerScript
         protected internal float CrushDamage; 
         public float moveSpeed;
         public float originSpeed;
-        public enum EnemyTypes { Boss, Group1, Group2, Group3 }
+        public enum EnemyTypes { Boss , Normal}
         protected internal EnemyTypes EnemyType;
         public enum RegistryTypes { Physics, Poison, Burn, Water, Darkness, None }
         protected internal RegistryTypes RegistryType; 
-        protected internal SpawnZones SpawnZone;
+       
         private static readonly object Lock = new object();
         public enum KillReasons { ByPlayer }
         public float healthPoint;
         public float maxHealthPoint;
         public float currentHealth;
-        public enum SpawnZones { A, B, C, D, E, F }
+        public enum SpawnZones { A, B, C, D, E, F, None}
+        protected internal SpawnZones SpawnZone;
+        public string enemyDesc;
 
         public enum EnemyClasses
         {
@@ -49,7 +49,6 @@ namespace Script.EnemyManagerScript
         public List<CharacterBase.UnitGroups> statusList = new List<CharacterBase.UnitGroups>();
         private bool _pooling;
         private readonly List<GameObject> _poisonPool = new List<GameObject>();
-        
         // 속박 (Bind)
         public readonly Dictionary<EnemyBase, bool> AlreadyBind = new Dictionary<EnemyBase, bool>();
         public readonly Dictionary<CharacterBase, CharacterBase.UnitGroups> IsBind = new Dictionary<CharacterBase, CharacterBase.UnitGroups>();
@@ -175,9 +174,9 @@ namespace Script.EnemyManagerScript
             if (!gameObject.activeInHierarchy || !isBleed) return;
             StartCoroutine(FlickerEffect(originColor, bleedColor));
         }
-       
         public virtual void Initialize()
         {
+            SpawnZone = SpawnZones.A;
             _hpSlider = GetComponentInChildren<Slider>(true);
             if (!_pooling)
             {
@@ -205,11 +204,11 @@ namespace Script.EnemyManagerScript
         {
             var enemyHPs = Resources.Load<TextAsset>("EnemyHpData");
             var data = enemyHPs.text.Split(new[] { '\n' });
+            if (StageManager.Instance == null) return;
             var stageData = data[StageManager.Instance.latestStage].Split(",");
             var healthPointData = stageData[1].Split(" ");
             var baseHealthPoint = int.Parse(healthPointData[StageManager.Instance.currentWave - 1]);
             healthPoint = baseHealthPoint;
-            StartCoroutine(UpdateHpSlider());
         }
         private IEnumerator DamageTextPopup(int damage)
         {
@@ -243,7 +242,6 @@ namespace Script.EnemyManagerScript
                 popup.SetActive(false);
             }
         }
-
         private readonly Dictionary<CharacterBase.UnitGroups, int> _cumulativeDamageByGroup = new Dictionary<CharacterBase.UnitGroups, int>();
         public void ReceiveDamage(EnemyBase detectEnemy, float damage, CharacterBase atkUnit, KillReasons reason = KillReasons.ByPlayer)
         {
@@ -356,7 +354,7 @@ namespace Script.EnemyManagerScript
                 popup.SetActive(false);
             }
             var enemyPool = FindObjectOfType<EnemyPool>();
-            StageManager.Instance.EnemyDestroyEvent(detectedEnemy);
+            if (StageManager.Instance != null) StageManager.Instance.EnemyDestroyEvent(detectedEnemy);
             detectedEnemy.isDead = false;
             detectedEnemy.statusList.Clear();
             detectedEnemy.IsBind.Clear();

@@ -29,7 +29,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.DeathChiller;
             UnitProperty = UnitProperties.Water;
             UnitGrade = UnitGrades.P;
-            UnitDesc = "Death Chiller Unit C / P Grade";
+            UnitDesc = "Frost Elemental can throw \npowerful ice shards that slow enemies \nand cause blizzards.";
             SetLevel(1);
         }
         public override Sprite GetSpriteForLevel(int characterObjectLevel)

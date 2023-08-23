@@ -141,7 +141,7 @@ namespace Script.PuzzleManagerGroup
         private void HandleTouchUp()
         {
             ScaleObject(_startObject, Vector3.one, 0.2f);
-            if (!_isSwipe)
+            if (!_isSwipe && _startObject != null)
             {
                 StartFindUnit(_startObject.GetComponent<CharacterBase>());
             }

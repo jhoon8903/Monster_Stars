@@ -10,7 +10,9 @@ using Script.UIManager;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
+using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace Script.EnemyManagerScript
@@ -29,16 +31,25 @@ namespace Script.EnemyManagerScript
         [SerializeField] private CharacterPool characterPool;
         [SerializeField] private GridManager gridManager;
         [SerializeField] private EnemyPatternManager enemyPatternManager;
+        
         // Enemy Desc
         [SerializeField] private GameObject enemyDescPanel;
         [SerializeField] private Image enemySprite;
         [SerializeField] private TextMeshProUGUI enemyDesc;
-        
+        [SerializeField] private List<Sprite> regSprite;
+        [SerializeField] private Image regIcon;
+        [SerializeField] private TextMeshProUGUI regText;
+        [Serializable] public class EnemySpriteClass
+        {
+            public EnemyBase.EnemyClasses enemyClasses;
+            public Sprite enemySprite;
+        }
+        public List<EnemySpriteClass> enemySpriteList;
 
         private Dictionary<EnemyBase.SpawnZones, Transform> _spawnZones;
         public int randomX;
         public int randomY;
-        private readonly List<EnemyBase.EnemyClasses> _enemyClassList = new List<EnemyBase.EnemyClasses>();
+        private List<EnemyBase.EnemyClasses> _enemyClassList = new List<EnemyBase.EnemyClasses>();
 
         private void Awake()
         {
@@ -53,55 +64,108 @@ namespace Script.EnemyManagerScript
             };
         }
 
-        public IEnumerator SpawnEnemies(EnemyBase.EnemyTypes enemyType, int count, List<EnemyBase.SpawnZones> groupZone)
+        public IEnumerator SpawnEnemies(int? count, EnemyBase.EnemyClasses? enemyClass, List<EnemyBase.SpawnZones> groupZone)
         {
             for (var i = 0; i < count; i++)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 var spawnZone = groupZone[i % groupZone.Count];
-                StartCoroutine(SpawnEnemy(enemyType, spawnZone));
-                yield return new WaitForSeconds(0.15f);
+                StartCoroutine(SpawnEnemy(enemyClass, spawnZone));
+                yield return new WaitForSeconds(0.2f);
             }
         }
-
-        private IEnumerator SpawnEnemy(EnemyBase.EnemyTypes enemyType, EnemyBase.SpawnZones spawnZone)
+        private IEnumerator SpawnEnemy(EnemyBase.EnemyClasses? enemyClass, EnemyBase.SpawnZones spawnZone)
         {
-            var enemyToSpawn = enemyPool.GetPooledEnemy(enemyType, spawnZone);
+            var enemyToSpawn = enemyPool.GetPooledEnemy(enemyClass);
             if (enemyToSpawn == null) yield break;
             var enemyBase = enemyToSpawn.GetComponent<EnemyBase>();
-            var spawnPosition = Vector3.zero;
+            enemyBase.gameObject.SetActive(true);
+            StartCoroutine(GetEnemyDesc(enemyBase));
+            enemyBase.Initialize();
+            var spawnPosition = spawnZoneA.position;
+            enemyBase.SpawnZone = spawnZone;
             yield return StartCoroutine(GetRandomPointInBounds(enemyBase.SpawnZone, pos => spawnPosition = pos));
             enemyBase.transform.position = spawnPosition;
-            enemyBase.gameObject.SetActive(true);
-            enemyBase.Initialize();
-            // GetEnemyDesc(enemyBase);
             yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyBase));
         }
+        private IEnumerator GetEnemyDesc(EnemyBase enemyBase)
+        { 
+            LoadEnemyClassList();
+            if (!_enemyClassList.Contains(enemyBase.enemyClass))
+            {
+                _enemyClassList.Add(enemyBase.enemyClass);
+                enemyDescPanel.SetActive(true);
+                foreach (var enemy in enemySpriteList.Where(enemy => enemyBase.enemyClass == enemy.enemyClasses))
+                {
+                    enemySprite.sprite = enemy.enemySprite;
+                }
+                enemyDesc.text = enemyBase.enemyDesc;
+                switch (enemyBase.RegistryType)
+                {
+                    case EnemyBase.RegistryTypes.Burn:
+                        regIcon.sprite = regSprite[0];
+                        regText.text = "-20%";
+                        break;
+                    case EnemyBase.RegistryTypes.Darkness:
+                        regIcon.sprite = regSprite[1];
+                        regText.text = "-20%";
+                        break;
+                    case EnemyBase.RegistryTypes.Water:
+                        regIcon.sprite = regSprite[2];
+                        regText.text = "-20%";
+                        break;
+                    case EnemyBase.RegistryTypes.Physics:
+                        regIcon.sprite = regSprite[3];
+                        regText.text = "-20%";
+                        break;
+                    case EnemyBase.RegistryTypes.Poison:
+                        regIcon.sprite = regSprite[4];
+                        regText.text = "-20%";
+                        break;
+                    case EnemyBase.RegistryTypes.None:
+                        regIcon.gameObject.SetActive(false);
+                        regText.text = null;
+                        break;
+                }
+            }
+            yield return new WaitForSecondsRealtime(4f);
+            enemyDescPanel.SetActive(false);
+            SaveEnemyClassList();
+        }
 
-        // private IEnumerator GetEnemyDesc(EnemyBase enemyBase)
-        // {
-        //     if (!_enemyClassList.Contains(enemyBase.enemyClass))
-        //     {
-        //         _enemyClassList.Add(enemyBase.enemyClass);
-        //         enemyDescPanel.SetActive(true);
-        //         enemySprite.sprite = enemyBase.GetComponentInChildren<SpriteRenderer>().sprite;
-        //         // enemyDesc.text = 
-        //     }
-        // }
+        private void SaveEnemyClassList()
+        {
+            var serializedData = string.Join(",", _enemyClassList.Select(e => e.ToString()).ToArray());
+            PlayerPrefs.SetString("EnemyClassList", serializedData);
+            PlayerPrefs.Save();
+        }
 
-        public IEnumerator SpawnBoss()
+        private void LoadEnemyClassList()
+        {
+            if (!PlayerPrefs.HasKey("EnemyClassList")) return;
+            var serializedData = PlayerPrefs.GetString("EnemyClassList");
+            _enemyClassList = serializedData.Split(',').Select(e => (EnemyBase.EnemyClasses)Enum.Parse(typeof(EnemyBase.EnemyClasses), e)).ToList();
+        }
+
+        public IEnumerator SpawnBoss(EnemyBase.EnemyClasses? bossClass)
         {
             enemyPool.enemyBases.Clear();
             var existingBoss = enemyPool.enemyBases.FirstOrDefault();
-            var bossObject = existingBoss != null ? existingBoss.gameObject : Instantiate(enemyManager.stageBoss, transform);
-            var enemyBase = bossObject.GetComponent<EnemyBase>();
-            enemyPool.enemyBases.Add(enemyBase);
-            enemyBase.transform.position = gridManager.bossSpawnArea;
-            enemyBase.gameObject.SetActive(true);
-            enemyBase.Initialize();
-            yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyBase));
+            foreach (var enemyBase in from bossPrefabs in enemyManager.stageBoss 
+                     where bossPrefabs.enemyClass == bossClass 
+                     select existingBoss != null 
+                         ? (Object)existingBoss.gameObject 
+                         : Instantiate(bossPrefabs, transform) 
+                     into bossObject 
+                     select bossObject.GetComponent<EnemyBase>())
+            {
+                enemyPool.enemyBases.Add(enemyBase);
+                enemyBase.transform.position = gridManager.bossSpawnArea;
+                enemyBase.gameObject.SetActive(true);
+                enemyBase.Initialize();
+                yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyBase));
+            }
         }
-
         private IEnumerator GetRandomPointInBounds(EnemyBase.SpawnZones zone, Action<Vector3> callback)
         {
             var spawnPosition = Vector3.zero;
@@ -110,7 +174,7 @@ namespace Script.EnemyManagerScript
                 case EnemyBase.SpawnZones.A:
                 {
                     var spawnPosY = _spawnZones[zone].position.y;
-                    if (StageManager.Instance.currentWave is 1 or 2 or 3)
+                    if (StageManager.Instance != null && StageManager.Instance.currentWave is 1 or 2 or 3)
                     {
                         var characters = characterPool.UsePoolCharacterList();
                         var xPositions = (
@@ -166,6 +230,7 @@ namespace Script.EnemyManagerScript
                     spawnPosition = new Vector3(randomX, spawnPosY, 0);
                     break;
                 }
+                case EnemyBase.SpawnZones.None:
                 default:
                     throw new ArgumentOutOfRangeException(nameof(zone), zone, null);
             }

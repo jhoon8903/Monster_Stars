@@ -29,7 +29,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.DarkElf;
             UnitProperty = UnitProperties.Darkness;
             UnitGrade = UnitGrades.P;
-            UnitDesc = "Dark Elf Unit K / P Grade";
+            UnitDesc = "The Dark Elf increases damage \nin proportion to the number of status ailments inflicted on enemies.";
             SetLevel(1);
         }
         public override Sprite GetSpriteForLevel(int characterObjectLevel)

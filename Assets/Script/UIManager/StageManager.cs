@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -9,6 +10,7 @@ using Script.RobbyScript.MainMenuGroup;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using EnemyBase = Script.EnemyManagerScript.EnemyBase;
 
 namespace Script.UIManager
 {
@@ -20,10 +22,7 @@ namespace Script.UIManager
         [SerializeField] private EnemyPool enemyPool;
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private CharacterPool characterPool;
-        [SerializeField] private GameObject descPanel;
-        [SerializeField] private Image enemySprite;
-        [SerializeField] private TextMeshProUGUI enemyDesc;
-        public static StageManager Instance;
+        public static StageManager? Instance;
         private int _setCount;
         public int maxWaveCount;
         public int maxStageCount;
@@ -53,86 +52,71 @@ namespace Script.UIManager
         {
             selectStage = MainPanel.Instance.SelectStage;
         }
-        public IEnumerator WaveController()
+
+        private static Dictionary<int, Dictionary<int, (int? wave1SpawnValue, EnemyBase.EnemyClasses? wave1EnemyClass, List<EnemyBase.SpawnZones>? wave1SpawnZone, int? wave2SpawnValue, EnemyBase.EnemyClasses? wave2EnemyClass, List<EnemyBase.SpawnZones>? wave2SpawnZone, int? wave3SpawnValue, EnemyBase.EnemyClasses? wave3EnemyClass, List<EnemyBase.SpawnZones>? wave3SpawnZone, EnemyBase.EnemyClasses? bossClass)>> LoadCsvData(string filename)
         {
-
-
-            var (group1,group1Zone, group2, group2Zone,group3,group3Zone) = GetSpawnCountForWave(selectStage, currentWave);
-            const int sets = 2;
-            if (currentWave % 10 == 0)
-            {
-                yield return StartCoroutine(enemySpawnManager.SpawnBoss());
-            }
-            else
-            {
-                for (var i = 0; i < sets; i++)
-                {
-                    StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group1, group1, group1Zone));
-                    StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group2, group2, group2Zone));
-                    StartCoroutine(enemySpawnManager.SpawnEnemies(EnemyBase.EnemyTypes.Group3, group3, group3Zone));
-                    _setCount++;
-                    yield return new WaitForSeconds(3f);
-                }
-            }
-        }
-
-        private IEnumerator EnemyDesc(EnemyBase enemyBase)
-        {
-            enemySprite.sprite = enemyBase.transform.Find("Sprite").GetComponent<SpriteRenderer>().sprite;
-            descPanel.SetActive(true);
-            yield return new WaitForSecondsRealtime(2f);
-            descPanel.SetActive(false);
-        }
-
-        private static Dictionary<string, Dictionary<int, (int group1, List<EnemyBase.SpawnZones> group1Zone, int group2, List<EnemyBase.SpawnZones> group2Zone, int group3, List<EnemyBase.SpawnZones> group3Zone)>> LoadCsvData(string filename)
-        {
-            var data = new Dictionary<string, Dictionary<int, (int group1, List<EnemyBase.SpawnZones> group1Zone, int group2, List<EnemyBase.SpawnZones> group2Zone, int group3, List<EnemyBase.SpawnZones> group3Zone)>>();
-
+            var data = new Dictionary<int, Dictionary<int, (int? wave1SpawnValue, EnemyBase.EnemyClasses? wave1EnemyClass, List<EnemyBase.SpawnZones>? wave1SpawnZone, int? wave2SpawnValue, EnemyBase.EnemyClasses? wave2EnemyClass, List<EnemyBase.SpawnZones>? wave2SpawnZone, int? wave3SpawnValue, EnemyBase.EnemyClasses? wave3EnemyClass, List<EnemyBase.SpawnZones>? wave3SpawnZone, EnemyBase.EnemyClasses? bossClass)>>();
             var csvFile = Resources.Load<TextAsset>(filename);
             var lines = csvFile.text.Split('\n');
-
             for (var i = 1; i < lines.Length; i++)
             {
-                var values = lines[i].Split(new [] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                var values = lines[i].Split(new [] { ',' }, StringSplitOptions.None);
                 for (var j = 0; j < values.Length; j++)
                 {
                     values[j] = values[j].Trim('"');
                 }
-                var stage = values[0];
+                var stage = int.Parse(values[0]);
                 var wave = int.Parse(values[1]);
-                var group1 = int.Parse(values[2]);
-                var group1Zone = ParseSpawnZones(values[3]);
-                var group2 = int.Parse(values[4]);
-                var group2Zone = ParseSpawnZones(values[5]);
-                var group3 = int.Parse(values[6]);
-                var group3Zone = ParseSpawnZones(values[7]);
-
-                if (stage.Contains("~"))
+                var wave1SpawnValue = !string.IsNullOrWhiteSpace(values[2]) 
+                    ? int.Parse(values[2]) : 0;
+                
+                var wave1EnemyClass = !string.IsNullOrWhiteSpace(values[3]) 
+                    ? ParseEnemyClass(values[3]) 
+                    : (EnemyBase.EnemyClasses?)null;
+                
+                var wave1SpawnZone = !string.IsNullOrWhiteSpace(values[4]) 
+                    ? ParseSpawnZones(values[4]) 
+                    : null; 
+                
+                var wave2SpawnValue = !string.IsNullOrWhiteSpace(values[5]) 
+                    ? int.Parse(values[5]) 
+                    : (int?)null;
+                
+                var wave2EnemyClass = !string.IsNullOrWhiteSpace(values[6]) 
+                    ? ParseEnemyClass(values[6]) 
+                    : (EnemyBase.EnemyClasses?)null;
+                
+                var wave2SpawnZone = !string.IsNullOrWhiteSpace(values[7]) 
+                    ? ParseSpawnZones(values[7]) 
+                    : null;
+                
+                var wave3SpawnValue = !string.IsNullOrWhiteSpace(values[8]) 
+                    ? int.Parse(values[8]) 
+                    : (int?)null;
+                
+                var wave3EnemyClass = !string.IsNullOrWhiteSpace(values[9]) 
+                    ? ParseEnemyClass(values[9]) 
+                    : (EnemyBase.EnemyClasses?)null;
+                
+                var wave3SpawnZone = !string.IsNullOrWhiteSpace(values[10]) 
+                    ? ParseSpawnZones(values[10]) 
+                    : null;
+                
+                var bossClass = !string.IsNullOrWhiteSpace(values[11]) 
+                    ? ParseEnemyClass(values[11]) 
+                    : (EnemyBase.EnemyClasses?)null;
+                
+                if (!data.ContainsKey(stage))
                 {
-                    var rangeParts = stage.Split('~');
-                    var rangeStart = int.Parse(rangeParts[0]);
-                    var rangeEnd = int.Parse(rangeParts[1]);
+                    data[stage] = new Dictionary<int, (int? wave1SpawnValue, EnemyBase.EnemyClasses? wave1EnemyClass, List<EnemyBase.SpawnZones>? wave1SpawnZone, int? wave2SpawnValue, EnemyBase.EnemyClasses? wave2EnemyClass, List<EnemyBase.SpawnZones>? wave2SpawnZone, int? wave3SpawnValue, EnemyBase.EnemyClasses? wave3EnemyClass, List<EnemyBase.SpawnZones>? wave3SpawnZone, EnemyBase.EnemyClasses? bossClass)>();
+                }
 
-                    for (var s = rangeStart; s <= rangeEnd; s++)
-                    {
-                        if (!data.ContainsKey(s.ToString()))
-                        {
-                            data[s.ToString()] = new Dictionary<int, (int group1, List<EnemyBase.SpawnZones> group1Zone, int group2, List<EnemyBase.SpawnZones> group2Zone, int group3, List<EnemyBase.SpawnZones> group3Zone)>();
-                        }
-                        data[s.ToString()][wave] = (group1,group1Zone, group2, group2Zone,group3,group3Zone);
-                    }
-                }
-                else
-                {
-                    if (!data.ContainsKey(stage))
-                    {
-                        data[stage] = new Dictionary<int, (int group1, List<EnemyBase.SpawnZones> group1Zone, int group2, List<EnemyBase.SpawnZones> group2Zone, int group3, List<EnemyBase.SpawnZones> group3Zone)>();
-                    }
-                    data[stage][wave] = (group1,group1Zone, group2, group2Zone,group3,group3Zone);
-                }
+                data[stage][wave] = (wave1SpawnValue, wave1EnemyClass, wave1SpawnZone, wave2SpawnValue, wave2EnemyClass,
+                    wave2SpawnZone, wave3SpawnValue, wave3EnemyClass, wave3SpawnZone, bossClass);
             }
             return data;
         }
+
         private static List<EnemyBase.SpawnZones> ParseSpawnZones(string zoneString)
         {
             var zones = new List<EnemyBase.SpawnZones>();
@@ -148,16 +132,42 @@ namespace Script.UIManager
             return zones;
         }
 
-        // private static List<EnemyBase.EnemyClasses> ParseEnemyClass()
-        // {
-        //
-        // }
-        private static (int group1, List<EnemyBase.SpawnZones> group1Zone, int group2, List<EnemyBase.SpawnZones> group2Zone, int group3, List<EnemyBase.SpawnZones> group3Zone) GetSpawnCountForWave(int stage, int wave)
+        private static EnemyBase.EnemyClasses ParseEnemyClass(string enemyClassString)
         {
-            var data = LoadCsvData("stageData");
-
-            return data[stage.ToString()][wave];
+            return Enum.TryParse(enemyClassString, out EnemyBase.EnemyClasses enemyClass) ? enemyClass : EnemyBase.EnemyClasses.Farmer;
         }
+
+        private static (int? wave1SpawnValue, EnemyBase.EnemyClasses? wave1EnemyClass, List<EnemyBase.SpawnZones>? wave1SpawnZone, int? wave2SpawnValue, EnemyBase.EnemyClasses? wave2EnemyClass, List<EnemyBase.SpawnZones>? wave2SpawnZone, int? wave3SpawnValue, EnemyBase.EnemyClasses? wave3EnemyClass, List<EnemyBase.SpawnZones>? wave3SpawnZone, EnemyBase.EnemyClasses? bossClass) GetSpawnCountForWave(int stage, int wave)
+        {
+            var data = LoadCsvData("StageData");
+
+            return data[stage][wave];
+        }
+
+        public IEnumerator WaveController()
+        {
+            var (set1SpawnValue,set1EnemyClass, set1SpawnZone, 
+                set2SpawnValue,set2EnemyClass,set2SpawnZone,
+                set3SpawnValue, set3EnemyClass, set3SpawnZone
+                , bossClass) = GetSpawnCountForWave(selectStage, currentWave);
+            const int sets = 2;
+            if (currentWave % 10 == 0)
+            {
+                yield return StartCoroutine(enemySpawnManager.SpawnBoss(bossClass));
+            }
+            else
+            {
+                for (var i = 0; i < sets; i++)
+                {
+                    StartCoroutine(enemySpawnManager.SpawnEnemies(set1SpawnValue, set1EnemyClass, set1SpawnZone));
+                    StartCoroutine(enemySpawnManager.SpawnEnemies(set2SpawnValue, set2EnemyClass, set2SpawnZone));
+                    StartCoroutine(enemySpawnManager.SpawnEnemies(set3SpawnValue, set3EnemyClass, set3SpawnZone));
+                    _setCount++;
+                    yield return new WaitForSeconds(3f);
+                }
+            }
+        }
+
         public void EnemyDestroyEvent(EnemyBase enemyBase)
         {
             enemyPool.enemyBases.Remove(enemyBase);
@@ -193,14 +203,12 @@ namespace Script.UIManager
             EnforceManager.Instance.addGoldCount = 0;
             PlayerPrefs.SetInt($"{latestStage}Stage_ProgressWave", 1);
             PlayerPrefs.SetInt($"{latestStage}Stage_ClearWave", MaxWave());
-            // Firebase.Analytics.FirebaseAnalytics.LogEvent("stage_success", "success", latestStage );
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("stage_success", "success", latestStage );
             latestStage++;
-
             if (latestStage > maxStageCount)
             {
                 GameClear();
             }
-
             PlayerPrefs.SetInt("LatestStage",latestStage);
             PlayerPrefs.SetInt($"{latestStage}Stage_MaxWave", MaxWave());
             PlayerPrefs.DeleteKey("unitState");

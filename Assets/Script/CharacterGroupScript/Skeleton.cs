@@ -28,7 +28,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.Skeleton;
             UnitProperty = UnitProperties.Poison;
             UnitGrade = UnitGrades.G;
-            UnitDesc = "Skeleton Unit F / G Grade";
+            UnitDesc = "Individually, the skeleton is insignificant, \nbut together they are stronger.";
             SetLevel(1);
         }
         

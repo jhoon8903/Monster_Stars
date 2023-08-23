@@ -29,7 +29,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.Octopus;
             UnitProperty = UnitProperties.Darkness;
             UnitGrade = UnitGrades.B;
-            UnitDesc = "Octopus Unit A / B Grade";
+            UnitDesc = "The octopus can fire explosive bullets\nafter long training.";
             SetLevel(1);
         }
         public override Sprite GetSpriteForLevel(int characterObjectLevel)

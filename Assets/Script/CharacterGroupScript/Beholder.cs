@@ -25,7 +25,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.Beholder;
             UnitProperty = UnitProperties.Fire;
             UnitGrade = UnitGrades.G;
-            UnitDesc = "Beholder Unit H / G Grade";
+            UnitDesc = "The Beholder can set enemies on fire \nwith just a glance through his large eyes.";
             SetLevel(1);
         }
 

@@ -1,121 +1,501 @@
-Stage,Wave,Group1,Group1Zone,Group2,Group2Zone,Group3,Group3Zone
-1,1,4,A,0,A,0,A
-1,2,6,A,1,A,0,A
-1,3,8,A,2,A,0,A
-1,4,10,A,3,B C,1,A
-1,5,12,A,4,D,1,A
-1,6,14,A,4,B C,2,A
-1,7,16,A,5,D,2,A
-1,8,18,A,5,B C,3,A
-1,9,20,A,6,D,3,A
-1,10,0,A,0,A,0,A
-2~9,1,4,A,0,A,0,A
-2~9,2,6,A,1,A,0,A
-2~9,3,8,A,2,A,0,A
-2~9,4,10,D,3,B C,1,A
-2~9,5,12,A,4,D,2,E
-2~9,6,14,A,5,B C,3,A
-2~9,7,16,A,6,D,4,E
-2~9,8,18,D,7,B C,5,A
-2~9,9,20,A,8,D,6,E
-2~9,10,0,A,0,A,0,A
-2~9,11,6,A,0,A,0,A
-2~9,12,8,A,1,B C,0,A
-2~9,13,10,A,2,D,0,A
-2~9,14,12,D,3,B C,1,F
-2~9,15,14,A,4,D,2,E
-2~9,16,16,A,5,B C,3,A
-2~9,17,18,A,6,D,4,E
-2~9,18,20,D,7,B C,5,F
-2~9,19,22,A,8,D,6,E
-2~9,20,0,A,0,A,0,A
-10,1,4,A,0,A,0,A
-10,2,6,A,1,A,0,A
-10,3,8,A,2,A,0,A
-10,4,10,D,3,B C,1,F
-10,5,12,A,4,D,2,A
-10,6,14,A,5,B C,3,E
-10,7,16,A,6,D,4,F
-10,8,18,D,7,B C,5,A
-10,9,20,A,8,D,6,E
-10,10,0,A,0,A,0,A
-10,11,6,A,0,A,0,A
-10,12,8,A,1,B C,0,A
-10,13,10,A,2,D,0,A
-10,14,12,D,3,B C,1,F
-10,15,14,A,4,D,2,A
-10,16,16,A,5,B C,3,E
-10,17,18,A,6,D,4,F
-10,18,20,D,7,B C,5,A
-10,19,22,A,8,D,6,E
-10,20,0,A,0,A,0,A
-10,21,6,A,0,A,0,A
-10,22,8,A,1,B C,0,A
-10,23,10,A,2,D,0,A
-10,24,12,D,3,B C,1,F
-10,25,14,A,4,D,2,A
-10,26,16,A,5,B C,3,E
-10,27,18,A,6,D,4,F
-10,28,20,D,7,B C,5,A
-10,29,22,A,8,D,6,E
-10,30,24,A,0,A,0,A
-11~19,1,4,A,0,A,0,A
-11~19,2,6,A,1,A,0,A
-11~19,3,8,A,2,A,1,A
-11~19,4,10,D,3,B C,2,F
-11~19,5,12,A,4,E,3,E
-11~19,6,14,A,5,B C,4,A
-11~19,7,16,A,6,E,5,F
-11~19,8,18,D,7,B C,6,E
-11~19,9,20,A,8,E,7,A
-11~19,10,0,A,0,A,0,A
-11~19,11,6,A,0,A,0,A
-11~19,12,8,A,1,B C,0,A
-11~19,13,10,A,2,E,1,A
-11~19,14,12,D,3,B C,2,F
-11~19,15,14,A,4,E,3,E
-11~19,16,16,A,5,B C,4,A
-11~19,17,18,A,6,E,5,F
-11~19,18,20,D,7,B C,6,E
-11~19,19,22,A,8,E,7,A
-11~19,20,0,A,0,A,0,A
-11~19,21,6,A,0,A,0,A
-11~19,22,8,A,1,B C,0,A
-11~19,23,10,A,2,E,1,A
-11~19,24,12,D,3,B C,2,F
-11~19,25,14,A,4,E,3,E
-11~19,26,16,A,5,B C,4,A
-11~19,27,18,A,6,E,5,F
-11~19,28,20,D,7,B C,6,E
-11~19,29,22,A,8,E,7,A
-11~19,30,0,A,0,A,0,A
-20,1,4,A,0,A,0,A
-20,2,6,A,2,A,0,A
-20,3,8,A,3,A,1,A
-20,4,10,D,4,B C,2,F
-20,5,12,A,5,F,3,E
-20,6,14,A,6,B C,4,A
-20,7,16,A,7,C,5,F
-20,8,18,D,8,B C,6,E
-20,9,20,A,9,D,7,A
-20,10,0,A,0,A,0,A
-20,11,6,A,0,A,0,A
-20,12,8,A,2,B C,0,A
-20,13,10,A,3,F,1,A
-20,14,12,D,4,B C,2,F
-20,15,14,A,5,F,3,E
-20,16,16,A,6,B C,4,A
-20,17,18,A,7,F,5,F
-20,18,20,D,8,B C,6,E
-20,19,22,A,9,F,7,A
-20,20,0,A,0,A,0,A
-20,21,6,A,0,A,0,A
-20,22,8,A,2,B C,0,A
-20,23,10,A,3,F,1,A
-20,24,12,D,4,B C,2,F
-20,25,14,A,5,F,3,E
-20,26,16,A,6,B C,4,A
-20,27,18,A,7,F,5,F
-20,28,20,D,8,B C,6,E
-20,29,22,A,9,F,7,A
-20,30,0,A,0,A,0,A
+Stage,Wave,1Set,EnemyClass,SpawnZone,2Set,EnemyClass,SpawnZone,3Set,EnemyClass,SpawnZone,BossClass
+1,1,4,Farmer,A,,,,,,,
+1,2,6,Farmer,A,1,Scout,A,,,,
+1,3,8,Farmer,A,2,Scout,A,,,,
+1,4,10,Farmer,A,3,Scout,B C,1,Magician,A,
+1,5,12,Farmer,A,4,Scout,D,1,Magician,A,
+1,6,14,Farmer,A,4,Scout,B C,2,Magician,A,
+1,7,16,Farmer,A,5,Scout,D,2,Magician,A,
+1,8,18,Farmer,A,5,Scout,B C,3,Magician,A,
+1,9,20,Farmer,A,6,Scout,D,3,Magician,A,
+1,10,,,,,,,,,,Shaman
+2,1,4,Pilgrim,A,,,,,,,
+2,2,6,Pilgrim,A,1,WarDancer,A,,,,
+2,3,8,Pilgrim,A,2,WarDancer,A,,,,
+2,4,10,Pilgrim,D,3,WarDancer,B C,1,Wizard,A,
+2,5,12,Pilgrim,A,4,WarDancer,D,2,Wizard,E,
+2,6,14,Pilgrim,A,5,WarDancer,B C,3,Wizard,A,
+2,7,16,Pilgrim,A,6,WarDancer,D,4,Wizard,E,
+2,8,18,Pilgrim,D,7,WarDancer,B C,5,Wizard,A,
+2,9,20,Pilgrim,A,8,WarDancer,D,6,Wizard,E,
+2,10,,,,,,,,,,SpearMan
+2,11,6,Pilgrim,A,,,,,,,
+2,12,8,Pilgrim,A,1,WarDancer,B C,,,,
+2,13,10,Pilgrim,A,2,WarDancer,D,,,,
+2,14,12,Pilgrim,D,3,WarDancer,B C,1,Wizard,F,
+2,15,14,Pilgrim,A,4,WarDancer,D,2,Wizard,E,
+2,16,16,Pilgrim,A,5,WarDancer,B C,3,Wizard,A,
+2,17,18,Pilgrim,A,6,WarDancer,D,4,Wizard,E,
+2,18,20,Pilgrim,D,7,WarDancer,B C,5,Wizard,F,
+2,19,22,Pilgrim,A,8,WarDancer,D,6,Wizard,E,
+2,20,,,,,,,,,,Berserker
+3,1,4,SwordMan,A,,,,,,,
+3,2,6,SwordMan,A,1,Militia,A,,,,
+3,3,8,SwordMan,A,2,Militia,A,,,,
+3,4,10,SwordMan,D,3,Militia,B C,1,Engineer,A,
+3,5,12,SwordMan,A,4,Militia,D,2,Engineer,E,
+3,6,14,SwordMan,A,5,Militia,B C,3,Engineer,A,
+3,7,16,SwordMan,A,6,Militia,D,4,Engineer,E,
+3,8,18,SwordMan,D,7,Militia,B C,5,Engineer,A,
+3,9,20,SwordMan,A,8,Militia,D,6,Engineer,E,
+3,10,,,,,,,,,,Royalguard
+3,11,6,SwordMan,A,,,,,,,
+3,12,8,SwordMan,A,1,Militia,B C,,,,
+3,13,10,SwordMan,A,2,Militia,D,,,,
+3,14,12,SwordMan,D,3,Militia,B C,1,Engineer,F,
+3,15,14,SwordMan,A,4,Militia,D,2,Engineer,E,
+3,16,16,SwordMan,A,5,Militia,B C,3,Engineer,A,
+3,17,18,SwordMan,A,6,Militia,D,4,Engineer,E,
+3,18,20,SwordMan,D,7,Militia,B C,5,Engineer,F,
+3,19,22,SwordMan,A,8,Militia,D,6,Engineer,E,
+3,20,,,,,,,,,,Shaman
+4,1,4,SpearMan,A,,,,,,,
+4,2,6,SpearMan,A,1,Archer,A,,,,
+4,3,8,SpearMan,A,2,Archer,A,,,,
+4,4,10,SpearMan,D,3,Archer,B C,1,Druid,A,
+4,5,12,SpearMan,A,4,Archer,D,2,Druid,E,
+4,6,14,SpearMan,A,5,Archer,B C,3,Druid,A,
+4,7,16,SpearMan,A,6,Archer,D,4,Druid,E,
+4,8,18,SpearMan,D,7,Archer,B C,5,Druid,A,
+4,9,20,SpearMan,A,8,Archer,D,6,Druid,E,
+4,10,,,,,,,,,,Pirate
+4,11,6,SpearMan,A,,,,,,,
+4,12,8,SpearMan,A,1,Archer,B C,,,,
+4,13,10,SpearMan,A,2,Archer,D,,,,
+4,14,12,SpearMan,D,3,Archer,B C,1,Druid,F,
+4,15,14,SpearMan,A,4,Archer,D,2,Druid,E,
+4,16,16,SpearMan,A,5,Archer,B C,3,Druid,A,
+4,17,18,SpearMan,A,6,Archer,D,4,Druid,E,
+4,18,20,SpearMan,D,7,Archer,B C,5,Druid,F,
+4,19,22,SpearMan,A,8,Archer,D,6,Druid,E,
+4,20,,,,,,,,,,Dryad
+5,1,4,Miner,A,,,,,,,
+5,2,6,Miner,A,1,Quarreller,A,,,,
+5,3,8,Miner,A,2,Quarreller,A,,,,
+5,4,10,Miner,D,3,Quarreller,B C,1,Marauder,A,
+5,5,12,Miner,A,4,Quarreller,D,2,Marauder,E,
+5,6,14,Miner,A,5,Quarreller,B C,3,Marauder,A,
+5,7,16,Miner,A,6,Quarreller,D,4,Marauder,E,
+5,8,18,Miner,D,7,Quarreller,B C,5,Marauder,A,
+5,9,20,Miner,A,8,Quarreller,D,6,Marauder,E,
+5,10,,,,,,,,,,Hammerer
+5,11,6,Miner,A,,,,,,,
+5,12,8,Miner,A,1,Quarreller,B C,,,,
+5,13,10,Miner,A,2,Quarreller,D,,,,
+5,14,12,Miner,D,3,Quarreller,B C,1,Marauder,F,
+5,15,14,Miner,A,4,Quarreller,D,2,Marauder,E,
+5,16,16,Miner,A,5,Quarreller,B C,3,Marauder,A,
+5,17,18,Miner,A,6,Quarreller,D,4,Marauder,E,
+5,18,20,Miner,D,7,Quarreller,B C,5,Marauder,F,
+5,19,22,Miner,A,8,Quarreller,D,6,Marauder,E,
+5,20,,,,,,,,,,Runesmith
+6,1,4,Pilgrim,A,,,,,,,
+6,2,6,Pilgrim,A,1,WarDancer,A,,,,
+6,3,8,Pilgrim,A,2,WarDancer,A,,,,
+6,4,10,Pilgrim,D,3,WarDancer,B C,1,Wizard,A,
+6,5,12,Pilgrim,A,4,WarDancer,D,2,Wizard,E,
+6,6,14,Pilgrim,A,5,WarDancer,B C,3,Wizard,A,
+6,7,16,Pilgrim,A,6,WarDancer,D,4,Wizard,E,
+6,8,18,Pilgrim,D,7,WarDancer,B C,5,Wizard,A,
+6,9,20,Pilgrim,A,8,WarDancer,D,6,Wizard,E,
+6,10,,,,,,,,,,SpearMan
+6,11,6,Pilgrim,A,,,,,,,
+6,12,8,Pilgrim,A,1,WarDancer,B C,,,,
+6,13,10,Pilgrim,A,2,WarDancer,D,,,,
+6,14,12,Pilgrim,D,3,WarDancer,B C,1,Wizard,F,
+6,15,14,Pilgrim,A,4,WarDancer,D,2,Wizard,E,
+6,16,16,Pilgrim,A,5,WarDancer,B C,3,Wizard,A,
+6,17,18,Pilgrim,A,6,WarDancer,D,4,Wizard,E,
+6,18,20,Pilgrim,D,7,WarDancer,B C,5,Wizard,F,
+6,19,22,Pilgrim,A,8,WarDancer,D,6,Wizard,E,
+6,20,,,,,,,,,,Berserker
+7,1,4,Pirate,A,,,,,,,
+7,2,6,Pirate,A,1,Archer,A,,,,
+7,3,8,Pirate,A,2,Archer,A,,,,
+7,4,10,Pirate,D,3,Archer,B C,1,Druid,A,
+7,5,12,Pirate,A,4,Archer,D,2,Druid,E,
+7,6,14,Pirate,A,5,Archer,B C,3,Druid,A,
+7,7,16,Pirate,A,6,Archer,D,4,Druid,E,
+7,8,18,Pirate,D,7,Archer,B C,5,Druid,A,
+7,9,20,Pirate,A,8,Archer,D,6,Druid,E,
+7,10,,,,,,,,,,Pirate
+7,11,6,Pirate,A,,,,,,,
+7,12,8,Pirate,A,1,Archer,B C,,,,
+7,13,10,Pirate,A,2,Archer,D,,,,
+7,14,12,Pirate,D,3,Archer,B C,1,Druid,F,
+7,15,14,Pirate,A,4,Archer,D,2,Druid,E,
+7,16,16,Pirate,A,5,Archer,B C,3,Druid,A,
+7,17,18,Pirate,A,6,Archer,D,4,Druid,E,
+7,18,20,Pirate,D,7,Archer,B C,5,Druid,F,
+7,19,22,Pirate,A,8,Archer,D,6,Druid,E,
+7,20,,,,,,,,,,Dryad
+8,1,4,Farmer,A,,,,,,,
+8,2,6,Farmer,A,1,Scout,A,,,,
+8,3,8,Farmer,A,2,Scout,A,,,,
+8,4,10,Farmer,D,3,Scout,B C,1,Magician,A,
+8,5,12,Farmer,A,4,Scout,D,2,Magician,E,
+8,6,14,Farmer,A,5,Scout,B C,3,Magician,A,
+8,7,16,Farmer,A,6,Scout,D,4,Magician,E,
+8,8,18,Farmer,D,7,Scout,B C,5,Magician,A,
+8,9,20,Farmer,A,8,Scout,D,6,Magician,E,
+8,10,,,,,,,,,,Royalguard
+8,11,6,Farmer,A,,,,,,,
+8,12,8,Farmer,A,1,Scout,B C,,,,
+8,13,10,Farmer,A,2,Scout,D,,,,
+8,14,12,Farmer,D,3,Scout,B C,1,Magician,F,
+8,15,14,Farmer,A,4,Scout,D,2,Magician,E,
+8,16,16,Farmer,A,5,Scout,B C,3,Magician,A,
+8,17,18,Farmer,A,6,Scout,D,4,Magician,E,
+8,18,20,Farmer,D,7,Scout,B C,5,Magician,F,
+8,19,22,Farmer,A,8,Scout,D,6,Magician,E,
+8,20,,,,,,,,,,Shaman
+9,1,4,Miner,A,,,,,,,
+9,2,6,Miner,A,1,Quarreller,A,,,,
+9,3,8,Miner,A,2,Quarreller,A,,,,
+9,4,10,Miner,D,3,Quarreller,B C,1,Marauder,A,
+9,5,12,Miner,A,4,Quarreller,D,2,Marauder,E,
+9,6,14,Miner,A,5,Quarreller,B C,3,Marauder,A,
+9,7,16,Miner,A,6,Quarreller,D,4,Marauder,E,
+9,8,18,Miner,D,7,Quarreller,B C,5,Marauder,A,
+9,9,20,Miner,A,8,Quarreller,D,6,Marauder,E,
+9,10,,,,,,,,,,Hammerer
+9,11,6,Miner,A,,,,,,,
+9,12,8,Miner,A,1,Quarreller,B C,,,,
+9,13,10,Miner,A,2,Quarreller,D,,,,
+9,14,12,Miner,D,3,Quarreller,B C,1,Marauder,F,
+9,15,14,Miner,A,4,Quarreller,D,2,Marauder,E,
+9,16,16,Miner,A,5,Quarreller,B C,3,Marauder,A,
+9,17,18,Miner,A,6,Quarreller,D,4,Marauder,E,
+9,18,20,Miner,D,7,Quarreller,B C,5,Marauder,F,
+9,19,22,Miner,A,8,Quarreller,D,6,Marauder,E,
+9,20,,,,,,,,,,Runesmith
+10,1,4,SwordMan,A,,,,,,,
+10,2,6,SwordMan,A,1,Militia,A,,,,
+10,3,8,SwordMan,A,2,Militia,A,,,,
+10,4,10,SwordMan,D,3,Militia,B C,1,Engineer,F,
+10,5,12,SwordMan,A,4,Militia,D,2,Engineer,A,
+10,6,14,SwordMan,A,5,Militia,B C,3,Engineer,E,
+10,7,16,SwordMan,A,6,Militia,D,4,Engineer,F,
+10,8,18,SwordMan,D,7,Militia,B C,5,Engineer,A,
+10,9,20,SwordMan,A,8,Militia,D,6,Engineer,E,
+10,10,,,,,,,,,,Marauder
+10,11,6,SwordMan,A,,,,,,,
+10,12,8,SwordMan,A,1,Militia,B C,,,,
+10,13,10,SwordMan,A,2,Militia,D,,,,
+10,14,12,SwordMan,D,3,Militia,B C,1,Engineer,F,
+10,15,14,SwordMan,A,4,Militia,D,2,Engineer,A,
+10,16,16,SwordMan,A,5,Militia,B C,3,Engineer,E,
+10,17,18,SwordMan,A,6,Militia,D,4,Engineer,F,
+10,18,20,SwordMan,D,7,Militia,B C,5,Engineer,A,
+10,19,22,SwordMan,A,8,Militia,D,6,Engineer,E,
+10,20,,,,,,,,,,Royalguard
+10,21,6,SwordMan,A,,,,,,,
+10,22,8,SwordMan,A,1,Militia,B C,,,,
+10,23,10,SwordMan,A,2,Militia,D,,,,
+10,24,12,SwordMan,D,3,Militia,B C,1,Engineer,F,
+10,25,14,SwordMan,A,4,Militia,D,2,Engineer,A,
+10,26,16,SwordMan,A,5,Militia,B C,3,Engineer,E,
+10,27,18,SwordMan,A,6,Militia,D,4,Engineer,F,
+10,28,20,SwordMan,D,7,Militia,B C,5,Engineer,A,
+10,29,22,SwordMan,A,8,Militia,D,6,Engineer,E,
+10,30,,,,,,,,,,Shaman
+11,1,4,SpearMan,A,,,,,,,
+11,2,6,SpearMan,A,1,Archer,A,,,,
+11,3,8,SpearMan,A,2,Archer,A,1,Druid,A,
+11,4,10,SpearMan,D,3,Archer,B C,2,Druid,F,
+11,5,12,SpearMan,A,4,Archer,E,3,Druid,E,
+11,6,14,SpearMan,A,5,Archer,B C,4,Druid,A,
+11,7,16,SpearMan,A,6,Archer,E,5,Druid,F,
+11,8,18,SpearMan,D,7,Archer,B C,6,Druid,E,
+11,9,20,SpearMan,A,8,Archer,E,7,Druid,A,
+11,10,,,,,,,,,,Pirate
+11,11,6,SpearMan,A,,,,,,,
+11,12,8,SpearMan,A,1,Archer,B C,,,,
+11,13,10,SpearMan,A,2,Archer,E,1,Druid,A,
+11,14,12,SpearMan,D,3,Archer,B C,2,Druid,F,
+11,15,14,SpearMan,A,4,Archer,E,3,Druid,E,
+11,16,16,SpearMan,A,5,Archer,B C,4,Druid,A,
+11,17,18,SpearMan,A,6,Archer,E,5,Druid,F,
+11,18,20,SpearMan,D,7,Archer,B C,6,Druid,E,
+11,19,22,SpearMan,A,8,Archer,E,7,Druid,A,
+11,20,,,,,,,,,,Wizard
+11,21,6,SpearMan,A,,,,,,,
+11,22,8,SpearMan,A,1,Archer,B C,,,,
+11,23,10,SpearMan,A,2,Archer,E,1,Druid,A,
+11,24,12,SpearMan,D,3,Archer,B C,2,Druid,F,
+11,25,14,SpearMan,A,4,Archer,E,3,Druid,E,
+11,26,16,SpearMan,A,5,Archer,B C,4,Druid,A,
+11,27,18,SpearMan,A,6,Archer,E,5,Druid,F,
+11,28,20,SpearMan,D,7,Archer,B C,6,Druid,E,
+11,29,22,SpearMan,A,8,Archer,E,7,Druid,A,
+11,30,,,,,,,,,,Dryad
+12,1,4,Pilgrim,A,,,,,,,
+12,2,6,Pilgrim,A,1,WarDancer,A,,,,
+12,3,8,Pilgrim,A,2,WarDancer,A,1,Wizard,A,
+12,4,10,Pilgrim,D,3,WarDancer,B C,2,Wizard,F,
+12,5,12,Pilgrim,A,4,WarDancer,E,3,Wizard,E,
+12,6,14,Pilgrim,A,5,WarDancer,B C,4,Wizard,A,
+12,7,16,Pilgrim,A,6,WarDancer,E,5,Wizard,F,
+12,8,18,Pilgrim,D,7,WarDancer,B C,6,Wizard,E,
+12,9,20,Pilgrim,A,8,WarDancer,E,7,Wizard,A,
+12,10,,,,,,,,,,Royalguard
+12,11,6,Pilgrim,A,,,,,,,
+12,12,8,Pilgrim,A,1,WarDancer,B C,,,,
+12,13,10,Pilgrim,A,2,WarDancer,E,1,Wizard,A,
+12,14,12,Pilgrim,D,3,WarDancer,B C,2,Wizard,F,
+12,15,14,Pilgrim,A,4,WarDancer,E,3,Wizard,E,
+12,16,16,Pilgrim,A,5,WarDancer,B C,4,Wizard,A,
+12,17,18,Pilgrim,A,6,WarDancer,E,5,Wizard,F,
+12,18,20,Pilgrim,D,7,WarDancer,B C,6,Wizard,E,
+12,19,22,Pilgrim,A,8,WarDancer,E,7,Wizard,A,
+12,20,,,,,,,,,,SpearMan
+12,21,6,Pilgrim,A,,,,,,,
+12,22,8,Pilgrim,A,1,WarDancer,B C,,,,
+12,23,10,Pilgrim,A,2,WarDancer,E,1,Wizard,A,
+12,24,12,Pilgrim,D,3,WarDancer,B C,2,Wizard,F,
+12,25,14,Pilgrim,A,4,WarDancer,E,3,Wizard,E,
+12,26,16,Pilgrim,A,5,WarDancer,B C,4,Wizard,A,
+12,27,18,Pilgrim,A,6,WarDancer,E,5,Wizard,F,
+12,28,20,Pilgrim,D,7,WarDancer,B C,6,Wizard,E,
+12,29,22,Pilgrim,A,8,WarDancer,E,7,Wizard,A,
+12,30,,,,,,,,,,Berserker
+13,1,4,SwordMan,A,,,,,,,
+13,2,6,SwordMan,A,1,Militia,A,,,,
+13,3,8,SwordMan,A,2,Militia,A,1,Engineer,A,
+13,4,10,SwordMan,D,3,Militia,B C,2,Engineer,F,
+13,5,12,SwordMan,A,4,Militia,E,3,Engineer,E,
+13,6,14,SwordMan,A,5,Militia,B C,4,Engineer,A,
+13,7,16,SwordMan,A,6,Militia,E,5,Engineer,F,
+13,8,18,SwordMan,D,7,Militia,B C,6,Engineer,E,
+13,9,20,SwordMan,A,8,Militia,E,7,Engineer,A,
+13,10,,,,,,,,,,Marauder
+13,11,6,SwordMan,A,,,,,,,
+13,12,8,SwordMan,A,1,Militia,B C,,,,
+13,13,10,SwordMan,A,2,Militia,E,1,Engineer,A,
+13,14,12,SwordMan,D,3,Militia,B C,2,Engineer,F,
+13,15,14,SwordMan,A,4,Militia,E,3,Engineer,E,
+13,16,16,SwordMan,A,5,Militia,B C,4,Engineer,A,
+13,17,18,SwordMan,A,6,Militia,E,5,Engineer,F,
+13,18,20,SwordMan,D,7,Militia,B C,6,Engineer,E,
+13,19,22,SwordMan,A,8,Militia,E,7,Engineer,A,
+13,20,,,,,,,,,,Royalguard
+13,21,6,SwordMan,A,,,,,,,
+13,22,8,SwordMan,A,1,Militia,B C,,,,
+13,23,10,SwordMan,A,2,Militia,E,1,Engineer,A,
+13,24,12,SwordMan,D,3,Militia,B C,2,Engineer,F,
+13,25,14,SwordMan,A,4,Militia,E,3,Engineer,E,
+13,26,16,SwordMan,A,5,Militia,B C,4,Engineer,A,
+13,27,18,SwordMan,A,6,Militia,E,5,Engineer,F,
+13,28,20,SwordMan,D,7,Militia,B C,6,Engineer,E,
+13,29,22,SwordMan,A,8,Militia,E,7,Engineer,A,
+13,30,,,,,,,,,,Shaman
+14,1,4,Farmer,A,,,,,,,
+14,2,6,Farmer,A,1,Scout,A,,,,
+14,3,8,Farmer,A,2,Scout,A,1,Magician,A,
+14,4,10,Farmer,D,3,Scout,B C,2,Magician,F,
+14,5,12,Farmer,A,4,Scout,E,3,Magician,E,
+14,6,14,Farmer,A,5,Scout,B C,4,Magician,A,
+14,7,16,Farmer,A,6,Scout,E,5,Magician,F,
+14,8,18,Farmer,D,7,Scout,B C,6,Magician,E,
+14,9,20,Farmer,A,8,Scout,E,7,Magician,A,
+14,10,,,,,,,,,,Engineer
+14,11,6,Farmer,A,,,,,,,
+14,12,8,Farmer,A,1,Scout,B C,,,,
+14,13,10,Farmer,A,2,Scout,E,1,Magician,A,
+14,14,12,Farmer,D,3,Scout,B C,2,Magician,F,
+14,15,14,Farmer,A,4,Scout,E,3,Magician,E,
+14,16,16,Farmer,A,5,Scout,B C,4,Magician,A,
+14,17,18,Farmer,A,6,Scout,E,5,Magician,F,
+14,18,20,Farmer,D,7,Scout,B C,6,Magician,E,
+14,19,22,Farmer,A,8,Scout,E,7,Magician,A,
+14,20,,,,,,,,,,Shaman
+14,21,6,Farmer,A,,,,,,,
+14,22,8,Farmer,A,1,Scout,B C,,,,
+14,23,10,Farmer,A,2,Scout,E,1,Magician,A,
+14,24,12,Farmer,D,3,Scout,B C,2,Magician,F,
+14,25,14,Farmer,A,4,Scout,E,3,Magician,E,
+14,26,16,Farmer,A,5,Scout,B C,4,Magician,A,
+14,27,18,Farmer,A,6,Scout,E,5,Magician,F,
+14,28,20,Farmer,D,7,Scout,B C,6,Magician,E,
+14,29,22,Farmer,A,8,Scout,E,7,Magician,A,
+14,30,,,,,,,,,,Berserker
+15,1,4,Miner,A,,,,,,,
+15,2,6,Miner,A,1,Scout,A,,,,
+15,3,8,Miner,A,2,Scout,A,1,Magician,A,
+15,4,10,Miner,D,3,Scout,B C,2,Magician,F,
+15,5,12,Miner,A,4,Scout,E,3,Magician,E,
+15,6,14,Miner,A,5,Scout,B C,4,Magician,A,
+15,7,16,Miner,A,6,Scout,E,5,Magician,F,
+15,8,18,Miner,D,7,Scout,B C,6,Magician,E,
+15,9,20,Miner,A,8,Scout,E,7,Magician,A,
+15,10,,,,,,,,,,Pilgrim
+15,11,6,Miner,A,,,,,,,
+15,12,8,Miner,A,1,Quarreller,B C,,,,
+15,13,10,Miner,A,2,Quarreller,E,1,Marauder,A,
+15,14,12,Miner,D,3,Quarreller,B C,2,Marauder,F,
+15,15,14,Miner,A,4,Quarreller,E,3,Marauder,E,
+15,16,16,Miner,A,5,Quarreller,B C,4,Marauder,A,
+15,17,18,Miner,A,6,Quarreller,E,5,Marauder,F,
+15,18,20,Miner,D,7,Quarreller,B C,6,Marauder,E,
+15,19,22,Miner,A,8,Quarreller,E,7,Marauder,A,
+15,20,,,,,,,,,,Hammerer
+15,21,6,Miner,A,,,,,,,
+15,22,8,Miner,A,1,Quarreller,B C,,,,
+15,23,10,Miner,A,2,Quarreller,E,1,Marauder,A,
+15,24,12,Miner,D,3,Quarreller,B C,2,Marauder,F,
+15,25,14,Miner,A,4,Quarreller,E,3,Marauder,E,
+15,26,16,Miner,A,5,Quarreller,B C,4,Marauder,A,
+15,27,18,Miner,A,6,Quarreller,E,5,Marauder,F,
+15,28,20,Miner,D,7,Quarreller,B C,6,Marauder,E,
+15,29,22,Miner,A,8,Quarreller,E,7,Marauder,A,
+15,30,,,,,,,,,,Runesmith
+16,1,4,SwordMan,A,,,,,,,
+16,2,6,SwordMan,A,1,Militia,A,,,,
+16,3,8,SwordMan,A,2,Militia,A,1,Engineer,A,
+16,4,10,SwordMan,D,3,Militia,B C,2,Engineer,F,
+16,5,12,SwordMan,A,4,Militia,E,3,Engineer,E,
+16,6,14,SwordMan,A,5,Militia,B C,4,Engineer,A,
+16,7,16,SwordMan,A,6,Militia,E,5,Engineer,F,
+16,8,18,SwordMan,D,7,Militia,B C,6,Engineer,E,
+16,9,20,SwordMan,A,8,Militia,E,7,Engineer,A,
+16,10,,,,,,,,,,Marauder
+16,11,6,SwordMan,A,,,,,,,
+16,12,8,SwordMan,A,1,Militia,B C,,,,
+16,13,10,SwordMan,A,2,Militia,E,1,Engineer,A,
+16,14,12,SwordMan,D,3,Militia,B C,2,Engineer,F,
+16,15,14,SwordMan,A,4,Militia,E,3,Engineer,E,
+16,16,16,SwordMan,A,5,Militia,B C,4,Engineer,A,
+16,17,18,SwordMan,A,6,Militia,E,5,Engineer,F,
+16,18,20,SwordMan,D,7,Militia,B C,6,Engineer,E,
+16,19,22,SwordMan,A,8,Militia,E,7,Engineer,A,
+16,20,,,,,,,,,,Royalguard
+16,21,6,SwordMan,A,,,,,,,
+16,22,8,SwordMan,A,1,Militia,B C,,,,
+16,23,10,SwordMan,A,2,Militia,E,1,Engineer,A,
+16,24,12,SwordMan,D,3,Militia,B C,2,Engineer,F,
+16,25,14,SwordMan,A,4,Militia,E,3,Engineer,E,
+16,26,16,SwordMan,A,5,Militia,B C,4,Engineer,A,
+16,27,18,SwordMan,A,6,Militia,E,5,Engineer,F,
+16,28,20,SwordMan,D,7,Militia,B C,6,Engineer,E,
+16,29,22,SwordMan,A,8,Militia,E,7,Engineer,A,
+16,30,,,,,,,,,,Shaman
+17,1,4,Pilgrim,A,,,,,,,
+17,2,6,Pilgrim,A,1,WarDancer,A,,,,
+17,3,8,Pilgrim,A,2,WarDancer,A,1,Wizard,A,
+17,4,10,Pilgrim,D,3,WarDancer,B C,2,Wizard,F,
+17,5,12,Pilgrim,A,4,WarDancer,E,3,Wizard,E,
+17,6,14,Pilgrim,A,5,WarDancer,B C,4,Wizard,A,
+17,7,16,Pilgrim,A,6,WarDancer,E,5,Wizard,F,
+17,8,18,Pilgrim,D,7,WarDancer,B C,6,Wizard,E,
+17,9,20,Pilgrim,A,8,WarDancer,E,7,Wizard,A,
+17,10,,,,,,,,,,Runesmith
+17,11,6,Pilgrim,A,,,,,,,
+17,12,8,Pilgrim,A,1,WarDancer,B C,,,,
+17,13,10,Pilgrim,A,2,WarDancer,E,1,Wizard,A,
+17,14,12,Pilgrim,D,3,WarDancer,B C,2,Wizard,F,
+17,15,14,Pilgrim,A,4,WarDancer,E,3,Wizard,E,
+17,16,16,Pilgrim,A,5,WarDancer,B C,4,Wizard,A,
+17,17,18,Pilgrim,A,6,WarDancer,E,5,Wizard,F,
+17,18,20,Pilgrim,D,7,WarDancer,B C,6,Wizard,E,
+17,19,22,Pilgrim,A,8,WarDancer,E,7,Wizard,A,
+17,20,,,,,,,,,,SpearMan
+17,21,6,Pilgrim,A,,,,,,,
+17,22,8,Pilgrim,A,1,WarDancer,B C,,,,
+17,23,10,Pilgrim,A,2,WarDancer,E,1,Wizard,A,
+17,24,12,Pilgrim,D,3,WarDancer,B C,2,Wizard,F,
+17,25,14,Pilgrim,A,4,WarDancer,E,3,Wizard,E,
+17,26,16,Pilgrim,A,5,WarDancer,B C,4,Wizard,A,
+17,27,18,Pilgrim,A,6,WarDancer,E,5,Wizard,F,
+17,28,20,Pilgrim,D,7,WarDancer,B C,6,Wizard,E,
+17,29,22,Pilgrim,A,8,WarDancer,E,7,Wizard,A,
+17,30,,,,,,,,,,Berserker
+18,1,4,Pirate,A,,,,,,,
+18,2,6,Pirate,A,1,Archer,A,,,,
+18,3,8,Pirate,A,2,Archer,A,1,Druid,A,
+18,4,10,Pirate,D,3,Archer,B C,2,Druid,F,
+18,5,12,Pirate,A,4,Archer,E,3,Druid,E,
+18,6,14,Pirate,A,5,Archer,B C,4,Druid,A,
+18,7,16,Pirate,A,6,Archer,E,5,Druid,F,
+18,8,18,Pirate,D,7,Archer,B C,6,Druid,E,
+18,9,20,Pirate,A,8,Archer,E,7,Druid,A,
+18,10,,,,,,,,,,Pirate
+18,11,6,Pirate,A,,,,,,,
+18,12,8,Pirate,A,1,Archer,B C,,,,
+18,13,10,Pirate,A,2,Archer,E,1,Druid,A,
+18,14,12,Pirate,D,3,Archer,B C,2,Druid,F,
+18,15,14,Pirate,A,4,Archer,E,3,Druid,E,
+18,16,16,Pirate,A,5,Archer,B C,4,Druid,A,
+18,17,18,Pirate,A,6,Archer,E,5,Druid,F,
+18,18,20,Pirate,D,7,Archer,B C,6,Druid,E,
+18,19,22,Pirate,A,8,Archer,E,7,Druid,A,
+18,20,,,,,,,,,,Wizard
+18,21,6,Pirate,A,,,,,,,
+18,22,8,Pirate,A,1,Archer,B C,,,,
+18,23,10,Pirate,A,2,Archer,E,1,Druid,A,
+18,24,12,Pirate,D,3,Archer,B C,2,Druid,F,
+18,25,14,Pirate,A,4,Archer,E,3,Druid,E,
+18,26,16,Pirate,A,5,Archer,B C,4,Druid,A,
+18,27,18,Pirate,A,6,Archer,E,5,Druid,F,
+18,28,20,Pirate,D,7,Archer,B C,6,Druid,E,
+18,29,22,Pirate,A,8,Archer,E,7,Druid,A,
+18,30,,,,,,,,,,Dryad
+19,1,4,Farmer,A,,,,,,,
+19,2,6,Farmer,A,1,Scout,A,,,,
+19,3,8,Farmer,A,2,Scout,A,1,Magician,A,
+19,4,10,Farmer,D,3,Scout,B C,2,Magician,F,
+19,5,12,Farmer,A,4,Scout,E,3,Magician,E,
+19,6,14,Farmer,A,5,Scout,B C,4,Magician,A,
+19,7,16,Farmer,A,6,Scout,E,5,Magician,F,
+19,8,18,Farmer,D,7,Scout,B C,6,Magician,E,
+19,9,20,Farmer,A,8,Scout,E,7,Magician,A,
+19,10,,,,,,,,,,Engineer
+19,11,6,Farmer,A,,,,,,,
+19,12,8,Farmer,A,1,Scout,B C,,,,
+19,13,10,Farmer,A,2,Scout,E,1,Magician,A,
+19,14,12,Farmer,D,3,Scout,B C,2,Magician,F,
+19,15,14,Farmer,A,4,Scout,E,3,Magician,E,
+19,16,16,Farmer,A,5,Scout,B C,4,Magician,A,
+19,17,18,Farmer,A,6,Scout,E,5,Magician,F,
+19,18,20,Farmer,D,7,Scout,B C,6,Magician,E,
+19,19,22,Farmer,A,8,Scout,E,7,Magician,A,
+19,20,,,,,,,,,,Shaman
+19,21,6,Farmer,A,,,,,,,
+19,22,8,Farmer,A,1,Scout,B C,,,,
+19,23,10,Farmer,A,2,Scout,E,1,Magician,A,
+19,24,12,Farmer,D,3,Scout,B C,2,Magician,F,
+19,25,14,Farmer,A,4,Scout,E,3,Magician,E,
+19,26,16,Farmer,A,5,Scout,B C,4,Magician,A,
+19,27,18,Farmer,A,6,Scout,E,5,Magician,F,
+19,28,20,Farmer,D,7,Scout,B C,6,Magician,E,
+19,29,22,Farmer,A,8,Scout,E,7,Magician,A,
+19,30,,,,,,,,,,Berserker
+20,1,4,Miner,A,,,,,,,
+20,2,6,Miner,A,2,Quarreller,A,,,,
+20,3,8,Miner,A,3,Quarreller,A,1,Marauder,A,
+20,4,10,Miner,D,4,Quarreller,B C,2,Marauder,F,
+20,5,12,Miner,A,5,Quarreller,F,3,Marauder,E,
+20,6,14,Miner,A,6,Quarreller,B C,4,Marauder,A,
+20,7,16,Miner,A,7,Quarreller,C,5,Marauder,F,
+20,8,18,Miner,D,8,Quarreller,B C,6,Marauder,E,
+20,9,20,Miner,A,9,Quarreller,D,7,Marauder,A,
+20,10,,,,,,,,,,Farmer
+20,11,6,Miner,A,,,,,,,
+20,12,8,Miner,A,2,Quarreller,B C,,,,
+20,13,10,Miner,A,3,Quarreller,F,1,Marauder,A,
+20,14,12,Miner,D,4,Quarreller,B C,2,Marauder,F,
+20,15,14,Miner,A,5,Quarreller,F,3,Marauder,E,
+20,16,16,Miner,A,6,Quarreller,B C,4,Marauder,A,
+20,17,18,Miner,A,7,Quarreller,F,5,Marauder,F,
+20,18,20,Miner,D,8,Quarreller,B C,6,Marauder,E,
+20,19,22,Miner,A,9,Quarreller,F,7,Marauder,A,
+20,20,,,,,,,,,,Hammerer
+20,21,6,Miner,A,,,,,,,
+20,22,8,Miner,A,2,Quarreller,B C,,,,
+20,23,10,Miner,A,3,Quarreller,F,1,Marauder,A,
+20,24,12,Miner,D,4,Quarreller,B C,2,Marauder,F,
+20,25,14,Miner,A,5,Quarreller,F,3,Marauder,E,
+20,26,16,Miner,A,6,Quarreller,B C,4,Marauder,A,
+20,27,18,Miner,A,7,Quarreller,F,5,Marauder,F,
+20,28,20,Miner,D,8,Quarreller,B C,6,Marauder,E,
+20,29,22,Miner,A,9,Quarreller,F,7,Marauder,A,
+20,30,,,,,,,,,,Runesmith

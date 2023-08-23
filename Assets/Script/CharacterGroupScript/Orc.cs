@@ -21,7 +21,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.Orc;
             UnitProperty = UnitProperties.Physics;
             UnitGrade = UnitGrades.G;
-            UnitDesc = "Orc Unit D / G Grade";
+            UnitDesc = "The orc is an unskilled swordsman, \nbut its strength transcends that of a human.";
             SetLevel(1);
         }
         public void Awake()

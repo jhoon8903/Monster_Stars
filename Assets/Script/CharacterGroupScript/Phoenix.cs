@@ -28,7 +28,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.Phoenix;
             UnitProperty = UnitProperties.Fire;
             UnitGrade = UnitGrades.B;
-            UnitDesc = "Phoenix Unit G / B Grade";
+            UnitDesc = "The phoenix causes burns on enemies \nand can deal particularly strong damage to bosses.";
             SetLevel(1);
         }
 

@@ -9,7 +9,6 @@ namespace Script.EnemyManagerScript
         [SerializeField] private EnemyManager enemyManager;
         [SerializeField] public List<GameObject> pooledEnemy = new List<GameObject>();
         [SerializeField] private  List<GameObject> pooledDefaultEnemy = new List<GameObject>();
-
         public List<EnemyBase> enemyBases = new List<EnemyBase>();
         
         public void Start()
@@ -27,13 +26,12 @@ namespace Script.EnemyManagerScript
             pooledEnemy = pooledDefaultEnemy.ToList();
         }
 
-        public GameObject GetPooledEnemy(EnemyBase.EnemyTypes enemyType, EnemyBase.SpawnZones spawnZones)
+        public GameObject GetPooledEnemy(EnemyBase.EnemyClasses? enemyClass)
         {
-            var spawnEnemy = pooledEnemy.FirstOrDefault(t => !t.activeInHierarchy && t.GetComponent<EnemyBase>().EnemyType == enemyType && t.GetComponent<EnemyBase>().SpawnZone == spawnZones);
-
+            var spawnEnemy = pooledEnemy.FirstOrDefault(t => !t.activeInHierarchy && t.GetComponent<EnemyBase>().enemyClass == enemyClass);
             if (spawnEnemy == null)
             {
-                var enemySettings = enemyManager.enemyList.FirstOrDefault(es => es.enemyPrefab.GetComponent<EnemyBase>().EnemyType == enemyType && es.enemyPrefab.GetComponent<EnemyBase>().SpawnZone == spawnZones);
+                var enemySettings = enemyManager.enemyList.FirstOrDefault(es => es.enemyPrefab.GetComponent<EnemyBase>().enemyClass == enemyClass);
                 if (enemySettings != null)
                 {
                     spawnEnemy = Instantiate(enemySettings.enemyPrefab, transform);
@@ -48,7 +46,6 @@ namespace Script.EnemyManagerScript
             enemyBases.Add(spawnEnemy.GetComponent<EnemyBase>());
             return spawnEnemy;
         }
-
 
         public void ClearList()
         {

@@ -28,7 +28,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.Cobra;
             UnitProperty = UnitProperties.Poison;
             UnitGrade = UnitGrades.B;
-            UnitDesc = "Cobra Unit I / B Grade";
+            UnitDesc = "Cobra's venom is very potent \nand leaves a puddle that continues to poison the enemy.";
             SetLevel(1);
         }
 

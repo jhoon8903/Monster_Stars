@@ -28,7 +28,7 @@ namespace Script.CharacterGroupScript
             unitGroup = UnitGroups.Ogre;
             UnitProperty = UnitProperties.Darkness;
             UnitGrade = UnitGrades.G;
-            UnitDesc = "Ogre Unit B / B Grade";
+            UnitDesc = "The ogre throws rocks to push back enemies. \nSometimes they throw larger boulders.";
             SetLevel(1);
         }
 
