@@ -55,6 +55,10 @@ namespace Script.RobbyScript.StoreMenuGroup
         [SerializeField] private GameObject errorContentsImage;
         [SerializeField] private QuestManager questManager;
         
+        [SerializeField] private Sprite gGradeSprite; 
+        [SerializeField] private Sprite bGradeSprite; 
+        [SerializeField] private Sprite pGradeSprite;
+        
         public static StoreMenu Instance { get; private set; }
         private int _coinReward;
         private int _unitPieceReward;
@@ -266,6 +270,13 @@ namespace Script.RobbyScript.StoreMenuGroup
                 _unitPieceReward = pieceCountPerUnit[index];
                 if (_unitPieceReward == 0) continue;
                 _unitPieceObject = chestItem.PieceInstance(unit, rewardItem, _unitPieceReward, boxRewardContents.transform);
+                _unitPieceObject.goodsBack.GetComponent<Image>().color = Color.white;
+                _unitPieceObject.goodsBack.GetComponent<Image>().sprite = unit.UnitGrade switch
+                {
+                    CharacterBase.UnitGrades.G => gGradeSprite,
+                    CharacterBase.UnitGrades.B => bGradeSprite,
+                    CharacterBase.UnitGrades.P => pGradeSprite,
+                };
                 _unitPieceDict[unit] = new Tuple<int, Goods>(_unitPieceReward, _unitPieceObject);
             }
             var totalUnitPieces = pieceCountPerUnit.Values.Sum();

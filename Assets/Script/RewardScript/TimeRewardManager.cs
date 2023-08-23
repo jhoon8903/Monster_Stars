@@ -7,6 +7,8 @@ using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.RobbyScript.StoreMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
 using TMPro;
+using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
@@ -25,6 +27,10 @@ namespace Script.RewardScript
         [SerializeField] private GameObject timeRewardCloseBtn;
         [SerializeField] private Goods rewardItem;
         [SerializeField] public List<CharacterBase> unitList = new List<CharacterBase>();
+        
+        [SerializeField] private Sprite gGradeSprite; // Assign G grade sprite in the Inspector
+        [SerializeField] private Sprite bGradeSprite; // Assign B grade sprite in the Inspector
+        
         public static TimeRewardManager Instance { get; private set; }
         private TextMeshProUGUI _rewardLevelText;
         private TextMeshProUGUI _rewardTimeText;
@@ -209,6 +215,12 @@ namespace Script.RewardScript
                 _unitPieceReward = pieceCountPerUnit[index];
                 if (_unitPieceReward == 0) continue;
                 _unitPieceObject = Instantiate(rewardItem, timeRewardContents.transform);
+                _unitPieceObject.goodsBack.GetComponent<Image>().color = Color.white;
+                _unitPieceObject.goodsBack.GetComponent<Image>().sprite = unit.UnitGrade switch
+                {
+                    CharacterBase.UnitGrades.G => gGradeSprite,
+                    CharacterBase.UnitGrades.B => bGradeSprite,
+                };
                 _unitPieceObject.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPieceLevel);
                 _unitPieceObject.goodsSprite.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);
                 _unitPieceObject.goodsValue.text = $"{_unitPieceReward}";
@@ -267,6 +279,12 @@ namespace Script.RewardScript
                     unit.Initialize();
                     _unitPieceReward = unitReward;
                     _unitPieceObject = Instantiate(rewardItem, timeRewardContents.transform);
+                    _unitPieceObject.goodsBack.GetComponent<Image>().color =Color.white;
+                    _unitPieceObject.goodsBack.GetComponent<Image>().sprite = unit.UnitGrade switch
+                    {
+                        CharacterBase.UnitGrades.G => gGradeSprite,
+                        CharacterBase.UnitGrades.B => bGradeSprite,
+                    };
                     _unitPieceObject.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPieceLevel);
                     _unitPieceObject.goodsSprite.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);
                     _unitPieceObject.goodsValue.text = $"{_unitPieceReward}";
@@ -293,8 +311,8 @@ namespace Script.RewardScript
                 _hour = timePassed.Hours;
                 _min = timePassed.Minutes;
                 _sec = timePassed.Seconds;
-                _rewardLevelText.text = $"보상레벨 [{PlayerPrefs.GetInt("LatestStage", 1)} Lv]";
-                _rewardTimeText.text = $"보상누적 [{_hour:D2}:{_min:D2}:{_sec:D2}]";
+                _rewardLevelText.text = $"Reward Level [{PlayerPrefs.GetInt("LatestStage", 1)} Lv]";
+                _rewardTimeText.text = $"Reward Accumulated [{_hour:D2}:{_min:D2}:{_sec:D2}]";
                 yield return new WaitForSecondsRealtime(1f);
             }
         }
