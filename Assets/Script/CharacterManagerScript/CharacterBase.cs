@@ -12,9 +12,9 @@ namespace Script.CharacterManagerScript
     public class CharacterBase : MonoBehaviour
     {
         [SerializeField] public GameObject cover;
-        public int unitPeaceLevel = 1;
-        protected internal int CharacterPeaceCount { get; set; }
-        protected internal int CharacterMaxPeace => CheckForMaxPeace();
+        [FormerlySerializedAs("unitPeaceLevel")] public int unitPieceLevel = 1;
+        protected internal int UnitPieceCount { get; set; }
+        protected internal int UnitPieceMaxPiece => CheckForMaxPeace();
         protected internal int CharacterLevelUpCoin => CheckForLevelUpCoin();
         protected internal int CumulativeDamage;
         public enum UnitGrades { G, B, P }
@@ -26,7 +26,7 @@ namespace Script.CharacterManagerScript
         protected internal Types Type; 
         public enum UnitGroups { Octopus,Ogre,DeathChiller,Orc,Fishman,Skeleton,Phoenix,Beholder,Cobra,Berserker,DarkElf,None }
         public enum UnitAtkTypes {None, Projectile, GuideProjectile, Circle}
-        public enum UnitProperties { Divine, Darkness, Physics, Water, Poison, Fire, None }
+        public enum UnitProperties { Darkness, Physics, Water, Poison, Fire, None }
         public enum UnitEffects { Slow, Bleed, Poison, Burn, Bind, None } 
         public UnitGroups unitGroup = UnitGroups.None; 
         protected internal UnitAtkTypes UnitAtkType = UnitAtkTypes.None;
@@ -86,7 +86,7 @@ namespace Script.CharacterManagerScript
         private int CheckForMaxPeace()
         {
             var maxPiece = 0;
-            switch (unitPeaceLevel)
+            switch (unitPieceLevel)
             {
                 case 1:
                 case 2:
@@ -192,7 +192,7 @@ namespace Script.CharacterManagerScript
         private int CheckForLevelUpCoin()
         {
             var coin = 0;
-            switch (unitPeaceLevel)
+            switch (unitPieceLevel)
             {
                 case 1:
                     coin = 0;
@@ -325,9 +325,9 @@ namespace Script.CharacterManagerScript
         }
         public IEnumerator UnitLevelUp()
         {
-            CharacterPeaceCount -= CharacterMaxPeace;
+            UnitPieceCount -= UnitPieceMaxPiece;
             CoinsScript.Instance.Coin -= CharacterLevelUpCoin;
-            unitPeaceLevel++;
+            unitPieceLevel++;
             Initialize();
             yield return null;
         }

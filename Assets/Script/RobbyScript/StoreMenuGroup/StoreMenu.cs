@@ -159,7 +159,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             boxRewardPanel.SetActive(false);
             foreach (var unitReward in _unitPieceDict)
             {
-                unitReward.Key.CharacterPeaceCount += unitReward.Value.Item1;
+                unitReward.Key.UnitPieceCount += unitReward.Value.Item1;
                 HoldCharacterList.Instance.UpdateRewardPiece(unitReward.Key);
                 Destroy(unitReward.Value.Item2.gameObject);
             }
@@ -232,7 +232,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             foreach (var grade in totalPiecesPerGrade.Keys)
             {
                 var unitsOfThisGrade = selectedUnitIndices.Where(index =>
-                    unitList[index].UnitGrade == grade && unitList[index].unitPeaceLevel < 14).ToList();
+                    unitList[index].UnitGrade == grade && unitList[index].unitPieceLevel < 14).ToList();
                 var assignedUnits = new List<int>();
                 var remainingPieces = totalPiecesPerGrade[grade];
                 while (remainingPieces > 0 && unitsOfThisGrade.Count > 0)
@@ -258,7 +258,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             foreach (var index in selectedUnitIndices)
             {
                 var unit = unitList[index];
-                if (unit.unitPeaceLevel >= 14) continue;
+                if (unit.unitPieceLevel >= 14) continue;
                 unit.Initialize();
                 _unitPieceReward = pieceCountPerUnit[index];
                 if (_unitPieceReward == 0) continue;

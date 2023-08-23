@@ -48,20 +48,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cover: {fileID: 3244762849881837837}
-  unitPeaceLevel: 1
-  unLock: 1
+  unitPeaceLevel: 3
+  unLock: 0
   selected: 0
   unitPuzzleLevel: 1
   unitGroup: 6
-  lv1: {fileID: 21300000, guid: 462169b0512c14fcbbabc335d5d66c7c, type: 3}
-  lv3: {fileID: 21300000, guid: 35553adc80994469d9b5655d15ba87eb, type: 3}
-  lv5: {fileID: 21300000, guid: 2c0ab42009ba7468ebd8b8a76127edab, type: 3}
-  lv7: {fileID: 21300000, guid: 5cedbd633af644cce9cdd8fa76d72ffc, type: 3}
-  lv9: {fileID: 21300000, guid: 37201d9cf154148f992e166a3fe24f35, type: 3}
-  lv11: {fileID: 21300000, guid: a00732e44b7c5402ea1443bf642858ae, type: 3}
-  lv13: {fileID: 21300000, guid: ffb94968fd1264b65a636e4992df4429, type: 3}
-  baseDamage: 40
-  dotDamage: 8
+  lv1: {fileID: 21300000, guid: f6ca6c69bf5ac42d680520277a2c3e88, type: 3}
+  lv3: {fileID: 21300000, guid: 97a9b711ea166413b8c359ab05b7dea0, type: 3}
+  lv5: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
+  lv7: {fileID: 21300000, guid: 97a9b711ea166413b8c359ab05b7dea0, type: 3}
+  lv9: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
+  lv11: {fileID: 21300000, guid: f6ca6c69bf5ac42d680520277a2c3e88, type: 3}
+  lv13: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
+  baseDamage: 34
+  dotDamage: 6.8
   effectChance: 0
   effectStack: 1
   slowTime: 0
@@ -79,12 +79,12 @@ MonoBehaviour:
   projectileSpeed: 0
   swingSpeed: 1
   defaultAtkDistance: 1
-  level1Sprite: {fileID: 21300000, guid: 462169b0512c14fcbbabc335d5d66c7c, type: 3}
-  level2Sprite: {fileID: 21300000, guid: 35553adc80994469d9b5655d15ba87eb, type: 3}
-  level3Sprite: {fileID: 21300000, guid: 2c0ab42009ba7468ebd8b8a76127edab, type: 3}
-  level4Sprite: {fileID: 21300000, guid: 5cedbd633af644cce9cdd8fa76d72ffc, type: 3}
-  level5Sprite: {fileID: 21300000, guid: 37201d9cf154148f992e166a3fe24f35, type: 3}
-  level6Sprite: {fileID: 21300000, guid: 9e77add9f1f4e41ab8f367d26f2cdd00, type: 3}
+  level1Sprite: {fileID: 21300000, guid: 2033e1ad0d9c14510bbc3c11a47492cf, type: 3}
+  level2Sprite: {fileID: 21300000, guid: 2033e1ad0d9c14510bbc3c11a47492cf, type: 3}
+  level3Sprite: {fileID: 21300000, guid: af589b29bcd8d46f7acab55fe93f16a4, type: 3}
+  level4Sprite: {fileID: 21300000, guid: 4fdb2aa2454e341339f4739058306c73, type: 3}
+  level5Sprite: {fileID: 21300000, guid: c5a09bc380e824bfd8ba1918e08d4c0f, type: 3}
+  level6Sprite: {fileID: 21300000, guid: 3a672bd8bf80944c8bdeae9c795be10c, type: 3}
 --- !u!212 &7786321694734890728
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -126,7 +126,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 462169b0512c14fcbbabc335d5d66c7c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2033e1ad0d9c14510bbc3c11a47492cf, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -154,7 +154,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.8888889, y: 0.8888889}
+    oldSize: {x: 0.85333335, y: 0.85333335}
     newSize: {x: 0.8888889, y: 0.8888889}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

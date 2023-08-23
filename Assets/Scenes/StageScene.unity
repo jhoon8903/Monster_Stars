@@ -1372,7 +1372,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
   m_AnchoredPosition: {x: 80, y: 0}
-  m_SizeDelta: {x: 220, y: 220}
+  m_SizeDelta: {x: 150, y: 150}
   m_Pivot: {x: 0, y: 0.5}
 --- !u!114 &242055662
 MonoBehaviour:
@@ -2229,8 +2229,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 700, y: 0}
+  m_AnchoredPosition: {x: -37, y: 0}
+  m_SizeDelta: {x: 532, y: 0}
   m_Pivot: {x: 1, y: 0.5}
 --- !u!114 &346148333
 MonoBehaviour:
@@ -2279,13 +2279,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 190
-  m_fontSizeBase: 190
+  m_fontSize: 150
+  m_fontSizeBase: 150
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 1
+  m_fontStyle: 0
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -2366,8 +2366,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 800, y: -100}
-  m_SizeDelta: {x: 1000, y: 300}
+  m_AnchoredPosition: {x: 630, y: -100}
+  m_SizeDelta: {x: 800, y: 250}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &362582817
 MonoBehaviour:
@@ -4851,7 +4851,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 74c97520331eb4b82a1b1880a3767e72, type: 3}
   - {fileID: 21300000, guid: 6c42adbea3ae843c0b6eea8c44fca533, type: 3}
   - {fileID: 21300000, guid: d40bc6ead151a4c5792caad1a6935bf2, type: 3}
-  unitSkillPrefabs: {fileID: 8652210597724827206, guid: 70a15dc6a1e9b42b99ce6d69efbb0d72, type: 3}
+  unitSkillPrefabs: {fileID: -8650270918232441338, guid: b592c060153b349d2b90515e8c362e81, type: 3}
   unit1SkillGrid: {fileID: 1556894473}
   unit1Back: {fileID: 1332943140}
   unit1Image: {fileID: 1919112913}
@@ -5408,7 +5408,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 100, y: -100}
-  m_SizeDelta: {x: 600, y: 300}
+  m_SizeDelta: {x: 500, y: 250}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &920323413
 MonoBehaviour:
@@ -9235,14 +9235,14 @@ MonoBehaviour:
   gridManager: {fileID: 8808150501734532426}
   countManager: {fileID: 841622520}
   characterList: []
-  octopusFifthAttackBoost: 0
-  octopusBleedAttack: 0
-  octopusPoisonDamageBoost: 0
+  octopusThirdAttackBoost: 0
+  octopusPoisonAttack: 0
+  octopusBleedDamageBoost: 0
   octopusShackledExplosion: 0
   octopusBleedDurationBoost: 0
   octopusDamageBoost: 0
   dark3RateBoost: 0
-  ogreFifthAttackDamageBoost: 0
+  ogreThirdAttackDamageBoost: 0
   ogreStatusAilmentSlowEffect: 0
   ogreRangeIncrease: 0
   darkAttackPowerBoost: 0
@@ -9299,7 +9299,7 @@ MonoBehaviour:
   cobraRateBoost: 0
   cobraPoolTimeBoost: 0
   berserkerCastleCrushStatBoost: 0
-  berserkerFifthBoost: 0
+  berserkerThirdBoost: 0
   berserkerBleedTimeBoost: 0
   berserkerPoisonDamageBoost: 0
   berserkerRangeBoost: 0
@@ -9537,8 +9537,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 130, y: 0}
-  m_SizeDelta: {x: -340, y: 0}
+  m_AnchoredPosition: {x: 97, y: 0}
+  m_SizeDelta: {x: -274, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1733803903
 MonoBehaviour:
@@ -9587,8 +9587,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 200
-  m_fontSizeBase: 200
+  m_fontSize: 150
+  m_fontSizeBase: 150
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18

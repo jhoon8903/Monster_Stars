@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Script.CharacterManagerScript;
 using Script.RobbyScript.TopMenuGroup;
 using Script.UIManager;
@@ -12,10 +13,12 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
 {
     public class InformationPanel : MonoBehaviour
     {
-        [SerializeField] private GameObject infoPanel;
+        // Panel
+        [SerializeField] private Image panel;
         // unit Name Tag
         [SerializeField] private TextMeshProUGUI nameText;
-        // unit Image
+        // UnitBack
+        [SerializeField] private List<Sprite> panelGrade;
         [SerializeField] private Image unitBackGround;
         [SerializeField] private List<Sprite> unitBackGroundSpriteList;
         [SerializeField] private Image unitFrame;
@@ -23,7 +26,9 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         [SerializeField] private Image unitImage;
         [SerializeField] private TextMeshProUGUI unitLevelText;
         [SerializeField] private Slider unitPeaceSlider;
-        // unit Desc && Properties
+        [SerializeField] private TextMeshProUGUI unitPieceText;
+        [SerializeField] private Image frameProperty;
+        // UnitNotice
         [SerializeField] private Image unitPropertyImage;
         [SerializeField] private TextMeshProUGUI unitPropertyText;
         [SerializeField] private TextMeshProUGUI unitNoticeText;
@@ -43,14 +48,13 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
 
         public void OpenInfoPanel(UnitIcon unitInstance, CharacterBase characterBase)
         {
-            // infoPanel.SetActive(true);
             StartCoroutine(CheckForLevelUp(unitInstance, characterBase));
         }
         private IEnumerator CheckForLevelUp(UnitIcon unitInstance, CharacterBase characterBase)
         {
             levelUpBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             
-            if (characterBase.CharacterPeaceCount >= characterBase.CharacterMaxPeace && CoinsScript.Instance.Coin >= characterBase.CharacterLevelUpCoin)
+            if (characterBase.UnitPieceCount >= characterBase.UnitPieceMaxPiece && CoinsScript.Instance.Coin >= characterBase.CharacterLevelUpCoin)
             {
                 levelUpBtn.GetComponent<Button>().interactable = true;
                 levelUpBtn.GetComponent<Image>().sprite = levelUpBtnSprite[0];
@@ -64,7 +68,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     Information(unitInstance, characterBase);
                 });
             }
-            else if (characterBase.unitPeaceLevel >= 14)
+            else if (characterBase.unitPieceLevel >= 14)
             {
                 levelUpBtn.GetComponent<Button>().interactable = false;
                 levelUpBtn.GetComponent<Image>().sprite = levelUpBtnSprite[1];
@@ -79,53 +83,81 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         }
         private void Information(UnitIcon unitInstance, CharacterBase characterBase)
         {
-            // unit Name
-            nameText.text = characterBase.name;
-            // unit Area-Unit Image
-            switch (characterBase.UnitGrade)
+            unitInstance.CharacterBase = characterBase;
+            nameText.text = unitInstance.CharacterBase.name;
+            switch (unitInstance.CharacterBase.unLock)
             {
-                case CharacterBase.UnitGrades.G:
-                    unitBackGround.GetComponent<Image>().sprite = unitBackGroundSpriteList[0];
-                    unitFrame.GetComponent<Image>().sprite = unitFrameSpriteList[0];
+                 case true:
+                     switch (unitInstance.CharacterBase.UnitGrade)
+                     {
+                         case CharacterBase.UnitGrades.G:
+                             panel.sprite = panelGrade[0];
+                             unitBackGround.sprite = unitBackGroundSpriteList[0];
+                             unitFrame.sprite = unitFrameSpriteList[0];
+                             break;
+                         case CharacterBase.UnitGrades.B:
+                             panel.sprite = panelGrade[1];
+                             unitBackGround.sprite = unitBackGroundSpriteList[1];
+                             unitFrame.sprite = unitFrameSpriteList[1];
+                             break;
+                         case CharacterBase.UnitGrades.P:
+                             panel.sprite = panelGrade[2];
+                             unitBackGround.sprite = unitBackGroundSpriteList[2];
+                             unitFrame.sprite = unitFrameSpriteList[2];
+                             break;
+                     }
+                     break;
+                 case false:
+                     panel.sprite = panelGrade[3];
+                     unitBackGround.sprite = unitBackGroundSpriteList[3];
+                     unitFrame.sprite = unitFrameSpriteList[3];
+                     break;
+            }
+
+            unitImage.sprite = unitInstance.CharacterBase.GetSpriteForLevel(unitInstance.CharacterBase.unitPieceLevel);
+            unitLevelText.text = $"LV.{unitInstance.CharacterBase.unitPieceLevel}";
+            unitPeaceSlider.value = unitInstance.CharacterBase.UnitPieceCount;
+            unitPeaceSlider.maxValue = unitInstance.CharacterBase.UnitPieceMaxPiece;
+            unitPieceText.text = $"{unitInstance.CharacterBase.UnitPieceCount}/{unitInstance.CharacterBase.UnitPieceMaxPiece}";
+            switch (unitInstance.CharacterBase.UnitProperty)
+            {
+                case CharacterBase.UnitProperties.Darkness:
+                    unitInstance.unitProperty.GetComponent<Image>().sprite = unitInstance.unitPropertiesSprite[0];
+                    frameProperty.sprite = unitInstance.unitPropertiesSprite[0];
+                    unitPropertyImage.sprite = unitInstance.unitPropertiesSprite[0];
                     break;
-                case CharacterBase.UnitGrades.B:
-                    unitBackGround.GetComponent<Image>().sprite = unitBackGroundSpriteList[1];
-                    unitFrame.GetComponent<Image>().sprite = unitFrameSpriteList[1];
+                case CharacterBase.UnitProperties.Fire:
+                    unitInstance.unitProperty.GetComponent<Image>().sprite = unitInstance.unitPropertiesSprite[1];
+                    frameProperty.sprite = unitInstance.unitPropertiesSprite[1];
+                    unitPropertyImage.sprite = unitInstance.unitPropertiesSprite[1];
                     break;
-                case CharacterBase.UnitGrades.P:
-                    unitBackGround.GetComponent<Image>().sprite = unitBackGroundSpriteList[2];
-                    unitFrame.GetComponent<Image>().sprite = unitFrameSpriteList[2];
+                case CharacterBase.UnitProperties.Physics:
+                    unitInstance.unitProperty.GetComponent<Image>().sprite = unitInstance.unitPropertiesSprite[2];
+                    frameProperty.sprite = unitInstance.unitPropertiesSprite[2];
+                    unitPropertyImage.sprite = unitInstance.unitPropertiesSprite[2];
+                    break;
+                case CharacterBase.UnitProperties.Poison:
+                    unitInstance.unitProperty.GetComponent<Image>().sprite = unitInstance.unitPropertiesSprite[3];
+                    frameProperty.sprite = unitInstance.unitPropertiesSprite[3];
+                    unitPropertyImage.sprite = unitInstance.unitPropertiesSprite[3];
+                    break;
+                case CharacterBase.UnitProperties.Water:
+                    unitInstance.unitProperty.GetComponent<Image>().sprite = unitInstance.unitPropertiesSprite[4];
+                    frameProperty.sprite = unitInstance.unitPropertiesSprite[4];
+                    unitPropertyImage.sprite = unitInstance.unitPropertiesSprite[4];
                     break;
                 default:
-                    unitBackGround.GetComponent<Image>().sprite = unitBackGroundSpriteList[3];
-                    unitFrame.GetComponent<Image>().sprite = unitFrameSpriteList[3];
-                    break;
+                    throw new ArgumentOutOfRangeException(nameof(unitInstance.CharacterBase.UnitProperty));
             }
-            unitImage.GetComponent<Image>().sprite = characterBase.GetSpriteForLevel(characterBase.unitPeaceLevel);
-            unitLevelText.text = $"LV.{characterBase.unitPeaceLevel}";
-            unitPeaceSlider.value = characterBase.CharacterPeaceCount;
-            unitPeaceSlider.maxValue = characterBase.CharacterMaxPeace;
-            // unit Area-Desc
-            unitPropertyImage.GetComponent<Image>().sprite = characterBase.UnitProperty switch
-            {
-                CharacterBase.UnitProperties.Divine => unitInstance.unitPropertiesSprite[0],
-                CharacterBase.UnitProperties.Darkness => unitInstance.unitPropertiesSprite[1],
-                CharacterBase.UnitProperties.Physics => unitInstance.unitPropertiesSprite[2],
-                CharacterBase.UnitProperties.Water => unitInstance.unitPropertiesSprite[3],
-                CharacterBase.UnitProperties.Poison => unitInstance.unitPropertiesSprite[4],
-                CharacterBase.UnitProperties.Fire => unitInstance.unitPropertiesSprite[5],
-            };
-            unitPropertyText.text = UnitPropertyText(characterBase);
-            unitNoticeText.text = characterBase.UnitDesc;
-            // unit Info Grid
-            var unitDataList = UnitData(characterBase);
-            PopulateUnitInfoObject(unitDataList, characterBase);
-            // unit Skill Grid
-            var unitSkillLists = UnitSkills(characterBase);
-            PopulateUnitSkillObject(unitSkillLists, characterBase);
-            // unit LevelUp Btn
-            var unitLevelUpPrice = characterBase.CharacterLevelUpCoin;
-            levelUpText.text = characterBase.unitPeaceLevel < 14 ? unitLevelUpPrice.ToString() : "Max Level";
+
+            unitPropertyText.text = UnitPropertyText(unitInstance.CharacterBase);
+            unitNoticeText.text = unitInstance.CharacterBase.UnitDesc;
+            var unitDataList = UnitData(unitInstance.CharacterBase);
+            PopulateUnitInfoObject(unitDataList, unitInstance.CharacterBase);
+            var unitSkillLists = UnitSkills(unitInstance.CharacterBase);
+            PopulateUnitSkillObject(unitSkillLists, unitInstance.CharacterBase);
+            var unitLevelUpPrice = unitInstance.CharacterBase.CharacterLevelUpCoin;
+            levelUpText.text = unitInstance.CharacterBase.unitPieceLevel < 14 ? unitLevelUpPrice.ToString() : "Max Level";
        
         }
         private static string UnitPropertyText(CharacterBase characterBase)
@@ -133,7 +165,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             var unitProperties = characterBase.UnitProperty;
             var unit = unitProperties switch
             {
-                CharacterBase.UnitProperties.Divine => "Divine",
                 CharacterBase.UnitProperties.Darkness => "Darkness",
                 CharacterBase.UnitProperties.Physics => "Physical",
                 CharacterBase.UnitProperties.Water => "Water",
@@ -150,16 +181,17 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             for (var i = 1; i < unitInfoData.Length; i++)
             {
                 var data = unitInfoData[i].Split(',');
-                var unitGroup = (CharacterBase.UnitGroups)Enum.Parse(typeof(CharacterBase.UnitGroups), data[1], true);
+                var unitGroup = (CharacterBase.UnitGroups)Enum.Parse(typeof(CharacterBase.UnitGroups), data[0], true);
                 if (unitGroup != characterBase.unitGroup) continue;
                 var unitDataDict = new Dictionary<string, object>
                 {
+                    {"AttackRange", data[1]},
                     {"Damage", data[2]},
-                    {"Range", data[3]},
-                    {"Rate", data[4]},
-                    {"Form", data[5]},
-                    {"Effect", data[6]},
-                    {"Time", data[7]},
+                    {"AttackSpeed", data[3]},
+                    {"Type", data[4]},
+                    {"Duration", data[5]},
+                    {"Intensity", data[6]},
+                    {"Bounce", data[7]}
                 };
                 result.Add(unitDataDict);
             }
@@ -171,37 +203,88 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             {
                 Destroy(child.gameObject);
             }
+
             foreach (var unitDataDict in unitDataList)
             {
-                foreach (var unitData in unitDataDict)
+                string currentType = null;
+
+                foreach (var unitData in unitDataDict.Where(unitData => unitData.Value.ToString() != "Null"))
                 {
-                    if (unitData.Value as string == "Null" && unitData.Key is "Effect" or "Time") continue;
+                    if (unitData.Key == "Type")
+                    {
+                        currentType = unitData.Value.ToString();
+                        continue; 
+                    }
                     var instance = Instantiate(infoObject, unitInformationGrid.transform);
+
                     switch (unitData.Key)
                     {
+                        case "AttackRange":
+                            instance.infoIcon.sprite = instance.attackRangeSprite;
+                            instance.infoTitle.text = "Attack Range";
+                            instance.infoDesc.text = unitData.Value.ToString();
+                            break;
                         case "Damage":
+                            instance.infoIcon.sprite = instance.damageSprite;
                             instance.infoTitle.text = "Damage";
-                            instance.infoDesc.text = characterBase.unitPeaceLevel == 1 ? $"{unitData.Value}" : $"{unitData.Value} + {characterBase.UnitLevelDamage}";
+                            instance.infoDesc.text = characterBase.unitPieceLevel == 1 ? $"{unitData.Value}" : $"{unitData.Value}(+{characterBase.UnitLevelDamage})";
                             break;
-                        case "Range":
-                            instance.infoTitle.text = "Range";
-                            instance.infoDesc.text = unitData.Value as string;
+                        case "AttackSpeed":
+                            instance.infoIcon.sprite = instance.attackSpeedSprite;
+                            instance.infoTitle.text = "Attack Speed (Per Second)";
+                            instance.infoDesc.text = unitData.Value.ToString();
                             break;
-                        case "Rate":
-                            instance.infoTitle.text = "Rate";
-                            instance.infoDesc.text = unitData.Value as string;
+                        case "Type":
+                            currentType = unitData.Value.ToString();
                             break;
-                        case "Form":
-                            instance.infoTitle.text = "Form";
-                            instance.infoDesc.text = unitData.Value as string;
+                        case "Duration":
+                            switch (currentType)
+                            {
+                                case "Slow":
+                                    instance.infoIcon.sprite = instance.durationSprites[0];
+                                    instance.infoTitle.text = "SlowDown Duration";
+                                    break;
+                                case "Burn":
+                                    instance.infoIcon.sprite = instance.durationSprites[1];
+                                    instance.infoTitle.text = "Burning Duration";
+                                    break;
+                                case "Poison":
+                                    instance.infoIcon.sprite = instance.durationSprites[2];
+                                    instance.infoTitle.text = "Poison Duration";
+                                    break;
+                                case "Bleed":
+                                    instance.infoIcon.sprite = instance.durationSprites[3];
+                                    instance.infoTitle.text = "Bleed Duration";
+                                    break;
+                            }
+                            instance.infoDesc.text = unitData.Value.ToString();
                             break;
-                        case "Effect":
-                            instance.infoTitle.text = "Effect";
-                            instance.infoDesc.text = unitData.Value as string;
+                        case "Intensity":
+                            switch (currentType)
+                            {
+                                case "Slow":
+                                    instance.infoIcon.sprite = instance.intensitySprites[0];
+                                    instance.infoTitle.text = "SlowDown Intensity";
+                                    break;
+                                case "Burn":
+                                    instance.infoIcon.sprite = instance.intensitySprites[1];
+                                    instance.infoTitle.text = "Burning Damage";
+                                    break;
+                                case "Poison":
+                                    instance.infoIcon.sprite = instance.intensitySprites[2];
+                                    instance.infoTitle.text = "Poison Damage";
+                                    break;
+                                case "Bleed":
+                                    instance.infoIcon.sprite = instance.intensitySprites[3];
+                                    instance.infoTitle.text = "Bleed Damage";
+                                    break;
+                            }
+                            instance.infoDesc.text = unitData.Value.ToString();
                             break;
-                        case "Time":
-                            instance.infoTitle.text = "Time";
-                            instance.infoDesc.text = unitData.Value as string;
+                        case "Bounce":
+                            instance.infoIcon.sprite = instance.bounceSprite;
+                            instance.infoTitle.text = "Bounces";
+                            instance.infoDesc.text = unitData.Value.ToString();
                             break;
                     }
                 }
@@ -237,44 +320,52 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
 
         private void PopulateUnitSkillObject(List<Dictionary<string, object>> skills, CharacterBase characterBase)
         {
-
             foreach (Transform child in unitSkillGrid.transform)
             {
                 Destroy(child.gameObject);
             }
-
             foreach (var skill in skills)
             {
                 var instance = Instantiate(skillObject, unitSkillGrid.transform);
-                if (characterBase.unitPeaceLevel < (int)skill["Level"])
+                if (characterBase.unitPieceLevel < (int)skill["Level"])
                 {
-                    instance.GetComponent<Image>().sprite = skillGradeSpriteList[3];
+                    instance.skillBackground.sprite = instance.background[3];
                 }
                 else
                 {
                     switch ((string)skill["Grade"])
                     {
                         case "G":
-                            instance.GetComponent<Image>().sprite = skillGradeSpriteList[0];
+                            instance.skillBackground.sprite = instance.background[0];
                             break;
                         case "B":
-                            instance.GetComponent<Image>().sprite = skillGradeSpriteList[1];
+                            instance.skillBackground.sprite = instance.background[1];
                             break;
                         case "P":
-                            instance.GetComponent<Image>().sprite = skillGradeSpriteList[2];
-                            break;
-                        default:
-                            Debug.LogError("Unexpected grade: " + skill["Grade"]);
+                            instance.skillBackground.sprite = instance.background[2];
                             break;
                     }
                 }
                 var skillLevel = (int)skill["Level"];
+                instance.skillLevel = skillLevel;
                 if (characterBase.UnitSkillDict.TryGetValue(skillLevel, out var skillSprite))
                 {
-                    // instance.skillIcon.sprite = null;
                     instance.skillIcon.sprite = skillSprite;
                 }
-                instance.skillDesc.text = (string)skill["PopupDesc"];
+                switch (skillLevel)
+                {
+                    case <=3:
+                    case >=11:
+                        instance.rightDesc.text =  (string)skill["PopupDesc"];
+                        break;
+                    case 5:
+                        instance.centerDesc.text =  (string)skill["PopupDesc"];
+                        break;
+                    default:
+                        instance.leftDesc.text = (string)skill["PopupDesc"];
+                        break;
+                }
+              
                 // instance.skillType.text = $"{skill["Type"]} / {skill["Level"]}";
             }
         }

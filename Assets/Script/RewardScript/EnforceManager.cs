@@ -668,7 +668,7 @@ namespace Script.RewardScript
                     finalTranslation = levelUpInfo.Aggregate(finalTranslation, (current, item) => current.Replace("{0level_unit_N}", item.Value)
                         .Replace("{unit_N}", item.Key));
                 }
-                _skill.skillIcon.sprite = characterList[(int)_property].GetSpriteForLevel(characterList[(int)_property].unitPeaceLevel);
+                _skill.skillIcon.sprite = characterList[(int)_property].GetSpriteForLevel(characterList[(int)_property].unitPieceLevel);
                 _skill.skillBackGround.sprite = characterList[(int)_property].UnitGrade switch
                 {
                     CharacterBase.UnitGrades.G => PowerTypeManager.Instance.green,

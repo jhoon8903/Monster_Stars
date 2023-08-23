@@ -75,7 +75,7 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = unitPeaceLevel > 1 ? unitPeaceLevel * 3 : 0f;
+            UnitLevelDamage = unitPieceLevel > 1 ? unitPieceLevel * 3 : 0f;
             Type = Types.Character;
             unitGroup = UnitGroups.Orc;
             var increaseDamage = 1f - EnforceManager.Instance.physicalDamageBoost;

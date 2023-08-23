@@ -46,7 +46,7 @@ namespace Script.RewardScript
                 if (pieceCount <= 0) continue;
                 var instantiatedItem = Instantiate(this, rewardGrid);
                 instantiatedItem.itemValue.text = $"{pieceCount}";
-                instantiatedItem.item.sprite = unit.GetSpriteForLevel(unit.unitPeaceLevel);
+                instantiatedItem.item.sprite = unit.GetSpriteForLevel(unit.unitPieceLevel);
                 switch (unit.UnitGrade)
                 {
                     case CharacterBase.UnitGrades.G:

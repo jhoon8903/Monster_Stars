@@ -42,7 +42,7 @@ namespace Script.RobbyScript.StoreMenuGroup
         public Goods PieceInstance(CharacterBase characterBase, Goods rewardItem, int rewardValue, Transform contentsLayer)
         {
             goodsObject = Instantiate(rewardItem, contentsLayer);
-            goodsObject.goodsSprite.GetComponent<Image>().sprite = characterBase.GetSpriteForLevel(characterBase.unitPeaceLevel);
+            goodsObject.goodsSprite.GetComponent<Image>().sprite = characterBase.GetSpriteForLevel(characterBase.unitPieceLevel);
             goodsObject.goodsSprite.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);
             goodsObject.goodsValue.text = $"{rewardValue}";
             goodsObject.goodsValue.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);

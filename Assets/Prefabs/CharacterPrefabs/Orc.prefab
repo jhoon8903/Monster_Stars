@@ -53,13 +53,13 @@ MonoBehaviour:
   selected: 1
   unitPuzzleLevel: 1
   unitGroup: 3
-  lv1: {fileID: 21300000, guid: 839512c7e5074443484353af99aa4716, type: 3}
-  lv3: {fileID: 21300000, guid: dada313516f624fe69bc4bab8590e8ed, type: 3}
-  lv5: {fileID: 21300000, guid: a1844507a19fb438893ad330f35d18d1, type: 3}
-  lv7: {fileID: 21300000, guid: f23d4b238c83f4c52a581aeeabfc8377, type: 3}
-  lv9: {fileID: 21300000, guid: 268b6ca3684d849608a79812c75c45fb, type: 3}
-  lv11: {fileID: 21300000, guid: 99a6ec84445054f00a1673bf601c31f3, type: 3}
-  lv13: {fileID: 21300000, guid: 69e0347d155094f008a3ed6761e138f4, type: 3}
+  lv1: {fileID: 21300000, guid: f6ca6c69bf5ac42d680520277a2c3e88, type: 3}
+  lv3: {fileID: 21300000, guid: f6ca6c69bf5ac42d680520277a2c3e88, type: 3}
+  lv5: {fileID: 21300000, guid: f6ca6c69bf5ac42d680520277a2c3e88, type: 3}
+  lv7: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
+  lv9: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
+  lv11: {fileID: 21300000, guid: 97a9b711ea166413b8c359ab05b7dea0, type: 3}
+  lv13: {fileID: 21300000, guid: 97a9b711ea166413b8c359ab05b7dea0, type: 3}
   baseDamage: 23
   dotDamage: 4.6
   effectChance: 0
@@ -79,7 +79,7 @@ MonoBehaviour:
   projectileSpeed: 0
   swingSpeed: 1
   defaultAtkDistance: 0
-  level1Sprite: {fileID: 21300000, guid: 839512c7e5074443484353af99aa4716, type: 3}
+  level1Sprite: {fileID: 21300000, guid: e3930480e56504fa08c5676ae0582063, type: 3}
   level2Sprite: {fileID: 21300000, guid: e3930480e56504fa08c5676ae0582063, type: 3}
   level3Sprite: {fileID: 21300000, guid: c3db84abab8b8461abd20157b4d5ca52, type: 3}
   level4Sprite: {fileID: 21300000, guid: e9d3ea5e58d0c447ab9663efbfbb9f2f, type: 3}
@@ -126,7 +126,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 839512c7e5074443484353af99aa4716, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e3930480e56504fa08c5676ae0582063, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -154,7 +154,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.8888889, y: 0.8888889}
+    oldSize: {x: 0.85333335, y: 0.85333335}
     newSize: {x: 0.8888889, y: 0.8888889}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

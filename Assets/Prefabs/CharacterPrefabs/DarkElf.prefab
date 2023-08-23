@@ -9,11 +9,11 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7725269076765781266}
-  - component: {fileID: 7725269076765781265}
   - component: {fileID: 7725269076765781264}
+  - component: {fileID: -6159287150290143683}
   - component: {fileID: 7725269076765781279}
   m_Layer: 6
-  m_Name: DeathChiller
+  m_Name: DarkElf
   m_TagString: Character
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -35,57 +35,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7725269076765781265
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7725269076765781278}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cdebf3418f79444f4b38e4d920cad8bf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cover: {fileID: 4679517600283520585}
-  unitPeaceLevel: 5
-  unLock: 0
-  selected: 0
-  unitPuzzleLevel: 1
-  unitGroup: 2
-  lv1: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
-  lv3: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
-  lv5: {fileID: 21300000, guid: 97a9b711ea166413b8c359ab05b7dea0, type: 3}
-  lv7: {fileID: 21300000, guid: f6ca6c69bf5ac42d680520277a2c3e88, type: 3}
-  lv9: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
-  lv11: {fileID: 21300000, guid: 43e5f06a44ba44079a07d4269bd154be, type: 3}
-  lv13: {fileID: 21300000, guid: 10c4bc2ca34784eb88a0462e2f02bfa1, type: 3}
-  baseDamage: 11
-  dotDamage: 0
-  effectChance: 25
-  effectStack: 0
-  slowTime: 1
-  slowPower: 0.7
-  bindTime: 0
-  freezeTime: 1
-  knockBackPower: 0
-  knockBackTime: 0
-  bleedTime: 0
-  poisonTime: 0
-  burnTime: 0
-  stunTime: 0
-  poisonAreaTime: 0
-  defaultAtkRate: 0.8
-  projectileSpeed: 1
-  swingSpeed: 0
-  defaultAtkDistance: 9
-  level1Sprite: {fileID: 21300000, guid: 54ca7e66103ed48cdb87d5961656ee33, type: 3}
-  level2Sprite: {fileID: 21300000, guid: 54ca7e66103ed48cdb87d5961656ee33, type: 3}
-  level3Sprite: {fileID: 21300000, guid: f5c8c930eb3b045cc89ed7c8d52f17ac, type: 3}
-  level4Sprite: {fileID: 21300000, guid: cce7e5261a66d4982b77e42c49aee9e8, type: 3}
-  level5Sprite: {fileID: 21300000, guid: 6721f0778d25c433e876a81adb25f12c, type: 3}
-  level6Sprite: {fileID: 21300000, guid: f3b0bb53a4de646f7a82008139cacb5e, type: 3}
-  level7Sprite: {fileID: 21300000, guid: cf88b3438d27c49c68cc45ec789609ff, type: 3}
 --- !u!212 &7725269076765781264
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -127,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 54ca7e66103ed48cdb87d5961656ee33, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d32993c500e554615aab047e769da5ff, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -138,6 +87,58 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &-6159287150290143683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7725269076765781278}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aafc20ea6ac6046669af67fc54585cd5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cover: {fileID: 4679517600283520585}
+  unitPeaceLevel: 5
+  unLock: 0
+  selected: 0
+  unitPuzzleLevel: 0
+  unitGroup: 10
+  lv1: {fileID: 21300000, guid: 10c4bc2ca34784eb88a0462e2f02bfa1, type: 3}
+  lv3: {fileID: 21300000, guid: 10c4bc2ca34784eb88a0462e2f02bfa1, type: 3}
+  lv5: {fileID: 21300000, guid: 80057e6c9874c4e8196c47a32db46c20, type: 3}
+  lv7: {fileID: 21300000, guid: 80057e6c9874c4e8196c47a32db46c20, type: 3}
+  lv9: {fileID: 21300000, guid: 5be17fa09edba411aa67aea5c1abdadf, type: 3}
+  lv11: {fileID: 21300000, guid: 16e87b9c021f04b9a9a66c030e804eb6, type: 3}
+  lv13: {fileID: 21300000, guid: 7637ac6cb55594d9eb948ce6a9742693, type: 3}
+  baseDamage: 0
+  dotDamage: 0
+  effectChance: 0
+  effectStack: 0
+  slowTime: 0
+  slowPower: 0
+  bindTime: 0
+  freezeTime: 0
+  knockBackPower: 0
+  knockBackTime: 0
+  bleedTime: 0
+  poisonTime: 0
+  burnTime: 0
+  stunTime: 0
+  poisonAreaTime: 0
+  defaultAtkRate: 0
+  projectileSpeed: 0
+  swingSpeed: 0
+  defaultAtkDistance: 0
+  level1Sprite: {fileID: 21300000, guid: d32993c500e554615aab047e769da5ff, type: 3}
+  level2Sprite: {fileID: 21300000, guid: d32993c500e554615aab047e769da5ff, type: 3}
+  level3Sprite: {fileID: 21300000, guid: df276a6a3cade4936806e086bf26ff8c, type: 3}
+  level4Sprite: {fileID: 21300000, guid: a7380b72b5f1e45a78a987ca5e0a7167, type: 3}
+  level5Sprite: {fileID: 21300000, guid: 46d267b8ee07b4fdc96a77e20acd96d9, type: 3}
+  level6Sprite: {fileID: 21300000, guid: de66e38ad371a4a11b6089fa6d393df9, type: 3}
+  level7Sprite: {fileID: 21300000, guid: e780d3396479e4af488c7db21ba000ca, type: 3}
+  atkCount: 0
 --- !u!61 &7725269076765781279
 BoxCollider2D:
   m_ObjectHideFlags: 0

@@ -149,7 +149,7 @@ namespace Script.RewardScript
             foreach (var grade in totalPiecesPerGrade.Keys)
             {
                 var unitsOfThisGrade = selectedUnitIndices.Where(index =>
-                    rewardUnitList[index].UnitGrade == grade && rewardUnitList[index].unitPeaceLevel < 14).ToList();
+                    rewardUnitList[index].UnitGrade == grade && rewardUnitList[index].unitPieceLevel < 14).ToList();
                 var remainingPieces = totalPiecesPerGrade[grade];
                 foreach (var index in unitsOfThisGrade)
                 {
@@ -182,7 +182,7 @@ namespace Script.RewardScript
             foreach (var index in selectedUnitIndices)
             {
                 var unit = rewardUnitList[index];
-                if (unit.unitPeaceLevel >= 14) continue;
+                if (unit.unitPieceLevel >= 14) continue;
                 var unitPieceReward = pieceCountPerUnit[index];
                 if (unitPieceReward == 0) continue;
                 CumulativeUnitPieces.TryAdd(unit, 0);

@@ -24,7 +24,7 @@ namespace Script.CharacterGroupScript
             base.Initialize();
             unitGroup = UnitGroups.Beholder;
             UnitProperty = UnitProperties.Fire;
-            UnitGrade = UnitGrades.B;
+            UnitGrade = UnitGrades.G;
             UnitDesc = "Beholder Unit H / G Grade";
             SetLevel(1);
         }
@@ -87,7 +87,7 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = unitPeaceLevel > 1 ? unitPeaceLevel * 2 + 3f : 0f;
+            UnitLevelDamage = unitPieceLevel > 1 ? unitPieceLevel * 2 + 3f : 0f;
             Type = Types.Character;
             unitGroup = UnitGroups.Beholder;
             DefaultDamage = UnitLevelDamage + 27f * level switch

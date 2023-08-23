@@ -36,12 +36,11 @@ namespace Script.CharacterGroupScript
         {
             return characterObjectLevel switch
             {
-                <= 2 => level1Sprite,
-                <= 4 => level2Sprite,
-                <= 6 => level3Sprite,
-                <= 8 => level4Sprite,
-                <= 10 => level5Sprite,
-                _ => level6Sprite
+                <= 3 => level1Sprite,
+                <= 6 => level2Sprite,
+                <= 9 => level3Sprite,
+                <= 12 => level4Sprite,
+                _ => level5Sprite,
             };
         }
 
@@ -93,7 +92,7 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = unitPeaceLevel > 1 ? unitPeaceLevel * 5f - 1f : 0f;
+            UnitLevelDamage = unitPieceLevel > 1 ? unitPieceLevel * 5f - 1f : 0f;
             Type = Types.Character;
             unitGroup = UnitGroups.Octopus;
             DefaultDamage = UnitLevelDamage + 36f * (EnforceManager.Instance.octopusDamageBoost ? 1.19f : 1f) * level switch

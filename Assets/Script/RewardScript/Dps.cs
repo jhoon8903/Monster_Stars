@@ -34,7 +34,7 @@ namespace Script.RewardScript
                 {
                     var damage = PlayerPrefs.GetInt($"{unit.unitGroup}DPS", 0);
                     groupDamage += damage;
-                    unitIcon = unit.GetSpriteForLevel(unit.unitPeaceLevel);
+                    unitIcon = unit.GetSpriteForLevel(unit.unitPieceLevel);
                     unitGrades = unit.UnitGrade;
                     PlayerPrefs.DeleteKey($"{unit.unitGroup}DPS");
                 }

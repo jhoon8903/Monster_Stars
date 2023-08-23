@@ -48,8 +48,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cover: {fileID: 8106914419751587629, guid: b8ad960f8f0f647bdae87bd3059f1ecf, type: 3}
-  unitPeaceLevel: 1
-  unLock: 1
+  unitPeaceLevel: 3
+  unLock: 0
   selected: 0
   unitPuzzleLevel: 1
   unitGroup: 0
@@ -155,7 +155,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 5.12, y: 5.12}
+    oldSize: {x: 0.85333335, y: 0.85333335}
     newSize: {x: 1.6, y: 1.6}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

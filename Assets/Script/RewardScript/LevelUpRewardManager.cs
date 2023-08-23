@@ -394,7 +394,7 @@ namespace Script.RewardScript
             var unitLevel = new int();
             foreach (var unit in characterManager.characterList.Where(unit => unit.unitGroup == group))
             {
-                unitLevel = unit.unitPeaceLevel;
+                unitLevel = unit.unitPieceLevel;
             }
             return unitLevel;
         }

@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: d76e14dd6747040949c813bf034a4145, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 26324e93e050c4bda8f96191dd007f18, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -104,7 +104,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.8888889, y: 0.8888889}
+    oldSize: {x: 0.85333335, y: 0.85333335}
     newSize: {x: 0.8888889, y: 0.8888889}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -126,18 +126,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cover: {fileID: 2641826980544604055}
-  unitPeaceLevel: 1
-  unLock: 1
+  unitPeaceLevel: 3
+  unLock: 0
   selected: 0
   unitPuzzleLevel: 1
   unitGroup: 8
-  lv1: {fileID: 21300000, guid: 782984bc776b948b698e5e6475a43ebb, type: 3}
-  lv3: {fileID: 21300000, guid: d76e14dd6747040949c813bf034a4145, type: 3}
-  lv5: {fileID: 21300000, guid: 98a403a293b0e4db094e862eb51ccb7d, type: 3}
-  lv7: {fileID: 21300000, guid: f04a05f17ed1d47d98afa2405820232d, type: 3}
-  lv9: {fileID: 21300000, guid: 646cabb414b064993b016af51a4dbdd7, type: 3}
-  lv11: {fileID: 21300000, guid: 57ad71cdca46d4e34906be0e136502e0, type: 3}
-  lv13: {fileID: 21300000, guid: 59f57128fce1447699e3031e430b78bd, type: 3}
+  lv1: {fileID: 21300000, guid: f6ca6c69bf5ac42d680520277a2c3e88, type: 3}
+  lv3: {fileID: 21300000, guid: f6ca6c69bf5ac42d680520277a2c3e88, type: 3}
+  lv5: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
+  lv7: {fileID: 21300000, guid: 97a9b711ea166413b8c359ab05b7dea0, type: 3}
+  lv9: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
+  lv11: {fileID: 21300000, guid: f6ca6c69bf5ac42d680520277a2c3e88, type: 3}
+  lv13: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
   baseDamage: 47
   dotDamage: 4.7000003
   effectChance: 50
@@ -157,7 +157,7 @@ MonoBehaviour:
   projectileSpeed: 1
   swingSpeed: 0
   defaultAtkDistance: 0
-  level1Sprite: {fileID: 21300000, guid: d76e14dd6747040949c813bf034a4145, type: 3}
+  level1Sprite: {fileID: 21300000, guid: 26324e93e050c4bda8f96191dd007f18, type: 3}
   level2Sprite: {fileID: 21300000, guid: 26324e93e050c4bda8f96191dd007f18, type: 3}
   level3Sprite: {fileID: 21300000, guid: 0e342fcdc44eb4c5caacb2adf617ff31, type: 3}
   level4Sprite: {fileID: 21300000, guid: 43adf5cb615a747de985da2155ec2ad8, type: 3}

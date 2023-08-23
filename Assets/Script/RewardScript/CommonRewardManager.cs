@@ -287,7 +287,7 @@ namespace Script.RewardScript
            if (powerUp.Type is PowerTypeManager.Types.GroupLevelUp or PowerTypeManager.Types.LevelUpPattern)
            {
                icon.sprite = EnforceManager.Instance.characterList[powerUp.Property[0]]
-                   .GetSpriteForLevel(EnforceManager.Instance.characterList[powerUp.Property[0]].unitPeaceLevel);
+                   .GetSpriteForLevel(EnforceManager.Instance.characterList[powerUp.Property[0]].unitPieceLevel);
 
                btnBadge.sprite = EnforceManager.Instance.characterList[powerUp.Property[0]].UnitGrade switch
                {

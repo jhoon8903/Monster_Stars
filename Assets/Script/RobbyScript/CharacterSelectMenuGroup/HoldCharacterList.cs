@@ -29,6 +29,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         private static readonly Dictionary<UnitIcon, UnitIcon> UnitIconMapping = new Dictionary<UnitIcon, UnitIcon>();
         private InformationPanel _informationPanel;
         public static HoldCharacterList Instance { get; private set; }
+        private bool _blueUnlock;
         private void Awake()
         {
             if (Instance == null)
@@ -97,18 +98,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             }
         }
 
-        private static void AdjustRectTransform(Transform parent)
-        {
-            var numberOfChildren = parent.childCount;
-            var numberOfRows = Mathf.CeilToInt((float)numberOfChildren / 4);
-            var newHeight = numberOfRows * 1100f + (numberOfRows - 1) * 65f;
-            var rectTransform = parent.GetComponent<RectTransform>();
-            if (rectTransform != null)
-            {
-                rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, newHeight);
-            }
-        }
-
         private void SetupUnitIcon(UnitIcon unitInstance, CharacterBase character)
         {
             unitInstance.CharacterBase = character;
@@ -124,7 +113,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 {
                     _informationPanel = Instantiate(informationPanelPrefab, gamePanel.transform).GetComponent<InformationPanel>();
                 }
-                // _informationPanel.gameObject.SetActive(true);
                 _informationPanel.OpenInfoPanel(unitInstance, character);
             });
 
@@ -137,7 +125,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 {
                     _informationPanel = Instantiate(informationPanelPrefab, gamePanel.transform).GetComponent<InformationPanel>();
                 }
-                // _informationPanel.gameObject.SetActive(true);
                 _informationPanel.OpenInfoPanel(unitInstance, character);
             });
 
@@ -197,16 +184,13 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 {
                     return canvasB.sortingOrder.CompareTo(canvasA.sortingOrder);
                 }
-        
                 return 0;
             });
-    
             for (var i = 0; i < children.Count; i++)
             {
                 children[i].SetSiblingIndex(i);
             }
         }
-
         public static void UpdateUnit(UnitIcon unitInstance, CharacterBase character)
         {
             unitInstance.normalBack.GetComponent<Image>().sprite = character.UnitGrade switch
@@ -229,34 +213,38 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 CharacterBase.UnitGrades.P => unitInstance.frameSprite[2],
                 _=> unitInstance.frameSprite[3]
             };
-            unitInstance.unitProperty.GetComponent<Image>().sprite = character.UnitProperty switch
-            {
-              CharacterBase.UnitProperties.Divine => unitInstance.unitPropertiesSprite[0],
-              CharacterBase.UnitProperties.Darkness => unitInstance.unitPropertiesSprite[1],
-              CharacterBase.UnitProperties.Physics => unitInstance.unitPropertiesSprite[2],
-              CharacterBase.UnitProperties.Water => unitInstance.unitPropertiesSprite[3],
-              CharacterBase.UnitProperties.Poison => unitInstance.unitPropertiesSprite[4],
-              CharacterBase.UnitProperties.Fire => unitInstance.unitPropertiesSprite[5],
-            };
-
-            unitInstance.unitImage.GetComponent<Image>().sprite = character.GetSpriteForLevel(character.unitPeaceLevel);
-            unitInstance.unitLevelText.text = $"Lv. {character.unitPeaceLevel}";
-            unitInstance.unitPieceSlider.maxValue = character.CharacterMaxPeace;
-            unitInstance.unitPieceSlider.value = character.CharacterPeaceCount;
-            unitInstance.unitPieceText.text = $"{character.CharacterPeaceCount}/{unitInstance.unitPieceSlider.maxValue}";
+            unitInstance.unitImage.GetComponent<Image>().sprite = character.GetSpriteForLevel(character.unitPieceLevel);
+            unitInstance.unitImage.GetComponent<Image>().color = Color.white;
+            SetUpUnitProperty(unitInstance, character);
+            SetUpUnitLevelProgress(unitInstance);
         }
-
         private void SetupInActiveUnitIcon(UnitIcon unitInstance, CharacterBase character)
         {
             unitInstance.CharacterBase = character;
-            unitInstance.unitImage.GetComponent<Image>().sprite = lockImage;
+            unitInstance.unitImage.GetComponent<Image>().sprite = character.GetSpriteForLevel(character.unitPieceLevel);
+            unitInstance.unitImage.GetComponent<Image>().color = Color.black;
             unitInstance.normalBack.GetComponent<Image>().sprite = lockBack;
             unitInstance.unitFrame.GetComponent<Image>().sprite = lockFrame;
-            unitInstance.unitLevelText.text = "InActivate";
-            unitInstance.unitPieceSlider.maxValue = 0;
-            unitInstance.unitPieceSlider.value = 0;
-            unitInstance.unitPieceText.text = $"{unitInstance.unitPieceSlider.value}/{unitInstance.unitPieceSlider.maxValue}";
-
+            SetUpUnitProperty(unitInstance, character);
+            SetUpUnitLevelProgress(unitInstance);
+        }
+        public static void SetUpUnitProperty(UnitIcon unitInstance, CharacterBase character)
+        {
+            unitInstance.unitProperty.GetComponent<Image>().sprite = character.UnitProperty switch
+            { 
+                CharacterBase.UnitProperties.Darkness => unitInstance.unitPropertiesSprite[0],
+                CharacterBase.UnitProperties.Fire => unitInstance.unitPropertiesSprite[1],
+                CharacterBase.UnitProperties.Physics => unitInstance.unitPropertiesSprite[2],
+                CharacterBase.UnitProperties.Poison => unitInstance.unitPropertiesSprite[3],
+                CharacterBase.UnitProperties.Water => unitInstance.unitPropertiesSprite[4],
+            };
+        }
+        public static void SetUpUnitLevelProgress(UnitIcon unitInstance)
+        {
+            unitInstance.unitLevelText.text = unitInstance.CharacterBase.unLock ? $"Lv. {unitInstance.CharacterBase.unitPieceLevel}" : "Lock" ;
+            unitInstance.unitPieceSlider.maxValue = unitInstance.CharacterBase.UnitPieceMaxPiece;
+            unitInstance.unitPieceSlider.value = unitInstance.CharacterBase.UnitPieceCount;
+            unitInstance.unitPieceText.text = $"{unitInstance.CharacterBase.UnitPieceCount}/{unitInstance.CharacterBase.UnitPieceMaxPiece}";
         }
 
         private void SwapBackGround(UnitIcon unitInstance, CharacterBase characterBase)
@@ -279,7 +267,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 case true when characterBase.selected:
                 {
                     unitInstance.infoBtn.gameObject.SetActive(true);
-                    if (characterBase.CharacterPeaceCount >= characterBase.CharacterMaxPeace && CoinsScript.Instance.Coin >= characterBase.CharacterLevelUpCoin)
+                    if (characterBase.UnitPieceCount >= characterBase.UnitPieceMaxPiece && CoinsScript.Instance.Coin >= characterBase.CharacterLevelUpCoin)
                     {
                         unitInstance.levelUpBtn.gameObject.SetActive(true);
                         unitInstance.removeBtn.gameObject.SetActive(false);
@@ -296,7 +284,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 case true when !characterBase.selected:
                 {
                     unitInstance.infoBtn.gameObject.SetActive(true);
-                    if (characterBase.CharacterPeaceCount >= characterBase.CharacterMaxPeace && CoinsScript.Instance.Coin >= characterBase.CharacterLevelUpCoin)
+                    if (characterBase.UnitPieceCount >= characterBase.UnitPieceMaxPiece && CoinsScript.Instance.Coin >= characterBase.CharacterLevelUpCoin)
                     {
                         unitInstance.levelUpBtn.gameObject.SetActive(true);
                         unitInstance.removeBtn.gameObject.SetActive(false);
@@ -313,6 +301,60 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 case false:
                     _informationPanel.OpenInfoPanel(unitInstance, characterBase);
                     break;
+            }
+        }
+
+        public void UpdateRewardPiece(CharacterBase characterBase)
+        {
+            var allUnitIconInstances = new List<UnitIcon>();
+            allUnitIconInstances.AddRange(selectedContent.GetComponentsInChildren<UnitIcon>());
+            allUnitIconInstances.AddRange(mainUnitContent.GetComponentsInChildren<UnitIcon>());
+            allUnitIconInstances.AddRange(activateUnitContent.GetComponentsInChildren<UnitIcon>());
+            allUnitIconInstances.AddRange(inActivateUnitContent.GetComponentsInChildren<UnitIcon>());
+            var matchingUnitIcons = allUnitIconInstances.Where(unitIcon => unitIcon.CharacterBase == characterBase).ToList();
+            foreach (var unitIcon in matchingUnitIcons)
+            {
+                unitIcon.CharacterBase = characterBase;
+                unitIcon.unitPieceSlider.maxValue = characterBase.UnitPieceMaxPiece;
+                unitIcon.unitPieceSlider.value = characterBase.UnitPieceCount;
+                unitIcon.unitPieceText.text = $"{characterBase.UnitPieceCount}/{unitIcon.unitPieceSlider.maxValue}";
+
+                if (unitIcon.CharacterBase.UnitPieceCount >= unitIcon.CharacterBase.UnitPieceMaxPiece && !unitIcon.CharacterBase.unLock)
+                {
+                    
+                    if (unitIcon.CharacterBase.UnitGrade == CharacterBase.UnitGrades.B && !_blueUnlock)
+                    {
+                        _blueUnlock = true;
+                        Firebase.Analytics.FirebaseAnalytics.LogEvent("blue_unlocked");
+                    }
+                    switch (unitIcon.CharacterBase.unitGroup)
+                    {
+                        case CharacterBase.UnitGroups.DarkElf:
+                            Firebase.Analytics.FirebaseAnalytics.LogEvent("darkelf_unlocked");
+                            break;
+                        case CharacterBase.UnitGroups.DeathChiller:
+                            Firebase.Analytics.FirebaseAnalytics.LogEvent("chiller_unlocked");
+                            break;
+                    }
+
+                    unitIcon.CharacterBase.unLock = true;
+                    UpdateUnit(unitIcon, unitIcon.CharacterBase);
+                    SetupUnitIcon(unitIcon, unitIcon.CharacterBase);
+                    unitIcon.transform.SetParent(activateUnitContent.transform, false);
+                    AdjustRectTransform(activateUnitContent.transform);
+                }
+            }
+        }
+
+        private static void AdjustRectTransform(Transform parent)
+        {
+            var numberOfChildren = parent.childCount;
+            var numberOfRows = Mathf.CeilToInt((float)numberOfChildren / 4);
+            var newHeight = numberOfRows * 1100f + (numberOfRows - 1) * 65f;
+            var rectTransform = parent.GetComponent<RectTransform>();
+            if (rectTransform != null)
+            {
+                rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, newHeight);
             }
         }
 
@@ -365,22 +407,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 _activeStatusPanel.transform == eventData.pointerCurrentRaycast.gameObject.transform) return;
             _activeStatusPanel.SetActive(false);
             _activeStatusPanel = null;
-        }
-
-        public void UpdateRewardPiece(CharacterBase characterBase)
-        {
-            var allUnitIconInstances = new List<UnitIcon>();
-            allUnitIconInstances.AddRange(selectedContent.GetComponentsInChildren<UnitIcon>());
-            allUnitIconInstances.AddRange(mainUnitContent.GetComponentsInChildren<UnitIcon>());
-            allUnitIconInstances.AddRange(activateUnitContent.GetComponentsInChildren<UnitIcon>());
-            allUnitIconInstances.AddRange(inActivateUnitContent.GetComponentsInChildren<UnitIcon>());
-            var matchingUnitIcons = allUnitIconInstances.Where(unitIcon => unitIcon.CharacterBase == characterBase).ToList();
-            foreach (var unitIcon in matchingUnitIcons)
-            {
-                unitIcon.unitPieceSlider.maxValue = characterBase.CharacterMaxPeace;
-                unitIcon.unitPieceSlider.value = characterBase.CharacterPeaceCount;
-                unitIcon.unitPieceText.text = $"{characterBase.CharacterPeaceCount}/{unitIcon.unitPieceSlider.maxValue}";
-            }
         }
     }
 }

@@ -340,7 +340,7 @@ namespace Script.QuestGroup
             foreach (var grade in totalPiecesPerGrade.Keys)
             {
                 var unitsOfThisGrade = selectedUnitIndices.Where(index =>
-                    TimeRewardManager.Instance.unitList[index].UnitGrade == grade && TimeRewardManager.Instance.unitList[index].unitPeaceLevel < 14).ToList();
+                    TimeRewardManager.Instance.unitList[index].UnitGrade == grade && TimeRewardManager.Instance.unitList[index].unitPieceLevel < 14).ToList();
                 var remainingPieces = totalPiecesPerGrade[grade];
                 foreach (var index in unitsOfThisGrade)
                 {
@@ -371,7 +371,7 @@ namespace Script.QuestGroup
             foreach (var index in selectedUnitIndices)
             {
                 var unit = TimeRewardManager.Instance.unitList[index];
-                if (unit.unitPeaceLevel >= 14) continue;
+                if (unit.unitPieceLevel >= 14) continue;
                 unit.Initialize();
                 _unitPieceReward = pieceCountPerUnit[index];
                 if (_unitPieceReward == 0) continue;
@@ -379,7 +379,7 @@ namespace Script.QuestGroup
             }
             foreach (var unitPiece in _unitPieceDict)
             {
-                unitPiece.Key.CharacterPeaceCount += unitPiece.Value;
+                unitPiece.Key.UnitPieceCount += unitPiece.Value;
                 HoldCharacterList.Instance.UpdateRewardPiece(unitPiece.Key);
             }
             _unitPieceDict.Clear();

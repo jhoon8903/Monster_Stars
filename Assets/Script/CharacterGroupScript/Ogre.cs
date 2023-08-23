@@ -100,7 +100,7 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = unitPeaceLevel > 1 ? unitPeaceLevel * 2 + 8f : 0;
+            UnitLevelDamage = unitPieceLevel > 1 ? unitPieceLevel * 2 + 8f : 0;
             Type = Types.Character;
             unitGroup = UnitGroups.Ogre;
             DefaultDamage = UnitLevelDamage + 38f * (1f + EnforceManager.Instance.darkAttackPowerBoost) * level switch

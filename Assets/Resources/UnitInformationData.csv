@@ -1,12 +1,12 @@
-Language,UnitGroup,Damage,Range,Rate,Form,Effect,EffectTime
-ENG,Octopus,100,Vertical,1 Per / Sec,Projectile,Bind,1 Sec
-ENG,Ogre,120,Around 1 Grid,1.4 Per / Sec,Projectile,Null,Null
-ENG,DeathChiller,60,Vertical,0.8 Per / Sec,Projectile,Slow,3 Sec
-ENG,Orc,100,Around 1 Grid,1 Per / Sec,Sword,Bleed,2 Sec
-ENG,Fishman,60,Vertical,1 Per / Sec,Projectile,Slow,1.5 Sec
-ENG,Skeleton,100,Around 1 Grid,1.2 Per / Sec,Guide Projectile,Poison,4 Sec
-ENG,Phoenix,180,Around 1 Grid,1 Per / Sec,Sword,Burn,2 Sec
-ENG,Beholder,80,Vertical,1 Per / Sec,Projectile,Burn,5 Sec
-ENG,Cobra,42,Around 1 Grid,1.2 Per / Sec,Projectile,Poison,5 Sec
-ENG,Berserker,49,Around 1 Grid,1 Per / Sec,Projectile,Bleed,3 Sec
-ENG,DarkElf,34,Vertical,1 Per / Sec,Projectile,Null,Null
+UnitGroup,AttackRange,Damage,AttackSpeed,Type,Duration,Intensity,Bounce
+Octopus,Same Vertical Line,100,1,Null,Null,Null,Null
+Ogre,1 Space Around,120,1.4,Null,Null,Null,Null
+DeathChiller,Same Vertical Line,60,0.8,Slow,1,30%,Null
+Orc,1 Space Around,100,1,Null,Null,Null,Null
+Fishman,Same Vertical Line,60,1,Slow,1.5,30%,Null
+Skeleton,1 Space Around,100,1.2,Null,Null,Null,Null
+Phoenix,1 Space Around,180,1,Burn,3,20%,Null
+Cobra,1 Space Around,42,1.2,Poison,5,10%,Null
+Berserker,1 Space Around,49,1,Bleed,3,20%,Null
+DarkElf,Same Vertical Line,34,1,Null,Null,Null,Null
+Beholder,Same Vertical Line,80,1,Null,Null,Null,1

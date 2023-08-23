@@ -102,7 +102,7 @@ namespace Script.RewardScript
             PlayerPrefs.SetString(LatestOpenTimeKey, _latestOpenTime.ToBinary().ToString());
             foreach (var unitPiece in _unitPieceDict)
             {
-                unitPiece.Key.CharacterPeaceCount += unitPiece.Value.Item1;
+                unitPiece.Key.UnitPieceCount += unitPiece.Value.Item1;
                 HoldCharacterList.Instance.UpdateRewardPiece(unitPiece.Key);
                 Destroy(unitPiece.Value.Item2.gameObject);
             }
@@ -161,7 +161,7 @@ namespace Script.RewardScript
             foreach (var grade in totalPiecesPerGrade.Keys)
             {
                 var unitsOfThisGrade = selectedUnitIndices.Where(index =>
-                    unitList[index].UnitGrade == grade && unitList[index].unitPeaceLevel < 14).ToList();
+                    unitList[index].UnitGrade == grade && unitList[index].unitPieceLevel < 14).ToList();
                 var remainingPieces = totalPiecesPerGrade[grade];
                 foreach (var index in unitsOfThisGrade)
                 {
@@ -192,12 +192,12 @@ namespace Script.RewardScript
             foreach (var index in selectedUnitIndices)
             {
                 var unit = unitList[index];
-                if (unit.unitPeaceLevel >= 14) continue;
+                if (unit.unitPieceLevel >= 14) continue;
                 unit.Initialize();
                 _unitPieceReward = pieceCountPerUnit[index];
                 if (_unitPieceReward == 0) continue;
                 _unitPieceObject = Instantiate(rewardItem, timeRewardContents.transform);
-                _unitPieceObject.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPeaceLevel);
+                _unitPieceObject.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPieceLevel);
                 _unitPieceObject.goodsSprite.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);
                 _unitPieceObject.goodsValue.text = $"{_unitPieceReward}";
                 _unitPieceObject.goodsValue.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);
@@ -255,7 +255,7 @@ namespace Script.RewardScript
                     unit.Initialize();
                     _unitPieceReward = unitReward;
                     _unitPieceObject = Instantiate(rewardItem, timeRewardContents.transform);
-                    _unitPieceObject.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPeaceLevel);
+                    _unitPieceObject.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPieceLevel);
                     _unitPieceObject.goodsSprite.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);
                     _unitPieceObject.goodsValue.text = $"{_unitPieceReward}";
                     _unitPieceObject.goodsValue.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);

@@ -146,7 +146,6 @@ namespace Script.QuestGroup
                 questObject.shuffleBtn.GetComponent<Button>().onClick.AddListener(QuestManager.CallShuffleAds);
             }
         }
-
         private static void SetActiveOrToggleParent(GameObject parentObject, int value, TMP_Text textUI)
         {
             if (value != 0)

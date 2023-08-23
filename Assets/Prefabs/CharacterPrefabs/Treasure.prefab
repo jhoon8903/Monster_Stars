@@ -52,7 +52,7 @@ MonoBehaviour:
   unLock: 1
   selected: 1
   unitPuzzleLevel: 0
-  unitGroup: 8
+  unitGroup: 11
   lv1: {fileID: 0}
   lv3: {fileID: 0}
   lv5: {fileID: 0}

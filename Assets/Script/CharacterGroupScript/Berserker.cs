@@ -57,7 +57,7 @@ namespace Script.CharacterGroupScript
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
             var rangeBoost = EnforceManager.Instance.berserkerRangeBoost ? 1 : 0;
-            _detectionSize = CastleManager.Instance.castleCrushBoost ? new Vector2(5+rangeBoost,5+rangeBoost) : new Vector2(3+rangeBoost, 3+rangeBoost);
+            _detectionSize = EnforceManager.Instance.berserkerCastleCrushStatBoost ? new Vector2(5+rangeBoost,5+rangeBoost) : new Vector2(3+rangeBoost, 3+rangeBoost);
             center = transform.position;
             size = _detectionSize;
         }
@@ -80,10 +80,10 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = unitPeaceLevel > 1 ? unitPeaceLevel * 6 : 0f;
+            UnitLevelDamage = unitPieceLevel > 1 ? unitPieceLevel * 6 : 0f;
             Type = Types.Character;
             unitGroup = UnitGroups.Berserker;
-            var crushDamageBoost = CastleManager.Instance.castleCrushBoost ? 1.3f : 1f; 
+            var crushDamageBoost = EnforceManager.Instance.berserkerCastleCrushStatBoost ? 1.3f : 1f; 
             DefaultDamage = UnitLevelDamage + 49f * crushDamageBoost * level switch
             {
                 <= 2 => 1f,

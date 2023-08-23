@@ -66,7 +66,7 @@ namespace Script.UIManager
         }
         private void UpdateUnitSkillView(CharacterBase unit, Image unitBack, Image unitImage, Component unitSkillGrid)
         {
-            unitImage.sprite = unit.GetSpriteForLevel(unit.unitPeaceLevel);
+            unitImage.sprite = unit.GetSpriteForLevel(unit.unitPieceLevel);
             unitBack.sprite = unit.UnitGrade switch
             {
                 CharacterBase.UnitGrades.G => gradeBack[0],
@@ -87,15 +87,14 @@ namespace Script.UIManager
 
             foreach (var skill in skills)
             {
-                if (characterBase.unitPeaceLevel < (int)skill["Level"])
+                if (characterBase.unitPieceLevel < (int)skill["Level"])
                 {
                     continue; // 해당 스킬이 조건을 만족하지 않으면 다음 스킬로 이동
                 }
-
-                var skillLevel = (int)skill["Level"];
-                var isActive = activeSkills.TryGetValue(skillLevel, out var active) && active;
-
                 var instance = Instantiate(unitSkillPrefabs, unitSkillGrid.transform);
+                var skillLevel = (int)skill["Level"];
+                instance.skillLevel = skillLevel;
+                var isActive = activeSkills.TryGetValue(skillLevel, out var active) && active;
                 if (instance == null) continue;
                 instance.GetComponent<Image>().sprite = isActive
                     ? gradeBack[(int)Enum.Parse(typeof(CharacterBase.UnitGrades), (string)skill["Grade"], true)]
@@ -104,8 +103,18 @@ namespace Script.UIManager
                 {
                     instance.skillIcon.sprite = skillSprite;
                 }
-                instance.skillDesc.text = (string)skill["PopupDesc"];
-
+                switch (instance.skillLevel)
+                {
+                    case <=3:
+                        instance.rightDesc.text =  (string)skill["PopupDesc"];
+                        break;
+                    case 5:
+                        instance.centerDesc.text =  (string)skill["PopupDesc"];
+                        break;
+                    default:
+                        instance.leftDesc.text = (string)skill["PopupDesc"];
+                        break;
+                }
                 // instance.skillType.text = $"{skill["Type"]} / {skill["Level"]}";
             }
         }

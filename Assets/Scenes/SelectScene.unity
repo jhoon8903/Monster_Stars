@@ -716,6 +716,8 @@ MonoBehaviour:
   - {fileID: 7786321694734890730, guid: d03f023d8b2cd49cdac846c313ff3870, type: 3}
   - {fileID: 2775731209932646854, guid: 50100ccb47c504a73a7c8e65b95b9285, type: 3}
   - {fileID: 1870357026580670063, guid: 4bc07200a831747d7bb4b1da8ac8c5d6, type: 3}
+  - {fileID: -1924353546723625355, guid: 2a1cded0b45ea4b1aa0555a188604195, type: 3}
+  - {fileID: -6159287150290143683, guid: 04e31d684c2d84053a642e0426576cc5, type: 3}
   treasureLayer: {fileID: 920717063}
   treasureChest: {fileID: 1462841676}
   specialOfferLayer: {fileID: 573130142}
@@ -950,7 +952,6 @@ GameObject:
   - component: {fileID: 60792357}
   - component: {fileID: 60792356}
   - component: {fileID: 60792355}
-  - component: {fileID: 60792354}
   m_Layer: 5
   m_Name: InActiveUnitList
   m_TagString: Untagged
@@ -978,50 +979,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 2800, y: 2000}
   m_Pivot: {x: 0.5, y: 1}
---- !u!114 &60792354
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 60792352}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Navigation:
-    m_Mode: 3
-    m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
-    m_SelectOnDown: {fileID: 0}
-    m_SelectOnLeft: {fileID: 0}
-    m_SelectOnRight: {fileID: 0}
-  m_Transition: 1
-  m_Colors:
-    m_NormalColor: {r: 1, g: 1, b: 1, a: 1}
-    m_HighlightedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_PressedColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
-    m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
-    m_ColorMultiplier: 1
-    m_FadeDuration: 0.1
-  m_SpriteState:
-    m_HighlightedSprite: {fileID: 0}
-    m_PressedSprite: {fileID: 0}
-    m_SelectedSprite: {fileID: 0}
-    m_DisabledSprite: {fileID: 0}
-  m_AnimationTriggers:
-    m_NormalTrigger: Normal
-    m_HighlightedTrigger: Highlighted
-    m_PressedTrigger: Pressed
-    m_SelectedTrigger: Selected
-    m_DisabledTrigger: Disabled
-  m_Interactable: 1
-  m_TargetGraphic: {fileID: 60792356}
-  m_OnClick:
-    m_PersistentCalls:
-      m_Calls: []
 --- !u!114 &60792355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4729,6 +4686,9 @@ MonoBehaviour:
   - {fileID: 8552942239932251840, guid: 927344b3c65004b149f23d4ee8065c8f, type: 3}
   - {fileID: 7786321694734890730, guid: d03f023d8b2cd49cdac846c313ff3870, type: 3}
   - {fileID: 2775731209932646854, guid: 50100ccb47c504a73a7c8e65b95b9285, type: 3}
+  - {fileID: 1870357026580670063, guid: 4bc07200a831747d7bb4b1da8ac8c5d6, type: 3}
+  - {fileID: -1924353546723625355, guid: 2a1cded0b45ea4b1aa0555a188604195, type: 3}
+  - {fileID: -6159287150290143683, guid: 04e31d684c2d84053a642e0426576cc5, type: 3}
 --- !u!114 &337770386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15765,7 +15725,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 3289.1}
+  m_SizeDelta: {x: 0, y: 3300}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &1274766355
 MonoBehaviour:
@@ -15787,7 +15747,7 @@ MonoBehaviour:
   m_ChildAlignment: 1
   m_Spacing: 40
   m_ChildForceExpandWidth: 1
-  m_ChildForceExpandHeight: 0
+  m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 0
   m_ChildControlHeight: 0
   m_ChildScaleWidth: 0
@@ -20119,6 +20079,8 @@ MonoBehaviour:
   - {fileID: 7786321694734890730, guid: d03f023d8b2cd49cdac846c313ff3870, type: 3}
   - {fileID: 2775731209932646854, guid: 50100ccb47c504a73a7c8e65b95b9285, type: 3}
   - {fileID: 1870357026580670063, guid: 4bc07200a831747d7bb4b1da8ac8c5d6, type: 3}
+  - {fileID: -1924353546723625355, guid: 2a1cded0b45ea4b1aa0555a188604195, type: 3}
+  - {fileID: -6159287150290143683, guid: 04e31d684c2d84053a642e0426576cc5, type: 3}
   selectedContent: {fileID: 943606469}
   mainUnitContent: {fileID: 1041561462}
   activateUnitContent: {fileID: 1400749138}

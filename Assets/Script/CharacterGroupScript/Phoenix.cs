@@ -92,7 +92,7 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = unitPeaceLevel > 0 ? unitPeaceLevel * 3f + 2f: 0f;
+            UnitLevelDamage = unitPieceLevel > 0 ? unitPieceLevel * 3f + 2f: 0f;
             Type = Types.Character;
             unitGroup = UnitGroups.Phoenix;
             var damageBoost = 1f + EnforceManager.Instance.fire2DamageBoost;

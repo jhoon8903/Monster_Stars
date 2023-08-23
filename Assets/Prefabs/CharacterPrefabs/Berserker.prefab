@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 80864d9771c404f798dae0a6fb7931b9, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 21e9870119e7945bc8175a8c10617107, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -104,7 +104,7 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.8888889, y: 0.8888889}
+    oldSize: {x: 0.85333335, y: 0.85333335}
     newSize: {x: 0.8888889, y: 0.8888889}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -125,19 +125,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7a9fd448699fd405780db07e3007c375, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cover: {fileID: 0}
-  unitPeaceLevel: 1
+  cover: {fileID: 2641826980544604055}
+  unitPeaceLevel: 3
   unLock: 0
   selected: 0
   unitPuzzleLevel: 0
-  unitGroup: 11
-  lv1: {fileID: 0}
-  lv3: {fileID: 0}
-  lv5: {fileID: 0}
-  lv7: {fileID: 0}
-  lv9: {fileID: 0}
-  lv11: {fileID: 0}
-  lv13: {fileID: 0}
+  unitGroup: 9
+  lv1: {fileID: 21300000, guid: f6ca6c69bf5ac42d680520277a2c3e88, type: 3}
+  lv3: {fileID: 21300000, guid: ff3db8ae51d4b4564a70b8b4fd5630a7, type: 3}
+  lv5: {fileID: 21300000, guid: 7d87dfd92a4e042d791cc7cc235c6995, type: 3}
+  lv7: {fileID: 21300000, guid: 80057e6c9874c4e8196c47a32db46c20, type: 3}
+  lv9: {fileID: 21300000, guid: f6ca6c69bf5ac42d680520277a2c3e88, type: 3}
+  lv11: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
+  lv13: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
   baseDamage: 0
   dotDamage: 0
   effectChance: 0
@@ -277,6 +277,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b8ad960f8f0f647bdae87bd3059f1ecf, type: 3}
+--- !u!1 &2641826980544604055 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8106914419751587629, guid: b8ad960f8f0f647bdae87bd3059f1ecf, type: 3}
+  m_PrefabInstance: {fileID: 6064145354757925050}
+  m_PrefabAsset: {fileID: 0}
 --- !u!224 &7653988002819383383 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4472146564483696877, guid: b8ad960f8f0f647bdae87bd3059f1ecf, type: 3}

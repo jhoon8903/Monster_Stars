@@ -92,7 +92,7 @@ namespace Script.CharacterGroupScript
         protected internal override void SetLevel(int level)
         {
             base.SetLevel(level);
-            UnitLevelDamage = unitPeaceLevel > 1 ? unitPeaceLevel * 2 + 3f : 0;
+            UnitLevelDamage = unitPieceLevel > 1 ? unitPieceLevel * 2 + 3f : 0;
             Type = Types.Character;
             unitGroup = UnitGroups.DeathChiller;
             DefaultDamage = UnitLevelDamage + 11f * level switch
