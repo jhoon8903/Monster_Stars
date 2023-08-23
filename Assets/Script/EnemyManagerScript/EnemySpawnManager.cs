@@ -3,10 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
+using Script.EnemyScript;
 using Script.PuzzleManagerGroup;
 using Script.RewardScript;
 using Script.UIManager;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace Script.EnemyManagerScript
@@ -25,14 +29,20 @@ namespace Script.EnemyManagerScript
         [SerializeField] private CharacterPool characterPool;
         [SerializeField] private GridManager gridManager;
         [SerializeField] private EnemyPatternManager enemyPatternManager;
+        // Enemy Desc
+        [SerializeField] private GameObject enemyDescPanel;
+        [SerializeField] private Image enemySprite;
+        [SerializeField] private TextMeshProUGUI enemyDesc;
+        
 
         private Dictionary<EnemyBase.SpawnZones, Transform> _spawnZones;
         public int randomX;
         public int randomY;
+        private readonly List<EnemyBase.EnemyClasses> _enemyClassList = new List<EnemyBase.EnemyClasses>();
 
         private void Awake()
         {
-            _spawnZones = new Dictionary<EnemyBase.SpawnZones, Transform>()
+            _spawnZones = new Dictionary<EnemyBase.SpawnZones, Transform>
             {
                 { EnemyBase.SpawnZones.A, spawnZoneA },
                 { EnemyBase.SpawnZones.B, spawnZoneB },
@@ -64,8 +74,20 @@ namespace Script.EnemyManagerScript
             enemyBase.transform.position = spawnPosition;
             enemyBase.gameObject.SetActive(true);
             enemyBase.Initialize();
+            // GetEnemyDesc(enemyBase);
             yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyBase));
         }
+
+        // private IEnumerator GetEnemyDesc(EnemyBase enemyBase)
+        // {
+        //     if (!_enemyClassList.Contains(enemyBase.enemyClass))
+        //     {
+        //         _enemyClassList.Add(enemyBase.enemyClass);
+        //         enemyDescPanel.SetActive(true);
+        //         enemySprite.sprite = enemyBase.GetComponentInChildren<SpriteRenderer>().sprite;
+        //         // enemyDesc.text = 
+        //     }
+        // }
 
         public IEnumerator SpawnBoss()
         {

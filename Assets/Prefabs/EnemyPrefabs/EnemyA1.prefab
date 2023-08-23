@@ -81,7 +81,7 @@ SpriteRenderer:
   m_Size: {x: 1.6, y: 1.6}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!1 &3415115993854886546
@@ -153,6 +153,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7dc96d77550454036875ff0a14a7d14c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyImage: {fileID: 838373169}
   damageText: {fileID: 3584920970260779170, guid: 21d3aafccea744b7696aa042fd57c566, type: 3}
   poisonAreaObject: {fileID: 8000264398442895287, guid: 349554efd3d02400298fddf1c49c40c0, type: 3}
   moveSpeed: 0
@@ -160,6 +161,8 @@ MonoBehaviour:
   healthPoint: 0
   maxHealthPoint: 0
   currentHealth: 0
+  enemyClass: 0
+  enemySpriteList: []
   isDead: 0
   statusList: 
   isBind: 0

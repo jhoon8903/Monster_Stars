@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cover: {fileID: 4679517600283520585}
-  unitPeaceLevel: 5
+  unitPieceLevel: 5
   unLock: 0
   selected: 0
   unitPuzzleLevel: 1
@@ -60,7 +60,7 @@ MonoBehaviour:
   lv9: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
   lv11: {fileID: 21300000, guid: 43e5f06a44ba44079a07d4269bd154be, type: 3}
   lv13: {fileID: 21300000, guid: 10c4bc2ca34784eb88a0462e2f02bfa1, type: 3}
-  baseDamage: 11
+  baseDamage: 24
   dotDamage: 0
   effectChance: 25
   effectStack: 0
@@ -79,13 +79,13 @@ MonoBehaviour:
   projectileSpeed: 1
   swingSpeed: 0
   defaultAtkDistance: 9
-  level1Sprite: {fileID: 21300000, guid: 54ca7e66103ed48cdb87d5961656ee33, type: 3}
-  level2Sprite: {fileID: 21300000, guid: 54ca7e66103ed48cdb87d5961656ee33, type: 3}
-  level3Sprite: {fileID: 21300000, guid: f5c8c930eb3b045cc89ed7c8d52f17ac, type: 3}
-  level4Sprite: {fileID: 21300000, guid: cce7e5261a66d4982b77e42c49aee9e8, type: 3}
-  level5Sprite: {fileID: 21300000, guid: 6721f0778d25c433e876a81adb25f12c, type: 3}
-  level6Sprite: {fileID: 21300000, guid: f3b0bb53a4de646f7a82008139cacb5e, type: 3}
-  level7Sprite: {fileID: 21300000, guid: cf88b3438d27c49c68cc45ec789609ff, type: 3}
+  level1Sprite: {fileID: 21300000, guid: ab943d495e2744f60917d655336558b4, type: 3}
+  level2Sprite: {fileID: 21300000, guid: dd1861a99966a4572ba4b29db76a4c84, type: 3}
+  level3Sprite: {fileID: 21300000, guid: eaabc3bdeb0fc4f668f30bc598dfb35b, type: 3}
+  level4Sprite: {fileID: 21300000, guid: 13b831e57d901481897716acd6f5492b, type: 3}
+  level5Sprite: {fileID: 21300000, guid: 69b817491ee73426ca7b2a462dc88e65, type: 3}
+  level6Sprite: {fileID: 21300000, guid: f9f8a2f096c894b7dafd247434d79a09, type: 3}
+  level7Sprite: {fileID: 21300000, guid: 7e8fb0f8727b445e8b2916027ec33337, type: 3}
 --- !u!212 &7725269076765781264
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -127,12 +127,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 54ca7e66103ed48cdb87d5961656ee33, type: 3}
+  m_Sprite: {fileID: 21300000, guid: ab943d495e2744f60917d655336558b4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.8888889, y: 0.8888889}
+  m_Size: {x: 0.85333335, y: 0.85333335}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -156,7 +156,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 0.85333335, y: 0.85333335}
-    newSize: {x: 0.8888889, y: 0.8888889}
+    newSize: {x: 0.85333335, y: 0.85333335}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0

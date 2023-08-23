@@ -427,6 +427,8 @@ MonoBehaviour:
   healthPoint: 0
   maxHealthPoint: 0
   currentHealth: 0
+  enemyClass: 7
+  enemySpriteList: []
   isDead: 0
   statusList: 
   isBind: 0

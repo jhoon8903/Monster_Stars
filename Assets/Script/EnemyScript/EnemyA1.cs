@@ -1,4 +1,5 @@
 using Script.EnemyManagerScript;
+using UnityEngine;
 
 namespace Script.EnemyScript
 {
@@ -11,6 +12,7 @@ namespace Script.EnemyScript
             EnemyType = EnemyTypes.Group1;
             SpawnZone = SpawnZones.A;
             RegistryType = RegistryTypes.Burn;
+            enemyClass = EnemyClasses.Farmer;
             base.Initialize();
         }
     }

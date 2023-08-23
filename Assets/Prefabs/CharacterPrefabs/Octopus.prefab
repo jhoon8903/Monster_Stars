@@ -48,8 +48,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cover: {fileID: 8106914419751587629, guid: b8ad960f8f0f647bdae87bd3059f1ecf, type: 3}
-  unitPeaceLevel: 3
-  unLock: 0
+  unitPieceLevel: 3
+  unLock: 1
   selected: 0
   unitPuzzleLevel: 1
   unitGroup: 0
@@ -60,8 +60,8 @@ MonoBehaviour:
   lv9: {fileID: 21300000, guid: 97a9b711ea166413b8c359ab05b7dea0, type: 3}
   lv11: {fileID: 21300000, guid: 6c42adbea3ae843c0b6eea8c44fca533, type: 3}
   lv13: {fileID: 21300000, guid: 80057e6c9874c4e8196c47a32db46c20, type: 3}
-  baseDamage: 36
-  dotDamage: 7.2000003
+  baseDamage: 50
+  dotDamage: 10
   effectChance: 30
   effectStack: 0
   slowTime: 0
@@ -79,7 +79,7 @@ MonoBehaviour:
   projectileSpeed: 1
   swingSpeed: 0
   defaultAtkDistance: 9
-  level1Sprite: {fileID: 21300000, guid: aa6608716389d4e3e8e032d6fc52b6e1, type: 3}
+  level1Sprite: {fileID: 21300000, guid: 84888faff3b464170952fa818d9f1542, type: 3}
   level2Sprite: {fileID: 21300000, guid: aa6608716389d4e3e8e032d6fc52b6e1, type: 3}
   level3Sprite: {fileID: 21300000, guid: 71bed4f188b4c459d861fa34545efc5d, type: 3}
   level4Sprite: {fileID: 21300000, guid: b9bcfef9eca1a4adcb767048be71705e, type: 3}
@@ -127,12 +127,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: aa6608716389d4e3e8e032d6fc52b6e1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 84888faff3b464170952fa818d9f1542, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.6, y: 1.6}
+  m_Size: {x: 5.12, y: 5.12}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -156,7 +156,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 0.85333335, y: 0.85333335}
-    newSize: {x: 1.6, y: 1.6}
+    newSize: {x: 5.12, y: 5.12}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0

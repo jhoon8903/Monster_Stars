@@ -1,5 +1,7 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.QuestGroup;
@@ -35,6 +37,13 @@ namespace Script.EnemyManagerScript
         public float maxHealthPoint;
         public float currentHealth;
         public enum SpawnZones { A, B, C, D, E, F }
+
+        public enum EnemyClasses
+        {
+           Farmer, SwordMan, Magician, Archer, Dryad, WarDancer, Marauders, Scout, Pirate, Militia, SpearMan, Pilgrim,
+           Engineer, Miner, Hammerer, Quarreller, RoyalGuard, Druid, Wizard, Shaman, RuneSmith, Berserker
+        }
+        public EnemyClasses enemyClass;
         private GameObject _damagePopup;
         public bool isDead;
         public List<CharacterBase.UnitGroups> statusList = new List<CharacterBase.UnitGroups>();

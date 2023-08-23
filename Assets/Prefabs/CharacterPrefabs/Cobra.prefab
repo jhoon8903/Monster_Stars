@@ -76,12 +76,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 26324e93e050c4bda8f96191dd007f18, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e6807d703436e4a06a08990db961f099, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.8888889, y: 0.8888889}
+  m_Size: {x: 0.85333335, y: 0.85333335}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -105,7 +105,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 0.85333335, y: 0.85333335}
-    newSize: {x: 0.8888889, y: 0.8888889}
+    newSize: {x: 0.85333335, y: 0.85333335}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -126,8 +126,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cover: {fileID: 2641826980544604055}
-  unitPeaceLevel: 3
-  unLock: 0
+  unitPieceLevel: 3
+  unLock: 1
   selected: 0
   unitPuzzleLevel: 1
   unitGroup: 8
@@ -138,8 +138,8 @@ MonoBehaviour:
   lv9: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
   lv11: {fileID: 21300000, guid: f6ca6c69bf5ac42d680520277a2c3e88, type: 3}
   lv13: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
-  baseDamage: 47
-  dotDamage: 4.7000003
+  baseDamage: 59
+  dotDamage: 5.9
   effectChance: 50
   effectStack: 0
   slowTime: 0
@@ -157,12 +157,12 @@ MonoBehaviour:
   projectileSpeed: 1
   swingSpeed: 0
   defaultAtkDistance: 0
-  level1Sprite: {fileID: 21300000, guid: 26324e93e050c4bda8f96191dd007f18, type: 3}
-  level2Sprite: {fileID: 21300000, guid: 26324e93e050c4bda8f96191dd007f18, type: 3}
-  level3Sprite: {fileID: 21300000, guid: 0e342fcdc44eb4c5caacb2adf617ff31, type: 3}
-  level4Sprite: {fileID: 21300000, guid: 43adf5cb615a747de985da2155ec2ad8, type: 3}
-  level5Sprite: {fileID: 21300000, guid: 572ef9344a0e845fa8fee1005c9e28a3, type: 3}
-  level6Sprite: {fileID: 21300000, guid: 90c42418e50b846cfa05cf23aa50e90e, type: 3}
+  level1Sprite: {fileID: 21300000, guid: e6807d703436e4a06a08990db961f099, type: 3}
+  level2Sprite: {fileID: 21300000, guid: 3b72919e92f774772a7914fcaae776b8, type: 3}
+  level3Sprite: {fileID: 21300000, guid: e36bf715572f64e17959d7d033d668ba, type: 3}
+  level4Sprite: {fileID: 21300000, guid: 2b8c3aa4c15d143db9cce31f7afe69d2, type: 3}
+  level5Sprite: {fileID: 21300000, guid: aa1b089774f1d491b8fb6f1fe8b2b1ab, type: 3}
+  level6Sprite: {fileID: 21300000, guid: 2e95df3b20c944032bfd5a639ce69d43, type: 3}
 --- !u!1001 &6064145354757925050
 PrefabInstance:
   m_ObjectHideFlags: 0

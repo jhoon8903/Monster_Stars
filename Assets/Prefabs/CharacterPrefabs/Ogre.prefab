@@ -48,7 +48,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cover: {fileID: 3679309235843551112}
-  unitPeaceLevel: 1
+  unitPieceLevel: 1
   unLock: 1
   selected: 1
   unitPuzzleLevel: 1
@@ -79,7 +79,7 @@ MonoBehaviour:
   projectileSpeed: 1
   swingSpeed: 0
   defaultAtkDistance: 0
-  level1Sprite: {fileID: 21300000, guid: 2d608087ea9ec4902ac1b3645b865c82, type: 3}
+  level1Sprite: {fileID: 21300000, guid: 4f282dfde043b4b7992949a5f2252237, type: 3}
   level2Sprite: {fileID: 21300000, guid: 2d608087ea9ec4902ac1b3645b865c82, type: 3}
   level3Sprite: {fileID: 21300000, guid: cf9c913ebacfe438e941877552bbd91e, type: 3}
   level4Sprite: {fileID: 21300000, guid: 5d745487838284d128d3d31f3ed070ce, type: 3}
@@ -126,12 +126,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 2d608087ea9ec4902ac1b3645b865c82, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4f282dfde043b4b7992949a5f2252237, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.8888889, y: 0.8888889}
+  m_Size: {x: 5.12, y: 5.12}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -154,8 +154,8 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 5.12, y: 5.12}
-    newSize: {x: 0.8888889, y: 0.8888889}
+    oldSize: {x: 0.85333335, y: 0.85333335}
+    newSize: {x: 5.12, y: 5.12}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0

@@ -76,12 +76,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: 21e9870119e7945bc8175a8c10617107, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 68edfde3dc9da48d19db03c752c934e7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.8888889, y: 0.8888889}
+  m_Size: {x: 5.12, y: 5.12}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -104,8 +104,8 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.85333335, y: 0.85333335}
-    newSize: {x: 0.8888889, y: 0.8888889}
+    oldSize: {x: 0.68266666, y: 0.68266666}
+    newSize: {x: 5.12, y: 5.12}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -126,10 +126,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cover: {fileID: 2641826980544604055}
-  unitPeaceLevel: 3
+  unitPieceLevel: 3
   unLock: 0
   selected: 0
-  unitPuzzleLevel: 0
+  unitPuzzleLevel: 1
   unitGroup: 9
   lv1: {fileID: 21300000, guid: f6ca6c69bf5ac42d680520277a2c3e88, type: 3}
   lv3: {fileID: 21300000, guid: ff3db8ae51d4b4564a70b8b4fd5630a7, type: 3}
@@ -138,8 +138,8 @@ MonoBehaviour:
   lv9: {fileID: 21300000, guid: f6ca6c69bf5ac42d680520277a2c3e88, type: 3}
   lv11: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
   lv13: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
-  baseDamage: 0
-  dotDamage: 0
+  baseDamage: 67
+  dotDamage: 13.400001
   effectChance: 0
   effectStack: 0
   slowTime: 0
@@ -148,16 +148,16 @@ MonoBehaviour:
   freezeTime: 0
   knockBackPower: 0
   knockBackTime: 0
-  bleedTime: 0
+  bleedTime: 3
   poisonTime: 0
   burnTime: 0
   stunTime: 0
   poisonAreaTime: 0
-  defaultAtkRate: 0
-  projectileSpeed: 0
+  defaultAtkRate: 1
+  projectileSpeed: 1
   swingSpeed: 0
-  defaultAtkDistance: 0
-  level1Sprite: {fileID: 21300000, guid: 21e9870119e7945bc8175a8c10617107, type: 3}
+  defaultAtkDistance: 9
+  level1Sprite: {fileID: 21300000, guid: 68edfde3dc9da48d19db03c752c934e7, type: 3}
   level2Sprite: {fileID: 21300000, guid: 21e9870119e7945bc8175a8c10617107, type: 3}
   level3Sprite: {fileID: 21300000, guid: 965cc1cd5febd4458bb5b6c12f7e2994, type: 3}
   level4Sprite: {fileID: 21300000, guid: 3583d55227b384af3a0fe35bc3a33bcd, type: 3}

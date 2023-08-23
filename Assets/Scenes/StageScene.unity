@@ -2144,6 +2144,9 @@ MonoBehaviour:
   characterPool: {fileID: 1097818334}
   gridManager: {fileID: 8808150501734532426}
   enemyPatternManager: {fileID: 329010039}
+  enemyDescPanel: {fileID: 0}
+  enemySprite: {fileID: 0}
+  enemyDesc: {fileID: 0}
   randomX: 0
   randomY: 0
 --- !u!114 &329010039
@@ -2179,11 +2182,58 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damageText: {fileID: 3584920970260779170, guid: 21d3aafccea744b7696aa042fd57c566, type: 3}
   poisonAreaObject: {fileID: 8000264398442895287, guid: 349554efd3d02400298fddf1c49c40c0, type: 3}
+  enemySprite: {fileID: 0}
   moveSpeed: 0
   originSpeed: 0
   healthPoint: 0
   maxHealthPoint: 0
   currentHealth: 0
+  enemyClass: 0
+  enemySpriteList:
+  - spriteKey: 0
+    spriteValue: {fileID: 21300000, guid: a3f57dfd5a20e4b199d674aa0585b7d4, type: 3}
+  - spriteKey: 1
+    spriteValue: {fileID: 21300000, guid: aab5201e8269f43a8a6157074fe6f578, type: 3}
+  - spriteKey: 2
+    spriteValue: {fileID: 21300000, guid: 85a077c2b510b403e8d6fc385744d4e4, type: 3}
+  - spriteKey: 3
+    spriteValue: {fileID: 21300000, guid: 255f9583e362d4093b263351e71ffe42, type: 3}
+  - spriteKey: 4
+    spriteValue: {fileID: 21300000, guid: 8f2b5c5f248b846e1a05e7f519e55aa5, type: 3}
+  - spriteKey: 5
+    spriteValue: {fileID: 21300000, guid: 7b81e49f5271a4b81a9745ff283db4f5, type: 3}
+  - spriteKey: 6
+    spriteValue: {fileID: 21300000, guid: d5d943fe1553844658f9261684904905, type: 3}
+  - spriteKey: 7
+    spriteValue: {fileID: 21300000, guid: f5e152b6761004ff09567652290cf47f, type: 3}
+  - spriteKey: 8
+    spriteValue: {fileID: 21300000, guid: 2975b5316e30f4f8e976d0cceb6e3b7d, type: 3}
+  - spriteKey: 9
+    spriteValue: {fileID: 21300000, guid: 36323886120b342f5a66b1eb239c03d3, type: 3}
+  - spriteKey: 10
+    spriteValue: {fileID: 21300000, guid: eb895cf36e2924806b7e6e1c9cdbd88f, type: 3}
+  - spriteKey: 11
+    spriteValue: {fileID: 21300000, guid: b3dbd061f114e40cab31666f933fc61a, type: 3}
+  - spriteKey: 12
+    spriteValue: {fileID: 21300000, guid: 41cccd52e8c8c484d98d3eb7aa067780, type: 3}
+  - spriteKey: 13
+    spriteValue: {fileID: 21300000, guid: 5778aad91cae540f88e8a40ce0688bac, type: 3}
+  - spriteKey: 14
+    spriteValue: {fileID: 21300000, guid: 15ee9fcd7205c4448b571263b48d5f8d, type: 3}
+  - spriteKey: 15
+    spriteValue: {fileID: 21300000, guid: 5f32f6d48aca04c28895a7f154da33e0, type: 3}
+  - spriteKey: 16
+    spriteValue: {fileID: 21300000, guid: 747b95493956c499084eba6fa77b8ea2, type: 3}
+  - spriteKey: 17
+    spriteValue: {fileID: 21300000, guid: 411cd346a60cd478190de002adc46c9b, type: 3}
+  - spriteKey: 18
+    spriteValue: {fileID: 21300000, guid: 799e457d6979a4e2daae07321c5cc00e, type: 3}
+  - spriteKey: 19
+    spriteValue: {fileID: 21300000, guid: d852eb411e16641eba337725eb789878, type: 3}
+  - spriteKey: 20
+    spriteValue: {fileID: 21300000, guid: 4429d03696fc947b68ac7e90a9a57c39, type: 3}
+  - spriteKey: 21
+    spriteValue: {fileID: 21300000, guid: 1419ba0d3b0db4698a060e4c912f0a04, type: 3}
   isDead: 0
   statusList: 
   isBind: 0

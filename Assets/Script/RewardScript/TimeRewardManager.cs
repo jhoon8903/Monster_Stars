@@ -68,7 +68,7 @@ namespace Script.RewardScript
                 _latestOpenTime = DateTime.Now;
                 PlayerPrefs.SetString(LatestOpenTimeKey, _latestOpenTime.ToBinary().ToString());
             }
-            timeRewardBtn.GetComponent<Button>().onClick.AddListener(ReceiveTimeReward);
+         
         }
 
         private void Update()
@@ -85,6 +85,7 @@ namespace Script.RewardScript
             StartCoroutine(UpdateReward());
             LoadRewardInfo(); 
             ShowTimeReward();
+            timeRewardBtn.GetComponent<Button>().onClick.AddListener(ReceiveTimeReward);
             timeRewardBtn.GetComponent<Button>().interactable = timeRewardContents.transform.childCount > 0;
             SaveRewardInfo();
         }
@@ -105,7 +106,8 @@ namespace Script.RewardScript
             timeRewardPanel.SetActive(false);
         }
         private void ReceiveTimeReward()
-        {
+        { 
+            Debug.LogWarning("이용이용");
             CoinsScript.Instance.Coin += _coinReward;
             CoinsScript.Instance.UpdateCoin();
             _latestOpenTime = DateTime.Now;

@@ -32,6 +32,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         [SerializeField] private Image unitPropertyImage;
         [SerializeField] private TextMeshProUGUI unitPropertyText;
         [SerializeField] private TextMeshProUGUI unitNoticeText;
+        [SerializeField] private Image basicShape;
         // unit InformationGrid
         [SerializeField] private GameObject unitInformationGrid;
         [SerializeField] private InfoObject infoObject;
@@ -149,7 +150,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 default:
                     throw new ArgumentOutOfRangeException(nameof(unitInstance.CharacterBase.UnitProperty));
             }
-
+            basicShape.sprite = unitInstance.CharacterBase.GetSpriteForLevel(1);
             unitPropertyText.text = UnitPropertyText(unitInstance.CharacterBase);
             unitNoticeText.text = unitInstance.CharacterBase.UnitDesc;
             var unitDataList = UnitData(unitInstance.CharacterBase);
@@ -290,7 +291,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 }
             }
         }
-
         private static List<Dictionary<string, object>> UnitSkills(CharacterBase characterBase)
         {
             var unitSkillFile = Resources.Load<TextAsset>("SkillData");
@@ -317,7 +317,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             });
             return skillList;
         }
-
         private void PopulateUnitSkillObject(List<Dictionary<string, object>> skills, CharacterBase characterBase)
         {
             foreach (Transform child in unitSkillGrid.transform)
