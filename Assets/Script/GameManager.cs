@@ -58,6 +58,7 @@ namespace Script
         private IEnumerator LoadGame()
         {
             swipeManager.isBusy = true;
+            BackGroundManager.Instance.ChangedBackGround();
             gridManager.GenerateInitialGrid(PlayerPrefs.GetInt("GridHeight", 6));
             if (LoadingManager.Instance.isFirstContact)
             {

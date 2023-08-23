@@ -192,7 +192,7 @@ namespace Script.WeaponScriptGroup
                     {
                         damage *= 1.5f;
                     }
-                    if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Divine)
+                    if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Darkness)
                     {
                         damage *= 0.8f;
                     }

@@ -77,6 +77,7 @@ namespace Script.RewardScript
             {
                 _latestOpenTime = DateTime.Now.AddHours(-MaxHours); // 현재 시간에서 최대 시간(MaxHours) 후로 설정
                 PlayerPrefs.SetString(LatestOpenTimeKey, _latestOpenTime.ToBinary().ToString());
+                CloseTimeReward();
             }
         }
         public void OpenPanel()
@@ -106,8 +107,7 @@ namespace Script.RewardScript
             timeRewardPanel.SetActive(false);
         }
         private void ReceiveTimeReward()
-        { 
-            Debug.LogWarning("이용이용");
+        {
             CoinsScript.Instance.Coin += _coinReward;
             CoinsScript.Instance.UpdateCoin();
             _latestOpenTime = DateTime.Now;

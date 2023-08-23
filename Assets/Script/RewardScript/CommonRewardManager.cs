@@ -418,12 +418,12 @@ namespace Script.RewardScript
         // 10. 상자 선택
         private void SelectCommonReward(Data selectedReward)
         {
-        Selected(selectedReward);
+        StartCoroutine(Selected(selectedReward));
         Quest.Instance.MatchCoinQuest();
         OnRewardSelected?.Invoke();
         }
         // 11. 선택 처리
-        private void Selected(Data selectedReward)
+        private IEnumerator Selected(Data selectedReward)
         {
         commonRewardPanel.SetActive(false);
         if (countManager.TotalMoveCount == 0)
@@ -438,7 +438,7 @@ namespace Script.RewardScript
 
         if (!spawnManager.isWave10Spawning)
         {
-            StartCoroutine(spawnManager.PositionUpCharacterObject());
+           yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
         }
         else
         {

@@ -27,6 +27,7 @@ namespace Script.PuzzleManagerGroup
         private float _totalPos;
         private int _currentGroupIndex;
         public bool isTutorial;
+        private static readonly object Lock = new object();
         private void Start()
         {
             if (!PlayerPrefs.HasKey("TutorialKey")) return;
@@ -51,7 +52,6 @@ namespace Script.PuzzleManagerGroup
         }
         public IEnumerator PositionUpCharacterObject()
         {
-            swipeManager.isBusy = true;
             var moves = new List<(GameObject, Vector3Int)>();
             for (var x = 0; x < gridManager.gridWidth; x++)
             {
@@ -87,7 +87,7 @@ namespace Script.PuzzleManagerGroup
                 yield return new WaitForSeconds(0.5f);
             }
             swipeManager.isBusy = false;
-            
+        
             if (countManager.TotalMoveCount == 0)
             {
                 yield return StartCoroutine(gameManager.Count0Call());

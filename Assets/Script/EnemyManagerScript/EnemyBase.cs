@@ -28,7 +28,7 @@ namespace Script.EnemyManagerScript
         public float originSpeed;
         public enum EnemyTypes { Boss, Group1, Group2, Group3 }
         protected internal EnemyTypes EnemyType;
-        public enum RegistryTypes { Physics, Divine, Poison, Burn, Water, Darkness, None }
+        public enum RegistryTypes { Physics, Poison, Burn, Water, Darkness, None }
         protected internal RegistryTypes RegistryType; 
         protected internal SpawnZones SpawnZone;
         private static readonly object Lock = new object();

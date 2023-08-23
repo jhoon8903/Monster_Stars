@@ -1,17 +1,20 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Script.PuzzleManagerGroup
 {
     public sealed class SwipeManager : MonoBehaviour
     {
+        private bool _isSwipe;
         private bool _isSoon;
         public bool isBusy;
         public bool isUp;
@@ -28,20 +31,19 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private EnforceManager enforceManager;
         [SerializeField] private GameObject pressObject;
         [SerializeField] private TutorialManager tutorialManager;
-         
-        // CountManager를 요청하여 캐릭터의 이동 허용 여부를 확인합니다.
-        private bool CanMove()  
-        {
-            return countManager.CanMove();
-        }
-        // 프레임당 한 번씩 실행되는 Unity 콜백 메서드입니다. 특히 터치 다운, 터치 업 및 드래그 이벤트를 확인하여 사용자의 입력을 처리합니다.
+        [SerializeField] private CharacterPool characterPool;
+
+
         private void Update()
         {
             var point2D = GetTouchPoint();
 
-            if (Input.GetMouseButtonDown(0) && _startObject == null)
+            if (Input.GetMouseButtonDown(0))
             {
-                HandleTouchDown(point2D);
+                if (_startObject == null)
+                {
+                    HandleTouchDown(point2D);
+                }
             }
             else if (Input.GetMouseButtonUp(0))
             {
@@ -52,15 +54,32 @@ namespace Script.PuzzleManagerGroup
                 HandleDrag(point2D);
             }
         }
-        // 사용자의 터치 포인트 또는 마우스 클릭 포인트를 화면 좌표에서 세계 좌표로 변환합니다.
-
-        // 사용자가 손가락을 떼거나 마우스 버튼을 놓을 때 처리합니다. 시작 개체의 크기를 조정하고 다음 스 와이프를 위해 무효화합니다.
+        private bool CanMove()  
+        {
+            return countManager.CanMove();
+        }
         private static Vector2 GetTouchPoint()
         {
             var worldPoint = Camera.main!.ScreenToWorldPoint(Input.mousePosition);
             return new Vector2(worldPoint.x, worldPoint.y);
         }
-        // 선택된 게임 오브젝트를 식별하고 첫 번째 터치 위치를 저장하는 초기 터치 또는 클릭 이벤트를 처리합니다.
+        private IEnumerator FindUnit(CharacterBase characterBase)
+        {
+            var unitList = characterPool.UsePoolCharacterList();
+            var activatedLines = new List<GameObject>();
+
+            foreach (var yellowLine in from unit in unitList select unit.GetComponent<CharacterBase>() into unitBase where unitBase.unitGroup == characterBase.unitGroup &&
+                         unitBase.unitPuzzleLevel == characterBase.unitPuzzleLevel select unitBase.transform.Find("Yellow_Line").gameObject)
+            {
+                yellowLine.SetActive(true);
+                activatedLines.Add(yellowLine);
+            }
+            yield return new WaitForSecondsRealtime(2f);
+            foreach (var line in activatedLines)
+            {
+                line.SetActive(false);
+            }
+        }
         private void HandleTouchDown(Vector2 point2D)
         {
             if (isBusy || _isSoon) return;
@@ -72,10 +91,8 @@ namespace Script.PuzzleManagerGroup
 
             var characterLayerMask = LayerMask.GetMask("Character");
             var hitCharacter = Physics2D.Raycast(point2D, Vector2.zero, Mathf.Infinity, characterLayerMask);
-    
-            // If no Character object was hit, return
+            
             if (hitCharacter.collider == null) return;
-
             _startObject = hitCharacter.collider.gameObject;
             ScaleObject(_startObject, new Vector3(1.2f,1.2f,1.2f), 0.2f);
             _startObject.GetComponent<CharacterBase>().IsClicked = true;
@@ -102,7 +119,7 @@ namespace Script.PuzzleManagerGroup
                         break;
                 }
             }
-            else
+            if (_startObject != null)
             {
                 StartCoroutine(CheckForLongPress());
             }
@@ -110,18 +127,21 @@ namespace Script.PuzzleManagerGroup
         private void HandleTouchUp()
         {
             ScaleObject(_startObject, Vector3.one, 0.2f);
-            var allObject = FindObjectOfType<CharacterPool>().UsePoolCharacterList();
-
-            foreach (var character in allObject.Where(character => character.GetComponent<CharacterBase>().IsClicked))
+            if (!_isSwipe)
             {
+                StartCoroutine(FindUnit(_startObject.GetComponent<CharacterBase>()));
+            }
+            var allObjects = characterPool.UsePoolCharacterList();
+            foreach (var character in allObjects)
+            {
+                if (!character.GetComponent<CharacterBase>().IsClicked) continue;
+                
                 ScaleObject(character, Vector3.one, 0.2f);
                 character.GetComponent<CharacterBase>().IsClicked = false;
             }
             _startObject = null;
+            _isSwipe = false;
         }
-
-        // 이 메서드는 사용자가 터치다운 후 손가락이나 마우스를 움직이는 드래그 이벤트를 처리합니다.
-        // 움직임이 스와이프로 간주될 만큼 길면 스와이프 동작을 시작합니다.
         private void HandleDrag(Vector2 point2D)
         {
             if (isBusy || isUp || rewardManager.openBoxing) return;
@@ -130,10 +150,9 @@ namespace Script.PuzzleManagerGroup
             if (!(Mathf.Abs(swipe.x) > 0.5f) && !(Mathf.Abs(swipe.y) > 0.5f)) return;
             _firstTouchPosition = point2D;
             Swipe(swipe);
-            HandleTouchUp(); // Release mouse input
+            _isSwipe = true;
+            HandleTouchUp();
         }
-        // 스와이프의 방향을 식별하고 스와이프의 시작 객체와 끝 객체를 결정합니다.
-         // 개체가 식별되면 개체의 상태에 따라 SwitchAndMatches 코루틴 또는 NullSwap 코루틴을 시작합니다.
         private void Swipe(Vector2 swipe)
         {
             if (isBusy || isUp || rewardManager.openBoxing) return;
@@ -269,7 +288,6 @@ namespace Script.PuzzleManagerGroup
             StartCoroutine(NullSwap(startObject, endX, endY));
             _startObject = null;
         }
-
         private static void ScaleObject(GameObject obj, Vector3 scale, float duration)
         {
             if (obj != null)
@@ -277,13 +295,16 @@ namespace Script.PuzzleManagerGroup
                 obj.transform.DOScale(scale, duration);
             }
         }
-
         private IEnumerator CheckForLongPress()
         {
+
+            if (_startObject == null) // Ensure _startObject is not null
+                yield break;
+
             yield return new WaitForSecondsRealtime(1f);
 
             if (_startObject == null || !_startObject.GetComponent<CharacterBase>().IsClicked)
-                yield break; // _startObject가 null이거나 더 이상 클릭되지 않은 경우 코루틴 종료
+                yield break; 
 
             var pressObjectInstance = Instantiate(pressObject, new Vector3(_startObject.transform.position.x, _startObject.transform.position.y + 0.5f, _startObject.transform.position.z), Quaternion.identity);
             var frontObject = pressObjectInstance.transform.GetChild(0).GetChild(0); 
@@ -361,5 +382,6 @@ namespace Script.PuzzleManagerGroup
             if (!matchManager.IsMatched(characterObject)) yield break;
             yield return null;
         }
+
     }
 }
