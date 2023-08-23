@@ -472,12 +472,14 @@ namespace Script.AdsScript
 
         private void FreeGemPack()
         {
-
+            Debug.Log("젬 10 지급");
+            GemScript.Instance.Gem += 10;
         }
 
         private void FreeCoinPack()
         {
-
+            Debug.Log("코인 10 지급");
+            CoinsScript.Instance.Coin += 10;
         }
     }
 }

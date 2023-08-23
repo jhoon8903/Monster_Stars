@@ -73,10 +73,10 @@ namespace Script.RobbyScript.TopMenuGroup
             _rewardTypes = RewardTypes.Gem;
 
             item1.GetComponent<Image>().sprite= gemSprite;
-            item1Value.text = "10";
+            item1Value.text = "200";
             
             item2.GetComponent<Image>().sprite = gemSprite;
-            item2Value.text = "10";
+            item2Value.text = "1000";
             item2Purchase = coinSprite;
             item2Price.text = "50";
         }
@@ -100,13 +100,13 @@ namespace Script.RobbyScript.TopMenuGroup
             switch (_rewardTypes)
             {
                 case RewardTypes.Stamina:
-                    AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.EnergyPackFreeStamina;
+                    AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Stamina;
                     break;
                 case RewardTypes.Gem:
-                    AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.GemPackFree;
+                    AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Gem;
                     break;
                 case RewardTypes.Coin:
-                    AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.CoinPackFree;
+                    AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Coin;
                     break;
             }
             AdsManager.Instance.ShowRewardedAd();
