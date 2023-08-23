@@ -87,7 +87,6 @@ namespace Script.PuzzleManagerGroup
                 yield return new WaitForSeconds(0.5f);
             }
             swipeManager.isBusy = false;
-        
             if (countManager.TotalMoveCount == 0)
             {
                 yield return StartCoroutine(gameManager.Count0Call());

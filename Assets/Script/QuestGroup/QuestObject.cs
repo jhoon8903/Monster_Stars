@@ -18,7 +18,7 @@ namespace Script.QuestGroup
         [SerializeField] internal TextMeshProUGUI receiveBtnText;
         [SerializeField] internal GameObject shuffleBtn;
         public QuestManager.QuestTypes QuestType { get; private set; }
-        public QuestManager.QuestCondition QuestCondition { get; set; }
+        private QuestManager.QuestCondition QuestCondition { get; set; }
         public int questValue;
         public int questGoal;
         public bool isShuffled;

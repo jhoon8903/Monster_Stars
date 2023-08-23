@@ -61,7 +61,6 @@ namespace Script.EnemyManagerScript
             }
             yield return null;
         }
-
         private static IEnumerator WalkingEffect(Transform childTransform)
         {
             var originalScale = childTransform.localScale;
@@ -70,10 +69,8 @@ namespace Script.EnemyManagerScript
             const float horizontalScaleAmount = 0.05f;
             const float positionOffset = 0.15f;
             const float positionChangeSpeed = 5f;
-
             var targetYPosition = originalLocalPosition.y - positionOffset;
             var currentYPosition = originalLocalPosition.y;
-
             while (true)
             {
                 var delta = targetYPosition - currentYPosition;
@@ -91,21 +88,17 @@ namespace Script.EnemyManagerScript
                     var newScale = new Vector3(originalScale.x + scaleValue * horizontalScaleAmount, originalScale.y - scaleValue * verticalScaleAmount, originalScale.z);
                     childTransform.localScale = newScale;
                 }
-
                 yield return null;
             }
             // ReSharper disable once IteratorNeverReturns
         }
-
         private IEnumerator Rain(EnemyBase enemyBase)
         {
             _rb = enemyBase.GetComponent<Rigidbody2D>();
             _enemyRigidbodies[enemyBase] = _rb;
-            
             var targetPosition = new Vector2(_enemyRigidbodies[enemyBase].transform.position.x, _endY);
             var childTransform = enemyBase.transform.Find("Sprite");
             StartCoroutine(WalkingEffect(childTransform));
-
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
@@ -126,7 +119,6 @@ namespace Script.EnemyManagerScript
                 {
                     _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed);
                 }
-
                 if (enemyBase.gameObject.activeInHierarchy)
                 {
                     StartCoroutine(Effect(enemyBase));
@@ -141,7 +133,6 @@ namespace Script.EnemyManagerScript
         {
             _rb = enemyBase.GetComponent<Rigidbody2D>();
             _enemyRigidbodies[enemyBase] = _rb;
-
             var endX = enemyBase.SpawnZone == EnemyBase.SpawnZones.B ? Random.Range(4, 7) : Random.Range(-1, 2);
             var targetPosition = new Vector2(endX, _endY);
             var childTransform = enemyBase.transform.Find("Sprite");
@@ -162,7 +153,6 @@ namespace Script.EnemyManagerScript
                 }
                 _moveSpeed = enemyBase.moveSpeed * _speedReductionFactor * moveSpeedOffset * Time.deltaTime;
                 _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed);
-                
                 if (enemyBase.gameObject.activeInHierarchy)
                 {
                     StartCoroutine(Effect(enemyBase));
@@ -197,7 +187,6 @@ namespace Script.EnemyManagerScript
                 }
                 var targetPosition = waypoints[waypointIndex];
                 var journeyLength = Vector2.Distance(_enemyRigidbodies[enemyBase].transform.position, targetPosition);
-
                 _slowCount = EnforceManager.Instance.slowCount;
                 _speedReductionFactor = 1f - _slowCount * 0.15f;
                 if (_speedReductionFactor == 0)
@@ -205,9 +194,7 @@ namespace Script.EnemyManagerScript
                     _speedReductionFactor = 1f;
                 }
                 _moveSpeed = enemyBase.moveSpeed * _speedReductionFactor * moveSpeedOffset * Time.deltaTime;
-
                 _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed);
-
                 if (journeyLength <= 0.01f)
                 {
                     waypointIndex++;
@@ -228,7 +215,6 @@ namespace Script.EnemyManagerScript
         {
             _rb = enemyBase.GetComponent<Rigidbody2D>();
             _enemyRigidbodies[enemyBase] = _rb;
-
             var targetPosition = _enemyRigidbodies[enemyBase].transform.position.x <= 2 
                 ? new Vector2(-1, _enemyRigidbodies[enemyBase].transform.position.y) 
                 : new Vector2(6, _enemyRigidbodies[enemyBase].transform.position.y);
@@ -256,7 +242,6 @@ namespace Script.EnemyManagerScript
                 {
                     targetPosition = new Vector2(targetPosition.x, _endY);
                 }
-
                 if (enemyBase.gameObject.activeInHierarchy)
                 {
                     StartCoroutine(Effect(enemyBase));
@@ -272,7 +257,6 @@ namespace Script.EnemyManagerScript
             _rb = enemyBase.GetComponent<Rigidbody2D>();
             _enemyRigidbodies[enemyBase] = _rb;
             Vector3 targetPosition;
-
             if (_enemyRigidbodies[enemyBase].transform.position.x <= -1) 
             {
                 var randomX = Random.Range(3, 6);
@@ -302,12 +286,10 @@ namespace Script.EnemyManagerScript
                 }
                 _moveSpeed = enemyBase.moveSpeed * _speedReductionFactor * moveSpeedOffset * Time.deltaTime;
                 _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed);
-                
                 if (journeyLength <= 0.01f)
                 {
                     targetPosition = new Vector3(targetPosition.x, _endY);
                 }
-
                 if (enemyBase.gameObject.activeInHierarchy)
                 {
                     StartCoroutine(Effect(enemyBase));
@@ -316,32 +298,26 @@ namespace Script.EnemyManagerScript
                 {
                     StopCoroutine(Effect(enemyBase));
                 }
-                
             }
         }
-        
         private IEnumerator Effect(EnemyBase enemyBase)
         {
             if (enemyBase.isBind)
             {
                 StartCoroutine(BindEffect(enemyBase, enemyBase.Character));
             }
-
             if (enemyBase.isSlow)
             {
                 StartCoroutine(SlowEffect(enemyBase, enemyBase.Character));
-            }                                                                   
-
+            }
             if (enemyBase.isKnockBack)
             {
                 StartCoroutine(KnockBackEffect(enemyBase, enemyBase.Character));
             }
-
             if (enemyBase.isFreeze)
             {
                 StartCoroutine(FreezeEffect(enemyBase, enemyBase.Character));
             }
-
             if (EnforceManager.Instance.ogreStatusAilmentSlowEffect)
             {
                 if (enemyBase.isBind|| enemyBase.isSlow || enemyBase.isBleed || enemyBase.isBurn || enemyBase.isPoison || enemyBase.isFreeze || enemyBase.isStun)
@@ -349,7 +325,6 @@ namespace Script.EnemyManagerScript
                     StartCoroutine(SlowEffect(enemyBase, enemyBase.Character));
                 }
             }
-
             if (enemyBase.isStun)
             {
                 StartCoroutine(StunEffect(enemyBase, enemyBase.Character));

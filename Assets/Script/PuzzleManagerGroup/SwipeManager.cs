@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,32 +6,32 @@ using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Script.PuzzleManagerGroup
 {
     public sealed class SwipeManager : MonoBehaviour
     {
+        private readonly WaitForSeconds _checkSoonWait = new WaitForSeconds(0.5f);
+        private Coroutine _findUnitCoroutine;
+        private readonly List<GameObject> _activatedLines = new List<GameObject>();
         private bool _isSwipe;
         private bool _isSoon;
         public bool isBusy;
         public bool isUp;
-        private GameObject _startObject; // 초기에 터치된 객체를 추적하는 데 사용됩니다.
-        private GameObject _returnObject; // 원래 위치로 돌아갈 객체를 추적하는 데 사용됩니다.
-        private Vector2 _firstTouchPosition; // 첫 터치의 위치를 저장합니다.
-        private Vector2 _emptyGridPosition; // 빈 그리드의 위치를 저장합니다.
-        [SerializeField] private float minSwipeLength = 1.0f; // 스와이프로 인식되는 최소 길이입니다.
-        [SerializeField] private SpawnManager spawnManager; // 스폰매니저를 참조합니다.
-        [SerializeField] private CountManager countManager; // 카운트매니저를 참조합니다.
-        [SerializeField] private LayerMask characterLayer; // 캐릭터 레이어를 저장합니다.
+        private GameObject _startObject;
+        private GameObject _returnObject;
+        private Vector2 _firstTouchPosition;
+        private Vector2 _emptyGridPosition;
+        [SerializeField] private float minSwipeLength;
+        [SerializeField] private SpawnManager spawnManager;
+        [SerializeField] private CountManager countManager;
         [SerializeField] private MatchManager matchManager;
         [SerializeField] private CommonRewardManager rewardManager;
         [SerializeField] private EnforceManager enforceManager;
         [SerializeField] private GameObject pressObject;
         [SerializeField] private TutorialManager tutorialManager;
         [SerializeField] private CharacterPool characterPool;
-
 
         private void Update()
         {
@@ -63,22 +62,37 @@ namespace Script.PuzzleManagerGroup
             var worldPoint = Camera.main!.ScreenToWorldPoint(Input.mousePosition);
             return new Vector2(worldPoint.x, worldPoint.y);
         }
+        private void StartFindUnit(CharacterBase characterBase)
+        {
+            if (_findUnitCoroutine != null)
+            {
+                StopCoroutine(_findUnitCoroutine);
+                foreach (var line in _activatedLines)
+                {
+                    line.SetActive(false);
+                }
+                _activatedLines.Clear();
+            }
+            _findUnitCoroutine = StartCoroutine(FindUnit(characterBase));
+        }
         private IEnumerator FindUnit(CharacterBase characterBase)
         {
             var unitList = characterPool.UsePoolCharacterList();
-            var activatedLines = new List<GameObject>();
 
             foreach (var yellowLine in from unit in unitList select unit.GetComponent<CharacterBase>() into unitBase where unitBase.unitGroup == characterBase.unitGroup &&
                          unitBase.unitPuzzleLevel == characterBase.unitPuzzleLevel select unitBase.transform.Find("Yellow_Line").gameObject)
             {
                 yellowLine.SetActive(true);
-                activatedLines.Add(yellowLine);
+                _activatedLines.Add(yellowLine);
             }
+
             yield return new WaitForSecondsRealtime(2f);
-            foreach (var line in activatedLines)
+
+            foreach (var line in _activatedLines)
             {
                 line.SetActive(false);
             }
+            _activatedLines.Clear();
         }
         private void HandleTouchDown(Vector2 point2D)
         {
@@ -129,13 +143,11 @@ namespace Script.PuzzleManagerGroup
             ScaleObject(_startObject, Vector3.one, 0.2f);
             if (!_isSwipe)
             {
-                StartCoroutine(FindUnit(_startObject.GetComponent<CharacterBase>()));
+                StartFindUnit(_startObject.GetComponent<CharacterBase>());
             }
             var allObjects = characterPool.UsePoolCharacterList();
-            foreach (var character in allObjects)
+            foreach (var character in allObjects.Where(character => character.GetComponent<CharacterBase>().IsClicked))
             {
-                if (!character.GetComponent<CharacterBase>().IsClicked) continue;
-                
                 ScaleObject(character, Vector3.one, 0.2f);
                 character.GetComponent<CharacterBase>().IsClicked = false;
             }
@@ -297,25 +309,20 @@ namespace Script.PuzzleManagerGroup
         }
         private IEnumerator CheckForLongPress()
         {
-
             if (_startObject == null) // Ensure _startObject is not null
                 yield break;
-
             yield return new WaitForSecondsRealtime(1f);
-
             if (_startObject == null || !_startObject.GetComponent<CharacterBase>().IsClicked)
-                yield break; 
-
-            var pressObjectInstance = Instantiate(pressObject, new Vector3(_startObject.transform.position.x, _startObject.transform.position.y + 0.5f, _startObject.transform.position.z), Quaternion.identity);
+                yield break;
+            var position = _startObject.transform.position;
+            var pressObjectInstance = Instantiate(pressObject, new Vector3(position.x, position.y + 0.5f, position.z), Quaternion.identity);
             var frontObject = pressObjectInstance.transform.GetChild(0).GetChild(0); 
             var fillImage = frontObject.GetComponent<Image>();
             var timer = 0f;
-
             while (_startObject != null && _startObject.GetComponent<CharacterBase>().IsClicked)
             {
                 timer += Time.deltaTime;
                 fillImage.fillAmount = timer / 2f; // fillAmount를 0에서 1까지 조정
-
                 if (timer >= 2f) // 눌러진 상태를 2초 동안 확인
                 {
                     CharacterPool.ReturnToPool(_startObject);
@@ -328,14 +335,12 @@ namespace Script.PuzzleManagerGroup
             fillImage.fillAmount = 0f; // fillAmount를 초기화
             Destroy(pressObjectInstance); // 인스턴스를 파괴
         }
-        private readonly WaitForSeconds _checkSoonWait = new WaitForSeconds(0.5f);
         private IEnumerator CheckSoon()
         {
             _isSoon = true;
             yield return _checkSoonWait;
             _isSoon = false;
         }
-        // 스와이프 끝에 빈 공간이 있는 null 스왑 시나리오를 처리합니다. 시작 개체는 빈 위치로 이동한 다음 개체 풀로 반환됩니다.
         private IEnumerator NullSwap(GameObject startObject, int endX, int endY)
         {
             if (isBusy || isUp || rewardManager.openBoxing) yield break;
@@ -356,8 +361,6 @@ namespace Script.PuzzleManagerGroup
             CharacterPool.ReturnToPool(startObject);
             StartCoroutine(spawnManager.PositionUpCharacterObject());
         }
-
-        // 시작 개체와 끝 개체 사이의 전환을 시작합니다. 그런 다음 두 개체와 관련된 일치 항목을 확인합니다.
         private IEnumerator SwitchAndMatches(GameObject startObject, GameObject endObject)
         {
             if (isBusy || isUp || rewardManager.openBoxing) yield break;
@@ -375,13 +378,11 @@ namespace Script.PuzzleManagerGroup
             countManager.DecreaseMoveCount();
             yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
         }
-        // 이 코루틴은 주어진 오브젝트가 MatchManager를 사용하여 매치의 일부인지 여부를 확인합니다.
         private IEnumerator MatchesCheck(GameObject characterObject)
         {
             if (characterObject == null) yield break;
             if (!matchManager.IsMatched(characterObject)) yield break;
             yield return null;
         }
-
     }
 }
