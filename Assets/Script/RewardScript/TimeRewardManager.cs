@@ -43,7 +43,8 @@ namespace Script.RewardScript
         private const int CoinRewardTime = 10;
         private const int GreenPieceRewardTime = 30;
         private const int BluePieceRewardTime = 1;
-
+        
+        
         private void Awake()
         {
             if (Instance == null)
@@ -69,6 +70,15 @@ namespace Script.RewardScript
             }
             timeRewardBtn.GetComponent<Button>().onClick.AddListener(ReceiveTimeReward);
         }
+
+        private void Update()
+        {
+            if (Input.GetKeyDown(KeyCode.Slash)) // / 키를 눌렀을 때
+            {
+                _latestOpenTime = DateTime.Now.AddHours(-MaxHours); // 현재 시간에서 최대 시간(MaxHours) 후로 설정
+                PlayerPrefs.SetString(LatestOpenTimeKey, _latestOpenTime.ToBinary().ToString());
+            }
+        }
         public void OpenPanel()
         {
             timeRewardPanel.SetActive(true);
@@ -87,7 +97,7 @@ namespace Script.RewardScript
             }
             foreach (var unitPiece in _unitPieceDict.Values)
             {
-                Destroy(unitPiece.Item2.gameObject);                           
+                  Destroy(unitPiece.Item2.gameObject);                           
             }
             _unitPieceDict.Clear();
             SaveRewardInfo();

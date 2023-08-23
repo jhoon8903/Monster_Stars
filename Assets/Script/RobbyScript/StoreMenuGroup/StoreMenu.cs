@@ -37,8 +37,8 @@ namespace Script.RobbyScript.StoreMenuGroup
         // ChestItem
         [SerializeField] public ChestItem chestItem;
 
-        [SerializeField] private GameObject boxRewardPanel;
-        [SerializeField] private GameObject boxRewardContents;
+        [SerializeField] public GameObject boxRewardPanel;
+        [SerializeField] public GameObject boxRewardContents;
         [SerializeField] private GameObject closeBtn;
         [SerializeField] private GameObject adsRewardBtn;
         [SerializeField] private Goods rewardItem;
@@ -163,7 +163,10 @@ namespace Script.RobbyScript.StoreMenuGroup
                 HoldCharacterList.Instance.UpdateRewardPiece(unitReward.Key);
                 Destroy(unitReward.Value.Item2.gameObject);
             }
-            Destroy(_coinObject.gameObject);
+            if (_coinObject != null)
+            {
+                Destroy(_coinObject.gameObject);
+            }
             _unitPieceDict.Clear();
         }
         private void CalculateCoinReward(BoxGrade boxTypes, int openCount)
