@@ -110,9 +110,9 @@ namespace Script
             StartCoroutine(cameraManager.CameraBattleSizeChange());
             StartCoroutine(backgroundManager.ChangeBattleSize());
             StartCoroutine(CoverUnit(true));
-            yield return _waitTwoSecRealtime;
             StartCoroutine(AtkManager.Instance.CheckForAttack());
-            StartCoroutine(StageManager.Instance.WaveController());
+            yield return _waitTwoSecRealtime;
+            if (StageManager.Instance != null) StartCoroutine(StageManager.Instance.WaveController());
 
             // var allUnits = FindObjectsOfType<CharacterBase>();
             // foreach (var unit in allUnits)

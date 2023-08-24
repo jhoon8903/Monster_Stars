@@ -22,7 +22,7 @@ namespace Script.RewardScript
         [SerializeField] private TextMeshProUGUI common1Text; // 파워1 텍스트
         [SerializeField] private TextMeshProUGUI common2Text; // 파워2 텍스트
         [SerializeField] private TextMeshProUGUI common3Text; // 파워3 텍스트
-        [SerializeField] private Button common1Button; 
+        [SerializeField] private GameObject common1Button; 
         [SerializeField] private Button common2Button; 
         [SerializeField] private Button common3Button;
         [SerializeField] private Button commonShuffle;
@@ -46,14 +46,14 @@ namespace Script.RewardScript
         private int _bossRewardSelected;
         public bool isOpenBox;
 
-        public Dictionary<CharacterBase.UnitGroups, Dictionary<string, string>> _levelUpDict =
+        public Dictionary<CharacterBase.UnitGroups, Dictionary<string, string>> LevelUpDict =
             new Dictionary<CharacterBase.UnitGroups, Dictionary<string, string>>();
 
         public event Action OnRewardSelected;
         private void Awake()
         {
             Instance = this;
-            _levelUpDict = new Dictionary<CharacterBase.UnitGroups, Dictionary<string, string>>
+            LevelUpDict = new Dictionary<CharacterBase.UnitGroups, Dictionary<string, string>>
             {
                 {CharacterBase.UnitGroups.Octopus, new Dictionary<string, string> {{"Octopus", "Tentacle"}}},
                 {CharacterBase.UnitGroups.Orc, new Dictionary<string, string> {{"Orc", "Sword"}}},
@@ -265,7 +265,7 @@ namespace Script.RewardScript
                 common2Button.interactable = true;
                 common3Button.interactable = true;
             }
-            CommonDisplayText(common1Button, common1Text, icon1, common1BtnBadge ,powerUpsDisplayData[0]);
+            CommonDisplayText(common1Button.GetComponent<Button>(), common1Text, icon1, common1BtnBadge ,powerUpsDisplayData[0]);
             CommonDisplayText(common2Button, common2Text, icon2, common2BtnBadge, powerUpsDisplayData[1]);
             CommonDisplayText(common3Button, common3Text, icon3, common3BtnBadge, powerUpsDisplayData[2]);
         }
@@ -336,7 +336,7 @@ namespace Script.RewardScript
                     break;
                 case PowerTypeManager.Types.GroupLevelUp:
                     var groupLevelUpKey = characterManager.characterList[powerUp.Property[0]];
-                    foreach (var item in _levelUpDict[groupLevelUpKey.unitGroup])
+                    foreach (var item in LevelUpDict[groupLevelUpKey.unitGroup])
                     {
                         _changeUnitName = "{unit_N}";
                         _zeroLevelUnitName = "{0level_unit_N}";
@@ -348,7 +348,7 @@ namespace Script.RewardScript
                     break;
                 case PowerTypeManager.Types.LevelUpPattern:
                     var levelUpPatternKey = characterManager.characterList[powerUp.Property[0]];
-                    foreach (var item in _levelUpDict[levelUpPatternKey.unitGroup])
+                    foreach (var item in LevelUpDict[levelUpPatternKey.unitGroup])
                     {
                         _changeUnitName = "{unit_N}";
                         _zeroLevelUnitName = "{0level_unit_N}";
@@ -386,11 +386,9 @@ namespace Script.RewardScript
         private IEnumerator OpenBox(GameObject treasure)
         {
         Time.timeScale = 0; // 게임 일시 정지
-        if (PlayerPrefs.GetInt("TutorialKey") == 1)
-        {
-            Time.timeScale = 1;
-        }
         commonRewardPanel.SetActive(true); // 보물 패널 활성화
+
+
         var treasureChestLevel = treasure.GetComponent<CharacterBase>().unitPuzzleLevel; // 보물 상자 이름
         switch(treasureChestLevel)
         {
@@ -406,7 +404,13 @@ namespace Script.RewardScript
                 yield return StartCoroutine(CommonChance(0, 80, 20, "purple"));
                 break;
         }
-
+        if (PlayerPrefs.GetInt("TutorialKey") == 1)
+        {
+            Time.timeScale = 1;
+            common1Button.GetComponent<Canvas>().enabled = true;
+            common1Button.GetComponent<Canvas>().overrideSorting = true;
+            common1Button.GetComponent<Canvas>().sortingOrder = 1;
+        }
         yield return new WaitUntil(() => commonRewardPanel.activeSelf == false); // 보물 패널이 비활성화될 때까지 대기
         openBoxing = false;
         if (PendingTreasure.Count > 0)
@@ -425,27 +429,31 @@ namespace Script.RewardScript
         // 11. 선택 처리
         private IEnumerator Selected(Data selectedReward)
         {
-        commonRewardPanel.SetActive(false);
-        if (countManager.TotalMoveCount == 0)
-        {
-            gameManager.GameSpeed();
-        }
-        else
-        {
-            Time.timeScale = 1; // 게임 재개
-        }
-        CharacterPool.ReturnToPool(_currentTreasure); // 보물을 풀에 반환
+            if (common1Button.GetComponent<Canvas>().overrideSorting)
+            {
+                common1Button.GetComponent<Canvas>().overrideSorting = false;
+                common1Button.GetComponent<Canvas>().enabled = false;
+            }
+            commonRewardPanel.SetActive(false);
+            if (countManager.TotalMoveCount == 0)
+            {
+                gameManager.GameSpeed();
+            }
+            else
+            {
+                Time.timeScale = 1; // 게임 재개
+            }
+            CharacterPool.ReturnToPool(_currentTreasure); // 보물을 풀에 반환
 
-        if (!spawnManager.isWave10Spawning)
-        {
-           yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
-        }
-        else
-        {
-            _currentTreasure = null; // 현재 보물 없음
-        }
-
-        ProcessCommonReward(selectedReward);
+            if (!spawnManager.isWave10Spawning)
+            {
+               yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
+            }
+            else
+            {
+                _currentTreasure = null; // 현재 보물 없음
+            }
+            ProcessCommonReward(selectedReward);
         }
         // 12. 선택된 버프 적용 
         private static void ProcessCommonReward(Data selectedReward)

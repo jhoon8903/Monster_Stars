@@ -10,7 +10,7 @@ namespace Script.EnemyScript.Enemy
             originSpeed = 1f;
             EnemyType = EnemyTypes.Normal;
             RegistryType = RegistryTypes.Physics;
-            enemyClass = EnemyClasses.Marauders;
+            enemyClass = EnemyClasses.Marauder;
             enemyDesc = "The Marauders came here in the employ of the nobles, but it is doubtful whether they will return the castle to them.";
             base.Initialize();
         }

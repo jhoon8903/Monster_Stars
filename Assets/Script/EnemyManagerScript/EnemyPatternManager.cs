@@ -5,6 +5,7 @@ using Script.CharacterManagerScript;
 using Script.RewardScript;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using DG.Tweening;
 
 namespace Script.EnemyManagerScript
 {
@@ -30,13 +31,11 @@ namespace Script.EnemyManagerScript
             Instance = this;
            _endY = castle.GetComponent<BoxCollider2D>().transform.position.y;
         }
-        public IEnumerator Zone_Move(EnemyBase enemyBase)
+        public IEnumerator Zone_Move(EnemyBase enemyBase, EnemyBase.SpawnZones spawnZone)
         {
-            if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
-            {
-                enemyBase.Initialize();
-                StartCoroutine(Rain(enemyBase));
-            }
+            enemyBase.gameObject.SetActive(true);
+            enemyBase.Initialize();
+            enemyBase.SpawnZone = spawnZone;
             switch (enemyBase.SpawnZone)
             {
                 case EnemyBase.SpawnZones.A:
@@ -61,6 +60,7 @@ namespace Script.EnemyManagerScript
             }
             yield return null;
         }
+
         private static IEnumerator WalkingEffect(Transform childTransform)
         {
             var originalScale = childTransform.localScale;
@@ -68,30 +68,24 @@ namespace Script.EnemyManagerScript
             const float verticalScaleAmount = 0.07f;
             const float horizontalScaleAmount = 0.05f;
             const float positionOffset = 0.15f;
-            const float positionChangeSpeed = 5f;
-            var targetYPosition = originalLocalPosition.y - positionOffset;
-            var currentYPosition = originalLocalPosition.y;
+            const float tweenDuration = 0.5f; // 애니메이션의 지속 시간을 조절합니다.
+            var targetScale = new Vector3(originalScale.x + horizontalScaleAmount, originalScale.y - verticalScaleAmount, originalScale.z);
+            var targetPosition = new Vector3(originalLocalPosition.x, originalLocalPosition.y - positionOffset, originalLocalPosition.z);
             while (true)
             {
-                var delta = targetYPosition - currentYPosition;
-                if (Mathf.Abs(delta) < 0.01f)
+                childTransform.DOLocalMove(targetPosition, tweenDuration).SetEase(Ease.InOutSine).OnComplete(() => 
                 {
-                    targetYPosition = targetYPosition >= originalLocalPosition.y ? originalLocalPosition.y - positionOffset : originalLocalPosition.y;
-                }
-                else
-                {
-                    currentYPosition += delta * positionChangeSpeed * Time.deltaTime;
-                    var newLocalPosition = new Vector3(originalLocalPosition.x, currentYPosition, originalLocalPosition.z);
-                    childTransform.localPosition = newLocalPosition;
+                    (targetPosition, originalLocalPosition) = (originalLocalPosition, targetPosition);
+                });
 
-                    var scaleValue = Mathf.Abs(currentYPosition - originalLocalPosition.y) / positionOffset;
-                    var newScale = new Vector3(originalScale.x + scaleValue * horizontalScaleAmount, originalScale.y - scaleValue * verticalScaleAmount, originalScale.z);
-                    childTransform.localScale = newScale;
-                }
-                yield return null;
+                childTransform.DOScale(targetScale, tweenDuration).SetEase(Ease.InOutSine).OnComplete(() => 
+                {
+                    (targetScale, originalScale) = (originalScale, targetScale);
+                });
+                yield return new WaitForSeconds(tweenDuration);
             }
-            // ReSharper disable once IteratorNeverReturns
         }
+
         private IEnumerator Rain(EnemyBase enemyBase)
         {
             _rb = enemyBase.GetComponent<Rigidbody2D>();

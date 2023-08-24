@@ -50,7 +50,8 @@ namespace Script.PuzzleManagerGroup
         {
             OnMatchFound?.Invoke();
         }
-        public IEnumerator PositionUpCharacterObject()
+
+        private List<(GameObject, Vector3Int)> CalculateMoves()
         {
             var moves = new List<(GameObject, Vector3Int)>();
             for (var x = 0; x < gridManager.gridWidth; x++)
@@ -69,7 +70,24 @@ namespace Script.PuzzleManagerGroup
                     moves.Add((currentObject, targetPosition));
                 }
             }
-            yield return StartCoroutine(PerformMoves(moves));
+            return moves;
+        }
+
+        private bool ShouldCheckPosition()
+        {
+            var totalPos = CharacterPool.Instance.UsePoolCharacterList().Sum(t => t.transform.position.y);
+            var maxRows = CharacterPool.Instance.UsePoolCharacterList().Count / 6;
+            var maxCount = maxRows * (maxRows - 1) * 3;
+            return totalPos < maxCount;
+        }
+
+        public IEnumerator PositionUpCharacterObject()
+        {
+            var moves = CalculateMoves(); // moves를 계산하는 별도의 함수
+            if (moves.Count > 0)
+            {
+                yield return StartCoroutine(PerformMoves(moves));
+            }
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
             yield return StartCoroutine(CheckPosition());
             if (rewardManger.PendingTreasure.Count != 0)
@@ -111,20 +129,20 @@ namespace Script.PuzzleManagerGroup
         }
         private static IEnumerator MoveCharacter(GameObject gameObject, Vector3 targetPosition, float duration = 0.35f)
         {
-            if (gameObject == null) yield break;
-
-            Vector3 startPosition = gameObject.transform.position;
+            if (gameObject == null || !gameObject.activeInHierarchy) 
+            {
+                yield break;
+            }
+            var startPosition = gameObject.transform.position;
             float elapsedTime = 0;
-
             while (elapsedTime < duration)
             {
-                float percentage = elapsedTime / duration;
-                gameObject.transform.position = Vector3.Lerp(startPosition, targetPosition, percentage);
+                var percentage = elapsedTime / duration;
+                gameObject.transform.position = Vector3.Lerp(startPosition, targetPosition, percentage); 
                 elapsedTime += Time.deltaTime;
-                yield return null; // 다음 프레임까지 기다립니다.
+                yield return null;
             }
-
-            gameObject.transform.position = targetPosition; // 마지막으로 정확한 목표 위치로 설정합니다.
+            gameObject.transform.position = targetPosition;
         }
 
         private IEnumerator PerformMoves(IEnumerable<(GameObject, Vector3Int)> moves)
@@ -156,12 +174,10 @@ namespace Script.PuzzleManagerGroup
                     var spawnPosition = new Vector3Int(currentPosition.x, -2 - emptyCellCount, 0);
                     var newCharacter = SpawnNewCharacter(spawnPosition);
                     if (newCharacter == null) continue;
-                   
                     var coroutine = StartCoroutine(MoveCharacter(newCharacter, currentPosition));
                     moveCoroutines.Add(coroutine);
                 }
             }
-
             foreach (var coroutine in moveCoroutines)
             {
                 yield return coroutine;
@@ -169,7 +185,10 @@ namespace Script.PuzzleManagerGroup
         }
         private GameObject SpawnNewCharacter(Vector3Int position)
         {
-            return isTutorial ? SpawnTutorialCharacter(position) : SpawnMainGameCharacter(position);
+            lock (Lock)
+            {
+                return isTutorial ? SpawnTutorialCharacter(position) : SpawnMainGameCharacter(position); 
+            }
         }
         private static GameObject SpawnMainGameCharacter(Vector3Int position)
         {

@@ -6769,7 +6769,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -13.442871, y: 685.07556}
+  m_Offset: {x: -13.442871, y: 405.06873}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -6780,7 +6780,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 5998.543, y: 1370.1511}
+  m_Size: {x: 5998.543, y: 810.13745}
   m_EdgeRadius: 0
 --- !u!50 &1177777545
 Rigidbody2D:
@@ -9760,6 +9760,8 @@ GameObject:
   - component: {fileID: 1760049448}
   - component: {fileID: 1760049447}
   - component: {fileID: 1760049449}
+  - component: {fileID: 1760049450}
+  - component: {fileID: 1760049451}
   m_Layer: 6
   m_Name: CommonBtn1
   m_TagString: Untagged
@@ -9871,6 +9873,44 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
+--- !u!223 &1760049450
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760049445}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: -460226443
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
+--- !u!114 &1760049451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760049445}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
 --- !u!1 &1792180221
 GameObject:
   m_ObjectHideFlags: 0
@@ -11881,7 +11921,7 @@ MonoBehaviour:
   common1Text: {fileID: 824982951}
   common2Text: {fileID: 2065008593}
   common3Text: {fileID: 728046137}
-  common1Button: {fileID: 1760049449}
+  common1Button: {fileID: 1760049445}
   common2Button: {fileID: 38570676}
   common3Button: {fileID: 1794350692}
   commonShuffle: {fileID: 478384769}

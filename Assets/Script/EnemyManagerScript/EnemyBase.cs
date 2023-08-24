@@ -40,7 +40,7 @@ namespace Script.EnemyManagerScript
 
         public enum EnemyClasses
         {
-           Farmer, SwordMan, Magician, Archer, Dryad, WarDancer, Marauders, Scout, Pirate, Militia, SpearMan, Pilgrim,
+           Farmer, SwordMan, Magician, Archer, Dryad, WarDancer, Marauder, Scout, Pirate, Militia, SpearMan, Pilgrim,
            Engineer, Miner, Hammerer, Quarreller, RoyalGuard, Druid, Wizard, Shaman, RuneSmith, Berserker
         }
         public EnemyClasses enemyClass;

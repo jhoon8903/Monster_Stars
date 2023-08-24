@@ -112,36 +112,14 @@ namespace Script.PuzzleManagerGroup
             _startObject.GetComponent<CharacterBase>().IsClicked = true;
             _firstTouchPosition = point2D;
             StartCoroutine(CheckSoon());
-            if (spawnManager.isTutorial)
-            {
-                switch (tutorialManager.CurrentTutorialStep.TutorialStepCount)
-                {
-                    case 1:
-                        break;
-                    case 2:
-                        break;
-                    case 3:
-                        break;
-                    case 4:
-                        break;
-                    case 5 :
-                        break;
-                    case 7:
-                        break;
-                    default:
-                        StartCoroutine(CheckForLongPress());
-                        break;
-                }
-            }
-            if (_startObject != null)
-            {
-                StartCoroutine(CheckForLongPress());
-            }
+            if (_startObject == null) return;
+            if (spawnManager.isTutorial && tutorialManager.CurrentTutorialStep.TutorialStepCount < 7) return;
+            StartCoroutine(CheckForLongPress());
         }
         private void HandleTouchUp()
         {
             ScaleObject(_startObject, Vector3.one, 0.2f);
-            if (!_isSwipe && _startObject != null)
+            if (!_isSwipe && _startObject != null && !GameManager.Instance.IsBattle)
             {
                 StartFindUnit(_startObject.GetComponent<CharacterBase>());
             }
@@ -222,9 +200,8 @@ namespace Script.PuzzleManagerGroup
                     case 4:
                         return;
                     case 5 :
-                    case 6:
-                        return; 
-                    case 7 when startX == 5 && startY == 4:
+                        return;
+                    case 6 when startX == 5 && startY == 4:
                     {
                         if (swipeAngle is > 45 or >= 315)
                         {
@@ -327,7 +304,7 @@ namespace Script.PuzzleManagerGroup
                 {
                     CharacterPool.ReturnToPool(_startObject);
                     countManager.DecreaseMoveCount();
-                    StartCoroutine(spawnManager.PositionUpCharacterObject());
+                    yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
                     break;
                 }
                 yield return null;

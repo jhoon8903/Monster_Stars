@@ -50,6 +50,7 @@ namespace Script.EnemyManagerScript
         public int randomX;
         public int randomY;
         private List<EnemyBase.EnemyClasses> _enemyClassList = new List<EnemyBase.EnemyClasses>();
+        private EnemyBase _bossObject;
 
         private void Awake()
         {
@@ -79,14 +80,11 @@ namespace Script.EnemyManagerScript
             var enemyToSpawn = enemyPool.GetPooledEnemy(enemyClass);
             if (enemyToSpawn == null) yield break;
             var enemyBase = enemyToSpawn.GetComponent<EnemyBase>();
-            enemyBase.gameObject.SetActive(true);
             StartCoroutine(GetEnemyDesc(enemyBase));
-            enemyBase.Initialize();
-            var spawnPosition = spawnZoneA.position;
-            enemyBase.SpawnZone = spawnZone;
+            var spawnPosition = new Vector3(0, 20, 0);
             yield return StartCoroutine(GetRandomPointInBounds(enemyBase.SpawnZone, pos => spawnPosition = pos));
             enemyBase.transform.position = spawnPosition;
-            yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyBase));
+            yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyBase, spawnZone));
         }
         private IEnumerator GetEnemyDesc(EnemyBase enemyBase)
         { 
@@ -132,14 +130,12 @@ namespace Script.EnemyManagerScript
             enemyDescPanel.SetActive(false);
             SaveEnemyClassList();
         }
-
         private void SaveEnemyClassList()
         {
             var serializedData = string.Join(",", _enemyClassList.Select(e => e.ToString()).ToArray());
             PlayerPrefs.SetString("EnemyClassList", serializedData);
             PlayerPrefs.Save();
         }
-
         private void LoadEnemyClassList()
         {
             if (!PlayerPrefs.HasKey("EnemyClassList")) return;
@@ -147,28 +143,24 @@ namespace Script.EnemyManagerScript
             _enemyClassList = serializedData.Split(',').Select(e => (EnemyBase.EnemyClasses)Enum.Parse(typeof(EnemyBase.EnemyClasses), e)).ToList();
         }
 
-        public IEnumerator SpawnBoss(EnemyBase.EnemyClasses? bossClass)
+        public IEnumerator SpawnBoss(EnemyBase.EnemyClasses? bossClass, EnemyBase.SpawnZones spawnZone)
         {
-            enemyPool.enemyBases.Clear();
-            var existingBoss = enemyPool.enemyBases.FirstOrDefault();
-            foreach (var enemyBase in from bossPrefabs in enemyManager.stageBoss 
-                     where bossPrefabs.enemyClass == bossClass 
-                     select existingBoss != null 
-                         ? (Object)existingBoss.gameObject 
-                         : Instantiate(bossPrefabs, transform) 
-                     into bossObject 
-                     select bossObject.GetComponent<EnemyBase>())
+           
+            if (_bossObject != null)
             {
-                enemyPool.enemyBases.Add(enemyBase);
-                enemyBase.transform.position = gridManager.bossSpawnArea;
-                enemyBase.gameObject.SetActive(true);
-                enemyBase.Initialize();
-                yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyBase));
+                Destroy(_bossObject);
+            }
+            enemyPool.enemyBases.Clear();
+            foreach (var enemyBase in enemyManager.stageBoss.Where(enemyBase => enemyBase.enemyClass == bossClass))
+            {
+                _bossObject = Instantiate(enemyBase, transform);
+                _bossObject.transform.position = gridManager.bossSpawnArea;
+                yield return StartCoroutine(enemyPatternManager.Zone_Move(_bossObject, spawnZone));
             }
         }
         private IEnumerator GetRandomPointInBounds(EnemyBase.SpawnZones zone, Action<Vector3> callback)
         {
-            var spawnPosition = Vector3.zero;
+            var spawnPosition = new Vector3(0,20,0);
             switch (zone)
             {
                 case EnemyBase.SpawnZones.A:

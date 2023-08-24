@@ -428,7 +428,7 @@ MonoBehaviour:
   maxHealthPoint: 0
   currentHealth: 0
   enemyDesc: 
-  enemyClass: 7
+  enemyClass: 19
   isDead: 0
   statusList: 
   isBind: 0

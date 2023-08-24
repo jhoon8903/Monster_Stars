@@ -663,7 +663,7 @@ namespace Script.RewardScript
             
             if (data.Type == PowerTypeManager.Types.LevelUpPattern)
             {
-                if (CommonRewardManager.Instance._levelUpDict.TryGetValue(characterList[(int)_property].unitGroup, out var levelUpInfo))
+                if (CommonRewardManager.Instance.LevelUpDict.TryGetValue(characterList[(int)_property].unitGroup, out var levelUpInfo))
                 {
                     finalTranslation = levelUpInfo.Aggregate(finalTranslation, (current, item) => current.Replace("{0level_unit_N}", item.Value)
                         .Replace("{unit_N}", item.Key));
