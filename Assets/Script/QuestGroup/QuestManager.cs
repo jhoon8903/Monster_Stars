@@ -77,7 +77,7 @@ namespace Script.QuestGroup
             questCloseBtn.onClick.AddListener(() => questPanel.SetActive(false));
             LoadQuests(QuestCondition.Fix);
             LoadQuests(QuestCondition.Rotation);
-            questRewardCloseBtn.onClick.AddListener(ReceiveReward);
+            questRewardCloseBtn.onClick.AddListener(ReceiveQuestReward);
         }
         private void LoadQuests(QuestCondition targetCondition)
         {
@@ -285,6 +285,7 @@ namespace Script.QuestGroup
             CalculateUnitPieceReward(quest);
             Quest.Instance.AllClearQuest();
             quest.isReceived = true;
+            QuestObject.SetQuestButtonStates(quest);
             PlayerPrefs.SetInt(quest.QuestType + "_isReceived", 1);
             quest.receiveBtn.GetComponent<Button>().interactable = false;
             quest.receiveBtnText.text = "Completed";
@@ -298,7 +299,7 @@ namespace Script.QuestGroup
             }
             PlayerPrefs.Save();
         }
-        private void ReceiveReward()
+        public void ReceiveQuestReward()
         {
             ChestCheck.Instance.CloseChestCheck();
             questRewardPanel.SetActive(false);
