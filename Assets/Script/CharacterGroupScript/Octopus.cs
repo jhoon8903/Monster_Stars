@@ -104,7 +104,7 @@ namespace Script.CharacterGroupScript
                 6 => 2.6F
             };
             defaultAtkRate = 1f * (1f - EnforceManager.Instance.dark3RateBoost);
-            bleedTime = EnforceManager.Instance.octopusBleedDurationBoost? 5f : 3f;
+            poisonTime = EnforceManager.Instance.octopusPoisonDurationBoost? 5f : 3f;
             dotDamage = DefaultDamage * 0.2f;
             defaultAtkDistance = 9f;
             projectileSpeed = 1f;

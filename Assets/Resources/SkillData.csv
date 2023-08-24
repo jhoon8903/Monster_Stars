@@ -1,9 +1,9 @@
 Group,Level,Code,Name,Grade,Kor,ENG DESC,PopUpDESC,Property
 Octopus,1,100,OctopusThirdAttackBoost,B,3회 공격마다 100% 추가데미지 (투사체 컬러 변경),Octopus deals 100% bonus damage every 3 attacks.,Octopus deals 100% bonus damage every 3 attacks.,1
 Octopus,3,100,OctopusPoisonAttack,P,적을 공격하면  초당 공격력의 20% 데미지를 주는 중독을 3초간 발생시킵니다.,Octopus attack inflicts 20% poison damage/sec for 3s.,Octopus attack inflicts 20% poison damage/sec for 3s.,1
-Octopus,5,100,OctopusBleedDamageBoost,G,출혈중인 적 추가데미지 50%,Octopus deals +{50%} damage to bleeding enemies,Octopus deals +{50%} damage to bleeding enemies,1
-Octopus,7,100,OctopusShackledExplosion,B,적 제거시 주변 1칸 범위의 100% 폭발데미지 추가,Octopus deals 100% damage in 1-cell radius upon enemy defeat,Octopus deals 100% damage in 1-cell radius upon enemy defeat,1
-Octopus,9,100,OctopusBleedDurationBoost,G,출혈지속시간 2초 증가,Bleeding from Octopus lasts 2s longer,Bleeding from Octopus lasts 2s longer,1
+Octopus,5,100,OctopusBleedDamageBoost,G,출혈중인 적 추가데미지 150%,Octopus deals +{150%} damage to bleeding enemies,Octopus deals +{150%} damage to bleeding enemies,1
+Octopus,7,100,OctopusPoisonDamageBoost,B,중독 피해가 초당 30% 증가,Octopus attack inflicts increase 20% > 30% poison damage/sec,Octopus attack inflicts increase 20% > 30% poison damage/sec,1
+Octopus,9,100,OctopusPoisonDurationBoost,G,중독 지속시간 2초 증가,Bleeding from Octopus lasts 2s longer,Bleeding from Octopus lasts 2s longer,1
 Octopus,11,100,OctopusDamageBoost,P,공력력 19% 증가,Octupus's damage increases by +{19%},Octupus's damage increases by +{19%},1
 Octopus,13,100,OctopusRateBoost,B,공격속도 9% 증가 (최대 4회),Octopus's attack speed increases by +{9%},Octopus's attack speed increases by +{9%},1
 Ogre,1,200,OgreThirdAttackDamageBoost,G,3회 공격마다 100% 추가 데미지,For every 3 attacks  Ogre throws a big rock to deal +{100%} damage,Every 3rd attack  Ogre hurls a powerful rock,1
@@ -19,7 +19,7 @@ DeathChiller,5,300,DeathChillerSlowDurationBoost,G,둔화 지속시간 0.2초 �
 DeathChiller,7,300,DeathChillerFreezeDamageBoost,P,C 유닛에게 빙결된 적은 받는 피해 15% 증가,Enemies freezed by Deathchiller take 20% more damage,Enemies freezed by Deathchiller take 20% more damage,1
 DeathChiller,9,300,DeathChillerSlowCPowerBoost,B,둔화강도 15% 증가,Deathchiller's slowing effect +{15%},Deathchiller's slowing effect +{15%},1
 DeathChiller,11,300,DeathChillerAttackRateBoost,G,공격속도 4% 증가 (최대 6회),Deathchiller's attack speed inceases by +{4%},Deathchiller's attack speed inceases by +{4%},1
-DeathChiller,13,300,DeathChillerGlobalFreeze,P,퍼즐위 모든 C 유닛의 공격 횟수의 합이 100이면 될 때마다 눈보라를 일으켜 보스를 제외한 모든 적을 빙결,For every 100 attacks Deathchiller performed  a blizzard freezes all enemies except the boss,Every 100 attacks  Deatchiller summons a blizzard,1
+DeathChiller,13,300,DeathChillerBackAttackBoost,P,적의 뒤를 공격시 데미지 20% 증가,Deathchiller's deals +20% increased damage when attacking from behind,Deathchiller's deals +20% increased damage when attacking from behind,1
 Orc,1,400,OrcSwordScaleIncrease,P,검의 크기가 100% 증가,Orc's sword becomes 100% larger,Orc's sword becomes 100% larger,1
 Orc,3,400,OrcSwordAddition,P,공격 시 검 한자루 추가,Orcs's attack grants 1 more sword,Orcs's attack grants 1 more sword,1
 Orc,5,400,OrcAttackSpeedBoost,B,공격속도 9% 증가 (최대 4회),Orc's attack speed increases by +{9%},Orc's attack speed increases by +{9%},1
@@ -51,7 +51,7 @@ Phoenix,13,700,PhoenixBossDamageBoost,B,보스 데미지 30% 증가,Phoenix deal
 Beholder,1,800,BeholderBurnPerAttackEffect,P,적을 공격하면 5초간 화상 초당 10% 데미지,Beholder's attacks cause a 5-second burn dealing 10% damage per second,Beholder's attacks cause a 5-second burn dealing 10% damage per second,1
 Beholder,3,800,BeholderStackOverlap,B,화상 중첩수 3회 증가,Beholder's burn can stack an additional 3 times,Beholder's burn can stack an additional 3 times,1
 Beholder,5,800,BeholderProjectileBounceDamage,P,적 적중시 가장 가까운적에게 투사체 튕김,Beholder's attack projectiles bounce to the nearest enemy on hit,Beholder's attack projectiles bounce to the nearest enemy on hit,1
-Beholder,7,800,BeholderBurnedEnemyExplosion,B,화상에 걸린 적 제거시 주변 1칸 범위의 200% 폭발데미지 추가,When Beholder defeats a burning enemy  it deals 200% explosive damage in a 1-cell radius,If Beholder kills a burning enemy  it explodes,1
+Beholder,7,800,BeholderDamageBoost,B,공격력 4% 증가 (최대 6회),Beholder's damage increases by +{4%},Beholder's damage increases by +{4%},1
 Beholder,9,800,BeholderAttackSpeedBoost,G,공격속도 4% 증가 (최대 6회),Beholder's attack speed increases by +{4%},Beholder's attack speed increases by +{4%},1
 Beholder,11,800,BeholderProjectileSpeedIncrease,G,투사체 속도가 100% 증가  반드시 명중,Beholder's projectiles fly 100% faster and are guaranteed to hit,Beholder's projectiles fly 100% faster and are guaranteed to hit,1
 Beholder,13,800,BeholderProjectileBounceIncrease,P,투사체가 튕기는 횟수 증가,Beholder's projectiles bounce one additional time,Beholder's projectiles bounce one additional time,1
@@ -59,7 +59,7 @@ Cobra,1,900,CobraStunToChance,P,타격시 50% 확률로 적을 0.4초간 기절 
 Cobra,3,900,CobraRangeBoost,P,사거리 1칸 증가,Cobra's range increases by 1 cell,Cobra's range increases by 1 cell,1
 Cobra,5,900,CobraDotDamageBoost,B,중독 데미지가 10% 증가,Cobra's poison damage per second increases by 10%,Cobra's poison damage per second increases by 10%,1
 Cobra,7,900,CobraStunTimeBoost,G,기절 시간 0.1초 증가 (최대 5회 / 0.5초),Cobra's stun duration on hit increases by 0.1 seconds,Cobra's stun duration on hit increases by 0.1 seconds,1
-Cobra,9,900,CobraSpawnPoisonArea,B,중독 된 적이 죽으면  그 자리에 2초간 독 웅덩이가 초당 200% 데미지를 입힘,A poisoned enemy's demise from Cobra creates a 2-second toxic puddle dealing 200% damage per second.,Enemies poisoned by Cobra leave behind a toxic puddle upon death,1
+Cobra,9,900,CobraDamageBoost,B,공격력 9% 증가 (최대 4회),Cobra's damage increases by +{9%},Cobra's damage increases by +{9%},1
 Cobra,11,900,CobraRateBoost,P,공격속도 20% 증가,Cobra's attack speed +{20%},Cobra's attack speed +{20%},1
 Cobra,13,900,CobraPoolTimeBoost,B,독 웅덩이 지속시간 1초 증가,Cobra's toxic puddle duration increases by 1 second,Cobra's toxic puddle duration increases by 1 second,1
 Berserker,1,1000,BerserkerCastleCrushStatBoost,P,성이 데미지를 받을 경우 해당 웨이브동안 사거리가 1 증가  데미지 30% 증가,When castle takes damage  Berserker gains +1 range and +30% damage for the round,When the castle is attacked  Berserker becomes even stronger,1

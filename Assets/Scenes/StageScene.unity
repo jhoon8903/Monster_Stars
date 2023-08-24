@@ -9206,8 +9206,8 @@ MonoBehaviour:
   octopusThirdAttackBoost: 0
   octopusPoisonAttack: 0
   octopusBleedDamageBoost: 0
-  octopusShackledExplosion: 0
-  octopusBleedDurationBoost: 0
+  octopusPoisonDamageBoost: 0
+  octopusPoisonDurationBoost: 0
   octopusDamageBoost: 0
   dark3RateBoost: 0
   ogreThirdAttackDamageBoost: 0
@@ -9223,7 +9223,7 @@ MonoBehaviour:
   deathChillerFreezeDamageBoost: 0
   deathChillerSlowCPowerBoost: 0
   waterAttackRateBoost: 0
-  deathChillerGlobalFreeze: 0
+  deathChillerBackAttackBoost: 0
   orcSwordScaleIncrease: 0
   orcSwordAddition: 0
   physicalAttackSpeedBoost: 0
@@ -9255,7 +9255,7 @@ MonoBehaviour:
   beholderBurnPerAttackEffect: 0
   beholderStackOverlap: 0
   beholderProjectileBounceDamage: 0
-  beholderBurnedEnemyExplosion: 0
+  beholderAttackDamageBoost: 0
   fireAttackSpeedBoost: 0
   beholderProjectileSpeedIncrease: 0
   beholderProjectileBounceIncrease: 0
@@ -9263,7 +9263,7 @@ MonoBehaviour:
   cobraRangeBoost: 0
   cobraDotDamageBoost: 0
   poison2StunTimeBoost: 0
-  cobraSpawnPoisonArea: 0
+  cobraDamageBoost: 0
   cobraRateBoost: 0
   cobraPoolTimeBoost: 0
   berserkerCastleCrushStatBoost: 0

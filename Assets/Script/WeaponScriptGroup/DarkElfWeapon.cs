@@ -21,15 +21,12 @@ namespace Script.WeaponScriptGroup
         {
             yield return base.UseWeapon();
             var useTime = Distance / Speed;
-            if (!EnforceManager.Instance.darkElfDualAttack)
+            var enemyTransforms = CharacterBase.GetComponent<DarkElf>().DetectEnemies();
+            foreach (var unused in enemyTransforms.Where(enemy => enemy.transform.position.y < CharacterBase.transform.position.y))
             {
-                var enemyTransforms = CharacterBase.GetComponent<DarkElf>().DetectEnemies();
-                foreach (var unused in enemyTransforms.Where(enemy => enemy.transform.position.y <= CharacterBase.transform.position.y))
-                {
-                    Speed = -Speed;
-                    Damage *= 1.3f; 
-                    transform.rotation = Quaternion.Euler(0, 0, 180);
-                }
+                Speed = -Speed;
+                Damage *= EnforceManager.Instance.darkElfBackBoost ? 1.3f : 1f;
+                transform.rotation = Quaternion.Euler(0, 0, 180);
             }
             _rigidBody2D.velocity = direction == Vector2.down ? new Vector2(0, -Speed) : new Vector2(0, Speed);
             yield return new WaitForSeconds(useTime);

@@ -83,11 +83,11 @@ namespace Script.RewardScript
                 case PowerTypeManager.Types.OctopusBleedDamageBoost:
                     EnforceManager.Instance.octopusBleedDamageBoost = true;
                     break;
-                case PowerTypeManager.Types.OctopusBleedDurationBoost:
-                    EnforceManager.Instance.octopusBleedDurationBoost = true;
+                case PowerTypeManager.Types.OctopusPoisonDurationBoost:
+                    EnforceManager.Instance.octopusPoisonDurationBoost = true;
                     break;
-                case PowerTypeManager.Types.OctopusShackledExplosion:
-                    EnforceManager.Instance.octopusShackledExplosion = true;
+                case PowerTypeManager.Types.OctopusPoisonDamageBoost:
+                    EnforceManager.Instance.octopusPoisonDamageBoost = true;
                     break;
                 case PowerTypeManager.Types.OctopusDamageBoost:
                     EnforceManager.Instance.octopusDamageBoost = true;
@@ -136,8 +136,8 @@ namespace Script.RewardScript
                 case PowerTypeManager.Types.DeathChillerAttackRateBoost:
                     EnforceManager.Instance.DeathChillerAttackRateBoost();
                     break;
-                case PowerTypeManager.Types.DeathChillerGlobalFreeze:
-                    EnforceManager.Instance.deathChillerGlobalFreeze = true;
+                case PowerTypeManager.Types.DeathChillerBackAttackBoost:
+                    EnforceManager.Instance.deathChillerBackAttackBoost = true;
                     break;
                 // Orc
                 case PowerTypeManager.Types.OrcSwordScaleIncrease:
@@ -181,7 +181,7 @@ namespace Script.RewardScript
                     EnforceManager.Instance.fishmanFreezeDamageBoost = true;
                     break;
                 case PowerTypeManager.Types.FishmanSlowTimeBoost:
-                    EnforceManager.Instance.fishmanSlowTimeBoost();
+                    EnforceManager.Instance.FishmanSlowTimeBoost();
                     break;
                 // Skeleton
                 case PowerTypeManager.Types.SkeletonPerHitEffect:
@@ -237,8 +237,8 @@ namespace Script.RewardScript
                 case PowerTypeManager.Types.BeholderProjectileBounceIncrease:
                     EnforceManager.Instance.beholderProjectileBounceIncrease = true;
                     break;
-                case PowerTypeManager.Types.BeholderBurnedEnemyExplosion:
-                    EnforceManager.Instance.beholderBurnedEnemyExplosion = true;
+                case PowerTypeManager.Types.BeholderDamageBoost:
+                    EnforceManager.Instance.BeholderAttackDamageBoost();
                     break;
                 case PowerTypeManager.Types.BeholderAttackSpeedBoost:
                     EnforceManager.Instance.BeholderAttackSpeedBoost();
@@ -262,8 +262,8 @@ namespace Script.RewardScript
                 case PowerTypeManager.Types.CobraStunTimeBoost:
                     EnforceManager.Instance.CobraStunTimeBoost();
                     break;
-                case PowerTypeManager.Types.CobraSpawnPoisonArea:
-                    EnforceManager.Instance.cobraSpawnPoisonArea = true;
+                case PowerTypeManager.Types.CobraDamageBoost:
+                    EnforceManager.Instance.CobraDamageBoost();
                     break;
                 case PowerTypeManager.Types.CobraRateBoost:
                     EnforceManager.Instance.cobraRateBoost = true;
@@ -430,8 +430,8 @@ namespace Script.RewardScript
                             break;
                         case PowerTypeManager.Types.StepDirection:
                             if (EnforceManager.Instance.diagonalMovement) return false;
-                            if (!StageManager.Instance.isBossClear) return false;
-                            if (StageManager.Instance.currentWave % 10 != 0) return false;
+                            if (StageManager.Instance != null && !StageManager.Instance.isBossClear) return false;
+                            if (StageManager.Instance != null && StageManager.Instance.currentWave % 10 != 0) return false;
                             break;
                         case PowerTypeManager.Types.CastleMaxHp:
                             if (EnforceManager.Instance.castleMaxHp >= 1000) return false;
@@ -454,15 +454,16 @@ namespace Script.RewardScript
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Octopus) < 5) return false;
                             if (EnforceManager.Instance.octopusBleedDamageBoost) return false;
                             break;
-                        case PowerTypeManager.Types.OctopusShackledExplosion:
+                        case PowerTypeManager.Types.OctopusPoisonDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Octopus)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Octopus) < 7) return false;
-                            if (EnforceManager.Instance.octopusShackledExplosion) return false;
+                            if (!EnforceManager.Instance.octopusPoisonAttack) return false;
+                            if (EnforceManager.Instance.octopusPoisonDamageBoost) return false;
                             break;
-                        case PowerTypeManager.Types.OctopusBleedDurationBoost:
+                        case PowerTypeManager.Types.OctopusPoisonDurationBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Octopus)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Octopus) < 9) return false;
-                            if (EnforceManager.Instance.octopusBleedDurationBoost) return false;
+                            if (EnforceManager.Instance.octopusPoisonDurationBoost) return false;
                             break;
                         case PowerTypeManager.Types.OctopusDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Octopus)) return false;
@@ -540,10 +541,10 @@ namespace Script.RewardScript
                             if (UnitPieceLevel(CharacterBase.UnitGroups.DeathChiller) < 11) return false;
                             if (EnforceManager.Instance.waterAttackRateBoost >= 0.24f) return false;
                             break;
-                        case PowerTypeManager.Types.DeathChillerGlobalFreeze:
+                        case PowerTypeManager.Types.DeathChillerBackAttackBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.DeathChiller)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.DeathChiller) < 13) return false;
-                            if (EnforceManager.Instance.deathChillerGlobalFreeze) return false;
+                            if (EnforceManager.Instance.deathChillerBackAttackBoost) return false;
                             break;
                         // Unit Orc
                         case PowerTypeManager.Types.OrcSwordScaleIncrease:
@@ -707,10 +708,10 @@ namespace Script.RewardScript
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Beholder) < 5) return false;
                             if (EnforceManager.Instance.beholderProjectileBounceDamage) return false;
                             break;
-                        case PowerTypeManager.Types.BeholderBurnedEnemyExplosion:
+                        case PowerTypeManager.Types.BeholderDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Beholder)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Beholder) < 7) return false;
-                            if (EnforceManager.Instance.beholderBurnedEnemyExplosion) return false;
+                            if (EnforceManager.Instance.beholderAttackDamageBoost >= 0.24f) return false;
                             break;
                         case PowerTypeManager.Types.BeholderAttackSpeedBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Beholder)) return false;
@@ -749,10 +750,10 @@ namespace Script.RewardScript
                             if (!EnforceManager.Instance.cobra2StunToChance) return false;
                             if (EnforceManager.Instance.poison2StunTimeBoost >= 0.5f) return false;
                             break;
-                        case PowerTypeManager.Types.CobraSpawnPoisonArea:
+                        case PowerTypeManager.Types.CobraDamageBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Cobra)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Cobra) < 9) return false;
-                            if (EnforceManager.Instance.cobraSpawnPoisonArea) return false;
+                            if (EnforceManager.Instance.cobraDamageBoost >= 0.36f) return false;
                             break;
                         case PowerTypeManager.Types.CobraRateBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Cobra)) return false;
@@ -762,7 +763,6 @@ namespace Script.RewardScript
                         case PowerTypeManager.Types.CobraPoolTimeBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Cobra)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Cobra) < 13) return false;
-                            if (!EnforceManager.Instance.cobraSpawnPoisonArea) return false;
                             if (EnforceManager.Instance.cobraPoolTimeBoost) return false;
                             break;
                         // Unit J
@@ -885,8 +885,8 @@ namespace Script.RewardScript
                 PowerTypeManager.Types.OctopusThirdAttackBoost => finalTranslation,
                 PowerTypeManager.Types.OctopusPoisonAttack => finalTranslation,
                 PowerTypeManager.Types.OctopusBleedDamageBoost => finalTranslation,
-                PowerTypeManager.Types.OctopusBleedDurationBoost => finalTranslation,
-                PowerTypeManager.Types.OctopusShackledExplosion => finalTranslation,
+                PowerTypeManager.Types.OctopusPoisonDurationBoost => finalTranslation,
+                PowerTypeManager.Types.OctopusPoisonDamageBoost => finalTranslation,
                 PowerTypeManager.Types.OctopusDamageBoost => finalTranslation,
                 PowerTypeManager.Types.OctopusRateBoost => finalTranslation,
                 PowerTypeManager.Types.OgreThirdAttackDamageBoost => finalTranslation,
@@ -902,7 +902,7 @@ namespace Script.RewardScript
                 PowerTypeManager.Types.DeathChillerFreezeDamageBoost => finalTranslation,
                 PowerTypeManager.Types.DeathChillerSlowCPowerBoost => finalTranslation,
                 PowerTypeManager.Types.DeathChillerAttackRateBoost => finalTranslation,
-                PowerTypeManager.Types.DeathChillerGlobalFreeze => finalTranslation,
+                PowerTypeManager.Types.DeathChillerBackAttackBoost => finalTranslation,
                 PowerTypeManager.Types.OrcSwordScaleIncrease => finalTranslation,
                 PowerTypeManager.Types.OrcSwordAddition => finalTranslation,
                 PowerTypeManager.Types.OrcAttackSpeedBoost => finalTranslation,
@@ -934,7 +934,7 @@ namespace Script.RewardScript
                 PowerTypeManager.Types.BeholderBurnPerAttackEffect => finalTranslation,
                 PowerTypeManager.Types.BeholderStackOverlap => finalTranslation,
                 PowerTypeManager.Types.BeholderProjectileBounceDamage => finalTranslation,
-                PowerTypeManager.Types.BeholderBurnedEnemyExplosion => finalTranslation,
+                PowerTypeManager.Types.BeholderDamageBoost => finalTranslation,
                 PowerTypeManager.Types.BeholderAttackSpeedBoost => finalTranslation,
                 PowerTypeManager.Types.BeholderProjectileSpeedIncrease => finalTranslation,
                 PowerTypeManager.Types.BeholderProjectileBounceIncrease => finalTranslation,
@@ -942,7 +942,7 @@ namespace Script.RewardScript
                 PowerTypeManager.Types.CobraRangeBoost => finalTranslation,
                 PowerTypeManager.Types.CobraDotDamageBoost => finalTranslation,
                 PowerTypeManager.Types.CobraStunTimeBoost => finalTranslation,
-                PowerTypeManager.Types.CobraSpawnPoisonArea => finalTranslation,
+                PowerTypeManager.Types.CobraDamageBoost => finalTranslation,
                 PowerTypeManager.Types.CobraRateBoost => finalTranslation,
                 PowerTypeManager.Types.CobraPoolTimeBoost => finalTranslation,
                 PowerTypeManager.Types.BerserkerCastleCrushStatBoost => finalTranslation,

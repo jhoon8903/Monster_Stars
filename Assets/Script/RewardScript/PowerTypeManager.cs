@@ -202,8 +202,8 @@ namespace Script.RewardScript
             OctopusThirdAttackBoost,
             OctopusPoisonAttack,
             OctopusBleedDamageBoost,
-            OctopusShackledExplosion,
-            OctopusBleedDurationBoost,
+            OctopusPoisonDamageBoost,
+            OctopusPoisonDurationBoost,
             OctopusDamageBoost,
             OctopusRateBoost,
 
@@ -223,7 +223,7 @@ namespace Script.RewardScript
             DeathChillerFreezeDamageBoost,
             DeathChillerSlowCPowerBoost,
             DeathChillerAttackRateBoost,
-            DeathChillerGlobalFreeze,
+            DeathChillerBackAttackBoost,
 
             //Physical Orc
             OrcSwordScaleIncrease,
@@ -265,7 +265,7 @@ namespace Script.RewardScript
             BeholderBurnPerAttackEffect,
             BeholderStackOverlap,
             BeholderProjectileBounceDamage,
-            BeholderBurnedEnemyExplosion,
+            BeholderDamageBoost,
             BeholderAttackSpeedBoost,
             BeholderProjectileSpeedIncrease,
             BeholderProjectileBounceIncrease,
@@ -275,7 +275,7 @@ namespace Script.RewardScript
             CobraRangeBoost,
             CobraDotDamageBoost,
             CobraStunTimeBoost,
-            CobraSpawnPoisonArea,
+            CobraDamageBoost,
             CobraRateBoost,
             CobraPoolTimeBoost,
 

@@ -7,7 +7,6 @@ using Script.PuzzleManagerGroup;
 using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.UIManager;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace Script.RewardScript
 {
@@ -89,7 +88,7 @@ namespace Script.RewardScript
         public bool fireBurnPerAttackEffect;
         public bool fireStackOverlap;
         public bool fireProjectileBounceDamage;
-        public bool fireBurnedEnemyExplosion;
+        public float fireBurnedEnemyExplosion;
         public float fireAttackSpeedBoost;
         public bool fireProjectileSpeedIncrease;
         public bool fireProjectileBounceIncrease;
@@ -99,7 +98,7 @@ namespace Script.RewardScript
         public bool poison2RangeBoost;
         public bool poison2DotDamageBoost;
         public float poison2StunTimeBoost;
-        public bool poison2SpawnPoisonArea;
+        public float poison2SpawnPoisonArea;
         public bool poison2RateBoost;
         public bool poison2PoolTimeBoost;
       
@@ -180,14 +179,14 @@ namespace Script.RewardScript
         [Header("P / 3Lv: 적을 공격하면, 초당 공격력의 20% 데미지를 주는 중독을 3초간 발생시킵니다.")]
         public bool octopusPoisonAttack; 
         // 완료
-        [Header("G / 5Lv: 출혈중인 적 추가데미지 50%")] 
+        [Header("G / 5Lv: 출혈중인 적 추가데미지 150%")] 
         public bool octopusBleedDamageBoost;
         // 완료
-         [Header("B / 7Lv: 적 제거시 주변 1칸 범위의 100% 폭발데미지 추가")] 
-        public bool octopusShackledExplosion;
+        [Header("B / 7Lv: 중독 피해가 초당 30% 증가")] 
+        public bool octopusPoisonDamageBoost;
         // 완료
-        [Header("G / 9Lv: 출혈지속시간 2초 증가")] 
-        public bool octopusBleedDurationBoost;
+        [Header("G / 9Lv: 중독지속시간 2초 증가")] 
+        public bool octopusPoisonDurationBoost;
         // 완료
         [Header("P / 11Lv: 공력력 19% 증가")] 
         public bool octopusDamageBoost;
@@ -266,8 +265,8 @@ namespace Script.RewardScript
             waterAttackRateBoost += 0.06f;
         }
         // 완료
-[Header("P / 13Lv: 퍼즐위 모든 DeathChiller 유닛의 공격 횟수의 합이 100이면 될 때마다 눈보라를 일으켜 보스를 제외한 모든 적을 빙결")]
-        public bool deathChillerGlobalFreeze;
+        [Header("P / 13Lv: 적의 뒤를 공격하면 데미지 20% 증가")]
+        public bool deathChillerBackAttackBoost;
 
 
 
@@ -333,7 +332,7 @@ namespace Script.RewardScript
         // 완료
         [Header("G / 13Lv: 둔화지속시간 0.1초 증가 (최대 0.5초)")]
         public float water2SlowTimeBoost;
-        protected internal void fishmanSlowTimeBoost()
+        protected internal void FishmanSlowTimeBoost()
         {
             if (water2SlowTimeBoost >= 0.5f) return;
             water2SlowTimeBoost += 0.1f;
@@ -409,8 +408,13 @@ namespace Script.RewardScript
        [Header("P/ 5Lv: 적 적중시 가장 가까운적에게 투사체 튕김")] 
         public bool beholderProjectileBounceDamage;
         // 완료
-      [Header("B/ 7Lv: 화상에 걸린 적 제거시 주변 1칸 범위의 200% 폭발데미지 추가")] 
-        public bool beholderBurnedEnemyExplosion;
+      [Header("B/ 7Lv: 공격력 +4% 증가 (최대 6회)")] 
+        public float beholderAttackDamageBoost;
+        protected internal void BeholderAttackDamageBoost()
+        {
+            if (beholderAttackDamageBoost >= 0.24f) return;
+            beholderAttackDamageBoost += 0.04f;
+        }
         // 완료
         [Header("G/ 9Lv: 공격속도 4% 증가 (최대 6회)")]
         public float fireAttackSpeedBoost; 
@@ -446,8 +450,13 @@ namespace Script.RewardScript
             poison2StunTimeBoost += 0.1f;
         }
         // 완료
-       [Header("B / 9Lv: 중독 된 적이 죽으면, 그 자리에 2초간 독 웅덩이가 초당 200% 데미지를 입힘")]
-        public bool cobraSpawnPoisonArea;
+       [Header("B / 9Lv: 공격력 9% 증가 (최대 4회)")]
+        public float cobraDamageBoost;
+        protected internal void CobraDamageBoost()
+        {
+            if (cobraDamageBoost > 0.36f) return;
+            cobraDamageBoost += 0.09f;
+        }
         // 완료
        [Header("P / 11Lv: 공격속도 20% 증가")] 
         public bool cobraRateBoost;
@@ -518,8 +527,8 @@ namespace Script.RewardScript
                     activatedSkills[1] = octopusThirdAttackBoost;
                     activatedSkills[3] = octopusPoisonAttack;
                     activatedSkills[5] = octopusBleedDamageBoost;
-                    activatedSkills[7] = octopusShackledExplosion;
-                    activatedSkills[9] = octopusBleedDurationBoost;
+                    activatedSkills[7] = octopusPoisonDamageBoost;
+                    activatedSkills[9] = octopusPoisonDurationBoost;
                     activatedSkills[11] = octopusDamageBoost;
                     activatedSkills[13] = dark3RateBoost > 0;
                     break;
@@ -539,7 +548,7 @@ namespace Script.RewardScript
                     activatedSkills[7] = deathChillerFreezeDamageBoost;
                     activatedSkills[9] = deathChillerSlowCPowerBoost;
                     activatedSkills[11] = waterAttackRateBoost > 0; 
-                    activatedSkills[13] = deathChillerGlobalFreeze;
+                    activatedSkills[13] = deathChillerBackAttackBoost;
                     break;
                 case CharacterBase.UnitGroups.Orc:
                     activatedSkills[1] = orcSwordScaleIncrease;
@@ -581,7 +590,7 @@ namespace Script.RewardScript
                     activatedSkills[1] = beholderBurnPerAttackEffect;
                     activatedSkills[3] = beholderStackOverlap;
                     activatedSkills[5] = beholderProjectileBounceDamage;
-                    activatedSkills[7] = beholderBurnedEnemyExplosion;
+                    activatedSkills[7] = beholderAttackDamageBoost > 0;
                     activatedSkills[9] = fireAttackSpeedBoost > 0;
                     activatedSkills[11] = beholderProjectileSpeedIncrease;
                     activatedSkills[13] = beholderProjectileBounceIncrease;
@@ -591,7 +600,7 @@ namespace Script.RewardScript
                     activatedSkills[3] = cobraRangeBoost;
                     activatedSkills[5] = cobraDotDamageBoost;
                     activatedSkills[7] = poison2StunTimeBoost > 0;
-                    activatedSkills[9] = cobraSpawnPoisonArea;
+                    activatedSkills[9] = cobraDamageBoost>0;
                     activatedSkills[11] = cobraRateBoost;
                     activatedSkills[13] = cobraPoolTimeBoost;
                     break;
@@ -622,17 +631,17 @@ namespace Script.RewardScript
             new Dictionary<(PowerTypeManager.Types Type, int Value), PauseSkillObjectScript>();
         private PauseSkillObjectScript _skill;
        
-        private string GetGroupNameFromValue(int value)
-        {
-            var unitName = value switch
-            {
-                0 => characterList[0].name,
-                1 => characterList[1].name,
-                2 => characterList[2].name,
-                3 => characterList[3].name,
-            };
-            return unitName;
-        }
+        // private string GetGroupNameFromValue(int value)
+        // {
+        //     var unitName = value switch
+        //     {
+        //         0 => characterList[0].name,
+        //         1 => characterList[1].name,
+        //         2 => characterList[2].name,
+        //         3 => characterList[3].name,
+        //     };
+        //     return unitName;
+        // }
         
         private void SkillInstance(Data data, float? value = null)
         {
@@ -883,8 +892,8 @@ namespace Script.RewardScript
                 dark3FifthAttackBoost = octopusThirdAttackBoost,
                 dark3BleedAttack = octopusPoisonAttack,
                 dark3PoisonDamageBoost = octopusBleedDamageBoost,
-                dark3ShackledExplosion = octopusShackledExplosion,
-                dark3BleedDurationBoost = octopusBleedDurationBoost,
+                dark3ShackledExplosion = octopusPoisonDamageBoost,
+                dark3BleedDurationBoost = octopusPoisonDurationBoost,
                 dark3DamageBoost = octopusDamageBoost,
                 dark3RateBoost = dark3RateBoost,
                 //Darkness Unit Ogre
@@ -902,7 +911,7 @@ namespace Script.RewardScript
                 waterFreezeDamageBoost = deathChillerFreezeDamageBoost,
                 waterSlowCPowerBoost =  deathChillerSlowCPowerBoost,
                 waterAttackRateBoost = waterAttackRateBoost,
-                waterGlobalFreeze = deathChillerGlobalFreeze, 
+                waterGlobalFreeze = deathChillerBackAttackBoost, 
                 //Physical Unit Orc
                 physicalAttackSpeedBoost = physicalAttackSpeedBoost,
                 physicalSwordAddition = orcSwordAddition,
@@ -940,7 +949,7 @@ namespace Script.RewardScript
                 fireBurnPerAttackEffect = beholderBurnPerAttackEffect,
                 fireStackOverlap = beholderStackOverlap,
                 fireProjectileBounceDamage = beholderProjectileBounceDamage,
-                fireBurnedEnemyExplosion = beholderBurnedEnemyExplosion,
+                fireBurnedEnemyExplosion = beholderAttackDamageBoost,
                 fireAttackSpeedBoost = fireAttackSpeedBoost,
                 fireProjectileSpeedIncrease = beholderProjectileSpeedIncrease,
                 fireProjectileBounceIncrease = beholderProjectileBounceIncrease,
@@ -950,7 +959,7 @@ namespace Script.RewardScript
                 poison2RangeBoost = cobraRangeBoost,
                 poison2DotDamageBoost = cobraDotDamageBoost,
                 poison2StunTimeBoost = poison2StunTimeBoost,
-                poison2SpawnPoisonArea = cobraSpawnPoisonArea,
+                poison2SpawnPoisonArea = cobraDamageBoost,
                 poison2RateBoost = cobraRateBoost,
                 poison2PoolTimeBoost = cobraPoolTimeBoost,
         
@@ -1008,8 +1017,8 @@ namespace Script.RewardScript
             octopusThirdAttackBoost = data.dark3FifthAttackBoost;
             octopusPoisonAttack = data.dark3BleedAttack;
             octopusBleedDamageBoost = data.dark3PoisonDamageBoost;
-            octopusShackledExplosion = data.dark3ShackledExplosion;
-            octopusBleedDurationBoost = data.dark3BleedDurationBoost;
+            octopusPoisonDamageBoost = data.dark3ShackledExplosion;
+            octopusPoisonDurationBoost = data.dark3BleedDurationBoost;
             octopusDamageBoost = data.dark3DamageBoost;
             dark3RateBoost = data.dark3RateBoost;
             //Darkness Unit Ogre
@@ -1027,7 +1036,7 @@ namespace Script.RewardScript
             deathChillerFreezeDamageBoost = data.waterFreezeDamageBoost;
             deathChillerSlowCPowerBoost =  data.waterSlowCPowerBoost;
             waterAttackRateBoost = data.waterAttackRateBoost;
-            deathChillerGlobalFreeze = data.waterGlobalFreeze;
+            deathChillerBackAttackBoost = data.waterGlobalFreeze;
             //Physical Unit Orc
             physicalAttackSpeedBoost = data.physicalAttackSpeedBoost;
             orcSwordAddition = data.physicalSwordAddition;
@@ -1064,7 +1073,7 @@ namespace Script.RewardScript
             beholderBurnPerAttackEffect = data.fireBurnPerAttackEffect;
             beholderStackOverlap = data.fireStackOverlap;
             beholderProjectileBounceDamage = data.fireProjectileBounceDamage;
-            beholderBurnedEnemyExplosion = data.fireBurnedEnemyExplosion;
+            beholderAttackDamageBoost = data.fireBurnedEnemyExplosion;
             fireAttackSpeedBoost = data.fireAttackSpeedBoost;
             beholderProjectileSpeedIncrease = data.fireProjectileSpeedIncrease;                            
             beholderProjectileBounceIncrease = data.fireProjectileBounceIncrease;
@@ -1073,7 +1082,7 @@ namespace Script.RewardScript
             cobraRangeBoost = data.poison2RangeBoost;
             cobraDotDamageBoost = data.poison2DotDamageBoost;
             poison2StunTimeBoost = data.poison2StunTimeBoost;
-            cobraSpawnPoisonArea = data.poison2SpawnPoisonArea;
+            cobraDamageBoost = data.poison2SpawnPoisonArea;
             cobraRateBoost = data.poison2RateBoost;
             cobraPoolTimeBoost = data.poison2PoolTimeBoost;
             //Physical2 Unit J

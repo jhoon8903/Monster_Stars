@@ -133,8 +133,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cover: {fileID: 3244762849881837837}
-  unitPieceLevel: 5
-  unLock: 1
+  unitPieceLevel: 3
+  unLock: 0
   selected: 0
   unitPuzzleLevel: 1
   unitGroup: 6
@@ -161,7 +161,7 @@ MonoBehaviour:
   stunTime: 0
   poisonAreaTime: 0
   defaultAtkRate: 1
-  projectileSpeed: 0
+  projectileSpeed: 1
   swingSpeed: 1
   defaultAtkDistance: 1
   level1Sprite: {fileID: 21300000, guid: 32888d8a3339447bab121fb4f2b85b5b, type: 3}

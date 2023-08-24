@@ -190,7 +190,7 @@ namespace Script.WeaponScriptGroup
                 case CharacterBase.UnitGroups.Octopus:
                     if (EnforceManager.Instance.octopusBleedDamageBoost && enemyBase.isBleed)
                     {
-                        damage *= 1.5f;
+                        damage *= 2.5f;
                     }
                     if (enemyBase.RegistryType == EnemyBase.RegistryTypes.Darkness)
                     {

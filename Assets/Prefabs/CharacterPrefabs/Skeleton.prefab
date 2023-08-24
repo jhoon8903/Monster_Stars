@@ -133,7 +133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cover: {fileID: 1545882033867031927}
-  unitPieceLevel: 2
+  unitPieceLevel: 1
   unLock: 1
   selected: 1
   unitPuzzleLevel: 1

@@ -187,14 +187,14 @@ namespace Script.CharacterManagerScript
                    }
                    break;
                case CharacterBase.UnitGroups.DeathChiller:
-                   if (EnforceManager.Instance.deathChillerGlobalFreeze)
-                   {
-                       groupCAtkCount++;
-                       if (groupCAtkCount == 100)
-                       {
-                           StartCoroutine(enemyPatternManager.GlobalFreezeEffect());
-                       }
-                   }
+                   // if (EnforceManager.Instance.deathChillerBackAttackBoost)
+                   // {
+                   //     groupCAtkCount++;
+                   //     if (groupCAtkCount == 100)
+                   //     {
+                   //         StartCoroutine(enemyPatternManager.GlobalFreezeEffect());
+                   //     }
+                   // }
                    break;
                case CharacterBase.UnitGroups.Orc:
                    if (EnforceManager.Instance.orcRatePerAttack)

@@ -262,90 +262,90 @@ namespace Script.EnemyManagerScript
                 if (currentHealth > 0f || isDead) return;
                 isDead = true;
                 ExpManager.Instance.HandleEnemyKilled(reason);
-                if (EnforceManager.Instance.octopusShackledExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.Octopus)
-                {
-                    StartCoroutine(ExplosionDamage(detectEnemy, damage, atkUnit));
-                }
-                else if (EnforceManager.Instance.beholderBurnedEnemyExplosion && atkUnit.unitGroup == CharacterBase.UnitGroups.Beholder)
-                {
-                    StartCoroutine(ExplosionDamage(detectEnemy, damage, atkUnit));
-                }
-
-                if (EnforceManager.Instance.cobraSpawnPoisonArea && detectEnemy.isPoison)
-                {
-                    StartCoroutine(PoisonArea(detectEnemy, damage, atkUnit));
-                }
-
-                if (EnforceManager.Instance.darkElfExplosionBoost && atkUnit.unitGroup == CharacterBase.UnitGroups.DarkElf)
-                {
-                    if (detectEnemy.isBind || detectEnemy.isPoison || detectEnemy.isBleed || detectEnemy.isBurn ||
-                        detectEnemy.isFreeze || detectEnemy.isSlow || detectEnemy.isStun || detectEnemy.isKnockBack)
-                    {
-                        StartCoroutine(ExplosionDamage(detectEnemy, damage, atkUnit));
-                    }
-                }
+                // if (EnforceManager.Instance.octopusPoisonDamageBoost && atkUnit.unitGroup == CharacterBase.UnitGroups.Octopus)
+                // {
+                //     StartCoroutine(ExplosionDamage(detectEnemy, damage, atkUnit));
+                // }
+                // else if (EnforceManager.Instance.beholderAttackDamageBoost && atkUnit.unitGroup == CharacterBase.UnitGroups.Beholder)
+                // {
+                //     StartCoroutine(ExplosionDamage(detectEnemy, damage, atkUnit));
+                // }
+                //
+                // if (EnforceManager.Instance.cobraSpawnPoisonArea && detectEnemy.isPoison)
+                // {
+                //     StartCoroutine(PoisonArea(detectEnemy, damage, atkUnit));
+                // }
+                //
+                // if (EnforceManager.Instance.darkElfExplosionBoost && atkUnit.unitGroup == CharacterBase.UnitGroups.DarkElf)
+                // {
+                //     if (detectEnemy.isBind || detectEnemy.isPoison || detectEnemy.isBleed || detectEnemy.isBurn ||
+                //         detectEnemy.isFreeze || detectEnemy.isSlow || detectEnemy.isStun || detectEnemy.isKnockBack)
+                //     {
+                //         StartCoroutine(ExplosionDamage(detectEnemy, damage, atkUnit));
+                //     }
+                // }
                 EnemyKilledEvents(detectEnemy, atkUnit);
             }
         }
-        private IEnumerator PoisonArea(Component detectEnemy, float damage, CharacterBase atkUnit)
-        {
-            var areaDuration = atkUnit.poisonAreaTime;
-            const float areaRadius = 0.5f;
-            var poisonPool = GetPoisonPool();
-            poisonPool.transform.position = detectEnemy.transform.position;
-            poisonPool.SetActive(true);
-            var timer = 0;
-            while (timer < areaDuration)
-            {
-                var poolArea = Physics2D.OverlapCircleAll(poisonPool.transform.position, areaRadius,
-                    1 << LayerMask.NameToLayer("Enemy"));
-                foreach (var enemy in poolArea)
-                {
-                    var enemyBase = enemy.GetComponent<EnemyBase>();
-                    if (enemyBase != null && !enemyBase.isDead)
-                    {
-                        enemyBase.ReceiveDamage(enemyBase, damage*2f, atkUnit);
-                    }
-                }
-                timer += 1;
-                yield return new WaitForSeconds(1f);
-            }
-            poisonPool.SetActive(false);
-            _poisonPool.Add(poisonPool);
-        }
-        private GameObject GetPoisonPool()
-        {
-            GameObject poisonPool;
-            if (_poisonPool.Count > 0)
-            {
-                poisonPool = _poisonPool[^1];
-                _poisonPool.RemoveAt(_poisonPool.Count -1);
-            }
-            else
-            {
-                poisonPool = Instantiate(poisonAreaObject, transform, true);
-            }
-
-            return poisonPool;
-        }
-        private IEnumerator ExplosionDamage(EnemyBase detectEnemy, float damage, CharacterBase atkUnit)
-        {
-            if (atkUnit.unitGroup is CharacterBase.UnitGroups.Beholder)
-            {
-                damage *= 2f;
-            }
-            var enemyPosition = detectEnemy.transform.position;
-            var explosionSize = atkUnit.unitGroup == CharacterBase.UnitGroups.DarkElf ? 2f : 1f;
-            var colliders = Physics2D.OverlapCircleAll(enemyPosition, explosionSize);
-            foreach (var enemyObject in colliders)
-            {
-                if (!enemyObject.gameObject.CompareTag("Enemy") || !enemyObject.gameObject.activeInHierarchy) continue;
-                var nearEnemy = enemyObject.GetComponent<EnemyBase>();
-                var explosionDamage = GetComponent<WeaponBase>().DamageCalculator(damage, detectEnemy, atkUnit);
-                ReceiveDamage(nearEnemy, (int)explosionDamage, atkUnit);
-            }
-            yield return null;
-        }
+        // private IEnumerator PoisonArea(Component detectEnemy, float damage, CharacterBase atkUnit)
+        // {
+        //     var areaDuration = atkUnit.poisonAreaTime;
+        //     const float areaRadius = 0.5f;
+        //     var poisonPool = GetPoisonPool();
+        //     poisonPool.transform.position = detectEnemy.transform.position;
+        //     poisonPool.SetActive(true);
+        //     var timer = 0;
+        //     while (timer < areaDuration)
+        //     {
+        //         var poolArea = Physics2D.OverlapCircleAll(poisonPool.transform.position, areaRadius,
+        //             1 << LayerMask.NameToLayer("Enemy"));
+        //         foreach (var enemy in poolArea)
+        //         {
+        //             var enemyBase = enemy.GetComponent<EnemyBase>();
+        //             if (enemyBase != null && !enemyBase.isDead)
+        //             {
+        //                 enemyBase.ReceiveDamage(enemyBase, damage*2f, atkUnit);
+        //             }
+        //         }
+        //         timer += 1;
+        //         yield return new WaitForSeconds(1f);
+        //     }
+        //     poisonPool.SetActive(false);
+        //     _poisonPool.Add(poisonPool);
+        // }
+        // private GameObject GetPoisonPool()
+        // {
+        //     GameObject poisonPool;
+        //     if (_poisonPool.Count > 0)
+        //     {
+        //         poisonPool = _poisonPool[^1];
+        //         _poisonPool.RemoveAt(_poisonPool.Count -1);
+        //     }
+        //     else
+        //     {
+        //         poisonPool = Instantiate(poisonAreaObject, transform, true);
+        //     }
+        //
+        //     return poisonPool;
+        // }
+        // private IEnumerator ExplosionDamage(EnemyBase detectEnemy, float damage, CharacterBase atkUnit)
+        // {
+        //     if (atkUnit.unitGroup is CharacterBase.UnitGroups.Beholder)
+        //     {
+        //         damage *= 2f;
+        //     }
+        //     var enemyPosition = detectEnemy.transform.position;
+        //     var explosionSize = atkUnit.unitGroup == CharacterBase.UnitGroups.DarkElf ? 2f : 1f;
+        //     var colliders = Physics2D.OverlapCircleAll(enemyPosition, explosionSize);
+        //     foreach (var enemyObject in colliders)
+        //     {
+        //         if (!enemyObject.gameObject.CompareTag("Enemy") || !enemyObject.gameObject.activeInHierarchy) continue;
+        //         var nearEnemy = enemyObject.GetComponent<EnemyBase>();
+        //         var explosionDamage = GetComponent<WeaponBase>().DamageCalculator(damage, detectEnemy, atkUnit);
+        //         ReceiveDamage(nearEnemy, (int)explosionDamage, atkUnit);
+        //     }
+        //     yield return null;
+        // }
         public void EnemyKilledEvents(EnemyBase detectedEnemy, CharacterBase characterBase = null)
         {
             detectedEnemy.StopAllCoroutines();

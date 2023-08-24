@@ -133,8 +133,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cover: {fileID: 8106914419751587629, guid: b8ad960f8f0f647bdae87bd3059f1ecf, type: 3}
-  unitPieceLevel: 4
-  unLock: 1
+  unitPieceLevel: 3
+  unLock: 0
   selected: 0
   unitPuzzleLevel: 1
   unitGroup: 0
@@ -145,8 +145,8 @@ MonoBehaviour:
   lv9: {fileID: 21300000, guid: 97a9b711ea166413b8c359ab05b7dea0, type: 3}
   lv11: {fileID: 21300000, guid: 6c42adbea3ae843c0b6eea8c44fca533, type: 3}
   lv13: {fileID: 21300000, guid: 80057e6c9874c4e8196c47a32db46c20, type: 3}
-  baseDamage: 55
-  dotDamage: 11
+  baseDamage: 36
+  dotDamage: 7.2000003
   effectChance: 30
   effectStack: 0
   slowTime: 0
@@ -156,7 +156,7 @@ MonoBehaviour:
   knockBackPower: 0
   knockBackTime: 0
   bleedTime: 3
-  poisonTime: 0
+  poisonTime: 3
   burnTime: 0
   stunTime: 0
   poisonAreaTime: 0
