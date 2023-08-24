@@ -97,39 +97,39 @@ namespace Script.CharacterManagerScript
             switch (unitGroup)
             {
                 case CharacterBase.UnitGroups.Octopus:
-                    Attack(new AttackData(unit, WeaponsPool.WeaponType.A));
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.Octopus));
                     break;
                 case CharacterBase.UnitGroups.Ogre:
-                    Attack(new AttackData(unit, WeaponsPool.WeaponType.B));
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.Ogre));
                     break;
                 case CharacterBase.UnitGroups.DeathChiller:
-                    Attack(new AttackData(unit, WeaponsPool.WeaponType.C));
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.DeathChiller));
                     break;
                 case CharacterBase.UnitGroups.Fishman:
-                    Attack(new AttackData(unit, WeaponsPool.WeaponType.E));
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.Fishman));
                     break;
                 case CharacterBase.UnitGroups.Beholder:
-                    Attack(new AttackData(unit, WeaponsPool.WeaponType.H));
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.Beholder));
                     break;
                 case CharacterBase.UnitGroups.Berserker: 
-                    Attack(new AttackData(unit, WeaponsPool.WeaponType.J));
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.Berserker));
                     break;
                 case CharacterBase.UnitGroups.DarkElf:
                     if (EnforceManager.Instance.darkElfDualAttack)
                     {
                         StartCoroutine(EnforceManager.Instance.darkElfDoubleAttack
-                            ? CombinedAttack(new AttackData(unit, WeaponsPool.WeaponType.K))
-                            : DualAttack(new AttackData(unit, WeaponsPool.WeaponType.K)));
+                            ? CombinedAttack(new AttackData(unit, WeaponsPool.WeaponType.Darkelf))
+                            : DualAttack(new AttackData(unit, WeaponsPool.WeaponType.Darkelf)));
                     }
                     else
                     {
                         if (EnforceManager.Instance.darkElfDoubleAttack)
                         {
-                            StartCoroutine(DoubleFire(new AttackData(unit, WeaponsPool.WeaponType.K)));
+                            StartCoroutine(DoubleFire(new AttackData(unit, WeaponsPool.WeaponType.Darkelf)));
                         }
                         else
                         {
-                            Attack(new AttackData(unit, WeaponsPool.WeaponType.K));
+                            Attack(new AttackData(unit, WeaponsPool.WeaponType.Darkelf));
                         }
                     }
                     break;
@@ -144,13 +144,13 @@ namespace Script.CharacterManagerScript
                 case CharacterBase.UnitGroups.Orc:
                     if (unit.GetComponent<CharacterBase>().CurrentWeapon == null || unit.GetComponent<CharacterBase>().CurrentWeapon.activeSelf == false)
                     {
-                        unit.GetComponent<CharacterBase>().CurrentWeapon = Attack(new AttackData(unit, WeaponsPool.WeaponType.D));
+                        unit.GetComponent<CharacterBase>().CurrentWeapon = Attack(new AttackData(unit, WeaponsPool.WeaponType.Orc));
                     }
                     break;
                 case CharacterBase.UnitGroups.Phoenix:
                     if (unit.GetComponent<CharacterBase>().CurrentWeapon == null || unit.GetComponent<CharacterBase>().CurrentWeapon.activeSelf == false)
                     {
-                        unit.GetComponent<CharacterBase>().CurrentWeapon = Attack(new AttackData(unit, WeaponsPool.WeaponType.G));
+                        unit.GetComponent<CharacterBase>().CurrentWeapon = Attack(new AttackData(unit, WeaponsPool.WeaponType.Phoenix));
                     }
                     break;
                 default:
@@ -162,10 +162,10 @@ namespace Script.CharacterManagerScript
             switch (unitGroup)
             {
                 case CharacterBase.UnitGroups.Skeleton:
-                    Attack(new AttackData(unit, WeaponsPool.WeaponType.F)); 
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.Skeleton)); 
                     break;
                 case CharacterBase.UnitGroups.Cobra:
-                    Attack(new AttackData(unit, WeaponsPool.WeaponType.I));
+                    Attack(new AttackData(unit, WeaponsPool.WeaponType.Cobra));
                     break;
             }
         }

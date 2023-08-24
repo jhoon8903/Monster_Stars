@@ -16,6 +16,7 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level5Sprite;
         [SerializeField] private Sprite level6Sprite;
         private float _currentDamage;
+        private Vector2 _detectionSize;
 
         public void Awake()
         {
@@ -56,21 +57,22 @@ namespace Script.CharacterGroupScript
             SetLevel(unitPuzzleLevel);
         }
 
-        private void GetDetectionProperties(out float size, out Vector2 center)
+        private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
+            _detectionSize = EnforceManager.Instance.phoenixRangeBoost ? new Vector2(5, 5) : new Vector2(3, 3);
             center = transform.position;
-            size = EnforceManager.Instance.phoenixRangeBoost ? 2.5f : 1.5f;
+            size = _detectionSize;
         }
 
         public override List<GameObject> DetectEnemies()
         {
-            GetDetectionProperties(out var size, out var center);
-            var colliders = Physics2D.OverlapCircleAll(center, size);
+            GetDetectionProperties(out var detectionSize, out var detectionCenter);
+            var colliders = Physics2D.OverlapBoxAll(detectionCenter, detectionSize,0f);
             var currentlyDetectedEnemies = (
-                from enemyObject in colliders
-                where enemyObject.gameObject.CompareTag("Enemy") && enemyObject.gameObject.activeInHierarchy
+                from enemyObject in colliders 
+                where enemyObject.gameObject.CompareTag("Enemy") && enemyObject.gameObject.activeInHierarchy 
                 select enemyObject.GetComponent<EnemyBase>()
-                into enemyBase
+                into enemyBase 
                 select enemyBase.gameObject).ToList();
             DetectedEnemies = currentlyDetectedEnemies;
             return DetectedEnemies;
@@ -110,8 +112,8 @@ namespace Script.CharacterGroupScript
             burnTime = EnforceManager.Instance.phoenixBurnDurationBoost ? 5f:3f;
             var increaseRateBoost = EnforceManager.Instance.phoenixRateBoost ? 0.85f : 1f;
             defaultAtkRate = 1f * increaseRateBoost;
-            swingSpeed = 1f * increaseRateBoost;
-            UnitAtkType = UnitAtkTypes.Circle;
+            projectileSpeed = 1f;
+            UnitAtkType = UnitAtkTypes.Projectile;
             UnitProperty = UnitProperties.Fire;
             UnitEffect = EnforceManager.Instance.phoenixChangeProperty? UnitEffects.None : UnitEffects.Burn;
         }

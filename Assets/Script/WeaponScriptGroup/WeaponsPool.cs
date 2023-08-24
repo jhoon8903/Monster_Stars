@@ -6,7 +6,7 @@ namespace Script.WeaponScriptGroup
 {
     public class WeaponsPool : MonoBehaviour
     {
-        public enum WeaponType { None, A, B, C, D, E, F, G, H, I, J, K }
+        public enum WeaponType { None, Octopus, Ogre, DeathChiller, Orc, Fishman, Skeleton, Phoenix, Beholder, Cobra, Berserker, Darkelf }
         [System.Serializable]
         public class Weapon
         {
@@ -49,7 +49,7 @@ namespace Script.WeaponScriptGroup
             var objectToSpawn = _poolDictionary[weaponType][puzzleLevel-2].Dequeue();
             objectToSpawn.transform.position = position;
             objectToSpawn.transform.rotation = rotation;
-            _pivotDSword = FindInChildren(objectToSpawn, $"OrcWeapon{puzzleLevel-1}(Clone)");
+            _pivotDSword = FindInChildren(objectToSpawn, $"OrcWeapon{puzzleLevel-2}(Clone)");
             if (EnforceManager.Instance.orcSwordScaleIncrease)
             {
                 if (_pivotDSword != null)

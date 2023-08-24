@@ -164,7 +164,7 @@ MonoBehaviour:
   projectileSpeed: 1
   swingSpeed: 0
   defaultAtkDistance: 9
-  level1Sprite: {fileID: 21300000, guid: cda2574f990f541b1b8688f487ebc4ab, type: 3}
+  level1Sprite: {fileID: 21300000, guid: 79b9feb4d9ab94fc8839bbaae4843ccc, type: 3}
   level2Sprite: {fileID: 21300000, guid: f1f7a2e64610c4137b4788dbaf127f58, type: 3}
   level3Sprite: {fileID: 21300000, guid: 9a8e22d5ce20a4ac584865dd85fb293b, type: 3}
   level4Sprite: {fileID: 21300000, guid: c26c06727aaef4a5c8dbb3837abc4de5, type: 3}
@@ -210,12 +210,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: cda2574f990f541b1b8688f487ebc4ab, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 79b9feb4d9ab94fc8839bbaae4843ccc, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.85333335, y: 0.85333335}
+  m_Size: {x: 0.70666665, y: 0.70666665}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -238,8 +238,8 @@ BoxCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.64, y: 0.64}
-    newSize: {x: 0.85333335, y: 0.85333335}
+    oldSize: {x: 0.70666665, y: 0.70666665}
+    newSize: {x: 0.70666665, y: 0.70666665}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0

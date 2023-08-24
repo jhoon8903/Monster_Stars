@@ -8557,6 +8557,7 @@ MonoBehaviour:
     - {fileID: 8597722120061639763, guid: 3125acb6f51cc4098a8a44b570bde532, type: 3}
     - {fileID: 3912560362642380481, guid: d3cb0d01a470f4ceab17d579f564e6d5, type: 3}
     - {fileID: 5751074731027988210, guid: 421542e5546fb40ba87151ffce774d83, type: 3}
+    - {fileID: 5751074731027988210, guid: a4335569f142e4750b8db0e0223f7c8b, type: 3}
   - weaponType: 2
     weaponPrefabs:
     - {fileID: 3519698620554704866, guid: 99fe5547b8cc244e7b3c53ed6afa1ba9, type: 3}
@@ -8569,6 +8570,8 @@ MonoBehaviour:
     - {fileID: 1182850483353209071, guid: c9a852153c01c4c32bfd3a9c49f68176, type: 3}
     - {fileID: 4586521134092140642, guid: 0696c39c1ffec4fed95760c17cff3888, type: 3}
     - {fileID: 1243695726781179494, guid: 3404c954c16834ab28825c74e1625c93, type: 3}
+    - {fileID: 1243695726781179494, guid: a2e785a9c35684a23aaff9ed07f755f1, type: 3}
+    - {fileID: 1243695726781179494, guid: ca9efd28bef19487992d5a1cac86c53c, type: 3}
   - weaponType: 4
     weaponPrefabs:
     - {fileID: 2317171953232880559, guid: cbd69eec3fb174359aaadeeabcd11cef, type: 3}
@@ -8589,10 +8592,11 @@ MonoBehaviour:
     - {fileID: 3483167949492173198, guid: 38efaa0ca628e47e7bc1898d02ee5b1f, type: 3}
   - weaponType: 7
     weaponPrefabs:
-    - {fileID: 917137997013329296, guid: ed4228f868b194c0d987d1feaa53e075, type: 3}
-    - {fileID: 5961984583268978398, guid: 0a60618ceaab44675b46580239972061, type: 3}
-    - {fileID: 6803344351827666215, guid: eff4beb97cb2248a49362b8b6f1fe537, type: 3}
-    - {fileID: 7965940349638506393, guid: 4d271a111ffe543ab82b89d9e28dd75a, type: 3}
+    - {fileID: 2850665361061446226, guid: b925133aa9c434ab0aa1e0026d1e1303, type: 3}
+    - {fileID: 794963424453298726, guid: e0a391bf3f50d404b91ea1a03842ac0d, type: 3}
+    - {fileID: 5043188110568816061, guid: 2218ab219fd9d4c9aa766ded1d023219, type: 3}
+    - {fileID: 6180465053333641847, guid: d58f2f2a2cfb740d580279a64ae1e869, type: 3}
+    - {fileID: 1666378130761924477, guid: e6955d92fbd654d30902206f3ff5e6fa, type: 3}
   - weaponType: 8
     weaponPrefabs:
     - {fileID: 8363499375382729511, guid: e36c369107b0c40138371d6417bc66b1, type: 3}
@@ -8601,10 +8605,26 @@ MonoBehaviour:
     - {fileID: 1525889226595552815, guid: 69e2d119eeda644549951bb0eb877ff3, type: 3}
   - weaponType: 9
     weaponPrefabs:
-    - {fileID: 8363499375382729511, guid: e36c369107b0c40138371d6417bc66b1, type: 3}
-    - {fileID: 5457084779571031275, guid: f0e642efb12f04a6ba5e9299226fb6f8, type: 3}
-    - {fileID: 1449720510264382049, guid: a68a978a2ffba49cdbfeefcac9a497b8, type: 3}
-    - {fileID: 1525889226595552815, guid: 69e2d119eeda644549951bb0eb877ff3, type: 3}
+    - {fileID: 2308691474505449953, guid: b88dd3f190933446683d20ce29fd2ffc, type: 3}
+    - {fileID: 1224875683372120104, guid: 160f2b57a61ae453abb8920167eaf2a2, type: 3}
+    - {fileID: 2196911220416562029, guid: 6d0b8987f857d4fe1b2fd08ed24bd110, type: 3}
+    - {fileID: 3946050672646041568, guid: 8f85440a6e01949948407875fb545650, type: 3}
+    - {fileID: 5352728011627012448, guid: 31647c271b46346abaa9eb62c092d81e, type: 3}
+  - weaponType: 10
+    weaponPrefabs:
+    - {fileID: 3534667739216382983, guid: 2f0471307bc0d4f6f9f0c73cb1b73148, type: 3}
+    - {fileID: 4211004262232538076, guid: a259b9b260bf14cbc9e7a314a91bea4f, type: 3}
+    - {fileID: 291702819465739965, guid: c7001d6b9687b42c8bc6237e0dc4b215, type: 3}
+    - {fileID: 6209186111472449475, guid: 3e9ad6a9e13b44a67a45338dda29d333, type: 3}
+    - {fileID: 303261364400228836, guid: 1607b6cd01edb47afbe2172aa0b8ff8e, type: 3}
+  - weaponType: 11
+    weaponPrefabs:
+    - {fileID: 1353042440618364873, guid: 35e9dc6768b3e4878adade8c925c9c47, type: 3}
+    - {fileID: 5133559102717329293, guid: 5160e6e3d56ac4ab4ac4b4af5f420163, type: 3}
+    - {fileID: 6826535017143188714, guid: 1237813ba8f3743a6a92d96d2874072f, type: 3}
+    - {fileID: 1060578751216653238, guid: 5a367da79047e4208bf1f8b1f86dd30e, type: 3}
+    - {fileID: 5596873465487122398, guid: 2b251fa029f33476685512d50f0eb436, type: 3}
+    - {fileID: 7123876605712188084, guid: a3814890e957c4640bd2e57f83c45cea, type: 3}
   weaponPoolCapacity: 20
 --- !u!4 &1537456865
 Transform:

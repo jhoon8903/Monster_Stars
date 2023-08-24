@@ -89,7 +89,6 @@ namespace Script.EnemyManagerScript
         private IEnumerator GetEnemyDesc(EnemyBase enemyBase)
         { 
             LoadEnemyClassList();
-            Debug.Log(enemyBase.enemyClass);
             if (!_enemyClassList.Contains(enemyBase.enemyClass))
             {
                 _enemyClassList.Add(enemyBase.enemyClass);
