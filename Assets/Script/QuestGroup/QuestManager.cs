@@ -22,10 +22,13 @@ namespace Script.QuestGroup
         [SerializeField] private Button questOpenBtn;
         [SerializeField] private Button questCloseBtn;
         [SerializeField] private GameObject questRewardPanel;
+        [SerializeField] private GameObject questRewardContents;
         [SerializeField] private QuestObject questObject;
         [SerializeField] public Transform questTransform;
         [SerializeField] public TextMeshProUGUI timer;
-
+        [SerializeField] private Goods rewardItem;
+        [SerializeField] private Button questRewardCloseBtn ;
+        
         // Ads Quest
         [SerializeField] public TextMeshProUGUI adsDesc;
         [SerializeField] public Slider adsProgress;
@@ -54,6 +57,9 @@ namespace Script.QuestGroup
         public static QuestManager Instance { get; private set; } 
         private readonly Dictionary<CharacterBase, int> _unitPieceDict = new Dictionary<CharacterBase, int>();
         private int _unitPieceReward;
+        
+        private Goods _coinObject;
+        private Goods _unitPieceObject;
 
 
         private void Awake()
@@ -71,6 +77,7 @@ namespace Script.QuestGroup
             questCloseBtn.onClick.AddListener(() => questPanel.SetActive(false));
             LoadQuests(QuestCondition.Fix);
             LoadQuests(QuestCondition.Rotation);
+            questRewardCloseBtn.onClick.AddListener(ReceiveReward);
         }
         private void LoadQuests(QuestCondition targetCondition)
         {
@@ -171,6 +178,7 @@ namespace Script.QuestGroup
                 {
                     quest.isCompleted = true;
                     PlayerPrefs.SetInt(quest.QuestType + "_isCompleted", 1);
+                    QuestObject.SetQuestButtonStates(quest); // 버튼 상태 업데이트 호출
                 }
 
                 if (quest.QuestType == QuestTypes.AllClear)
@@ -290,6 +298,22 @@ namespace Script.QuestGroup
             }
             PlayerPrefs.Save();
         }
+        private void ReceiveReward()
+        {
+            ChestCheck.Instance.CloseChestCheck();
+            questRewardPanel.SetActive(false);
+            foreach (var unitReward in _unitPieceDict)
+            {
+                unitReward.Key.UnitPieceCount += unitReward.Value;
+                HoldCharacterList.Instance.UpdateRewardPiece(unitReward.Key);
+                Destroy(_unitPieceObject.gameObject);
+            }
+            if (_coinObject != null)
+            {
+                Destroy(_coinObject.gameObject);
+            }
+            _unitPieceDict.Clear();
+        }
         private int UnitPieceReceiveValue(CharacterBase.UnitGrades unitGrade, QuestObject quest)
         {
             var greenPiece = 0;
@@ -375,6 +399,18 @@ namespace Script.QuestGroup
                 unit.Initialize();
                 _unitPieceReward = pieceCountPerUnit[index];
                 if (_unitPieceReward == 0) continue;
+                _unitPieceObject = Instantiate(rewardItem, questRewardContents.transform);
+                _unitPieceObject.goodsBack.GetComponent<Image>().color = Color.white;
+                _unitPieceObject.goodsBack.GetComponent<Image>().sprite = unit.UnitGrade switch
+                {
+                    CharacterBase.UnitGrades.G => StoreMenu.Instance.gGradeSprite,
+                    CharacterBase.UnitGrades.B => StoreMenu.Instance.bGradeSprite,
+                    CharacterBase.UnitGrades.P => StoreMenu.Instance.pGradeSprite,
+                };
+                _unitPieceObject.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPieceLevel);
+                _unitPieceObject.goodsSprite.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);
+                _unitPieceObject.goodsValue.text = $"{_unitPieceReward}";
+                _unitPieceObject.goodsValue.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);
                 _unitPieceDict[unit] = _unitPieceReward;
             }
             foreach (var unitPiece in _unitPieceDict)

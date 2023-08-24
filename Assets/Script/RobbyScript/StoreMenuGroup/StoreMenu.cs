@@ -55,9 +55,9 @@ namespace Script.RobbyScript.StoreMenuGroup
         [SerializeField] private GameObject errorContentsImage;
         [SerializeField] private QuestManager questManager;
         
-        [SerializeField] private Sprite gGradeSprite; 
-        [SerializeField] private Sprite bGradeSprite; 
-        [SerializeField] private Sprite pGradeSprite;
+        [SerializeField] public Sprite gGradeSprite; 
+        [SerializeField] public Sprite bGradeSprite; 
+        [SerializeField] public Sprite pGradeSprite;
         
         public static StoreMenu Instance { get; private set; }
         private int _coinReward;
@@ -212,6 +212,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             };
             if (_coinReward == 0) return;
             _coinObject = chestItem.CoinInstance(rewardItem, boxRewardContents.transform, boxTypes, _coinReward);
+            Quest.Instance.GetCoinQuest(_coinReward);
         }
         private void CalculateUnitPieceReward(BoxGrade boxTypes, int openCount)
         {

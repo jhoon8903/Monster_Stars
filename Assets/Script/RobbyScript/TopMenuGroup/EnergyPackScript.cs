@@ -88,7 +88,7 @@ namespace Script.RobbyScript.TopMenuGroup
             _rewardTypes = RewardTypes.Coin;
 
             item1.GetComponent<Image>().sprite = coinSprite;
-            item1Value.text = "10";
+            item1Value.text = "1000";
             
             item1.GetComponent<Image>().sprite = coinSprite;
             item2Value.text = "10";

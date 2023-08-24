@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
 using Script.EnemyManagerScript;
+using Script.QuestGroup;
 using Script.RewardScript;
 using Script.RobbyScript.TopMenuGroup;
 using UnityEngine.Serialization;
@@ -296,7 +297,6 @@ namespace Script.CharacterManagerScript
                      break;
             }
             return coin;
-
         }
         public void LevelUpScale(GameObject levelUpObject)
         {
@@ -327,6 +327,7 @@ namespace Script.CharacterManagerScript
         {
             UnitPieceCount -= UnitPieceMaxPiece;
             CoinsScript.Instance.Coin -= CharacterLevelUpCoin;
+            Quest.Instance.UseCoinQuest(CharacterLevelUpCoin);
             unitPieceLevel++;
             Initialize();
             yield return null;

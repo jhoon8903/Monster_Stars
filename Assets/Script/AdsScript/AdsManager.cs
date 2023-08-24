@@ -422,10 +422,10 @@ namespace Script.AdsScript
             {
                 case ButtonType.Coin:
                     Debug.Log("코인 보상을 제공합니다.");
-                    if (CoinsScript.Instance != null)
-                    {
-                        CoinsScript.Instance.Coin += 1000;
-                    }
+                    // if (CoinsScript.Instance != null)
+                    // {
+                    //     CoinsScript.Instance.Coin += 1000;
+                    // }
                     break;
                 case ButtonType.Gem:
                     Debug.Log("재화 보상을 제공합니다.");
