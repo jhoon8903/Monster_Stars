@@ -89,9 +89,11 @@ namespace Script.EnemyManagerScript
         private IEnumerator GetEnemyDesc(EnemyBase enemyBase)
         { 
             LoadEnemyClassList();
+            Debug.Log(enemyBase.enemyClass);
             if (!_enemyClassList.Contains(enemyBase.enemyClass))
             {
                 _enemyClassList.Add(enemyBase.enemyClass);
+                SaveEnemyClassList();
                 enemyDescPanel.SetActive(true);
                 foreach (var enemy in enemySpriteList.Where(enemy => enemyBase.enemyClass == enemy.enemyClasses))
                 {
@@ -128,7 +130,7 @@ namespace Script.EnemyManagerScript
             }
             yield return new WaitForSecondsRealtime(4f);
             enemyDescPanel.SetActive(false);
-            SaveEnemyClassList();
+       
         }
         private void SaveEnemyClassList()
         {

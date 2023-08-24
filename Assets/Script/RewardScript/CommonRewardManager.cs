@@ -429,10 +429,10 @@ namespace Script.RewardScript
         // 11. 선택 처리
         private IEnumerator Selected(Data selectedReward)
         {
-            if (common1Button.GetComponent<Canvas>().overrideSorting)
+            if (common1Button.GetComponent<Canvas>() != null)
             {
-                common1Button.GetComponent<Canvas>().overrideSorting = false;
-                common1Button.GetComponent<Canvas>().enabled = false;
+                Destroy(common1Button.GetComponent<GraphicRaycaster>());
+                Destroy(common1Button.GetComponent<Canvas>());
             }
             commonRewardPanel.SetActive(false);
             if (countManager.TotalMoveCount == 0)

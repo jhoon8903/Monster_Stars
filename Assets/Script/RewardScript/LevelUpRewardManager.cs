@@ -435,6 +435,9 @@ namespace Script.RewardScript
                             break;
                         case PowerTypeManager.Types.CastleMaxHp:
                             if (EnforceManager.Instance.castleMaxHp >= 1000) return false;
+                            break; 
+                        case PowerTypeManager.Types.Match5Upgrade:
+                            if (EnforceManager.Instance.match5Upgrade) return false;
                             break;
                         // Unit A
                         case PowerTypeManager.Types.OctopusThirdAttackBoost:
