@@ -10,7 +10,7 @@ namespace Script.UIManager
     {
         [SerializeField] private GameObject bornEffect;
         public List<GameObject> bornPoolList = new List<GameObject>();
-        public static FxManager Instance { get; set; }
+        public static FxManager Instance { get; private set; }
 
         private void Awake()
         {

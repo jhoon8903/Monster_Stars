@@ -103,13 +103,12 @@ namespace Script.CharacterGroupScript
                 5 => 2.3f,
                 6 => 2.6f
             };
-            effectChance = 50;
+            effectChance = EnforceManager.Instance.cobraStunChanceBoost ? 100 : 50;
             poisonTime = 5f;
             var dotDamageBoost = EnforceManager.Instance.cobraDotDamageBoost ? 0.2f : 0.1f;
             dotDamage = DefaultDamage * dotDamageBoost;
             var timeBoost = EnforceManager.Instance.poison2StunTimeBoost;
             stunTime = 0.4f + timeBoost;
-            poisonAreaTime = EnforceManager.Instance.cobraPoolTimeBoost ? 3f : 2f;
             defaultAtkRate = EnforceManager.Instance.cobraRateBoost ? 1.2f * 0.8f : 1.2f;
             projectileSpeed = 1f;
             UnitAtkType = UnitAtkTypes.GuideProjectile;

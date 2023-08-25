@@ -5813,6 +5813,7 @@ MonoBehaviour:
     right: {fileID: 21300000, guid: bb0de1bfa491e47fba119e556b2788ad, type: 3}
     grid1: {fileID: 21300000, guid: 6d82139dbbbb042ed904a5edec93da46, type: 3}
     grid2: {fileID: 21300000, guid: c575988a382a64a22bae10c2650678b4, type: 3}
+    destroySprite: {fileID: 21300000, guid: d14ed8a36db214505a7ca4dda7bcded9, type: 3}
   - back: {fileID: 21300000, guid: 3ee5787fdcbe14c8dba964b4c717ef09, type: 3}
     topSprite: {fileID: 21300000, guid: a7b6ccf0a820149a1a30eccd0b29fe84, type: 3}
     castleSprite: {fileID: 21300000, guid: 56d478dd990dd4eaba2b71d1a50d5f89, type: 3}
@@ -5820,6 +5821,31 @@ MonoBehaviour:
     right: {fileID: 21300000, guid: c44f78193a0e447b49b4ff3c5fa0aab4, type: 3}
     grid1: {fileID: 21300000, guid: 6d82139dbbbb042ed904a5edec93da46, type: 3}
     grid2: {fileID: 21300000, guid: c575988a382a64a22bae10c2650678b4, type: 3}
+    destroySprite: {fileID: 21300000, guid: befaef18871624df0a62304940967dea, type: 3}
+  - back: {fileID: 21300000, guid: 3ee5787fdcbe14c8dba964b4c717ef09, type: 3}
+    topSprite: {fileID: 21300000, guid: a7b6ccf0a820149a1a30eccd0b29fe84, type: 3}
+    castleSprite: {fileID: 21300000, guid: 56d478dd990dd4eaba2b71d1a50d5f89, type: 3}
+    left: {fileID: 21300000, guid: 7cfd403a66c9049cc9fbe4031bfb236e, type: 3}
+    right: {fileID: 21300000, guid: c44f78193a0e447b49b4ff3c5fa0aab4, type: 3}
+    grid1: {fileID: 21300000, guid: 6d82139dbbbb042ed904a5edec93da46, type: 3}
+    grid2: {fileID: 21300000, guid: c575988a382a64a22bae10c2650678b4, type: 3}
+    destroySprite: {fileID: 21300000, guid: 6fa98250033044f6f8dccc0ec226bd81, type: 3}
+  - back: {fileID: 21300000, guid: 3ee5787fdcbe14c8dba964b4c717ef09, type: 3}
+    topSprite: {fileID: 21300000, guid: a7b6ccf0a820149a1a30eccd0b29fe84, type: 3}
+    castleSprite: {fileID: 21300000, guid: 56d478dd990dd4eaba2b71d1a50d5f89, type: 3}
+    left: {fileID: 21300000, guid: 7cfd403a66c9049cc9fbe4031bfb236e, type: 3}
+    right: {fileID: 21300000, guid: c44f78193a0e447b49b4ff3c5fa0aab4, type: 3}
+    grid1: {fileID: 21300000, guid: 6d82139dbbbb042ed904a5edec93da46, type: 3}
+    grid2: {fileID: 21300000, guid: c575988a382a64a22bae10c2650678b4, type: 3}
+    destroySprite: {fileID: 21300000, guid: 85e0fcbabb4524e53ad1c707eda51a2f, type: 3}
+  - back: {fileID: 21300000, guid: 3ee5787fdcbe14c8dba964b4c717ef09, type: 3}
+    topSprite: {fileID: 21300000, guid: a7b6ccf0a820149a1a30eccd0b29fe84, type: 3}
+    castleSprite: {fileID: 21300000, guid: 56d478dd990dd4eaba2b71d1a50d5f89, type: 3}
+    left: {fileID: 21300000, guid: 7cfd403a66c9049cc9fbe4031bfb236e, type: 3}
+    right: {fileID: 21300000, guid: c44f78193a0e447b49b4ff3c5fa0aab4, type: 3}
+    grid1: {fileID: 21300000, guid: 6d82139dbbbb042ed904a5edec93da46, type: 3}
+    grid2: {fileID: 21300000, guid: c575988a382a64a22bae10c2650678b4, type: 3}
+    destroySprite: {fileID: 21300000, guid: a80297d9099a64687b8250db617913c9, type: 3}
 --- !u!114 &1011029962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8756,7 +8782,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 1}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.7529412}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

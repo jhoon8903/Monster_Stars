@@ -61,6 +61,7 @@ namespace Script.UIManager
             UpdateHpText();
             FindObjectOfType<EnemyBase>().EnemyKilledEvents(enemyBase);
             if (HpPoint > 0) return;
+            BackGroundManager.Instance.Lose();
             HpPoint = 0;
             hpBar.value = HpPoint;
             UpdateHpText();

@@ -25,7 +25,8 @@ namespace Script.RobbyScript.MainMenuGroup
         [SerializeField] private GameObject nextStageBtn;
         [SerializeField] private GameObject previousStageBtn;
         [SerializeField] private TextMeshProUGUI stageText;
-        [SerializeField] private GameObject stageImage;
+        [SerializeField] private Image stageImage;
+        [SerializeField] private List<Sprite> stageSprite;
         [SerializeField] private Slider stageProgress;
         [SerializeField] private TextMeshProUGUI stageProgressText;
         [SerializeField] private GameObject timeRewardBtn;
@@ -40,6 +41,7 @@ namespace Script.RobbyScript.MainMenuGroup
         {
             Instance = this;
             Application.targetFrameRate = 60;
+            stageImage.sprite = stageSprite[PlayerPrefs.GetInt("LatestStage", 1) - 1];
         }
         public void Start()
         {
@@ -62,6 +64,7 @@ namespace Script.RobbyScript.MainMenuGroup
             if (LatestStage != 1) return;
             previousStageBtn.SetActive(false);
             nextStageBtn.SetActive(false);
+            ;
         }
         private void Update()
         {
@@ -147,24 +150,34 @@ namespace Script.RobbyScript.MainMenuGroup
             if (SelectStage < LatestStage)
             {
                 SelectStage++;
+                stageImage.sprite = stageSprite[SelectStage - 1];
                 var (maxWave, clearWave) = GetStageWave(SelectStage);
                 UpdateProgress(SelectStage, maxWave, clearWave);
             }
-            else
-            {
-                nextStageBtn.SetActive(false);
-            }
+
+            UpdateButtonStates(); // 버튼 상태 업데이트를 위한 호출
         }
+
         private void PreviousStage()
         {
-            if (SelectStage <= 1)
+            if (SelectStage > 1)
             {
-                previousStageBtn.SetActive(false);
+                SelectStage--;
+                stageImage.sprite = stageSprite[SelectStage - 1];
+                var (maxWave, clearWave) = GetStageWave(SelectStage);
+                UpdateProgress(SelectStage, maxWave, clearWave);
             }
-            SelectStage--;
-            var (maxWave, clearWave) = GetStageWave(SelectStage);
-            UpdateProgress(SelectStage, maxWave, clearWave);
-            nextStageBtn.SetActive(true);
+
+            UpdateButtonStates(); // 버튼 상태 업데이트를 위한 호출
+        }
+
+        private void UpdateButtonStates()
+        {
+            // 이전 스테이지 버튼 상태 업데이트
+            previousStageBtn.SetActive(SelectStage > 1);
+
+            // 다음 스테이지 버튼 상태 업데이트
+            nextStageBtn.SetActive(SelectStage < LatestStage);
         }
         private void ReturnRobby()
         {

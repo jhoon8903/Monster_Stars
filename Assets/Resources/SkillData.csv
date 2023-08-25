@@ -61,7 +61,7 @@ Cobra,5,900,CobraDotDamageBoost,B,중독 데미지가 10% 증가,Cobra's poison 
 Cobra,7,900,CobraStunTimeBoost,G,기절 시간 0.1초 증가 (최대 5회 / 0.5초),Cobra's stun duration on hit increases by 0.1 seconds,Cobra's stun duration on hit increases by 0.1 seconds,1
 Cobra,9,900,CobraDamageBoost,B,공격력 9% 증가 (최대 4회),Cobra's damage increases by +{9%},Cobra's damage increases by +{9%},1
 Cobra,11,900,CobraRateBoost,P,공격속도 20% 증가,Cobra's attack speed +{20%},Cobra's attack speed +{20%},1
-Cobra,13,900,CobraPoolTimeBoost,B,독 웅덩이 지속시간 1초 증가,Cobra's toxic puddle duration increases by 1 second,Cobra's toxic puddle duration increases by 1 second,1
+Cobra,13,900,CobraStunChanceBoost,B,스턴 100%,When Cobra attacks an enemy there's a 100% chance to stun them for 0.4 seconds,When Cobra attacks an enemy there's a 100% chance to stun them for 0.4 seconds,1
 Berserker,1,1000,BerserkerCastleCrushStatBoost,P,성이 데미지를 받을 경우 해당 웨이브동안 사거리가 1 증가  데미지 30% 증가,When castle takes damage  Berserker gains +1 range and +30% damage for the round,When the castle is attacked  Berserker becomes even stronger,1
 Berserker,3,1000,BerserkerThirdBoost,P,3회 공격마다 공격력의 200% 데미지 투사체 전방 발사,Berserker deals 200% bonus damage every 3 attacks.,Berserker deals 200% bonus damage every 3 attacks.,1
 Berserker,5,1000,BerserkerBleedTimeBoost,G,출혈 지속시간 2초 증가,Berserker's attack bleed duration increases by 2 seconds,Berserker's attack bleed duration increases by 2 seconds,1

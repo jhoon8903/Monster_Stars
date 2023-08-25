@@ -4220,8 +4220,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
-  m_Type: 1
+  m_Sprite: {fileID: 21300000, guid: 2e52eae143d33467c9271e64c6caa898, type: 3}
+  m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 4
@@ -4259,7 +4259,13 @@ MonoBehaviour:
   nextStageBtn: {fileID: 386128773}
   previousStageBtn: {fileID: 579919695}
   stageText: {fileID: 1025503497}
-  stageImage: {fileID: 877251576}
+  stageImage: {fileID: 877251578}
+  stageSprite:
+  - {fileID: 21300000, guid: 2532dc72a5d7a443eb172ddced58dc3b, type: 3}
+  - {fileID: 21300000, guid: 99528750b02104bb9bbc283c7eb522de, type: 3}
+  - {fileID: 21300000, guid: 6fa98250033044f6f8dccc0ec226bd81, type: 3}
+  - {fileID: 21300000, guid: 9ea8b943ead3b41e88df58536e6ba705, type: 3}
+  - {fileID: 21300000, guid: 6df4d9a6ea96544b280d05ec365f517f, type: 3}
   stageProgress: {fileID: 545131046}
   stageProgressText: {fileID: 892367576}
   timeRewardBtn: {fileID: 1129108794}

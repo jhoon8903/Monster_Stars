@@ -277,7 +277,7 @@ namespace Script.RewardScript
             CobraStunTimeBoost,
             CobraDamageBoost,
             CobraRateBoost,
-            CobraPoolTimeBoost,
+            CobraStunChanceBoost,
 
             //Physical2 Berserker
             BerserkerCastleCrushStatBoost,

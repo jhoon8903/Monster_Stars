@@ -268,8 +268,8 @@ namespace Script.RewardScript
                 case PowerTypeManager.Types.CobraRateBoost:
                     EnforceManager.Instance.cobraRateBoost = true;
                     break;
-                case PowerTypeManager.Types.CobraPoolTimeBoost:
-                    EnforceManager.Instance.cobraPoolTimeBoost = true;
+                case PowerTypeManager.Types.CobraStunChanceBoost:
+                    EnforceManager.Instance.cobraStunChanceBoost = true;
                     break;
                 // J
                 case PowerTypeManager.Types.BerserkerCastleCrushStatBoost:
@@ -760,10 +760,10 @@ namespace Script.RewardScript
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Cobra) < 11) return false;
                             if (EnforceManager.Instance.cobraRateBoost) return false;
                             break;
-                        case PowerTypeManager.Types.CobraPoolTimeBoost:
+                        case PowerTypeManager.Types.CobraStunChanceBoost:
                             if (!HasUnitInGroup(CharacterBase.UnitGroups.Cobra)) return false;
                             if (UnitPieceLevel(CharacterBase.UnitGroups.Cobra) < 13) return false;
-                            if (EnforceManager.Instance.cobraPoolTimeBoost) return false;
+                            if (EnforceManager.Instance.cobraStunChanceBoost) return false;
                             break;
                         // Unit J
                         case PowerTypeManager.Types.BerserkerCastleCrushStatBoost:                         
@@ -944,7 +944,7 @@ namespace Script.RewardScript
                 PowerTypeManager.Types.CobraStunTimeBoost => finalTranslation,
                 PowerTypeManager.Types.CobraDamageBoost => finalTranslation,
                 PowerTypeManager.Types.CobraRateBoost => finalTranslation,
-                PowerTypeManager.Types.CobraPoolTimeBoost => finalTranslation,
+                PowerTypeManager.Types.CobraStunChanceBoost => finalTranslation,
                 PowerTypeManager.Types.BerserkerCastleCrushStatBoost => finalTranslation,
                 PowerTypeManager.Types.BerserkerThirdBoost => finalTranslation,
                 PowerTypeManager.Types.BerserkerBleedTimeBoost => finalTranslation,

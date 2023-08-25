@@ -7,6 +7,7 @@ using Script.PuzzleManagerGroup;
 using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.UIManager;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Script.RewardScript
 {
@@ -461,8 +462,8 @@ namespace Script.RewardScript
        [Header("P / 11Lv: 공격속도 20% 증가")] 
         public bool cobraRateBoost;
         // 완료
-        [Header("B / 13Lv: 독 웅덩이 지속시간 1초 증가")]
-        public bool cobraPoolTimeBoost;
+        [Header("B / 13Lv: 스턴 확률이 100%로 증가합니다.")]
+        public bool cobraStunChanceBoost;
 
 
         [Header("\n\nJ 물리: B\n")] 
@@ -602,7 +603,7 @@ namespace Script.RewardScript
                     activatedSkills[7] = poison2StunTimeBoost > 0;
                     activatedSkills[9] = cobraDamageBoost>0;
                     activatedSkills[11] = cobraRateBoost;
-                    activatedSkills[13] = cobraPoolTimeBoost;
+                    activatedSkills[13] = cobraStunChanceBoost;
                     break;
                 case CharacterBase.UnitGroups.Berserker:
                     activatedSkills[1] = berserkerCastleCrushStatBoost;
@@ -961,7 +962,7 @@ namespace Script.RewardScript
                 poison2StunTimeBoost = poison2StunTimeBoost,
                 poison2SpawnPoisonArea = cobraDamageBoost,
                 poison2RateBoost = cobraRateBoost,
-                poison2PoolTimeBoost = cobraPoolTimeBoost,
+                poison2PoolTimeBoost = cobraStunChanceBoost,
         
                 //Physical2 Unit J
                 physical2CastleCrushStatBoost = berserkerCastleCrushStatBoost,
@@ -1084,7 +1085,7 @@ namespace Script.RewardScript
             poison2StunTimeBoost = data.poison2StunTimeBoost;
             cobraDamageBoost = data.poison2SpawnPoisonArea;
             cobraRateBoost = data.poison2RateBoost;
-            cobraPoolTimeBoost = data.poison2PoolTimeBoost;
+            cobraStunChanceBoost = data.poison2PoolTimeBoost;
             //Physical2 Unit J
             berserkerCastleCrushStatBoost = data.physical2CastleCrushStatBoost;
             berserkerThirdBoost = data.physical2FifthBoost;

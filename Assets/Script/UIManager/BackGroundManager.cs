@@ -15,7 +15,7 @@ namespace Script.UIManager
         [SerializeField] private GridManager gridManager;
         [SerializeField] private GameObject backGround;
         [SerializeField] private GameObject top;
-        [SerializeField] private GameObject castle;
+        [SerializeField] private  GameObject castle;
         [SerializeField] private Image leftSide;
         [SerializeField] private Image rightSide;
 
@@ -29,6 +29,7 @@ namespace Script.UIManager
             public Sprite right;
             public Sprite grid1;
             public Sprite grid2;
+            public Sprite destroySprite;
         }
 
         public List<BattleSpriteSet> spriteSet = new List<BattleSpriteSet>();
@@ -47,6 +48,7 @@ namespace Script.UIManager
 
         public void ChangedBackGround()
         {
+            if (StageManager.Instance == null) return;
             var stage = StageManager.Instance.selectStage;
             backGround.GetComponent<Image>().sprite = spriteSet[stage - 1].back;
             top.GetComponent<Image>().sprite = spriteSet[stage - 1].topSprite;
@@ -73,7 +75,12 @@ namespace Script.UIManager
             yield return null;
         }
 
-
+        public void Lose()
+        {
+            if (StageManager.Instance == null) return;
+            var stage = StageManager.Instance.selectStage;
+            castle.GetComponent<Image>().sprite = spriteSet[stage - 1].destroySprite;
+        }
     }
 }
 
