@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace Script.EnemyManagerScript
 {
@@ -16,5 +17,12 @@ namespace Script.EnemyManagerScript
         [SerializeField] public List<EnemySettings> enemyList;
         [Header("Boss Prefabs")]
         [SerializeField] public List<EnemyBase> stageBoss;
+        [SerializeField] public GameObject deadEffect;
+        public static EnemyManager instance;
+
+        public void Awake()
+        {
+            instance = this;
+        }
     }
 }

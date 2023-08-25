@@ -5,6 +5,7 @@ using System.Linq;
 using Script.CharacterGroupScript;
 using Script.EnemyManagerScript;
 using Script.RewardScript;
+using Script.UIManager;
 using Script.WeaponScriptGroup;
 using UnityEngine;
 using Ogre = Script.CharacterGroupScript.Ogre;
@@ -69,7 +70,6 @@ namespace Script.CharacterManagerScript
                 unit.GetComponent<SpriteRenderer>().sortingOrder = enemyList.Count <= 0 ? 1 : 2;
                 unit.cover.GetComponent<SpriteRenderer>().sortingOrder = enemyList.Count <= 0 ? 2 : 1;
                 if (enemyList.Count <= 0) continue;
-
                 var atkUnit = unit.gameObject; 
                 var unitAtkType = unit.UnitAtkType;
                 var unitGroup = unit.unitGroup; 

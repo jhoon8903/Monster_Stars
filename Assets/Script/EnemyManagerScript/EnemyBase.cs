@@ -2,8 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
 using Script.CharacterManagerScript;
+using Script.PuzzleManagerGroup;
 using Script.QuestGroup;
-using Script.RewardScript;
 using Script.UIManager;
 using Script.WeaponScriptGroup;
 using TMPro;
@@ -49,6 +49,7 @@ namespace Script.EnemyManagerScript
         public List<CharacterBase.UnitGroups> statusList = new List<CharacterBase.UnitGroups>();
         private bool _pooling;
         private readonly List<GameObject> _poisonPool = new List<GameObject>();
+        
         // 속박 (Bind)
         public readonly Dictionary<EnemyBase, bool> AlreadyBind = new Dictionary<EnemyBase, bool>();
         public readonly Dictionary<CharacterBase, CharacterBase.UnitGroups> IsBind = new Dictionary<CharacterBase, CharacterBase.UnitGroups>();
@@ -229,6 +230,25 @@ namespace Script.EnemyManagerScript
                 if (damage == 0) continue;
                 popup.SetActive(true);
                 popup.GetComponent<TextMeshPro>().text = damage.ToString();
+                Color damageColor = default;
+                if (isBleed)
+                {
+                    damageColor = Color.red;
+                }
+                else if (isPoison)
+                {
+                    damageColor = Color.green;
+                }
+                else if (isBurn)
+                {
+                    damageColor = Color.red;
+                }
+                else if (isSlow)
+                {
+                    damageColor = Color.blue;
+                }
+
+                popup.GetComponent<TextMeshPro>().color = damageColor;
 
                 float t = 0;
                 const float speed = 1f;
@@ -260,6 +280,7 @@ namespace Script.EnemyManagerScript
                 StartCoroutine(DamageTextPopup(receiveDamage));
                 _updateSlider = true;
                 if (currentHealth > 0f || isDead) return;
+           
                 isDead = true;
                 ExpManager.Instance.HandleEnemyKilled(reason);
                 // if (EnforceManager.Instance.octopusPoisonDamageBoost && atkUnit.unitGroup == CharacterBase.UnitGroups.Octopus)
@@ -349,6 +370,7 @@ namespace Script.EnemyManagerScript
         public void EnemyKilledEvents(EnemyBase detectedEnemy, CharacterBase characterBase = null)
         {
             detectedEnemy.StopAllCoroutines();
+            StartCoroutine(FxManager.Instance.DeadEffect( detectedEnemy.transform.position)); 
             foreach (var popup in detectedEnemy._damagePopupList)
             {
                 popup.SetActive(false);

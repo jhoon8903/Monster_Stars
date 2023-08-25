@@ -140,6 +140,7 @@ namespace Script
         public IEnumerator ContinueOrLose()
         {
             IsBattle = false;
+            StartCoroutine(FxManager.Instance.SetFalseEffect());
             AtkManager.Instance.ClearWeapons();
             // var allUnits = FindObjectsOfType<CharacterBase>();
             // foreach (var unit in allUnits)

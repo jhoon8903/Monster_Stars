@@ -356,19 +356,16 @@ namespace Script.AdsScript
             {
                 case ButtonType.Coin:
                     boxGrade = StoreMenu.BoxGrade.Coin;
-                    // StoreMenu.Instance.Reward(boxGrade);
                     StoreMenu.Instance.OpenAds(boxGrade);
                     GiveReward(ButtonType.Coin);
                     break;
                 case ButtonType.Gem:
                     boxGrade = StoreMenu.BoxGrade.Gem;
-                    // StoreMenu.Instance.Reward(boxGrade);
                     StoreMenu.Instance.OpenAds(boxGrade);
                     GiveReward(ButtonType.Gem);
                     break;
                 case ButtonType.Stamina:
                     boxGrade = StoreMenu.BoxGrade.Stamina;
-                    // StoreMenu.Instance.Reward(boxGrade);
                     StoreMenu.Instance.OpenAds(boxGrade);
                     GiveReward(ButtonType.Stamina);
                     break;
@@ -421,22 +418,13 @@ namespace Script.AdsScript
             switch (buttonType)
             {
                 case ButtonType.Coin:
-                    Debug.Log("코인 보상을 제공합니다.");
-                    // if (CoinsScript.Instance != null)
-                    // {
-                    //     CoinsScript.Instance.Coin += 1000;
-                    // }
+                    CoinsScript.Instance.Coin += 1000;
                     break;
                 case ButtonType.Gem:
-                    Debug.Log("재화 보상을 제공합니다.");
-                    if (GemScript.Instance != null)
-                    {
-                        GemScript.Instance.Gem += 200;
-                    }
+                    GemScript.Instance.Gem += 200;
                     break;
                 case ButtonType.Stamina:
                 {
-                    Debug.Log("스테미너 보상을 제공합니다.");
                     StaminaScript.Instance.CurrentStamina += 10;
                 }
                     break;

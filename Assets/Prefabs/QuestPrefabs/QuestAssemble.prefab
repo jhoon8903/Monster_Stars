@@ -1539,7 +1539,7 @@ GameObject:
   - component: {fileID: 4426519706271225949}
   - component: {fileID: 4426519706271225951}
   - component: {fileID: 4426519706271225950}
-  - component: {fileID: 4898787409224745602}
+  - component: {fileID: -1139216444765494}
   m_Layer: 5
   m_Name: QuestAssemble
   m_TagString: Untagged
@@ -1610,25 +1610,25 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &4898787409224745602
+--- !u!114 &-1139216444765494
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4426519706271225948}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b73929c223a434d1ea34b6be66bc5152, type: 3}
+  m_Script: {fileID: 11500000, guid: 8793b0e8866e44d75b654f8b9c53794a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   questDesc: {fileID: 4426519704750226040}
   questProgress: {fileID: 4426519706095828640}
   questProgressText: {fileID: 4426519706555036019}
-  coinValue: {fileID: 4426519706188988852}
-  greenPieceValue: {fileID: 4426519704739648272}
-  bluePieceValue: {fileID: 8175636824508422416}
-  purplePieceValue: {fileID: 1405453361318917078}
+  coinValueText: {fileID: 4426519706188988852}
+  greenPieceValueText: {fileID: 4426519704739648272}
+  bluePieceValueText: {fileID: 8175636824508422416}
+  purplePieceValueText: {fileID: 1405453361318917078}
   receiveBtn: {fileID: 2414390146092849660}
   receiveBtnText: {fileID: 4363657113027491130}
   shuffleBtn: {fileID: 4426519705265827606}
