@@ -6,6 +6,7 @@ using Script.UIManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.TextCore.Text;
 using Image = UnityEngine.UI.Image;
 
 namespace Script.RobbyScript.CharacterSelectMenuGroup
@@ -54,7 +55,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         {
             var sortingLayerOder = 10;
             foreach (var character in characterList)
-            {           
+            {
                 character.Initialize();
                 if (character.unLock)
                 {
@@ -95,6 +96,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     SetupInActiveUnitIcon(unitInstance, character);
                     AdjustRectTransform(inActivateUnitContent.transform);
                 }
+                UpdateRewardPiece(character);
             }
         }
 

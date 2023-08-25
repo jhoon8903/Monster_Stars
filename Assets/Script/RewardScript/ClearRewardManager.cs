@@ -340,6 +340,7 @@ namespace Script.RewardScript
                 }
             }
         }
+        
         private void ResetCumulativeData()
         {
             PlayerPrefs.DeleteKey(CumulativeCoinKey);

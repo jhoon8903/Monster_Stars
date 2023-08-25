@@ -418,7 +418,7 @@ namespace Script.AdsScript
             switch (buttonType)
             {
                 case ButtonType.Coin:
-                    CoinsScript.Instance.Coin += 1000;
+                    // CoinsScript.Instance.Coin += 1000;
                     break;
                 case ButtonType.Gem:
                     GemScript.Instance.Gem += 200;
