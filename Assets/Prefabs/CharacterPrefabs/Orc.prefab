@@ -138,15 +138,15 @@ MonoBehaviour:
   selected: 1
   unitPuzzleLevel: 1
   unitGroup: 3
-  lv1: {fileID: 21300000, guid: f6ca6c69bf5ac42d680520277a2c3e88, type: 3}
-  lv3: {fileID: 21300000, guid: f6ca6c69bf5ac42d680520277a2c3e88, type: 3}
-  lv5: {fileID: 21300000, guid: f6ca6c69bf5ac42d680520277a2c3e88, type: 3}
-  lv7: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
-  lv9: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
-  lv11: {fileID: 21300000, guid: 97a9b711ea166413b8c359ab05b7dea0, type: 3}
-  lv13: {fileID: 21300000, guid: 97a9b711ea166413b8c359ab05b7dea0, type: 3}
-  baseDamage: 29
-  dotDamage: 5.8
+  lv1: {fileID: 21300000, guid: 0ab60f262578541c5864b7a62621db1c, type: 3}
+  lv3: {fileID: 21300000, guid: ae7b3fc9638894d968de58984eb222f5, type: 3}
+  lv5: {fileID: 21300000, guid: 173ddef611189411a89b2d73c24e3fc0, type: 3}
+  lv7: {fileID: 21300000, guid: 6e0c7b98c968440fe8b331ec3f376d8a, type: 3}
+  lv9: {fileID: 21300000, guid: 01a2791c605f042e88d972d10cb8d1ca, type: 3}
+  lv11: {fileID: 21300000, guid: b3ec9b81b78f34cc4888c32d1ae4f0c4, type: 3}
+  lv13: {fileID: 21300000, guid: 6ceab5ebd5eea4940975cc9629132890, type: 3}
+  baseDamage: 23
+  dotDamage: 4.6
   effectChance: 0
   effectStack: 0
   slowTime: 0

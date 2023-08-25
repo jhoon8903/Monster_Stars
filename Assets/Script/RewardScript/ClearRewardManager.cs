@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
 using Script.QuestGroup;
+using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
 using Script.UIManager;
 using TMPro;
@@ -187,6 +188,7 @@ namespace Script.RewardScript
                 if (unitPieceReward == 0) continue;
                 CumulativeUnitPieces.TryAdd(unit, 0);
                 CumulativeUnitPieces[unit] += unitPieceReward;
+                unit.UnitPieceCount += unitPieceReward;
             }
             SaveCumulativeData();
         }

@@ -84,10 +84,11 @@ namespace Script.QuestGroup
             questOpenBtn.onClick.AddListener(() => questPanel.SetActive(true));
             questCloseBtn.onClick.AddListener(() => questPanel.SetActive(false));
             questRewardCloseBtn.onClick.AddListener(ReceiveQuestReward);
+      
             if (PlayerPrefs.HasKey(questDataKey))
             {
-                LoadQuests();
                 SetUpRotationList();
+                LoadQuests();
             }
             else
             {
@@ -102,6 +103,19 @@ namespace Script.QuestGroup
             var csvText = csvFile.text;
             _csvData = csvText.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
         }
+        private List<QuestData> ParseCsvData()
+        {
+            SetupCsv();
+            var parsedData = new List<QuestData>();
+            for (var i = 1; i < _csvData.Length; i++)
+            {
+                var line = _csvData[i];
+                if (string.IsNullOrEmpty(line)) continue;
+                var data = ConvertToQuestData(line.Split(','));
+                parsedData.Add(data);
+            }
+            return parsedData;
+        }
         private void CreateNewQuests()
         {
             if (questInstances.Count > 0)
@@ -110,14 +124,10 @@ namespace Script.QuestGroup
                 {
                     Destroy(quest.gameObject); 
                 }
- 
             }
-            SetupCsv();
-            for (var i = 1; i < _csvData.Length; i++)
+            var dataList = ParseCsvData();
+            foreach (var data in dataList)
             {
-                var line = _csvData[i];
-                if (string.IsNullOrEmpty(line)) continue;
-                var data = ConvertToQuestData(line.Split(','));
                 var condition = ParseQuestCondition(data.questCondition);
                 if (condition == QuestCondition.Fix)
                 {
@@ -132,18 +142,12 @@ namespace Script.QuestGroup
         }
         private void SetUpRotationList()
         {
-              SetupCsv();
-              for (var i = 1; i < _csvData.Length; i++)
-              {
-                  var line = _csvData[i];
-                  if (string.IsNullOrEmpty(line)) continue;
-                  var data = ConvertToQuestData(line.Split(','));
-                  var condition = ParseQuestCondition(data.questCondition);
-                  if (condition == QuestCondition.Rotation)
-                  {
-                      _rotationQuestCandidates.Add(data);
-                  }
-              }
+            var dataList = ParseCsvData();
+            _rotationQuestCandidates.Clear();
+            foreach (var data in from data in dataList let condition = ParseQuestCondition(data.questCondition) where condition == QuestCondition.Rotation select data)
+            {
+                _rotationQuestCandidates.Add(data);
+            }
         }
         private static QuestData ConvertToQuestData(IReadOnlyList<string> data)
         {
@@ -162,44 +166,66 @@ namespace Script.QuestGroup
         }
         private void RotationQuestSelection()
         {
-            var selectedQuestData = _rotationQuestCandidates.OrderBy(_ => Random.value).Take(3).ToList();
+            var selectedQuestData = _rotationQuestCandidates
+                .Where(data => questInstances.All(q => q.QuestType.ToString() != data.questType))
+                .OrderBy(_ => Random.value)
+                .Take(3)
+                .ToList();
+
             foreach (var selectedQuest in selectedQuestData)
             {
                 questObject.RotationQuestCreate(selectedQuest);
+                _rotationQuestCandidates.Remove(selectedQuest);
             }
         }
         public void SaveQuest(IEnumerable<QuestAssemble> quests)
         {
-            var existingData = PlayerPrefs.GetString(questDataKey);
-            var existingQuests = string.IsNullOrEmpty(existingData) ? new List<string>() : existingData.Split(';').ToList();
-            foreach (var json in quests.Select(quest => new QuestData
-                     {
-                         questType = quest.QuestType.ToString(),
-                         questCondition = quest.QuestCondition.ToString(),
-                         questDesc = quest.questDesc.text,
-                         questKey = quest.questKey,
-                         questGoal = quest.questGoal,
-                         item1CoinValue = int.Parse(quest.coinValueText.text),
-                         item2GreenPieceValue = int.Parse(quest.greenPieceValueText.text),
-                         item3BluePieceValue = int.Parse(quest.bluePieceValueText.text),
-                         item4PurplePieceValue = int.Parse(quest.purplePieceValueText.text),
-                         isReceived = quest.isReceived,
-                         isCompleted = quest.isCompleted,
-                         isShuffled = quest.isShuffled
-                     }).Select(JsonUtility.ToJson).Where(json => !existingQuests.Contains(json)))
+            var existingDataJson = PlayerPrefs.GetString(questDataKey);
+            var existingQuestList = new List<QuestData>();
+
+            if (!string.IsNullOrEmpty(existingDataJson))
             {
-                existingQuests.Add(json);
+                existingQuestList = existingDataJson.Split(';').Select(JsonUtility.FromJson<QuestData>).ToList();
             }
-            PlayerPrefs.SetString(questDataKey, string.Join(";", existingQuests));
+
+            var questDataList = quests.Select(quest => new QuestData
+            {
+                questType = quest.QuestType.ToString(),
+                questCondition = quest.QuestCondition.ToString(),
+                questDesc = quest.questDesc.text,
+                questKey = quest.questKey,
+                questGoal = quest.questGoal,
+                item1CoinValue = int.Parse(quest.coinValueText.text),
+                item2GreenPieceValue = int.Parse(quest.greenPieceValueText.text),
+                item3BluePieceValue = int.Parse(quest.bluePieceValueText.text),
+                item4PurplePieceValue = int.Parse(quest.purplePieceValueText.text),
+                isReceived = quest.isReceived,
+                isCompleted = quest.isCompleted,
+                isShuffled = quest.isShuffled
+            }).ToList();
+
+            var nonDuplicateQuests = questDataList.Where(newQuest => existingQuestList.All(existingQuest => existingQuest.questType != newQuest.questType)).ToList();
+            var combinedQuests = existingQuestList.Concat(nonDuplicateQuests).ToList();
+            var jsonDataList = combinedQuests.Select(JsonUtility.ToJson).ToList();
+
+            PlayerPrefs.SetString(questDataKey, string.Join(";", jsonDataList)); 
+            Debug.Log(PlayerPrefs.GetString(questDataKey, string.Join(";", jsonDataList)));
             PlayerPrefs.Save();
         }
         private void LoadQuests()
         {
-            var jsonData = PlayerPrefs.GetString(questDataKey);
+            var jsonData = PlayerPrefs.GetString(questDataKey); 
+            Debug.Log(jsonData);
             var questList = jsonData.Split(';').Select(JsonUtility.FromJson<QuestData>).ToList();
+            foreach (var instance in questInstances)
+            {
+                Destroy(instance.gameObject);
+            }
+            questInstances.Clear();
             foreach (var data in questList)
             {
-                if (ParseQuestCondition(data.questCondition) == QuestCondition.Fix)
+                var condition = ParseQuestCondition(data.questCondition);
+                if (condition == QuestCondition.Fix)
                 {
                     questObject.CoinQuestsCreate(data);
                 }
@@ -209,7 +235,46 @@ namespace Script.QuestGroup
                 }
             }
         }
+        public void ShuffleQuest()
+        {
+            Debug.Log("QM " + shuffleQuest.QuestType);
+            RotationQuestList.Remove(shuffleQuest);
+            questInstances.Remove(shuffleQuest);
+            Destroy(shuffleQuest.gameObject);
 
+            var existingQuestTypes = questInstances.Select(q => q.QuestType.ToString()).ToList();
+
+            var availableQuestData = _rotationQuestCandidates
+                .Where(data => !existingQuestTypes.Contains(data.questType))
+                .Where(data => !bool.Parse(PlayerPrefs.GetString($"{data.questKey}{completeKey}", "false")))
+                .ToList();
+
+            if (availableQuestData.Any()) 
+            {
+                var newQuestData = availableQuestData.OrderBy(_ => Random.value).First();
+                _rotationQuestCandidates.Remove(newQuestData); // Remove the selected quest data from candidates
+                var newQuestInstance = questObject.RotationQuestCreate(newQuestData);
+                RotationQuestList.Add(newQuestInstance);
+            }
+
+            shuffleQuest = null; 
+            PlayerPrefs.Save();
+            SaveQuest(FixQuestList.Concat(RotationQuestList).ToList());
+        }
+
+        public void CallShuffleAds(QuestAssemble questAssemble)
+        {
+            shuffleQuest = questAssemble;
+            AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.ShuffleQuest;
+            AdsManager.Instance.ShowRewardedAd();
+        }
+        private void InitQuest(QuestAssemble quest)
+        {
+            PlayerPrefs.DeleteKey(SetKey(quest,valueKey));
+            PlayerPrefs.DeleteKey(SetKey(quest,completeKey));
+            PlayerPrefs.DeleteKey(SetKey(quest,receiveKey));
+            PlayerPrefs.DeleteKey(SetKey(quest,shuffleKey));
+        }
         public void ResetQuest()
         {
             foreach (var quest in FixQuestList)
@@ -226,34 +291,6 @@ namespace Script.QuestGroup
             PlayerPrefs.DeleteKey(questDataKey);
             PlayerPrefs.Save();
             CreateNewQuests();
-        }
-        private void InitQuest(QuestAssemble quest)
-        {
-            PlayerPrefs.DeleteKey(SetKey(quest,valueKey));
-            PlayerPrefs.DeleteKey(SetKey(quest,completeKey));
-            PlayerPrefs.DeleteKey(SetKey(quest,receiveKey));
-            PlayerPrefs.DeleteKey(SetKey(quest,shuffleKey));
-        }
-
-        public void ShuffleQuest()
-        {
-            InitQuest(shuffleQuest);
-            var existingQuests = questInstances;
-            Destroy(shuffleQuest.gameObject);
-            var availableQuestData = _rotationQuestCandidates
-                .Where(data => data.questType != shuffleQuest.QuestType.ToString())
-                .ToList();
-            RotationQuestList.Remove(shuffleQuest);
-            var newQuestData =availableQuestData.OrderBy(_ => Random.value).First();
-            questObject.RotationQuestCreate(newQuestData);
-            existingQuests.Remove(shuffleQuest);
-        }
-
-        public void CallShuffleAds(QuestAssemble questAssemble)
-        {
-            AdsManager.Instance.ShowRewardedAd();
-            AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.ShuffleQuest;
-            shuffleQuest = questAssemble;
         }
 
   

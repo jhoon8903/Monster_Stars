@@ -72,8 +72,8 @@ namespace Script.PuzzleManagerGroup
             
             // 3Matched
             _tutorialSteps.Enqueue(new TutorialStep(
-                new Vector3(4, 4, 0), 
-                new Vector3(3, 4, 0), 
+                new Vector3(4, 3.3f, 0), 
+                new Vector3(3, 3.3f, 0), 
                 1,
                 "Move units by swiping them", 
                 new Vector2Int(1, 4), new Vector2Int(2, 4), 
@@ -82,8 +82,8 @@ namespace Script.PuzzleManagerGroup
             // 4Matched
             _tutorialSteps.Enqueue(new TutorialStep(
                 
-                new Vector3(3,5,0), 
-                new Vector3(3,4,0),
+                new Vector3(3,4.5f,0), 
+                new Vector3(3,3.5f,0),
                 2,
                 "Swipe once more to combine units\nMerging 4 units will level up 2 units.", 
                 new Vector2Int(1,4), 
@@ -93,8 +93,8 @@ namespace Script.PuzzleManagerGroup
             // 5Matched
             _tutorialSteps.Enqueue(new TutorialStep(
                 
-                new Vector3(1, 3, 0),
-                new Vector3(0, 3, 0),
+                new Vector3(1, 2.3f, 0),
+                new Vector3(0, 2.3f, 0),
                 3,
                 "Combining 5 makes a higher tier unit", 
                 new Vector2Int(0, 1), new Vector2Int(0, 2), 
@@ -104,8 +104,8 @@ namespace Script.PuzzleManagerGroup
             // Power Up Matched
             _tutorialSteps.Enqueue(new TutorialStep(
                 
-                new Vector3(4,5,0), 
-                new Vector3(3,5,0),
+                new Vector3(4,4.3f,0), 
+                new Vector3(3,4.3f,0),
                 4,
                 "By combining coins, you can obtain a reinforcement box.", 
                 new Vector2Int(1,5), new Vector2Int(2,5),
@@ -113,16 +113,16 @@ namespace Script.PuzzleManagerGroup
             );
             // Choose Power Up
             _tutorialSteps.Enqueue(new TutorialStep(
-                new Vector3(3,3.5f,0), 
-                new Vector3(3,3f,0), 
+                new Vector3(3,0.5f,0), 
+                new Vector3(3,1.5f,0), 
                 5,
                 "Strengthen your units by pressing the Enhance Select button.")
             );
             // Press Long Object
             _tutorialSteps.Enqueue(new TutorialStep(
                 
-                new Vector3(5,6,0), 
-                new Vector3(5,5.4f, 0),
+                new Vector3(5,4.4f,0), 
+                new Vector3(5,4.7f, 0),
                 7,
                 "Units can be removed by holding down the unit for 2 seconds.", 
                 new Vector2Int(5,5))
@@ -130,7 +130,7 @@ namespace Script.PuzzleManagerGroup
             // Null Swap
             _tutorialSteps.Enqueue(new TutorialStep(
                 
-                new Vector3(5,4,0), new Vector3(6,4,0),
+                new Vector3(5,3.3f,0), new Vector3(6,3.3f,0),
                 6,
                 "You can remove units by swiping off the tile.", 
                 new Vector2Int(5,4), new Vector2Int(6,4))
@@ -145,7 +145,7 @@ namespace Script.PuzzleManagerGroup
             TextPopup(step.PopupText);
             var guidePointer = Instantiate(guidePointerPrefab, step.PointerStartPosition, Quaternion.identity);
             _pointerCoroutine = StartCoroutine(MoveGuidePointer(guidePointer, step.PointerStartPosition, step.PointerEndPosition, 2f, 0.5f));
-            guidePointer.GetComponent<Canvas>().sortingOrder = 1;
+            guidePointer.GetComponent<Canvas>().sortingOrder = 3;
         }
         private void OnDestroy()
         {
@@ -264,7 +264,7 @@ namespace Script.PuzzleManagerGroup
             if (disablePositions == null) return;
             for (var x = -2; x <= 7; x++)
             {
-                for (var y = -4; y <= 11; y++)
+                for (var y = -4; y <= 14; y++)
                 {
                     var pos = new Vector2Int(x, y);
                     if (_covers.TryGetValue(pos, out var cover)) continue;

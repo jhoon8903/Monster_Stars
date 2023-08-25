@@ -56,7 +56,7 @@ namespace Script.UIManager
         {
             Debug.Log("리셋?");
             StoreMenu.Instance.ResetButtonCounts();
-            QuestManager.Instance.ResetQuest();
+            // QuestManager.Instance.ResetQuest();
             LastDate= DateTime.Today;
             PlayerPrefs.SetString(LastSavedDateKey, LastDate.ToBinary().ToString());
             PlayerPrefs.Save();

@@ -15,7 +15,7 @@ namespace Script.UIManager
         private void Awake()
         {
             Instance = this;
-            for (var i = 0; i < 80; i++)
+            for (var i = 0; i < 30; i++)
             {
                 var born = Instantiate(bornEffect, transform, true);
                 born.SetActive(false);
@@ -30,7 +30,7 @@ namespace Script.UIManager
                 bornObject.transform.position = position;
                 bornObject.SetActive(true);
                 yield return new WaitForSecondsRealtime(0.5f);
-                bornObject.SetActive(false);
+                //bornObject.SetActive(false);
             }
         }
 

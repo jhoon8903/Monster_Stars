@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 1741106536246723286}
   - component: {fileID: 3097249597601434661}
   - component: {fileID: 3104095277573559581}
+  - component: {fileID: 228595521173754177}
+  - component: {fileID: 2509555909531204885}
   m_Layer: 5
   m_Name: SkeletFX_07
   m_TagString: Untagged
@@ -4671,3 +4673,35 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &228595521173754177
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7207819649102337089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f1b124d79e134ff7a6be3e25179bd90, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!95 &2509555909531204885
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7207819649102337089}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 45cd08bda02604358b01bb5e22c46ca5, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
