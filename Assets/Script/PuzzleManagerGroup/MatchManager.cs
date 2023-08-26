@@ -23,6 +23,7 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private EnforceManager enforceManager;
         [SerializeField] private SwipeManager swipeManager;
+        
         public bool IsMatched(GameObject swapCharacter)
         {
             var matched = false;
@@ -148,7 +149,6 @@ namespace Script.PuzzleManagerGroup
                 yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
             }
         }
-
         private static List<List<GameObject>> FindConsecutiveTilesInRow(IReadOnlyList<GameObject> characters)
         {
             var result = new List<List<GameObject>>();
@@ -359,7 +359,8 @@ namespace Script.PuzzleManagerGroup
             CharacterPool.ReturnToPool(character);
         }
         private bool Matches3Case1(IReadOnlyList<GameObject> matchedCharacters)
-        {
+        {        
+            SoundManager.Instance.MatchSound(3);
             if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[2]); 
@@ -377,6 +378,7 @@ namespace Script.PuzzleManagerGroup
         }
         private bool Matches3Case2(IReadOnlyList<GameObject> matchedCharacters)
         {
+            SoundManager.Instance.MatchSound(3);
             if (matchedCharacters[0].transform.position.x.Equals(matchedCharacters[1].transform.position.x))
             {
                 if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
@@ -434,6 +436,7 @@ namespace Script.PuzzleManagerGroup
         }
         private bool Matches3Case3(IReadOnlyList<GameObject> matchedCharacters)
         {
+            SoundManager.Instance.MatchSound(3);
             if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[3]); 
@@ -451,6 +454,7 @@ namespace Script.PuzzleManagerGroup
         }
         private bool Matches3Case4(IReadOnlyList<GameObject> matchedCharacters)
         {
+            SoundManager.Instance.MatchSound(3);
             if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[1]);
@@ -468,6 +472,7 @@ namespace Script.PuzzleManagerGroup
         }
         private bool Matches4Case1(IReadOnlyList<GameObject> matchedCharacters)
         {
+            SoundManager.Instance.MatchSound(4);
             if (matchedCharacters[0].transform.position.y > matchedCharacters[2].transform.position.y && 
                 matchedCharacters[0].transform.position.y < matchedCharacters[3].transform.position.y)
             {
@@ -515,6 +520,7 @@ namespace Script.PuzzleManagerGroup
         }
         private bool Matches4Case2(IReadOnlyList<GameObject> matchedCharacters)
         {
+            SoundManager.Instance.MatchSound(4);
             if (matchedCharacters[2].transform.position.x > matchedCharacters[0].transform.position.x)
             {
                 if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
@@ -557,6 +563,7 @@ namespace Script.PuzzleManagerGroup
         }
         private bool Matches4Case3(IReadOnlyList<GameObject> matchedCharacters)
         {
+            SoundManager.Instance.MatchSound(4);
             if (matchedCharacters[0].transform.position.y > matchedCharacters[4].transform.position.y)
             {
                 if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
@@ -599,6 +606,7 @@ namespace Script.PuzzleManagerGroup
         }
         private bool Matches4Case4(IReadOnlyList<GameObject> matchedCharacters)
         {
+            SoundManager.Instance.MatchSound(4);
             if (matchedCharacters[0].transform.position.x < matchedCharacters[2].transform.position.x &&
                 matchedCharacters[0].transform.position.x > matchedCharacters[1].transform.position.x)
             {
@@ -642,6 +650,7 @@ namespace Script.PuzzleManagerGroup
         }
         private bool Matches5Case1(IReadOnlyList<GameObject> matchedCharacters)
         {
+            SoundManager.Instance.MatchSound(5);
             if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[3]);
@@ -677,6 +686,7 @@ namespace Script.PuzzleManagerGroup
         }
         private bool Matches5Case2(IReadOnlyList<GameObject> matchedCharacters)
         {
+            SoundManager.Instance.MatchSound(5);
             if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[3]);
@@ -708,6 +718,7 @@ namespace Script.PuzzleManagerGroup
         }
         private bool Matches2X5Case(IReadOnlyList<GameObject> matchedCharacters)
         {
+            SoundManager.Instance.MatchSound(5);
             if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[6]);
@@ -739,7 +750,7 @@ namespace Script.PuzzleManagerGroup
         }
         private bool Matches5X2Case(IReadOnlyList<GameObject> matchedCharacters)
         {
-
+            SoundManager.Instance.MatchSound(5);
             if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[1]);
@@ -771,6 +782,7 @@ namespace Script.PuzzleManagerGroup
         }
         private bool Matches3X3Case(IReadOnlyList<GameObject> matchedCharacters)
         {
+            SoundManager.Instance.MatchSound(3);
             if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[2]);
@@ -794,6 +806,7 @@ namespace Script.PuzzleManagerGroup
         }
         private bool Matches3X4Case(IReadOnlyList<GameObject> matchedCharacters)
         {
+            SoundManager.Instance.MatchSound(4);
             if (matchedCharacters[3].transform.position.y > matchedCharacters[5].transform.position.y)
             {
                 if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
@@ -843,6 +856,7 @@ namespace Script.PuzzleManagerGroup
         }
         private bool Matches4X3Case(IReadOnlyList<GameObject> matchedCharacters)
         {
+            SoundManager.Instance.MatchSound(4);
             if (matchedCharacters[2].transform.position.x < matchedCharacters[4].transform.position.x)
             {
                 if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
@@ -894,7 +908,8 @@ namespace Script.PuzzleManagerGroup
             return true;
         }
         private bool Matches3X5Case(IReadOnlyList<GameObject> matchedCharacters)
-        {
+        { 
+            SoundManager.Instance.MatchSound(5);
             if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[7]);
@@ -931,6 +946,7 @@ namespace Script.PuzzleManagerGroup
         }
         private bool Matches5X3Case(IReadOnlyList<GameObject> matchedCharacters)
         {
+            SoundManager.Instance.MatchSound(5);
             if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 ReturnObject(matchedCharacters[2]);

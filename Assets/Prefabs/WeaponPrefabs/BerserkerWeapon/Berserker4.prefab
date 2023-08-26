@@ -213,3 +213,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isInUse: 0
   direction: {x: 0, y: 0}
+  powerUpWeapon: {fileID: 21300000, guid: 0a3f0e5c4726948ab80569f13b25b7e5, type: 3}

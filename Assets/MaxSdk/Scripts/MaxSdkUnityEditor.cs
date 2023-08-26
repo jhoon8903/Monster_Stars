@@ -19,7 +19,6 @@ using Object = UnityEngine.Object;
 /// </summary>
 public class MaxSdkUnityEditor : MaxSdkBase
 {
-    [SerializeField] private GameObject _rewardPrefabs;
     private static bool _isInitialized;
     private static bool _hasSdkKey;
     private static bool _hasUserConsent = false;
@@ -882,7 +881,6 @@ public class MaxSdkUnityEditor : MaxSdkBase
 
         if (_showStubAds)
         {
-            Debug.Log("여기냐!");
             ShowStubInterstitial(adUnitIdentifier);
         }
     }
@@ -1122,9 +1120,9 @@ public class MaxSdkUnityEditor : MaxSdkBase
 
     private static void ShowStubRewardedAd(string adUnitIdentifier)
     {
+#if UNITY_EDITOR
         var prefabPath = MaxSdkUtils.GetAssetPathForExportPath("MaxSdk/Prefabs/Rewarded.prefab");
         var rewardedPrefab = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
-        Debug.Log("RewardPrefabs" + rewardedPrefab);
         var stubRewardedAd = Object.Instantiate(rewardedPrefab, Vector3.zero, Quaternion.identity);
         var grantedReward = false;
         var rewardedTitle = GameObject.Find("MaxRewardTitle").GetComponent<Text>();
@@ -1157,6 +1155,7 @@ public class MaxSdkUnityEditor : MaxSdkBase
 
         var adDisplayedEventProps = Json.Serialize(CreateBaseEventPropsDictionary("OnRewardedAdDisplayedEvent", adUnitIdentifier));
         MaxSdkCallbacks.Instance.ForwardEvent(adDisplayedEventProps);
+#endif
     }
 
     /// <summary>
@@ -1388,7 +1387,13 @@ public class MaxSdkUnityEditor : MaxSdkBase
     /// Refer to AppLovin logs for the IDFA/GAID of your current device.
     /// </summary>
     /// <param name="advertisingIdentifiers">String list of advertising identifiers from devices to receive test ads.</param>
-    public static void SetTestDeviceAdvertisingIdentifiers(string[] advertisingIdentifiers) { }
+    public static void SetTestDeviceAdvertisingIdentifiers(string[] advertisingIdentifiers)
+    { 
+        if (IsInitialized())
+        {
+            MaxSdkLogger.UserError("Test Device Advertising Identifiers must be set before SDK initialization.");
+        }
+    }
 
     /// <summary>
     /// Whether or not the native AppLovin SDKs listen to exceptions. Defaults to <c>true</c>.

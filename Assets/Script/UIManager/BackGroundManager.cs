@@ -46,17 +46,32 @@ namespace Script.UIManager
             _originalCastlePosition = castle.GetComponent<RectTransform>().anchoredPosition3D;
         }
 
-        public void ChangedBackGround()
+        public void ChangedBackGround(int stage)
         {
+            // 0 : Forest  1 : Desert 2 : Snow 3 : Swam 4 : Volcanic
+            var index = 0;
             if (StageManager.Instance == null) return;
-            var stage = StageManager.Instance.selectStage;
-            backGround.GetComponent<Image>().sprite = spriteSet[stage - 1].back;
-            top.GetComponent<Image>().sprite = spriteSet[stage - 1].topSprite;
-            castle.GetComponent<Image>().sprite = spriteSet[stage - 1].castleSprite;
-            leftSide.sprite = spriteSet[stage - 1].left;
-            rightSide.sprite = spriteSet[stage - 1].right;
-            gridManager.grid1Sprite.GetComponent<SpriteRenderer>().sprite = spriteSet[stage - 1].grid1;
-            gridManager.grid2Sprite.GetComponent<SpriteRenderer>().sprite = spriteSet[stage - 1].grid2;
+            index = stage switch
+            {
+                1 or 8 or 14 or 19 => 0,
+                2 or 6 or 12 or 17 => 1,
+                3 or 10 or 13 or 16 => 2,
+                4 or 7 or 11 or 18 => 3,
+                5 or 9 or 15 or 20 => 4,
+                _ => index
+            };
+            BackSprite(index);
+        }
+
+        private void BackSprite(int index)
+        {
+            backGround.GetComponent<Image>().sprite = spriteSet[index].back;
+            top.GetComponent<Image>().sprite = spriteSet[index].topSprite;
+            castle.GetComponent<Image>().sprite = spriteSet[index].castleSprite;
+            leftSide.sprite = spriteSet[index].left;
+            rightSide.sprite = spriteSet[index].right;
+            gridManager.grid1Sprite.GetComponent<SpriteRenderer>().sprite = spriteSet[index].grid1;
+            gridManager.grid2Sprite.GetComponent<SpriteRenderer>().sprite = spriteSet[index].grid2;
         }
 
         public IEnumerator ChangeBattleSize()

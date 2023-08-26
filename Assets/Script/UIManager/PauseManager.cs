@@ -5,6 +5,7 @@ using Script.PuzzleManagerGroup;
 using Script.RewardScript;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.UIManager
@@ -17,14 +18,13 @@ namespace Script.UIManager
         [SerializeField] private GameObject pausePanel;
         [SerializeField] private Button pauseBtn;
         // SoundController
-        [SerializeField] private GameObject volumeBtn;
-        [SerializeField] private Sprite volumeOnSprite;
-        [SerializeField] private Sprite volumeOffSprite;
-        private bool _volume = true;
         [SerializeField] private GameObject soundBtn;
         [SerializeField] private Sprite soundOnSprite;
         [SerializeField] private Sprite soundOffSprite;
-        private bool _sound = true;
+        [SerializeField] private GameObject musicBtn;
+        [SerializeField] private Sprite musicOnSprite;
+        [SerializeField] private Sprite musicOffSprite;
+
         // Unit1 Skill Grid
         [SerializeField] private List<Sprite> gradeBack;
         [SerializeField] private UnitSkillObject unitSkillPrefabs;
@@ -47,14 +47,24 @@ namespace Script.UIManager
         [SerializeField] private Button homeBtn;
         [SerializeField] private Button continueBtn;
 
+        private void Awake()
+        {
+            musicBtn.GetComponent<Button>().onClick.AddListener(MusicController);
+            soundBtn.GetComponent<Button>().onClick.AddListener(SoundController);
+            SoundManager.Instance.music = PlayerPrefs.GetInt(SoundManager.MusicKey, 1) == 1;
+            SoundManager.Instance.IsMusicEnabled = SoundManager.Instance.music;
+            SoundManager.Instance.sound = PlayerPrefs.GetInt(SoundManager.SoundKey, 1) == 1;
+            SoundManager.Instance. IsSoundEnabled = SoundManager.Instance.sound;
+            UpdateMusicState();
+            UpdateSoundState();
+            pausePanel.SetActive(false);
+        }
+
         private void Start()
         {
             UnitSkillView();
-            volumeBtn.GetComponent<Button>().onClick.AddListener(VolumeController);
-            soundBtn.GetComponent<Button>().onClick.AddListener(SoundController);
             homeBtn.onClick.AddListener(Home);
             continueBtn.onClick.AddListener(Continue);
-   
             pauseBtn.onClick.AddListener(OnPausePanel);
         }
         private void OnPausePanel()
@@ -152,38 +162,37 @@ namespace Script.UIManager
             UpdateUnitSkillView(units[2], unit3Back, unit3Image, unit3SkillGrid.transform);
             UpdateUnitSkillView(units[3], unit4Back, unit4Image, unit4SkillGrid.transform);
         }
-        private void VolumeController()
-        {
-            if (_volume)
-            {
-                _volume = false;
-                volumeBtn.GetComponent<Image>().sprite = volumeOffSprite;
-            }
-            else
-            {
-                _volume = true;
-                volumeBtn.GetComponent<Image>().sprite = volumeOnSprite;
-            }
-        }
         private void SoundController()
         {
-            if (_sound)
-            {
-                _sound = false;
-                soundBtn.GetComponent<Image>().sprite = soundOffSprite;
-            }
-            else
-            {
-                _sound = true;
-                soundBtn.GetComponent<Image>().sprite = soundOnSprite;
-            }
+            SoundManager.Instance.sound = !SoundManager.Instance.sound;
+            PlayerPrefs.SetInt(SoundManager.SoundKey, SoundManager.Instance.sound ? 1 : 0);
+            PlayerPrefs.Save();
+            UpdateSoundState();
+        }
+        private void UpdateSoundState()
+        {
+            SoundManager.Instance.IsSoundEnabled = SoundManager.Instance.sound;
+            soundBtn.GetComponent<Image>().sprite = SoundManager.Instance.IsSoundEnabled ? soundOnSprite : soundOffSprite;
+        }
+        private void MusicController()
+        {
+            SoundManager.Instance.music = !SoundManager.Instance.music;
+            PlayerPrefs.SetInt(SoundManager.MusicKey, SoundManager.Instance.music ? 1 : 0);
+            PlayerPrefs.Save();
+            UpdateMusicState();
+        }
+        private void UpdateMusicState()
+        {
+            SoundManager.Instance.IsMusicEnabled = SoundManager.Instance.music;
+            if (StageManager.Instance != null) SoundManager.Instance.StageSound(StageManager.Instance.selectStage, true);
+            musicBtn.GetComponent<Image>().sprite = SoundManager.Instance.IsMusicEnabled ? musicOnSprite : musicOffSprite;
         }
         private static void Home()
         {
             PlayerPrefs.DeleteKey("unitState");
             PlayerPrefs.DeleteKey("moveCount");
             PlayerPrefs.DeleteKey("GridHeight");
-            PlayerPrefs.SetInt($"{StageManager.Instance.latestStage}Stage_ProgressWave",1);
+            if (StageManager.Instance != null) PlayerPrefs.SetInt($"{StageManager.Instance.latestStage}Stage_ProgressWave", 1);
             PlayerPrefs.Save();
             SceneManager.LoadScene("SelectScene");
         }

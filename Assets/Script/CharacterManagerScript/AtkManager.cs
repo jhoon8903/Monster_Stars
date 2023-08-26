@@ -115,22 +115,32 @@ namespace Script.CharacterManagerScript
                     Attack(new AttackData(unit, WeaponsPool.WeaponType.Berserker));
                     break;
                 case CharacterBase.UnitGroups.DarkElf:
-                    if (EnforceManager.Instance.darkElfDualAttack)
+                    switch (EnforceManager.Instance.darkElfDualAttack)
                     {
-                        StartCoroutine(EnforceManager.Instance.darkElfDoubleAttack
-                            ? CombinedAttack(new AttackData(unit, WeaponsPool.WeaponType.Darkelf))
-                            : DualAttack(new AttackData(unit, WeaponsPool.WeaponType.Darkelf)));
+                        case true when EnforceManager.Instance.darkElfDoubleAttack:
+                            StartCoroutine(CombinedAttack(new AttackData(unit, WeaponsPool.WeaponType.Darkelf)));
+                            break;
+                        case true:
+                            StartCoroutine(DualAttack(new AttackData(unit, WeaponsPool.WeaponType.Darkelf)));
+                            break;
+                        default:
+                        {
+                            if (EnforceManager.Instance.darkElfDoubleAttack)
+                            {
+                                StartCoroutine(DoubleFire(new AttackData(unit, WeaponsPool.WeaponType.Darkelf)));
+                            }
+                            else
+                            {
+                                Attack(new AttackData(unit, WeaponsPool.WeaponType.Darkelf));
+                            }
+                            break;
+                        }
                     }
-                    else
+                    break;
+                case CharacterBase.UnitGroups.Phoenix:
+                    if (unit.GetComponent<CharacterBase>().CurrentWeapon == null || unit.GetComponent<CharacterBase>().CurrentWeapon.activeSelf == false)
                     {
-                        if (EnforceManager.Instance.darkElfDoubleAttack)
-                        {
-                            StartCoroutine(DoubleFire(new AttackData(unit, WeaponsPool.WeaponType.Darkelf)));
-                        }
-                        else
-                        {
-                            Attack(new AttackData(unit, WeaponsPool.WeaponType.Darkelf));
-                        }
+                        unit.GetComponent<CharacterBase>().CurrentWeapon = Attack(new AttackData(unit, WeaponsPool.WeaponType.Phoenix));
                     }
                     break;
                 default:
@@ -147,12 +157,7 @@ namespace Script.CharacterManagerScript
                         unit.GetComponent<CharacterBase>().CurrentWeapon = Attack(new AttackData(unit, WeaponsPool.WeaponType.Orc));
                     }
                     break;
-                case CharacterBase.UnitGroups.Phoenix:
-                    if (unit.GetComponent<CharacterBase>().CurrentWeapon == null || unit.GetComponent<CharacterBase>().CurrentWeapon.activeSelf == false)
-                    {
-                        unit.GetComponent<CharacterBase>().CurrentWeapon = Attack(new AttackData(unit, WeaponsPool.WeaponType.Phoenix));
-                    }
-                    break;
+
                 default:
                     throw new ArgumentOutOfRangeException(nameof(unitGroup), unitGroup, null);
             }
@@ -175,18 +180,21 @@ namespace Script.CharacterManagerScript
             switch (unit.GetComponent<CharacterBase>().unitGroup)
             {
                case CharacterBase.UnitGroups.Octopus:
+                   SoundManager.Instance.AttackSoundEffect(SoundManager.Instance.iagAttackMotion);
                    if (EnforceManager.Instance.octopusThirdAttackBoost)
                    {
                        unit.GetComponent<Octopus>().atkCount++;
                    }
                    break;
                case CharacterBase.UnitGroups.Ogre:
+                   SoundManager.Instance.AttackSoundEffect(SoundManager.Instance.bcjAttackMotion);
                    if (EnforceManager.Instance.ogreThirdAttackDamageBoost)
                    {
                        unit.GetComponent<Ogre>().atkCount++;
                    }
                    break;
                case CharacterBase.UnitGroups.DeathChiller:
+                   SoundManager.Instance.AttackSoundEffect(SoundManager.Instance.cAttackMotion);
                    // if (EnforceManager.Instance.deathChillerBackAttackBoost)
                    // {
                    //     groupCAtkCount++;
@@ -197,6 +205,7 @@ namespace Script.CharacterManagerScript
                    // }
                    break;
                case CharacterBase.UnitGroups.Orc:
+                   SoundManager.Instance.AttackSoundEffect(SoundManager.Instance.dAttackMotion);
                    if (EnforceManager.Instance.orcRatePerAttack)
                    {
                        groupDAtkCount++;
@@ -218,16 +227,35 @@ namespace Script.CharacterManagerScript
                            unit.GetComponent<Skeleton>().groupFDamage += 0.01f;
                        }
                    }
+                   SoundManager.Instance.AttackSoundEffect(SoundManager.Instance.kfeAttackMotion);
                    break;
                case CharacterBase.UnitGroups.Berserker:
                    if (EnforceManager.Instance.berserkerThirdBoost)
                    {
                        unit.GetComponent<Berserker>().atkCount++;
                    }
+                   SoundManager.Instance.AttackSoundEffect(SoundManager.Instance.bcjAttackMotion);
+                   break;
+               case CharacterBase.UnitGroups.Fishman:
+                   SoundManager.Instance.AttackSoundEffect(SoundManager.Instance.kfeAttackMotion);
+                   break;
+               case CharacterBase.UnitGroups.Phoenix:
+                   SoundManager.Instance.AttackSoundEffect(SoundManager.Instance.iagAttackMotion);
+                   break;
+               case CharacterBase.UnitGroups.Beholder:
+                   SoundManager.Instance.AttackSoundEffect(SoundManager.Instance.bcjAttackMotion);
+                   break;
+               case CharacterBase.UnitGroups.Cobra:
+                   SoundManager.Instance.AttackSoundEffect(SoundManager.Instance.iagAttackMotion);
+                   break;
+               case CharacterBase.UnitGroups.DarkElf:
+                   SoundManager.Instance.AttackSoundEffect(SoundManager.Instance.kfeAttackMotion);
+                   break;
+               case CharacterBase.UnitGroups.None:
                    break;
             }
             var weaponType = attackData.WeaponType;
-            var weaponObject = weaponsPool.SpawnFromPool(weaponType, attackData.Unit.GetComponent<CharacterBase>().unitPuzzleLevel, unit.transform.position, unit.transform.rotation);
+            var weaponObject = weaponsPool.SpawnFromPool(weaponType, attackData.Unit.GetComponent<CharacterBase>(), unit.transform.position, unit.transform.rotation);
             if (weaponObject == null) return null;
             var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
             if (weaponBase == null) return null;
@@ -259,7 +287,7 @@ namespace Script.CharacterManagerScript
             };
             foreach (var weapon in weaponDirections)
             {
-                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, unitPosition, weapon.Rotation);
+                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>(), unitPosition, weapon.Rotation);
                 var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
                 weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
                 weaponsList.Add(weaponBase.gameObject);
@@ -281,7 +309,7 @@ namespace Script.CharacterManagerScript
             };
             foreach (var position in weaponPositions)
             {
-                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, position, unit.transform.rotation);
+                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>(), position, unit.transform.rotation);
                 var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
                 weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
                 weaponsList.Add(weaponBase.gameObject);
@@ -295,22 +323,29 @@ namespace Script.CharacterManagerScript
             var unit = attackData.Unit;
             var weaponType = attackData.WeaponType;
             var unitPosition = unit.transform.position;
+            const float offset = 0.3f;
+            
             var directionsAndPositions = new[]
             {
-                new {Direction = Vector2.up, Rotation = Quaternion.identity, Position = new Vector3(unitPosition.x - 0.3f, unitPosition.y, 0)},
-                new {Direction = Vector2.down, Rotation = Quaternion.Euler(0, 0, 180), Position = new Vector3(unitPosition.x + 0.3f, unitPosition.y, 0)}
+                new {Direction = Vector2.up, Rotation = Quaternion.identity, Position = new Vector3(unitPosition.x - offset, unitPosition.y, 0)},
+                new {Direction = Vector2.up, Rotation = Quaternion.identity, Position = new Vector3(unitPosition.x + offset, unitPosition.y, 0)},
+                new {Direction = Vector2.down, Rotation = Quaternion.Euler(0, 0, 180), Position = new Vector3(unitPosition.x - offset, unitPosition.y, 0)},
+                new {Direction = Vector2.down, Rotation = Quaternion.Euler(0, 0, 180), Position = new Vector3(unitPosition.x + offset, unitPosition.y, 0)}
             };
+
             foreach (var item in directionsAndPositions)
             {
-                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>().unitPuzzleLevel, item.Position, item.Rotation);
+                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>(), item.Position, item.Rotation);
                 var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
                 weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
                 weaponsList.Add(weaponBase.gameObject);
                 weaponBase.direction = item.Direction;
                 StartCoroutine(weaponBase.UseWeapon());
             }
+    
             yield return null;
         }
+
 
         public void ClearWeapons()
         {

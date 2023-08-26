@@ -69,15 +69,12 @@ namespace Script.QuestGroup
             var questInstance = CreateQuestFromData(data);
             QuestManager.Instance.FixQuestList.Add(questInstance);
             QuestManager.Instance.questInstances.Add(questInstance);
-            QuestManager.Instance.SaveQuest(QuestManager.Instance.FixQuestList);
         }
-        public QuestAssemble RotationQuestCreate(QuestManager.QuestData data)
+        public void RotationQuestCreate(QuestManager.QuestData data)
         {
             var questInstance = CreateQuestFromData(data);
             QuestManager.Instance.RotationQuestList.Add(questInstance);
             QuestManager.Instance.questInstances.Add(questInstance);
-            QuestManager.Instance.SaveQuest(QuestManager.Instance.RotationQuestList);
-            return questInstance;
         }
         public QuestAssemble CreateQuestFromData(QuestManager.QuestData data)
         {
@@ -104,7 +101,6 @@ namespace Script.QuestGroup
         }
         public void UpdateQuestStates(QuestAssemble instanceObject)
         {
-            Debug.Log("QO "+ instanceObject.QuestType);
             instanceObject.shuffleBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             var receive = bool.Parse(PlayerPrefs.GetString(  instanceObject.questKey + "_isReceived", "false"));
             var complete = bool.Parse(PlayerPrefs.GetString(  instanceObject.questKey + "_isCompleted", "false"));

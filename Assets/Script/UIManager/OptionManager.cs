@@ -18,13 +18,6 @@ namespace Script.UIManager
         [SerializeField] private GameObject soundOn;
         [SerializeField] private GameObject soundOff;
         [SerializeField] private Button supportBtn;
-
-        private bool _music;
-        private bool _sound;
-
-        private const string MusicKey = "Music";
-        private const string SoundKey = "Sound";
-
         private void Awake()
         {
            openBtn.GetComponent<Button>().onClick.AddListener(() =>
@@ -41,8 +34,8 @@ namespace Script.UIManager
            musicOff.GetComponent<Button>().onClick.AddListener(MusicController);
            soundOn.GetComponent<Button>().onClick.AddListener(SoundController);
            soundOff.GetComponent<Button>().onClick.AddListener(SoundController);
-           _music = PlayerPrefs.GetInt(MusicKey) == 1;
-           _sound = PlayerPrefs.GetInt(SoundKey) == 1;
+           SoundManager.Instance.music = PlayerPrefs.GetInt(SoundManager.MusicKey) == 1;
+           SoundManager.Instance.sound = PlayerPrefs.GetInt(SoundManager.SoundKey) == 1;
            UpdateMusicState();
            UpdateSoundState();
            gameObject.SetActive(false);
@@ -66,32 +59,33 @@ namespace Script.UIManager
 
         private void MusicController()
         {
-            _music = !_music;
-            PlayerPrefs.SetInt(MusicKey, _music ? 1 : 0);
+            SoundManager.Instance.music = !SoundManager.Instance.music;
+            PlayerPrefs.SetInt(SoundManager.MusicKey, SoundManager.Instance.music ? 1 : 0);
             PlayerPrefs.Save();
             UpdateMusicState();
         }
 
         private void UpdateMusicState()
         {
-            SoundManager.Instance.IsMusicEnabled = _music;
-            musicOn.SetActive(_music);
-            musicOff.SetActive(!_music);
+            SoundManager.Instance.IsMusicEnabled = SoundManager.Instance.music;
+            musicOn.SetActive(SoundManager.Instance.music);
+            musicOff.SetActive(!SoundManager.Instance.music);
+            SoundManager.Instance.BGM(SoundManager.Instance.bgmClip);
         }
 
         private void SoundController()
         {
-            _sound = !_sound;
-            PlayerPrefs.SetInt(SoundKey, _sound ? 1 : 0);
+            SoundManager.Instance.sound = !SoundManager.Instance.sound;
+            PlayerPrefs.SetInt(SoundManager.SoundKey, SoundManager.Instance.sound ? 1 : 0);
             PlayerPrefs.Save();
             UpdateSoundState();
         }
 
         private void UpdateSoundState()
         {
-            SoundManager.Instance.IsSoundEnabled = _sound;
-            soundOn.SetActive(_sound);
-            soundOff.SetActive(!_sound);
+            SoundManager.Instance.IsSoundEnabled = SoundManager.Instance.sound;
+            soundOn.SetActive(SoundManager.Instance.sound);
+            soundOff.SetActive(!SoundManager.Instance.sound);
         }
     }
 }

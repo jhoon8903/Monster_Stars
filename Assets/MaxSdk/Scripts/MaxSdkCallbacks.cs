@@ -32,8 +32,6 @@ public class MaxSdkCallbacks : MonoBehaviour
 #endif
     }
 
-    public bool isRetry;
-
     // Fired when the SDK has finished initializing
     private static Action<MaxSdkBase.SdkConfiguration> _onSdkInitializedEvent;
     public static event Action<MaxSdkBase.SdkConfiguration> OnSdkInitializedEvent
@@ -188,6 +186,7 @@ public class MaxSdkCallbacks : MonoBehaviour
         /// <summary>
         /// Fired when an Ad Review Creative ID has been generated.
         /// The parameters returned are the adUnitIdentifier, adReviewCreativeId, and adInfo in that respective order.
+        /// Executed on a background thread to avoid any delays in execution.
         /// </summary>
         public static event Action<string, string, MaxSdkBase.AdInfo> OnAdReviewCreativeIdGeneratedEvent
         {
@@ -440,6 +439,7 @@ public class MaxSdkCallbacks : MonoBehaviour
         /// <summary>
         /// Fired when an Ad Review Creative ID has been generated.
         /// The parameters returned are the adUnitIdentifier, adReviewCreativeId, and adInfo in that respective order.
+        /// Executed on a background thread to avoid any delays in execution.
         /// </summary>
         public static event Action<string, string, MaxSdkBase.AdInfo> OnAdReviewCreativeIdGeneratedEvent
         {
@@ -591,6 +591,7 @@ public class MaxSdkCallbacks : MonoBehaviour
         /// <summary>
         /// Fired when an Ad Review Creative ID has been generated.
         /// The parameters returned are the adUnitIdentifier, adReviewCreativeId, and adInfo in that respective order.
+        /// Executed on a background thread to avoid any delays in execution.
         /// </summary>
         public static event Action<string, string, MaxSdkBase.AdInfo> OnAdReviewCreativeIdGeneratedEvent
         {
@@ -1345,7 +1346,7 @@ public class MaxSdkCallbacks : MonoBehaviour
         var eventProps = Json.Deserialize(eventPropsStr) as Dictionary<string, object>;
         if (eventProps == null)
         {
-            MaxSdkLogger.E("Failed to forward event for serialized event data: " + eventPropsStr);
+            MaxSdkLogger.E("Failed to forward event due to invalid event data");
             return;
         }
 

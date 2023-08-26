@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Script.AdsScript;
@@ -48,7 +49,7 @@ namespace Script.QuestGroup
         public string valueKey = "_value";
 
         //Shuffle
-        public QuestAssemble shuffleQuest;
+        private QuestAssemble _shuffleQuest;
         public static string SetKey(QuestAssemble quest, string key)
         {
             return $"{quest.questKey}{key}";
@@ -235,12 +236,30 @@ namespace Script.QuestGroup
                 }
             }
         }
+
+        private IEnumerator DestroyObject()
+        {
+            Debug.Log("QM " + _shuffleQuest.QuestType);
+            if (RotationQuestList.Contains(_shuffleQuest))
+            {
+                RotationQuestList.Remove(_shuffleQuest);
+            }
+            if (questInstances.Contains(_shuffleQuest))
+            {
+                questInstances.Remove(_shuffleQuest);
+            }
+            Destroy(_shuffleQuest.gameObject);
+            yield return null;
+            if (_shuffleQuest.gameObject.activeInHierarchy)
+            {
+                Debug.Log(_shuffleQuest.gameObject.name);
+            }
+            _shuffleQuest = null; 
+        }
+
         public void ShuffleQuest()
         {
-            Debug.Log("QM " + shuffleQuest.QuestType);
-            RotationQuestList.Remove(shuffleQuest);
-            questInstances.Remove(shuffleQuest);
-            Destroy(shuffleQuest.gameObject);
+            StartCoroutine(DestroyObject());
 
             var existingQuestTypes = questInstances.Select(q => q.QuestType.ToString()).ToList();
 
@@ -253,18 +272,20 @@ namespace Script.QuestGroup
             {
                 var newQuestData = availableQuestData.OrderBy(_ => Random.value).First();
                 _rotationQuestCandidates.Remove(newQuestData); // Remove the selected quest data from candidates
-                var newQuestInstance = questObject.RotationQuestCreate(newQuestData);
-                RotationQuestList.Add(newQuestInstance);
+                questObject.RotationQuestCreate(newQuestData);
             }
 
-            shuffleQuest = null; 
             PlayerPrefs.Save();
-            SaveQuest(FixQuestList.Concat(RotationQuestList).ToList());
+            var testList = FixQuestList.Concat(RotationQuestList).ToList();
+            Debug.Log("test : " + testList.Count);
+            SaveQuest(testList);
         }
+
 
         public void CallShuffleAds(QuestAssemble questAssemble)
         {
-            shuffleQuest = questAssemble;
+            Debug.Log(questAssemble.gameObject.name);
+            _shuffleQuest = questAssemble;
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.ShuffleQuest;
             AdsManager.Instance.ShowRewardedAd();
         }

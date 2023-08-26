@@ -92,7 +92,7 @@ None,1,7,Gold,B,5 매치시 골드 1추가 획득,Matching 5 pieces creates 1 go
 None,1,8,CastleMaxHp,B,캐슬 최대체력 {p} 증가,Castle's max health increased by {p},Castle's max health increased by {p},200
 None,1,9,CastleRecovery,B,웨이브 종료까지 피해를 입지 않으면 캐슬 체력 200씩 매 웨이브 마다 증가,Castle restores 200 HP if it does not take any damage in a day,Castle restores 200 HP if it does not take any damage in a day,200
 None,1,10,Match5Upgrade,P,5개 매치시 가운데 케릭터의 레벨이 1 더 증가,Matching 5 pieces increases the level of the center unit by 1,Matching 5 pieces increases the level of the center unit by 1,1
-None,1,11,Slow,B,다음 웨이브 부터는 적 이동속도 {p}% 감소||(현재 {15*EnforceManager.Instance.slowCount}% 최대 60%),A horizontal row is added to the cell,A horizontal row is added to the cell,15
+None,1,11,Slow,P,다음 웨이브 부터는 적 이동속도 {p}% 감소||(현재 {15*EnforceManager.Instance.slowCount}% 최대 60%),Starting next round,enemy movement speed decreases by {p}%,15
 None,1,12,StepLimit,P,총 이동횟수 {p} 증가,Movement count increases by {p} each wave,Movement count increases by {p} each wave,1
 None,1,13,StepDirection,P,대각선 이동 가능,Pieces can be moved diagonally,Pieces can be moved diagonally,1
 None,1,14,NextStage,P,보스 스테이지 이후 {p} 개의 케릭터 추가 이동 (현재 {EnforceManager.Instance.highLevelCharacterCount}),After defeating the boss  you can move {p} additional units,After defeating the boss  you can move {p} additional units,1 2

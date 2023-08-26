@@ -48,9 +48,9 @@ namespace Script.UIManager
                 PlayerPrefs.DeleteAll();
             }
         }
-        public void SelectedStages()
+        public int SelectedStages()
         {
-            selectStage = MainPanel.Instance.SelectStage;
+            return selectStage = MainPanel.Instance.SelectStage;
         }
 
         private static Dictionary<int, Dictionary<int, (int? wave1SpawnValue, EnemyBase.EnemyClasses? wave1EnemyClass, List<EnemyBase.SpawnZones>? wave1SpawnZone, int? wave2SpawnValue, EnemyBase.EnemyClasses? wave2EnemyClass, List<EnemyBase.SpawnZones>? wave2SpawnZone, int? wave3SpawnValue, EnemyBase.EnemyClasses? wave3EnemyClass, List<EnemyBase.SpawnZones>? wave3SpawnZone, EnemyBase.EnemyClasses? bossClass)>> LoadCsvData(string filename)

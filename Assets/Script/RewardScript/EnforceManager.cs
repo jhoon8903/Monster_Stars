@@ -838,6 +838,7 @@ namespace Script.RewardScript
         public float castleMaxHp; 
         protected internal void IncreaseCastleMaxHp(Data data)
         {
+            if (castleMaxHp >=2000) return;
             castleMaxHp += 200f;
             castleManager.IncreaseMaxHp();
             SkillInstance(data, castleMaxHp);

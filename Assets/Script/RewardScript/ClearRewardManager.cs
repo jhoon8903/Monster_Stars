@@ -75,6 +75,7 @@ namespace Script.RewardScript
         public readonly Dictionary<CharacterBase, int> CumulativeUnitPieces = new Dictionary<CharacterBase, int>();
         private const string CumulativeCoinKey = "CumulativeCoin";
         private const string CumulativeUnitPiecesKey = "CumulativeUnitPieces";
+        public bool alreadyPrintPanel;
         private void Awake()
         {
             if (Instance == null)
@@ -90,15 +91,22 @@ namespace Script.RewardScript
         public void ClearReward(bool gameResult)
         {
             stageClearPanel.SetActive(true);
+            Debug.Log("1");
             if (gameResult)
             {
+                Debug.Log("2");
                 Win();
             }
             else
             {
+                Debug.Log("3");
                 Lose();
             }
+            Debug.Log("4");
+
             LoadCumulativeData();
+            if (alreadyPrintPanel) return;
+            alreadyPrintPanel = true;
             dps.UnitDps(totalDps,unitDpsGrid);
             itemObject.CoinObject(rewardGrid);
             itemObject.InstantiateCumulativeUnitPieces(rewardGrid);
@@ -107,11 +115,13 @@ namespace Script.RewardScript
         {
             title.sprite = winTitle;
             waveText.text = StageManager.Instance.currentWave.ToString();
+            SoundManager.Instance.ClearSoundEffect(SoundManager.Instance.stageClearSound);
         }
         private void Lose()
         {
             title.sprite = loseTitle;
             waveText.text = StageManager.Instance.currentWave.ToString();
+            SoundManager.Instance.ClearSoundEffect(SoundManager.Instance.stageFailSound);
         }
         public void GetCoin(int wave)
         {
@@ -343,6 +353,7 @@ namespace Script.RewardScript
         
         private void ResetCumulativeData()
         {
+            alreadyPrintPanel = false;
             PlayerPrefs.DeleteKey(CumulativeCoinKey);
             PlayerPrefs.DeleteKey(CumulativeUnitPiecesKey);
             cumulativeCoin = 0;

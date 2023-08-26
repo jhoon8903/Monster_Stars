@@ -447,7 +447,7 @@ namespace Script.RewardScript
 
             if (!spawnManager.isWave10Spawning)
             {
-               yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
+                yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
             }
             else
             {

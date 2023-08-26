@@ -49,18 +49,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cover: {fileID: 4679517600283520585}
-  unitPieceLevel: 5
+  unitPieceLevel: 1
   unLock: 0
   selected: 0
   unitPuzzleLevel: 1
   unitGroup: 2
-  lv1: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
-  lv3: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
-  lv5: {fileID: 21300000, guid: 97a9b711ea166413b8c359ab05b7dea0, type: 3}
-  lv7: {fileID: 21300000, guid: f6ca6c69bf5ac42d680520277a2c3e88, type: 3}
-  lv9: {fileID: 21300000, guid: 5a52db7b87bdd4edba297b9ce09f2677, type: 3}
-  lv11: {fileID: 21300000, guid: 43e5f06a44ba44079a07d4269bd154be, type: 3}
-  lv13: {fileID: 21300000, guid: 10c4bc2ca34784eb88a0462e2f02bfa1, type: 3}
+  lv1: {fileID: 21300000, guid: ba0daa6a6024e4b6c9e5a404076c9d65, type: 3}
+  lv3: {fileID: 21300000, guid: d83d5c683c086453980e1085d6151a77, type: 3}
+  lv5: {fileID: 21300000, guid: ee4eb3b8d05254aff94074cd6a0843ac, type: 3}
+  lv7: {fileID: 21300000, guid: 9047f45556b7d424bb9b2207f8d2a284, type: 3}
+  lv9: {fileID: 21300000, guid: 736f6ac77af564238b985762968a0709, type: 3}
+  lv11: {fileID: 21300000, guid: 329af0cea60cd40548b977d1b0581a65, type: 3}
+  lv13: {fileID: 21300000, guid: 92c44ec1b32574394956da831ee1a12d, type: 3}
   baseDamage: 24
   dotDamage: 0
   effectChance: 25

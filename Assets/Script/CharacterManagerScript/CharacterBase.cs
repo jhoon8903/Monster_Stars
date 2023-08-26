@@ -79,8 +79,16 @@ namespace Script.CharacterManagerScript
         public float UnitLevelDamage { get; set; }
         public Dictionary<EnemyBase, int> AttackCounts { get; set; } = new Dictionary<EnemyBase, int>();
         
+        protected internal const string LevelKey = "level";
         public virtual void Initialize()
         {
+            var level = UnitGrade switch
+            {
+                UnitGrades.B => 3,
+                UnitGrades.P => 5,
+                _ => 1,
+            };
+            unitPieceLevel = PlayerPrefs.GetInt($"{this}{LevelKey}", level);
             _spriteRenderer = GetComponent<SpriteRenderer>();
             UnitSkillDict = new Dictionary<int, Sprite> { {1, lv1}, {3, lv3}, {5, lv5}, {7, lv7}, {9, lv9}, {11, lv11}, {13, lv13} };
         }
@@ -323,19 +331,16 @@ namespace Script.CharacterManagerScript
         {
             return null;
         }
-        public IEnumerator UnitLevelUp()
+        public IEnumerator UnitLevelUp(UnitGroups unitGroups)
         {
             UnitPieceCount -= UnitPieceMaxPiece;
             CoinsScript.Instance.Coin -= CharacterLevelUpCoin;
             Quest.Instance.UseCoinQuest(CharacterLevelUpCoin);
             unitPieceLevel++;
+            PlayerPrefs.SetInt($"{unitGroups}{LevelKey}", unitPieceLevel);
+            PlayerPrefs.Save();
             Initialize();
             yield return null;
-        }
-
-        protected internal virtual void UnitSkillActive()
-        {
-
         }
         protected internal virtual Sprite GetSprite(int level)
         {

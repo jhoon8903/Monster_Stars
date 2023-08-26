@@ -62,9 +62,9 @@ namespace Script.PuzzleManagerGroup
             var worldPoint = Camera.main!.ScreenToWorldPoint(Input.mousePosition);
             return new Vector2(worldPoint.x, worldPoint.y);
         }
-        private void StartFindUnit(CharacterBase characterBase)
+        public void StartFindUnit(CharacterBase characterBase)
         {
-            if (_findUnitCoroutine != null)
+            if (_findUnitCoroutine != null || isBusy || GameManager.Instance.IsBattle)
             {
                 StopCoroutine(_findUnitCoroutine);
                 foreach (var line in _activatedLines)
@@ -97,6 +97,7 @@ namespace Script.PuzzleManagerGroup
         private void HandleTouchDown(Vector2 point2D)
         {
             if (isBusy || _isSoon) return;
+            SoundManager.Instance.PlaySound(SoundManager.Instance.touchUnitSound);
             var coverLayerMask = LayerMask.GetMask("Cover");
             var hitCover = Physics2D.Raycast(point2D, Vector2.zero, Mathf.Infinity, coverLayerMask);
 
@@ -110,6 +111,7 @@ namespace Script.PuzzleManagerGroup
             _startObject = hitCharacter.collider.gameObject;
             ScaleObject(_startObject, new Vector3(1.2f,1.2f,1.2f), 0.2f);
             _startObject.GetComponent<CharacterBase>().IsClicked = true;
+            
             _firstTouchPosition = point2D;
             StartCoroutine(CheckSoon());
             if (_startObject == null) return;
@@ -159,6 +161,7 @@ namespace Script.PuzzleManagerGroup
             {
                 switch (tutorialManager.CurrentTutorialStep.TutorialStepCount)
                 {
+                  
                     case 1 when startX == 4 && startY == 4:
                     {
                         if (swipeAngle is < 135 or >= 225)

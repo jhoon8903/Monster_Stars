@@ -58,7 +58,7 @@ namespace Script
         private IEnumerator LoadGame()
         {
             swipeManager.isBusy = true;
-            BackGroundManager.Instance.ChangedBackGround();
+            
             gridManager.GenerateInitialGrid(PlayerPrefs.GetInt("GridHeight", 6));
             if (LoadingManager.Instance.isFirstContact)
             {
@@ -94,9 +94,10 @@ namespace Script
    
             castleManager.castleCrushBoost = false;
             if (StageManager.Instance != null)
-            {
-                StageManager.Instance.SelectedStages();
+            {                                                 
+                var stage = StageManager.Instance.SelectedStages();
                 StageManager.Instance.UpdateWaveText();
+                BackGroundManager.Instance.ChangedBackGround(stage);
             }
 
             speedUp = true;
@@ -245,11 +246,14 @@ namespace Script
                 }
             }
 
-            if (!expRewardPanel.activeSelf) yield break;
-            while (expRewardPanel.activeSelf)
+            if (!expRewardPanel.activeSelf)
             {
-                yield return null;
+                while (expRewardPanel.activeSelf)
+                {
+                    yield return null;
+                }
             }
+            yield return null;
         }
         public void GameSpeedSelect()
         {

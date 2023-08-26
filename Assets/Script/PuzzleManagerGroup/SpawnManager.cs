@@ -20,9 +20,7 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private GameManager gameManager;
         [SerializeField] private CountManager countManager;
         [SerializeField] private EnforceManager enforceManager;
-        [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private SwipeManager swipeManager;
-        [SerializeField] private TutorialManager tutorialManager;
         public bool isWave10Spawning;
         private float _totalPos;
         private int _currentGroupIndex;
@@ -83,32 +81,19 @@ namespace Script.PuzzleManagerGroup
 
         public IEnumerator PositionUpCharacterObject()
         {
-            var moves = CalculateMoves(); // moves를 계산하는 별도의 함수
-            if (moves.Count > 0)
-            {
-                yield return StartCoroutine(PerformMoves(moves));
-            }
+            var moves = CalculateMoves();
+            if (moves.Count > 0) yield return StartCoroutine(PerformMoves(moves));
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
             yield return StartCoroutine(CheckPosition());
-            if (rewardManger.PendingTreasure.Count != 0)
-            {
-                rewardManger.EnqueueTreasure();
-            }
+            if (rewardManger.PendingTreasure.Count != 0) rewardManger.EnqueueTreasure();
+            yield return StartCoroutine(gameManager.WaitForPanelToClose());
             if (isTutorial)
             {
                 yield return new WaitForSecondsRealtime(0.5f);
                 TriggerOnMatchFound();
             }
-            while (commonRewardManager.isOpenBox)
-            {
-                yield return StartCoroutine(gameManager.WaitForPanelToClose());
-                yield return new WaitForSeconds(0.5f);
-            }
+            if (countManager.TotalMoveCount == 0) yield return StartCoroutine(gameManager.Count0Call());
             swipeManager.isBusy = false;
-            if (countManager.TotalMoveCount == 0)
-            {
-                yield return StartCoroutine(gameManager.Count0Call());
-            }
         }
 
         private IEnumerator CheckPosition()
@@ -143,6 +128,7 @@ namespace Script.PuzzleManagerGroup
                 yield return null;
             }
             gameObject.transform.position = targetPosition;
+            yield return null;
         }
 
         private IEnumerator PerformMoves(IEnumerable<(GameObject, Vector3Int)> moves)
@@ -155,6 +141,8 @@ namespace Script.PuzzleManagerGroup
             {
                 yield return moveCoroutine;
             }
+
+            yield return null;
         }
         private IEnumerator SpawnAndMoveNewCharacters()
         {
@@ -182,6 +170,7 @@ namespace Script.PuzzleManagerGroup
             {
                 yield return coroutine;
             }
+            yield return null;
         }
         private GameObject SpawnNewCharacter(Vector3Int position)
         {

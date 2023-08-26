@@ -61,7 +61,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 levelUpBtn.GetComponent<Image>().sprite = levelUpBtnSprite[0];
                 levelUpBtn.GetComponent<Button>().onClick.AddListener(() =>
                 {
-                    StartCoroutine(characterBase.UnitLevelUp());
+                    StartCoroutine(characterBase.UnitLevelUp(characterBase.unitGroup));
                     StartCoroutine(CheckForLevelUp(unitInstance, characterBase));
                     HoldCharacterList.SyncWithSelected(unitInstance, characterBase);
                     HoldCharacterList.UpdateUnit(unitInstance, characterBase);

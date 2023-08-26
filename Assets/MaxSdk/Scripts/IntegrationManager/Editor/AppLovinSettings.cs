@@ -63,8 +63,7 @@ public class AppLovinSettings : ScriptableObject
     [SerializeField] private Platform consentFlowPlatform;
     [SerializeField] private string consentFlowPrivacyPolicyUrl = string.Empty;
     [SerializeField] private string consentFlowTermsOfServiceUrl = string.Empty;
-    [FormerlySerializedAs("userTrackingUsageDescription")] 
-    [SerializeField] private string userTrackingUsageDescriptionEn = string.Empty;
+    [FormerlySerializedAs("userTrackingUsageDescription")] [SerializeField] private string userTrackingUsageDescriptionEn = string.Empty;
     [SerializeField] private bool userTrackingUsageLocalizationEnabled;
     [SerializeField] private string userTrackingUsageDescriptionDe = string.Empty;
     [SerializeField] private string userTrackingUsageDescriptionEs = string.Empty;
