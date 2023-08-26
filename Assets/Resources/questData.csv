@@ -7,5 +7,5 @@ GetPiece,Rotation,Getting Unit Pieces,GetPieceKey,45,0,3,1,0
 KillEnemy,Rotation,Killed Enemy,KillEnemyKey,150,1500,0,3,0
 KillBoss,Rotation,Killed Boss,KillBossKey,8,2000,3,0,0
 ViewAds,Fix,Viewing Ads,ViewAdsKey,1,1500,0,3,0
-MatchCoin,Rotation,Merge inGame PowerUP Box,MatchCoinKey,10,2000,3,0,0
+MergeBox,Rotation,Merge inGame PowerUP Box,MergeBoxKey,10,2000,3,0,0
 Victory,Rotation,Victory Game,VoctoryKey,2,1000,3,0,0

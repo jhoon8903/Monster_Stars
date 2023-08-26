@@ -48,7 +48,7 @@ namespace Script.RobbyScript.StoreMenuGroup
         [SerializeField] private Image chestBackLightImage;
         [SerializeField] private Image chestParticleImage;
         [SerializeField] private GameObject chestGrade;
-        [SerializeField] private GameObject chestOpenBtn;
+        [SerializeField] public GameObject chestOpenBtn;
         [SerializeField] private GameObject chestErrorPanel;
         [SerializeField] private GameObject chestErrorCloseBtn;
         [SerializeField] private GameObject getBackToStoreBtn;
@@ -65,7 +65,7 @@ namespace Script.RobbyScript.StoreMenuGroup
         private readonly Dictionary<CharacterBase, Tuple<int, Goods>> _unitPieceDict = new Dictionary<CharacterBase, Tuple<int, Goods>>();
         private Goods _coinObject;
         private Goods _unitPieceObject;
-        public enum BoxGrade { Bronze, Silver, Gold, Coin, Stamina, Gem, BronzeGem, SilverGem, GoldGem }
+        public enum BoxGrade { Bronze, Silver, Gold, Coin, Stamina, Gem, BronzeGem, SilverGem, GoldGem}
         public bool isReset;
         public enum ButtonType { BronzeAds, SilverAds, GoldAds, BronzeGem, SilverGem, GoldGem }
         private Vector3 _originalPosition;
@@ -97,7 +97,6 @@ namespace Script.RobbyScript.StoreMenuGroup
         {
             treasureChest.UpdateButtonState();
         }
-
         public void ResetButtonCounts()
         {
             isReset = true;
@@ -150,7 +149,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                     break;
             }
 
-            if (boxTypes is not (BoxGrade.Coin and BoxGrade.Stamina and BoxGrade.Gem))
+            if (boxTypes is not (BoxGrade.Coin and BoxGrade.Stamina and BoxGrade.Gem ))
             {
                 Quest.Instance.OpenBoxQuest();
             }
@@ -355,7 +354,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             chestOpenBtn.GetComponent<Button>().onClick.AddListener(() => OpenChest(chestType));
             StartCoroutine(IncreaseBackLightAlpha(chestType));
         }
-        private IEnumerator IncreaseBackLightAlpha(ButtonType chestType)
+        public IEnumerator IncreaseBackLightAlpha(ButtonType chestType)
         {
             chestGrade.gameObject.SetActive(true);
             chestGrade.transform.position = _newPosition;
@@ -366,7 +365,7 @@ namespace Script.RobbyScript.StoreMenuGroup
                     chestSprite = treasureChest.bronzeSprite;
                     break;
                 case ButtonType.SilverAds:
-                    chestSprite =treasureChest.silverSprite;
+                    chestSprite = treasureChest.silverSprite;
                     break;
                 case ButtonType.GoldAds:
                     chestSprite = treasureChest.goldSprite;
@@ -409,13 +408,13 @@ namespace Script.RobbyScript.StoreMenuGroup
             yield return shakeAnimation.WaitForCompletion();
             shakeAnimation.Kill();
         }
-        private void OpenChest(ButtonType chestType)
+        public void OpenChest(ButtonType chestType)
         {
             SoundManager.Instance.PlaySound(SoundManager.Instance.reward);
             ChestCheck.Instance.chestCheckPanel.SetActive(false);
             chestRewardPanel.SetActive(false);
-            boxRewardPanel.SetActive(true);
             chestGrade.gameObject.SetActive(false);
+            boxRewardPanel.SetActive(true);
             var boxGrade = chestType switch
             {
                 ButtonType.BronzeAds => BoxGrade.Bronze,

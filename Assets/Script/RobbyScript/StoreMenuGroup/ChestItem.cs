@@ -17,7 +17,6 @@ namespace Script.RobbyScript.StoreMenuGroup
         public Goods CoinInstance(Goods rewardItem, Transform contentLayer, StoreMenu.BoxGrade boxTypes, int coinReward)
         {
             goodsObject = Instantiate(rewardItem, contentLayer);
-            goodsObject.goodsBack.GetComponent<Image>().color = Color.white;
             goodsObject.goodsSprite.GetComponent<Image>().sprite = specialOffer.RewardSprite(boxTypes);
             goodsObject.goodsSprite.GetComponent<RectTransform>().localScale = boxTypes switch
             {

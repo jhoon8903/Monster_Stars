@@ -122,7 +122,7 @@ namespace Script.RobbyScript.MainMenuGroup
         }
         private void UpdateProgress(int stage, int maxWave, int clearWave)
         {
-            stageText.text = $"스테이지 {stage}";
+            stageText.text = $"Stage {stage}";
             stageProgress.maxValue = maxWave;
             stageProgress.value = clearWave ;
             stageProgressText.text = $"{clearWave} / {maxWave}";
@@ -150,12 +150,11 @@ namespace Script.RobbyScript.MainMenuGroup
             if (SelectStage < LatestStage)
             {
                 SelectStage++;
-                stageImage.sprite = stageSprite[SelectStage - 1];
+                stageImage.sprite = PreviewStage(SelectStage);
                 var (maxWave, clearWave) = GetStageWave(SelectStage);
                 UpdateProgress(SelectStage, maxWave, clearWave);
             }
-
-            UpdateButtonStates(); // 버튼 상태 업데이트를 위한 호출
+            UpdateButtonStates(); 
         }
 
         private void PreviousStage()
@@ -163,20 +162,28 @@ namespace Script.RobbyScript.MainMenuGroup
             if (SelectStage > 1)
             {
                 SelectStage--;
-                stageImage.sprite = stageSprite[SelectStage - 1];
+                stageImage.sprite = PreviewStage(SelectStage);
                 var (maxWave, clearWave) = GetStageWave(SelectStage);
                 UpdateProgress(SelectStage, maxWave, clearWave);
             }
+            UpdateButtonStates();
+        }
 
-            UpdateButtonStates(); // 버튼 상태 업데이트를 위한 호출
+        private Sprite PreviewStage(int stage)
+        {
+            return stage switch
+            {
+                1 or 8 or 14 or 19 => stageSprite[0],
+                2 or 6 or 12 or 17 => stageSprite[1],
+                3 or 10 or 13 or 16 => stageSprite[2],
+                4 or 7 or 11 or 18 => stageSprite[3],
+                5 or 9 or 15 or 20 => stageSprite[4],
+            };
         }
 
         private void UpdateButtonStates()
         {
-            // 이전 스테이지 버튼 상태 업데이트
             previousStageBtn.SetActive(SelectStage > 1);
-
-            // 다음 스테이지 버튼 상태 업데이트
             nextStageBtn.SetActive(SelectStage < LatestStage);
         }
         private void ReturnRobby()

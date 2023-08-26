@@ -9,12 +9,13 @@ using Script.RobbyScript.CharacterSelectMenuGroup;
 using Script.RobbyScript.StoreMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 namespace Script.QuestGroup
-{ 
+{
     public class QuestManager : MonoBehaviour
     {
         [SerializeField] private GameObject questPanel;
@@ -26,15 +27,34 @@ namespace Script.QuestGroup
         [SerializeField] public Transform questTransform;
         [SerializeField] public TextMeshProUGUI timer;
         [SerializeField] private Goods rewardItem;
-        [SerializeField] private Button questRewardCloseBtn ;
-        
+        [SerializeField] private Button questRewardCloseBtn;
+
         private readonly List<QuestData> _rotationQuestCandidates = new List<QuestData>();
         public readonly List<QuestAssemble> FixQuestList = new List<QuestAssemble>();
         public readonly List<QuestAssemble> RotationQuestList = new List<QuestAssemble>();
-        public enum QuestTypes { AllClear, UseCoin, GetCoin, OpenBox, GetPiece, KillEnemy, KillBoss, ViewAds, MatchCoin, Victory }
-        public enum QuestCondition { Fix, Rotation }
+
+        public enum QuestTypes
+        {
+            AllClear,
+            UseCoin,
+            GetCoin,
+            OpenBox,
+            GetPiece,
+            KillEnemy,
+            KillBoss,
+            ViewAds,
+            MergeBox,
+            Victory
+        }
+
+        public enum QuestCondition
+        {
+            Fix,
+            Rotation
+        }
+
         private string[] _csvData;
-        public static QuestManager Instance { get; private set; } 
+        public static QuestManager Instance { get; private set; }
         private readonly Dictionary<CharacterBase, int> _unitPieceDict = new Dictionary<CharacterBase, int>();
         private int _unitPieceReward;
         private Goods _coinObject;
@@ -42,34 +62,33 @@ namespace Script.QuestGroup
         public List<QuestAssemble> questInstances = new List<QuestAssemble>();
 
         // Data Key
-        public string completeKey = "_Complete";
-        public string shuffleKey = "_Shuffle";
-        public string receiveKey = "_Receive";
-        public string questDataKey = "QuestData";
-        public string valueKey = "_value";
+        protected internal const string CompleteKey = "_Complete";
+        protected internal const string ShuffleKey = "_Shuffle";
+        protected internal const string ReceiveKey = "_Receive";
+        private const string QuestDataKey = "QuestData";
+        protected internal const string ValueKey = "_value";
+        protected internal const string GoalKey = "_goal";
 
         //Shuffle
         private QuestAssemble _shuffleQuest;
+
         public static string SetKey(QuestAssemble quest, string key)
         {
             return $"{quest.questKey}{key}";
         }
 
-        [Serializable] public class QuestData
-        { 
+        [Serializable]
+        public class QuestData
+        {
             public string questType;
             public string questCondition;
             public string questDesc;
             public string questKey;
             public int questGoal;
-            public int questValue;
             public int item1CoinValue;
             public int item2GreenPieceValue;
             public int item3BluePieceValue;
             public int item4PurplePieceValue;
-            public bool isReceived;
-            public bool isCompleted;
-            public bool isShuffled;
         }
 
         private void Awake()
@@ -82,11 +101,11 @@ namespace Script.QuestGroup
             {
                 Destroy(gameObject);
             }
+
             questOpenBtn.onClick.AddListener(() => questPanel.SetActive(true));
             questCloseBtn.onClick.AddListener(() => questPanel.SetActive(false));
-            questRewardCloseBtn.onClick.AddListener(ReceiveQuestReward);
-      
-            if (PlayerPrefs.HasKey(questDataKey))
+            // questRewardCloseBtn.onClick.AddListener(ReceiveQuestReward);
+            if (PlayerPrefs.HasKey(QuestDataKey))
             {
                 SetUpRotationList();
                 LoadQuests();
@@ -95,9 +114,11 @@ namespace Script.QuestGroup
             {
                 CreateNewQuests();
             }
+
+            DontDestroyOnLoad(gameObject);
         }
         public static QuestTypes ParseQuestType(string type) => (QuestTypes)Enum.Parse(typeof(QuestTypes), type);
-        public static QuestCondition ParseQuestCondition(string condition) => (QuestCondition)Enum.Parse(typeof(QuestCondition), condition);
+        private static QuestCondition ParseQuestCondition(string condition) => (QuestCondition)Enum.Parse(typeof(QuestCondition), condition);
         private void SetupCsv()
         {
             var csvFile = Resources.Load<TextAsset>("questData");
@@ -115,6 +136,7 @@ namespace Script.QuestGroup
                 var data = ConvertToQuestData(line.Split(','));
                 parsedData.Add(data);
             }
+
             return parsedData;
         }
         private void CreateNewQuests()
@@ -123,7 +145,7 @@ namespace Script.QuestGroup
             {
                 foreach (var quest in questInstances)
                 {
-                    Destroy(quest.gameObject); 
+                    Destroy(quest.gameObject);
                 }
             }
             var dataList = ParseCsvData();
@@ -145,7 +167,10 @@ namespace Script.QuestGroup
         {
             var dataList = ParseCsvData();
             _rotationQuestCandidates.Clear();
-            foreach (var data in from data in dataList let condition = ParseQuestCondition(data.questCondition) where condition == QuestCondition.Rotation select data)
+            foreach (var data in from data in dataList
+                     let condition = ParseQuestCondition(data.questCondition)
+                     where condition == QuestCondition.Rotation
+                     select data)
             {
                 _rotationQuestCandidates.Add(data);
             }
@@ -172,23 +197,13 @@ namespace Script.QuestGroup
                 .OrderBy(_ => Random.value)
                 .Take(3)
                 .ToList();
-
-            foreach (var selectedQuest in selectedQuestData)
+            foreach (var selectedQuest in from selectedQuest in selectedQuestData let newRotationQuest = questObject.RotationQuestCreate(selectedQuest) select selectedQuest)
             {
-                questObject.RotationQuestCreate(selectedQuest);
                 _rotationQuestCandidates.Remove(selectedQuest);
             }
         }
-        public void SaveQuest(IEnumerable<QuestAssemble> quests)
+        private static void SaveQuest(IEnumerable<QuestAssemble> quests)
         {
-            var existingDataJson = PlayerPrefs.GetString(questDataKey);
-            var existingQuestList = new List<QuestData>();
-
-            if (!string.IsNullOrEmpty(existingDataJson))
-            {
-                existingQuestList = existingDataJson.Split(';').Select(JsonUtility.FromJson<QuestData>).ToList();
-            }
-
             var questDataList = quests.Select(quest => new QuestData
             {
                 questType = quest.QuestType.ToString(),
@@ -200,101 +215,92 @@ namespace Script.QuestGroup
                 item2GreenPieceValue = int.Parse(quest.greenPieceValueText.text),
                 item3BluePieceValue = int.Parse(quest.bluePieceValueText.text),
                 item4PurplePieceValue = int.Parse(quest.purplePieceValueText.text),
-                isReceived = quest.isReceived,
-                isCompleted = quest.isCompleted,
-                isShuffled = quest.isShuffled
             }).ToList();
-
-            var nonDuplicateQuests = questDataList.Where(newQuest => existingQuestList.All(existingQuest => existingQuest.questType != newQuest.questType)).ToList();
-            var combinedQuests = existingQuestList.Concat(nonDuplicateQuests).ToList();
-            var jsonDataList = combinedQuests.Select(JsonUtility.ToJson).ToList();
-
-            PlayerPrefs.SetString(questDataKey, string.Join(";", jsonDataList)); 
-            Debug.Log(PlayerPrefs.GetString(questDataKey, string.Join(";", jsonDataList)));
+            var jsonDataList = questDataList.Select(JsonUtility.ToJson).ToList();
+            PlayerPrefs.DeleteKey(QuestDataKey);
+            PlayerPrefs.SetString(QuestDataKey, string.Join(";", jsonDataList));
             PlayerPrefs.Save();
         }
         private void LoadQuests()
         {
-            var jsonData = PlayerPrefs.GetString(questDataKey); 
-            Debug.Log(jsonData);
+            var jsonData = PlayerPrefs.GetString(QuestDataKey);
             var questList = jsonData.Split(';').Select(JsonUtility.FromJson<QuestData>).ToList();
             foreach (var instance in questInstances)
             {
                 Destroy(instance.gameObject);
             }
             questInstances.Clear();
+
+
             foreach (var data in questList)
             {
                 var condition = ParseQuestCondition(data.questCondition);
                 if (condition == QuestCondition.Fix)
                 {
-                    questObject.CoinQuestsCreate(data);
+                    questObject.FixQuestCreate(data);
                 }
                 else
                 {
                     questObject.RotationQuestCreate(data);
                 }
             }
-        }
 
+            var dataList = ParseCsvData();
+            foreach (var data in dataList)
+            {
+                var type = ParseQuestType(data.questType);
+                if (type is QuestTypes.AllClear or QuestTypes.ViewAds)
+                {
+                    questObject.SpecialQuests(type, data);
+                }
+            }
+        }
         private IEnumerator DestroyObject()
         {
-            Debug.Log("QM " + _shuffleQuest.QuestType);
-            if (RotationQuestList.Contains(_shuffleQuest))
-            {
-                RotationQuestList.Remove(_shuffleQuest);
-            }
+            Debug.Log($"Shuffle Origin Object: {_shuffleQuest.QuestType}");
             if (questInstances.Contains(_shuffleQuest))
             {
                 questInstances.Remove(_shuffleQuest);
             }
+            if (RotationQuestList.Contains(_shuffleQuest))
+            {
+                RotationQuestList.Remove(_shuffleQuest);
+            }
             Destroy(_shuffleQuest.gameObject);
             yield return null;
-            if (_shuffleQuest.gameObject.activeInHierarchy)
-            {
-                Debug.Log(_shuffleQuest.gameObject.name);
-            }
-            _shuffleQuest = null; 
+            _shuffleQuest = null;
         }
-
         public void ShuffleQuest()
         {
             StartCoroutine(DestroyObject());
-
-            var existingQuestTypes = questInstances.Select(q => q.QuestType.ToString()).ToList();
-
-            var availableQuestData = _rotationQuestCandidates
-                .Where(data => !existingQuestTypes.Contains(data.questType))
-                .Where(data => !bool.Parse(PlayerPrefs.GetString($"{data.questKey}{completeKey}", "false")))
-                .ToList();
-
-            if (availableQuestData.Any()) 
+            var existingQuestTypes = questInstances.Where(q => q.QuestCondition != QuestCondition.Fix).Select(q => q.QuestType).ToList();
+            var availableQuestData = (from data in _rotationQuestCandidates from type in existingQuestTypes where data.questType == type.ToString() select data).ToList();
+           
+            if (availableQuestData.Any())
             {
                 var newQuestData = availableQuestData.OrderBy(_ => Random.value).First();
-                _rotationQuestCandidates.Remove(newQuestData); // Remove the selected quest data from candidates
-                questObject.RotationQuestCreate(newQuestData);
+                _rotationQuestCandidates.Remove(newQuestData);
+                var shuffleQuest = questObject.RotationQuestCreate(newQuestData);
+                Debug.Log($"shuffleType: "+shuffleQuest.QuestType);
+                shuffleQuest.isShuffled = true;
+                PlayerPrefs.SetString(SetKey(shuffleQuest, ShuffleKey), "true");
+                QuestObject.UpdateQuestStates(shuffleQuest);
+                PlayerPrefs.Save();
             }
-
-            PlayerPrefs.Save();
-            var testList = FixQuestList.Concat(RotationQuestList).ToList();
-            Debug.Log("test : " + testList.Count);
-            SaveQuest(testList);
+            SaveQuest(FixQuestList.Concat(RotationQuestList));
         }
-
-
         public void CallShuffleAds(QuestAssemble questAssemble)
         {
-            Debug.Log(questAssemble.gameObject.name);
             _shuffleQuest = questAssemble;
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.ShuffleQuest;
             AdsManager.Instance.ShowRewardedAd();
         }
-        private void InitQuest(QuestAssemble quest)
+        private static void InitQuest(QuestAssemble quest)
         {
-            PlayerPrefs.DeleteKey(SetKey(quest,valueKey));
-            PlayerPrefs.DeleteKey(SetKey(quest,completeKey));
-            PlayerPrefs.DeleteKey(SetKey(quest,receiveKey));
-            PlayerPrefs.DeleteKey(SetKey(quest,shuffleKey));
+            PlayerPrefs.DeleteKey(SetKey(quest, ValueKey));
+            PlayerPrefs.DeleteKey(SetKey(quest, CompleteKey));
+            PlayerPrefs.DeleteKey(SetKey(quest, ReceiveKey));
+            PlayerPrefs.DeleteKey(SetKey(quest, ShuffleKey));
         }
         public void ResetQuest()
         {
@@ -302,82 +308,21 @@ namespace Script.QuestGroup
             {
                 InitQuest(quest);
             }
+
             foreach (var quest in RotationQuestList)
-            { 
+            {
                 InitQuest(quest);
-            } 
+            }
+
             FixQuestList.Clear();
             RotationQuestList.Clear();
             _rotationQuestCandidates.Clear();
-            PlayerPrefs.DeleteKey(questDataKey);
+            PlayerPrefs.DeleteKey(QuestDataKey);
             PlayerPrefs.Save();
             CreateNewQuests();
         }
-
-  
-        // public void ReceiveQuestReward(QuestObject quest)
-        // {
-        //     questRewardPanel.SetActive(true);
-        //     CoinsScript.Instance.Coin += int.Parse(quest.coinValue.text);
-        //     CalculateUnitPieceReward(quest);
-        //     Quest.Instance.AllClearQuest();
-        //     quest.isReceived = true;
-        //     QuestObject.UpdateQuestStates(quest);
-        //     PlayerPrefs.SetInt(quest.QuestType + "_isReceived", 1);
-        //     quest.receiveBtn.GetComponent<Button>().interactable = false;
-        //     quest.receiveBtnText.text = "Completed";
-        //     if (FixQuestList.Contains(quest))
-        //     {
-        //        SaveFixQuestList(FixQuestList);
-        //     }
-        //     else if (RotationQuestList.Contains(quest))
-        //     {
-        //        SaveRotationQuestList(RotationQuestList);
-        //     }
-        //     PlayerPrefs.Save();
-        // }
-        // public void UpdateQuest(QuestAssemble quest, int value)
-        // {
-        //     if (FixQuestList.Contains(quest) || RotationQuestList.Contains(quest))
-        //     {
-        //         if (quest.QuestCondition == QuestCondition.Fix)
-        //         {
-        //             var fixValue = 0;
-        //             var fixGoal = 0;
-        //
-        //
-        //             if (fixValue >= fixGoal)
-        //             {
-        //                 // QuestClear 
-        //                 // 버튼 활성화 
-        //             }
-        //
-        //         }
-        //         quest.questValue += value;
-        //         if (quest.questValue >= quest.questGoal)
-        //         {
-        //             quest.isCompleted = true;
-        //             PlayerPrefs.SetInt(quest.questKey + "_isCompleted", 1);
-        //             QuestObject.UpdateQuestStates(quest);
-        //         }
-        //
-        //
-        //         if (FixQuestList.Contains(quest))
-        //         {
-        //             SaveFixQuestList(FixQuestList);
-        //         }
-        //         else if (RotationQuestList.Contains(quest))
-        //         {
-        //             SaveRotationQuestList(RotationQuestList);
-        //         }
-        //     }
-        //     PlayerPrefs.Save();
-        // }
-
-        public void ReceiveQuestReward()
+        private void CloseReward()
         {
-            ChestCheck.Instance.CloseChestCheck();
-            questRewardPanel.SetActive(false);
             foreach (var unitReward in _unitPieceDict)
             {
                 unitReward.Key.UnitPieceCount += unitReward.Value;
@@ -389,112 +334,330 @@ namespace Script.QuestGroup
                 Destroy(_coinObject.gameObject);
             }
             _unitPieceDict.Clear();
+            questRewardPanel.SetActive(false);
         }
-        // private int UnitPieceReceiveValue(CharacterBase.UnitGrades unitGrade, QuestObject quest)
-        // {
-        //     var greenPiece = 0;
-        //     var bluePiece = 0;
-        //     var purplePiece = 0;
-        //     for (var i = 1; i < _csvData.Length; i++)
-        //     {
-        //         var line = _csvData[i];
-        //         if (string.IsNullOrEmpty(line)) continue;
-        //         var data = line.Split(',');
-        //         var questType = ParseQuestType(data[0]);
-        //         if (questType != quest.QuestType) continue;
-        //         greenPiece = int.Parse(data[6]); 
-        //         bluePiece = int.Parse(data[7]);
-        //         purplePiece = int.Parse(data[8]);
-        //     }
-        //     return unitGrade switch
-        //     {
-        //         CharacterBase.UnitGrades.G => greenPiece,
-        //         CharacterBase.UnitGrades.B => bluePiece,
-        //         CharacterBase.UnitGrades.P => purplePiece
-        //     };
-        // }
-        // private void CalculateUnitPieceReward(QuestObject quest)
-        // {
-        //     var possibleIndices = Enumerable.Range(0, TimeRewardManager.Instance.unitList.Count).ToList();
-        //     var selectedUnitIndices = new List<int>();
-        //     var pieceCountPerUnit = new Dictionary<int, int>();
-        //     foreach (var index in possibleIndices)
-        //     {
-        //         pieceCountPerUnit.TryAdd(index, 0);
-        //     }
-        //
-        //     while (possibleIndices.Count > 0)
-        //     {
-        //         var randomIndex = Random.Range(0, possibleIndices.Count);
-        //         selectedUnitIndices.Add(possibleIndices[randomIndex]);
-        //         possibleIndices.RemoveAt(randomIndex);
-        //     }
-        //
-        //     var totalPiecesPerGrade = new Dictionary<CharacterBase.UnitGrades, int>
-        //     {
-        //         { CharacterBase.UnitGrades.G, UnitPieceReceiveValue(CharacterBase.UnitGrades.G, quest) },
-        //         { CharacterBase.UnitGrades.B, UnitPieceReceiveValue(CharacterBase.UnitGrades.B, quest) },
-        //         {CharacterBase.UnitGrades.P, UnitPieceReceiveValue(CharacterBase.UnitGrades.P, quest)}
-        //     };
-        //
-        //     foreach (var grade in totalPiecesPerGrade.Keys)
-        //     {
-        //         var unitsOfThisGrade = selectedUnitIndices.Where(index =>
-        //             TimeRewardManager.Instance.unitList[index].UnitGrade == grade && TimeRewardManager.Instance.unitList[index].unitPieceLevel < 14).ToList();
-        //         var remainingPieces = totalPiecesPerGrade[grade];
-        //         foreach (var index in unitsOfThisGrade)
-        //         {
-        //             pieceCountPerUnit.TryAdd(index, 0);
-        //             if (remainingPieces > 1)
-        //             {
-        //                 var piecesForThisUnit = Random.Range(1, remainingPieces);
-        //                 pieceCountPerUnit[index] = piecesForThisUnit;
-        //                 remainingPieces -= piecesForThisUnit;
-        //             }
-        //             else
-        //             {
-        //                 pieceCountPerUnit[index] = remainingPieces;
-        //                 remainingPieces = 0;
-        //                 break;
-        //             }
-        //         }
-        //         while (remainingPieces > 0 && unitsOfThisGrade.Count > 0)
-        //         {
-        //             for (var i = 0; i < unitsOfThisGrade.Count && remainingPieces > 0; i++)
-        //             {
-        //                 var index = unitsOfThisGrade[i];
-        //                 pieceCountPerUnit[index]++;
-        //                 remainingPieces--;
-        //             }
-        //         }
-        //     }
-        //     foreach (var index in selectedUnitIndices)
-        //     {
-        //         var unit = TimeRewardManager.Instance.unitList[index];
-        //         if (unit.unitPieceLevel >= 14) continue;
-        //         unit.Initialize();
-        //         _unitPieceReward = pieceCountPerUnit[index];
-        //         if (_unitPieceReward == 0) continue;
-        //         _unitPieceObject = Instantiate(rewardItem, questRewardContents.transform);
-        //         _unitPieceObject.goodsBack.GetComponent<Image>().color = Color.white;
-        //         _unitPieceObject.goodsBack.GetComponent<Image>().sprite = unit.UnitGrade switch
-        //         {
-        //             CharacterBase.UnitGrades.G => StoreMenu.Instance.gGradeSprite,
-        //             CharacterBase.UnitGrades.B => StoreMenu.Instance.bGradeSprite,
-        //             CharacterBase.UnitGrades.P => StoreMenu.Instance.pGradeSprite,
-        //         };
-        //         _unitPieceObject.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPieceLevel);
-        //         _unitPieceObject.goodsSprite.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);
-        //         _unitPieceObject.goodsValue.text = $"{_unitPieceReward}";
-        //         _unitPieceObject.goodsValue.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 0);
-        //         _unitPieceDict[unit] = _unitPieceReward;
-        //     }
-        //     foreach (var unitPiece in _unitPieceDict)
-        //     {
-        //         unitPiece.Key.UnitPieceCount += unitPiece.Value;
-        //         HoldCharacterList.Instance.UpdateRewardPiece(unitPiece.Key);
-        //     }
-        //     _unitPieceDict.Clear();
-        // }
+        public IEnumerator UpdateQuest(QuestAssemble quest, int value)
+        {
+            if (!FixQuestList.Contains(quest) && !RotationQuestList.Contains(quest)) yield break;
+            quest.questValue = PlayerPrefs.GetInt(SetKey(quest, ValueKey), 0);
+            quest.questValue += value;
+            quest.questProgress.value = quest.questValue;
+            quest.questProgressText.text = $"{quest.questValue} / {quest.questGoal}";
+            PlayerPrefs.SetInt(SetKey(quest, ValueKey), quest.questValue);
+            if (quest.questValue >= quest.questGoal)
+            {
+                quest.questProgressText.text = $"{quest.questGoal} / {quest.questGoal}";
+                quest.isCompleted = true;
+                PlayerPrefs.GetString(SetKey(quest, CompleteKey), "true");
+            }
+            QuestObject.UpdateQuestStates(quest);
+            PlayerPrefs.Save();
+            yield return null;
+        }
+        public IEnumerator SpecialQuestUpdate(QuestTypes questType, int value)
+        {
+            switch (questType)
+            {
+                case QuestTypes.ViewAds:
+                {
+                    questObject.adsGoal = PlayerPrefs.GetInt($"{questType}{GoalKey}", 0);
+                    questObject.adsValue = PlayerPrefs.GetInt($"{questType}{ValueKey}", 0);
+                    questObject.adsValue += value;
+                    questObject.adsProgress.maxValue = questObject.adsGoal;
+                    Debug.Log("QuestGoal:" + questObject.adsGoal);
+                    questObject.adsProgress.value = questObject.adsValue;
+                    Debug.Log("QuestValue:" + questObject.adsValue);
+                    questObject.adsProgressText.text = $"{questObject.adsValue} / {questObject.adsGoal}";
+                    if (questObject.adsValue >= questObject.adsGoal)
+                    {
+                        questObject.adsProgressText.text = $"{questObject.adsGoal} / {questObject.adsGoal}";
+                        questObject.adsRewardBtn.interactable = true;
+                        questObject.adsRewardBtn.onClick.AddListener(() => SpecialQuestReward(questType));
+                        PlayerPrefs.SetString($"{questType}{CompleteKey}", "true");
+                    }
+                    PlayerPrefs.SetInt($"{questType}{ValueKey}", questObject.adsValue);
+                    PlayerPrefs.Save();
+                    yield return null;
+                    break;
+                }
+                case QuestTypes.AllClear:
+                {
+                    questObject.allClearGoal = PlayerPrefs.GetInt($"{questType}{GoalKey}", 0);
+                    questObject.allClearValue = PlayerPrefs.GetInt($"{questType}{ValueKey}", 0);
+                    questObject.allClearValue += value;
+                    questObject.allClearProgress.maxValue = questObject.allClearGoal;
+                    questObject.allClearProgress.value = questObject.allClearValue;
+                    questObject.allClearProgressText.text = $"{questObject.allClearValue} / {questObject.allClearGoal}";
+                    if (questObject.allClearValue >= questObject.allClearGoal)
+                    {
+                        questObject.allClearProgressText.text = $"{questObject.allClearGoal} / {questObject.allClearGoal}";
+                        questObject.allClearRewardBtn.interactable = true;
+                        questObject.allClearRewardBtn.onClick.AddListener(() => SpecialQuestReward(questType));
+                        PlayerPrefs.SetString($"{questType}{CompleteKey}", "true");
+                    }
+                    PlayerPrefs.SetInt($"{questType}{ValueKey}", questObject.adsValue);
+                    PlayerPrefs.Save();
+                    yield return null;
+                    break;
+                }
+            }
+        }
+        public void SpecialQuestReward(QuestTypes quest)
+        {
+            questObject.adsRewardBtn.onClick.RemoveListener(() => SpecialQuestReward(quest));
+            questObject.allClearRewardBtn.onClick.RemoveListener(() => SpecialQuestReward(quest));
+            questRewardPanel.SetActive(true);
+            SpecialQuestCoinCalculate(quest);
+            SpecialQuestPieceCalculate(quest);
+            switch (quest)
+            {
+                case QuestTypes.ViewAds:
+                    questObject.adsRewardBtn.interactable = false;
+                    PlayerPrefs.SetString($"{quest}{ReceiveKey}", "true");
+                    break;
+                case QuestTypes.AllClear:
+                    questObject.allClearRewardBtn.interactable = false;
+                    PlayerPrefs.SetString($"{quest}{ReceiveKey}", "true");
+                    break;
+            }
+            questRewardCloseBtn.onClick.AddListener(CloseReward);
+        }
+        private void SpecialQuestPieceCalculate(QuestTypes quest)
+        {
+            var possibleIndices = Enumerable.Range(0, TimeRewardManager.Instance.unitList.Count).ToList();
+            var selectedUnitIndices = new List<int>();
+            var pieceCountPerUnit = new Dictionary<int, int>();
+            foreach (var index in possibleIndices)
+            {
+                pieceCountPerUnit.TryAdd(index, 0);
+            }
+
+            while (possibleIndices.Count > 0)
+            {
+                var randomIndex = Random.Range(0, possibleIndices.Count);
+                selectedUnitIndices.Add(possibleIndices[randomIndex]);
+                possibleIndices.RemoveAt(randomIndex);
+            }
+
+            var totalPiecesPerGrade = new Dictionary<CharacterBase.UnitGrades, int>
+            {
+                { CharacterBase.UnitGrades.G, SpecialRewardPieceValue(CharacterBase.UnitGrades.G, quest) },
+                { CharacterBase.UnitGrades.B, SpecialRewardPieceValue(CharacterBase.UnitGrades.B, quest) },
+                { CharacterBase.UnitGrades.P, SpecialRewardPieceValue(CharacterBase.UnitGrades.P, quest) }
+            };
+
+            foreach (var grade in totalPiecesPerGrade.Keys)
+            {
+                var unitsOfThisGrade = selectedUnitIndices.Where(index =>
+                    TimeRewardManager.Instance.unitList[index].UnitGrade == grade &&
+                    TimeRewardManager.Instance.unitList[index].unitPieceLevel < 14).ToList();
+                var remainingPieces = totalPiecesPerGrade[grade];
+                foreach (var index in unitsOfThisGrade)
+                {
+                    pieceCountPerUnit.TryAdd(index, 0);
+                    if (remainingPieces > 1)
+                    {
+                        var piecesForThisUnit = Random.Range(1, remainingPieces);
+                        pieceCountPerUnit[index] = piecesForThisUnit;
+                        remainingPieces -= piecesForThisUnit;
+                    }
+                    else
+                    {
+                        pieceCountPerUnit[index] = remainingPieces;
+                        remainingPieces = 0;
+                        break;
+                    }
+                }
+
+                while (remainingPieces > 0 && unitsOfThisGrade.Count > 0)
+                {
+                    for (var i = 0; i < unitsOfThisGrade.Count && remainingPieces > 0; i++)
+                    {
+                        var index = unitsOfThisGrade[i];
+                        pieceCountPerUnit[index]++;
+                        remainingPieces--;
+                    }
+                }
+            }
+
+            foreach (var index in selectedUnitIndices)
+            {
+                var unit = TimeRewardManager.Instance.unitList[index];
+                if (unit.unitPieceLevel >= 14) continue;
+                unit.Initialize();
+                _unitPieceReward = pieceCountPerUnit[index];
+                if (_unitPieceReward == 0) continue;
+                _unitPieceObject = Instantiate(rewardItem, questRewardContents.transform);
+                _unitPieceObject.goodsBack.GetComponent<Image>().color = Color.white;
+                _unitPieceObject.goodsBack.GetComponent<Image>().sprite = unit.UnitGrade switch
+                {
+                    CharacterBase.UnitGrades.G => StoreMenu.Instance.gGradeSprite,
+                    CharacterBase.UnitGrades.B => StoreMenu.Instance.bGradeSprite,
+                    CharacterBase.UnitGrades.P => StoreMenu.Instance.pGradeSprite,
+                };
+                _unitPieceObject.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPieceLevel);
+                _unitPieceObject.goodsValue.text = $"{_unitPieceReward}";
+                _unitPieceDict[unit] = _unitPieceReward;
+            }
+
+            foreach (var unitPiece in _unitPieceDict)
+            {
+                unitPiece.Key.UnitPieceCount += unitPiece.Value;
+                HoldCharacterList.Instance.UpdateRewardPiece(unitPiece.Key);
+            }
+
+            _unitPieceDict.Clear();
+        }
+        private int SpecialRewardPieceValue(CharacterBase.UnitGrades unitGrades, QuestTypes quest)
+        {
+            var greenPiece = 0;
+            var bluePiece = 0;
+            var purplePiece = 0;
+            for (var i = 1; i < _csvData.Length; i++)
+            {
+                var line = _csvData[i];
+                if (string.IsNullOrEmpty(line)) continue;
+                var data = line.Split(',');
+                var questType = ParseQuestType(data[0]);
+                if (questType != quest) continue;
+                greenPiece = int.Parse(data[6]); 
+                bluePiece = int.Parse(data[7]);
+                purplePiece = int.Parse(data[8]);
+            }
+            return unitGrades switch
+            {
+                CharacterBase.UnitGrades.G => greenPiece,
+                CharacterBase.UnitGrades.B => bluePiece,
+                CharacterBase.UnitGrades.P => purplePiece
+            };
+        }
+        private void SpecialQuestCoinCalculate(QuestTypes quest)
+        {
+            if (_coinObject != null)
+            {
+                Destroy(_coinObject.gameObject);
+            }
+            _coinObject = Instantiate(rewardItem, questRewardContents.transform);
+            _coinObject.goodsBack.GetComponent<Image>().sprite = _coinObject.coinSprite;
+            _coinObject.goodsSprite.GetComponent<Image>().sprite = StoreMenu.Instance.specialOffer.coinSprite;
+            var value = 0;
+            foreach (var data in ParseCsvData().Where(data => data.questType == quest.ToString()))
+            {
+                value = data.item1CoinValue;
+            }
+            _coinObject.goodsValue.text = value.ToString();
+            CoinsScript.Instance.Coin += value;
+        }
+        public void ReceiveQuestReward(QuestAssemble quest)
+        {
+            quest.isReceived = true;
+            PlayerPrefs.SetString(SetKey(quest,ReceiveKey), "true");
+            Quest.Instance.AllClearQuest(quest.QuestType);
+            questRewardPanel.SetActive(true);
+            CalculateCoinReward(quest);
+            CalculateUnitPieceReward(quest);
+            QuestObject.UpdateQuestStates(quest);
+            PlayerPrefs.Save();
+            questRewardCloseBtn.onClick.AddListener(CloseReward);
+        }
+        private void CalculateCoinReward(QuestAssemble quest)
+        {
+            if (quest.coinValue == 0) return;
+            _coinObject = Instantiate(rewardItem, questRewardContents.transform);
+            _coinObject.goodsBack.GetComponent<Image>().sprite = _coinObject.coinSprite;
+            _coinObject.goodsSprite.GetComponent<Image>().sprite = StoreMenu.Instance.specialOffer.coinSprite;
+            _coinObject.goodsValue.text = quest.coinValue.ToString();
+            CoinsScript.Instance.Coin += quest.coinValue;
+        }
+        private static int UnitPieceReceiveValue(CharacterBase.UnitGrades unitGrade, QuestAssemble quest)
+        {
+            return unitGrade switch
+            {
+                CharacterBase.UnitGrades.G => quest.greenValue,
+                CharacterBase.UnitGrades.B => quest.blueValue,
+                CharacterBase.UnitGrades.P => quest.purpleValue
+            };
+        }
+        private void CalculateUnitPieceReward(QuestAssemble quest)
+        {
+            var possibleIndices = Enumerable.Range(0, TimeRewardManager.Instance.unitList.Count).ToList();
+            var selectedUnitIndices = new List<int>();
+            var pieceCountPerUnit = new Dictionary<int, int>();
+            foreach (var index in possibleIndices)
+            {
+                pieceCountPerUnit.TryAdd(index, 0);
+            }
+        
+            while (possibleIndices.Count > 0)
+            {
+                var randomIndex = Random.Range(0, possibleIndices.Count);
+                selectedUnitIndices.Add(possibleIndices[randomIndex]);
+                possibleIndices.RemoveAt(randomIndex);
+            }
+        
+            var totalPiecesPerGrade = new Dictionary<CharacterBase.UnitGrades, int>
+            {
+                { CharacterBase.UnitGrades.G, UnitPieceReceiveValue(CharacterBase.UnitGrades.G, quest) },
+                { CharacterBase.UnitGrades.B, UnitPieceReceiveValue(CharacterBase.UnitGrades.B, quest) },
+                { CharacterBase.UnitGrades.P, UnitPieceReceiveValue(CharacterBase.UnitGrades.P, quest) }
+            };
+        
+            foreach (var grade in totalPiecesPerGrade.Keys)
+            {
+                var unitsOfThisGrade = selectedUnitIndices.Where(index =>
+                    TimeRewardManager.Instance.unitList[index].UnitGrade == grade && TimeRewardManager.Instance.unitList[index].unitPieceLevel < 14).ToList();
+                var remainingPieces = totalPiecesPerGrade[grade];
+                foreach (var index in unitsOfThisGrade)
+                {
+                    pieceCountPerUnit.TryAdd(index, 0);
+                    if (remainingPieces > 1)
+                    {
+                        var piecesForThisUnit = Random.Range(1, remainingPieces);
+                        pieceCountPerUnit[index] = piecesForThisUnit;
+                        remainingPieces -= piecesForThisUnit;
+                    }
+                    else
+                    {
+                        pieceCountPerUnit[index] = remainingPieces;
+                        remainingPieces = 0;
+                        break;
+                    }
+                }
+                while (remainingPieces > 0 && unitsOfThisGrade.Count > 0)
+                {
+                    for (var i = 0; i < unitsOfThisGrade.Count && remainingPieces > 0; i++)
+                    {
+                        var index = unitsOfThisGrade[i];
+                        pieceCountPerUnit[index]++;
+                        remainingPieces--;
+                    }
+                }
+            }
+            foreach (var index in selectedUnitIndices)
+            {
+                var unit = TimeRewardManager.Instance.unitList[index];
+                if (unit.unitPieceLevel >= 14) continue;
+                unit.Initialize();
+                _unitPieceReward = pieceCountPerUnit[index];
+                if (_unitPieceReward == 0) continue;
+                _unitPieceObject = Instantiate(rewardItem, questRewardContents.transform);
+                _unitPieceObject.goodsBack.GetComponent<Image>().color = Color.white;
+                _unitPieceObject.goodsBack.GetComponent<Image>().sprite = unit.UnitGrade switch
+                {
+                    CharacterBase.UnitGrades.G => StoreMenu.Instance.gGradeSprite,
+                    CharacterBase.UnitGrades.B => StoreMenu.Instance.bGradeSprite,
+                    CharacterBase.UnitGrades.P => StoreMenu.Instance.pGradeSprite,
+                };
+                _unitPieceObject.goodsSprite.GetComponent<Image>().sprite = unit.GetSpriteForLevel(unit.unitPieceLevel);
+                _unitPieceObject.goodsValue.text = $"{_unitPieceReward}";
+                _unitPieceDict[unit] = _unitPieceReward;
+            }
+            foreach (var unitPiece in _unitPieceDict)
+            {
+                unitPiece.Key.UnitPieceCount += unitPiece.Value;
+                HoldCharacterList.Instance.UpdateRewardPiece(unitPiece.Key);
+            }
+            _unitPieceDict.Clear();
+        }
     }   
 }

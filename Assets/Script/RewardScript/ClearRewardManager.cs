@@ -200,6 +200,8 @@ namespace Script.RewardScript
                 CumulativeUnitPieces[unit] += unitPieceReward;
                 unit.UnitPieceCount += unitPieceReward;
             }
+            var totalUnitPieces = pieceCountPerUnit.Values.Sum();
+            Quest.Instance.GetPieceQuest(totalUnitPieces);
             SaveCumulativeData();
         }
         private static int GetUnitPieceReward(int stage, int wave, CharacterBase.UnitGrades unitGrade)

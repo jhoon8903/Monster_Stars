@@ -10,7 +10,7 @@ namespace Script.QuestGroup
         [SerializeField] public TextMeshProUGUI adsDesc;
         [SerializeField] public Slider adsProgress;
         [SerializeField] public TextMeshProUGUI adsProgressText;
-        [SerializeField] private Button adsRewardBtn;
+        [SerializeField] public Button adsRewardBtn;
         public int adsValue;
         public int adsGoal;
         
@@ -18,12 +18,12 @@ namespace Script.QuestGroup
         [SerializeField] public TextMeshProUGUI allClearDesc;
         [SerializeField] public Slider allClearProgress;
         [SerializeField] public TextMeshProUGUI allClearProgressText;
-        [SerializeField] private Button allClearRewardBtn;
+        [SerializeField] public Button allClearRewardBtn;
         public int allClearValue;
         public int allClearGoal;
         
         [SerializeField] internal QuestAssemble assemble;
-        internal QuestAssemble QuestInstance;
+        private QuestAssemble _questInstance;
 
         public void FixQuestCreate(QuestManager.QuestData data)
         {
@@ -37,25 +37,48 @@ namespace Script.QuestGroup
                 CoinQuestsCreate(data);
             }
         }
-        private void SpecialQuests(QuestManager.QuestTypes questType, QuestManager.QuestData data)
+        public void SpecialQuests(QuestManager.QuestTypes questType, QuestManager.QuestData data)
         {
             var desc = data.questDesc;
-            var questGoal = data.questGoal;
-            var questKey = data.questKey;
-            var questValue = PlayerPrefs.GetInt( questKey + "_value", 0);
+            var questGoal = PlayerPrefs.GetInt($"{questType}{QuestManager.GoalKey}", data.questGoal);
+            PlayerPrefs.SetInt($"{questType}{QuestManager.GoalKey}", questGoal);
+            var questValue = PlayerPrefs.GetInt( $"{questType}{QuestManager.ValueKey}", 0);
+            var complete = bool.Parse(PlayerPrefs.GetString($"{questType}{QuestManager.CompleteKey}", "false"));
+            var receive = bool.Parse(PlayerPrefs.GetString($"{questType}{QuestManager.ReceiveKey}", "false"));
             switch (questType)
             {
                 case QuestManager.QuestTypes.ViewAds:
-                    SetSpecialQuest(adsDesc, adsProgress, adsProgressText, desc, adsGoal, adsValue);
                     adsValue = questValue;
                     adsGoal = questGoal;
+                    adsRewardBtn.interactable = receive switch
+                    {
+                        true => false,
+                        false => complete switch
+                        {
+                            true => true,
+                            false => false
+                        }
+                    };
+                    SetSpecialQuest(adsDesc, adsProgress, adsProgressText, desc, adsGoal, adsValue);
                     break;
                 case QuestManager.QuestTypes.AllClear:
                     allClearValue = questValue;
                     allClearGoal = questGoal;
+                    allClearRewardBtn.interactable = receive switch
+                    {
+                        true => false,
+                        false => complete switch
+                        {
+                            true => true,
+                            false => false
+                        }
+                    };
                     SetSpecialQuest(allClearDesc, allClearProgress, allClearProgressText, desc, allClearGoal, allClearValue);
                     break;
             }
+            PlayerPrefs.Save();
+            adsRewardBtn.onClick.AddListener(()=>QuestManager.Instance.SpecialQuestReward(questType));
+
         }
         private static void SetSpecialQuest(TMP_Text descText, Slider progress, TMP_Text progressText, string desc, int goal, int value)
         {
@@ -64,28 +87,29 @@ namespace Script.QuestGroup
             progress.value = value;
             progressText.text = $"{value} / {goal}";
         }
-        public void CoinQuestsCreate(QuestManager.QuestData data)
+        private void CoinQuestsCreate(QuestManager.QuestData data)
         {
             var questInstance = CreateQuestFromData(data);
             QuestManager.Instance.FixQuestList.Add(questInstance);
             QuestManager.Instance.questInstances.Add(questInstance);
         }
-        public void RotationQuestCreate(QuestManager.QuestData data)
+        public QuestAssemble RotationQuestCreate(QuestManager.QuestData data)
         {
             var questInstance = CreateQuestFromData(data);
             QuestManager.Instance.RotationQuestList.Add(questInstance);
             QuestManager.Instance.questInstances.Add(questInstance);
+            return questInstance;
         }
-        public QuestAssemble CreateQuestFromData(QuestManager.QuestData data)
+        private QuestAssemble CreateQuestFromData(QuestManager.QuestData data)
         {
-            QuestInstance = Instantiate(assemble, QuestManager.Instance.questTransform);
-            QuestAssemble.InitializeFromData(QuestInstance, data);
-            SetActiveOrToggleParent(QuestInstance.coinValueText.transform.parent.gameObject, data.item1CoinValue, QuestInstance.coinValueText);
-            SetActiveOrToggleParent(QuestInstance.greenPieceValueText.transform.parent.gameObject, data.item2GreenPieceValue, QuestInstance.greenPieceValueText);
-            SetActiveOrToggleParent(QuestInstance.bluePieceValueText.transform.parent.gameObject, data.item3BluePieceValue, QuestInstance.bluePieceValueText);
-            SetActiveOrToggleParent(QuestInstance.purplePieceValueText.transform.parent.gameObject, data.item4PurplePieceValue, QuestInstance.purplePieceValueText);
-            UpdateQuestStates(QuestInstance);
-            return QuestInstance;
+            _questInstance = Instantiate(assemble, QuestManager.Instance.questTransform);
+            QuestAssemble.InitializeFromData(_questInstance, data);
+            SetActiveOrToggleParent(_questInstance.coinValueText.transform.parent.gameObject, data.item1CoinValue, _questInstance.coinValueText);
+            SetActiveOrToggleParent(_questInstance.greenPieceValueText.transform.parent.gameObject, data.item2GreenPieceValue, _questInstance.greenPieceValueText);
+            SetActiveOrToggleParent(_questInstance.bluePieceValueText.transform.parent.gameObject, data.item3BluePieceValue, _questInstance.bluePieceValueText);
+            SetActiveOrToggleParent(_questInstance.purplePieceValueText.transform.parent.gameObject, data.item4PurplePieceValue, _questInstance.purplePieceValueText);
+            UpdateQuestStates(_questInstance);
+            return _questInstance;
         }
         private static void SetActiveOrToggleParent(GameObject parentObject, int value, TMP_Text textUI)
         {
@@ -99,13 +123,12 @@ namespace Script.QuestGroup
                 parentObject.SetActive(false);
             }
         }
-        public void UpdateQuestStates(QuestAssemble instanceObject)
+        public static void UpdateQuestStates(QuestAssemble instanceObject)
         {
             instanceObject.shuffleBtn.GetComponent<Button>().onClick.RemoveAllListeners();
-            var receive = bool.Parse(PlayerPrefs.GetString(  instanceObject.questKey + "_isReceived", "false"));
-            var complete = bool.Parse(PlayerPrefs.GetString(  instanceObject.questKey + "_isCompleted", "false"));
-            var shuffle = bool.Parse(PlayerPrefs.GetString( instanceObject.questKey + "_isShuffled", "false"));
-    
+            var receive = instanceObject.isReceived;
+            var complete = instanceObject.isCompleted;
+            var shuffle = instanceObject.isShuffled;
             switch (receive)
             {
                 case true:
@@ -122,7 +145,7 @@ namespace Script.QuestGroup
                             instanceObject.receiveBtn.SetActive(true);
                             instanceObject.receiveBtn.GetComponent<Button>().interactable = true;
                             instanceObject.receiveBtnText.text = "Receive";
-                            // QuestInstance.receiveBtn.GetComponent<Button>().onClick.AddListener(() => QuestManager.Instance.ReceiveQuestReward(questObject));
+                            instanceObject.receiveBtn.GetComponent<Button>().onClick.AddListener(() => QuestManager.Instance.ReceiveQuestReward(instanceObject));
                             break;
                         case false :
                             if ( instanceObject.QuestCondition == QuestManager.QuestCondition.Fix || shuffle)

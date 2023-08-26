@@ -181,23 +181,23 @@ namespace Script.RewardScript
         public enum Types
         {
             // Common Property
-            Step,
-            StepLimit,
-            RandomLevelUp,
-            GroupLevelUp,
-            LevelUpPattern,
-            Match5Upgrade,
-            AddRow,
             GroupDamage,
             GroupAtkSpeed,
-            StepDirection,
+            Step,
+            RandomLevelUp,
+            GroupLevelUp,
             Exp,
-            CastleRecovery,
-            CastleMaxHp,
-            Slow,
-            NextStage,
             Gold,
-
+            CastleMaxHp,
+            CastleRecovery,
+            Match5Upgrade,
+            Slow,
+            StepLimit,
+            StepDirection,
+            NextStage,
+            LevelUpPattern,
+            AddRow,
+            
             //Darkness3 Octopus
             OctopusThirdAttackBoost,
             OctopusPoisonAttack,
@@ -296,7 +296,6 @@ namespace Script.RewardScript
             DarkElfDoubleAttack,
             DarkElfStatusPoison,
             DarkElfSameEnemyBoost,
-
         }
 
         [Serializable]
@@ -305,13 +304,10 @@ namespace Script.RewardScript
             public Types skillTypes;
             public Sprite skillIcon;
         }
-
         [SerializeField] public List<Skill> skills = new List<Skill>();
-
         public List<Data> GreenList { get; private set; } = new List<Data>();
         public List<Data> BlueList { get; private set; } = new List<Data>();
         public List<Data> PurpleList { get; private set; } = new List<Data>();
-
         [SerializeField] internal Sprite green;
         [SerializeField] internal Sprite blue;
         [SerializeField] internal Sprite purple;

@@ -856,20 +856,12 @@ namespace Script.RewardScript
         private void LevelUpDisplayText(Button expButton, TMP_Text powerText, Image icon, Image btnBadge, Data powerUp)
         {
             var finalDesc = powerUp.Desc;
-            var placeholderValues = new Dictionary<string, Func<double>>
-            {
-                { "{p}", () => powerUp.Property[0]},
-                { "{15*EnforceManager.Instance.slowCount}", () => 15 * EnforceManager.Instance.slowCount },
-                { "{EnforceManager.Instance.expPercentage}", () => EnforceManager.Instance.expPercentage },
-                { "{EnforceManager.Instance.highLevelCharacterCount}", () => EnforceManager.Instance.highLevelCharacterCount},
-            };
+            var placeholderValues = new Dictionary<string, Func<double>> {{ "{p}", () => powerUp.Property[0]}};
             finalDesc = placeholderValues.Aggregate(finalDesc, (current, placeholder) => current.Replace(placeholder.Key, placeholder.Value().ToString(CultureInfo.CurrentCulture)));
             var finalTranslation = finalDesc.Replace("||", "\n");
-
             icon.sprite = powerUp.Icon;
             btnBadge.sprite = powerUp.BtnColor;
             expButton.GetComponent<Image>().sprite = powerUp.BackGroundColor;
-
             powerText.text = powerUp.Type switch
             {
                 PowerTypeManager.Types.GroupDamage => finalTranslation,

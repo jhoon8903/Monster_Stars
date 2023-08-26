@@ -78,8 +78,7 @@ namespace Script.CharacterManagerScript
         protected internal string UnitDesc { get; protected set; }
         public float UnitLevelDamage { get; set; }
         public Dictionary<EnemyBase, int> AttackCounts { get; set; } = new Dictionary<EnemyBase, int>();
-        
-        protected internal const string LevelKey = "level";
+        private const string LevelKey = "level";
         public virtual void Initialize()
         {
             var level = UnitGrade switch
@@ -346,7 +345,6 @@ namespace Script.CharacterManagerScript
         {
             return null;
         }
-
         protected internal virtual void SetLevel(int level)
         {
             unitPuzzleLevel = level;

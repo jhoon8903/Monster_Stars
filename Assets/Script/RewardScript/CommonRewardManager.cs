@@ -45,9 +45,7 @@ namespace Script.RewardScript
         private string _changeUnitName;
         private int _bossRewardSelected;
         public bool isOpenBox;
-
-        public Dictionary<CharacterBase.UnitGroups, Dictionary<string, string>> LevelUpDict =
-            new Dictionary<CharacterBase.UnitGroups, Dictionary<string, string>>();
+        public Dictionary<CharacterBase.UnitGroups, Dictionary<string, string>> LevelUpDict = new Dictionary<CharacterBase.UnitGroups, Dictionary<string, string>>();
 
         public event Action OnRewardSelected;
         private void Awake()
@@ -92,7 +90,7 @@ namespace Script.RewardScript
         // 2. 상자마다의 확률 분배
         private IEnumerator CommonChance(int greenChance, int blueChance, int purpleChance, string forcedColor)
         {
-            if (StageManager.Instance.currentWave >= 11 && !StageManager.Instance.isBossClear)
+            if (StageManager.Instance != null && StageManager.Instance.currentWave >= 11 && !StageManager.Instance.isBossClear)
             {
                 greenChance = 60;
                 blueChance = 35;
@@ -122,7 +120,7 @@ namespace Script.RewardScript
         {
             var commonPowerUps = new List<Data>();
             var selectedCodes = new HashSet<int>();
-            if (StageManager.Instance.isBossClear && !EnforceManager.Instance.addRow)
+            if (StageManager.Instance != null && StageManager.Instance.isBossClear && !EnforceManager.Instance.addRow)
             {
                 const PowerTypeManager.Types type = PowerTypeManager.Types.AddRow;
                 var (desc, popupDesc) = GetSkillDesc(type);
@@ -246,11 +244,11 @@ namespace Script.RewardScript
         // 6. 예외처리되고 처리 된 옵션값 리턴
         private static Data SelectRandom(IEnumerable<Data> validOptions)
         {
-           var commonDataList = validOptions.ToList();
-           var count = commonDataList.Count();
-           if (count == 0) return null;
-           var randomIndex = Random.Range(0, count);
-           return commonDataList.ElementAt(randomIndex);
+            var commonDataList = validOptions.ToList();
+            var count = commonDataList.Count();
+            if (count == 0) return null;
+            var randomIndex = Random.Range(0, count);
+            return commonDataList.ElementAt(randomIndex);
         }
         // 7. 옵션값 출력
         private void CommonDisplay(IReadOnlyList<Data> powerUpsDisplayData)
@@ -273,19 +271,11 @@ namespace Script.RewardScript
         private void CommonDisplayText(Button commonButton, TMP_Text powerText, Image icon, Image btnBadge, Data powerUp)
         {
             var finalDesc = powerUp.Desc;
-            var placeholderValues = new Dictionary<string, Func<double>>
-           {
-               { "{p}", () => powerUp.Property[0]},
-               { "{15*EnforceManager.Instance.slowCount}", () => 15 * EnforceManager.Instance.slowCount },
-               { "{EnforceManager.Instance.expPercentage}", () => EnforceManager.Instance.expPercentage },
-               { "{EnforceManager.Instance.highLevelCharacterCount}", () => EnforceManager.Instance.highLevelCharacterCount},
-           };
+            var placeholderValues = new Dictionary<string, Func<double>> {{ "{p}", () => powerUp.Property[0]}};
             finalDesc = placeholderValues.Aggregate(finalDesc, (current, placeholder) => current.Replace(placeholder.Key, placeholder.Value().ToString(CultureInfo.CurrentCulture)));
             var finalTranslation = finalDesc.Replace("||", "\n");
-            
-
-           if (powerUp.Type is PowerTypeManager.Types.GroupLevelUp or PowerTypeManager.Types.LevelUpPattern)
-           {
+            if (powerUp.Type is PowerTypeManager.Types.GroupLevelUp or PowerTypeManager.Types.LevelUpPattern)
+            {
                icon.sprite = EnforceManager.Instance.characterList[powerUp.Property[0]]
                    .GetSpriteForLevel(EnforceManager.Instance.characterList[powerUp.Property[0]].unitPieceLevel);
 
@@ -301,14 +291,14 @@ namespace Script.RewardScript
                    CharacterBase.UnitGrades.B => PowerTypeManager.Instance.blueBack,
                    CharacterBase.UnitGrades.P => PowerTypeManager.Instance.purpleBack,
                };
-           }
-           else
-           {
-               icon.sprite = powerUp.Icon;
-               btnBadge.sprite = powerUp.BtnColor;
-               commonButton.GetComponent<Image>().sprite = powerUp.BackGroundColor;
-           }
-           switch (powerUp.Type)
+            }
+            else
+            {
+                icon.sprite = powerUp.Icon;
+                btnBadge.sprite = powerUp.BtnColor;
+                commonButton.GetComponent<Image>().sprite = powerUp.BackGroundColor;
+            }
+            switch (powerUp.Type)
             {
                 case PowerTypeManager.Types.Exp:
                     powerText.text = finalTranslation;
@@ -385,46 +375,44 @@ namespace Script.RewardScript
         // 9. 상자 오픈
         private IEnumerator OpenBox(GameObject treasure)
         {
-        Time.timeScale = 0; // 게임 일시 정지
-        commonRewardPanel.SetActive(true); // 보물 패널 활성화
-
-
-        var treasureChestLevel = treasure.GetComponent<CharacterBase>().unitPuzzleLevel; // 보물 상자 이름
-        switch(treasureChestLevel)
-        {
-            case 1:
-                break;
-            case 2:
-                yield return StartCoroutine(CommonChance(80, 17, 3, null));
-                break;
-            case 3:
-                yield return StartCoroutine(CommonChance(60, 35, 5, "blue"));
-                break;
-            case 4:
-                yield return StartCoroutine(CommonChance(0, 80, 20, "purple"));
-                break;
-        }
-        if (PlayerPrefs.GetInt("TutorialKey") == 1)
-        {
-            Time.timeScale = 1;
-            common1Button.GetComponent<Canvas>().enabled = true;
-            common1Button.GetComponent<Canvas>().overrideSorting = true;
-            common1Button.GetComponent<Canvas>().sortingOrder = 1;
-        }
-        yield return new WaitUntil(() => commonRewardPanel.activeSelf == false); // 보물 패널이 비활성화될 때까지 대기
-        openBoxing = false;
-        if (PendingTreasure.Count > 0)
-        {
-            EnqueueTreasure();
-        }
-        isOpenBox = false;
+            Quest.Instance.MergeBoxQuest();
+            Time.timeScale = 0; // 게임 일시 정지
+            commonRewardPanel.SetActive(true); // 보물 패널 활성화
+            var treasureChestLevel = treasure.GetComponent<CharacterBase>().unitPuzzleLevel; // 보물 상자 이름
+            switch(treasureChestLevel)
+            {
+                case 1:
+                    break;
+                case 2:
+                    yield return StartCoroutine(CommonChance(80, 17, 3, null));
+                    break;
+                case 3:
+                    yield return StartCoroutine(CommonChance(60, 35, 5, "blue"));
+                    break;
+                case 4:
+                    yield return StartCoroutine(CommonChance(0, 80, 20, "purple"));
+                    break;
+            }
+            if (PlayerPrefs.GetInt("TutorialKey") == 1)
+            {
+                Time.timeScale = 1;
+                common1Button.GetComponent<Canvas>().enabled = true;
+                common1Button.GetComponent<Canvas>().overrideSorting = true;
+                common1Button.GetComponent<Canvas>().sortingOrder = 1;
+            }
+            yield return new WaitUntil(() => commonRewardPanel.activeSelf == false); // 보물 패널이 비활성화될 때까지 대기
+            openBoxing = false;
+            if (PendingTreasure.Count > 0)
+            {
+                EnqueueTreasure();
+            }
+            isOpenBox = false;
         }
         // 10. 상자 선택
         private void SelectCommonReward(Data selectedReward)
         {
-        StartCoroutine(Selected(selectedReward));
-        Quest.Instance.MatchCoinQuest();
-        OnRewardSelected?.Invoke();
+            StartCoroutine(Selected(selectedReward));
+            OnRewardSelected?.Invoke();
         }
         // 11. 선택 처리
         private IEnumerator Selected(Data selectedReward)
@@ -516,18 +504,18 @@ namespace Script.RewardScript
         // # 보스 웨이브 클리어 별도 보상
         public IEnumerator WaveRewardChance()
         {
-        if (StageManager.Instance.latestStage == 1) yield break;
-        Time.timeScale = 0;
-        commonRewardPanel.SetActive(true);
-        yield return StartCoroutine(CommonChance(30, 55, 15, null));
+            if (StageManager.Instance != null && StageManager.Instance.latestStage == 1) yield break;
+            Time.timeScale = 0;
+            commonRewardPanel.SetActive(true);
+            yield return StartCoroutine(CommonChance(30, 55, 15, null));
         }
         private void ShuffleCommonReward()
         {
-        if (spawnManager.isTutorial) return;
-        AdsManager.Instance.ShowRewardedAd();
-        Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_refresh");
-        AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Common;
-        commonShuffle.gameObject.SetActive(false);
+            if (spawnManager.isTutorial) return;
+            AdsManager.Instance.ShowRewardedAd();
+            Firebase.Analytics.FirebaseAnalytics.LogEvent("ad_refresh");
+            AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.Common;
+            commonShuffle.gameObject.SetActive(false);
         }
     }
 }
