@@ -36,12 +36,16 @@ namespace Script.CharacterGroupScript
         {
             return characterObjectLevel switch
             {
-                <= 3 => level1Sprite,
-                <= 6 => level2Sprite,
-                <= 9 => level3Sprite,
-                <= 12 => level4Sprite,
+                <= 3 => level2Sprite,
+                <= 6 => level3Sprite,
+                <= 9 => level4Sprite,
+                <= 12 => level5Sprite,
                 _ => level5Sprite
             };
+        }
+        protected internal override Sprite GetBasicSprite()
+        {
+            return level1Sprite;
         }
         protected override void LevelUp()
         {

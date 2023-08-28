@@ -150,8 +150,8 @@ namespace Script.RewardScript
             var type = (Types)Enum.Parse(typeof(Types), skillData[3]);
             var desc = skillData[6];
             var popupDesc = skillData[7];
-            var property = skillData[8].Contains(" ")
-                ? Array.ConvertAll(skillData[8].Split(' '), int.Parse)
+            var property = skillData[8].Contains(";")
+                ? Array.ConvertAll(skillData[8].Split(';'), int.Parse)
                 : new[] { int.Parse(skillData[8]) };
 
             switch (skillData[4])

@@ -42,56 +42,37 @@ namespace Script.QuestGroup
         public void KillEnemyQuest()
         {
             var killEnemyQuest = questManager.RotationQuestList.FirstOrDefault(q => q.QuestType == QuestManager.QuestTypes.KillEnemy);
-            if (killEnemyQuest != null)
-            {
-                StartCoroutine(questManager.UpdateQuest(killEnemyQuest, 1));
-            }
+            StartCoroutine(questManager.UpdateQuest(killEnemyQuest, 1));
         }
         // Open Box (Store) Quest (Rotation)
         public void OpenBoxQuest()
         {
             var openBoxQuest = questManager.RotationQuestList.FirstOrDefault(q => q.QuestType == QuestManager.QuestTypes.OpenBox);
-
-            if (openBoxQuest != null)
-            {
-                StartCoroutine(questManager.UpdateQuest(openBoxQuest, 1));
-            }
+            StartCoroutine(questManager.UpdateQuest(openBoxQuest, 1));
         }
         // Kill Boss Quest (Rotation)
         public void KillBossQuest()
         {
             var killBossQuest = questManager.RotationQuestList.FirstOrDefault(q => q.QuestType == QuestManager.QuestTypes.KillBoss);
-            if (killBossQuest != null)
-            {
-                StartCoroutine(questManager.UpdateQuest(killBossQuest, 1));
-            }
+            StartCoroutine(questManager.UpdateQuest(killBossQuest, 1));
         }
         // Match Coin Quest (Rotation)
         public void MergeBoxQuest()
         {
             var mergeBoxQuest = questManager.RotationQuestList.FirstOrDefault(q => q.QuestType == QuestManager.QuestTypes.MergeBox);
-            if (mergeBoxQuest != null)
-            {
-                StartCoroutine(questManager.UpdateQuest(mergeBoxQuest, 1));
-            }
+            StartCoroutine(questManager.UpdateQuest(mergeBoxQuest, 1));
         }
         // Victory Quest (Rotation)
         public void VictoryQuest()
         {
             var victoryQuest = questManager.RotationQuestList.FirstOrDefault(q => q.QuestType == QuestManager.QuestTypes.Victory);
-            if (victoryQuest != null)
-            {
-                StartCoroutine(questManager.UpdateQuest(victoryQuest, 1));
-            }
+            StartCoroutine(questManager.UpdateQuest(victoryQuest, 1));
         }
         // Get Piece Quest (Rotation)
         public void GetPieceQuest(int getPiece)
         {
             var getPieceQuest = questManager.RotationQuestList.FirstOrDefault(q => q.QuestType == QuestManager.QuestTypes.GetPiece);
-            if (getPieceQuest != null)
-            {
-                StartCoroutine(questManager.UpdateQuest(getPieceQuest, getPiece));
-            }
+            StartCoroutine(questManager.UpdateQuest(getPieceQuest, getPiece));
         }
     }
 }

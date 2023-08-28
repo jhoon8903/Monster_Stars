@@ -14,17 +14,24 @@ namespace Script
         public void Start()
         {
             Instance = this;
-            Time.timeScale = 1f;
-            if (PlayerPrefs.HasKey("TutorialKey"))
+            if (!bool.Parse(PlayerPrefs.GetString(MainPanel.IsLoadingKey, "true")))
             {
-                isFirstContact = PlayerPrefs.GetInt("TutorialKey", 1) == 1;
+                Instance.gameObject.SetActive(false);
             }
             else
             {
-                PlayerPrefs.SetInt("TutorialKey", 1);
-                isFirstContact = true;
+                Time.timeScale = 1f;
+                if (PlayerPrefs.HasKey("TutorialKey"))
+                {
+                    isFirstContact = PlayerPrefs.GetInt("TutorialKey", 1) == 1;
+                }
+                else
+                {
+                    PlayerPrefs.SetInt("TutorialKey", 1);
+                    isFirstContact = true;
+                }
+                StartCoroutine(UpdateLoadingBar());
             }
-            StartCoroutine(UpdateLoadingBar());
         }
 
         private IEnumerator UpdateLoadingBar()

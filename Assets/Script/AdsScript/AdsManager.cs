@@ -403,7 +403,7 @@ namespace Script.AdsScript
                     FreeCoinPack();
                     break;
                 case ButtonType.ShuffleQuest:
-                    questManager.ShuffleQuest();
+                    StartCoroutine(questManager.ShuffleQuest());
                     break;
                 case ButtonType.AdsStart:
                     adsMoveCount += 6;

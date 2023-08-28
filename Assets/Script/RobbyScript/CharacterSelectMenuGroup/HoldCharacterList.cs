@@ -11,7 +11,7 @@ using Image = UnityEngine.UI.Image;
 
 namespace Script.RobbyScript.CharacterSelectMenuGroup
 {
-    public class HoldCharacterList : MonoBehaviour, IPointerClickHandler
+    public class HoldCharacterList : MonoBehaviour
     {                    
         [SerializeField] private List<CharacterBase> characterList;
         [SerializeField] private GameObject selectedContent;
@@ -43,12 +43,31 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             }
             gameObject.SetActive(false);
         }
+
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.R))
             {
                 PlayerPrefs.DeleteAll();
             }
+            if (!Input.GetMouseButtonDown(0)) return;
+            var clickedObject = EventSystem.current.currentSelectedGameObject;
+            if (clickedObject != null && IsDescendantOrSelf(_activeStatusPanel, clickedObject)) return;
+            if (_activeStatusPanel == null) return;
+            _activeStatusPanel.SetActive(false);
+            _activeStatusPanel = null;
+        }
+
+        private static bool IsDescendantOrSelf(Object obj, GameObject toCheck)
+        {
+            if (obj == null || toCheck == null) return false;
+            var current = toCheck.transform;
+            while (current != null)
+            {
+                if (current.gameObject == obj) return true;
+                current = current.parent;
+            }
+            return false;
         }
 
         public void InstanceUnit()
@@ -230,7 +249,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             SetUpUnitProperty(unitInstance, character);
             SetUpUnitLevelProgress(unitInstance);
         }
-        public static void SetUpUnitProperty(UnitIcon unitInstance, CharacterBase character)
+        private static void SetUpUnitProperty(UnitIcon unitInstance, CharacterBase character)
         {
             unitInstance.unitProperty.GetComponent<Image>().sprite = character.UnitProperty switch
             { 
@@ -241,14 +260,13 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 CharacterBase.UnitProperties.Water => unitInstance.unitPropertiesSprite[4],
             };
         }
-        public static void SetUpUnitLevelProgress(UnitIcon unitInstance)
+        private static void SetUpUnitLevelProgress(UnitIcon unitInstance)
         {
             unitInstance.unitLevelText.text = unitInstance.CharacterBase.unLock ? $"Lv. {unitInstance.CharacterBase.unitPieceLevel}" : "Lock" ;
             unitInstance.unitPieceSlider.maxValue = unitInstance.CharacterBase.UnitPieceMaxPiece;
             unitInstance.unitPieceSlider.value = unitInstance.CharacterBase.UnitPieceCount;
             unitInstance.unitPieceText.text = $"{unitInstance.CharacterBase.UnitPieceCount}/{unitInstance.CharacterBase.UnitPieceMaxPiece}";
         }
-
         private void SwapBackGround(UnitIcon unitInstance, CharacterBase characterBase)
         {
             SoundManager.Instance.PlaySound(SoundManager.Instance.unitSelect);
@@ -305,7 +323,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     break;
             }
         }
-
         public void UpdateRewardPiece(CharacterBase characterBase)
         {
             var allUnitIconInstances = new List<UnitIcon>();
@@ -347,7 +364,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 }
             }
         }
-
         private static void AdjustRectTransform(Transform parent)
         {
             var numberOfChildren = parent.childCount;
@@ -359,7 +375,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 rectTransform.sizeDelta = new Vector2(rectTransform.sizeDelta.x, newHeight);
             }
         }
-
         private void UpdateMainUnitContent()
         {
             UnitIconMapping.Clear();
@@ -403,12 +418,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             UpdateUnit(correspondingUnit, unitBase);
         }
 
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            if (_activeStatusPanel == null ||
-                _activeStatusPanel.transform == eventData.pointerCurrentRaycast.gameObject.transform) return;
-            _activeStatusPanel.SetActive(false);
-            _activeStatusPanel = null;
-        }
+
     }
 }

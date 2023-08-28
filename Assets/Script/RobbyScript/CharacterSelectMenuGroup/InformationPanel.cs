@@ -150,7 +150,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 default:
                     throw new ArgumentOutOfRangeException(nameof(unitInstance.CharacterBase.UnitProperty));
             }
-            basicShape.sprite = unitInstance.CharacterBase.GetSpriteForLevel(1);
+            basicShape.sprite = unitInstance.CharacterBase.GetBasicSprite();
             unitPropertyText.text = UnitPropertyText(unitInstance.CharacterBase);
             unitNoticeText.text = unitInstance.CharacterBase.UnitDesc;
             var unitDataList = UnitData(unitInstance.CharacterBase);

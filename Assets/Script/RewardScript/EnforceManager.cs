@@ -276,7 +276,7 @@ namespace Script.RewardScript
         [Header("P / 1Lv: 검의 크기가 100% 증가")] 
         public bool orcSwordScaleIncrease;
         // 완료
-[Header("P / 3Lv: 공격 시 검 한자루 추가")] 
+        [Header("P / 3Lv: 공격 시 검 한자루 추가")] 
         public bool orcSwordAddition;
         // 완료
         [Header("B / 5Lv: 공격속도 9% 증가 (최대 4회)")]

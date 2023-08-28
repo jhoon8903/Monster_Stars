@@ -98,6 +98,7 @@ namespace Script.UIManager
             Bgm = gameObject.AddComponent<AudioSource>();
             Bgm.clip = clip;
             Bgm.loop = true;
+            Bgm.volume = 0.5f;
             Bgm.mute = !IsMusicEnabled;
             Bgm.Play(); 
         }

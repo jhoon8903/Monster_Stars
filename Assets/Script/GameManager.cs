@@ -50,6 +50,7 @@ namespace Script
             Instance = this;
             Input.multiTouchEnabled = false;
             Application.targetFrameRate = 60;
+            PlayerPrefs.SetString("IsLoading", "true");
         }
         private void Start()
         {

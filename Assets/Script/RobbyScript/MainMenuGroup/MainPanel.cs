@@ -37,6 +37,8 @@ namespace Script.RobbyScript.MainMenuGroup
         public int SelectStage { get; private set; }
         public int recordWave;
         public static MainPanel Instance { get; private set; }
+        public const string IsLoadingKey = "IsLoading";
+
         public void Awake()
         {
             Instance = this;
@@ -54,6 +56,7 @@ namespace Script.RobbyScript.MainMenuGroup
             SelectStage = LatestStage;
             var (maxWave, clearWave) = GetStageWave(LatestStage);
             UpdateProgress(LatestStage, maxWave, clearWave);
+            UpdateButtonStates();
             startBtn.GetComponent<Button>().onClick.AddListener(StartGame); 
             nextStageBtn.GetComponent<Button>().onClick.AddListener(NextStage);
             previousStageBtn.GetComponent<Button>().onClick.AddListener(PreviousStage);
@@ -64,7 +67,7 @@ namespace Script.RobbyScript.MainMenuGroup
             if (LatestStage != 1) return;
             previousStageBtn.SetActive(false);
             nextStageBtn.SetActive(false);
-            ;
+            PlayerPrefs.SetString(IsLoadingKey, "true");
         }
         private void Update()
         {
@@ -86,6 +89,7 @@ namespace Script.RobbyScript.MainMenuGroup
         }
         private void CancelContinue()
         {
+            PlayerPrefs.SetString(IsLoadingKey, "false");
             ReturnRobby();
             continuePanel.SetActive(false);
         }
@@ -100,7 +104,7 @@ namespace Script.RobbyScript.MainMenuGroup
                         PlayerPrefs.SetInt("Retry", 1);
                     }
 
-                    if (!LoadingManager.Instance.isFirstContact)
+                    if (PlayerPrefs.GetInt("TutorialKey", 1)!=1)
                     {
                         staminaScript.CurrentStamina -= 5;
                     }
@@ -111,13 +115,13 @@ namespace Script.RobbyScript.MainMenuGroup
                 else
                 {
                     warningPanel.SetActive(true);
-                    messageText.text = "스테미나가 부족합니다";
+                    messageText.text = "Stamina is low";
                 }
             }
             else
             {
                 warningPanel.SetActive(true);
-                messageText.text = "유닛배치를 확인해주세요";
+                messageText.text = "Check the \narrangement of units";
             }
         }
         private void UpdateProgress(int stage, int maxWave, int clearWave)
@@ -185,6 +189,10 @@ namespace Script.RobbyScript.MainMenuGroup
         {
             previousStageBtn.SetActive(SelectStage > 1);
             nextStageBtn.SetActive(SelectStage < LatestStage);
+            if (SelectStage == LatestStage)
+            {
+                nextStageBtn.SetActive(false);
+            }
         }
         private void ReturnRobby()
         {

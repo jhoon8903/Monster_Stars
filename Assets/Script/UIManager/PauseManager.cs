@@ -189,6 +189,7 @@ namespace Script.UIManager
         }
         private static void Home()
         {
+            PlayerPrefs.SetString("IsLoading", "true");
             PlayerPrefs.DeleteKey("unitState");
             PlayerPrefs.DeleteKey("moveCount");
             PlayerPrefs.DeleteKey("GridHeight");

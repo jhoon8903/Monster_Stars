@@ -76,7 +76,7 @@ namespace Script.CharacterManagerScript
         protected static List<GameObject> DetectedEnemies = new List<GameObject>();
         private SpriteRenderer _spriteRenderer;
         protected internal string UnitDesc { get; protected set; }
-        public float UnitLevelDamage { get; set; }
+        public float UnitLevelDamage { get; protected set; }
         public Dictionary<EnemyBase, int> AttackCounts { get; set; } = new Dictionary<EnemyBase, int>();
         private const string LevelKey = "level";
         public virtual void Initialize()
@@ -342,6 +342,11 @@ namespace Script.CharacterManagerScript
             yield return null;
         }
         protected internal virtual Sprite GetSprite(int level)
+        {
+            return null;
+        }
+
+        protected internal virtual Sprite GetBasicSprite()
         {
             return null;
         }
