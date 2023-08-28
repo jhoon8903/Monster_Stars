@@ -851,7 +851,7 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   gridManager: {fileID: 8808150501734532426}
   spawnManager: {fileID: 149521964}
-  moveCount: 15
+  moveCount: 10
   swipeManager: {fileID: 149521965}
   cameraManager: {fileID: 758648960}
   backgroundManager: {fileID: 1011029961}
@@ -940,6 +940,9 @@ MonoBehaviour:
   pressObject: {fileID: 905448899372057052, guid: e3578fad2cf1749a4ba4bf5405784f9d, type: 3}
   tutorialManager: {fileID: 149521970}
   characterPool: {fileID: 1097818334}
+  levelUpPanel: {fileID: 1331568212}
+  commonPanel: {fileID: 903150599}
+  pausePanel: {fileID: 249244818}
 --- !u!114 &149521966
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1551,6 +1554,8 @@ GameObject:
   - component: {fileID: 249244819}
   - component: {fileID: 249244821}
   - component: {fileID: 249244820}
+  - component: {fileID: 249244823}
+  - component: {fileID: 249244822}
   m_Layer: 6
   m_Name: PausePanel
   m_TagString: Untagged
@@ -1621,6 +1626,44 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 249244818}
   m_CullTransparentMesh: 1
+--- !u!114 &249244822
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 249244818}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_IgnoreReversedGraphics: 1
+  m_BlockingObjects: 0
+  m_BlockingMask:
+    serializedVersion: 2
+    m_Bits: 4294967295
+--- !u!223 &249244823
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 249244818}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_AdditionalShaderChannelsFlag: 0
+  m_SortingLayerID: 0
+  m_SortingOrder: 0
+  m_TargetDisplay: 0
 --- !u!1 &267531862
 GameObject:
   m_ObjectHideFlags: 0
@@ -4812,6 +4855,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efbe2bcfadc2c4db98ffaea9f9e7b363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  swipeManager: {fileID: 149521965}
   moveCountText: {fileID: 1733803903}
 --- !u!114 &841622521
 MonoBehaviour:
@@ -12108,7 +12152,6 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
-  openBoxing: 0
   isOpenBox: 0
 --- !u!1 &2124479364
 GameObject:

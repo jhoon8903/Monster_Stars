@@ -61,18 +61,19 @@ namespace Script.EnemyManagerScript
             yield return null;
         }
 
-        private static IEnumerator WalkingEffect(Transform childTransform)
+        private IEnumerator WalkingEffect(Transform childTransform)
         {
             var originalScale = childTransform.localScale;
             var originalLocalPosition = childTransform.localPosition;
-            const float verticalScaleAmount = 0.07f;
-            const float horizontalScaleAmount = 0.05f;
+            const float verticalScaleAmount = 0.08f;
+            const float horizontalScaleAmount = 0.06f;
             const float positionOffset = 0.15f;
-            const float tweenDuration = 0.5f; // 애니메이션의 지속 시간을 조절합니다.
+            const float tweenDuration = 0.6f;
             var targetScale = new Vector3(originalScale.x + horizontalScaleAmount, originalScale.y - verticalScaleAmount, originalScale.z);
             var targetPosition = new Vector3(originalLocalPosition.x, originalLocalPosition.y - positionOffset, originalLocalPosition.z);
             while (true)
             {
+                yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 childTransform.DOLocalMove(targetPosition, tweenDuration).SetEase(Ease.InOutSine).OnComplete(() => 
                 {
                     (targetPosition, originalLocalPosition) = (originalLocalPosition, targetPosition);

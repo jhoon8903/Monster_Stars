@@ -62,7 +62,7 @@ namespace Script.PuzzleManagerGroup
             }
         }
         private float _nextTriggerTime; // 다음 트리거가 발생할 수 있는 시간
-        private const float TutorialTriggerCooldown = 1.5f;
+        private const float TutorialTriggerCooldown = 1.6f;
         private void Start()
         {
             if (PlayerPrefs.GetInt("TutorialKey") != 1) return;

@@ -85,17 +85,24 @@ namespace Script.PuzzleManagerGroup
             if (moves.Count > 0) yield return StartCoroutine(PerformMoves(moves));
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
             yield return StartCoroutine(CheckPosition());
-            if (rewardManger.PendingTreasure.Count != 0) rewardManger.EnqueueTreasure();
-            yield return StartCoroutine(gameManager.WaitForPanelToClose());
             if (isTutorial)
             {
                 yield return new WaitForSecondsRealtime(0.5f);
                 TriggerOnMatchFound();
             }
-            if (countManager.TotalMoveCount == 0) yield return StartCoroutine(gameManager.Count0Call());
+            if (rewardManger.PendingTreasure.Count != 0)
+            {
+                rewardManger.EnqueueTreasure();
+            }
+            else if (countManager.TotalMoveCount == 0)
+            {
+                if (rewardManger.PendingTreasure.Count == 0)
+                {
+                    StartCoroutine(GameManager.Instance.Count0Call());
+                }
+            }
             swipeManager.isBusy = false;
         }
-
         private IEnumerator CheckPosition()
         {
             var wait = new WaitForSeconds(0.3f);
@@ -130,7 +137,6 @@ namespace Script.PuzzleManagerGroup
             gameObject.transform.position = targetPosition;
             yield return null;
         }
-
         private IEnumerator PerformMoves(IEnumerable<(GameObject, Vector3Int)> moves)
         {
             var moveCoroutines
@@ -297,7 +303,12 @@ namespace Script.PuzzleManagerGroup
         public IEnumerator BossStageClearRule()
         {
             isWave10Spawning = true;
+            swipeManager.isBusy = true;
             yield return StartCoroutine(gameManager.WaitForPanelToClose());
+            foreach (var unit in CharacterPool.Instance.pooledCharacters)
+            {
+                unit.GetComponent<CharacterBase>().cover.SetActive(false);
+            }
             var saveCharacterList = CharacterPool.Instance.UsePoolCharacterList();
             var highLevelCharacters = saveCharacterList
                 .OrderByDescending(character => character.GetComponent<CharacterBase>().unitPuzzleLevel)
@@ -342,6 +353,7 @@ namespace Script.PuzzleManagerGroup
             }
             yield return StartCoroutine(matchManager.CheckMatches());
             isWave10Spawning = false;
+            swipeManager.isBusy = false;
         }
     }
 }

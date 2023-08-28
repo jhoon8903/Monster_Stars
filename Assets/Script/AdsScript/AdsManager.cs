@@ -5,6 +5,7 @@ using Script.RobbyScript.MainMenuGroup;
 using Script.RobbyScript.StoreMenuGroup;
 using Script.RobbyScript.TopMenuGroup;
 using Script.UIManager;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -18,14 +19,18 @@ namespace Script.AdsScript
         [SerializeField] private GameObject staminaBtn;
         [SerializeField] private GameObject gemBtn;
         [SerializeField] private QuestManager questManager;
+        [SerializeField] private GameObject warningPanel;
+        [SerializeField] private TextMeshProUGUI message;
+
         public static AdsManager Instance { get; private set; }
-        private const string MaxSdkKey = "EG4dCO2mV2THPcolJ7UkHmIGIfTqtwfpRaimZ-lyk-OV5RSBpi4KMT6P3FnnemsgdzXD-3swcClOldu3";
+        private const string MaxSdkKey = "EG4dCO2mV2THPcolJ7UkHmIGIfTqtwfpRaimZ-lyk-OV5RSBpi4KMT6P3FnnemsgdzXD-3swcClOldu3paIfqG";
         private const string BannerAdUnitId = "BannerAdUnitId";
         private const string AdUnitId = "d70473ac274d7b4d";
         private const string InterstitialAdUnitId = "InterstitialAdUnitId";
         private int _interstitialRetryAttempt;
         public int rewardedRetryAttempt;
         public int adsMoveCount;
+        public QuestAssemble shuffleQuest;
         private void Awake()
         {
             if (Instance == null)
@@ -226,14 +231,14 @@ namespace Script.AdsScript
         // closebtn event
         private void OnRewardedAdDismissedEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
         {
-            RewardButtonClicked();
-            Quest.Instance.AdsViewQuest();
             LoadRewardedAd();
         }
 
-        private static void OnRewardedAdReceivedRewardEvent(string adUnitId, MaxSdk.Reward reward, MaxSdkBase.AdInfo adInfo)
+        private void OnRewardedAdReceivedRewardEvent(string adUnitId, MaxSdk.Reward reward, MaxSdkBase.AdInfo adInfo)
         {
             Debug.Log("Rewarded ad received reward");
+            RewardButtonClicked();
+            Quest.Instance.AdsViewQuest();
         }
 
         private static void OnRewardedAdRevenuePaidEvent(string adUnitId, MaxSdkBase.AdInfo adInfo)
@@ -403,7 +408,7 @@ namespace Script.AdsScript
                     FreeCoinPack();
                     break;
                 case ButtonType.ShuffleQuest:
-                    StartCoroutine(questManager.ShuffleQuest());
+                    StartCoroutine(questManager.ShuffleDestroy(shuffleQuest));
                     break;
                 case ButtonType.AdsStart:
                     adsMoveCount += 6;
@@ -431,6 +436,19 @@ namespace Script.AdsScript
             }
         }
 
+        private void NotRoReadyAds()
+        {
+            warningPanel.SetActive(true);
+            message.text = "sorry Ads is not ready.\nPlease try again next time.";
+        }
+
+        public void CallShuffleAds(QuestAssemble questAssemble)
+        {
+
+            shuffleQuest = questAssemble;
+            AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.ShuffleQuest;
+            AdsManager.Instance.ShowRewardedAd();
+        }
         public void RetryAds()
         {
             ShowRewardedAd();
@@ -443,14 +461,14 @@ namespace Script.AdsScript
             SceneManager.LoadScene("StageScene");
             isRetry = false;
         }
-        private static void CommonShuffle()
+        private void CommonShuffle()
         {
             CommonRewardManager.Instance.ReEnqueueTreasure();
         }
-        private static void ExpShuffle()
+        private void ExpShuffle()
         {
             Debug.Log("레벨업 동작");
-            LevelUpRewardManager.Instance.ReLevelUpReward();
+            StartCoroutine(LevelUpRewardManager.Instance.LevelUpReward());
         }
         private void EnergyPackFree()
         {

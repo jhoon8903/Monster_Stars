@@ -61,7 +61,7 @@ namespace Script
             swipeManager.isBusy = true;
             
             gridManager.GenerateInitialGrid(PlayerPrefs.GetInt("GridHeight", 6));
-            if (LoadingManager.Instance.isFirstContact)
+            if (PlayerPrefs.GetInt("TutorialKey", 1) == 1)
             {
                 // 사용가능 무브 6회 [3match, 4match, 5match, nullSwap, PressDelete, commonReward match] 
                  countManager.Initialize(6);
@@ -109,17 +109,12 @@ namespace Script
         public IEnumerator Count0Call()
         {
             IsBattle = true;
-            if (PlayerPrefs.GetInt("TutorialKey") == 1)
-            {
-                tutorialManager.EndTutorial();
-            }
-            StartCoroutine(cameraManager.CameraBattleSizeChange());
-            StartCoroutine(backgroundManager.ChangeBattleSize());
-            StartCoroutine(CoverUnit(true));
+            yield return StartCoroutine(CoverUnit(true));
+            yield return StartCoroutine(cameraManager.CameraBattleSizeChange());
+            yield return StartCoroutine(backgroundManager.ChangeBattleSize());
             StartCoroutine(AtkManager.Instance.CheckForAttack());
             yield return _waitTwoSecRealtime;
             if (StageManager.Instance != null) StartCoroutine(StageManager.Instance.WaveController());
-
             // var allUnits = FindObjectsOfType<CharacterBase>();
             // foreach (var unit in allUnits)
             // {
@@ -128,6 +123,10 @@ namespace Script
             //         unitE.ApplyAttackSpeedBuffToAllies();
             //     }
             // }
+            if (PlayerPrefs.GetInt("TutorialKey") == 1)
+            {
+                tutorialManager.EndTutorial();
+            }
             GameSpeed();
         }
         private IEnumerator CoverUnit(bool value)

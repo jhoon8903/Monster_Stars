@@ -18,11 +18,5 @@ namespace Script.EnemyManagerScript
         [Header("Boss Prefabs")]
         [SerializeField] public List<EnemyBase> stageBoss;
         [SerializeField] public GameObject deadEffect;
-        public static EnemyManager instance;
-
-        public void Awake()
-        {
-            instance = this;
-        }
     }
 }

@@ -1,4 +1,5 @@
 using System.Linq;
+using Script.AdsScript;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -28,7 +29,6 @@ namespace Script.QuestGroup
 
         public void FixQuestCreate(QuestManager.QuestData data)
         {
-            Debug.Log("4");
             var questType = QuestManager.ParseQuestType(data.questType);
             if (questType is QuestManager.QuestTypes.ViewAds or QuestManager.QuestTypes.AllClear)
             {
@@ -36,7 +36,6 @@ namespace Script.QuestGroup
             }
             else
             {
-                Debug.Log("5");
                 CoinQuestsCreate(data);
             }
         }
@@ -97,8 +96,6 @@ namespace Script.QuestGroup
         }
         private void CoinQuestsCreate(QuestManager.QuestData data)
         {
-            Debug.Log("6");
-            Debug.Log("??");
             var questInstance = CreateQuestFromData(data);
             QuestManager.Instance.FixQuestList.Add(questInstance);
             QuestManager.Instance.questInstances.Add(questInstance);
@@ -174,7 +171,7 @@ namespace Script.QuestGroup
                                 instanceObject.receiveBtn.SetActive(false);
                                 instanceObject.shuffleBtn.SetActive(true);
                                 instanceObject.shuffleBtn.GetComponent<Button>().interactable = true;
-                                instanceObject.shuffleBtn.GetComponent<Button>().onClick.AddListener(() => QuestManager.Instance.CallShuffleAds(instanceObject));
+                                instanceObject.shuffleBtn.GetComponent<Button>().onClick.AddListener(() => AdsManager.Instance.CallShuffleAds(instanceObject));
                              
                             }
                             break;

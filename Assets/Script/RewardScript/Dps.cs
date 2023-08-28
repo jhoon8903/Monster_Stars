@@ -17,8 +17,7 @@ namespace Script.RewardScript
         [SerializeField] private  TextMeshProUGUI unitDps;
         private Dps _unitDpsInstance;
         public void UnitDps(TextMeshProUGUI totalDps, Transform dpsGrid)
-        { 
-            Debug.Log("DPS Call!");
+        {
             if (_unitDpsInstance != null)
             {
                 Destroy(_unitDpsInstance);

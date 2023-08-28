@@ -73,6 +73,9 @@ namespace Script.RewardScript
                 case PowerTypeManager.Types.Match5Upgrade:
                     EnforceManager.Instance.Match5Upgrade(selectedReward);
                     break;
+                case PowerTypeManager.Types.StepLimit:
+                    EnforceManager.Instance.PermanentIncreaseMoveCount(selectedReward, selectedReward.Property[0]);
+                    break;
                 // A
                 case PowerTypeManager.Types.OctopusThirdAttackBoost:
                     EnforceManager.Instance.octopusThirdAttackBoost = true;
@@ -332,6 +335,7 @@ namespace Script.RewardScript
         {
             Time.timeScale = 0; // 게임 일시 정지
             levelUpRewardPanel.SetActive(true); // 보물 패널 활성화
+            expShuffle.gameObject.SetActive(true);
             var playerLevel = expManager.level;
             if (playerLevel <= 9)
             {
@@ -342,10 +346,6 @@ namespace Script.RewardScript
                 yield return StartCoroutine(LevelUpChance(50, 40, 10));
             }
             yield return new WaitUntil(() => levelUpRewardPanel.activeSelf == false); // 보물 패널이 비활성화될 때까지 대기
-        }
-        public void ReLevelUpReward() // 레벨업 보상 처리
-        {
-            StartCoroutine(LevelUpReward());
         }
         private IEnumerator LevelUpChance(int greenChance, int blueChance, int purpleChance)
         {
@@ -874,6 +874,7 @@ namespace Script.RewardScript
                 PowerTypeManager.Types.NextStage => finalTranslation,
                 PowerTypeManager.Types.Gold => finalTranslation,
                 PowerTypeManager.Types.Match5Upgrade => finalTranslation,
+                PowerTypeManager.Types.StepLimit => finalTranslation,
                 PowerTypeManager.Types.OctopusThirdAttackBoost => finalTranslation,
                 PowerTypeManager.Types.OctopusPoisonAttack => finalTranslation,
                 PowerTypeManager.Types.OctopusBleedDamageBoost => finalTranslation,

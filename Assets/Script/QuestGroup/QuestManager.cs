@@ -69,9 +69,6 @@ namespace Script.QuestGroup
         protected internal const string ValueKey = "_value";
         protected internal const string GoalKey = "_goal";
 
-        //Shuffle
-        private QuestAssemble _shuffleQuest;
-
         public static string SetKey(QuestAssemble quest, string key)
         {
             return $"{quest.questKey}{key}";
@@ -132,7 +129,6 @@ namespace Script.QuestGroup
         }
         private void CreateNewQuests()
         {
-            Debug.Log("2");
             if (questInstances.Count > 0)
             {
                 foreach (var quest in questInstances)
@@ -146,7 +142,6 @@ namespace Script.QuestGroup
                 var condition = ParseQuestCondition(data.questCondition);
                 if (condition == QuestCondition.Fix)
                 {
-                    Debug.Log("3");
                     questObject.FixQuestCreate(data);
                 }
                 else
@@ -262,42 +257,45 @@ namespace Script.QuestGroup
             };
             return questData;
         }
-        public IEnumerator ShuffleQuest()
+
+        public IEnumerator ShuffleDestroy(QuestAssemble shuffleQuest)
         {
-            InitQuest(_shuffleQuest);
-            var shuffleData = ConvertQuestAssembleToQuestData(_shuffleQuest);
-            if (questInstances.Contains(_shuffleQuest))                            
+            Debug.Log(shuffleQuest.QuestType);
+            InitQuest(shuffleQuest);
+            var shuffleData = ConvertQuestAssembleToQuestData(shuffleQuest);
+            if (questInstances.Contains(shuffleQuest))                            
             {
-                questInstances.Remove(_shuffleQuest);
+                questInstances.Remove(shuffleQuest);
             }
-            if (RotationQuestList.Contains(_shuffleQuest))
+            if (RotationQuestList.Contains(shuffleQuest))
             {
-                RotationQuestList.Remove(_shuffleQuest);
+                RotationQuestList.Remove(shuffleQuest);
             }
+            Destroy(shuffleQuest.gameObject);
+            AdsManager.Instance.shuffleQuest = null;
+            yield return null;
+            ShuffleQuest();
+        }
+
+        private void ShuffleQuest()
+        {
             var existingQuestTypes = questInstances.Where(q => q.QuestCondition != QuestCondition.Fix).Select(q => q.QuestType).ToList();
             var availableQuestData = (from data in _rotationQuestCandidates from type in existingQuestTypes where data.questType == type.ToString() select data).ToList();
-            if (availableQuestData.Any())
+            var filteredQuestData = availableQuestData
+                .Where(q => PlayerPrefs.GetString($"{q.questKey}{CompleteKey}", "false") == "false")
+                .ToList();
+            if (filteredQuestData.Any())
             {
-                var newQuestData = availableQuestData.OrderBy(_ => Random.value).First();
+                var newQuestData = filteredQuestData.OrderBy(_ => Random.value).First();
                 _rotationQuestCandidates.Remove(newQuestData);
-                var shuffleQuest = questObject.RotationQuestCreate(newQuestData);
-                shuffleQuest.isShuffled = true;
-                PlayerPrefs.SetString(SetKey(shuffleQuest, ShuffleKey), "true");
-                QuestObject.UpdateQuestStates(shuffleQuest);
+                filteredQuestData.Remove(newQuestData);
+                var newQuest = questObject.RotationQuestCreate(newQuestData);
+                newQuest.isShuffled = true;
+                PlayerPrefs.SetString(SetKey(newQuest, ShuffleKey), "true");
+                QuestObject.UpdateQuestStates(newQuest);
                 PlayerPrefs.Save();
             }
-            _rotationQuestCandidates.Add(shuffleData);
-            Destroy(_shuffleQuest.gameObject);
-            yield return null;
-            _shuffleQuest = null;
             SaveQuest(FixQuestList.Concat(RotationQuestList));
-            yield return null;
-        }
-        public void CallShuffleAds(QuestAssemble questAssemble)
-        {
-            _shuffleQuest = questAssemble;
-            AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.ShuffleQuest;
-            AdsManager.Instance.ShowRewardedAd();
         }
         private static void InitQuest(QuestAssemble quest)
         {
@@ -323,7 +321,6 @@ namespace Script.QuestGroup
             QuestObject.InitSpecialQuest(QuestTypes.ViewAds);
             PlayerPrefs.DeleteKey(QuestDataKey);
             PlayerPrefs.Save();
-            Debug.Log("1");
             CreateNewQuests();
         }
         private void CloseReward()
@@ -349,10 +346,6 @@ namespace Script.QuestGroup
                 quest.questValue += value;
                 quest.questProgress.value = quest.questValue;
                 quest.questProgressText.text = $"{quest.questValue} / {quest.questGoal}";
-                if (quest.QuestType == QuestTypes.MergeBox)
-                {
-                    Debug.Log($"Value: {quest.questValue}");
-                }
                 PlayerPrefs.SetInt(SetKey(quest, ValueKey), quest.questValue);
                 if (quest.questValue >= quest.questGoal)
                 {
@@ -375,9 +368,7 @@ namespace Script.QuestGroup
                     questObject.adsValue = PlayerPrefs.GetInt($"{questType}{ValueKey}", 0);
                     questObject.adsValue += value;
                     questObject.adsProgress.maxValue = questObject.adsGoal;
-                    Debug.Log("QuestGoal:" + questObject.adsGoal);
                     questObject.adsProgress.value = questObject.adsValue;
-                    Debug.Log("QuestValue:" + questObject.adsValue);
                     questObject.adsProgressText.text = $"{questObject.adsValue} / {questObject.adsGoal}";
                     if (questObject.adsValue >= questObject.adsGoal)
                     {

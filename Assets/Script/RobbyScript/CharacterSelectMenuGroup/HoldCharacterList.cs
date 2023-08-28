@@ -72,7 +72,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
 
         public void InstanceUnit()
         {
-            var sortingLayerOder = 10;
+            var sortingLayerOder = 11;
             foreach (var character in characterList)
             {
                 character.Initialize();

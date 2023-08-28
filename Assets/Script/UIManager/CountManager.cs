@@ -1,11 +1,15 @@
+using System;
+using Script.PuzzleManagerGroup;
 using Script.RewardScript;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Script.UIManager
 {
     public class CountManager : MonoBehaviour
     {
+        [SerializeField] private SwipeManager swipeManager;
         private int _comboCount;
         private int _baseMoveCount;
         private int _rewardMoveCount;

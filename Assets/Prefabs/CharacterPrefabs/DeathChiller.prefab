@@ -49,8 +49,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cover: {fileID: 4679517600283520585}
-  unitPieceLevel: 1
-  unLock: 0
+  unitPieceLevel: 5
+  unLock: 1
   selected: 0
   unitPuzzleLevel: 1
   unitGroup: 2

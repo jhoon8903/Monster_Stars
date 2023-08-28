@@ -213,10 +213,9 @@ namespace Script.EnemyManagerScript
         }
         private IEnumerator DamageTextPopup(int damage)
         {
-            if (!gameObject.activeInHierarchy) yield break;
-
             foreach (var popup in _damagePopupList)
-            {
+            {   
+               
                 if (popup.activeInHierarchy) continue;
                 var pos = gameObject.transform.position;
                 popup.transform.position = new Vector3(pos.x,pos.y + 0.5f,0f);
@@ -230,7 +229,7 @@ namespace Script.EnemyManagerScript
                 if (damage == 0) continue;
                 popup.SetActive(true);
                 popup.GetComponent<TextMeshPro>().text = damage.ToString();
-                Color damageColor = default;
+                Color damageColor;
                 if (isBleed)
                 {
                     damageColor = Color.red;
@@ -247,18 +246,21 @@ namespace Script.EnemyManagerScript
                 {
                     damageColor = Color.blue;
                 }
-
+                else
+                {
+                    damageColor = Color.white;
+                }
                 popup.GetComponent<TextMeshPro>().color = damageColor;
-
                 float t = 0;
                 const float speed = 1f;
                 while (t < 1)
                 {
+                    if (!gameObject.activeInHierarchy) break;
                     t += Time.deltaTime * speed;
                     popup.transform.position = Vector2.Lerp(startPosition, endPosition, t);
                     yield return null;
                 }
-                yield return new WaitForSeconds(0.1f); // Adjust this time as needed
+                yield return new WaitForSecondsRealtime(0.15f);
                 popup.SetActive(false);
             }
         }
@@ -268,19 +270,20 @@ namespace Script.EnemyManagerScript
             lock (Lock)
             {
                 var receiveDamage = (int)damage;
-                if (_cumulativeDamageByGroup.ContainsKey(atkUnit.unitGroup))
-                    _cumulativeDamageByGroup[atkUnit.unitGroup] += receiveDamage;
-                else
-                    _cumulativeDamageByGroup[atkUnit.unitGroup] = receiveDamage;
-                PlayerPrefs.SetInt($"{atkUnit.unitGroup}DPS", _cumulativeDamageByGroup[atkUnit.unitGroup]);
+                if (gameObject.activeInHierarchy)
+                {
+                    StartCoroutine(DamageTextPopup(receiveDamage));
+                    _cumulativeDamageByGroup.TryGetValue(atkUnit.unitGroup, out var currentDamage);
+                    var newCumulativeDamage = currentDamage + receiveDamage;
+                    _cumulativeDamageByGroup[atkUnit.unitGroup] = newCumulativeDamage;
+                    PlayerPrefs.SetInt($"{atkUnit.unitGroup}DPS", newCumulativeDamage);
+                }
                 PlayerPrefs.Save();
                 if (isDead) return;
                 currentHealth -= receiveDamage;
                 if (!gameObject.activeInHierarchy) return;
-                StartCoroutine(DamageTextPopup(receiveDamage));
                 _updateSlider = true;
                 if (currentHealth > 0f || isDead) return;
-           
                 isDead = true;
                 ExpManager.Instance.HandleEnemyKilled(reason);
                 // if (EnforceManager.Instance.octopusPoisonDamageBoost && atkUnit.unitGroup == CharacterBase.UnitGroups.Octopus)
@@ -395,7 +398,6 @@ namespace Script.EnemyManagerScript
             detectedEnemy.AlreadyBurn.Clear();
             detectedEnemy.IsBleed.Clear();
             detectedEnemy.AlreadyBleed.Clear();
-            detectedEnemy.transform.localScale = Vector3.one;
             detectedEnemy.GetComponentInChildren<SpriteRenderer>().color = Color.white;
             detectedEnemy.BindStatus(false, characterBase);
             detectedEnemy.SlowStatus(false, characterBase);
@@ -412,6 +414,7 @@ namespace Script.EnemyManagerScript
             }
             Quest.Instance.KillEnemyQuest();
             enemyPool.ReturnToPool(detectedEnemy);
+           
         }
         private IEnumerator UpdateHpSlider()
         {

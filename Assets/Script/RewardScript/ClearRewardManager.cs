@@ -91,18 +91,14 @@ namespace Script.RewardScript
         public void ClearReward(bool gameResult)
         {
             stageClearPanel.SetActive(true);
-            Debug.Log("1");
             if (gameResult)
             {
-                Debug.Log("2");
                 Win();
             }
             else
             {
-                Debug.Log("3");
                 Lose();
             }
-            Debug.Log("4");
 
             LoadCumulativeData();
             if (alreadyPrintPanel) return;
@@ -341,7 +337,7 @@ namespace Script.RewardScript
             cumulativeCoin = PlayerPrefs.GetInt(CumulativeCoinKey, 0);
             var jsonUnitPieces = PlayerPrefs.GetString(CumulativeUnitPiecesKey, "");
             var unitPieceDataList = JsonUtility.FromJson<SerializationWrapper<UnitPieceData>>(jsonUnitPieces).list;
-            CumulativeUnitPieces.Clear();
+            // CumulativeUnitPieces.Clear();
 
             foreach (var data in unitPieceDataList)
             {
@@ -352,7 +348,6 @@ namespace Script.RewardScript
                 }
             }
         }
-        
         private void ResetCumulativeData()
         {
             alreadyPrintPanel = false;

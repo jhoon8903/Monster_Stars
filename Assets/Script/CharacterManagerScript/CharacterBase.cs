@@ -87,7 +87,7 @@ namespace Script.CharacterManagerScript
                 UnitGrades.P => 5,
                 _ => 1,
             };
-            unitPieceLevel = PlayerPrefs.GetInt($"{this}{LevelKey}", level);
+            unitPieceLevel = PlayerPrefs.GetInt($"{unitGroup}{LevelKey}", level);
             _spriteRenderer = GetComponent<SpriteRenderer>();
             UnitSkillDict = new Dictionary<int, Sprite> { {1, lv1}, {3, lv3}, {5, lv5}, {7, lv7}, {9, lv9}, {11, lv11}, {13, lv13} };
         }
@@ -334,11 +334,11 @@ namespace Script.CharacterManagerScript
         {
             UnitPieceCount -= UnitPieceMaxPiece;
             CoinsScript.Instance.Coin -= CharacterLevelUpCoin;
-            Quest.Instance.UseCoinQuest(CharacterLevelUpCoin);
             unitPieceLevel++;
             PlayerPrefs.SetInt($"{unitGroups}{LevelKey}", unitPieceLevel);
             PlayerPrefs.Save();
             Initialize();
+            Quest.Instance.UseCoinQuest(CharacterLevelUpCoin);
             yield return null;
         }
         protected internal virtual Sprite GetSprite(int level)

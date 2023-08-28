@@ -69,7 +69,7 @@ namespace Script.EnemyManagerScript
         {
             for (var i = 0; i < count; i++)
             {
-                yield return StartCoroutine(gameManager.WaitForPanelToClose());
+                // yield return StartCoroutine(gameManager.WaitForPanelToClose());
                 var spawnZone = groupZone[i % groupZone.Count];
                 StartCoroutine(SpawnEnemy(enemyClass, spawnZone));
                 yield return new WaitForSeconds(0.2f);
@@ -81,9 +81,7 @@ namespace Script.EnemyManagerScript
             if (enemyToSpawn == null) yield break;
             var enemyBase = enemyToSpawn.GetComponent<EnemyBase>();
             StartCoroutine(GetEnemyDesc(enemyBase));
-            var spawnPosition = new Vector3(0, 20, 0);
-            yield return StartCoroutine(GetRandomPointInBounds(enemyBase.SpawnZone, pos => spawnPosition = pos));
-            enemyBase.transform.position = spawnPosition;
+            enemyBase.transform.position = GetRandomPointInBounds(spawnZone);
             yield return StartCoroutine(enemyPatternManager.Zone_Move(enemyBase, spawnZone));
         }
         private IEnumerator GetEnemyDesc(EnemyBase enemyBase)
@@ -152,6 +150,7 @@ namespace Script.EnemyManagerScript
                 Destroy(_bossObject);
             }
             enemyPool.enemyBases.Clear();
+           
             foreach (var enemyBase in enemyManager.stageBoss.Where(enemyBase => enemyBase.enemyClass == bossClass))
             {
                 _bossObject = Instantiate(enemyBase, transform);
@@ -159,7 +158,7 @@ namespace Script.EnemyManagerScript
                 yield return StartCoroutine(enemyPatternManager.Zone_Move(_bossObject, spawnZone));
             }
         }
-        private IEnumerator GetRandomPointInBounds(EnemyBase.SpawnZones zone, Action<Vector3> callback)
+        private Vector3 GetRandomPointInBounds(EnemyBase.SpawnZones zone)
         {
             var spawnPosition = new Vector3(0,20,0);
             switch (zone)
@@ -227,8 +226,7 @@ namespace Script.EnemyManagerScript
                 default:
                     throw new ArgumentOutOfRangeException(nameof(zone), zone, null);
             }
-            callback?.Invoke(spawnPosition);
-            yield return null;
+            return spawnPosition;
         }
     }
 }

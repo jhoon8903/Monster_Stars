@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +7,7 @@ using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Script.PuzzleManagerGroup
@@ -32,9 +34,23 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private GameObject pressObject;
         [SerializeField] private TutorialManager tutorialManager;
         [SerializeField] private CharacterPool characterPool;
+        [SerializeField] private GameObject levelUpPanel;
+        [SerializeField] private GameObject commonPanel;
+        [SerializeField] private GameObject pausePanel;
+
+        private int _pointer;
+        private void Start()
+        {
+            #if UNITY_EDITOR
+            _pointer = -1;
+            #elif UNITY_ANDROID
+            _pointer = 0;
+            #endif
+        }
 
         private void Update()
         {
+            if (levelUpPanel.activeInHierarchy || commonPanel.activeInHierarchy || pausePanel.activeInHierarchy || !CanMove()) return;
             var point2D = GetTouchPoint();
 
             if (Input.GetMouseButtonDown(0))
@@ -136,7 +152,7 @@ namespace Script.PuzzleManagerGroup
         }
         private void HandleDrag(Vector2 point2D)
         {
-            if (isBusy || isUp || rewardManager.openBoxing) return;
+            if (isBusy || isUp ) return;
             var swipe = point2D - _firstTouchPosition;
             if (!(swipe.sqrMagnitude > minSwipeLength * minSwipeLength)) return;
             if (!(Mathf.Abs(swipe.x) > 0.5f) && !(Mathf.Abs(swipe.y) > 0.5f)) return;
@@ -147,8 +163,7 @@ namespace Script.PuzzleManagerGroup
         }
         private void Swipe(Vector2 swipe)
         {
-            if (isBusy || isUp || rewardManager.openBoxing) return;
-            if (!CanMove()) return;
+            if (isBusy || isUp ) return;
             if (_startObject == null) return;
             var swipeAngle = Mathf.Atan2(swipe.y, swipe.x) * Mathf.Rad2Deg;
             swipeAngle = (swipeAngle < 0) ? swipeAngle + 360 : swipeAngle;
@@ -323,7 +338,7 @@ namespace Script.PuzzleManagerGroup
         }
         private IEnumerator NullSwap(GameObject startObject, int endX, int endY)
         {
-            if (isBusy || isUp || rewardManager.openBoxing) yield break;
+            if (isBusy || isUp ) yield break;
             if (endY < 0) yield break;
             isBusy = true;
             if (startObject == null) yield break;
@@ -343,7 +358,7 @@ namespace Script.PuzzleManagerGroup
         }
         private IEnumerator SwitchAndMatches(GameObject startObject, GameObject endObject)
         {
-            if (isBusy || isUp || rewardManager.openBoxing) yield break;
+            if (isBusy || isUp) yield break;
             isBusy = true;
             if (startObject == null || endObject == null) yield break;
             var startObjectPosition = startObject.transform.position;

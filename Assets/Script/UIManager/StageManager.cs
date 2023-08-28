@@ -30,6 +30,7 @@ namespace Script.UIManager
         public int currentWave;
         public bool isBossClear;
         public int selectStage;
+        private int _spawnCount;
         private void Awake()
         {
             Instance = this;
@@ -91,9 +92,9 @@ namespace Script.UIManager
                     : null;
                 
                 var wave3SpawnValue = !string.IsNullOrWhiteSpace(values[8]) 
+       
                     ? int.Parse(values[8]) 
                     : (int?)null;
-                
                 var wave3EnemyClass = !string.IsNullOrWhiteSpace(values[9]) 
                     ? ParseEnemyClass(values[9]) 
                     : (EnemyBase.EnemyClasses?)null;
@@ -111,8 +112,9 @@ namespace Script.UIManager
                     data[stage] = new Dictionary<int, (int? wave1SpawnValue, EnemyBase.EnemyClasses? wave1EnemyClass, List<EnemyBase.SpawnZones>? wave1SpawnZone, int? wave2SpawnValue, EnemyBase.EnemyClasses? wave2EnemyClass, List<EnemyBase.SpawnZones>? wave2SpawnZone, int? wave3SpawnValue, EnemyBase.EnemyClasses? wave3EnemyClass, List<EnemyBase.SpawnZones>? wave3SpawnZone, EnemyBase.EnemyClasses? bossClass)>();
                 }
 
-                data[stage][wave] = (wave1SpawnValue, wave1EnemyClass, wave1SpawnZone, wave2SpawnValue, wave2EnemyClass,
-                    wave2SpawnZone, wave3SpawnValue, wave3EnemyClass, wave3SpawnZone, bossClass);
+                data[stage][wave] = (wave1SpawnValue, wave1EnemyClass, wave1SpawnZone, 
+                    wave2SpawnValue, wave2EnemyClass, wave2SpawnZone, 
+                    wave3SpawnValue, wave3EnemyClass, wave3SpawnZone, bossClass);
             }
             return data;
         }
@@ -150,19 +152,21 @@ namespace Script.UIManager
                 set2SpawnValue,set2EnemyClass,set2SpawnZone,
                 set3SpawnValue, set3EnemyClass, set3SpawnZone
                 , bossClass) = GetSpawnCountForWave(selectStage, currentWave);
-            const int sets = 2;
-            if (currentWave % 10 == 0)
+            _setCount = set3SpawnValue != null ? 3 : 2;
+            _setCount = bossClass != null ? 1 : _setCount;
+            if (bossClass != null)
             {
                 yield return StartCoroutine(enemySpawnManager.SpawnBoss(bossClass, EnemyBase.SpawnZones.A));
+                _spawnCount = 1;
             }
             else
             {
-                for (var i = 0; i < sets; i++)
+                for (var i = 0; i < _setCount; i++)
                 {
                     StartCoroutine(enemySpawnManager.SpawnEnemies(set1SpawnValue, set1EnemyClass, set1SpawnZone));
                     StartCoroutine(enemySpawnManager.SpawnEnemies(set2SpawnValue, set2EnemyClass, set2SpawnZone));
                     StartCoroutine(enemySpawnManager.SpawnEnemies(set3SpawnValue, set3EnemyClass, set3SpawnZone));
-                    _setCount++;
+                    _spawnCount++;
                     yield return new WaitForSeconds(3f);
                 }
             }
@@ -171,12 +175,8 @@ namespace Script.UIManager
         public void EnemyDestroyEvent(EnemyBase enemyBase)
         {
             enemyPool.enemyBases.Remove(enemyBase);
-            if (enemyPool.enemyBases.Count != 0) return;
-            if (enemyBase.EnemyType != EnemyBase.EnemyTypes.Boss)
-            {
-                if (_setCount != 2) return;
-                _setCount = 0;
-            }
+            if (enemyPool.enemyBases.Count > 0 || _spawnCount < _setCount) return;
+            _spawnCount = 0;
             if (castleManager.HpPoint > 0)
             {
                 if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
@@ -185,6 +185,7 @@ namespace Script.UIManager
                     Quest.Instance.KillBossQuest();
                 }
             }
+
             if (currentWave == MaxWave() && isBossClear )
             {
                 PlayerPrefs.SetInt($"{latestStage}Stage_ClearWave", MaxWave());
@@ -192,8 +193,14 @@ namespace Script.UIManager
             }
             else
             {
-                StartCoroutine(GameManager.Instance.ContinueOrLose());
+                StartCoroutine(DelayedContinueOrLose());
             }
+        }
+
+        private IEnumerator DelayedContinueOrLose()
+        {
+            yield return new WaitForSecondsRealtime(1f);
+            StartCoroutine(GameManager.Instance.ContinueOrLose());
         }
         private void StageClear()
         {

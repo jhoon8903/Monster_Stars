@@ -34,12 +34,10 @@ namespace Script.RewardScript
         [SerializeField] private Image common3BtnBadge; // 공통 데이터
         [SerializeField] private SpawnManager spawnManager;
         [SerializeField] private CountManager countManager;
-        [SerializeField] private GameManager gameManager;
         [SerializeField] private CharacterManager characterManager;
         public static CommonRewardManager Instance;
         public readonly Queue<GameObject> PendingTreasure = new Queue<GameObject>(); // 보류 중인 보물 큐
         private GameObject _currentTreasure; // 현재 보물
-        public bool openBoxing = true;
         private List<Data> _powerUps;
         private string _zeroLevelUnitName;
         private string _changeUnitName;
@@ -71,10 +69,9 @@ namespace Script.RewardScript
         public void EnqueueTreasure()
         {
             if (isOpenBox) return;
-            commonShuffle.gameObject.SetActive(true);
             isOpenBox = true;
+            commonShuffle.gameObject.SetActive(true);
             var treasure = PendingTreasure.Dequeue();
-            openBoxing = true;
             var shake = treasure.transform.DOShakeScale(1.0f, 0.5f, 8); // 흔들리는 애니메이션 재생
             shake.OnComplete(() =>
             {
@@ -106,7 +103,6 @@ namespace Script.RewardScript
                 yield return null;
             }
         }
-
         private static (string desc, string popupDesc) GetSkillDesc(PowerTypeManager.Types type)
         {
             foreach (var data in PowerTypeManager.Instance.PurpleList.Where(data => data.Type == type))
@@ -230,6 +226,7 @@ namespace Script.RewardScript
                         if (EnforceManager.Instance.index.Contains(powerUp.Property[0])) return false; // Do not display GroupLevelUp options for groups where LevelUpPattern is executed
                         break;
                     case PowerTypeManager.Types.Step:
+                        if (countManager.TotalMoveCount == 0) return false;
                         if (spawnManager.isTutorial) return false;
                         break;
                     case PowerTypeManager.Types.LevelUpPattern:
@@ -375,9 +372,9 @@ namespace Script.RewardScript
         // 9. 상자 오픈
         private IEnumerator OpenBox(GameObject treasure)
         {
-            Quest.Instance.MergeBoxQuest();
             Time.timeScale = 0; // 게임 일시 정지
             commonRewardPanel.SetActive(true); // 보물 패널 활성화
+            Quest.Instance.MergeBoxQuest();
             var treasureChestLevel = treasure.GetComponent<CharacterBase>().unitPuzzleLevel; // 보물 상자 이름
             switch(treasureChestLevel)
             {
@@ -401,12 +398,11 @@ namespace Script.RewardScript
                 common1Button.GetComponent<Canvas>().sortingOrder = 1;
             }
             yield return new WaitUntil(() => commonRewardPanel.activeSelf == false); // 보물 패널이 비활성화될 때까지 대기
-            openBoxing = false;
             if (PendingTreasure.Count > 0)
             {
                 EnqueueTreasure();
             }
-            isOpenBox = false;
+          
         }
         // 10. 상자 선택
         private void SelectCommonReward(Data selectedReward)
@@ -423,28 +419,13 @@ namespace Script.RewardScript
                 Destroy(common1Button.GetComponent<Canvas>());
             }
             commonRewardPanel.SetActive(false);
-            if (countManager.TotalMoveCount == 0)
-            {
-                gameManager.GameSpeed();
-            }
-            else
-            {
-                Time.timeScale = 1; // 게임 재개
-            }
             CharacterPool.ReturnToPool(_currentTreasure); // 보물을 풀에 반환
-
-            if (!spawnManager.isWave10Spawning)
-            {
-                yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
-            }
-            else
-            {
-                _currentTreasure = null; // 현재 보물 없음
-            }
             ProcessCommonReward(selectedReward);
+            Time.timeScale = 1; // 게임 재개
+            yield return null;
         }
         // 12. 선택된 버프 적용 
-        private static void ProcessCommonReward(Data selectedReward)
+        private void ProcessCommonReward(Data selectedReward)
         {
             switch (selectedReward.Type)
             {
@@ -500,6 +481,15 @@ namespace Script.RewardScript
                     break;
             }
             selectedReward.ChosenProperty = null;
+            isOpenBox = false;
+            if (PendingTreasure.Count == 0)
+            {
+                _currentTreasure = null; // 현재 보물 없음
+            }
+            if (!spawnManager.isWave10Spawning)
+            {
+                StartCoroutine(spawnManager.PositionUpCharacterObject());
+            }
         }
         // # 보스 웨이브 클리어 별도 보상
         public IEnumerator WaveRewardChance()
