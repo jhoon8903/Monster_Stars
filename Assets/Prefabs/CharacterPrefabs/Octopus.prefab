@@ -133,8 +133,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cover: {fileID: 8106914419751587629, guid: b8ad960f8f0f647bdae87bd3059f1ecf, type: 3}
-  unitPieceLevel: 3
-  unLock: 0
+  unitPieceLevel: 1
+  unLock: 1
   selected: 0
   unitPuzzleLevel: 1
   unitGroup: 0
@@ -152,8 +152,8 @@ MonoBehaviour:
   lv11Lock: {fileID: 21300000, guid: 1064859e739254bf995affbee7bbc42d, type: 3}
   lv13: {fileID: 21300000, guid: 35237f32b7a29408e81c97491c6a6455, type: 3}
   lv13Lock: {fileID: 21300000, guid: fc4121935f2474f58b6e1f0ba92e07ee, type: 3}
-  baseDamage: 50
-  dotDamage: 10
+  baseDamage: 36
+  dotDamage: 7.2000003
   effectChance: 30
   effectStack: 0
   slowTime: 0

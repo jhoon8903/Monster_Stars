@@ -19,7 +19,8 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private EnforceManager enforceManager;
         [SerializeField] private GridManager gridManager;
         
-  public bool IsMatched(GameObject swapCharacter)
+        public event Action OnMatchCheckComplete;
+        public bool IsMatched(GameObject swapCharacter)
         {
             var matched = false;
             var swapCharacterBase = swapCharacter.GetComponent<CharacterBase>();
@@ -142,6 +143,8 @@ namespace Script.PuzzleManagerGroup
                 }
                 yield return null;
             }
+            OnMatchCheckComplete?.Invoke();
+            yield return null;
         }
         private static void ReturnObject(GameObject character)
         {   

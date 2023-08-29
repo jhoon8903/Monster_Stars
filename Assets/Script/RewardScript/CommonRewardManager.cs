@@ -69,26 +69,33 @@ namespace Script.RewardScript
 
         }
         // 1. 상자가 매치 되면 상자를 큐에 추가
-        public void EnqueueTreasure()
+        public IEnumerator EnqueueTreasure()
         {
-            if (isOpenBox) return;
+            if (isOpenBox) yield break;
             isOpenBox = true;
             commonShuffle.gameObject.SetActive(true);
             var treasure = PendingTreasure.Dequeue();
-            var shake = treasure.transform.DOShakeScale(1.0f, 0.5f, 8); // 흔들리는 애니메이션 재생
+            var sprite = treasure.GetComponent<CharacterBase>().unitPuzzleLevel switch
+            {
+                2 => bronzeOpen,
+                3 => silverOpen,
+                4 => goldOpen,
+                _ => bronzeOpen
+            };
+            var shake = treasure.transform.DOShakeScale(0.7f, 0.5f, 8); // 흔들리는 애니메이션 재생
             shake.OnComplete(() =>
             {
-                var sprite = treasure.GetComponent<CharacterBase>().unitPuzzleLevel switch
-                {
-                    2 => bronzeOpen,
-                    3 => silverOpen,
-                    4 => goldOpen,
-                    _ => bronzeOpen
-                };
                 treasure.GetComponent<SpriteRenderer>().sprite = sprite;
                 _currentTreasure = treasure;
-                StartCoroutine(OpenBox(_currentTreasure));
+                StartCoroutine(WaitAndOpenBox(_currentTreasure, 0.3f));
             });
+            yield return null;
+        }
+
+        private IEnumerator WaitAndOpenBox(GameObject treasure, float delay)
+        {
+            yield return new WaitForSecondsRealtime(delay);
+            StartCoroutine(OpenBox(treasure));
         }
         // 1-1. 다시 섞기
         public void ReEnqueueTreasure()
@@ -437,7 +444,7 @@ namespace Script.RewardScript
             yield return new WaitUntil(() => commonRewardPanel.activeSelf == false); // 보물 패널이 비활성화될 때까지 대기
             if (PendingTreasure.Count > 0)
             {
-                EnqueueTreasure();
+               yield return StartCoroutine(EnqueueTreasure());
             }
           
         }

@@ -9,7 +9,6 @@ namespace Script
     public class LoadingManager : MonoBehaviour 
     {
         [SerializeField] private Slider loadingSlider;
-        [SerializeField] private Image handle;
         public bool isFirstContact;
 
         public void Start()
@@ -31,7 +30,6 @@ namespace Script
                     isFirstContact = true;
                 }
                 StartCoroutine(UpdateLoadingBar());
-                StartCoroutine(ShakeHandle());
             }
         }
 
@@ -57,21 +55,6 @@ namespace Script
             else
             {
                 gameObject.SetActive(false);
-            }
-        }
-
-        private IEnumerator ShakeHandle()
-        {
-            handle.rectTransform.localRotation = Quaternion.Euler(0, 0, 0);
-            const float shakeDuration = 0.5f;
-
-            while (true) // 무한 루프로 계속 움직임
-            {
-                handle.rectTransform.DOLocalRotate(new Vector3(0, 0, 30), shakeDuration, RotateMode.FastBeyond360).SetEase(Ease.InOutSine);
-                yield return new WaitForSeconds(shakeDuration);
-
-                handle.rectTransform.DOLocalRotate(new Vector3(0, 0, 0), shakeDuration, RotateMode.FastBeyond360).SetEase(Ease.InOutSine);
-                yield return new WaitForSeconds(shakeDuration);
             }
         }
     }

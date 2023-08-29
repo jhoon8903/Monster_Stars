@@ -66,7 +66,6 @@ namespace Script.WeaponScriptGroup
            
             if (EnforceManager.Instance.orcSwordScaleIncrease)
             {
-                Debug.Log(puzzleLevel);
                 _pivotDSword = FindInChildren(objectToSpawn, $"Orc{puzzleLevel-1}(Clone)");
                 if (_pivotDSword != null)
                 {

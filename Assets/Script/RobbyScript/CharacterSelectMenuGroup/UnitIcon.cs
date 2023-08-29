@@ -8,7 +8,7 @@ using UnityEngine.UI;
 namespace Script.RobbyScript.CharacterSelectMenuGroup
 {
 
-    public class UnitIcon : MonoBehaviour
+    public class UnitIcon : MonoBehaviour, IPointerClickHandler
     {
         public CharacterBase CharacterBase { get; set; }
         public Canvas unitCanvas;
@@ -30,29 +30,34 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         public List<Sprite> frameSprite;
         public List<Sprite> unitPropertiesSprite;
 
+        private void Start() 
+        {
+            var trigger = gameObject.AddComponent<EventTrigger>();
+            var entry = new EventTrigger.Entry
+            {
+                eventID = EventTriggerType.PointerClick
+            };
+            entry.callback.AddListener((data) => { OnPointerClick((PointerEventData)data); });
+            trigger.triggers.Add(entry);
+        }
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            Debug.Log("OnPointerClick called");
-            if (SelectedUnitHolder.Instance.selectedUnit.Count >= 4)
+            if (SelectedUnitHolder.Instance.selectedUnit.Count < 4) return;
+            if (HoldCharacterList.Instance.selectedToSwap == null)
             {
-                if (HoldCharacterList.Instance.selectedToSwap == null)
-                {
-                    HoldCharacterList.Instance.selectedToSwap = this;
-                }
-                else
-                {
-                    HoldCharacterList.Instance.secondSwap = this;
-                    HoldCharacterList.Instance.SwapUnitInstances(
-                        HoldCharacterList.Instance.selectedToSwap,
-                        HoldCharacterList.Instance.selectedToSwap.CharacterBase,
-                        HoldCharacterList.Instance.secondSwap,
-                        HoldCharacterList.Instance.secondSwap.CharacterBase
-                    );
-                    HoldCharacterList.Instance.selectedToSwap = null;
-                    HoldCharacterList.Instance.secondSwap = null;
-                }
+                return; 
             }
+            HoldCharacterList.Instance.secondSwap = this;
+            HoldCharacterList.Instance.SwapUnitInstances(
+                HoldCharacterList.Instance.selectedToSwap,
+                HoldCharacterList.Instance.selectedToSwap.CharacterBase,
+                HoldCharacterList.Instance.secondSwap,
+                HoldCharacterList.Instance.secondSwap.CharacterBase
+            );
+            Debug.Log("Second: " + HoldCharacterList.Instance.selectedToSwap);
+            HoldCharacterList.Instance.selectedToSwap = null;
+            HoldCharacterList.Instance.secondSwap = null;
         }
     }
 }

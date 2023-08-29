@@ -96,16 +96,19 @@ namespace Script.CharacterManagerScript
             };
             unitPieceLevel = PlayerPrefs.GetInt($"{unitGroup}{LevelKey}", level);
             _spriteRenderer = GetComponent<SpriteRenderer>();
-            UnitSkillDict = new Dictionary<int, Dictionary<Sprite, Sprite>>
+            if (unitGroup != UnitGroups.None)
             {
-                {1, new Dictionary<Sprite, Sprite>{{lv1, lv1Lock}}}, 
-                {3, new Dictionary<Sprite, Sprite>{{lv3, lv3Lock}}}, 
-                {5, new Dictionary<Sprite, Sprite>{{lv5, lv5Lock}}}, 
-                {7,new Dictionary<Sprite, Sprite>{{lv7, lv7Lock}}}, 
-                {9, new Dictionary<Sprite, Sprite>{{lv9, lv9Lock}}}, 
-                {11, new Dictionary<Sprite, Sprite>{{lv11, lv11Lock}}}, 
-                {13, new Dictionary<Sprite, Sprite>{{lv13, lv13Lock}}}
-            };
+                UnitSkillDict = new Dictionary<int, Dictionary<Sprite, Sprite>>
+                {
+                    {1, new Dictionary<Sprite, Sprite>{{lv1, lv1Lock}}}, 
+                    {3, new Dictionary<Sprite, Sprite>{{lv3, lv3Lock}}}, 
+                    {5, new Dictionary<Sprite, Sprite>{{lv5, lv5Lock}}}, 
+                    {7,new Dictionary<Sprite, Sprite>{{lv7, lv7Lock}}}, 
+                    {9, new Dictionary<Sprite, Sprite>{{lv9, lv9Lock}}}, 
+                    {11, new Dictionary<Sprite, Sprite>{{lv11, lv11Lock}}}, 
+                    {13, new Dictionary<Sprite, Sprite>{{lv13, lv13Lock}}}
+                };
+            }
         }
         private int CheckForMaxPeace()
         {

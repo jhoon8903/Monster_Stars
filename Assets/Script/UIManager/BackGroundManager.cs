@@ -16,8 +16,6 @@ namespace Script.UIManager
         [SerializeField] private GameObject backGround;
         [SerializeField] private GameObject top;
         [SerializeField] private  GameObject castle;
-        [SerializeField] private Image leftSide;
-        [SerializeField] private Image rightSide;
 
         [Serializable]
         public class BattleSpriteSet
@@ -25,8 +23,6 @@ namespace Script.UIManager
             public Sprite back;
             public Sprite topSprite;
             public Sprite castleSprite;
-            public Sprite left;
-            public Sprite right;
             public Sprite grid1;
             public Sprite grid2;
             public Sprite destroySprite;
@@ -68,8 +64,6 @@ namespace Script.UIManager
             backGround.GetComponent<Image>().sprite = spriteSet[index].back;
             top.GetComponent<Image>().sprite = spriteSet[index].topSprite;
             castle.GetComponent<Image>().sprite = spriteSet[index].castleSprite;
-            leftSide.sprite = spriteSet[index].left;
-            rightSide.sprite = spriteSet[index].right;
             gridManager.grid1Sprite.GetComponent<SpriteRenderer>().sprite = spriteSet[index].grid1;
             gridManager.grid2Sprite.GetComponent<SpriteRenderer>().sprite = spriteSet[index].grid2;
         }

@@ -26,6 +26,7 @@ namespace Script.PuzzleManagerGroup
         private int _currentGroupIndex;
         public bool isTutorial;
         private static readonly object Lock = new object();
+        private bool isMatchComplete = false;
         private void Start()
         {
             if (!PlayerPrefs.HasKey("TutorialKey")) return;
@@ -33,6 +34,7 @@ namespace Script.PuzzleManagerGroup
             {
                 isTutorial = true;
             }
+            matchManager.OnMatchCheckComplete += () => { isMatchComplete = true; };
         }
 
         public static GameObject CharacterObject(Vector3 spawnPosition)
@@ -71,60 +73,55 @@ namespace Script.PuzzleManagerGroup
             return moves;
         }
 
-        private bool ShouldCheckPosition()
-        {
-            var totalPos = CharacterPool.Instance.UsePoolCharacterList().Sum(t => t.transform.position.y);
-            var maxRows = CharacterPool.Instance.UsePoolCharacterList().Count / 6;
-            var maxCount = maxRows * (maxRows - 1) * 3;
-            return totalPos < maxCount;
-        }
-
         public IEnumerator PositionUpCharacterObject()
         {
-            var moves = CalculateMoves();
-            if (moves.Count > 0) yield return StartCoroutine(PerformMoves(moves));
-            yield return StartCoroutine(SpawnAndMoveNewCharacters());
-            yield return StartCoroutine(CheckPosition());
-            if (isTutorial)
+            lock (Lock)
             {
-                yield return new WaitForSecondsRealtime(0.5f);
-                TriggerOnMatchFound();
-            }
-            if (rewardManger.PendingTreasure.Count != 0)
-            {
-                rewardManger.EnqueueTreasure();
-            }
-            else if (countManager.TotalMoveCount == 0)
-            {    
-                if (rewardManger.PendingTreasure.Count == 0)
+                var moves = CalculateMoves();
+                if (moves.Count > 0) yield return StartCoroutine(PerformMoves(moves));
+                yield return StartCoroutine(SpawnAndMoveNewCharacters());
+                if (isTutorial)
                 {
-                    StartCoroutine(GameManager.Instance.Count0Call());
+                    TriggerOnMatchFound();
                 }
             }
             swipeManager.isBusy = false;
+            yield return StartCoroutine(CheckPosition());
+            if (isMatchComplete && rewardManger.PendingTreasure.Count != 0)
+            {
+                yield return StartCoroutine(rewardManger.EnqueueTreasure());
+                isMatchComplete = false;
+            }
+            if (countManager.TotalMoveCount > 0 || rewardManger.PendingTreasure.Count != 0 ||
+                !isMatchComplete) yield break;
+            yield return StartCoroutine(GameManager.Instance.Count0Call());
+            isMatchComplete = false;
         }
         private IEnumerator CheckPosition()
         {
             var totalUnitCount = gridManager.gridHeight * gridManager.gridWidth;
-            while (true)
+            lock (Lock)
             {
-                var units = CharacterPool.Instance.UsePoolCharacterList();
-                if (units.Count == totalUnitCount)
+                while (true)
                 {
-                    var allUnitsAtIntegerPositions = units.All(unit =>
+                    var units = CharacterPool.Instance.UsePoolCharacterList();
+                    if (units.Count == totalUnitCount)
                     {
-                        var pos = unit.transform.position;
-                        return Mathf.Approximately(pos.x, (int)pos.x) && Mathf.Approximately(pos.y, (int)pos.y);
-                    });
+                        var allUnitsAtIntegerPositions = units.All(unit =>
+                        {
+                            var pos = unit.transform.position;
+                            return Mathf.Approximately(pos.x, (int)pos.x) && Mathf.Approximately(pos.y, (int)pos.y);
+                        });
 
-                    if (allUnitsAtIntegerPositions)
-                    {
-                        break;
+                        if (allUnitsAtIntegerPositions)
+                        {
+                            break;
+                        }
                     }
+                    yield return null;
                 }
-                yield return null;
+                yield return StartCoroutine(matchManager.CheckMatches());
             }
-            yield return StartCoroutine(matchManager.CheckMatches());
         }
 
         private static IEnumerator MoveCharacter(GameObject gameObject, Vector3 targetPosition, float duration = 0.35f)
@@ -147,15 +144,17 @@ namespace Script.PuzzleManagerGroup
         }
         private IEnumerator PerformMoves(IEnumerable<(GameObject, Vector3Int)> moves)
         {
-            var moveCoroutines
-                = moves.Select(move 
-                    => StartCoroutine(MoveCharacter(move.Item1, move.Item2)))
-                    .ToList();
-            foreach (var moveCoroutine in moveCoroutines)
+            lock (Lock)
             {
-                yield return moveCoroutine;
+                var moveCoroutines
+                    = moves.Select(move 
+                            => StartCoroutine(MoveCharacter(move.Item1, move.Item2)))
+                        .ToList();
+                foreach (var moveCoroutine in moveCoroutines)
+                {
+                    yield return moveCoroutine;
+                }
             }
-
             yield return null;
         }
         private IEnumerator SpawnAndMoveNewCharacters()
@@ -174,10 +173,14 @@ namespace Script.PuzzleManagerGroup
                     }
                     if (emptyCellCount <= 0) continue;
                     var spawnPosition = new Vector3Int(currentPosition.x, -2 - emptyCellCount, 0);
+                    if (CharacterObject(spawnPosition) != null) continue;
                     var newCharacter = SpawnNewCharacter(spawnPosition);
                     if (newCharacter == null) continue;
-                    var coroutine = StartCoroutine(MoveCharacter(newCharacter, currentPosition));
-                    moveCoroutines.Add(coroutine);
+                    lock (Lock)
+                    {
+                        var coroutine = StartCoroutine(MoveCharacter(newCharacter, currentPosition));
+                        moveCoroutines.Add(coroutine);
+                    }
                 }
             }
             foreach (var coroutine in moveCoroutines)

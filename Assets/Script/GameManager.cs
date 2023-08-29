@@ -109,6 +109,10 @@ namespace Script
         public IEnumerator Count0Call()
         {
             IsBattle = true;
+            if (PlayerPrefs.GetInt("TutorialKey") == 1)
+            {
+                yield return StartCoroutine(tutorialManager.EndTutorial());
+            }
             yield return StartCoroutine(CoverUnit(true));
             yield return StartCoroutine(cameraManager.CameraBattleSizeChange());
             yield return StartCoroutine(backgroundManager.ChangeBattleSize());
@@ -123,10 +127,6 @@ namespace Script
             //         unitE.ApplyAttackSpeedBuffToAllies();
             //     }
             // }
-            if (PlayerPrefs.GetInt("TutorialKey") == 1)
-            {
-                tutorialManager.EndTutorial();
-            }
             GameSpeed();
         }
         private IEnumerator CoverUnit(bool value)

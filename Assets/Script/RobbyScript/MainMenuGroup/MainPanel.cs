@@ -121,7 +121,7 @@ namespace Script.RobbyScript.MainMenuGroup
             else
             {
                 warningPanel.SetActive(true);
-                messageText.text = "Check the \narrangement of units";
+                messageText.text = "You need to Deploy 4 Units";
             }
         }
         private void UpdateProgress(int stage, int maxWave, int clearWave)

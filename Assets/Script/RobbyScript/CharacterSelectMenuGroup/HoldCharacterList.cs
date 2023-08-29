@@ -28,12 +28,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         [SerializeField] private Sprite lockImage;
         [SerializeField] private Sprite lockBack;
         [SerializeField] private Sprite lockFrame;
-        [SerializeField] private GameObject selectBackPanel;
-        [SerializeField] private Image pointer1;
-        [SerializeField] private Image pointer2;
-        [SerializeField] private Image pointer3;
-        [SerializeField] private Image pointer4;
-        
+
         private GameObject _activeStatusPanel;
         private GameObject _activeNormalBack;
         private static readonly Dictionary<UnitIcon, UnitIcon> UnitIconMapping = new Dictionary<UnitIcon, UnitIcon>();
@@ -42,6 +37,8 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         private bool _blueUnlock;
         public UnitIcon selectedToSwap;
         public UnitIcon secondSwap;
+        public List<UnitIcon> unitList = new List<UnitIcon>();
+        public List<UnitIcon> topList = new List<UnitIcon>();
         private void Awake()
         {
             if (Instance == null)
@@ -54,7 +51,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             }
             gameObject.SetActive(false);
         }
-
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.R))
@@ -62,24 +58,91 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 PlayerPrefs.DeleteAll();
             }
 
-            if (Input.GetMouseButtonDown(0))
+            if (!Input.GetMouseButtonDown(0)) return;
+            var clickedObject = EventSystem.current.currentSelectedGameObject;
+            
+            if (selectedToSwap != null)
             {
-                var clickedObject = EventSystem.current.currentSelectedGameObject;
+                secondSwap = clickedObject.GetComponentInParent<UnitIcon>();
+                var secondSwapBase = secondSwap.CharacterBase;
+                SwapUnitInstances(selectedToSwap, selectedToSwap.CharacterBase, secondSwap, secondSwapBase);
+            }
+            else
+            {
                 if (clickedObject != null && IsDescendantOrSelf(_activeStatusPanel, clickedObject))
                 {
                     return;
                 }
-                if (_activeStatusPanel != null)
+                    
+                if (_activeStatusPanel == null) return;
+                _activeStatusPanel.SetActive(false);
+                if (_activeNormalBack != null)
                 {
-                    _activeStatusPanel.SetActive(false);
-                    if (_activeNormalBack != null)  // null 체크 추가
-                    {
-                        _activeNormalBack.SetActive(true);  // 활성화
-                    }
-                    _activeStatusPanel = null;
-                    _activeNormalBack = null;  // 초기화
+                    _activeNormalBack.SetActive(true);
                 }
+
+                _activeStatusPanel = null;
+                _activeNormalBack = null;  
             }
+        }
+
+        private IEnumerator ViveUnitCard()
+        {
+            while (selectedToSwap != null)
+            { 
+                if (secondSwap) StartCoroutine(ViveUnitCard());
+                foreach (var topInstance in topList)
+                {
+                    topInstance.transform.DOScale(new Vector3(0.95f, 0.95f, 0), 0.5f).SetLoops(2, LoopType.Yoyo);
+                }
+                yield return new WaitForSeconds(1f);  // 원하는 대기 시간을 설정합니다.
+            }
+        }
+
+        public void SwapUnitInstances(UnitIcon first, CharacterBase firstBase, UnitIcon second, CharacterBase secondBase)
+        {
+            firstBase.selected = true;
+            SelectedUnitHolder.Instance.selectedUnit.Add(firstBase);
+            topList.Add(first);
+            PlayerPrefs.SetInt(firstBase.unitGroup.ToString(), 1);
+            PlayerPrefs.Save();
+            first.transform.SetParent(selectedContent.transform);
+            first.transform.SetAsLastSibling();
+            first.normalBack.SetActive(true);
+            first.infoBack.SetActive(false);
+            var firstCanvas = first.unitCanvas;
+            var secondCanvas = second.unitCanvas;
+            if (firstCanvas != null)
+            {
+                firstCanvas.sortingOrder = secondCanvas.sortingOrder;
+                firstCanvas.sortingLayerName = secondCanvas.sortingLayerName;
+            }
+
+
+            secondBase.selected = false;
+            unitList.Add(second);
+            topList.Remove(second);
+            SelectedUnitHolder.Instance.selectedUnit.Remove(secondBase);
+            PlayerPrefs.DeleteKey(secondBase.unitGroup.ToString());
+            second.transform.SetParent(activateUnitContent.transform);
+            second.transform.SetAsLastSibling();
+            second.normalBack.SetActive(true);
+            second.infoBack.SetActive(false);
+            if (secondCanvas != null)
+            {
+                secondCanvas.sortingOrder = firstCanvas.sortingOrder;
+                secondCanvas.sortingLayerName = firstCanvas.sortingLayerName;
+            }
+
+            foreach (var unitObjet in unitList)
+            {
+                unitObjet.unitCanvas.sortingLayerName = "Unit";
+            }
+            UpdateMainUnitContent();
+            SortChildrenBySortingLayer(activateUnitContent.transform);
+            AdjustRectTransform(activateUnitContent.transform);
+            selectedToSwap = null;
+            secondSwap = null;
         }
         private static bool IsDescendantOrSelf(Object obj, GameObject toCheck)
         {
@@ -92,42 +155,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             }
             return false;
         }
-
-        public void SwapUnitInstances(UnitIcon first, CharacterBase firstBase, UnitIcon second, CharacterBase secondBase)
-        {
-            Debug.Log($"First: {first.name} / {firstBase.unitGroup}");
-            firstBase.selected = true;
-            SelectedUnitHolder.Instance.selectedUnit.Add(firstBase);
-            PlayerPrefs.SetInt(firstBase.unitGroup.ToString(), 1);
-            PlayerPrefs.Save();
-            first.transform.SetParent(selectedContent.transform);
-            first.transform.SetAsLastSibling();
-            first.normalBack.SetActive(true);
-            first.infoBack.SetActive(false);
-            var firstCanvas = first.unitCanvas;
-            if (firstCanvas != null)
-            {
-                firstCanvas.sortingLayerName = "TopMenu";
-            }
-
-            Debug.Log($"Second: {second.name} / {secondBase.unitGroup}");
-            secondBase.selected = false;
-            SelectedUnitHolder.Instance.selectedUnit.Remove(secondBase);
-            PlayerPrefs.DeleteKey(secondBase.unitGroup.ToString());
-            second.transform.SetParent(activateUnitContent.transform);
-            second.transform.SetAsLastSibling();
-            second.normalBack.SetActive(true);
-            second.infoBack.SetActive(false);
-            var secondCanvas = first.unitCanvas;
-            if (secondCanvas != null)
-            {
-                secondCanvas.sortingLayerName = "Unit";
-            }
-
-            UpdateMainUnitContent();
-            SortChildrenBySortingLayer(activateUnitContent.transform);
-            AdjustRectTransform(activateUnitContent.transform);
-        }
+        
         public void InstanceUnit()
         {
             var sortingLayerOder = 11;
@@ -150,12 +178,15 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                         }
                         AdjustRectTransform(activateUnitContent.transform);
                         SelectedUnitHolder.Instance.selectedUnit.Add(character);
+                         topList.Add(selectedUnitInstance);
+                     
                     }
                     else
                     {
                         var activeUnitInstance = Instantiate(unitIconPrefab, selectedContent.transform, false);
                         activeUnitInstance.transform.SetParent(activateUnitContent.transform, false);
                         SetupUnitIcon(activeUnitInstance, character);
+                        unitList.Add(activeUnitInstance);
 
                         var canvas = activeUnitInstance.unitCanvas;
                         if (canvas != null && sortingLayerOder > 0)
@@ -166,17 +197,18 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     }
                     sortingLayerOder--;
                     AdjustRectTransform(activateUnitContent.transform);
+                  
                 }
                 else
                 {
                     var unitInstance = Instantiate(unitIconPrefab, inActivateUnitContent.transform, false);
                     SetupInActiveUnitIcon(unitInstance, character);
                     AdjustRectTransform(inActivateUnitContent.transform);
+                    unitList.Add(unitInstance);
                 }
                 UpdateRewardPiece(character);
             }
         }
-
         private void SetupUnitIcon(UnitIcon unitInstance, CharacterBase character)
         {
             unitInstance.CharacterBase = character;
@@ -216,6 +248,8 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 unitInstance.transform.SetAsLastSibling(); 
                 unitInstance.normalBack.SetActive(true);
                 unitInstance.infoBack.SetActive(false);
+                unitList.Add(unitInstance);
+                topList.Remove(unitInstance);
                 UpdateMainUnitContent();
                 var canvas = unitInstance.unitCanvas;
                 if (canvas == null) return;
@@ -238,6 +272,8 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     unitInstance.transform.SetAsLastSibling(); 
                     unitInstance.normalBack.SetActive(true);
                     unitInstance.infoBack.SetActive(false);
+                    unitList.Remove(unitInstance);
+                    topList.Add(unitInstance);
                     UpdateMainUnitContent();
                     AdjustRectTransform(activateUnitContent.transform);
                     var canvas = unitInstance.unitCanvas;
@@ -246,19 +282,21 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 }
                 else
                 {
-                    selectBackPanel.SetActive(true);
-                    StartCoroutine(MovePointer());
-                    var canvas = unitInstance.unitCanvas;
-                    if (canvas == null) return;
-                    canvas.sortingLayerName = "TopMenu";
                     if (selectedToSwap != null) return;
                     selectedToSwap = unitInstance;
-                    Debug.Log(selectedToSwap.CharacterBase.unitGroup);
+                    StartCoroutine(ViveUnitCard());
+                    selectedToSwap.infoBack.SetActive(false);
+                    selectedToSwap.normalBack.SetActive(true);
+                    unitList.Remove(selectedToSwap);
+                    
+                    foreach (var unitObject in unitList.Where(unitObject => selectedToSwap != unitObject))
+                    {
+                        var anotherCanvas = unitObject.unitCanvas;
+                        anotherCanvas.sortingLayerName = "Default";
+                    }
                 }
             });
         }
-
- 
         private static void SortChildrenBySortingLayer(Transform parent)
         {
             var children = new List<Transform>();
@@ -310,7 +348,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             SetUpUnitProperty(unitInstance, character);
             SetUpUnitLevelProgress(unitInstance);
         }
-             private void SwapBackGround(UnitIcon unitInstance, CharacterBase characterBase)
+        private void SwapBackGround(UnitIcon unitInstance, CharacterBase characterBase)
         {
             SoundManager.Instance.PlaySound(SoundManager.Instance.unitSelect);
             if (_activeStatusPanel == null)
@@ -374,35 +412,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     break;
             }
         }
-       private IEnumerator MovePointer()
-        {
-            pointer1.rectTransform.localRotation =  Quaternion.Euler(0, 0, 0);
-            pointer2.rectTransform.localRotation =  Quaternion.Euler(0, 0, 0);
-            pointer3.rectTransform.localRotation =  Quaternion.Euler(0, 0, 0);
-            pointer4.rectTransform.localRotation =  Quaternion.Euler(0, 0, 0);
-            const float duration = 0.5f;
-
-            while (true)
-            {
-                pointer1.rectTransform.DOLocalRotate(new Vector3(0, 0, 30), duration, RotateMode.FastBeyond360).SetEase(Ease.InOutSine);
-                yield return new WaitForSeconds(duration);
-                pointer1.rectTransform.DOLocalRotate(new Vector3(0, 0, 0), duration, RotateMode.FastBeyond360).SetEase(Ease.InOutSine);
-                yield return new WaitForSeconds(duration);
-                pointer2.rectTransform.DOLocalRotate(new Vector3(0, 0, 30), duration, RotateMode.FastBeyond360).SetEase(Ease.InOutSine);
-                yield return new WaitForSeconds(duration);
-                pointer2.rectTransform.DOLocalRotate(new Vector3(0, 0, 0), duration, RotateMode.FastBeyond360).SetEase(Ease.InOutSine);
-                yield return new WaitForSeconds(duration);
-                pointer3.rectTransform.DOLocalRotate(new Vector3(0, 0, 30), duration, RotateMode.FastBeyond360).SetEase(Ease.InOutSine);
-                yield return new WaitForSeconds(duration);
-                pointer3.rectTransform.DOLocalRotate(new Vector3(0, 0, 0), duration, RotateMode.FastBeyond360).SetEase(Ease.InOutSine);
-                yield return new WaitForSeconds(duration);
-                pointer4.rectTransform.DOLocalRotate(new Vector3(0, 0, 30), duration, RotateMode.FastBeyond360).SetEase(Ease.InOutSine);
-                yield return new WaitForSeconds(duration);
-                pointer4.rectTransform.DOLocalRotate(new Vector3(0, 0, 0), duration, RotateMode.FastBeyond360).SetEase(Ease.InOutSine);
-                yield return new WaitForSeconds(duration);
-            }
-        }
-        
         private void SetupInActiveUnitIcon(UnitIcon unitInstance, CharacterBase character)
         {
             unitInstance.CharacterBase = character;

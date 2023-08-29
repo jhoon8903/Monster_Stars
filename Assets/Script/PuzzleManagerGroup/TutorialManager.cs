@@ -62,7 +62,7 @@ namespace Script.PuzzleManagerGroup
             }
         }
         private float _nextTriggerTime; // 다음 트리거가 발생할 수 있는 시간
-        private const float TutorialTriggerCooldown = 1.6f;
+        private const float TutorialTriggerCooldown = 2f;
         private void Start()
         {
             if (PlayerPrefs.GetInt("TutorialKey") != 1) return;
@@ -164,7 +164,7 @@ namespace Script.PuzzleManagerGroup
             ProcessNextTutorialStep();
             _nextTriggerTime = Time.time + TutorialTriggerCooldown;
         }
-        public void EndTutorial()
+        public IEnumerator EndTutorial()
         {
             foreach (var cover in _covers.Values)
             {
@@ -184,6 +184,7 @@ namespace Script.PuzzleManagerGroup
             PlayerPrefs.SetInt("TutorialKey", 0);
             spawnManager.isTutorial = false;
             Firebase.Analytics.FirebaseAnalytics.LogEvent("tutorial_complete");
+            yield return null;
         }
         private void ProcessNextTutorialStep()
         {

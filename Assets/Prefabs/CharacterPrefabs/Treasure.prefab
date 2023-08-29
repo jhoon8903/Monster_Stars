@@ -52,15 +52,22 @@ MonoBehaviour:
   unitPieceLevel: 1
   unLock: 1
   selected: 1
-  unitPuzzleLevel: 0
+  unitPuzzleLevel: 1
   unitGroup: 11
   lv1: {fileID: 0}
+  lv1Lock: {fileID: 0}
   lv3: {fileID: 0}
+  lv3Lock: {fileID: 0}
   lv5: {fileID: 0}
+  lv5Lock: {fileID: 0}
   lv7: {fileID: 0}
+  lv7Lock: {fileID: 0}
   lv9: {fileID: 0}
+  lv9Lock: {fileID: 0}
   lv11: {fileID: 0}
+  lv11Lock: {fileID: 0}
   lv13: {fileID: 0}
+  lv13Lock: {fileID: 0}
   baseDamage: 0
   dotDamage: 0
   effectChance: 0
