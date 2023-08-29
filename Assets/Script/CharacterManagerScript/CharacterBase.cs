@@ -33,14 +33,21 @@ namespace Script.CharacterManagerScript
         protected internal UnitAtkTypes UnitAtkType = UnitAtkTypes.None;
         protected internal UnitProperties UnitProperty = UnitProperties.None;
         protected internal UnitEffects UnitEffect = UnitEffects.None;
-        protected internal Dictionary<int, Sprite> UnitSkillDict = new Dictionary<int, Sprite>();
+        protected internal Dictionary<int, Dictionary<Sprite, Sprite>> UnitSkillDict = new Dictionary<int, Dictionary<Sprite, Sprite>>();
         [SerializeField] internal Sprite lv1;
+        [SerializeField] internal Sprite lv1Lock;
         [SerializeField] internal Sprite lv3;
+        [SerializeField] internal Sprite lv3Lock;
         [SerializeField] internal Sprite lv5;
+        [SerializeField] internal Sprite lv5Lock;
         [SerializeField] internal Sprite lv7;
+        [SerializeField] internal Sprite lv7Lock;
         [SerializeField] internal Sprite lv9;
+        [SerializeField] internal Sprite lv9Lock;
         [SerializeField] internal Sprite lv11;
+        [SerializeField] internal Sprite lv11Lock;
         [SerializeField] internal Sprite lv13;
+        [SerializeField] internal Sprite lv13Lock;
         public int baseDamage;
         public float dotDamage;
         public int effectChance;
@@ -89,7 +96,16 @@ namespace Script.CharacterManagerScript
             };
             unitPieceLevel = PlayerPrefs.GetInt($"{unitGroup}{LevelKey}", level);
             _spriteRenderer = GetComponent<SpriteRenderer>();
-            UnitSkillDict = new Dictionary<int, Sprite> { {1, lv1}, {3, lv3}, {5, lv5}, {7, lv7}, {9, lv9}, {11, lv11}, {13, lv13} };
+            UnitSkillDict = new Dictionary<int, Dictionary<Sprite, Sprite>>
+            {
+                {1, new Dictionary<Sprite, Sprite>{{lv1, lv1Lock}}}, 
+                {3, new Dictionary<Sprite, Sprite>{{lv3, lv3Lock}}}, 
+                {5, new Dictionary<Sprite, Sprite>{{lv5, lv5Lock}}}, 
+                {7,new Dictionary<Sprite, Sprite>{{lv7, lv7Lock}}}, 
+                {9, new Dictionary<Sprite, Sprite>{{lv9, lv9Lock}}}, 
+                {11, new Dictionary<Sprite, Sprite>{{lv11, lv11Lock}}}, 
+                {13, new Dictionary<Sprite, Sprite>{{lv13, lv13Lock}}}
+            };
         }
         private int CheckForMaxPeace()
         {

@@ -43,10 +43,22 @@ namespace Script.RewardScript
         {
             switch (selectedReward.Type)
             {
-                case PowerTypeManager.Types.GroupDamage:
+                case PowerTypeManager.Types.GroupDamage1:
                     EnforceManager.Instance.IncreaseGroupDamage(selectedReward,selectedReward.Property[0]);
                     break;
-                case PowerTypeManager.Types.GroupAtkSpeed:
+                case PowerTypeManager.Types.GroupDamage2:
+                    EnforceManager.Instance.IncreaseGroupDamage(selectedReward,selectedReward.Property[0]);
+                    break;
+                case PowerTypeManager.Types.GroupDamage3:
+                    EnforceManager.Instance.IncreaseGroupDamage(selectedReward,selectedReward.Property[0]);
+                    break;
+                case PowerTypeManager.Types.GroupAtkSpeed1:
+                    EnforceManager.Instance.IncreaseGroupRate(selectedReward,selectedReward.Property[0]);
+                    break;
+                case PowerTypeManager.Types.GroupAtkSpeed2:
+                    EnforceManager.Instance.IncreaseGroupRate(selectedReward,selectedReward.Property[0]);
+                    break;
+                case PowerTypeManager.Types.GroupAtkSpeed3:
                     EnforceManager.Instance.IncreaseGroupRate(selectedReward,selectedReward.Property[0]);
                     break;
                 case PowerTypeManager.Types.StepDirection:
@@ -404,7 +416,9 @@ namespace Script.RewardScript
             switch (powerUp.Type)
             {
                 case PowerTypeManager.Types.AddRow:
-                case PowerTypeManager.Types.Step:
+                case PowerTypeManager.Types.Step1:
+                case PowerTypeManager.Types.Step2:
+                case PowerTypeManager.Types.Step3:
                 case PowerTypeManager.Types.RandomLevelUp:
                 case PowerTypeManager.Types.GroupLevelUp:
                 case PowerTypeManager.Types.LevelUpPattern:
@@ -864,8 +878,12 @@ namespace Script.RewardScript
             expButton.GetComponent<Image>().sprite = powerUp.BackGroundColor;
             powerText.text = powerUp.Type switch
             {
-                PowerTypeManager.Types.GroupDamage => finalTranslation,
-                PowerTypeManager.Types.GroupAtkSpeed => finalTranslation,
+                PowerTypeManager.Types.GroupDamage1 => finalTranslation,
+                PowerTypeManager.Types.GroupDamage2 => finalTranslation,
+                PowerTypeManager.Types.GroupDamage3 => finalTranslation,
+                PowerTypeManager.Types.GroupAtkSpeed1 => finalTranslation,
+                PowerTypeManager.Types.GroupAtkSpeed2 => finalTranslation,
+                PowerTypeManager.Types.GroupAtkSpeed3 => finalTranslation,
                 PowerTypeManager.Types.StepDirection => finalTranslation,
                 PowerTypeManager.Types.Exp => finalTranslation,
                 PowerTypeManager.Types.CastleRecovery => finalTranslation,

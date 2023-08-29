@@ -650,11 +650,17 @@ namespace Script.RewardScript
             var finalDesc = data.Desc;
             var placeholderValues = new Dictionary<PowerTypeManager.Types, Dictionary<string, float>>
             {
-                { PowerTypeManager.Types.Slow , new Dictionary<string, float>{{"{15*EnforceManager.Instance.slowCount}", _property}}},
                 { PowerTypeManager.Types.StepLimit , new Dictionary<string, float>{{"{p}", 1}}},
-                { PowerTypeManager.Types.GroupDamage , new Dictionary<string, float>{{"{p}", _property}}},
-                { PowerTypeManager.Types.GroupAtkSpeed , new Dictionary<string, float>{{"{p}", _property}}},
-                { PowerTypeManager.Types.Exp , new Dictionary<string, float>{{"{EnforceManager.Instance.expPercentage}", _property}}},
+                { PowerTypeManager.Types.GroupDamage1 , new Dictionary<string, float>{{"{p}", _property}}},
+                { PowerTypeManager.Types.GroupDamage2 , new Dictionary<string, float>{{"{p}", _property}}},
+                { PowerTypeManager.Types.GroupDamage3 , new Dictionary<string, float>{{"{p}", _property}}},
+                { PowerTypeManager.Types.GroupAtkSpeed1 , new Dictionary<string, float>{{"{p}", _property}}},
+                { PowerTypeManager.Types.GroupAtkSpeed2 , new Dictionary<string, float>{{"{p}", _property}}},
+                { PowerTypeManager.Types.GroupAtkSpeed3 , new Dictionary<string, float>{{"{p}", _property}}},
+                { PowerTypeManager.Types.Step1 , new Dictionary<string, float>{{"{p}", _property}}},
+                { PowerTypeManager.Types.Step2 , new Dictionary<string, float>{{"{p}", _property}}},
+                { PowerTypeManager.Types.Step3 , new Dictionary<string, float>{{"{p}", _property}}},
+                { PowerTypeManager.Types.Exp , new Dictionary<string, float>{{"{p}", _property}}},
                 { PowerTypeManager.Types.CastleMaxHp, new Dictionary<string, float>{{"{p}", _property}}},
             };
 
@@ -666,7 +672,7 @@ namespace Script.RewardScript
             if (data.Type == PowerTypeManager.Types.NextStage)
             {
                 finalDesc = finalDesc.Replace("{p}", _property.ToString(CultureInfo.CurrentCulture));
-                finalDesc.Replace("{EnforceManager.Instance.highLevelCharacterCount}", highLevelCharacterCount.ToString(CultureInfo.CurrentCulture));
+                finalDesc.Replace("{nextStage}", highLevelCharacterCount.ToString(CultureInfo.CurrentCulture));
             }
             var finalTranslation = finalDesc.Replace("||", "\n");
          

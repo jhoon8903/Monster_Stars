@@ -76,15 +76,15 @@ DarkElf,7,1100,DarkElfExplosionBoost,B,상태이상적을 처치하면 주변 2�
 DarkElf,9,1100,DarkElfDoubleAttack,P,발사하는 투사체 갯수 1개 증가,Dark Elf fires 1 additional projectile,Dark Elf fires 1 additional projectile,1
 DarkElf,11,1100,DarkElfStatusPoison,G,적이 상태이상에 걸리지 않았을때  초당 공격력의 20%의 중독을 3초간 발생시킵니다.,If no debuffs on foe  Dark Elves apply 3s poison: 20% attack damage/sec.,If no debuffs on foe  Dark Elves apply 3s poison: 20% attack damage/sec.,1
 DarkElf,13,1100,DarkElfSameEnemyBoost,B,동일한 적을 타격할때마다 데미지가 5% 증가 (최대 10회),Dark Elves deal 5% more damage to the same enemy ||with each hit  up to a max 50% increase.,Dark Elf's damage increases when attacking the same enemy,1
-None,1,1,GroupDamage,G,전체 데미지 {p}% 증가,All units' damage increases by +{p}%,All units' damage increases by +{p}%,1
-None,1,1,GroupDamage,B,전체 데미지 {p}% 증가,All units' damage increases by +{p}%,All units' damage increases by +{p}%,6;7;8;9;10
-None,1,1,GroupDamage,P,전체 데미지 {p}% 증가,All units' damage increases by +{p}%,All units' damage increases by +{p}%,18
-None,1,2,GroupAtkSpeed,G,전체 공격속도 {p}% 증가,All units' attack speed increases by +{p}%,All units' attack speed increases by +{p}%,3;4;5
-None,1,2,GroupAtkSpeed,B,전체 공격속도 {p}% 증가,All units' attack speed increases by +{p}%,All units' attack speed increases by +{p}%,10;11;12
-None,1,2,GroupAtkSpeed,P,전체 공격속도 {p}% 증가,All units' attack speed increases by +{p}%,All units' attack speed increases by +{p}%,19
-None,1,3,Step,G,이동횟수 {p} 증가,Movement count increased by {p},Movement count increased by {p},3;4;5
-None,1,3,Step,B,이동횟수 {p} 증가,Movement count increased by {p},Movement count increased by {p},9;10;11
-None,1,3,Step,P,이동횟수 {p} 증가,Movement count increased by {p},Movement count increased by {p},14;15;16;17
+None,1,1,GroupDamage1,G,전체 데미지 {p}% 증가,All units' damage increases by +{p}%,All units' damage increases by +{p}%,1
+None,1,1,GroupDamage2,B,전체 데미지 {p}% 증가,All units' damage increases by +{p}%,All units' damage increases by +{p}%,6;7;8;9;10
+None,1,1,GroupDamage3,P,전체 데미지 {p}% 증가,All units' damage increases by +{p}%,All units' damage increases by +{p}%,18
+None,1,2,GroupAtkSpeed1,G,전체 공격속도 {p}% 증가,All units' attack speed increases by +{p}%,All units' attack speed increases by +{p}%,3;4;5
+None,1,2,GroupAtkSpeed2,B,전체 공격속도 {p}% 증가,All units' attack speed increases by +{p}%,All units' attack speed increases by +{p}%,10;11;12
+None,1,2,GroupAtkSpeed3,P,전체 공격속도 {p}% 증가,All units' attack speed increases by +{p}%,All units' attack speed increases by +{p}%,19
+None,1,3,Step1,G,이동횟수 {p} 증가,Movement count increased by {p},Movement count increased by {p},3;4;5
+None,1,3,Step2,B,이동횟수 {p} 증가,Movement count increased by {p},Movement count increased by {p},9;10;11
+None,1,3,Step3,P,이동횟수 {p} 증가,Movement count increased by {p},Movement count increased by {p},14;15;16;17
 None,1,4,RandomLevelUp,G,퍼즐상의 랜덤한 {p}개의 케릭터 1 레벨 증가,Random {p} characters on the cell level up,Random {p} characters on the cell level up,2;3
 None,1,5,GroupLevelUp,B,셀 상의 모든 {0level_unit_N}이 {unit_N}으로 변합니다.,All {0level_unit_N}s on the cell become {unit_N}s,All {0level_unit_N}s on the cell become {unit_N}s,0;1;2;3
 None,1,6,Exp,G,적 처치시 경험치 획득량 {p}% 증가||(현재 {EnforceManager.Instance.expPercentage}% 최대 30%),Experience gained from defeating enemies is increased by {p}%,Experience gained from defeating enemies is increased by {p}%,5
@@ -95,6 +95,6 @@ None,1,10,Match5Upgrade,P,5개 매치시 가운데 케릭터의 레벨이 1 더 
 None,1,11,Slow,P,다음 웨이브 부터는 적 이동속도 {p}% 감소||(현재 {15*EnforceManager.Instance.slowCount}% 최대 60%),Starting next round enemy movement speed decreases by {p}%,enemy movement speed decreases by {p}%,15
 None,1,12,StepLimit,P,총 이동횟수 {p} 증가,Movement count increases by {p} each wave,Movement count increases by {p} each wave,1
 None,1,13,StepDirection,P,대각선 이동 가능,Pieces can be moved diagonally,Pieces can be moved diagonally,1
-None,1,14,NextStage,P,보스 스테이지 이후 {p} 개의 케릭터 추가 이동 (현재 {EnforceManager.Instance.highLevelCharacterCount}),After defeating the boss  you can move {p} additional units,After defeating the boss  you can move {p} additional units,1;2
+None,1,14,NextStage,P,보스 스테이지 이후 {p} 개의 케릭터 추가 이동 (현재 {EnforceManager.Instance.highLevelCharacterCount}),After defeating the boss  you can move {nextStage} additional units,After defeating the boss  you can move {nextStage} additional units,1;2
 None,1,15,LevelUpPattern,P,이제부터 {0level_unit_N}은 처음부터 {unit_N}으로 등장합니다.,From now on  {0level_unit_N} will appear as {unit_N} from the start,From now on  {0level_unit_N} will appear as {unit_N} from the start,0;1;2;3
 None,1,16,AddRow,P,가로줄이 1줄 증가,The cell gains an additional row,The cell gains an additional row,1

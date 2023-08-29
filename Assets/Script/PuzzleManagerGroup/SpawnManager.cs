@@ -95,7 +95,7 @@ namespace Script.PuzzleManagerGroup
                 rewardManger.EnqueueTreasure();
             }
             else if (countManager.TotalMoveCount == 0)
-            {
+            {    
                 if (rewardManger.PendingTreasure.Count == 0)
                 {
                     StartCoroutine(GameManager.Instance.Count0Call());
@@ -105,20 +105,28 @@ namespace Script.PuzzleManagerGroup
         }
         private IEnumerator CheckPosition()
         {
-            var wait = new WaitForSeconds(0.3f);
-            var maxRows = CharacterPool.Instance.UsePoolCharacterList().Count / 6;
-            var maxCount = maxRows * (maxRows - 1) * 3;
-            _totalPos = CharacterPool.Instance.UsePoolCharacterList().Sum(t=> t.transform.position.y);
-            while (_totalPos < maxCount)
+            var totalUnitCount = gridManager.gridHeight * gridManager.gridWidth;
+            while (true)
             {
-                while(CharacterPool.Instance.SortPoolCharacterList().Count < CharacterPool.Instance.UsePoolCharacterList().Count)
+                var units = CharacterPool.Instance.UsePoolCharacterList();
+                if (units.Count == totalUnitCount)
                 {
-                    yield return wait;
+                    var allUnitsAtIntegerPositions = units.All(unit =>
+                    {
+                        var pos = unit.transform.position;
+                        return Mathf.Approximately(pos.x, (int)pos.x) && Mathf.Approximately(pos.y, (int)pos.y);
+                    });
+
+                    if (allUnitsAtIntegerPositions)
+                    {
+                        break;
+                    }
                 }
-                _totalPos = CharacterPool.Instance.UsePoolCharacterList().Sum(t => t.transform.position.y);
+                yield return null;
             }
             yield return StartCoroutine(matchManager.CheckMatches());
         }
+
         private static IEnumerator MoveCharacter(GameObject gameObject, Vector3 targetPosition, float duration = 0.35f)
         {
             if (gameObject == null || !gameObject.activeInHierarchy) 

@@ -851,7 +851,7 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   gridManager: {fileID: 8808150501734532426}
   spawnManager: {fileID: 149521964}
-  moveCount: 10
+  moveCount: 50
   swipeManager: {fileID: 149521965}
   cameraManager: {fileID: 758648960}
   backgroundManager: {fileID: 1011029961}
@@ -959,7 +959,7 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   commonRewardManager: {fileID: 2120144525}
   enforceManager: {fileID: 1595735486}
-  swipeManager: {fileID: 149521965}
+  gridManager: {fileID: 8808150501734532426}
 --- !u!114 &149521967
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1562,7 +1562,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &249244819
 RectTransform:
   m_ObjectHideFlags: 0
@@ -3530,10 +3530,10 @@ RectTransform:
   m_Father: {fileID: 2127962879}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1430, y: -1450}
+  m_SizeDelta: {x: 2860, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &652836182
 MonoBehaviour:
@@ -5584,10 +5584,10 @@ RectTransform:
   m_Father: {fileID: 2127962879}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1430, y: -250}
+  m_SizeDelta: {x: 2860, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &997395099
 MonoBehaviour:
@@ -7439,10 +7439,10 @@ RectTransform:
   m_Father: {fileID: 2127962879}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1430, y: -2050}
+  m_SizeDelta: {x: 2860, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1277674442
 MonoBehaviour:
@@ -8004,10 +8004,10 @@ RectTransform:
   m_Father: {fileID: 2127962879}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1430, y: -850}
+  m_SizeDelta: {x: 2860, y: 500}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1384841506
 MonoBehaviour:
@@ -11933,45 +11933,49 @@ MonoBehaviour:
   skillData: []
   skills:
   - skillTypes: 0
-    skillIcon: {fileID: 21300000, guid: 5df2b4e28df3c437685cabde242cd80f, type: 3}
+    skillIcon: {fileID: 21300000, guid: a78767a976cbb4841b7b6b90bb507b48, type: 3}
   - skillTypes: 1
-    skillIcon: {fileID: 21300000, guid: dd1e4e22f574740dba8f68d649bd83e9, type: 3}
+    skillIcon: {fileID: 21300000, guid: f392618ffd9544bf59a62a25f17e34a8, type: 3}
   - skillTypes: 2
-    skillIcon: {fileID: 21300000, guid: 1428a8ed2447349a285d82b832bab829, type: 3}
+    skillIcon: {fileID: 21300000, guid: bfc1bf67dfe1d411691efa7e5028a9ba, type: 3}
   - skillTypes: 3
-    skillIcon: {fileID: 21300000, guid: 1428a8ed2447349a285d82b832bab829, type: 3}
+    skillIcon: {fileID: 21300000, guid: 42e4338181c284ec790aeddc6caec4a7, type: 3}
+  - skillTypes: 4
+    skillIcon: {fileID: 21300000, guid: e51732e7332cf4925bfdc7be6ded00f8, type: 3}
+  - skillTypes: 5
+    skillIcon: {fileID: 21300000, guid: c9097f019f71f4d32bf28517021bbaa1, type: 3}
   - skillTypes: 6
-    skillIcon: {fileID: 21300000, guid: 638e6f121dbba4f168616bc0d1b082fa, type: 3}
+    skillIcon: {fileID: 21300000, guid: 16bc466e2f0c844268207caed26b8bfd, type: 3}
   - skillTypes: 7
-    skillIcon: {fileID: 21300000, guid: 8684bc2519d66493c97fa0aad5023cc1, type: 3}
+    skillIcon: {fileID: 21300000, guid: feb52eaf1e92b47908cd520feb572cda, type: 3}
   - skillTypes: 8
-    skillIcon: {fileID: 21300000, guid: 0105164b6dc1e4287b484dee6d04c1ea, type: 3}
+    skillIcon: {fileID: 21300000, guid: cb0262548598049e4822b861a8ac556a, type: 3}
   - skillTypes: 9
-    skillIcon: {fileID: 21300000, guid: 6e33df453079846b998ef0fe900b24f1, type: 3}
+    skillIcon: {fileID: 21300000, guid: 7d80a63c61121446ab5e384fbfb12c07, type: 3}
   - skillTypes: 10
-    skillIcon: {fileID: 21300000, guid: afe24767b47734133be7727555bd3486, type: 3}
+    skillIcon: {fileID: 21300000, guid: 79e31911c39514bf198e9d2f44563f36, type: 3}
   - skillTypes: 11
-    skillIcon: {fileID: 21300000, guid: 17fd26184c0da438ea13f7db48372a25, type: 3}
+    skillIcon: {fileID: 21300000, guid: 5cde37290e523482383e1b40cb4d86d8, type: 3}
   - skillTypes: 12
-    skillIcon: {fileID: 21300000, guid: 4add09a71fb1e4f60b99e4dc1bbc86f2, type: 3}
+    skillIcon: {fileID: 21300000, guid: ba4e1f570b51142febab2577a4c7a8f5, type: 3}
   - skillTypes: 13
-    skillIcon: {fileID: 21300000, guid: 77a7ca925321f46229f13b7580806e58, type: 3}
+    skillIcon: {fileID: 21300000, guid: 76279aa68570e40439ed6ead1d03e3ce, type: 3}
   - skillTypes: 14
-    skillIcon: {fileID: 21300000, guid: 0c8132544b83646539b1ee34bed0e06d, type: 3}
+    skillIcon: {fileID: 21300000, guid: 66cb681264ef74d248d94ce40d161f2e, type: 3}
   - skillTypes: 15
-    skillIcon: {fileID: 21300000, guid: 348978c9e1068446fb3933562b31a3b5, type: 3}
+    skillIcon: {fileID: 21300000, guid: cefe3d981da594990a6fc046ded6f3d7, type: 3}
   - skillTypes: 16
-    skillIcon: {fileID: 21300000, guid: 1ad8c80dc966a4bf7b2f65e9590a9bcd, type: 3}
+    skillIcon: {fileID: 21300000, guid: c1650b31d044d42ddbbe3b5ec4b0556c, type: 3}
   - skillTypes: 17
-    skillIcon: {fileID: 21300000, guid: d30d8198cb12c4e53a957d42e7c1c594, type: 3}
+    skillIcon: {fileID: 21300000, guid: 58d034465750547e691efcf0be111827, type: 3}
   - skillTypes: 18
-    skillIcon: {fileID: 21300000, guid: 4aef7e8957f114618a4973fcc0f94364, type: 3}
+    skillIcon: {fileID: 21300000, guid: d207daa9c848642b483b8801b207475d, type: 3}
   - skillTypes: 19
-    skillIcon: {fileID: 21300000, guid: 1a95c6cd5dc19417d901e8298dca879c, type: 3}
+    skillIcon: {fileID: 21300000, guid: a658395a03a8a4eb2954fa007818d40c, type: 3}
   - skillTypes: 20
-    skillIcon: {fileID: 21300000, guid: a750ffc9fcc65444894ff8a174eb6d2e, type: 3}
+    skillIcon: {fileID: 21300000, guid: 192a9449befd54050b915cb8e2c59d1f, type: 3}
   - skillTypes: 21
-    skillIcon: {fileID: 21300000, guid: f1b11e6cef6dc403cb0e17d2ba9bf0d2, type: 3}
+    skillIcon: {fileID: 21300000, guid: 63b76efa01a1e4823b06a868c5f783c3, type: 3}
   - skillTypes: 22
     skillIcon: {fileID: 21300000, guid: 35237f32b7a29408e81c97491c6a6455, type: 3}
   - skillTypes: 23
@@ -12114,8 +12118,6 @@ MonoBehaviour:
     skillIcon: {fileID: 21300000, guid: 63cd51557a3624febb457c13107971bb, type: 3}
   - skillTypes: 92
     skillIcon: {fileID: 21300000, guid: fe18063c1c19b4b7aa324b3e7112082e, type: 3}
-  - skillTypes: 5
-    skillIcon: {fileID: 21300000, guid: 0c8132544b83646539b1ee34bed0e06d, type: 3}
   green: {fileID: 21300000, guid: 7d87dfd92a4e042d791cc7cc235c6995, type: 3}
   blue: {fileID: 21300000, guid: b0b3746eb1032435e947f6b0e1c30b94, type: 3}
   purple: {fileID: 21300000, guid: 5be17fa09edba411aa67aea5c1abdadf, type: 3}
@@ -12150,8 +12152,10 @@ MonoBehaviour:
   common3BtnBadge: {fileID: 1794350693}
   spawnManager: {fileID: 149521964}
   countManager: {fileID: 841622520}
-  gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
+  bronzeOpen: {fileID: 21300000, guid: f7dd17c844a7e44fa86c0dabc02c7aae, type: 3}
+  silverOpen: {fileID: 21300000, guid: c763e9d355ef74619bd02f041bb314ac, type: 3}
+  goldOpen: {fileID: 21300000, guid: 49108c1e480aa444fa159efe12c3cea2, type: 3}
   isOpenBox: 0
 --- !u!1 &2124479364
 GameObject:

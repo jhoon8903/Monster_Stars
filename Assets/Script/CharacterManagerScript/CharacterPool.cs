@@ -45,15 +45,6 @@ namespace Script.CharacterManagerScript
             return pooledCharacters.Where(t => t.activeInHierarchy).ToList();
         }
 
-        public List<GameObject> SortPoolCharacterList()
-        {
-            var sortedList = UsePoolCharacterList()
-                .OrderBy(t => t.transform.position.y)
-                .ThenBy(t => t.transform.position.x)
-                .ToList();
-            return sortedList;
-        }
-
         public static void ReturnToPool(GameObject obj)
         {
             if (obj == null) return;

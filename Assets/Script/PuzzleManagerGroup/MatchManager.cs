@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json.Utilities;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
@@ -12,19 +13,13 @@ namespace Script.PuzzleManagerGroup
 {
     public sealed class MatchManager : MonoBehaviour
     {
-        private struct MatchedPair
-        {
-            public GameObject GameObject;
-            public List<GameObject> RowList;
-            public List<GameObject> ColumnList;
-        }
         [SerializeField] private SpawnManager spawnManager;
         [SerializeField] private CountManager countManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private EnforceManager enforceManager;
-        [SerializeField] private SwipeManager swipeManager;
+        [SerializeField] private GridManager gridManager;
         
-        public bool IsMatched(GameObject swapCharacter)
+  public bool IsMatched(GameObject swapCharacter)
         {
             var matched = false;
             var swapCharacterBase = swapCharacter.GetComponent<CharacterBase>();
@@ -37,8 +32,7 @@ namespace Script.PuzzleManagerGroup
                 case CharacterBase.UnitGrades.P when swapCharPuzzleLevel == 7:
                     return false;
             }
-
-            var swapCharacterPosition = swapCharacterBase.transform.position;                      
+            var swapCharacterPosition = swapCharacterBase.transform.position;
             var directions = new[]
             {
                 (Vector3Int.left, Vector3Int.right, "Horizontal"), // Horizontal
@@ -133,9 +127,9 @@ namespace Script.PuzzleManagerGroup
         }
         public IEnumerator CheckMatches()
         {
-            var characterList = CharacterPool.Instance.SortPoolCharacterList();
+            var characterList = CharacterPool.Instance.UsePoolCharacterList();
             var count = 0;
-            foreach (var character in FindConsecutiveCharacters(characterList))
+            foreach (var character in characterList)
             {
                 if (IsMatched(character))
                 {
@@ -144,215 +138,10 @@ namespace Script.PuzzleManagerGroup
                     {
                         countManager.IncrementComboCount();
                     }
-              
+                    yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
                 }
-                yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
+                yield return null;
             }
-        }
-        private static List<List<GameObject>> FindConsecutiveTilesInRow(IReadOnlyList<GameObject> characters)
-        {
-            var result = new List<List<GameObject>>();
-            var tempLevel = 0;
-            var tempUnitGroup = CharacterBase.UnitGroups.None;
-            var currentFloor = 1;
-            var sameCount = 1;
-            for (var i = 0; i < characters.Count - 1; i++)
-            {
-                if (i / 6 < currentFloor)
-                {
-                    if (tempLevel == characters[i].GetComponent<CharacterBase>().unitPuzzleLevel &&
-                        tempUnitGroup == characters[i].GetComponent<CharacterBase>().unitGroup)
-                    {
-                        sameCount++;
-                    }
-                    else
-                    {
-                        if (sameCount >= 3)
-                        {
-                            var currentList = new List<GameObject>();
-                            for (var j = i - (sameCount); j <= i - 1; j++)
-                            {
-                                currentList.Add(characters[j]);
-                            }
-                            result.Add(currentList);
-                        }
-                        tempLevel = characters[i].GetComponent<CharacterBase>().unitPuzzleLevel;
-                        tempUnitGroup = characters[i].GetComponent<CharacterBase>().unitGroup;
-                        sameCount = 1;
-                    }
-                }
-                else
-                {
-                    if (sameCount >= 3)
-                    {
-                        var currentList = new List<GameObject>();
-                        for (var j = i - sameCount; j <= i - 1; j++)
-                        {
-                            currentList.Add(characters[j]);
-                        }
-                        result.Add(currentList);
-                    }
-                    currentFloor++;
-                    tempLevel = characters[i].GetComponent<CharacterBase>().unitPuzzleLevel;
-                    tempUnitGroup = characters[i].GetComponent<CharacterBase>().unitGroup;
-                    sameCount = 1;
-                }
-            }
-            var lastCharacter = characters[^1];
-            if (tempLevel == lastCharacter.GetComponent<CharacterBase>().unitPuzzleLevel && tempUnitGroup == lastCharacter.GetComponent<CharacterBase>().unitGroup)
-            {
-                sameCount++;
-            }
-
-            if (sameCount < 3) return result;
-            {
-                var currentList = new List<GameObject>();
-                for (var j = characters.Count - sameCount; j < characters.Count; j++)
-                {
-                    currentList.Add(characters[j]);
-                }
-                result.Add(currentList);
-            }
-
-            return result;
-        }
-        private static List<List<GameObject>> FindConsecutiveTilesInColumn(IReadOnlyList<GameObject> characters)
-        {
-            var result = new List<List<GameObject>>();
-            var tempLevel = 0;
-            var tempUnitGroup = CharacterBase.UnitGroups.None;
-            var sameCount = 1;
-            var totalRows = characters.Count / 6;
-            const int totalColumns = 6;
-            for (var i = 0; i < totalColumns; i++)
-            {
-                for (var j = 0; j < totalRows; j++)
-                {
-                    var index = j * totalColumns + i;
-                    if(index == characters.Count - 1)
-                    {
-                        if (tempLevel == characters[index].GetComponent<CharacterBase>().unitPuzzleLevel && tempUnitGroup == characters[index].GetComponent<CharacterBase>().unitGroup)
-                        {
-                            sameCount++;
-                            if (sameCount >= 3)
-                            {
-                                var currentList = new List<GameObject>();
-                                for (var k = i + (totalColumns * (j - sameCount)); k <= i + (totalColumns * j - 1); k += totalColumns)
-                                {
-                                    currentList.Add(characters[k]);
-                                }
-                                result.Add(currentList);
-                            }
-                        }
-                        else
-                        {
-                            if (sameCount >= 3)
-                            {
-                                var currentList = new List<GameObject>();
-                                for (var k = i + (totalColumns * j - sameCount); k <= i + (totalColumns * j - 1); k += totalColumns)
-                                {
-                                    currentList.Add(characters[k]);
-                                }
-                                result.Add(currentList);
-                            }
-                        }
-                        break;
-                    }
-                    if (j == 0)
-                    {
-                        if (sameCount >= 3)
-                        {
-                            var currentList = new List<GameObject>();
-                            for (var k = (i-1) + (totalColumns * (totalRows - sameCount)); k <= (i-1) + (totalColumns * (totalRows - 1)); k += totalColumns)
-                            {
-                                currentList.Add(characters[k]);
-                            }
-                            result.Add(currentList);
-                        }
-                        tempLevel = characters[index].GetComponent<CharacterBase>().unitPuzzleLevel;
-                        tempUnitGroup = characters[index].GetComponent<CharacterBase>().unitGroup;
-                        sameCount = 1;
-                    }
-                    else
-                    {
-                        if (tempLevel == characters[index].GetComponent<CharacterBase>().unitPuzzleLevel && tempUnitGroup == characters[index].GetComponent<CharacterBase>().unitGroup)
-                        {
-                            sameCount++;
-                        }
-                        else
-                        {
-                            if (sameCount >= 3)
-                            {
-                                var currentList = new List<GameObject>();
-                                for (var k = i + (totalColumns * (j - sameCount)); k <= i + (totalColumns * j-1); k += totalColumns)
-                                {
-                                    currentList.Add(characters[k]);
-                                }
-                                result.Add(currentList);
-                            }
-                            tempLevel = characters[index].GetComponent<CharacterBase>().unitPuzzleLevel;
-                            tempUnitGroup = characters[index].GetComponent<CharacterBase>().unitGroup;
-                            sameCount = 1;
-                        }
-                    }
-                }
-            }
-            return result;
-        }
-        private static IEnumerable<GameObject> FindMatchingGameObjects(List<List<GameObject>> rowResults, List<List<GameObject>> columnResults)
-        {
-            var matchingGameObjects = new List<GameObject>();
-            var matchedPairs = new List<MatchedPair>();
-
-            foreach (var rowList in rowResults)
-            {
-                foreach (var columnList in columnResults)
-                {
-                    matchedPairs.AddRange(from rowObject in rowList where columnList
-                        .Any(columnObject =>
-                        {
-                            Vector3 position;
-                            var position1 = rowObject.transform.position;
-                            return position1.x.Equals((position = columnObject.transform.position).x ) &&
-                                   position1.y.Equals(position.y);
-                        }) 
-                        select new MatchedPair { GameObject = rowObject, RowList = rowList, ColumnList = columnList });
-                }
-            }
-            foreach (var gameObject in from rowList in rowResults 
-                     let foundMatchedPair = matchedPairs.Any(matchedPair => matchedPair.RowList == rowList) 
-                     where !foundMatchedPair 
-                     let index = Mathf.FloorToInt(rowList.Count / 2f) 
-                     select rowList[index] 
-                     into gameObject 
-                     where !matchingGameObjects.Contains(gameObject) 
-                     select gameObject)
-            {
-                matchingGameObjects.Add(gameObject);
-            }
-            foreach (var gameObject in from columnList in columnResults 
-                     let foundMatchedPair = matchedPairs.Any(matchedPair => matchedPair.ColumnList == columnList) 
-                     where !foundMatchedPair 
-                     let tempIndex = columnList.Count() 
-                     let index = Mathf.FloorToInt(columnList.Count / 2f) 
-                     select columnList[index] 
-                     into gameObject 
-                     where !matchingGameObjects.Contains(gameObject) 
-                     select gameObject)
-            {
-                matchingGameObjects.Add(gameObject);
-            }
-            foreach (var matchedPair in matchedPairs.Where(matchedPair => !matchingGameObjects.Contains(matchedPair.GameObject)))
-            {
-                matchingGameObjects.Add(matchedPair.GameObject);
-            }
-            return matchingGameObjects;
-        }
-        private static IEnumerable<GameObject> FindConsecutiveCharacters(IReadOnlyList<GameObject> characters)
-        {
-            var rowsResult = FindConsecutiveTilesInRow(characters);
-            var colsResult = FindConsecutiveTilesInColumn(characters);
-            return FindMatchingGameObjects(rowsResult, colsResult);
         }
         private static void ReturnObject(GameObject character)
         {   

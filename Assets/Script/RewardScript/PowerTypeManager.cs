@@ -181,9 +181,15 @@ namespace Script.RewardScript
         public enum Types
         {
             // Common Property
-            GroupDamage,
-            GroupAtkSpeed,
-            Step,
+            GroupDamage1,
+            GroupDamage2,
+            GroupDamage3,
+            GroupAtkSpeed1,
+            GroupAtkSpeed2,
+            GroupAtkSpeed3,
+            Step1,
+            Step2,
+            Step3,
             RandomLevelUp,
             GroupLevelUp,
             Exp,

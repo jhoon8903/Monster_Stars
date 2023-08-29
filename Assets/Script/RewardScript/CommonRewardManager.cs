@@ -35,6 +35,9 @@ namespace Script.RewardScript
         [SerializeField] private SpawnManager spawnManager;
         [SerializeField] private CountManager countManager;
         [SerializeField] private CharacterManager characterManager;
+        [SerializeField] private Sprite bronzeOpen;
+        [SerializeField] private Sprite silverOpen;
+        [SerializeField] private Sprite goldOpen;
         public static CommonRewardManager Instance;
         public readonly Queue<GameObject> PendingTreasure = new Queue<GameObject>(); // 보류 중인 보물 큐
         private GameObject _currentTreasure; // 현재 보물
@@ -75,6 +78,14 @@ namespace Script.RewardScript
             var shake = treasure.transform.DOShakeScale(1.0f, 0.5f, 8); // 흔들리는 애니메이션 재생
             shake.OnComplete(() =>
             {
+                var sprite = treasure.GetComponent<CharacterBase>().unitPuzzleLevel switch
+                {
+                    2 => bronzeOpen,
+                    3 => silverOpen,
+                    4 => goldOpen,
+                    _ => bronzeOpen
+                };
+                treasure.GetComponent<SpriteRenderer>().sprite = sprite;
                 _currentTreasure = treasure;
                 StartCoroutine(OpenBox(_currentTreasure));
             });
@@ -225,7 +236,15 @@ namespace Script.RewardScript
                         if (spawnManager.isTutorial) return false;
                         if (EnforceManager.Instance.index.Contains(powerUp.Property[0])) return false; // Do not display GroupLevelUp options for groups where LevelUpPattern is executed
                         break;
-                    case PowerTypeManager.Types.Step:
+                    case PowerTypeManager.Types.Step1:
+                        if (countManager.TotalMoveCount == 0) return false;
+                        if (spawnManager.isTutorial) return false;
+                        break;
+                    case PowerTypeManager.Types.Step2:
+                        if (countManager.TotalMoveCount == 0) return false;
+                        if (spawnManager.isTutorial) return false;
+                        break;
+                    case PowerTypeManager.Types.Step3:
                         if (countManager.TotalMoveCount == 0) return false;
                         if (spawnManager.isTutorial) return false;
                         break;
@@ -303,13 +322,31 @@ namespace Script.RewardScript
                 case PowerTypeManager.Types.Slow: 
                     powerText.text = finalTranslation;
                     break;
-                case PowerTypeManager.Types.GroupDamage: 
+                case PowerTypeManager.Types.GroupDamage1: 
                     powerText.text = finalTranslation; 
                     break;
-                case PowerTypeManager.Types.GroupAtkSpeed: 
+                case PowerTypeManager.Types.GroupDamage2: 
                     powerText.text = finalTranslation; 
                     break;
-                case PowerTypeManager.Types.Step: 
+                case PowerTypeManager.Types.GroupDamage3: 
+                    powerText.text = finalTranslation; 
+                    break;
+                case PowerTypeManager.Types.GroupAtkSpeed1: 
+                    powerText.text = finalTranslation; 
+                    break;
+                case PowerTypeManager.Types.GroupAtkSpeed2: 
+                    powerText.text = finalTranslation; 
+                    break;
+                case PowerTypeManager.Types.GroupAtkSpeed3: 
+                    powerText.text = finalTranslation; 
+                    break;
+                case PowerTypeManager.Types.Step1: 
+                    powerText.text = finalTranslation; 
+                    break;
+                case PowerTypeManager.Types.Step2: 
+                    powerText.text = finalTranslation; 
+                    break;
+                case PowerTypeManager.Types.Step3: 
                     powerText.text = finalTranslation; 
                     break;
                 case PowerTypeManager.Types.StepLimit: 
@@ -432,13 +469,31 @@ namespace Script.RewardScript
                 case PowerTypeManager.Types.AddRow:
                     EnforceManager.Instance.AddRow(selectedReward);
                     break; // Row 추가 강화 효과
-                case PowerTypeManager.Types.GroupDamage:
+                case PowerTypeManager.Types.GroupDamage1:
                     EnforceManager.Instance.IncreaseGroupDamage(selectedReward,selectedReward.Property[0]); 
                     break;     // 전체 데미지 증가 효과
-                case PowerTypeManager.Types.GroupAtkSpeed:
+                case PowerTypeManager.Types.GroupDamage2:
+                    EnforceManager.Instance.IncreaseGroupDamage(selectedReward,selectedReward.Property[0]); 
+                    break;     // 전체 데미지 증가 효과
+                case PowerTypeManager.Types.GroupDamage3:
+                    EnforceManager.Instance.IncreaseGroupDamage(selectedReward,selectedReward.Property[0]); 
+                    break;     // 전체 데미지 증가 효과
+                case PowerTypeManager.Types.GroupAtkSpeed1:
                     EnforceManager.Instance.IncreaseGroupRate(selectedReward,selectedReward.Property[0]); 
                     break;  // 전체 공격 속도 증가 효과
-                case PowerTypeManager.Types.Step: 
+                case PowerTypeManager.Types.GroupAtkSpeed2:
+                    EnforceManager.Instance.IncreaseGroupRate(selectedReward,selectedReward.Property[0]); 
+                    break;  // 전체 공격 속도 증가 효과
+                case PowerTypeManager.Types.GroupAtkSpeed3:
+                    EnforceManager.Instance.IncreaseGroupRate(selectedReward,selectedReward.Property[0]); 
+                    break;  // 전체 공격 속도 증가 효과
+                case PowerTypeManager.Types.Step1: 
+                    EnforceManager.Instance.RewardMoveCount(selectedReward.Property[0]);
+                    break; // 카운트 증가
+                case PowerTypeManager.Types.Step2: 
+                    EnforceManager.Instance.RewardMoveCount(selectedReward.Property[0]);
+                    break; // 카운트 증가
+                case PowerTypeManager.Types.Step3: 
                     EnforceManager.Instance.RewardMoveCount(selectedReward.Property[0]);
                     break; // 카운트 증가
                 case PowerTypeManager.Types.StepLimit:

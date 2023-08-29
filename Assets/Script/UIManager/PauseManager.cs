@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Script.CharacterManagerScript;
 using Script.PuzzleManagerGroup;
 using Script.RewardScript;
@@ -109,9 +110,11 @@ namespace Script.UIManager
                 instance.GetComponent<Image>().sprite = isActive
                     ? gradeBack[(int)Enum.Parse(typeof(CharacterBase.UnitGrades), (string)skill["Grade"], true)]
                     : gradeBack[3];
-                if (characterBase.UnitSkillDict.TryGetValue(skillLevel, out var skillSprite))
+                if (characterBase.UnitSkillDict.TryGetValue(skillLevel, out var skillSpriteDict))
                 {
-                    instance.skillIcon.sprite = skillSprite;
+                    instance.skillIcon.sprite = characterBase.unitPieceLevel < skillLevel 
+                        ? skillSpriteDict.Values.First() :
+                        skillSpriteDict.Keys.First();
                 }
                 switch (instance.skillLevel)
                 {

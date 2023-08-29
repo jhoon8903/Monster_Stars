@@ -347,9 +347,11 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 }
                 var skillLevel = (int)skill["Level"];
                 instance.skillLevel = skillLevel;
-                if (characterBase.UnitSkillDict.TryGetValue(skillLevel, out var skillSprite))
+                if (characterBase.UnitSkillDict.TryGetValue(skillLevel, out var skillSpriteDict))
                 {
-                    instance.skillIcon.sprite = skillSprite;
+                    instance.skillIcon.sprite = characterBase.unitPieceLevel < skillLevel 
+                        ? skillSpriteDict.Values.First() :
+                        skillSpriteDict.Keys.First();
                 }
                 switch (skillLevel)
                 {

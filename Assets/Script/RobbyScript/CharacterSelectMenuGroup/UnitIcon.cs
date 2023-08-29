@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Script.CharacterManagerScript;
 using TMPro;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Script.RobbyScript.CharacterSelectMenuGroup
@@ -28,5 +29,30 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         public List<Sprite> infoBackSprite;
         public List<Sprite> frameSprite;
         public List<Sprite> unitPropertiesSprite;
+
+
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            Debug.Log("OnPointerClick called");
+            if (SelectedUnitHolder.Instance.selectedUnit.Count >= 4)
+            {
+                if (HoldCharacterList.Instance.selectedToSwap == null)
+                {
+                    HoldCharacterList.Instance.selectedToSwap = this;
+                }
+                else
+                {
+                    HoldCharacterList.Instance.secondSwap = this;
+                    HoldCharacterList.Instance.SwapUnitInstances(
+                        HoldCharacterList.Instance.selectedToSwap,
+                        HoldCharacterList.Instance.selectedToSwap.CharacterBase,
+                        HoldCharacterList.Instance.secondSwap,
+                        HoldCharacterList.Instance.secondSwap.CharacterBase
+                    );
+                    HoldCharacterList.Instance.selectedToSwap = null;
+                    HoldCharacterList.Instance.secondSwap = null;
+                }
+            }
+        }
     }
 }
