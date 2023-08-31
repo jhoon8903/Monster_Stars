@@ -360,6 +360,7 @@ namespace Script.QuestGroup
         }
         public IEnumerator SpecialQuestUpdate(QuestTypes questType, int value)
         {
+            if (questObject == null) yield break;
             switch (questType)
             {
                 case QuestTypes.ViewAds:
@@ -403,6 +404,7 @@ namespace Script.QuestGroup
                     break;
                 }
             }
+
         }
         public void SpecialQuestReward(QuestTypes quest)
         {

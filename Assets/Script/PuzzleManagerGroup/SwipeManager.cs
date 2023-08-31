@@ -324,7 +324,7 @@ namespace Script.PuzzleManagerGroup
                 {
                     CharacterPool.ReturnToPool(_startObject);
                     countManager.DecreaseMoveCount();
-                    yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
+                    spawnManager.AddToQueue(spawnManager.PositionUpCharacterObject());
                     break;
                 }
                 yield return null;
@@ -356,7 +356,7 @@ namespace Script.PuzzleManagerGroup
             color = new Color(color.r, color.g, color.b, 1f);
             spriteRenderer.color = color;
             CharacterPool.ReturnToPool(startObject);
-            yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
+            spawnManager.AddToQueue(spawnManager.PositionUpCharacterObject());
         }
         private IEnumerator SwitchAndMatches(GameObject startObject, GameObject endObject)
         {
@@ -376,7 +376,7 @@ namespace Script.PuzzleManagerGroup
             yield return StartCoroutine(MatchesCheck(endObject));
             countManager.IsSwapOccurred = false;
             countManager.DecreaseMoveCount();
-            yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
+            spawnManager.AddToQueue(spawnManager.PositionUpCharacterObject());
         }
         private IEnumerator MatchesCheck(GameObject characterObject)
         {

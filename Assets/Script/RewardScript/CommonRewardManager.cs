@@ -462,6 +462,7 @@ namespace Script.RewardScript
             commonRewardPanel.SetActive(false);
             CharacterPool.ReturnToPool(_currentTreasure); // 보물을 풀에 반환
             yield return null;
+            spawnManager.AddToQueue(spawnManager.PositionUpCharacterObject());
             ProcessCommonReward(selectedReward);
         }
         // 12. 선택된 버프 적용 

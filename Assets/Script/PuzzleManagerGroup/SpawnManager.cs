@@ -30,6 +30,8 @@ namespace Script.PuzzleManagerGroup
         public List<GameObject> movedObjects = new List<GameObject>();
         private bool _gameStart;
         private int _count = 0;  
+        private bool isCoroutineRunning = false;
+        private readonly Queue<IEnumerator> _coroutineQueue = new Queue<IEnumerator>();
         private void Start()
         {
             if (!PlayerPrefs.HasKey("TutorialKey")) return;
@@ -39,6 +41,23 @@ namespace Script.PuzzleManagerGroup
             }
 
             _gameStart = true;
+        }
+        
+        public void AddToQueue(IEnumerator coroutine)
+        {
+            _coroutineQueue.Enqueue(coroutine);
+            if (_coroutineQueue.Count == 1)
+            {
+                StartCoroutine(ProcessQueue());
+            }
+        }
+
+        private IEnumerator ProcessQueue()
+        {
+            while (_coroutineQueue.Count > 0)
+            {
+                yield return StartCoroutine(_coroutineQueue.Dequeue());
+            }
         }
         public static GameObject CharacterObject(Vector3 spawnPosition)
         {
@@ -159,67 +178,47 @@ namespace Script.PuzzleManagerGroup
         }
         public IEnumerator PositionUpCharacterObject()
         {
-            Debug.Log("1");
             var moves = CalculateMoves();
-            Debug.Log("2");
             if (moves.Count > 0)
             {
                 movedObjects.AddRange(moves.Select(move => move.Item1).ToList());
                 yield return StartCoroutine(PerformMoves(moves));
             }
-            Debug.Log("3");
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
             
-            Debug.Log("4");
             if (_gameStart)
             {
-                Debug.Log("5");
                 var spawnCharacters = CharacterPool.Instance.UsePoolCharacterList();
-                Debug.Log("6");
                 foreach (var unit in spawnCharacters)
                 {
-                    Debug.Log("7");
                     matchManager.IsMatched(unit);
                 }
-                Debug.Log("8");
                 var movesFirst = CalculateMoves();
-                Debug.Log("9");
                 yield return StartCoroutine(PerformMoves(movesFirst));
-                Debug.Log("10");
                 yield return StartCoroutine(SpawnAndMoveNewCharacters());
                 _gameStart = false;
             }
             
-            Debug.Log("11");
             yield return StartCoroutine(CheckPosition());
             
-            Debug.Log("12");
             foreach (var movedObject in movedObjects.Where(movedObject => movedObject != null))
             {
-                Debug.Log("13");
                 movedObject.transform.position = movedObject.transform.position;
             }
-            Debug.Log("14");
             var isMatched = movedObjects.Where(movedObject => movedObject != null).Any(movedObject => matchManager.IsMatched(movedObject.gameObject));
-            Debug.Log("15");
             movedObjects.Clear();
 
             if (isMatched)
-            {Debug.Log("16");
+            {
                 _count++;
                 if (_count > 1)
                 {
-                    Debug.Log("17");
                     countManager.IncrementComboCount();
                 }
-                Debug.Log("18");
-                yield return new WaitForSecondsRealtime(0.3f);
-                Debug.Log("19");
-                yield return StartCoroutine(PositionUpCharacterObject());
+                AddToQueue(PositionUpCharacterObject());
             }
             else
             {
-                Debug.Log("20");
                 _count = 0;
                 if (rewardManger.PendingTreasure.Count != 0)
                 {
@@ -229,13 +228,12 @@ namespace Script.PuzzleManagerGroup
                 {
                     TriggerOnMatchFound();
                 }
-                Debug.Log("21");
-                swipeManager.isBusy = false;
             }
-
-            if (countManager.TotalMoveCount > 0 || CommonRewardManager.Instance.isOpenBox) yield break;
-            Debug.Log("22");
-            yield return StartCoroutine(GameManager.Instance.Count0Call());
+            if (countManager.TotalMoveCount <= 0 && !CommonRewardManager.Instance.isOpenBox)
+            {
+                yield return StartCoroutine(GameManager.Instance.Count0Call());
+            }
+            swipeManager.isBusy = false;
             yield return null;
         }
         public IEnumerator CheckPosition()
@@ -405,7 +403,7 @@ namespace Script.PuzzleManagerGroup
                 }
                 yield return StartCoroutine(PerformMoves(moves)); // Move all characters to the current row at once
             }
-            yield return StartCoroutine(PositionUpCharacterObject());
+            AddToQueue(PositionUpCharacterObject());
              isWave10Spawning = false;
             swipeManager.isBusy = false;
         }

@@ -279,7 +279,7 @@ namespace Script.PuzzleManagerGroup
             yield return null;
             if (boolean)
             {
-                StartCoroutine(spawnManager.PositionUpCharacterObject());
+                spawnManager.AddToQueue(spawnManager.PositionUpCharacterObject());
             }
         }
         private bool Matches3X3Case(IEnumerable<GameObject> rawMatchedCharacters, Vector3 swapPosition)
