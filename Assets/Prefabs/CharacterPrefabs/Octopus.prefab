@@ -132,7 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97c8ae47ce10b4466afa07039e35c08f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cover: {fileID: 8106914419751587629, guid: b8ad960f8f0f647bdae87bd3059f1ecf, type: 3}
+  cover: {fileID: 5856041800600839900}
   unitPieceLevel: 3
   unLock: 0
   selected: 0
@@ -376,5 +376,10 @@ PrefabInstance:
 --- !u!224 &2293771268264501532 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4472146564483696877, guid: b8ad960f8f0f647bdae87bd3059f1ecf, type: 3}
+  m_PrefabInstance: {fileID: 2433453753981987313}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5856041800600839900 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8106914419751587629, guid: b8ad960f8f0f647bdae87bd3059f1ecf, type: 3}
   m_PrefabInstance: {fileID: 2433453753981987313}
   m_PrefabAsset: {fileID: 0}

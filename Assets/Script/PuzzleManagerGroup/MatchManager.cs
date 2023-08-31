@@ -122,6 +122,7 @@ namespace Script.PuzzleManagerGroup
 
                 if (horizontalMatchCount + verticalMatchCount == 5)
                 {
+                    Debug.Log(horizontalMatchCount);
                     matched = horizontalMatchCount switch
                     {
                         1 => Matches4Case(matchedCharacters,"y"),
@@ -149,28 +150,52 @@ namespace Script.PuzzleManagerGroup
         private bool Match3Case(IEnumerable<GameObject> rawMatchedCharacters, Vector3 swapPosition)
         {
             SoundManager.Instance.MatchSound(3);
-            var grouped = rawMatchedCharacters.GroupBy(mc => mc.transform.position);
-            var matchedCharacters = grouped.Select(g => g.First()).ToList();
-            foreach (var matchedCharacter in matchedCharacters)
+
+            var matchedCharacters = rawMatchedCharacters as GameObject[] ?? rawMatchedCharacters.ToArray();
+            var groupedByX = matchedCharacters.GroupBy(mc => mc.transform.position.x).Where(g => g.Count() >= 3).ToList();
+            var groupedByY = matchedCharacters.GroupBy(mc => mc.transform.position.y).Where(g => g.Count() >= 3).ToList();
+    
+            var validCharacters = new List<GameObject>();
+    
+            if (groupedByX.Count >= groupedByY.Count)
             {
-                var characterBase = matchedCharacter.GetComponent<CharacterBase>();
+                foreach (var group in groupedByX)
+                {
+                    validCharacters.AddRange(group);
+                }
+            }
+            else
+            {
+                foreach (var group in groupedByY)
+                {
+                    validCharacters.AddRange(group);
+                }
+            }
+    
+            var uniqueValidCharacters = validCharacters.Distinct().ToList();
+    
+            foreach (var validCharacter in uniqueValidCharacters)
+            {
+                var characterBase = validCharacter.GetComponent<CharacterBase>();
                 var isTreasure = characterBase.Type == CharacterBase.Types.Treasure;
-                var isCenter = matchedCharacter.transform.position == swapPosition;
+                var isCenter = validCharacter.transform.position == swapPosition;
                 if (isCenter)
                 {
-                    characterBase.LevelUpScale(matchedCharacter);
+                    characterBase.LevelUpScale(validCharacter);
                     if (isTreasure)
                     {
-                        commonRewardManager.PendingTreasure.Enqueue(matchedCharacter);
+                        commonRewardManager.PendingTreasure.Enqueue(validCharacter);
                     }
                 }
                 else
                 {
-                    ReturnObject(matchedCharacter);
+                    ReturnObject(validCharacter);
                 }
             }
             return true;
         }
+
+
         private bool Matches4Case(IReadOnlyList<GameObject> matchedCharacters, string dir)
         {
             SoundManager.Instance.MatchSound(4);

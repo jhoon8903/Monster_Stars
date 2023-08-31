@@ -179,13 +179,15 @@ namespace Script.PuzzleManagerGroup
         public IEnumerator PositionUpCharacterObject()
         {
             var moves = CalculateMoves();
+            yield return null;
             if (moves.Count > 0)
             {
                 movedObjects.AddRange(moves.Select(move => move.Item1).ToList());
                 yield return StartCoroutine(PerformMoves(moves));
             }
+            yield return null;
             yield return StartCoroutine(SpawnAndMoveNewCharacters());
-            
+            yield return null;
             if (_gameStart)
             {
                 var spawnCharacters = CharacterPool.Instance.UsePoolCharacterList();
@@ -200,14 +202,15 @@ namespace Script.PuzzleManagerGroup
             }
             
             yield return StartCoroutine(CheckPosition());
-            
+            yield return null;
             foreach (var movedObject in movedObjects.Where(movedObject => movedObject != null))
             {
                 movedObject.transform.position = movedObject.transform.position;
             }
+            yield return null;
             var isMatched = movedObjects.Where(movedObject => movedObject != null).Any(movedObject => matchManager.IsMatched(movedObject.gameObject));
             movedObjects.Clear();
-
+            yield return null;
             if (isMatched)
             {
                 _count++;
@@ -215,7 +218,9 @@ namespace Script.PuzzleManagerGroup
                 {
                     countManager.IncrementComboCount();
                 }
+                yield return null;
                 AddToQueue(PositionUpCharacterObject());
+                yield return null;
             }
             else
             {
@@ -223,6 +228,7 @@ namespace Script.PuzzleManagerGroup
                 if (rewardManger.PendingTreasure.Count != 0)
                 {
                     yield return StartCoroutine(rewardManger.EnqueueTreasure());
+                    yield return null;
                 }
                 if (isTutorial)
                 {
@@ -232,6 +238,7 @@ namespace Script.PuzzleManagerGroup
             if (countManager.TotalMoveCount <= 0 && !CommonRewardManager.Instance.isOpenBox)
             {
                 yield return StartCoroutine(GameManager.Instance.Count0Call());
+                yield return null;
             }
             swipeManager.isBusy = false;
             yield return null;

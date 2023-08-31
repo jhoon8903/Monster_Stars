@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Script.QuestGroup
 {
@@ -17,7 +18,8 @@ namespace Script.QuestGroup
 
         // View Ads Quest (Fix)
         public void AdsViewQuest()
-        {
+        {                             
+            if (SceneManager.GetActiveScene().name != "SelectScene") return;
             StartCoroutine(questManager.SpecialQuestUpdate(QuestManager.QuestTypes.ViewAds, 1));
         }
         // All Clear Quest (Fix)
