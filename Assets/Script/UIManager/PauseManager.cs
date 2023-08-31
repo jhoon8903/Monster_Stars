@@ -112,13 +112,12 @@ namespace Script.UIManager
                     : gradeBack[3];
                 if (characterBase.UnitSkillDict.TryGetValue(skillLevel, out var skillSpriteDict))
                 {
-                    instance.skillIcon.sprite = characterBase.unitPieceLevel < skillLevel 
-                        ? skillSpriteDict.Values.First() :
-                        skillSpriteDict.Keys.First();
+                    instance.skillIcon.sprite =
+                        isActive ? skillSpriteDict.Keys.First() : skillSpriteDict.Values.First();
                 }
                 switch (instance.skillLevel)
                 {
-                    case <=3:
+                    case <= 3:
                         instance.rightDesc.text =  (string)skill["PopupDesc"];
                         break;
                     case 5:
@@ -203,7 +202,7 @@ namespace Script.UIManager
         private void Continue()
         {
             pausePanel.SetActive(false);
-            Time.timeScale = 1;
+            GameManager.Instance.GameSpeed();
         }
     }
 }

@@ -91,7 +91,6 @@ namespace Script.RewardScript
             });
             yield return null;
         }
-
         private IEnumerator WaitAndOpenBox(GameObject treasure, float delay)
         {
             yield return new WaitForSecondsRealtime(delay);
@@ -416,7 +415,6 @@ namespace Script.RewardScript
         // 9. 상자 오픈
         private IEnumerator OpenBox(GameObject treasure)
         {
-            Time.timeScale = 0; // 게임 일시 정지
             commonRewardPanel.SetActive(true); // 보물 패널 활성화
             Quest.Instance.MergeBoxQuest();
             var treasureChestLevel = treasure.GetComponent<CharacterBase>().unitPuzzleLevel; // 보물 상자 이름
@@ -436,7 +434,6 @@ namespace Script.RewardScript
             }
             if (PlayerPrefs.GetInt("TutorialKey") == 1)
             {
-                Time.timeScale = 1;
                 common1Button.GetComponent<Canvas>().enabled = true;
                 common1Button.GetComponent<Canvas>().overrideSorting = true;
                 common1Button.GetComponent<Canvas>().sortingOrder = 1;
@@ -464,9 +461,8 @@ namespace Script.RewardScript
             }
             commonRewardPanel.SetActive(false);
             CharacterPool.ReturnToPool(_currentTreasure); // 보물을 풀에 반환
-            ProcessCommonReward(selectedReward);
-            Time.timeScale = 1; // 게임 재개
             yield return null;
+            ProcessCommonReward(selectedReward);
         }
         // 12. 선택된 버프 적용 
         private void ProcessCommonReward(Data selectedReward)
@@ -546,11 +542,7 @@ namespace Script.RewardScript
             isOpenBox = false;
             if (PendingTreasure.Count == 0)
             {
-                _currentTreasure = null; // 현재 보물 없음
-            }
-            if (!spawnManager.isWave10Spawning)
-            {
-                StartCoroutine(spawnManager.PositionUpCharacterObject());
+                _currentTreasure = null;
             }
         }
         // # 보스 웨이브 클리어 별도 보상

@@ -20,6 +20,12 @@ namespace Script.WeaponScriptGroup
             yield return base.UseWeapon();
             var useTime = Distance / Speed;
             var enemyTransforms = CharacterBase.GetComponent<Fishman>().DetectEnemies();
+            foreach (var enemy in enemyTransforms)
+            {
+                Debug.Log(enemy.transform.position);
+            }
+
+            direction = Vector2.up;
             foreach (var unused in enemyTransforms.Where(enemy => enemy.transform.position.y < CharacterBase.transform.position.y))
             {
                 transform.rotation = Quaternion.Euler(0, 0, 180);

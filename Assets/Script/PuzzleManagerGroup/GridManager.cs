@@ -77,37 +77,30 @@ namespace Script.PuzzleManagerGroup
             gridHeight = newGridHeight;
         }
 
-        public void ApplyBossSpawnColor(Vector3Int bossArea)
-        {
-            bossSpawnArea = bossArea;
-            _bossGridCells = new GameObject[gridWidth, gridHeight];
+        // public void ApplyBossSpawnColor(Vector3Int bossArea)
+        // {
+        //     bossSpawnArea = bossArea;
+        //     _bossGridCells = new GameObject[gridWidth, gridHeight];
+        //
+        //     for (var x = bossSpawnArea.x - 1; x <= bossSpawnArea.x + 1; x++)
+        //     {
+        //         for (var y = 0; y < gridHeight; y++)
+        //         {
+        //             if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) continue;
+        //
+        //             var spritePrefab = (x + y) % 2 == 0 ? bossGrid1Sprite : bossGrid2Sprite;
+        //             var newCell = Instantiate(spritePrefab, new Vector3(x, y, 0), Quaternion.identity, transform);
+        //             _bossGridCells[x, y] = newCell;
+        //             _gridCells[x, y].SetActive(false);
+        //         }
+        //     }
+        // }
 
-            for (var x = bossSpawnArea.x - 1; x <= bossSpawnArea.x + 1; x++)
-            {
-                for (var y = 0; y < gridHeight; y++)
-                {
-                    if (x < 0 || x >= gridWidth || y < 0 || y >= gridHeight) continue;
-
-                    var spritePrefab = (x + y) % 2 == 0 ? bossGrid1Sprite : bossGrid2Sprite;
-                    var newCell = Instantiate(spritePrefab, new Vector3(x, y, 0), Quaternion.identity, transform);
-                    _bossGridCells[x, y] = newCell;
-                    _gridCells[x, y].SetActive(false);
-                }
-            }
-        }
-
-        public IEnumerator ResetBossSpawnColor()
-        {
-            for (var x = 0; x < gridWidth; x++)
-            {
-                for (var y = 0; y < _bossGridCells.GetLength(1); y++) // Use actual array height here
-                {
-                    if (_bossGridCells[x, y] == null) continue;
-                    Destroy(_bossGridCells[x, y]);
-                    _gridCells[x, y].SetActive(true);
-                }
-            }
-            yield return null;
-        }
+        // public IEnumerator ResetBossSpawnColor()
+        // {
+        //
+        //     GameManager.Instance.
+        //     yield return null;
+        // }
     }
 }

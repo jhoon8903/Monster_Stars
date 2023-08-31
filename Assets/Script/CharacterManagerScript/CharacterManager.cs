@@ -15,7 +15,6 @@ namespace Script.CharacterManagerScript
             {
                 characterList.Add(unit);
             }
-            Debug.Log(treasureBox);
             characterList.Add(treasureBox);
         }
     }

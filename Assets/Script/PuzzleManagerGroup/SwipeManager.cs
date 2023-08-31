@@ -6,6 +6,7 @@ using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -21,6 +22,7 @@ namespace Script.PuzzleManagerGroup
         private bool _isSoon;
         public bool isBusy;
         public bool isUp;
+        public bool isSwipe;
         private GameObject _startObject;
         private GameObject _returnObject;
         private Vector2 _firstTouchPosition;
@@ -354,12 +356,13 @@ namespace Script.PuzzleManagerGroup
             color = new Color(color.r, color.g, color.b, 1f);
             spriteRenderer.color = color;
             CharacterPool.ReturnToPool(startObject);
-            StartCoroutine(spawnManager.PositionUpCharacterObject());
+            yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
         }
         private IEnumerator SwitchAndMatches(GameObject startObject, GameObject endObject)
         {
             if (isBusy || isUp) yield break;
             isBusy = true;
+           
             if (startObject == null || endObject == null) yield break;
             var startObjectPosition = startObject.transform.position;
             var endObjectPosition = endObject.transform.position;
@@ -367,7 +370,9 @@ namespace Script.PuzzleManagerGroup
             Tween switch2 = endObject.transform.DOMove(startObjectPosition, 0.1f);
             yield return switch2.WaitForCompletion();
             countManager.IsSwapOccurred = true;
+            isSwipe = true;
             yield return StartCoroutine(MatchesCheck(startObject));
+            isSwipe = true;
             yield return StartCoroutine(MatchesCheck(endObject));
             countManager.IsSwapOccurred = false;
             countManager.DecreaseMoveCount();
@@ -377,7 +382,6 @@ namespace Script.PuzzleManagerGroup
         {
             if (characterObject == null) yield break;
             if (!matchManager.IsMatched(characterObject)) yield break;
-            yield return null;
         }
     }
 }

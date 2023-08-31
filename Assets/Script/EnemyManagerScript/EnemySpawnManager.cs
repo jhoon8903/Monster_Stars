@@ -154,7 +154,7 @@ namespace Script.EnemyManagerScript
             foreach (var enemyBase in enemyManager.stageBoss.Where(enemyBase => enemyBase.enemyClass == bossClass))
             {
                 _bossObject = Instantiate(enemyBase, transform);
-                _bossObject.transform.position = gridManager.bossSpawnArea;
+                _bossObject.transform.position = GameManager.Instance.bossSpawnArea;
                 yield return StartCoroutine(enemyPatternManager.Zone_Move(_bossObject, spawnZone));
             }
         }

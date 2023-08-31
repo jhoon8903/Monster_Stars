@@ -12,6 +12,7 @@ using Script.UIManager;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
@@ -37,11 +38,12 @@ namespace Script
         [SerializeField] private Image speedUpImage;
         [SerializeField] private Sprite normalSpeedImage;
         [SerializeField] private Sprite doubleSpeedImage;
+        [SerializeField] private GameObject bossArea;
         public List<GameObject> characterList = new List<GameObject>(); 
         public static GameManager Instance { get; private set; }
         private readonly WaitForSecondsRealtime _waitTwoSecRealtime = new WaitForSecondsRealtime(2f);
         public bool speedUp;
-        private Vector3Int _bossSpawnArea;
+        public Vector3Int bossSpawnArea;
         public bool IsBattle { get; private set; }
        
 
@@ -80,8 +82,9 @@ namespace Script
                     castleManager.LoadCastleHp();
                     if (StageManager.Instance != null && StageManager.Instance.currentWave % 10 == 0)
                     {
-                        _bossSpawnArea = new Vector3Int(Random.Range(1, 5), 9, 0);
-                        gridManager.ApplyBossSpawnColor(_bossSpawnArea);
+                        bossSpawnArea = new Vector3Int(Random.Range(1, 5), 9, 0);
+                        bossArea.SetActive(true);
+                        bossArea.transform.position = new Vector3(bossSpawnArea.x, 3.5f, 0);
                     }
                 }
                 else
@@ -162,7 +165,8 @@ namespace Script
                         countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
                         yield return StartCoroutine(commonRewardManager.WaveRewardChance());
                         yield return StartCoroutine(spawnManager.BossStageClearRule());
-                        yield return StartCoroutine(gridManager.ResetBossSpawnColor());
+                        bossArea.SetActive(false);
+                        // yield return StartCoroutine(gridManager.ResetBossSpawnColor());
                         yield return StartCoroutine(InitializeWave());
                     }
                     else
@@ -195,8 +199,9 @@ namespace Script
             castleManager.TookDamageLastWave = false;
             if (StageManager.Instance != null && StageManager.Instance.currentWave % 10 == 0)
             {
-                _bossSpawnArea = new Vector3Int(Random.Range(1, 5), 9, 0);
-                gridManager.ApplyBossSpawnColor(_bossSpawnArea);
+                bossSpawnArea = new Vector3Int(Random.Range(1, 5), 9, 0);
+                bossArea.SetActive(true);
+                bossArea.transform.position = new Vector3(bossSpawnArea.x, 3.5f, 0);
             }
             
             yield return StartCoroutine(backgroundManager.ChangePuzzleSize());

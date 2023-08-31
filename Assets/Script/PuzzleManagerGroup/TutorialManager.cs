@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Script.RewardScript;
 using TMPro;
+using UnityEngine.UI;
 
 namespace Script.PuzzleManagerGroup
 {
@@ -19,6 +20,8 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private TextMeshProUGUI textPopup;
         [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private SpawnManager spawnManager;
+        [SerializeField] private Sprite buttonDownSprite;
+        [SerializeField] private Sprite buttonUpSprite;
 
         private readonly Dictionary<Vector2Int, GameObject> _covers = new Dictionary<Vector2Int, GameObject>();
         private Coroutine _pointerCoroutine;
@@ -121,8 +124,8 @@ namespace Script.PuzzleManagerGroup
             // Press Long Object
             _tutorialSteps.Enqueue(new TutorialStep(
                 
-                new Vector3(5,4.4f,0), 
-                new Vector3(5,4.7f, 0),
+                new Vector3(5,4f,0), 
+                new Vector3(5,4.4f, 0),
                 7,
                 "Units can be removed by holding down the unit for 2 seconds.", 
                 new Vector2Int(5,5))
@@ -246,6 +249,7 @@ namespace Script.PuzzleManagerGroup
                     var t = (Time.time - startTime) * speed;
                     if (_currentGuidePointer == null) yield break;
                     _currentGuidePointer.transform.position = Vector3.Lerp(startPosition, endPosition, t);
+                    _currentGuidePointer.GetComponent<Image>().sprite = buttonDownSprite;
                     yield return null;
                 }
                 yield return new WaitForSeconds(waitTime);
@@ -255,6 +259,7 @@ namespace Script.PuzzleManagerGroup
                     var t = (Time.time - startTime) * speed;
                     if (_currentGuidePointer == null) yield break;
                     _currentGuidePointer.transform.position = Vector3.Lerp(endPosition, startPosition, t);
+                    _currentGuidePointer.GetComponent<Image>().sprite = buttonUpSprite;
                     yield return null;
                 }
                 yield return new WaitForSeconds(waitTime);

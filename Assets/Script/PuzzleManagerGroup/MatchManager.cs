@@ -8,24 +8,39 @@ using Script.RewardScript;
 using Script.UIManager;
 using UnityEngine;
 using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace Script.PuzzleManagerGroup
 {
     public sealed class MatchManager : MonoBehaviour
     {
-        [SerializeField] private SpawnManager spawnManager;
-        [SerializeField] private CountManager countManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private EnforceManager enforceManager;
-        [SerializeField] private GridManager gridManager;
-        
-        public event Action OnMatchCheckComplete;
+        [SerializeField] private SpawnManager spawnManager;
+        [SerializeField] private CharacterPool characterPool;
+        [SerializeField] private MergeEffect mergeEffectPrefabs;
+
+        private List<MergeEffect> _effectList = new List<MergeEffect>();
+        private void Awake()
+        {
+            for (var i = 0; i < 20; i++)
+            {
+                var mergeEffect = Instantiate(mergeEffectPrefabs, transform);
+                mergeEffect.gameObject.SetActive(false);
+                _effectList.Add(mergeEffect);
+            }
+        }
+
         public bool IsMatched(GameObject swapCharacter)
         {
             var matched = false;
             var swapCharacterBase = swapCharacter.GetComponent<CharacterBase>();
             var swapCharacterGroup = swapCharacterBase.unitGroup;
             var swapCharPuzzleLevel = swapCharacterBase.unitPuzzleLevel;
+            var swapCharacterPosition = swapCharacter.transform.position;
+            var horizontalMatchCount = 0;
+            var verticalMatchCount = 0;
+            var matchedCharacters = new List<GameObject>();
             switch (swapCharacterBase.UnitGrade)
             {
                 case CharacterBase.UnitGrades.G when swapCharPuzzleLevel == 5:
@@ -33,745 +48,348 @@ namespace Script.PuzzleManagerGroup
                 case CharacterBase.UnitGrades.P when swapCharPuzzleLevel == 7:
                     return false;
             }
-            var swapCharacterPosition = swapCharacterBase.transform.position;
             var directions = new[]
             {
-                (Vector3Int.left, Vector3Int.right, "Horizontal"), // Horizontal
-                (Vector3Int.down, Vector3Int.up, "Vertical") // Vertical
+                (Vector3Int.left, Vector3Int.right, "Horizontal"),
+                (Vector3Int.up, Vector3Int.down, "Vertical")
             };
-            var horizontalMatchCount = 0;
-            var verticalMatchCount = 0;
-            var matchedCharacters = new List<GameObject>();
-
             foreach (var (dir1, dir2, dirName) in directions)
             {
-                var matchCount = 1; // To count the center character itself.
-                var matchedObjects = new List<GameObject> { swapCharacter };
+                var matchCount = 1;
+                var matchedObjects = new List<GameObject>()
+                {
+                    swapCharacter
+                };
                 foreach (var dir in new[] { dir1, dir2 })
                 {
+                    if (!swapCharacter.activeInHierarchy) continue;
                     var nextPosition = swapCharacterPosition + dir;
-                    for (var i = 0; i < 2; i++)
+                    for (var i = 0; i < 4; i++)
                     {
                         var nextCharacter = SpawnManager.CharacterObject(nextPosition);
-                        if (nextCharacter == null ||
-                            (nextCharacter.GetComponent<CharacterBase>().unitGroup != swapCharacterGroup
-                             || nextCharacter.GetComponent<CharacterBase>().unitPuzzleLevel != swapCharPuzzleLevel))
+                        if (nextCharacter == null 
+                            || nextCharacter.GetComponent<CharacterBase>().unitGroup != swapCharacterGroup 
+                            || nextCharacter.GetComponent<CharacterBase>().unitPuzzleLevel != swapCharPuzzleLevel)
                             break;
                         matchedObjects.Add(nextCharacter);
                         matchCount++;
                         nextPosition += dir;
                     }
                 }
-            
-                if (dirName == "Horizontal") horizontalMatchCount += matchCount;
-                else verticalMatchCount += matchCount;
+
+                if (dirName == "Horizontal")
+                {
+                    horizontalMatchCount += matchCount;
+                }
+                else
+                {
+                    verticalMatchCount += matchCount;
+                }
                 matchedCharacters.AddRange(matchedObjects);
-            }
 
-            if (horizontalMatchCount + verticalMatchCount == 8)
-            {
-                matched = horizontalMatchCount switch
+                if (horizontalMatchCount + verticalMatchCount == 8)
                 {
-                    3 => Matches3X5Case(matchedCharacters),
-                    5 => Matches5X3Case(matchedCharacters),
-                    _ => false
-                };
-            }
+                    matched = horizontalMatchCount switch
+                    {
+                        3 or 5 => Matches3X5Case(matchedCharacters, swapCharacterPosition),
+                        _ => false
+                    };
+                }
 
-            if (horizontalMatchCount + verticalMatchCount == 7)
-            {
-                matched = horizontalMatchCount switch
+                if (horizontalMatchCount + verticalMatchCount == 7)
                 {
-                    2 => Matches2X5Case(matchedCharacters),
-                    3 => Matches3X4Case(matchedCharacters),
-                    4 => Matches4X3Case(matchedCharacters),
-                    5 => Matches5X2Case(matchedCharacters),
-                    _ => false
-                };
-            }
+                    matched = horizontalMatchCount switch
+                    {
+                        2 => Matches5Case(matchedCharacters,"y",swapCharacterPosition),
+                        3 or 4 => Matches3X4Case(matchedCharacters, swapCharacterPosition),
+                        5 => Matches5Case(matchedCharacters,"x",swapCharacterPosition),
+                        _ => false
+                    };
+                }
 
-            if (horizontalMatchCount + verticalMatchCount == 6)
-            {
-                matched = horizontalMatchCount switch
+                if (horizontalMatchCount + verticalMatchCount == 6)
                 {
-                    1 => Matches5Case1(matchedCharacters),
-                    2 => Matches4Case3(matchedCharacters),
-                    3 => Matches3X3Case(matchedCharacters),
-                    4 => Matches4Case4(matchedCharacters),
-                    5 => Matches5Case2(matchedCharacters),
-                    _ => false
-                };
-            }
+                    matched = horizontalMatchCount switch
+                    {
+                        1 => Matches5Case(matchedCharacters,"y",swapCharacterPosition),
+                        2 => Matches4Case(matchedCharacters,"y"),
+                        3 => Matches3X3Case(matchedCharacters,swapCharacterPosition),
+                        4 => Matches4Case(matchedCharacters,"x"),
+                        5 => Matches5Case(matchedCharacters,"x",swapCharacterPosition),
+                        _ => false
+                    };
+                }
 
-            if (horizontalMatchCount + verticalMatchCount == 5)
-            {
-                matched = horizontalMatchCount switch
+                if (horizontalMatchCount + verticalMatchCount == 5)
                 {
-                    1 => Matches4Case1(matchedCharacters),
-                    2 => Matches3Case3(matchedCharacters),
-                    3 => Matches3Case4(matchedCharacters),
-                    4 => Matches4Case2(matchedCharacters),
-                    _ => false
-                };
-            }
+                    matched = horizontalMatchCount switch
+                    {
+                        1 => Matches4Case(matchedCharacters,"y"),
+                        2 or 3 => Match3Case(matchedCharacters,swapCharacterPosition),
+                        4 => Matches4Case(matchedCharacters,"x"),
+                        _ => false
+                    };
+                }
 
-            if (horizontalMatchCount + verticalMatchCount == 4)
-            {
-               matched = horizontalMatchCount switch
+                if (horizontalMatchCount + verticalMatchCount == 4)
                 {
-                    1 => Matches3Case1(matchedCharacters),
-                    3 => Matches3Case2(matchedCharacters),
-                    _ => false
-                };
+                    matched = horizontalMatchCount switch
+                    {
+                        1 or 3=> Match3Case(matchedCharacters,swapCharacterPosition),
+                        _ => false
+                    };
+                }
             }
             return matched;
-        }
-        public IEnumerator CheckMatches()
-        {
-            var characterList = CharacterPool.Instance.UsePoolCharacterList();
-            var count = 0;
-            foreach (var character in characterList)
-            {
-                if (IsMatched(character))
-                {
-                    count++;
-                    if (count >= 1)
-                    {
-                        countManager.IncrementComboCount();
-                    }
-                    yield return StartCoroutine(spawnManager.PositionUpCharacterObject());
-                }
-                yield return null;
-            }
-            OnMatchCheckComplete?.Invoke();
-            yield return null;
         }
         private static void ReturnObject(GameObject character)
         {   
             CharacterPool.ReturnToPool(character);
         }
-        private bool Matches3Case1(IReadOnlyList<GameObject> matchedCharacters)
-        {        
-            SoundManager.Instance.MatchSound(3);
-            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-            {
-                ReturnObject(matchedCharacters[2]); 
-                ReturnObject(matchedCharacters[3]);
-                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[1]);
-            }
-            else
-            {
-                ReturnObject(matchedCharacters[2]); 
-                ReturnObject(matchedCharacters[3]);
-                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-            }
-            return true;
-        }
-        private bool Matches3Case2(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Match3Case(IEnumerable<GameObject> rawMatchedCharacters, Vector3 swapPosition)
         {
             SoundManager.Instance.MatchSound(3);
-            if (matchedCharacters[0].transform.position.x.Equals(matchedCharacters[1].transform.position.x))
+            var grouped = rawMatchedCharacters.GroupBy(mc => mc.transform.position);
+            var matchedCharacters = grouped.Select(g => g.First()).ToList();
+            foreach (var matchedCharacter in matchedCharacters)
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
+                var characterBase = matchedCharacter.GetComponent<CharacterBase>();
+                var isTreasure = characterBase.Type == CharacterBase.Types.Treasure;
+                var isCenter = matchedCharacter.transform.position == swapPosition;
+                if (isCenter)
                 {
-                    ReturnObject(matchedCharacters[2]);
-                    ReturnObject(matchedCharacters[3]);
-                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[1]);
+                    characterBase.LevelUpScale(matchedCharacter);
+                    if (isTreasure)
+                    {
+                        commonRewardManager.PendingTreasure.Enqueue(matchedCharacter);
+                    }
                 }
                 else
                 {
-                    ReturnObject(matchedCharacters[2]);
-                    ReturnObject(matchedCharacters[3]);
-                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                    ReturnObject(matchedCharacter);
                 }
-                return true;
             }
+            return true;
+        }
+        private bool Matches4Case(IReadOnlyList<GameObject> matchedCharacters, string dir)
+        {
+            SoundManager.Instance.MatchSound(4);
+            var grouped = matchedCharacters.GroupBy(mc => 
+                dir == "x" ? mc.transform.position.x : mc.transform.position.y
+            );
+            var uniqueList = grouped.Select(g => g.First()).ToList();
 
-            if (matchedCharacters[0].transform.position.x.Equals(matchedCharacters[2].transform.position.x))
+            var sortedList = uniqueList.OrderBy(mc => 
+                dir == "x" ? mc.transform.position.x : mc.transform.position.y
+            ).ToList();
+            var hasLeveledUpNonTreasure = false;
+            foreach (var matchedCharacter in matchedCharacters)
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure) 
-                { 
-                    ReturnObject(matchedCharacters[1]); 
-                    ReturnObject(matchedCharacters[3]);
-                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[2]);
+                var characterBase = matchedCharacter.GetComponent<CharacterBase>();
+                var isTreasure = characterBase.Type == CharacterBase.Types.Treasure;
+                var isCenter = matchedCharacter.transform.position == matchedCharacters[0].transform.position;
+                if (isTreasure)
+                {
+                    if (isCenter)
+                    {
+                        if (hasLeveledUpNonTreasure) continue;
+                        characterBase.LevelUpScale(matchedCharacter);
+                        characterBase.LevelUpScale(matchedCharacter);
+                        commonRewardManager.PendingTreasure.Enqueue(matchedCharacter);
+                        hasLeveledUpNonTreasure = true;
+                    }
+                    else
+                    {
+                        ReturnObject(matchedCharacter);
+                    }
                 }
                 else
                 {
-                    ReturnObject(matchedCharacters[1]);
-                    ReturnObject(matchedCharacters[3]);
-                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
+                    if (hasLeveledUpNonTreasure) continue;
+                    sortedList[1].GetComponent<CharacterBase>().LevelUpScale(sortedList[1]);
+                    sortedList[2].GetComponent<CharacterBase>().LevelUpScale(sortedList[2]);
+                    ReturnObject(sortedList[0]);
+                    ReturnObject(sortedList[3]);
+                    hasLeveledUpNonTreasure = true;
                 }
-                return true;
-            }
-
-            if (matchedCharacters[0].transform.position.x.Equals(matchedCharacters[3].transform.position.x))
-            {
-                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-                {
-                    ReturnObject(matchedCharacters[1]);
-                    ReturnObject(matchedCharacters[2]);
-                    matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                    commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[3]);
-                }
-                else
-                {
-                    ReturnObject(matchedCharacters[1]);
-                    ReturnObject(matchedCharacters[2]);
-                    matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                }
-                return true;
             }
             return true;
         }
-        private bool Matches3Case3(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Matches5Case(IEnumerable<GameObject> matchedCharacters, string dir, Vector3 swapPosition)
+        {
+            SoundManager.Instance.MatchSound(5);
+            var grouped = matchedCharacters.GroupBy(mc => 
+                dir == "x" ? mc.transform.position.x : mc.transform.position.y);
+            var uniqueList = grouped.Select(g => g.First()).ToList();
+            var sortedList = uniqueList.OrderBy(mc => 
+                dir == "x" ? mc.transform.position.x : mc.transform.position.y).ToList();
+            var hasLeveledUpNonTreasure = false;
+            if (EnforceManager.Instance.addGold)
+            {
+                EnforceManager.Instance.addGoldCount++;
+            }
+            foreach (var sort in sortedList)
+            {
+                var characterBase = sortedList[2].GetComponent<CharacterBase>();
+                var isTreasure = characterBase.Type == CharacterBase.Types.Treasure;
+                var isCenter = sort.transform.position == swapPosition;
+                if (isTreasure)
+                {
+                    if (isCenter)
+                    {
+                        if (hasLeveledUpNonTreasure) continue;
+                        characterBase.LevelUpScale(sortedList[2]);
+                        characterBase.LevelUpScale(sortedList[2]);
+                        characterBase.LevelUpScale(sortedList[2]);
+                        commonRewardManager.PendingTreasure.Enqueue(sortedList[2]);
+                        hasLeveledUpNonTreasure = true;
+                    }
+                    else
+                    {
+                        ReturnObject(sort);
+                    }
+                }
+                else
+                {
+                    if (hasLeveledUpNonTreasure) continue;
+                    ReturnObject(sortedList[0]);
+                    ReturnObject(sortedList[4]);
+                    sortedList[1].GetComponent<CharacterBase>().LevelUpScale(sortedList[1]);
+                    sortedList[2].GetComponent<CharacterBase>().LevelUpScale(sortedList[2]);
+                    sortedList[3].GetComponent<CharacterBase>().LevelUpScale(sortedList[3]);
+                    if (enforceManager.match5Upgrade)
+                    {
+                        sortedList[2].GetComponent<CharacterBase>().LevelUpScale(sortedList[2]);
+                    }
+                   
+                    hasLeveledUpNonTreasure = true;
+
+
+                  
+                }
+
+                StartCoroutine(Match3(sortedList[2]));
+            }
+            return true;
+        }
+        private IEnumerator Match3(GameObject center)
+        {
+            yield return new WaitForSecondsRealtime(0.8f);
+            var boolean = IsMatched(center);
+            yield return null;
+            if (boolean)
+            {
+                StartCoroutine(spawnManager.PositionUpCharacterObject());
+            }
+        }
+        private bool Matches3X3Case(IEnumerable<GameObject> rawMatchedCharacters, Vector3 swapPosition)
         {
             SoundManager.Instance.MatchSound(3);
-            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
+            var grouped = rawMatchedCharacters.GroupBy(mc => mc.transform.position);
+            var matchedCharacters = grouped.Select(g => g.First()).ToList();
+            var horizontalMatches = matchedCharacters.Where(mc => mc.transform.position.y == swapPosition.y)
+                .OrderBy(mc => mc.transform.position.x).ToList();
+            var verticalMatches = matchedCharacters.Where(mc => mc.transform.position.x == swapPosition.x)
+                .OrderBy(mc => mc.transform.position.y).ToList();
+            var intersection = horizontalMatches.FirstOrDefault(h => verticalMatches.Contains(h));
+            GameObject nextInVertical = null;
+            if (intersection != null)
             {
-                ReturnObject(matchedCharacters[3]); 
-                ReturnObject(matchedCharacters[4]);
-                matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[2]);
-            }
-            else
-            {
-                ReturnObject(matchedCharacters[3]); 
-                ReturnObject(matchedCharacters[4]);
-                matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-            }
-            return true;
-        }
-        private bool Matches3Case4(IReadOnlyList<GameObject> matchedCharacters)
-        {
-            SoundManager.Instance.MatchSound(3);
-            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-            {
-                ReturnObject(matchedCharacters[1]);
-                ReturnObject(matchedCharacters[2]);
-                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[3]);
-            }
-            else
-            {
-                ReturnObject(matchedCharacters[1]);
-                ReturnObject(matchedCharacters[2]);
-                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-            }
-            return true;
-        }
-        private bool Matches4Case1(IReadOnlyList<GameObject> matchedCharacters)
-        {
-            SoundManager.Instance.MatchSound(4);
-            if (matchedCharacters[0].transform.position.y > matchedCharacters[2].transform.position.y && 
-                matchedCharacters[0].transform.position.y < matchedCharacters[3].transform.position.y)
-            {
-                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-                {
-                    ReturnObject(matchedCharacters[2]);
-                    ReturnObject(matchedCharacters[4]);
-                    ReturnObject(matchedCharacters[3]);
-                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[1]);
-                }
-                else
-                {
-                    ReturnObject(matchedCharacters[2]);
-                    ReturnObject(matchedCharacters[4]);
-                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                }
-                return true;
-            }
+                intersection.GetComponent<CharacterBase>().LevelUpScale(intersection);
 
-            if (matchedCharacters[0].transform.position.y > matchedCharacters[3].transform.position.y &&
-                matchedCharacters[0].transform.position.y < matchedCharacters[4].transform.position.y)
+                if (intersection.GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
+                {
+                    commonRewardManager.PendingTreasure.Enqueue(intersection);
+                }
+                var indexInVertical = verticalMatches.IndexOf(intersection);
+                nextInVertical = indexInVertical < verticalMatches.Count - 1 ? verticalMatches[indexInVertical + 1] : verticalMatches[indexInVertical - 1];
+                nextInVertical.GetComponent<CharacterBase>().LevelUpScale(nextInVertical);
+                if (nextInVertical.GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
+                {
+                    commonRewardManager.PendingTreasure.Enqueue(nextInVertical);
+                }
+            }
+            foreach (var obj in matchedCharacters.Where(obj => obj != intersection && obj != nextInVertical))
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-                {
-                    ReturnObject(matchedCharacters[3]);
-                    ReturnObject(matchedCharacters[4]);
-                    ReturnObject(matchedCharacters[1]);
-                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[2]);
-                }
-                else
-                {
-                    ReturnObject(matchedCharacters[3]);
-                    ReturnObject(matchedCharacters[4]);
-                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                }
-                return true;
+                ReturnObject(obj);
             }
             return true;
         }
-        private bool Matches4Case2(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Matches3X4Case(IEnumerable<GameObject> rawMatchedCharacters, Vector3 swapPosition)
         {
             SoundManager.Instance.MatchSound(4);
-            if (matchedCharacters[2].transform.position.x > matchedCharacters[0].transform.position.x)
+            var grouped = rawMatchedCharacters.GroupBy(mc => mc.transform.position);
+            var matchedCharacters = grouped.Select(g => g.First()).ToList();
+            var horizontalMatches = matchedCharacters.Where(mc => mc.transform.position.y == swapPosition.y)
+                .OrderBy(mc => mc.transform.position.x).ToList();
+            var verticalMatches = matchedCharacters.Where(mc => mc.transform.position.x == swapPosition.x)
+                .OrderBy(mc => mc.transform.position.y).ToList();
+            var longestMatch = horizontalMatches.Count > verticalMatches.Count ? horizontalMatches : verticalMatches;
+            if (longestMatch.Count < 3) return true; // Ensure we have at least 3 to consider it a match
+            var levelUp1 = longestMatch[1];
+            var levelUp2 = longestMatch[2];
+            levelUp1.GetComponent<CharacterBase>().LevelUpScale(levelUp1);
+            levelUp2.GetComponent<CharacterBase>().LevelUpScale(levelUp2);
+            if(levelUp1.GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-                {
-                    ReturnObject(matchedCharacters[1]); 
-                    ReturnObject(matchedCharacters[3]);
-                    ReturnObject(matchedCharacters[2]);
-                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[4]);
-                }
-                else
-                {
-                    ReturnObject(matchedCharacters[1]); 
-                    ReturnObject(matchedCharacters[3]); 
-                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                }
+                commonRewardManager.PendingTreasure.Enqueue(levelUp1);
+                commonRewardManager.PendingTreasure.Enqueue(levelUp2);
             }
-            else
+            foreach(var obj in matchedCharacters.Where(obj => obj != levelUp1 && obj != levelUp2))
             {
-                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-                {
-                    ReturnObject(matchedCharacters[2]);
-                    ReturnObject(matchedCharacters[3]);
-                    ReturnObject(matchedCharacters[1]);
-                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[4]);
-                }
-                else
-                {
-                    ReturnObject(matchedCharacters[2]);
-                    ReturnObject(matchedCharacters[3]);
-                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                }
+                ReturnObject(obj);
             }
             return true;
         }
-        private bool Matches4Case3(IReadOnlyList<GameObject> matchedCharacters)
-        {
-            SoundManager.Instance.MatchSound(4);
-            if (matchedCharacters[0].transform.position.y > matchedCharacters[4].transform.position.y)
-            {
-                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-                {
-                    ReturnObject(matchedCharacters[5]);
-                    ReturnObject(matchedCharacters[4]);
-                    ReturnObject(matchedCharacters[3]);
-                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[2]);
-                }
-                else
-                {
-                    ReturnObject(matchedCharacters[5]);
-                    ReturnObject(matchedCharacters[4]);
-                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                }
-            }
-            else
-            {
-                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-                {
-                    ReturnObject(matchedCharacters[5]);
-                    ReturnObject(matchedCharacters[3]);
-                    ReturnObject(matchedCharacters[4]);
-                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[2]);
-                }
-                else
-                {
-                    ReturnObject(matchedCharacters[5]);
-                    ReturnObject(matchedCharacters[3]); 
-                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]); 
-                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                }
-            }
-            return true;
-        }
-        private bool Matches4Case4(IReadOnlyList<GameObject> matchedCharacters)
-        {
-            SoundManager.Instance.MatchSound(4);
-            if (matchedCharacters[0].transform.position.x < matchedCharacters[2].transform.position.x &&
-                matchedCharacters[0].transform.position.x > matchedCharacters[1].transform.position.x)
-            {
-                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-                {
-                    ReturnObject(matchedCharacters[1]);
-                    ReturnObject(matchedCharacters[3]);
-                    ReturnObject(matchedCharacters[2]);
-                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[4]);
-                }
-                else
-                {
-                    ReturnObject(matchedCharacters[1]);
-                    ReturnObject(matchedCharacters[3]);
-                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                }
-            }
-            else
-            {
-                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-                {
-                    ReturnObject(matchedCharacters[1]);
-                    ReturnObject(matchedCharacters[3]);
-                    ReturnObject(matchedCharacters[2]);
-                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[4]);
-                }
-                else
-                {
-                    ReturnObject(matchedCharacters[2]);
-                    ReturnObject(matchedCharacters[3]);
-                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                }
-            }
-            return true;
-        }
-        private bool Matches5Case1(IReadOnlyList<GameObject> matchedCharacters)
+        private bool Matches3X5Case(IEnumerable<GameObject> rawMatchedCharacters, Vector3 swapPosition)
         {
             SoundManager.Instance.MatchSound(5);
-            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
+            var grouped = rawMatchedCharacters.GroupBy(mc => mc.transform.position);
+            var matchedCharacters = grouped.Select(g => g.First()).ToList();
+            var match5Horizontal = matchedCharacters.Where(mc => mc.transform.position.y == swapPosition.y)
+                .OrderBy(mc => mc.transform.position.x).ToList();
+            var match5Vertical = matchedCharacters.Where(mc => mc.transform.position.x == swapPosition.x)
+                .OrderBy(mc => mc.transform.position.y).ToList();
+            var match3Horizontal = match5Horizontal.Count == 5 ? new List<GameObject>() : match5Horizontal;
+            var match3Vertical = match5Vertical.Count == 5 ? new List<GameObject>() : match5Vertical;
+            if (match5Horizontal.Count >= 5)
             {
-                ReturnObject(matchedCharacters[3]);
-                ReturnObject(matchedCharacters[5]);
-                ReturnObject(matchedCharacters[2]);
-                ReturnObject(matchedCharacters[4]);
-                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[1]);
-                if (EnforceManager.Instance.addGold)
+                Matches5Case(match5Horizontal, "x", swapPosition);
+            }
+            else
+            {
+                Matches5Case(match5Vertical, "y", swapPosition);
+            }
+            if (match3Horizontal.Count >= 3)
+            {
+                var levelUpObjectHorizontal = match3Horizontal[1];
+                var returnObjectsHorizontal = match3Horizontal.Where((obj, index) => index != 1 && obj.transform.position != swapPosition);
+                levelUpObjectHorizontal.GetComponent<CharacterBase>().LevelUpScale(levelUpObjectHorizontal);
+                if (levelUpObjectHorizontal.GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
                 {
-                    EnforceManager.Instance.addGoldCount++;
+                    commonRewardManager.PendingTreasure.Enqueue(levelUpObjectHorizontal);
+                }
+                foreach (var obj in returnObjectsHorizontal)
+                {
+                    ReturnObject(obj);
                 }
             }
             else
             {
-                ReturnObject(matchedCharacters[3]);
-                ReturnObject(matchedCharacters[5]);
-                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                if (enforceManager.match5Upgrade)
-                { 
-                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
+                var levelUpObjectVertical = match3Vertical[1];
+                var returnObjectsVertical = match3Vertical.Where((obj, index) => index != 1 && obj.transform.position != swapPosition);
+                levelUpObjectVertical.GetComponent<CharacterBase>().LevelUpScale(levelUpObjectVertical);
+                if (levelUpObjectVertical.GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
+                {
+                    commonRewardManager.PendingTreasure.Enqueue(levelUpObjectVertical);
                 }
-            }
-            if (EnforceManager.Instance.addGold)
-            {
-                EnforceManager.Instance.addGoldCount++;
+                foreach (var obj in returnObjectsVertical)
+                {
+                    ReturnObject(obj);
+                }
             }
             return true;
         }
-        private bool Matches5Case2(IReadOnlyList<GameObject> matchedCharacters)
-        {
-            SoundManager.Instance.MatchSound(5);
-            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-            {
-                ReturnObject(matchedCharacters[3]);
-                ReturnObject(matchedCharacters[1]);
-                ReturnObject(matchedCharacters[2]);
-                ReturnObject(matchedCharacters[4]);
-                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[5]);
-            }
-            else
-            {
-                ReturnObject(matchedCharacters[2]);
-                ReturnObject(matchedCharacters[4]);
-                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                if (enforceManager.match5Upgrade)
-                {
-                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                }
-            }
-            if (EnforceManager.Instance.addGold)
-            {
-                EnforceManager.Instance.addGoldCount++;
-            }
-            return true;
-        }
-        private bool Matches2X5Case(IReadOnlyList<GameObject> matchedCharacters)
-        {
-            SoundManager.Instance.MatchSound(5);
-            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-            {
-                ReturnObject(matchedCharacters[6]);
-                ReturnObject(matchedCharacters[4]);
-                ReturnObject(matchedCharacters[2]);
-                ReturnObject(matchedCharacters[3]);
-                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[5]);
-            }
-            else
-            {
-                ReturnObject(matchedCharacters[6]);
-                ReturnObject(matchedCharacters[4]);
-                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                if (enforceManager.match5Upgrade)
-                {
-                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                }
-            }
-            if (EnforceManager.Instance.addGold)
-            {
-                EnforceManager.Instance.addGoldCount++;
-            }
-            return true;
-        }
-        private bool Matches5X2Case(IReadOnlyList<GameObject> matchedCharacters)
-        {
-            SoundManager.Instance.MatchSound(5);
-            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-            {
-                ReturnObject(matchedCharacters[1]);
-                ReturnObject(matchedCharacters[2]);
-                ReturnObject(matchedCharacters[3]);
-                ReturnObject(matchedCharacters[4]);
-                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[5]);
-            }
-            else
-            {
-                ReturnObject(matchedCharacters[2]);
-                ReturnObject(matchedCharacters[4]);
-                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                if (enforceManager.match5Upgrade)
-                {
-                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                }
-            }
-            if (EnforceManager.Instance.addGold)
-            {
-                EnforceManager.Instance.addGoldCount++;
-            }
-            return true;
-        }
-        private bool Matches3X3Case(IReadOnlyList<GameObject> matchedCharacters)
-        {
-            SoundManager.Instance.MatchSound(3);
-            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-            {
-                ReturnObject(matchedCharacters[2]);
-                ReturnObject(matchedCharacters[1]);
-                ReturnObject(matchedCharacters[5]);
-                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[3]);
-                matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[4]);
-            }
-            else
-            {
-                ReturnObject(matchedCharacters[2]);
-                ReturnObject(matchedCharacters[1]);
-                ReturnObject(matchedCharacters[5]);
-                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]); 
-            }
 
-            return true;
-        }
-        private bool Matches3X4Case(IReadOnlyList<GameObject> matchedCharacters)
-        {
-            SoundManager.Instance.MatchSound(4);
-            if (matchedCharacters[3].transform.position.y > matchedCharacters[5].transform.position.y)
-            {
-                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-                {
-                    ReturnObject(matchedCharacters[2]);
-                    ReturnObject(matchedCharacters[6]);
-                    ReturnObject(matchedCharacters[5]);
-                    ReturnObject(matchedCharacters[3]);
-                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[1]);
-                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[4]);
-                }
-                ReturnObject(matchedCharacters[2]);
-                ReturnObject(matchedCharacters[6]);
-                ReturnObject(matchedCharacters[5]);
-                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-            }
-            else
-            {
-                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-                {
-                    ReturnObject(matchedCharacters[2]);
-                    ReturnObject(matchedCharacters[6]);
-                    ReturnObject(matchedCharacters[4]);
-                    ReturnObject(matchedCharacters[3]);
-                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[1]);
-                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                    commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[5]);
-                }
-                else
-                {
-                    ReturnObject(matchedCharacters[2]);
-                    ReturnObject(matchedCharacters[6]);
-                    ReturnObject(matchedCharacters[4]);
-                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                }
-            }
-            return true;
-        }
-        private bool Matches4X3Case(IReadOnlyList<GameObject> matchedCharacters)
-        {
-            SoundManager.Instance.MatchSound(4);
-            if (matchedCharacters[2].transform.position.x < matchedCharacters[4].transform.position.x)
-            {
-                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-                {
-                    ReturnObject(matchedCharacters[2]); 
-                    ReturnObject(matchedCharacters[3]);
-                    ReturnObject(matchedCharacters[4]);
-                    ReturnObject(matchedCharacters[6]);
-                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[1]);
-                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                    commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[5]);
-                }
-                else
-                {
-                    ReturnObject(matchedCharacters[2]); 
-                    ReturnObject(matchedCharacters[3]); 
-                    ReturnObject(matchedCharacters[6]); 
-                    matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                }
-            }
-            else
-            {
-                if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-                {
-                    ReturnObject(matchedCharacters[1]);
-                    ReturnObject(matchedCharacters[3]);
-                    ReturnObject(matchedCharacters[6]);
-                    ReturnObject(matchedCharacters[4]);
-                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[2]);
-                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                    commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[5]);
-                }
-                else
-                {
-                    ReturnObject(matchedCharacters[1]); 
-                    ReturnObject(matchedCharacters[3]); 
-                    ReturnObject(matchedCharacters[6]); 
-                    matchedCharacters[2].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[2]);
-                    matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                }
-            }
-            return true;
-        }
-        private bool Matches3X5Case(IReadOnlyList<GameObject> matchedCharacters)
-        { 
-            SoundManager.Instance.MatchSound(5);
-            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-            {
-                ReturnObject(matchedCharacters[7]);
-                ReturnObject(matchedCharacters[5]); 
-                ReturnObject(matchedCharacters[2]); 
-                ReturnObject(matchedCharacters[6]);
-                ReturnObject(matchedCharacters[4]);
-                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[1]);
-                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[3]);
-            }
-            else
-            {
-                ReturnObject(matchedCharacters[7]);
-                ReturnObject(matchedCharacters[5]); 
-                ReturnObject(matchedCharacters[2]); 
-                matchedCharacters[6].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[6]);
-                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                matchedCharacters[4].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[4]);
-                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                if (enforceManager.match5Upgrade)
-                {
-                    matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                }
-            }
-            if (EnforceManager.Instance.addGold)
-            {
-                EnforceManager.Instance.addGoldCount++;
-            }
-            return true;
-        }
-        private bool Matches5X3Case(IReadOnlyList<GameObject> matchedCharacters)
-        {
-            SoundManager.Instance.MatchSound(5);
-            if (matchedCharacters[0].GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
-            {
-                ReturnObject(matchedCharacters[2]);
-                ReturnObject(matchedCharacters[4]);
-                ReturnObject(matchedCharacters[7]);
-                ReturnObject(matchedCharacters[1]);
-                ReturnObject(matchedCharacters[3]);
-                matchedCharacters[6].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[6]);
-                commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[6]);
-                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                commonRewardManager.PendingTreasure.Enqueue(matchedCharacters[5]);
-            }
-            else
-            {
-                ReturnObject(matchedCharacters[2]);
-                ReturnObject(matchedCharacters[4]);
-                ReturnObject(matchedCharacters[7]);
-                matchedCharacters[1].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[1]);
-                matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                matchedCharacters[3].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[3]);
-                matchedCharacters[6].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[6]);
-                if (enforceManager.match5Upgrade)
-                {
-                    matchedCharacters[5].GetComponent<CharacterBase>().LevelUpScale(matchedCharacters[5]);
-                }
-            }
-            if (EnforceManager.Instance.addGold)
-            {
-                EnforceManager.Instance.addGoldCount++;
-            }
-            return true;
-        }
     }
 }
