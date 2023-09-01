@@ -149,6 +149,8 @@ namespace Script.EnemyManagerScript
             {
                 Destroy(_bossObject);
             }
+            yield return null;
+
             enemyPool.enemyBases.Clear();
            
             foreach (var enemyBase in enemyManager.stageBoss.Where(enemyBase => enemyBase.enemyClass == bossClass))
@@ -157,6 +159,8 @@ namespace Script.EnemyManagerScript
                 _bossObject.transform.position = GameManager.Instance.bossSpawnArea;
                 yield return StartCoroutine(enemyPatternManager.Zone_Move(_bossObject, spawnZone));
             }
+
+            yield return null;
         }
         private Vector3 GetRandomPointInBounds(EnemyBase.SpawnZones zone)
         {

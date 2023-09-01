@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using DG.Tweening;
 using Script.EnemyManagerScript;
+using Script.PuzzleManagerGroup;
 using Script.RewardScript;
 
 namespace Script.UIManager
@@ -14,6 +15,7 @@ namespace Script.UIManager
         [SerializeField] private Slider expBar;
         [SerializeField] private LevelUpRewardManager levelUpRewardManager;
         [SerializeField] private EnforceManager enforceManager;
+        [SerializeField] private SpawnManager spawnManager;
         private static readonly object Lock = new object();
         public int level;
         public static ExpManager Instance { get; private set; }
@@ -52,7 +54,7 @@ namespace Script.UIManager
                         levelUpPoint += 5;
                         expBar.maxValue = levelUpPoint;
                     }
-                    StartCoroutine(levelUpRewardManager.LevelUpReward());
+                    spawnManager.AddToQueue(levelUpRewardManager.LevelUpReward());
                 }
                 expBar.value = expPoint;
                 expBar.DOValue(expPoint, 0.5f);

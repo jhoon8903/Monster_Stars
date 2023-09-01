@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2507139373241753565}
   - component: {fileID: 8968598003116571384}
   - component: {fileID: 566872951328902030}
-  - component: {fileID: 8968598003116571387}
+  - component: {fileID: -1630673374375552757}
   m_Layer: 9
   m_Name: BerserkerPowerUpWeapon
   m_TagString: Untagged
@@ -73,7 +73,7 @@ PolygonCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.428, y: 1.03}
+    oldSize: {x: 0.42799997, y: 1.0336603}
     newSize: {x: 0.8134375, y: 2.74}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -224,7 +224,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &8968598003116571387
+--- !u!114 &-1630673374375552757
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

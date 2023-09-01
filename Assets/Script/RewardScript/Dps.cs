@@ -32,6 +32,8 @@ namespace Script.RewardScript
                 foreach (var unit in group)
                 {
                     var damage = PlayerPrefs.GetInt($"{unit.unitGroup}DPS", 0);
+                    Debug.Log(damage);
+                    Debug.Log($"Key: {unit.unitGroup}DPS");
                     groupDamage += damage;
                     unitIcon = unit.GetSpriteForLevel(unit.unitPieceLevel);
                     unitGrades = unit.UnitGrade;

@@ -39,6 +39,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         public UnitIcon secondSwap;
         public List<UnitIcon> unitList = new List<UnitIcon>();
         public List<UnitIcon> topList = new List<UnitIcon>();
+        public int sortingNumber = 11;
         private void Awake()
         {
             if (Instance == null)
@@ -104,7 +105,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             firstBase.selected = true;
             SelectedUnitHolder.Instance.selectedUnit.Add(firstBase);
             topList.Add(first);
-            PlayerPrefs.SetInt(firstBase.unitGroup.ToString(), 1);
+            PlayerPrefs.SetString($"{firstBase.unitGroup}{CharacterBase.SelectKey}","true");
             PlayerPrefs.Save();
             first.transform.SetParent(selectedContent.transform);
             first.transform.SetAsLastSibling();
@@ -123,7 +124,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             unitList.Add(second);
             topList.Remove(second);
             SelectedUnitHolder.Instance.selectedUnit.Remove(secondBase);
-            PlayerPrefs.DeleteKey(secondBase.unitGroup.ToString());
+            PlayerPrefs.SetString($"{secondBase.unitGroup}{CharacterBase.SelectKey}","false");
             second.transform.SetParent(activateUnitContent.transform);
             second.transform.SetAsLastSibling();
             second.normalBack.SetActive(true);
@@ -162,6 +163,8 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             foreach (var character in characterList)
             {
                 character.Initialize();
+                character.unLock = bool.Parse(PlayerPrefs.GetString($"{character.unitGroup}{CharacterBase.UnLockKey}", "false"));
+                character.selected = bool.Parse(PlayerPrefs.GetString($"{character.unitGroup}{CharacterBase.SelectKey}", "false"));
                 if (character.unLock)
                 {
                     if (character.selected)
@@ -178,7 +181,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                         }
                         AdjustRectTransform(activateUnitContent.transform);
                         SelectedUnitHolder.Instance.selectedUnit.Add(character);
-                         topList.Add(selectedUnitInstance);
+                        topList.Add(selectedUnitInstance);
                      
                     }
                     else
@@ -242,8 +245,9 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             unitInstance.removeBtn.onClick.AddListener(() =>
             {
                 character.selected = false;
+                PlayerPrefs.SetString($"{character.unitGroup}{CharacterBase.SelectKey}","false");
+                PlayerPrefs.Save();
                 SelectedUnitHolder.Instance.selectedUnit.Remove(character);
-                PlayerPrefs.DeleteKey(character.unitGroup.ToString());
                 unitInstance.transform.SetParent(activateUnitContent.transform);
                 unitInstance.transform.SetAsLastSibling(); 
                 unitInstance.normalBack.SetActive(true);
@@ -265,9 +269,9 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 if (SelectedUnitHolder.Instance.selectedUnit.Count < 4)
                 {
                     character.selected = true;
-                    SelectedUnitHolder.Instance.selectedUnit.Add(character);
-                    PlayerPrefs.SetInt(character.unitGroup.ToString(), 1);
+                    PlayerPrefs.SetString($"{character.unitGroup}{CharacterBase.SelectKey}","true");
                     PlayerPrefs.Save();
+                    SelectedUnitHolder.Instance.selectedUnit.Add(character);
                     unitInstance.transform.SetParent(selectedContent.transform);
                     unitInstance.transform.SetAsLastSibling(); 
                     unitInstance.normalBack.SetActive(true);
@@ -472,12 +476,14 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                             Firebase.Analytics.FirebaseAnalytics.LogEvent("chiller_unlocked");
                             break;
                     }
-
                     unitIcon.CharacterBase.unLock = true;
+                    PlayerPrefs.SetString($"{unitIcon.CharacterBase.unitGroup}{CharacterBase.UnLockKey}", "true");
                     UpdateUnit(unitIcon, unitIcon.CharacterBase);
                     SetupUnitIcon(unitIcon, unitIcon.CharacterBase);
                     unitIcon.transform.SetParent(activateUnitContent.transform, false);
                     AdjustRectTransform(activateUnitContent.transform);
+                    unitIcon.unitCanvas.sortingOrder = sortingNumber;
+                    sortingNumber--;
                 }
             }
         }

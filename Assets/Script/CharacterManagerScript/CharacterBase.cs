@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -70,7 +71,7 @@ namespace Script.CharacterManagerScript
                 var increaseDamageAmount = EnforceManager.Instance.increaseAtkDamage;
                 return baseDamage * (1.0f + (increaseDamageAmount / 100f));
             }
-            protected set => baseDamage = (int)value;
+            set => baseDamage = (int)value;
         }
         public float defaultAtkRate;
         public float projectileSpeed; 
@@ -86,8 +87,74 @@ namespace Script.CharacterManagerScript
         public float UnitLevelDamage { get; protected set; }
         public Dictionary<EnemyBase, int> AttackCounts { get; set; } = new Dictionary<EnemyBase, int>();
         private const string LevelKey = "level";
+        protected internal const string SelectKey = "Select";
+        protected internal const string UnLockKey = "Unlock";
+        protected internal const string PieceKey = "Piece";
         public virtual void Initialize()
         {
+            if (bool.Parse(PlayerPrefs.GetString("TutorialKey", "true")))
+            {
+                switch (unitGroup)
+                {
+                    case UnitGroups.Octopus:
+                        selected = false;
+                        unLock = false;
+                        break;
+                    case UnitGroups.Ogre:
+                        selected = true;
+                        unLock = true;
+                        PlayerPrefs.SetString($"{unitGroup}{SelectKey}","true");
+                        PlayerPrefs.SetString($"{unitGroup}{UnLockKey}","true");
+                        break;
+                    case UnitGroups.DeathChiller:
+                        selected = false;
+                        unLock = false;
+                        break;
+                    case UnitGroups.Orc:
+                        selected = true;
+                        unLock = true;
+                        PlayerPrefs.SetString($"{unitGroup}{SelectKey}","true");
+                        PlayerPrefs.SetString($"{unitGroup}{UnLockKey}","true");
+                        break;
+                    case UnitGroups.Fishman:
+                        selected = true;
+                        unLock = true;
+                        PlayerPrefs.SetString($"{unitGroup}{SelectKey}","true");
+                        PlayerPrefs.SetString($"{unitGroup}{UnLockKey}","true");
+                        break;
+                    case UnitGroups.Skeleton:
+                        selected = true;
+                        unLock = true;
+                        PlayerPrefs.SetString($"{unitGroup}{SelectKey}","true");
+                        PlayerPrefs.SetString($"{unitGroup}{UnLockKey}","true");
+                        break;
+                    case UnitGroups.Phoenix:
+                        selected = false;
+                        unLock = false;
+                        break;
+                    case UnitGroups.Beholder:
+                        selected = false;
+                        unLock = false;
+                        break;
+                    case UnitGroups.Cobra:
+                        selected = false;
+                        unLock = false;
+                        break;
+                    case UnitGroups.Berserker:
+                        selected = false;
+                        unLock = false;
+                        break;
+                    case UnitGroups.DarkElf:
+                        selected = false;
+                        unLock = false;
+                        break;
+                }
+            }
+            else
+            {
+                selected = bool.Parse(PlayerPrefs.GetString($"{unitGroup}{SelectKey}", "false"));
+                unLock = bool.Parse(PlayerPrefs.GetString($"{unitGroup}{UnLockKey}","false"));
+            }
             var level = UnitGrade switch
             {
                 UnitGrades.B => 3,
@@ -95,6 +162,7 @@ namespace Script.CharacterManagerScript
                 _ => 1,
             };
             unitPieceLevel = PlayerPrefs.GetInt($"{unitGroup}{LevelKey}", level);
+            UnitPieceCount = PlayerPrefs.GetInt($"{unitGroup}{PieceKey}", 0);
             _spriteRenderer = GetComponent<SpriteRenderer>();
             if (unitGroup != UnitGroups.None)
             {
@@ -326,7 +394,7 @@ namespace Script.CharacterManagerScript
         }
         public void LevelUpScale(GameObject levelUpObject)
         {
-            var sequence = DOTween.Sequence(); 
+            var sequence = DOTween.Sequence();
             Tween scaleUp = sequence.Append(levelUpObject.transform.DOScale(_levelUpScale, 0.3f)); 
             scaleUp.WaitForCompletion();
             LevelUp();
@@ -352,9 +420,11 @@ namespace Script.CharacterManagerScript
         public IEnumerator UnitLevelUp(UnitGroups unitGroups)
         {
             UnitPieceCount -= UnitPieceMaxPiece;
+
             CoinsScript.Instance.Coin -= CharacterLevelUpCoin;
             unitPieceLevel++;
             PlayerPrefs.SetInt($"{unitGroups}{LevelKey}", unitPieceLevel);
+            PlayerPrefs.SetInt($"{unitGroups}{PieceKey}", UnitPieceCount);
             PlayerPrefs.Save();
             Initialize();
             Quest.Instance.UseCoinQuest(CharacterLevelUpCoin);

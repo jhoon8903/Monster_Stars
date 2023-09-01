@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Script.CharacterManagerScript;
 using Script.EnemyScript.Enemy;
 using Script.RewardScript;
@@ -18,11 +19,12 @@ namespace Script.WeaponScriptGroup
         }
         public List<Weapon> weapons;
         [SerializeField] private int weaponPoolCapacity = 20;
-        [SerializeField] private GameObject berserkerWeapon;
+        [SerializeField] private BerserkerWeapon berserkerWeapon;
         private Dictionary<WeaponType, List<Queue<GameObject>>> _poolDictionary;
         private static readonly Vector3 InitLocalScale = new Vector3(1f, 1f , 1f);
         private GameObject _pivotDSword;
-        private GameObject _berserkerWeapon;
+        private BerserkerWeapon _berserkerWeapon;
+        private readonly List<BerserkerWeapon> _berserkerList = new List<BerserkerWeapon>();
         private void Start()
         {
             _poolDictionary = new Dictionary<WeaponType, List<Queue<GameObject>>>();
@@ -48,11 +50,12 @@ namespace Script.WeaponScriptGroup
             for (var i = 0; i < weaponPoolCapacity; i++)
             {
                 _berserkerWeapon = Instantiate(berserkerWeapon, transform);
-                _berserkerWeapon.SetActive(false);
+                _berserkerWeapon.gameObject.SetActive(false);
+                _berserkerList.Add(_berserkerWeapon);
             }
         }
 
-        public GameObject SpawnFromPool(WeaponType weaponType, CharacterBase unit, Vector3 position, Quaternion rotation)
+        public GameObject SpawnFromPool(WeaponType weaponType, GameObject atkUnit ,CharacterBase unit, Vector3 position, Quaternion rotation)
         {
             var puzzleLevel = unit.unitPuzzleLevel;
             if (!_poolDictionary.ContainsKey(weaponType))
@@ -73,14 +76,17 @@ namespace Script.WeaponScriptGroup
                 }
             }
 
-            if (EnforceManager.Instance.berserkerThirdBoost)
+            if (EnforceManager.Instance.berserkerThirdBoost && unit.unitGroup == CharacterBase.UnitGroups.Berserker)
             {
-                if (unit.GetComponent<Berserker>().atkCount == 3 && unit.GetComponent<Berserker>())
+                Debug.Log(atkUnit.GetComponent<Berserker>().atkCount);
+                if (atkUnit.GetComponent<Berserker>().atkCount == 3)
                 {
-                    _berserkerWeapon.transform.position = position;
-                    _berserkerWeapon.transform.rotation = rotation;
-                    _berserkerWeapon.SetActive(true);
-                    return _berserkerWeapon;
+                    if (_berserkerList.Any(weaponObject => !weaponObject.gameObject.activeInHierarchy))
+                    {
+                        GameObject o;
+                        (o = _berserkerWeapon.gameObject).SetActive(true);
+                        return o;
+                    }
                 }
             }
             _poolDictionary[weaponType][puzzleLevel-2].Enqueue(objectToSpawn);

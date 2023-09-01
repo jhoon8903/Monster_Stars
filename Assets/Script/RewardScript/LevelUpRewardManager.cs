@@ -345,6 +345,7 @@ namespace Script.RewardScript
         }
         public IEnumerator LevelUpReward() // 레벨업 보상 처리
         {
+            if (StageManager.Instance.currentWave == StageManager.Instance.maxWaveCount) yield break;
             Time.timeScale = 0; // 게임 일시 정지
             levelUpRewardPanel.SetActive(true); // 보물 패널 활성화
             expShuffle.gameObject.SetActive(true);

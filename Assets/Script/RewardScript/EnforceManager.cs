@@ -150,6 +150,7 @@ namespace Script.RewardScript
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private GridManager gridManager;
         [SerializeField] private CountManager countManager;
+        [SerializeField] private SpawnManager spawnManager;
         [RuntimeInitializeOnLoadMethod] 
         private static void InitializeOnLoad()
         {
@@ -684,7 +685,8 @@ namespace Script.RewardScript
                     finalTranslation = levelUpInfo.Aggregate(finalTranslation, (current, item) => current.Replace("{0level_unit_N}", item.Value)
                         .Replace("{unit_N}", item.Key));
                 }
-                _skill.skillIcon.sprite = characterList[(int)_property].GetComponent<CharacterBase>().GetSpriteForLevel(characterList[(int)_property].GetComponent<CharacterBase>().unitPieceLevel);
+
+                _skill.skillIcon.sprite = data.Icon;
                 _skill.skillBackGround.sprite = characterList[(int)_property].UnitGrade switch
                 {
                     CharacterBase.UnitGrades.G => PowerTypeManager.Instance.green,
@@ -776,7 +778,7 @@ namespace Script.RewardScript
         }
 
         // RandomUnitLevelUp
-        public static void RandomCharacterLevelUp(int characterCount)
+        public void RandomCharacterLevelUp(int characterCount)
         {
             var activeCharacters = CharacterPool.Instance.UsePoolCharacterList();
             if (activeCharacters.Count == 0) return;
@@ -796,6 +798,7 @@ namespace Script.RewardScript
                 eligibleCharacters = eligibleCharacters.Where(character => 
                     character.GetComponent<CharacterBase>()?.unitPuzzleLevel < 5).ToList();
             }
+            spawnManager.AddToQueue(spawnManager.PositionUpCharacterObject());
         }
 
         // Unit Group LevelUp
@@ -812,6 +815,7 @@ namespace Script.RewardScript
                     characterObj.LevelUpScale(character);
                 }
             }
+            spawnManager.AddToQueue(spawnManager.PositionUpCharacterObject());
         }
 
         [Header("그룹 영구 레벨업")]

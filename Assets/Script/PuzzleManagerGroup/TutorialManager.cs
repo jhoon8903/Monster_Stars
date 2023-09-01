@@ -65,14 +65,15 @@ namespace Script.PuzzleManagerGroup
             }
         }
         private float _nextTriggerTime; // 다음 트리거가 발생할 수 있는 시간
-        private const float TutorialTriggerCooldown = 2f;
+        private const float TutorialTriggerCooldown = 1.5f;
         private void Start()
         {
-            if (PlayerPrefs.GetInt("TutorialKey") != 1) return;
+            var isTutorial = bool.Parse(PlayerPrefs.GetString("TutorialKey", "true"));
+            if (!isTutorial) return;
             spawnManager.OnMatchFound += HandleMatchFound;
             _tutorialSteps = new Queue<TutorialStep>();
             commonRewardManager.OnRewardSelected += HandleMatchFound;
-            
+                
             // 3Matched
             _tutorialSteps.Enqueue(new TutorialStep(
                 new Vector3(4, 3.3f, 0), 
@@ -84,7 +85,7 @@ namespace Script.PuzzleManagerGroup
 
             // 4Matched
             _tutorialSteps.Enqueue(new TutorialStep(
-                
+                    
                 new Vector3(3,4.5f,0), 
                 new Vector3(3,3.5f,0),
                 2,
@@ -95,7 +96,7 @@ namespace Script.PuzzleManagerGroup
             );
             // 5Matched
             _tutorialSteps.Enqueue(new TutorialStep(
-                
+                    
                 new Vector3(1, 2.3f, 0),
                 new Vector3(0, 2.3f, 0),
                 3,
@@ -106,7 +107,7 @@ namespace Script.PuzzleManagerGroup
             );
             // Power Up Matched
             _tutorialSteps.Enqueue(new TutorialStep(
-                
+                    
                 new Vector3(4,4.3f,0), 
                 new Vector3(3,4.3f,0),
                 4,
@@ -123,7 +124,7 @@ namespace Script.PuzzleManagerGroup
             );
             // Press Long Object
             _tutorialSteps.Enqueue(new TutorialStep(
-                
+                    
                 new Vector3(5,4f,0), 
                 new Vector3(5,4.4f, 0),
                 7,
@@ -132,7 +133,7 @@ namespace Script.PuzzleManagerGroup
             );
             // Null Swap
             _tutorialSteps.Enqueue(new TutorialStep(
-                
+                    
                 new Vector3(5,3.3f,0), new Vector3(6,3.3f,0),
                 6,
                 "You can remove units by swiping off the tile.", 
@@ -184,7 +185,7 @@ namespace Script.PuzzleManagerGroup
                 Destroy(_currentTextPopup);
                 _currentTextPopup = null;
             }
-            PlayerPrefs.SetInt("TutorialKey", 0);
+            PlayerPrefs.SetString("TutorialKey", "false");
             spawnManager.isTutorial = false;
             Firebase.Analytics.FirebaseAnalytics.LogEvent("tutorial_complete");
             yield return null;

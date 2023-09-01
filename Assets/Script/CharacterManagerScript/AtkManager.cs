@@ -35,7 +35,6 @@ namespace Script.CharacterManagerScript
         public List<GameObject> enemyList = new List<GameObject>();
         public List<GameObject> weaponsList = new List<GameObject>();
         public static AtkManager Instance { get; private set; }
-        public int groupCAtkCount;
         public int groupDAtkCount;
         public int groupFCount;
         public void Awake()
@@ -255,7 +254,7 @@ namespace Script.CharacterManagerScript
                    break;
             }
             var weaponType = attackData.WeaponType;
-            var weaponObject = weaponsPool.SpawnFromPool(weaponType, attackData.Unit.GetComponent<CharacterBase>(), unit.transform.position, unit.transform.rotation);
+            var weaponObject = weaponsPool.SpawnFromPool(weaponType, attackData.Unit,attackData.Unit.GetComponent<CharacterBase>(), unit.transform.position, unit.transform.rotation);
             if (weaponObject == null) return null;
             var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
             if (weaponBase == null) return null;
@@ -287,7 +286,7 @@ namespace Script.CharacterManagerScript
             };
             foreach (var weapon in weaponDirections)
             {
-                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>(), unitPosition, weapon.Rotation);
+                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit, unit.GetComponent<CharacterBase>(), unitPosition, weapon.Rotation);
                 var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
                 weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
                 weaponsList.Add(weaponBase.gameObject);
@@ -309,7 +308,7 @@ namespace Script.CharacterManagerScript
             };
             foreach (var position in weaponPositions)
             {
-                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>(), position, unit.transform.rotation);
+                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit, unit.GetComponent<CharacterBase>(), position, unit.transform.rotation);
                 var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
                 weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
                 weaponsList.Add(weaponBase.gameObject);
@@ -335,7 +334,7 @@ namespace Script.CharacterManagerScript
 
             foreach (var item in directionsAndPositions)
             {
-                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit.GetComponent<CharacterBase>(), item.Position, item.Rotation);
+                var weaponObject = weaponsPool.SpawnFromPool(weaponType, unit, unit.GetComponent<CharacterBase>(), item.Position, item.Rotation);
                 var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
                 weaponBase.InitializeWeapon(unit.GetComponent<CharacterBase>());
                 weaponsList.Add(weaponBase.gameObject);

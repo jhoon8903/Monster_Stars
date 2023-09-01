@@ -37,13 +37,12 @@ namespace Script.RobbyScript.MainMenuGroup
         public int SelectStage { get; private set; }
         public int recordWave;
         public static MainPanel Instance { get; private set; }
-        public const string IsLoadingKey = "IsLoading";
 
         public void Awake()
         {
             Instance = this;
             Application.targetFrameRate = 60;
-            stageImage.sprite = stageSprite[PlayerPrefs.GetInt("LatestStage", 1) - 1];
+            stageImage.sprite = PreviewStage(PlayerPrefs.GetInt("LatestStage", 1));
         }
         public void Start()
         {
@@ -67,7 +66,6 @@ namespace Script.RobbyScript.MainMenuGroup
             if (LatestStage != 1) return;
             previousStageBtn.SetActive(false);
             nextStageBtn.SetActive(false);
-            PlayerPrefs.SetString(IsLoadingKey, "true");
         }
         private void Update()
         {
@@ -89,7 +87,7 @@ namespace Script.RobbyScript.MainMenuGroup
         }
         private void CancelContinue()
         {
-            PlayerPrefs.SetString(IsLoadingKey, "false");
+            PlayerPrefs.SetString("Loading", "false");
             ReturnRobby();
             continuePanel.SetActive(false);
         }
@@ -104,7 +102,7 @@ namespace Script.RobbyScript.MainMenuGroup
                         PlayerPrefs.SetInt("Retry", 1);
                     }
 
-                    if (PlayerPrefs.GetInt("TutorialKey", 1)!=1)
+                    if (!bool.Parse(PlayerPrefs.GetString("TutorialKey", "true")))
                     {
                         staminaScript.CurrentStamina -= 5;
                     }

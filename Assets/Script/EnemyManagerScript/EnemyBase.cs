@@ -277,8 +277,9 @@ namespace Script.EnemyManagerScript
                     var newCumulativeDamage = currentDamage + receiveDamage;
                     _cumulativeDamageByGroup[atkUnit.unitGroup] = newCumulativeDamage;
                     PlayerPrefs.SetInt($"{atkUnit.unitGroup}DPS", newCumulativeDamage);
+                    Debug.Log($"DPS_KEY : {atkUnit.unitGroup}DPS / DPS Value: {newCumulativeDamage}");
+                    PlayerPrefs.Save();
                 }
-                PlayerPrefs.Save();
                 if (isDead) return;
                 currentHealth -= receiveDamage;
                 if (!gameObject.activeInHierarchy) return;

@@ -17,7 +17,7 @@ namespace Script.CharacterGroupScript
         [SerializeField] private Sprite level5Sprite;
         [SerializeField] private Sprite level6Sprite;
         private Vector2 _detectionSize;
-        public int atkCount;
+        public int atkCount = 0;
         public override void Initialize()
         {
             base.Initialize();

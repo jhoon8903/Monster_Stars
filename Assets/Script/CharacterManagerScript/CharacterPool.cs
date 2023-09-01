@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
+using Script.PuzzleManagerGroup;
 using UnityEngine;
 
 namespace Script.CharacterManagerScript
@@ -8,6 +10,7 @@ namespace Script.CharacterManagerScript
     {
         [SerializeField] private CharacterManager characterManager;
         [SerializeField] private int poolSize;
+        [SerializeField] private SpawnManager spawnManager;
         public List<GameObject> pooledCharacters;
         public bool theFirst;
         public static CharacterPool Instance;
@@ -48,9 +51,17 @@ namespace Script.CharacterManagerScript
         public static void ReturnToPool(GameObject obj)
         {
             if (obj == null) return;
-            obj.GetComponent<CharacterBase>().CharacterReset();
-            obj.transform.localScale = Vector3.one;
-            obj.SetActive(false);
+            var spriteRenderer = obj.GetComponent<SpriteRenderer>();
+            spriteRenderer.DOFade(0, 0.1f).OnComplete(() =>
+            {
+                obj.GetComponent<CharacterBase>().CharacterReset();
+                obj.transform.localScale = Vector3.one;
+                var color = spriteRenderer.color;
+                color = new Color(color.r, color.g, color.b, 1);
+                spriteRenderer.color = color;
+                obj.SetActive(false);
+            });
+            
         }
     }
 }

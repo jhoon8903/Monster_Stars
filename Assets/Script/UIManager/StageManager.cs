@@ -9,6 +9,7 @@ using Script.RewardScript;
 using Script.RobbyScript.MainMenuGroup;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 using EnemyBase = Script.EnemyManagerScript.EnemyBase;
 
@@ -23,14 +24,14 @@ namespace Script.UIManager
         [SerializeField] private CastleManager castleManager;
         [SerializeField] private CharacterPool characterPool;
         public static StageManager? Instance;
-        private int _setCount;
+        public int setCount;
         public int maxWaveCount;
         public int maxStageCount;
         public int latestStage;
         public int currentWave;
         public bool isBossClear;
         public int selectStage;
-        private int _spawnCount;
+        private int _spawnSetCount;
         private void Awake()
         {
             Instance = this;
@@ -68,8 +69,9 @@ namespace Script.UIManager
                 }
                 var stage = int.Parse(values[0]);
                 var wave = int.Parse(values[1]);
-                var wave1SpawnValue = !string.IsNullOrWhiteSpace(values[2]) 
-                    ? int.Parse(values[2]) : 0;
+                var wave1SpawnValue = !string.IsNullOrWhiteSpace(values[2])
+                    ? int.Parse(values[2])
+                    : (int?)null;
                 
                 var wave1EnemyClass = !string.IsNullOrWhiteSpace(values[3]) 
                     ? ParseEnemyClass(values[3]) 
@@ -152,21 +154,21 @@ namespace Script.UIManager
                 set2SpawnValue,set2EnemyClass,set2SpawnZone,
                 set3SpawnValue, set3EnemyClass, set3SpawnZone
                 , bossClass) = GetSpawnCountForWave(selectStage, currentWave);
-            _setCount = set3SpawnValue != null ? 3 : 2;
-            _setCount = bossClass != null ? 1 : _setCount;
+            setCount = set3SpawnValue != null ? 3 : 2;
+            setCount = bossClass != null ? 1 : setCount;
             if (bossClass != null)
             {
                 yield return StartCoroutine(enemySpawnManager.SpawnBoss(bossClass, EnemyBase.SpawnZones.A));
-                _spawnCount = 1;
+                _spawnSetCount = 1;
             }
             else
             {
-                for (var i = 0; i < _setCount; i++)
+                for (var i = 0; i < setCount; i++)
                 {
                     StartCoroutine(enemySpawnManager.SpawnEnemies(set1SpawnValue, set1EnemyClass, set1SpawnZone));
                     StartCoroutine(enemySpawnManager.SpawnEnemies(set2SpawnValue, set2EnemyClass, set2SpawnZone));
                     StartCoroutine(enemySpawnManager.SpawnEnemies(set3SpawnValue, set3EnemyClass, set3SpawnZone));
-                    _spawnCount++;
+                    _spawnSetCount++;
                     yield return new WaitForSeconds(3f);
                 }
             }
@@ -175,8 +177,15 @@ namespace Script.UIManager
         public void EnemyDestroyEvent(EnemyBase enemyBase)
         {
             enemyPool.enemyBases.Remove(enemyBase);
-            if (enemyPool.enemyBases.Count > 0 || _spawnCount < _setCount) return;
-            _spawnCount = 0;
+
+            if (_spawnSetCount < setCount) return;
+            
+            StartCoroutine(DelayedEndWaveCheck());
+            
+            if (enemyPool.enemyBases.Count > 0) return;
+            
+            _spawnSetCount = 0;
+
             if (castleManager.HpPoint > 0)
             {
                 if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
@@ -197,6 +206,11 @@ namespace Script.UIManager
             }
         }
 
+        private static IEnumerator DelayedEndWaveCheck()
+        {
+            yield return new WaitForSecondsRealtime(3f);
+            yield return null;
+        }
         private IEnumerator DelayedContinueOrLose()
         {
             yield return new WaitForSecondsRealtime(1f);

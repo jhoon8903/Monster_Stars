@@ -1,5 +1,4 @@
 using System.Collections;
-using DG.Tweening;
 using Script.RobbyScript.MainMenuGroup;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,26 +9,29 @@ namespace Script
     {
         [SerializeField] private Slider loadingSlider;
         public bool isFirstContact;
+        public bool isLoading = true;
 
         public void Start()
         {
-            if (!bool.Parse(PlayerPrefs.GetString(MainPanel.IsLoadingKey, "true")))
-            {
-                gameObject.SetActive(false);
-            }
-            else
+
+            isLoading = bool.Parse(PlayerPrefs.GetString("Loading", "true"));
+            if (isLoading)
             {
                 Time.timeScale = 1f;
                 if (PlayerPrefs.HasKey("TutorialKey"))
                 {
-                    isFirstContact = PlayerPrefs.GetInt("TutorialKey", 1) == 1;
+                    isFirstContact = bool.Parse(PlayerPrefs.GetString("TutorialKey", "true"));
                 }
                 else
                 {
-                    PlayerPrefs.SetInt("TutorialKey", 1);
                     isFirstContact = true;
+                    PlayerPrefs.SetString("TutorialKey", "true");
                 }
                 StartCoroutine(UpdateLoadingBar());
+            }
+            else
+            {
+                gameObject.SetActive(false);
             }
         }
 

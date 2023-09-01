@@ -20,6 +20,7 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private CharacterPool characterPool;
         [SerializeField] private MergeEffect mergeEffectPrefabs;
 
+
         private List<MergeEffect> _effectList = new List<MergeEffect>();
         private void Awake()
         {
@@ -30,7 +31,6 @@ namespace Script.PuzzleManagerGroup
                 _effectList.Add(mergeEffect);
             }
         }
-
         public bool IsMatched(GameObject swapCharacter)
         {
             var matched = false;
@@ -122,11 +122,10 @@ namespace Script.PuzzleManagerGroup
 
                 if (horizontalMatchCount + verticalMatchCount == 5)
                 {
-                    Debug.Log(horizontalMatchCount);
                     matched = horizontalMatchCount switch
                     {
                         1 => Matches4Case(matchedCharacters,"y"),
-                        2 or 3 => Match3Case(matchedCharacters,swapCharacterPosition),
+                        2 or 3 => Match3Case(matchedCharacters,horizontalMatchCount,verticalMatchCount,swapCharacterPosition),
                         4 => Matches4Case(matchedCharacters,"x"),
                         _ => false
                     };
@@ -136,7 +135,7 @@ namespace Script.PuzzleManagerGroup
                 {
                     matched = horizontalMatchCount switch
                     {
-                        1 or 3=> Match3Case(matchedCharacters,swapCharacterPosition),
+                        1 or 3=> Match3Case(matchedCharacters,horizontalMatchCount,verticalMatchCount,swapCharacterPosition),
                         _ => false
                     };
                 }
@@ -147,34 +146,21 @@ namespace Script.PuzzleManagerGroup
         {   
             CharacterPool.ReturnToPool(character);
         }
-        private bool Match3Case(IEnumerable<GameObject> rawMatchedCharacters, Vector3 swapPosition)
+        private bool Match3Case(IEnumerable<GameObject> rawMatchedCharacters, int horizontalCount, int verticalCount, Vector3 swapPosition)
         {
             SoundManager.Instance.MatchSound(3);
-
             var matchedCharacters = rawMatchedCharacters as GameObject[] ?? rawMatchedCharacters.ToArray();
-            var groupedByX = matchedCharacters.GroupBy(mc => mc.transform.position.x).Where(g => g.Count() >= 3).ToList();
-            var groupedByY = matchedCharacters.GroupBy(mc => mc.transform.position.y).Where(g => g.Count() >= 3).ToList();
-    
+            var groupedByX = matchedCharacters.GroupBy(mc => (int)mc.transform.position.x).ToList();
+            var groupedByY = matchedCharacters.GroupBy(mc => (int)mc.transform.position.y).ToList();
             var validCharacters = new List<GameObject>();
-    
-            if (groupedByX.Count >= groupedByY.Count)
+            IEnumerable<IGrouping<int, GameObject>> selectedGroups = horizontalCount > verticalCount ? groupedByY : groupedByX;
+            var largestGroup = selectedGroups.OrderByDescending(group => group.Count()).FirstOrDefault();
+            if (largestGroup != null)
             {
-                foreach (var group in groupedByX)
-                {
-                    validCharacters.AddRange(group);
-                }
+                validCharacters.AddRange(largestGroup);
             }
-            else
-            {
-                foreach (var group in groupedByY)
-                {
-                    validCharacters.AddRange(group);
-                }
-            }
-    
-            var uniqueValidCharacters = validCharacters.Distinct().ToList();
-    
-            foreach (var validCharacter in uniqueValidCharacters)
+            var uniqueList = validCharacters.Distinct().ToList();
+            foreach (var validCharacter in uniqueList)
             {
                 var characterBase = validCharacter.GetComponent<CharacterBase>();
                 var isTreasure = characterBase.Type == CharacterBase.Types.Treasure;
@@ -182,6 +168,7 @@ namespace Script.PuzzleManagerGroup
                 if (isCenter)
                 {
                     characterBase.LevelUpScale(validCharacter);
+                    IsMatched(validCharacter);
                     if (isTreasure)
                     {
                         commonRewardManager.PendingTreasure.Enqueue(validCharacter);
@@ -191,11 +178,10 @@ namespace Script.PuzzleManagerGroup
                 {
                     ReturnObject(validCharacter);
                 }
+                
             }
             return true;
         }
-
-
         private bool Matches4Case(IReadOnlyList<GameObject> matchedCharacters, string dir)
         {
             SoundManager.Instance.MatchSound(4);
@@ -208,7 +194,7 @@ namespace Script.PuzzleManagerGroup
                 dir == "x" ? mc.transform.position.x : mc.transform.position.y
             ).ToList();
             var hasLeveledUpNonTreasure = false;
-            foreach (var matchedCharacter in matchedCharacters)
+            foreach (var matchedCharacter in sortedList)
             {
                 var characterBase = matchedCharacter.GetComponent<CharacterBase>();
                 var isTreasure = characterBase.Type == CharacterBase.Types.Treasure;
@@ -222,6 +208,7 @@ namespace Script.PuzzleManagerGroup
                         characterBase.LevelUpScale(matchedCharacter);
                         commonRewardManager.PendingTreasure.Enqueue(matchedCharacter);
                         hasLeveledUpNonTreasure = true;
+                        IsMatched(matchedCharacter);
                     }
                     else
                     {
@@ -236,6 +223,8 @@ namespace Script.PuzzleManagerGroup
                     ReturnObject(sortedList[0]);
                     ReturnObject(sortedList[3]);
                     hasLeveledUpNonTreasure = true;
+                    IsMatched(sortedList[1]);
+                    IsMatched(sortedList[2]);
                 }
             }
             return true;
@@ -286,13 +275,8 @@ namespace Script.PuzzleManagerGroup
                     {
                         sortedList[2].GetComponent<CharacterBase>().LevelUpScale(sortedList[2]);
                     }
-                   
                     hasLeveledUpNonTreasure = true;
-
-
-                  
                 }
-
                 StartCoroutine(Match3(sortedList[2]));
             }
             return true;
@@ -312,16 +296,15 @@ namespace Script.PuzzleManagerGroup
             SoundManager.Instance.MatchSound(3);
             var grouped = rawMatchedCharacters.GroupBy(mc => mc.transform.position);
             var matchedCharacters = grouped.Select(g => g.First()).ToList();
-            var horizontalMatches = matchedCharacters.Where(mc => mc.transform.position.y == swapPosition.y)
+            var horizontalMatches = matchedCharacters.Where(mc => (int)mc.transform.position.y == (int)swapPosition.y)
                 .OrderBy(mc => mc.transform.position.x).ToList();
-            var verticalMatches = matchedCharacters.Where(mc => mc.transform.position.x == swapPosition.x)
+            var verticalMatches = matchedCharacters.Where(mc => (int)mc.transform.position.x == (int)swapPosition.x)
                 .OrderBy(mc => mc.transform.position.y).ToList();
             var intersection = horizontalMatches.FirstOrDefault(h => verticalMatches.Contains(h));
             GameObject nextInVertical = null;
             if (intersection != null)
             {
                 intersection.GetComponent<CharacterBase>().LevelUpScale(intersection);
-
                 if (intersection.GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
                 {
                     commonRewardManager.PendingTreasure.Enqueue(intersection);
@@ -333,11 +316,13 @@ namespace Script.PuzzleManagerGroup
                 {
                     commonRewardManager.PendingTreasure.Enqueue(nextInVertical);
                 }
+               
             }
             foreach (var obj in matchedCharacters.Where(obj => obj != intersection && obj != nextInVertical))
             {
                 ReturnObject(obj);
             }
+            IsMatched(nextInVertical);
             return true;
         }
         private bool Matches3X4Case(IEnumerable<GameObject> rawMatchedCharacters, Vector3 swapPosition)
@@ -345,14 +330,15 @@ namespace Script.PuzzleManagerGroup
             SoundManager.Instance.MatchSound(4);
             var grouped = rawMatchedCharacters.GroupBy(mc => mc.transform.position);
             var matchedCharacters = grouped.Select(g => g.First()).ToList();
-            var horizontalMatches = matchedCharacters.Where(mc => mc.transform.position.y == swapPosition.y)
+            var horizontalMatches = matchedCharacters.Where(mc => (int)mc.transform.position.y == (int)swapPosition.y)
                 .OrderBy(mc => mc.transform.position.x).ToList();
-            var verticalMatches = matchedCharacters.Where(mc => mc.transform.position.x == swapPosition.x)
+            var verticalMatches = matchedCharacters.Where(mc => (int)mc.transform.position.x == (int)swapPosition.x)
                 .OrderBy(mc => mc.transform.position.y).ToList();
             var longestMatch = horizontalMatches.Count > verticalMatches.Count ? horizontalMatches : verticalMatches;
             if (longestMatch.Count < 3) return true; // Ensure we have at least 3 to consider it a match
             var levelUp1 = longestMatch[1];
             var levelUp2 = longestMatch[2];
+
             levelUp1.GetComponent<CharacterBase>().LevelUpScale(levelUp1);
             levelUp2.GetComponent<CharacterBase>().LevelUpScale(levelUp2);
             if(levelUp1.GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
@@ -364,6 +350,8 @@ namespace Script.PuzzleManagerGroup
             {
                 ReturnObject(obj);
             }
+            IsMatched(levelUp1);
+            IsMatched(levelUp2);
             return true;
         }
         private bool Matches3X5Case(IEnumerable<GameObject> rawMatchedCharacters, Vector3 swapPosition)
@@ -371,9 +359,9 @@ namespace Script.PuzzleManagerGroup
             SoundManager.Instance.MatchSound(5);
             var grouped = rawMatchedCharacters.GroupBy(mc => mc.transform.position);
             var matchedCharacters = grouped.Select(g => g.First()).ToList();
-            var match5Horizontal = matchedCharacters.Where(mc => mc.transform.position.y == swapPosition.y)
+            var match5Horizontal = matchedCharacters.Where(mc => (int)mc.transform.position.y == (int)swapPosition.y)
                 .OrderBy(mc => mc.transform.position.x).ToList();
-            var match5Vertical = matchedCharacters.Where(mc => mc.transform.position.x == swapPosition.x)
+            var match5Vertical = matchedCharacters.Where(mc => (int)mc.transform.position.x == (int)swapPosition.x)
                 .OrderBy(mc => mc.transform.position.y).ToList();
             var match3Horizontal = match5Horizontal.Count == 5 ? new List<GameObject>() : match5Horizontal;
             var match3Vertical = match5Vertical.Count == 5 ? new List<GameObject>() : match5Vertical;
@@ -398,6 +386,7 @@ namespace Script.PuzzleManagerGroup
                 {
                     ReturnObject(obj);
                 }
+                IsMatched(levelUpObjectHorizontal);
             }
             else
             {
@@ -412,9 +401,9 @@ namespace Script.PuzzleManagerGroup
                 {
                     ReturnObject(obj);
                 }
+                IsMatched(levelUpObjectVertical);
             }
             return true;
         }
-
     }
 }

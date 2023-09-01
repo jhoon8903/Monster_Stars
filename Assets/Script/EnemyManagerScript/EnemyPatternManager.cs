@@ -446,7 +446,7 @@ namespace Script.EnemyManagerScript
             if (globalFreeze) yield break;
             globalFreeze = true;
             StartCoroutine(BlizzardEffect());
-            AtkManager.Instance.groupCAtkCount = 0;
+            // AtkManager.Instance.groupCAtkCount = 0;
             var enemyList = enemyPool.enemyBases;
             foreach (var enemyBase in enemyList.Select(enemy => enemy.GetComponent<EnemyBase>()))
             {

@@ -163,6 +163,7 @@ namespace Script.RobbyScript.StoreMenuGroup
             foreach (var unitReward in _unitPieceDict)
             {
                 unitReward.Key.UnitPieceCount += unitReward.Value.Item1;
+                PlayerPrefs.SetInt($"{unitReward.Key.unitGroup}{CharacterBase.PieceKey}", unitReward.Key.UnitPieceCount);
                 HoldCharacterList.Instance.UpdateRewardPiece(unitReward.Key);
                 Destroy(unitReward.Value.Item2.gameObject);
             }

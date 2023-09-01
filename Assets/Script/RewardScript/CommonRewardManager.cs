@@ -432,7 +432,7 @@ namespace Script.RewardScript
                     yield return StartCoroutine(CommonChance(0, 80, 20, "purple"));
                     break;
             }
-            if (PlayerPrefs.GetInt("TutorialKey") == 1)
+            if (bool.Parse(PlayerPrefs.GetString("TutorialKey", "true")))
             {
                 common1Button.GetComponent<Canvas>().enabled = true;
                 common1Button.GetComponent<Canvas>().overrideSorting = true;
@@ -461,9 +461,9 @@ namespace Script.RewardScript
             }
             commonRewardPanel.SetActive(false);
             CharacterPool.ReturnToPool(_currentTreasure); // 보물을 풀에 반환
-            yield return null;
-            spawnManager.AddToQueue(spawnManager.PositionUpCharacterObject());
             ProcessCommonReward(selectedReward);
+            
+            yield return null;
         }
         // 12. 선택된 버프 적용 
         private void ProcessCommonReward(Data selectedReward)
@@ -507,7 +507,7 @@ namespace Script.RewardScript
                     EnforceManager.Instance.DiagonalMovement(selectedReward);
                     break;    // 대각선 이동
                 case PowerTypeManager.Types.RandomLevelUp:
-                    EnforceManager.RandomCharacterLevelUp(selectedReward.Property[0]); 
+                    EnforceManager.Instance.RandomCharacterLevelUp(selectedReward.Property[0]); 
                     break;// 랜덤 케릭터 레벨업
                 case PowerTypeManager.Types.GroupLevelUp: 
                     EnforceManager.Instance.CharacterGroupLevelUp(selectedReward.Property[0]); 
@@ -540,11 +540,12 @@ namespace Script.RewardScript
                     break;
             }
             selectedReward.ChosenProperty = null;
-            isOpenBox = false;
             if (PendingTreasure.Count == 0)
             {
                 _currentTreasure = null;
+                spawnManager.AddToQueue(spawnManager.PositionUpCharacterObject());
             }
+            isOpenBox = false;
         }
         // # 보스 웨이브 클리어 별도 보상
         public IEnumerator WaveRewardChance()

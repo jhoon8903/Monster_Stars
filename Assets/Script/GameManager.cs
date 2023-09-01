@@ -63,7 +63,8 @@ namespace Script
             swipeManager.isBusy = true;
             
             gridManager.GenerateInitialGrid(PlayerPrefs.GetInt("GridHeight", 6));
-            if (PlayerPrefs.GetInt("TutorialKey", 1) == 1)
+            var isTutorial = bool.Parse(PlayerPrefs.GetString("TutorialKey", "true"));
+            if (isTutorial)
             {
                 // 사용가능 무브 6회 [3match, 4match, 5match, nullSwap, PressDelete, commonReward match] 
                  countManager.Initialize(6);
@@ -112,7 +113,7 @@ namespace Script
         public IEnumerator Count0Call()
         {
             IsBattle = true;
-            if (PlayerPrefs.GetInt("TutorialKey") == 1)
+            if (bool.Parse(PlayerPrefs.GetString("TutorialKey", "true")))
             {
                 yield return StartCoroutine(tutorialManager.EndTutorial());
             }
@@ -160,13 +161,16 @@ namespace Script
                     StageManager.Instance.SaveClearWave();
                     if (StageManager.Instance.isBossClear)
                     {
-                        moveCount = 15 + EnforceManager.Instance.rewardMoveCount;
+                        moveCount = 10 + EnforceManager.Instance.rewardMoveCount;
                         PlayerPrefs.SetInt("moveCount", moveCount);
                         countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
                         yield return StartCoroutine(commonRewardManager.WaveRewardChance());
-                        yield return StartCoroutine(spawnManager.BossStageClearRule());
                         bossArea.SetActive(false);
-                        // yield return StartCoroutine(gridManager.ResetBossSpawnColor());
+                        yield return new WaitUntil(() => CommonRewardManager.Instance.isOpenBox == false);
+                        if (!EnforceManager.Instance.addRow)
+                        {
+                            spawnManager.BossStageClearRule();
+                        }
                         yield return StartCoroutine(InitializeWave());
                     }
                     else
@@ -187,6 +191,7 @@ namespace Script
         private IEnumerator InitializeWave()
         {
             yield return StartCoroutine(KillMotion());
+            // yield return StartCoroutine(WaitForPanelToClose());
             SpawnManager.SaveUnitState();
             expManager.SaveExp();
             castleManager.SaveCastleHp();

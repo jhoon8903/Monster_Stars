@@ -13,7 +13,7 @@ namespace Script.WeaponScriptGroup
     {
         public bool isInUse;
         protected float Speed { get; set; }
-        protected float Damage { get; set; }
+        public float Damage { get; set; }
         protected float Distance { get; private set; }
         protected CharacterBase CharacterBase { get; private set; }
         protected Color Sprite { get; set; }
