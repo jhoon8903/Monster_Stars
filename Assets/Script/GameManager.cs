@@ -66,8 +66,8 @@ namespace Script
             var isTutorial = bool.Parse(PlayerPrefs.GetString("TutorialKey", "true"));
             if (isTutorial)
             {
-                // 사용가능 무브 6회 [3match, 4match, 5match, nullSwap, PressDelete, commonReward match] 
-                 countManager.Initialize(6);
+                // 사용가능 무브 5회 [3match, 4match, 5match, nullSwap, commonReward match] 
+                 countManager.Initialize(5);
                  // 튜토리얼용 매치 오브젝트 생성
                  StartCoroutine(tutorialManager.TutorialState());
                  swipeManager.isBusy = false;

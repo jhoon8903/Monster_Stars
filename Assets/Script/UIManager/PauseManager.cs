@@ -70,10 +70,11 @@ namespace Script.UIManager
         }
         private void OnPausePanel()
         {
+   
             if (spawnManager.isTutorial) return;
+            Time.timeScale = 0;
             pausePanel.SetActive(true);
             UnitSkillView();
-            Time.timeScale = 0;
         }
         private void UpdateUnitSkillView(CharacterBase unit, Image unitBack, Image unitImage, Component unitSkillGrid)
         {

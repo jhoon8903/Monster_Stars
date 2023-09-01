@@ -272,7 +272,8 @@ namespace Script.EnemyManagerScript
                 var receiveDamage = (int)damage;
                 if (gameObject.activeInHierarchy)
                 {
-                    StartCoroutine(DamageTextPopup(receiveDamage));
+                    // Marketing Version
+                    // StartCoroutine(DamageTextPopup(receiveDamage));
                     _cumulativeDamageByGroup.TryGetValue(atkUnit.unitGroup, out var currentDamage);
                     var newCumulativeDamage = currentDamage + receiveDamage;
                     _cumulativeDamageByGroup[atkUnit.unitGroup] = newCumulativeDamage;

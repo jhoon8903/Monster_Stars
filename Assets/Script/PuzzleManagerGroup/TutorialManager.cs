@@ -122,15 +122,15 @@ namespace Script.PuzzleManagerGroup
                 5,
                 "Strengthen your units by pressing the Enhance Select button.")
             );
-            // Press Long Object
-            _tutorialSteps.Enqueue(new TutorialStep(
-                    
-                new Vector3(5,4f,0), 
-                new Vector3(5,4.4f, 0),
-                7,
-                "Units can be removed by holding down the unit for 2 seconds.", 
-                new Vector2Int(5,5))
-            );
+            // // Press Long Object
+            // _tutorialSteps.Enqueue(new TutorialStep(
+            //         
+            //     new Vector3(5,4f,0), 
+            //     new Vector3(5,4.4f, 0),
+            //     7,
+            //     "Units can be removed by holding down the unit for 2 seconds.", 
+            //     new Vector2Int(5,5))
+            // );
             // Null Swap
             _tutorialSteps.Enqueue(new TutorialStep(
                     

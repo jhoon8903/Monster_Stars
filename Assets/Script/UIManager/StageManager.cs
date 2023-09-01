@@ -32,6 +32,7 @@ namespace Script.UIManager
         public bool isBossClear;
         public int selectStage;
         private int _spawnSetCount;
+        private bool _alreadyBoss;
         private void Awake()
         {
             Instance = this;
@@ -156,8 +157,9 @@ namespace Script.UIManager
                 , bossClass) = GetSpawnCountForWave(selectStage, currentWave);
             setCount = set3SpawnValue != null ? 3 : 2;
             setCount = bossClass != null ? 1 : setCount;
-            if (bossClass != null)
+            if (bossClass != null &&!_alreadyBoss)
             {
+                _alreadyBoss = true;
                 yield return StartCoroutine(enemySpawnManager.SpawnBoss(bossClass, EnemyBase.SpawnZones.A));
                 _spawnSetCount = 1;
             }

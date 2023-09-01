@@ -12,7 +12,9 @@ namespace Script.RobbyScript.TopMenuGroup
 
         public int Coin
         {
-            get => PlayerPrefs.GetInt(CoinKey, 0);
+            // Marketing Version
+            // get => PlayerPrefs.GetInt(CoinKey, 0);
+            get => PlayerPrefs.GetInt(CoinKey, 100000000);
             set
             {
                 PlayerPrefs.SetInt(CoinKey, value);

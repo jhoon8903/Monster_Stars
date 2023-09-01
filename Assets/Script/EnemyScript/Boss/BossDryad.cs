@@ -9,7 +9,7 @@ namespace Script.EnemyScript.Boss
             CrushDamage = 10000;
             originSpeed = 0.7f;
             EnemyType = EnemyTypes.Boss;
-            enemyClass = EnemyClasses.SpearMan;
+            enemyClass = EnemyClasses.Dryad;
             RegistryType = RegistryTypes.None;
             base.Initialize();
         }

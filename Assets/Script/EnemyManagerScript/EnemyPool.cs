@@ -10,6 +10,7 @@ namespace Script.EnemyManagerScript
         [SerializeField] public List<GameObject> pooledEnemy = new List<GameObject>();
         [SerializeField] private  List<GameObject> pooledDefaultEnemy = new List<GameObject>();
         public List<EnemyBase> enemyBases = new List<EnemyBase>();
+        public List<EnemyBase> bossList = new List<EnemyBase>();
         
         public void Start()
         {
@@ -24,6 +25,17 @@ namespace Script.EnemyManagerScript
                 }
             }
             pooledEnemy = pooledDefaultEnemy.ToList();
+
+            foreach (var bossObj in enemyManager.stageBoss)
+            {
+                for (var i = 0; i < 1; i++)
+                {
+                    var obj = Instantiate(bossObj, transform);
+                    obj.GetComponent<EnemyBase>().Initialize();
+                    obj.gameObject.SetActive(false);
+                    bossList.Add(obj);
+                }
+            }
         }
 
         public GameObject GetPooledEnemy(EnemyBase.EnemyClasses? enemyClass)

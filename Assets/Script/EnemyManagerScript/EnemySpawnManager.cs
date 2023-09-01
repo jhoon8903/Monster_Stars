@@ -50,7 +50,6 @@ namespace Script.EnemyManagerScript
         public int randomX;
         public int randomY;
         private List<EnemyBase.EnemyClasses> _enemyClassList = new List<EnemyBase.EnemyClasses>();
-        private EnemyBase _bossObject;
 
         private void Awake()
         {
@@ -141,25 +140,22 @@ namespace Script.EnemyManagerScript
             var serializedData = PlayerPrefs.GetString("EnemyClassList");
             _enemyClassList = serializedData.Split(',').Select(e => (EnemyBase.EnemyClasses)Enum.Parse(typeof(EnemyBase.EnemyClasses), e)).ToList();
         }
-
         public IEnumerator SpawnBoss(EnemyBase.EnemyClasses? bossClass, EnemyBase.SpawnZones spawnZone)
-        {
-           
-            if (_bossObject != null)
+        { 
+            Debug.Log(bossClass);
+            foreach (var boss in enemyPool.bossList)
             {
-                Destroy(_bossObject);
+                if (bossClass == boss.enemyClass)
+                {
+                    boss.gameObject.SetActive(true);
+                    boss.transform.position = GameManager.Instance.bossSpawnArea;
+                    yield return StartCoroutine(enemyPatternManager.Zone_Move(boss, spawnZone));
+                }
+                else
+                {
+                    boss.gameObject.SetActive(false);
+                }
             }
-            yield return null;
-
-            enemyPool.enemyBases.Clear();
-           
-            foreach (var enemyBase in enemyManager.stageBoss.Where(enemyBase => enemyBase.enemyClass == bossClass))
-            {
-                _bossObject = Instantiate(enemyBase, transform);
-                _bossObject.transform.position = GameManager.Instance.bossSpawnArea;
-                yield return StartCoroutine(enemyPatternManager.Zone_Move(_bossObject, spawnZone));
-            }
-
             yield return null;
         }
         private Vector3 GetRandomPointInBounds(EnemyBase.SpawnZones zone)

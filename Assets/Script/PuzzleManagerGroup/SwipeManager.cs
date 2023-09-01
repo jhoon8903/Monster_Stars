@@ -229,8 +229,6 @@ namespace Script.PuzzleManagerGroup
                         }
                         break;
                     }
-                    case 7:
-                        return;
                 }
             }
             // If diagonal movement is enabled, handle 8 directions

@@ -11,7 +11,9 @@ namespace Script.RobbyScript.TopMenuGroup
     {
         [SerializeField] private TextMeshProUGUI staminaText;
         [SerializeField] private TextMeshProUGUI staminaRecoveryTime;
-        private const int MaxStamina = 30;
+        // MarketingVersion
+        // private const int MaxStamina = 30;
+        private const int MaxStamina = 1000;
         private const float RecoveryCooldown = 1200.0f;
         private float _currentCooldown;
         private const string LastTimeKey = "LastTimeKey";
@@ -47,7 +49,9 @@ namespace Script.RobbyScript.TopMenuGroup
         private void Update()
         {
             if (!Input.GetKeyDown(KeyCode.S)) return;
-            CurrentStamina = 30;
+            // MarketingVersion
+            //CurrentStamina = 30;
+            CurrentStamina = 1000;
             StaminaUpdate();
         }
         private void OnApplicationQuit()

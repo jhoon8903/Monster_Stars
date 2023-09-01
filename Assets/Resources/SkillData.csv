@@ -88,7 +88,7 @@ None,1,3,Step3,P,이동횟수 {p} 증가,Movement count increased by {p},Movemen
 None,1,4,RandomLevelUp,G,퍼즐상의 랜덤한 {p}개의 케릭터 1 레벨 증가,Random {p} characters on the cell level up,Random {p} characters on the cell level up,2;3
 None,1,5,GroupLevelUp,B,셀 상의 모든 {0level_unit_N}이 {unit_N}으로 변합니다.,All {0level_unit_N}s on the cell become {unit_N}s,All {0level_unit_N}s on the cell become {unit_N}s,0;1;2;3
 None,1,6,Exp,G,적 처치시 경험치 획득량 {p}% 증가||(현재 {EnforceManager.Instance.expPercentage}% 최대 30%),Experience gained from defeating enemies is increased by {p}%,Experience gained from defeating enemies is increased by {p}%,5
-None,1,7,Gold,B,5 매치시 골드 1추가 획득,Matching 5 pieces creates 1 gold,Matching 5 pieces creates 1 gold,1
+None,1,7,Gold,B,5 매치시 골드 1추가 획득,Matching 5 pieces creates 1 Key,Matching 5 pieces creates 1 Key,1
 None,1,8,CastleMaxHp,B,캐슬 최대체력 {p} 증가,Castle's max health increased by {p},Castle's max health increased by {p},200
 None,1,9,CastleRecovery,B,웨이브 종료까지 피해를 입지 않으면 캐슬 체력 200씩 매 웨이브 마다 증가,Castle restores 200 HP if it does not take any damage in a day,Castle restores 200 HP if it does not take any damage in a day,200
 None,1,10,Match5Upgrade,P,5개 매치시 가운데 케릭터의 레벨이 1 더 증가,Matching 5 pieces increases the level of the center unit by 1,Matching 5 pieces increases the level of the center unit by 1,1

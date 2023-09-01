@@ -51,7 +51,9 @@ namespace Script.RobbyScript.MainMenuGroup
             {
                 continuePanel.SetActive(true);
             }
-            LatestStage = PlayerPrefs.GetInt("LatestStage", 1);
+            // Marketing Version
+            // LatestStage = PlayerPrefs.GetInt("LatestStage", 1);
+            LatestStage = 10;
             SelectStage = LatestStage;
             var (maxWave, clearWave) = GetStageWave(LatestStage);
             UpdateProgress(LatestStage, maxWave, clearWave);

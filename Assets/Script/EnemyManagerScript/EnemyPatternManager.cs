@@ -65,8 +65,8 @@ namespace Script.EnemyManagerScript
         {
             var originalScale = childTransform.localScale;
             var originalLocalPosition = childTransform.localPosition;
-            const float verticalScaleAmount = 0.08f;
-            const float horizontalScaleAmount = 0.06f;
+            const float verticalScaleAmount = 0.04f;
+            const float horizontalScaleAmount = 0.03f;
             const float positionOffset = 0.15f;
             const float tweenDuration = 0.6f;
             var targetScale = new Vector3(originalScale.x + horizontalScaleAmount, originalScale.y - verticalScaleAmount, originalScale.z);

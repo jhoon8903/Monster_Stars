@@ -120,7 +120,7 @@ namespace Script.PuzzleManagerGroup
                 }
             }
         }
-        private static IEnumerator MoveCharacter(GameObject gameObject, Vector3 targetPosition, float duration = 0.35f)
+        private static IEnumerator MoveCharacter(GameObject gameObject, Vector3 targetPosition, float duration = 0.3f)
         {
             lock (Lock)
             {
@@ -273,6 +273,14 @@ namespace Script.PuzzleManagerGroup
 
                 if (countManager.TotalMoveCount <= 0 && !CommonRewardManager.Instance.isOpenBox)
                 {
+                    if (isMatched)
+                    {
+                        _count++;
+                        if (_count > 1)
+                        {
+                            countManager.IncrementComboCount();
+                        }
+                    }
                     yield return new WaitForSecondsRealtime(1f);
                     if (countManager.TotalMoveCount <= 0 && !CommonRewardManager.Instance.isOpenBox)
                     {
@@ -288,16 +296,15 @@ namespace Script.PuzzleManagerGroup
         {
             GameObject newCharacter = null;
             var attempts = 0;
-
             while (newCharacter == null && attempts < TutorialManager.UnitGroupOrder.Length) 
             {
                 var nextUnitGroupKey = TutorialManager.UnitGroupOrder[_currentGroupIndex];
                 _currentGroupIndex = (_currentGroupIndex + 1) % TutorialManager.UnitGroupOrder.Length; // Always increment the index
-
                 var notUsePoolCharacterList = CharacterPool.Instance.NotUsePoolCharacterList()
                     .Where(character => character.GetComponent<CharacterBase>().unitGroup == nextUnitGroupKey && !character.activeInHierarchy)
                     .ToList();
-                if (notUsePoolCharacterList.Count > 0) {
+                if (notUsePoolCharacterList.Count > 0) 
+                {
                     var randomIndex = Random.Range(0, notUsePoolCharacterList.Count);
                     newCharacter = notUsePoolCharacterList[randomIndex];
                 }
@@ -307,6 +314,7 @@ namespace Script.PuzzleManagerGroup
             newCharacter.transform.position = position;
             newCharacter.GetComponent<CharacterBase>().Initialize();
             newCharacter.SetActive(true);
+            movedObjects.Add(newCharacter);
             return newCharacter;
         }
         private IEnumerator PerformMovesSequentially(List<(GameObject, Vector3Int)> moves)
