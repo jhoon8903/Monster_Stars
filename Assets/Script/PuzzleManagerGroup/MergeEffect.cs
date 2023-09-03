@@ -24,12 +24,12 @@ namespace Script.PuzzleManagerGroup
             
             mergeCircleEffect.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
             mergeCircleEffect.SetActive(true);
-            mergeCircleEffect.transform.DOScale(1f, 0.8f)
-                .OnComplete(() => mergeCircleEffect.transform.DOScale(0.3f, 0.2f));
+            mergeCircleEffect.transform.DOScale(1f, 0.6f)
+                .OnComplete(() => mergeCircleEffect.transform.DOScale(0.3f, 0.25f));
             
             tileEffect.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0f);
             tileEffect.SetActive(true);
-            tileEffect.GetComponent<SpriteRenderer>().DOFade(1f, 0.25f)
+            tileEffect.GetComponent<SpriteRenderer>().DOFade(1f, 0.2f)
                 .OnComplete(() => tileEffect.GetComponent<SpriteRenderer>().DOFade(0f, 0.35f));
 
             var delay = 0f;
@@ -46,7 +46,7 @@ namespace Script.PuzzleManagerGroup
 
         public void MergeActionClose()
         {
-            DOVirtual.DelayedCall(1f, () => {
+            DOVirtual.DelayedCall(0.6f, () => {
                 mergeCircleEffect.SetActive(false);
                 tileEffect.SetActive(false);
                 gameObject.SetActive(false);
@@ -58,7 +58,7 @@ namespace Script.PuzzleManagerGroup
             GameObject[] sparkles = { sparkle1, sparkle2, sparkle3, sparkle4, sparkle5, sparkle6, sparkle7, sparkle8 };
             tileEffect.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0f);
             tileEffect.SetActive(true);
-            tileEffect.GetComponent<SpriteRenderer>().DOFade(1f, 0.45f)
+            tileEffect.GetComponent<SpriteRenderer>().DOFade(1f, 0.25f)
                 .OnComplete(() => tileEffect.GetComponent<SpriteRenderer>().DOFade(0f, 0.35f));
             var delay = 0f;
             foreach (var sparkle in sparkles)
@@ -74,7 +74,7 @@ namespace Script.PuzzleManagerGroup
 
         public void ReturnActionClose()
         {
-            DOVirtual.DelayedCall(0.9f, () => {
+            DOVirtual.DelayedCall(0.6f, () => {
                 mergeCircleEffect.SetActive(false);
                 tileEffect.SetActive(false);
                 gameObject.SetActive(false);

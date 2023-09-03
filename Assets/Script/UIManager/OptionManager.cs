@@ -36,8 +36,8 @@ namespace Script.UIManager
            musicOff.GetComponent<Button>().onClick.AddListener(MusicController);
            soundOn.GetComponent<Button>().onClick.AddListener(SoundController);
            soundOff.GetComponent<Button>().onClick.AddListener(SoundController);
-           SoundManager.Instance.music = PlayerPrefs.GetInt(SoundManager.MusicKey) == 1;
-           SoundManager.Instance.sound = PlayerPrefs.GetInt(SoundManager.SoundKey) == 1;
+           SoundManager.Instance.music = bool.Parse(PlayerPrefs.GetString(SoundManager.MusicKey, "true"));
+           SoundManager.Instance.sound = bool.Parse(PlayerPrefs.GetString(SoundManager.SoundKey, "true"));
            UpdateMusicState();
            UpdateSoundState();
            gameObject.SetActive(false);
@@ -62,7 +62,7 @@ namespace Script.UIManager
         private void MusicController()
         {
             SoundManager.Instance.music = !SoundManager.Instance.music;
-            PlayerPrefs.SetInt(SoundManager.MusicKey, SoundManager.Instance.music ? 1 : 0);
+            PlayerPrefs.SetString(SoundManager.MusicKey, $"{SoundManager.Instance.music}");
             PlayerPrefs.Save();
             UpdateMusicState();
         }
@@ -70,15 +70,15 @@ namespace Script.UIManager
         private void UpdateMusicState()
         {
             SoundManager.Instance.IsMusicEnabled = SoundManager.Instance.music;
-            musicOn.SetActive(SoundManager.Instance.music);
-            musicOff.SetActive(!SoundManager.Instance.music);
+            musicOn.SetActive(SoundManager.Instance.IsMusicEnabled);
+            musicOff.SetActive(!SoundManager.Instance.IsMusicEnabled);
             SoundManager.Instance.BGM(SoundManager.Instance.bgmClip);
         }
 
         private void SoundController()
         {
             SoundManager.Instance.sound = !SoundManager.Instance.sound;
-            PlayerPrefs.SetInt(SoundManager.SoundKey, SoundManager.Instance.sound ? 1 : 0);
+            PlayerPrefs.SetString(SoundManager.SoundKey, $"{SoundManager.Instance.sound}");
             PlayerPrefs.Save();
             UpdateSoundState();
         }
@@ -86,8 +86,8 @@ namespace Script.UIManager
         private void UpdateSoundState()
         {
             SoundManager.Instance.IsSoundEnabled = SoundManager.Instance.sound;
-            soundOn.SetActive(SoundManager.Instance.sound);
-            soundOff.SetActive(!SoundManager.Instance.sound);
+            soundOn.SetActive(SoundManager.Instance.IsSoundEnabled);
+            soundOff.SetActive(!SoundManager.Instance.IsSoundEnabled);
         }
     }
 }

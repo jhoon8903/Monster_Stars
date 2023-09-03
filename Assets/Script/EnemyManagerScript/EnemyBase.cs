@@ -215,8 +215,7 @@ namespace Script.EnemyManagerScript
         private IEnumerator DamageTextPopup(int damage)
         {
             foreach (var popup in _damagePopupList)
-            {   
-               
+            {
                 if (popup.activeInHierarchy) continue;
                 var pos = gameObject.transform.position;
                 popup.transform.position = new Vector3(pos.x,pos.y + 0.5f,0f);
@@ -268,13 +267,13 @@ namespace Script.EnemyManagerScript
 
         public void ReceiveDamage(EnemyBase detectEnemy, float damage, CharacterBase atkUnit, KillReasons reason = KillReasons.ByPlayer)
         {
+            StartCoroutine(DamageTextPopup((int)damage));
             lock (Lock)
             {
                 var receiveDamage = (int)damage;
                 if (gameObject.activeInHierarchy)
                 {
                     // Marketing Version
-                    StartCoroutine(DamageTextPopup(receiveDamage));
                     var currentDamage = PlayerPrefs.GetInt($"{atkUnit.unitGroup}DPS", 0);
                     var newCumulativeDamage = currentDamage + receiveDamage;
                     PlayerPrefs.SetInt($"{atkUnit.unitGroup}DPS", newCumulativeDamage);

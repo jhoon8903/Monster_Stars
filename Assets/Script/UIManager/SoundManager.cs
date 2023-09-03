@@ -74,12 +74,13 @@ namespace Script.UIManager
             Effect.clip = popupOpen;
             ClearSound = gameObject.AddComponent<AudioSource>();
             ClearSound.clip = stageClearSound;
-            AttackSound = gameObject.AddComponent<AudioSource>();
+            GameObject o;
+            AttackSound = (o = gameObject).AddComponent<AudioSource>();
             AttackSound.clip = cAttackMotion;
-            DontDestroyOnLoad(gameObject);
-            music = PlayerPrefs.GetInt(MusicKey, 1) == 1;
+            DontDestroyOnLoad(o);
+            music = bool.Parse(PlayerPrefs.GetString(MusicKey, "true"));
             IsMusicEnabled = music;
-            sound = PlayerPrefs.GetInt(SoundKey, 1) == 1;
+            sound = bool.Parse(PlayerPrefs.GetString(SoundKey, "true"));
             IsSoundEnabled = sound;
             _match = gameObject.AddComponent<AudioSource>();
         }

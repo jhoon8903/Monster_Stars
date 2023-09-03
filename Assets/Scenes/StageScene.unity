@@ -851,7 +851,7 @@ MonoBehaviour:
   countManager: {fileID: 841622520}
   gridManager: {fileID: 8808150501734532426}
   spawnManager: {fileID: 149521964}
-  moveCount: 1000
+  moveCount: 10
   swipeManager: {fileID: 149521965}
   cameraManager: {fileID: 758648960}
   backgroundManager: {fileID: 1011029961}
@@ -962,7 +962,6 @@ MonoBehaviour:
   commonRewardManager: {fileID: 2120144525}
   enforceManager: {fileID: 1595735486}
   spawnManager: {fileID: 149521964}
-  characterPool: {fileID: 1097818334}
   mergePrefab: {fileID: 5421803783582323404, guid: e3fd3be137540431e93dc5be5c9f8619, type: 3}
   mergeEffectList: []
 --- !u!114 &149521967

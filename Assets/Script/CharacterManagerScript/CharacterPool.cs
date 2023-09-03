@@ -52,7 +52,7 @@ namespace Script.CharacterManagerScript
         {
             if (obj == null) return;
             var spriteRenderer = obj.GetComponent<SpriteRenderer>();
-            spriteRenderer.DOFade(0, 0.9f).OnComplete(() =>
+            spriteRenderer.DOFade(0, 0.6f).OnComplete(() =>
             {
                 obj.GetComponent<CharacterBase>().CharacterReset();
                 obj.transform.localScale = Vector3.one;

@@ -328,6 +328,7 @@ namespace Script.EnemyManagerScript
         }
         private static IEnumerator BindEffect(EnemyBase enemyBase, CharacterBase characterBase)
         {
+            if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss) yield break;
             var restrainColor = new Color(1, 0.5f, 0);
             var originColor = new Color(1, 1, 1);
             var restrainTime = characterBase.bindTime;
@@ -373,6 +374,7 @@ namespace Script.EnemyManagerScript
         }
         private static IEnumerator KnockBackEffect(EnemyBase enemyBase, CharacterBase characterBase)
         {
+            if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss) yield break;
             if (!enemyBase.AlreadyKnockBack.TryGetValue(enemyBase, out var isAlreadyKnockBack))
             {
                 isAlreadyKnockBack = false;
@@ -401,6 +403,7 @@ namespace Script.EnemyManagerScript
         }
         private IEnumerator FreezeEffect(EnemyBase enemyBase, CharacterBase characterBase)
         {
+            if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss) yield break;
             var freezeTime = characterBase.freezeTime;
             if (!enemyBase.AlreadyFreeze.TryGetValue(enemyBase, out var isAlreadyFreeze))
             {
@@ -441,28 +444,29 @@ namespace Script.EnemyManagerScript
             }
             return freeze;
         }
-        public IEnumerator GlobalFreezeEffect()
-        {
-            if (globalFreeze) yield break;
-            globalFreeze = true;
-            StartCoroutine(BlizzardEffect());
-            // AtkManager.Instance.groupCAtkCount = 0;
-            var enemyList = enemyPool.enemyBases;
-            foreach (var enemyBase in enemyList.Select(enemy => enemy.GetComponent<EnemyBase>()))
-            {
-                StartCoroutine(FreezeEffect(enemyBase, enemyBase.Character));
-            }
-            yield return null;
-        }
-        private IEnumerator BlizzardEffect()
-        {
-            blizzardEffect.SetActive(true);
-            yield return new WaitForSeconds(1f);
-            blizzardEffect.SetActive(false);
-            globalFreeze = false;
-        }
+        // public IEnumerator GlobalFreezeEffect()
+        // {
+        //     if (globalFreeze) yield break;
+        //     globalFreeze = true;
+        //     StartCoroutine(BlizzardEffect());
+        //     // AtkManager.Instance.groupCAtkCount = 0;
+        //     var enemyList = enemyPool.enemyBases;
+        //     foreach (var enemyBase in enemyList.Select(enemy => enemy.GetComponent<EnemyBase>()))
+        //     {
+        //         StartCoroutine(FreezeEffect(enemyBase, enemyBase.Character));
+        //     }
+        //     yield return null;
+        // }
+        // private IEnumerator BlizzardEffect()
+        // {
+        //     blizzardEffect.SetActive(true);
+        //     yield return new WaitForSeconds(1f);
+        //     blizzardEffect.SetActive(false);
+        //     globalFreeze = false;
+        // }
         private IEnumerator StunEffect(EnemyBase enemyBase, CharacterBase characterBase)
         {
+            if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss) yield break;
             var stunColor = new Color(1f, 0.3f, 0);
             var originColor = enemyBase.GetComponentInChildren<SpriteRenderer>();
             var stunTime = characterBase.stunTime;

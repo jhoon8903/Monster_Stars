@@ -48,15 +48,12 @@ namespace Script.UIManager
         // Bottom Button
         [SerializeField] private Button homeBtn;
         [SerializeField] private Button continueBtn;
-
         private void Awake()
         {
             musicBtn.GetComponent<Button>().onClick.AddListener(MusicController);
             soundBtn.GetComponent<Button>().onClick.AddListener(SoundController);
-            SoundManager.Instance.music = PlayerPrefs.GetInt(SoundManager.MusicKey, 1) == 1;
-            SoundManager.Instance.IsMusicEnabled = SoundManager.Instance.music;
-            SoundManager.Instance.sound = PlayerPrefs.GetInt(SoundManager.SoundKey, 1) == 1;
-            SoundManager.Instance. IsSoundEnabled = SoundManager.Instance.sound;
+            SoundManager.Instance.music = bool.Parse(PlayerPrefs.GetString(SoundManager.MusicKey, "true"));
+            SoundManager.Instance.sound = bool.Parse(PlayerPrefs.GetString(SoundManager.SoundKey, "true"));
             UpdateMusicState();
             UpdateSoundState();
             pausePanel.SetActive(false);
@@ -173,7 +170,7 @@ namespace Script.UIManager
         private void SoundController()
         {
             SoundManager.Instance.sound = !SoundManager.Instance.sound;
-            PlayerPrefs.SetInt(SoundManager.SoundKey, SoundManager.Instance.sound ? 1 : 0);
+            PlayerPrefs.SetString(SoundManager.SoundKey, $"{SoundManager.Instance.sound}");
             PlayerPrefs.Save();
             UpdateSoundState();
         }
@@ -185,7 +182,7 @@ namespace Script.UIManager
         private void MusicController()
         {
             SoundManager.Instance.music = !SoundManager.Instance.music;
-            PlayerPrefs.SetInt(SoundManager.MusicKey, SoundManager.Instance.music ? 1 : 0);
+            PlayerPrefs.SetString(SoundManager.MusicKey, $"{SoundManager.Instance.music}");
             PlayerPrefs.Save();
             UpdateMusicState();
         }

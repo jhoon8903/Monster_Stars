@@ -290,10 +290,10 @@ namespace Script.PuzzleManagerGroup
                 else
                 {
                     if (hasLeveledUpNonTreasure) continue;
-                    sortedList[1].GetComponent<CharacterBase>().LevelUpScale(sortedList[1]);
-                    MergeEffect(sortedList[1]);
                     sortedList[2].GetComponent<CharacterBase>().LevelUpScale(sortedList[2]);
                     MergeEffect(sortedList[2]);
+                    sortedList[1].GetComponent<CharacterBase>().LevelUpScale(sortedList[1]);
+                    MergeEffect(sortedList[1]);
                     sortedList[3].GetComponent<CharacterBase>().LevelUpScale(sortedList[3]);
                     MergeEffect(sortedList[3]);
                     if (enforceManager.match5Upgrade)
@@ -305,14 +305,15 @@ namespace Script.PuzzleManagerGroup
                     ReturnObject(sortedList[4]);
                     ReturnEffect(sortedList[4]);
                     hasLeveledUpNonTreasure = true;
+                   
                 }
-                StartCoroutine(Match3(sortedList[2]));
             }
+            StartCoroutine(Match3(sortedList[2]));
             return true;
         }
         private IEnumerator Match3(GameObject center)
         {
-            yield return new WaitForSecondsRealtime(0.8f);
+            yield return new WaitForSecondsRealtime(0.59f);
             var boolean = IsMatched(center);
             yield return null;
             if (boolean)

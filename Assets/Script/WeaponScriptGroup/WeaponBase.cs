@@ -13,7 +13,7 @@ namespace Script.WeaponScriptGroup
     {
         public bool isInUse;
         protected float Speed { get; set; }
-        public float Damage { get; set; }
+        protected float Damage { get; set; }
         protected float Distance { get; private set; }
         protected CharacterBase CharacterBase { get; private set; }
         protected Color Sprite { get; set; }
@@ -24,12 +24,10 @@ namespace Script.WeaponScriptGroup
         protected bool HasHit;
         public static WeaponBase Instance { get; private set; }
         private readonly Dictionary<EnemyBase, int> _burnStacks = new Dictionary<EnemyBase, int>();
-
         public void Awake()
         {
             Instance = this;
         }
-
         public void InitializeWeapon(CharacterBase characterBase , GameObject target = null)
         {
             CharacterBase = characterBase;
@@ -173,7 +171,7 @@ namespace Script.WeaponScriptGroup
                     return;
             }
         }
-        protected internal float DamageCalculator(float damage,EnemyBase enemyBase, CharacterBase characterBase)
+        protected float DamageCalculator(float damage,EnemyBase enemyBase, CharacterBase characterBase)
         {
             if (enemyBase.IsFreeze.ContainsKey(characterBase) && enemyBase.IsFreeze[characterBase] == CharacterBase.UnitGroups.DeathChiller)
             {
