@@ -1,14 +1,11 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using Newtonsoft.Json.Utilities;
+using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
 namespace Script.PuzzleManagerGroup
 {
@@ -17,18 +14,16 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private EnforceManager enforceManager;
         [SerializeField] private SpawnManager spawnManager;
-        [SerializeField] private CharacterPool characterPool;
-        [SerializeField] private MergeEffect mergeEffectPrefabs;
+        [SerializeField] private MergeEffect mergePrefab;
 
-
-        private List<MergeEffect> _effectList = new List<MergeEffect>();
+        public List<MergeEffect> mergeEffectList = new List<MergeEffect>();
         private void Awake()
         {
             for (var i = 0; i < 20; i++)
             {
-                var mergeEffect = Instantiate(mergeEffectPrefabs, transform);
+                var mergeEffect = Instantiate(mergePrefab, transform);
                 mergeEffect.gameObject.SetActive(false);
-                _effectList.Add(mergeEffect);
+                mergeEffectList.Add(mergeEffect);
             }
         }
         public bool IsMatched(GameObject swapCharacter)
@@ -143,9 +138,29 @@ namespace Script.PuzzleManagerGroup
             return matched;
         }
         private static void ReturnObject(GameObject character)
-        {   
+        {
             CharacterPool.ReturnToPool(character);
         }
+        private void MergeEffect(GameObject target)
+        {
+            var mergeEffect = mergeEffectList.FirstOrDefault(effect => !effect.gameObject.activeInHierarchy);
+            if (mergeEffect == null) return;
+            mergeEffect.gameObject.SetActive(true);
+            mergeEffect.transform.position = target.transform.position;
+            mergeEffect.MergeAction();
+            mergeEffect.MergeActionClose();
+        }
+
+        private void ReturnEffect(GameObject target)
+        {
+            var returnEffect = mergeEffectList.FirstOrDefault(effect => !effect.gameObject.activeInHierarchy);
+            if (returnEffect == null) return;
+            returnEffect.gameObject.SetActive(true);
+            returnEffect.transform.position = target.transform.position;
+            returnEffect.ReturnAction();
+            returnEffect.ReturnActionClose();
+        }
+
         private bool Match3Case(IEnumerable<GameObject> rawMatchedCharacters, int horizontalCount, int verticalCount, Vector3 swapPosition)
         {
             SoundManager.Instance.MatchSound(3);
@@ -168,17 +183,18 @@ namespace Script.PuzzleManagerGroup
                 if (isCenter)
                 {
                     characterBase.LevelUpScale(validCharacter);
-                    IsMatched(validCharacter);
                     if (isTreasure)
                     {
                         commonRewardManager.PendingTreasure.Enqueue(validCharacter);
                     }
+                    IsMatched(validCharacter); 
+                    MergeEffect(validCharacter);
                 }
                 else
                 {
                     ReturnObject(validCharacter);
+                    ReturnEffect(validCharacter);
                 }
-                
             }
             return true;
         }
@@ -209,19 +225,25 @@ namespace Script.PuzzleManagerGroup
                         commonRewardManager.PendingTreasure.Enqueue(matchedCharacter);
                         hasLeveledUpNonTreasure = true;
                         IsMatched(matchedCharacter);
+                        MergeEffect(matchedCharacter);
                     }
                     else
                     {
                         ReturnObject(matchedCharacter);
+                        ReturnEffect(matchedCharacter);
                     }
                 }
                 else
                 {
                     if (hasLeveledUpNonTreasure) continue;
                     sortedList[1].GetComponent<CharacterBase>().LevelUpScale(sortedList[1]);
+                    MergeEffect(sortedList[1]);
                     sortedList[2].GetComponent<CharacterBase>().LevelUpScale(sortedList[2]);
+                    MergeEffect(sortedList[2]);
                     ReturnObject(sortedList[0]);
+                    ReturnEffect(sortedList[0]);
                     ReturnObject(sortedList[3]);
+                    ReturnEffect(sortedList[3]);
                     hasLeveledUpNonTreasure = true;
                     IsMatched(sortedList[1]);
                     IsMatched(sortedList[2]);
@@ -257,24 +279,31 @@ namespace Script.PuzzleManagerGroup
                         characterBase.LevelUpScale(sortedList[2]);
                         commonRewardManager.PendingTreasure.Enqueue(sortedList[2]);
                         hasLeveledUpNonTreasure = true;
+                        MergeEffect(sortedList[2]);
                     }
                     else
                     {
                         ReturnObject(sort);
+                        ReturnEffect(sort);
                     }
                 }
                 else
                 {
                     if (hasLeveledUpNonTreasure) continue;
-                    ReturnObject(sortedList[0]);
-                    ReturnObject(sortedList[4]);
                     sortedList[1].GetComponent<CharacterBase>().LevelUpScale(sortedList[1]);
+                    MergeEffect(sortedList[1]);
                     sortedList[2].GetComponent<CharacterBase>().LevelUpScale(sortedList[2]);
+                    MergeEffect(sortedList[2]);
                     sortedList[3].GetComponent<CharacterBase>().LevelUpScale(sortedList[3]);
+                    MergeEffect(sortedList[3]);
                     if (enforceManager.match5Upgrade)
                     {
                         sortedList[2].GetComponent<CharacterBase>().LevelUpScale(sortedList[2]);
                     }
+                    ReturnObject(sortedList[0]);
+                    ReturnEffect(sortedList[0]);
+                    ReturnObject(sortedList[4]);
+                    ReturnEffect(sortedList[4]);
                     hasLeveledUpNonTreasure = true;
                 }
                 StartCoroutine(Match3(sortedList[2]));
@@ -309,6 +338,7 @@ namespace Script.PuzzleManagerGroup
                 {
                     commonRewardManager.PendingTreasure.Enqueue(intersection);
                 }
+                MergeEffect(intersection);
                 var indexInVertical = verticalMatches.IndexOf(intersection);
                 nextInVertical = indexInVertical < verticalMatches.Count - 1 ? verticalMatches[indexInVertical + 1] : verticalMatches[indexInVertical - 1];
                 nextInVertical.GetComponent<CharacterBase>().LevelUpScale(nextInVertical);
@@ -316,12 +346,15 @@ namespace Script.PuzzleManagerGroup
                 {
                     commonRewardManager.PendingTreasure.Enqueue(nextInVertical);
                 }
+                MergeEffect(nextInVertical);
                
             }
             foreach (var obj in matchedCharacters.Where(obj => obj != intersection && obj != nextInVertical))
             {
                 ReturnObject(obj);
+                ReturnEffect(obj);
             }
+            IsMatched(intersection);
             IsMatched(nextInVertical);
             return true;
         }
@@ -340,7 +373,9 @@ namespace Script.PuzzleManagerGroup
             var levelUp2 = longestMatch[2];
 
             levelUp1.GetComponent<CharacterBase>().LevelUpScale(levelUp1);
+            MergeEffect(levelUp1);
             levelUp2.GetComponent<CharacterBase>().LevelUpScale(levelUp2);
+            MergeEffect(levelUp2);
             if(levelUp1.GetComponent<CharacterBase>().Type == CharacterBase.Types.Treasure)
             {
                 commonRewardManager.PendingTreasure.Enqueue(levelUp1);
@@ -349,6 +384,7 @@ namespace Script.PuzzleManagerGroup
             foreach(var obj in matchedCharacters.Where(obj => obj != levelUp1 && obj != levelUp2))
             {
                 ReturnObject(obj);
+                ReturnEffect(obj);
             }
             IsMatched(levelUp1);
             IsMatched(levelUp2);
@@ -382,9 +418,11 @@ namespace Script.PuzzleManagerGroup
                 {
                     commonRewardManager.PendingTreasure.Enqueue(levelUpObjectHorizontal);
                 }
+                MergeEffect(levelUpObjectHorizontal);
                 foreach (var obj in returnObjectsHorizontal)
                 {
                     ReturnObject(obj);
+                    ReturnEffect(obj);
                 }
                 IsMatched(levelUpObjectHorizontal);
             }
@@ -397,9 +435,11 @@ namespace Script.PuzzleManagerGroup
                 {
                     commonRewardManager.PendingTreasure.Enqueue(levelUpObjectVertical);
                 }
+                MergeEffect(levelUpObjectVertical);
                 foreach (var obj in returnObjectsVertical)
                 {
                     ReturnObject(obj);
+                    ReturnEffect(obj);
                 }
                 IsMatched(levelUpObjectVertical);
             }

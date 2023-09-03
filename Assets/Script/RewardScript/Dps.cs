@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
+using Script.EnemyManagerScript;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.RewardScript
@@ -16,6 +19,7 @@ namespace Script.RewardScript
         [SerializeField] private  Image unitSprite;
         [SerializeField] private  TextMeshProUGUI unitDps;
         private Dps _unitDpsInstance;
+
         public void UnitDps(TextMeshProUGUI totalDps, Transform dpsGrid)
         {
             if (_unitDpsInstance != null)
@@ -31,13 +35,12 @@ namespace Script.RewardScript
                 var unitGrades = CharacterBase.UnitGrades.G;
                 foreach (var unit in group)
                 {
-                    var damage = PlayerPrefs.GetInt($"{unit.unitGroup}DPS", 0);
-                    Debug.Log(damage);
-                    Debug.Log($"Key: {unit.unitGroup}DPS");
+                    var damage = PlayerPrefs.GetInt($"{unit.unitGroup}DPS");
                     groupDamage += damage;
                     unitIcon = unit.GetSpriteForLevel(unit.unitPieceLevel);
                     unitGrades = unit.UnitGrade;
                     PlayerPrefs.DeleteKey($"{unit.unitGroup}DPS");
+                    PlayerPrefs.Save();
                 }
                 totalDamage += groupDamage;
                 _unitDpsInstance = Instantiate(this, dpsGrid);

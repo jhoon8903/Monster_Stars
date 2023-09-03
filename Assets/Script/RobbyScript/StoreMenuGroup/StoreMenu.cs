@@ -158,20 +158,23 @@ namespace Script.RobbyScript.StoreMenuGroup
         }
         private void ReceiveReward()
         {
-            ChestCheck.Instance.CloseChestCheck();
-            boxRewardPanel.SetActive(false);
-            foreach (var unitReward in _unitPieceDict)
-            {
-                unitReward.Key.UnitPieceCount += unitReward.Value.Item1;
-                PlayerPrefs.SetInt($"{unitReward.Key.unitGroup}{CharacterBase.PieceKey}", unitReward.Key.UnitPieceCount);
-                HoldCharacterList.Instance.UpdateRewardPiece(unitReward.Key);
-                Destroy(unitReward.Value.Item2.gameObject);
-            }
-            if (_coinObject != null)
-            {
-                Destroy(_coinObject.gameObject);
-            }
-            _unitPieceDict.Clear();
+            boxRewardPanel.transform.DOScale(0.1f, 0.3f).SetEase(Ease.InBack).OnComplete(() =>
+                {
+                    boxRewardPanel.SetActive(false);
+                    ChestCheck.Instance.CloseChestCheck();
+                    foreach (var unitReward in _unitPieceDict)
+                    {
+                        unitReward.Key.UnitPieceCount += unitReward.Value.Item1;
+                        PlayerPrefs.SetInt($"{unitReward.Key.unitGroup}{CharacterBase.PieceKey}", unitReward.Key.UnitPieceCount);
+                        HoldCharacterList.Instance.UpdateRewardPiece(unitReward.Key);
+                        Destroy(unitReward.Value.Item2.gameObject);
+                    }
+                    if (_coinObject != null)
+                    {
+                        Destroy(_coinObject.gameObject);
+                    }
+                    _unitPieceDict.Clear();
+                });
         }
         private void CalculateCoinReward(BoxGrade boxTypes, int openCount)
         {
@@ -409,37 +412,45 @@ namespace Script.RobbyScript.StoreMenuGroup
             yield return shakeAnimation.WaitForCompletion();
             shakeAnimation.Kill();
         }
-        public void OpenChest(ButtonType chestType)
+        private void OpenChest(ButtonType chestType)
         {
             SoundManager.Instance.PlaySound(SoundManager.Instance.reward);
             ChestCheck.Instance.chestCheckPanel.SetActive(false);
             chestRewardPanel.SetActive(false);
             chestGrade.gameObject.SetActive(false);
             boxRewardPanel.SetActive(true);
-            var boxGrade = chestType switch
+            boxRewardPanel.transform.localScale = Vector3.zero;
+            boxRewardPanel.transform.DOScale(1, 0.3f).SetEase(Ease.OutBack).OnComplete(() =>
             {
-                ButtonType.BronzeAds => BoxGrade.Bronze,
-                ButtonType.SilverAds => BoxGrade.Silver,
-                ButtonType.GoldAds => BoxGrade.Gold,
-                ButtonType.BronzeGem => BoxGrade.BronzeGem,
-                ButtonType.SilverGem => BoxGrade.SilverGem,
-                ButtonType.GoldGem => BoxGrade.GoldGem,
-                _ => BoxGrade.Bronze
-            };
-            Reward(boxGrade);
+                var boxGrade = chestType switch
+                {
+                    ButtonType.BronzeAds => BoxGrade.Bronze,
+                    ButtonType.SilverAds => BoxGrade.Silver,
+                    ButtonType.GoldAds => BoxGrade.Gold,
+                    ButtonType.BronzeGem => BoxGrade.BronzeGem,
+                    ButtonType.SilverGem => BoxGrade.SilverGem,
+                    ButtonType.GoldGem => BoxGrade.GoldGem,
+                    _ => BoxGrade.Bronze
+                };
+                Reward(boxGrade);
+            });
         }
         public void OpenAds(BoxGrade adsType)
         {
             SoundManager.Instance.PlaySound(SoundManager.Instance.reward);
             boxRewardPanel.SetActive(true);
-            var boxGrade = adsType switch
+            boxRewardPanel.transform.localScale = Vector3.zero;
+            boxRewardPanel.transform.DOScale(1, 0.3f).SetEase(Ease.OutBack).OnComplete(() =>
             {
-                BoxGrade.Coin => BoxGrade.Coin,
-                BoxGrade.Stamina => BoxGrade.Stamina,
-                BoxGrade.Gem => BoxGrade.Gem,
-                _ => BoxGrade.Bronze
-            };
-            Reward(boxGrade);
+                var boxGrade = adsType switch
+                {
+                    BoxGrade.Coin => BoxGrade.Coin,
+                    BoxGrade.Stamina => BoxGrade.Stamina,
+                    BoxGrade.Gem => BoxGrade.Gem,
+                    _ => BoxGrade.Bronze
+                };
+                Reward(boxGrade);
+            });
         }
         public void ErrorClose()
         {

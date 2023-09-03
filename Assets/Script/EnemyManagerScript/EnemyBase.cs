@@ -4,6 +4,7 @@ using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.PuzzleManagerGroup;
 using Script.QuestGroup;
+using Script.RewardScript;
 using Script.UIManager;
 using Script.WeaponScriptGroup;
 using TMPro;
@@ -264,7 +265,7 @@ namespace Script.EnemyManagerScript
                 popup.SetActive(false);
             }
         }
-        private readonly Dictionary<CharacterBase.UnitGroups, int> _cumulativeDamageByGroup = new Dictionary<CharacterBase.UnitGroups, int>();
+
         public void ReceiveDamage(EnemyBase detectEnemy, float damage, CharacterBase atkUnit, KillReasons reason = KillReasons.ByPlayer)
         {
             lock (Lock)
@@ -273,12 +274,10 @@ namespace Script.EnemyManagerScript
                 if (gameObject.activeInHierarchy)
                 {
                     // Marketing Version
-                    // StartCoroutine(DamageTextPopup(receiveDamage));
-                    _cumulativeDamageByGroup.TryGetValue(atkUnit.unitGroup, out var currentDamage);
+                    StartCoroutine(DamageTextPopup(receiveDamage));
+                    var currentDamage = PlayerPrefs.GetInt($"{atkUnit.unitGroup}DPS", 0);
                     var newCumulativeDamage = currentDamage + receiveDamage;
-                    _cumulativeDamageByGroup[atkUnit.unitGroup] = newCumulativeDamage;
                     PlayerPrefs.SetInt($"{atkUnit.unitGroup}DPS", newCumulativeDamage);
-                    Debug.Log($"DPS_KEY : {atkUnit.unitGroup}DPS / DPS Value: {newCumulativeDamage}");
                     PlayerPrefs.Save();
                 }
                 if (isDead) return;

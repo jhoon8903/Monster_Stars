@@ -810,7 +810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8c00f31233a49d185e9d10e8a6cb015, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mergeCircle: {fileID: 6446534065042614024}
+  mergeCircleEffect: {fileID: 6446534065042614024}
   sparkle1: {fileID: 6446534064875909398}
   sparkle2: {fileID: 6446534064369711836}
   sparkle3: {fileID: 6446534065145805488}
@@ -819,7 +819,7 @@ MonoBehaviour:
   sparkle6: {fileID: 6446534064202268637}
   sparkle7: {fileID: 6446534064325663940}
   sparkle8: {fileID: 6446534065062642402}
-  tileImage: {fileID: 6446534064774439777}
+  tileEffect: {fileID: 6446534064774439777}
 --- !u!1 &6446534065983290989
 GameObject:
   m_ObjectHideFlags: 0

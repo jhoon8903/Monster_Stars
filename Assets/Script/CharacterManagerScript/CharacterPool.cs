@@ -52,7 +52,7 @@ namespace Script.CharacterManagerScript
         {
             if (obj == null) return;
             var spriteRenderer = obj.GetComponent<SpriteRenderer>();
-            spriteRenderer.DOFade(0, 0.1f).OnComplete(() =>
+            spriteRenderer.DOFade(0, 0.9f).OnComplete(() =>
             {
                 obj.GetComponent<CharacterBase>().CharacterReset();
                 obj.transform.localScale = Vector3.one;
@@ -61,7 +61,6 @@ namespace Script.CharacterManagerScript
                 spriteRenderer.color = color;
                 obj.SetActive(false);
             });
-            
         }
     }
 }

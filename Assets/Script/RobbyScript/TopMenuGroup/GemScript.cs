@@ -11,8 +11,8 @@ namespace Script.RobbyScript.TopMenuGroup
 
         public int Gem
         {
-            // get => PlayerPrefs.GetInt(GemKey, 0);
-            get => PlayerPrefs.GetInt(GemKey, 10000000);
+            get => PlayerPrefs.GetInt(GemKey, 0);
+            // get => PlayerPrefs.GetInt(GemKey, 10000000);
             set
             {
                 PlayerPrefs.SetInt(GemKey, value);

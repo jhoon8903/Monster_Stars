@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using Script.AdsScript;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
@@ -91,8 +92,16 @@ namespace Script.QuestGroup
         private void Awake()
         {
             Instance = this;
-            questOpenBtn.onClick.AddListener(() => questPanel.SetActive(true));
-            questCloseBtn.onClick.AddListener(() => questPanel.SetActive(false));
+            questOpenBtn.onClick.AddListener(() =>
+            {
+                questPanel.SetActive(true);
+                questPanel.transform.localScale = Vector3.zero; 
+                questPanel.transform.DOScale(1, 0.3f).SetEase(Ease.OutBack);
+            });
+            questCloseBtn.onClick.AddListener(() =>
+            {
+                questPanel.transform.DOScale(0.1f, 0.3f).SetEase(Ease.InBack).OnComplete(() => questPanel.SetActive(false));
+            });
             // questRewardCloseBtn.onClick.AddListener(ReceiveQuestReward);
             if (PlayerPrefs.HasKey(QuestDataKey))
             {

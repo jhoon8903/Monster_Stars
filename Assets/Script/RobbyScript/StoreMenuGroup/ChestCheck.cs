@@ -1,8 +1,11 @@
 using System;
+using System.Numerics;
+using DG.Tweening;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
+using Vector3 = UnityEngine.Vector3;
 
 namespace Script.RobbyScript.StoreMenuGroup
 {
@@ -52,12 +55,18 @@ namespace Script.RobbyScript.StoreMenuGroup
         private void OpenPanel()
         {
             chestCheckPanel.SetActive(true);
+            chestCheckPanel.transform.localScale = Vector3.zero;
+            chestCheckPanel.transform.DOScale(1, 0.3f).SetEase(Ease.OutBack);
         }
 
         public void CloseChestCheck()
         {
-            chestCheckPanel.SetActive(false);
-            StoreMenu.Instance.DeleteEvent();
+            chestCheckPanel.transform.DOScale(0.1f, 0.3f).SetEase(Ease.InBack)
+                .OnComplete(() =>
+                {
+                    chestCheckPanel.SetActive(false);
+                    StoreMenu.Instance.DeleteEvent();
+                });
         }
 
         public void ChestCheckClick(StoreMenu.ButtonType buttonType)

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.PuzzleManagerGroup;
 using Script.RewardScript;
@@ -70,11 +71,15 @@ namespace Script.UIManager
         }
         private void OnPausePanel()
         {
-   
             if (spawnManager.isTutorial) return;
-            Time.timeScale = 0;
             pausePanel.SetActive(true);
-            UnitSkillView();
+            pausePanel.transform.localScale = Vector3.zero; 
+            pausePanel.transform.DOScale(1, 0.3f).SetEase(Ease.OutBack).OnComplete(() =>
+            {
+                UnitSkillView();
+                Time.timeScale = 0;
+            });
+    
         }
         private void UpdateUnitSkillView(CharacterBase unit, Image unitBack, Image unitImage, Component unitSkillGrid)
         {
@@ -196,13 +201,20 @@ namespace Script.UIManager
             PlayerPrefs.DeleteKey("unitState");
             PlayerPrefs.DeleteKey("moveCount");
             PlayerPrefs.DeleteKey("GridHeight");
+            foreach (var unit in EnforceManager.Instance.characterList)
+            {
+                PlayerPrefs.DeleteKey($"{unit.unitGroup}DPS");
+            }
             if (StageManager.Instance != null) PlayerPrefs.SetInt($"{StageManager.Instance.latestStage}Stage_ProgressWave", 1);
             PlayerPrefs.Save();
             SceneManager.LoadScene("SelectScene");
         }
         private void Continue()
         {
-            pausePanel.SetActive(false);
+            pausePanel.transform.DOScale(0, 0.3f).SetEase(Ease.InBack).OnComplete(() =>
+            {
+                pausePanel.SetActive(false);
+            });
             GameManager.Instance.GameSpeed();
         }
     }

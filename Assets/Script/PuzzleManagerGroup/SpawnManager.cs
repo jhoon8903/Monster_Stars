@@ -233,7 +233,7 @@ namespace Script.PuzzleManagerGroup
             movedObjects.Clear();
             lock (Lock)
             {
-                yield return new WaitForSecondsRealtime(0.31f);
+                yield return new WaitForSecondsRealtime(0.91f);
                 var moves = CalculateMoves();
                 if (moves.Count > 0)
                 {

@@ -52,8 +52,8 @@ namespace Script.RobbyScript.MainMenuGroup
                 continuePanel.SetActive(true);
             }
             // Marketing Version
-            // LatestStage = PlayerPrefs.GetInt("LatestStage", 1);
-            LatestStage = 10;
+            LatestStage = PlayerPrefs.GetInt("LatestStage", 1);
+            // LatestStage = 10;
             SelectStage = LatestStage;
             var (maxWave, clearWave) = GetStageWave(LatestStage);
             UpdateProgress(LatestStage, maxWave, clearWave);
@@ -90,8 +90,8 @@ namespace Script.RobbyScript.MainMenuGroup
         private void CancelContinue()
         {
             PlayerPrefs.SetString("Loading", "false");
-            ReturnRobby();
             continuePanel.SetActive(false);
+            ReturnRobby();
         }
         public void StartGame()
         {
@@ -196,6 +196,10 @@ namespace Script.RobbyScript.MainMenuGroup
         }
         private void ReturnRobby()
         {
+            foreach (var unit in EnforceManager.Instance.characterList)
+            {
+                PlayerPrefs.DeleteKey($"{unit.unitGroup}DPS");
+            }
             PlayerPrefs.DeleteKey("unitState");
             PlayerPrefs.DeleteKey("EnforceData");
             PlayerPrefs.SetInt($"{LatestStage}Stage_ProgressWave",1);

@@ -118,8 +118,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 firstCanvas.sortingOrder = secondCanvas.sortingOrder;
                 firstCanvas.sortingLayerName = secondCanvas.sortingLayerName;
             }
-
-
             secondBase.selected = false;
             unitList.Add(second);
             topList.Remove(second);
@@ -134,7 +132,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 secondCanvas.sortingOrder = firstCanvas.sortingOrder;
                 secondCanvas.sortingLayerName = firstCanvas.sortingLayerName;
             }
-
             foreach (var unitObjet in unitList)
             {
                 unitObjet.unitCanvas.sortingLayerName = "Unit";
@@ -223,11 +220,12 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 unitInstance.normalBack.SetActive(true);
                 unitInstance.infoBack.SetActive(false);
                 _activeStatusPanel = null;
-                if (_informationPanel == null)
-                {
-                    _informationPanel = Instantiate(informationPanelPrefab, gamePanel.transform).GetComponent<InformationPanel>();
-                }
+                if (_informationPanel != null) return;
+                _informationPanel = Instantiate(informationPanelPrefab, gamePanel.transform).GetComponent<InformationPanel>();
                 _informationPanel.OpenInfoPanel(unitInstance, character);
+                _informationPanel.transform.localScale = Vector3.zero;
+                _informationPanel.transform.DOScale(1, 0.3f).SetEase(Ease.OutBack);
+
             });
 
             unitInstance.levelUpBtn.onClick.AddListener(() =>
@@ -235,11 +233,11 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                 unitInstance.normalBack.SetActive(true);
                 unitInstance.infoBack.SetActive(false);
                 _activeStatusPanel = null;
-                if (_informationPanel == null)
-                {
-                    _informationPanel = Instantiate(informationPanelPrefab, gamePanel.transform).GetComponent<InformationPanel>();
-                }
+                if (_informationPanel != null) return;
+                _informationPanel = Instantiate(informationPanelPrefab, gamePanel.transform).GetComponent<InformationPanel>();
                 _informationPanel.OpenInfoPanel(unitInstance, character);
+                _informationPanel.transform.localScale = Vector3.zero;
+                _informationPanel.transform.DOScale(1, 0.3f).SetEase(Ease.OutBack);
             });
 
             unitInstance.removeBtn.onClick.AddListener(() =>
@@ -292,7 +290,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     selectedToSwap.infoBack.SetActive(false);
                     selectedToSwap.normalBack.SetActive(true);
                     unitList.Remove(selectedToSwap);
-                    
                     foreach (var unitObject in unitList.Where(unitObject => selectedToSwap != unitObject))
                     {
                         var anotherCanvas = unitObject.unitCanvas;
@@ -520,8 +517,11 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                     if (_informationPanel == null)
                     {
                         _informationPanel = Instantiate(informationPanelPrefab, gamePanel.transform).GetComponent<InformationPanel>();
+                        _informationPanel.OpenInfoPanel(newUnit, newUnitBase);
+                        _informationPanel.transform.localScale = Vector3.zero;
+                        _informationPanel.transform.DOScale(1, 0.3f).SetEase(Ease.OutBack);
                     }
-                    _informationPanel.OpenInfoPanel(newUnit, newUnitBase);
+                
                     SyncWithSelected(newUnit, newUnitBase);
                 });
             }

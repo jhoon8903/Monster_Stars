@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.RobbyScript.TopMenuGroup;
 using Script.UIManager;
@@ -373,7 +374,7 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
         public void ClosePanel()
         {
             SoundManager.Instance.PlaySound(SoundManager.Instance.popupClose);
-            Destroy(gameObject);
+            gameObject.transform.DOScale(0.1f, 0.3f).SetEase(Ease.InBack).OnComplete(() => Destroy(gameObject));
         }
     }
 }

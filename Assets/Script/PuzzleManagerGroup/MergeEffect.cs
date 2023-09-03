@@ -1,12 +1,12 @@
-using System.Collections;
 using DG.Tweening;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Script.PuzzleManagerGroup
 {
     public class MergeEffect : MonoBehaviour
     {
-        [SerializeField] private GameObject mergeCircle;
+        [SerializeField] private GameObject mergeCircleEffect;
         [SerializeField] private GameObject sparkle1;
         [SerializeField] private GameObject sparkle2;
         [SerializeField] private GameObject sparkle3;
@@ -15,49 +15,70 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private GameObject sparkle6;
         [SerializeField] private GameObject sparkle7;
         [SerializeField] private GameObject sparkle8;
-        [SerializeField] private GameObject tileImage;
+        [SerializeField] private GameObject tileEffect;
 
-        public delegate void EffectComplete(GameObject obj, bool isCenter);
-        public EffectComplete onEffectComplete;
 
-        public IEnumerator MergeEffectAction(GameObject matchedCharacter, bool isCenter)
+        public void MergeAction()
         {
-            float delay = 0f;
             GameObject[] sparkles = { sparkle1, sparkle2, sparkle3, sparkle4, sparkle5, sparkle6, sparkle7, sparkle8 };
-        
+            
+            mergeCircleEffect.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
+            mergeCircleEffect.SetActive(true);
+            mergeCircleEffect.transform.DOScale(1f, 0.8f)
+                .OnComplete(() => mergeCircleEffect.transform.DOScale(0.3f, 0.2f));
+            
+            tileEffect.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0f);
+            tileEffect.SetActive(true);
+            tileEffect.GetComponent<SpriteRenderer>().DOFade(1f, 0.25f)
+                .OnComplete(() => tileEffect.GetComponent<SpriteRenderer>().DOFade(0f, 0.35f));
+
+            var delay = 0f;
             foreach (var sparkle in sparkles)
             {
-                DOVirtual.DelayedCall(delay, () => sparkle.SetActive(true));
-                DOVirtual.DelayedCall(delay + 0.8f, () => sparkle.SetActive(false));
-                delay += Random.Range(0.2f, 0.3f);
-            }
-
-            if (isCenter)
-            {
-                mergeCircle.transform.localScale = Vector3.zero;
-                var seq = DOTween.Sequence();
-                seq.Append(mergeCircle.transform.DOScale(0.8f, 0.8f))
-                    .Append(mergeCircle.transform.DOScale(1f, 0.2f).SetEase(Ease.OutSine))
-                    .OnKill(() => mergeCircle.SetActive(false));
-            }
-
-            var spriteRenderer = tileImage.GetComponent<SpriteRenderer>();
-            if (spriteRenderer != null)
-            {
-                spriteRenderer.DOFade(1, 0.25f).OnComplete(() => 
-                {
-                    spriteRenderer.DOFade(0, 0.45f).OnComplete(() => 
-                    {
-                        onEffectComplete?.Invoke(matchedCharacter, isCenter);
-                    });
+                var randomTime = Random.Range(0.2f, 0.3f);
+                DOVirtual.DelayedCall(delay, () => {
+                    sparkle.SetActive(true);
+                    DOVirtual.DelayedCall(randomTime, () => sparkle.SetActive(false));
                 });
+                delay += randomTime;
             }
-            else
-            {
-                onEffectComplete?.Invoke(matchedCharacter, isCenter);
-            }
+        }
 
-            yield return new WaitForSeconds(1f);
+        public void MergeActionClose()
+        {
+            DOVirtual.DelayedCall(1f, () => {
+                mergeCircleEffect.SetActive(false);
+                tileEffect.SetActive(false);
+                gameObject.SetActive(false);
+            });
+        }
+
+        public void ReturnAction()
+        {
+            GameObject[] sparkles = { sparkle1, sparkle2, sparkle3, sparkle4, sparkle5, sparkle6, sparkle7, sparkle8 };
+            tileEffect.GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 1f, 0f);
+            tileEffect.SetActive(true);
+            tileEffect.GetComponent<SpriteRenderer>().DOFade(1f, 0.45f)
+                .OnComplete(() => tileEffect.GetComponent<SpriteRenderer>().DOFade(0f, 0.35f));
+            var delay = 0f;
+            foreach (var sparkle in sparkles)
+            {
+                var randomTime = Random.Range(0.2f, 0.3f);
+                DOVirtual.DelayedCall(delay, () => {
+                    sparkle.SetActive(true);
+                    DOVirtual.DelayedCall(randomTime, () => sparkle.SetActive(false));
+                });
+                delay += randomTime;
+            }
+        }
+
+        public void ReturnActionClose()
+        {
+            DOVirtual.DelayedCall(0.9f, () => {
+                mergeCircleEffect.SetActive(false);
+                tileEffect.SetActive(false);
+                gameObject.SetActive(false);
+            });
         }
     }
 }

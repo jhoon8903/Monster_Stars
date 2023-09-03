@@ -1,4 +1,4 @@
-using System;
+using DG.Tweening;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,17 +19,19 @@ namespace Script.UIManager
         [SerializeField] private GameObject soundOff;
         [SerializeField] private Button supportBtn;
         private void Awake()
-        {
-           openBtn.GetComponent<Button>().onClick.AddListener(() =>
-           {
-               SoundManager.Instance.PlaySound(SoundManager.Instance.popupOpen);
-               settingPanel.SetActive(true);
-           }); 
-           closeBtn.onClick.AddListener(() =>
-           {
-               SoundManager.Instance.PlaySound(SoundManager.Instance.popupClose);
-               settingPanel.SetActive(false);
-           });
+        { 
+            openBtn.GetComponent<Button>().onClick.AddListener(() => 
+            { 
+                SoundManager.Instance.PlaySound(SoundManager.Instance.popupOpen); 
+                settingPanel.SetActive(true); 
+                settingPanel.transform.localScale = Vector3.zero; 
+                settingPanel.transform.DOScale(1, 0.3f).SetEase(Ease.OutBack);
+            }); 
+            closeBtn.onClick.AddListener(() =>
+            {
+                SoundManager.Instance.PlaySound(SoundManager.Instance.popupClose);
+                settingPanel.transform.DOScale(0.1f, 0.3f).SetEase(Ease.InBack).OnComplete(() => settingPanel.SetActive(false));
+            });
            musicOn.GetComponent<Button>().onClick.AddListener(MusicController);
            musicOff.GetComponent<Button>().onClick.AddListener(MusicController);
            soundOn.GetComponent<Button>().onClick.AddListener(SoundController);

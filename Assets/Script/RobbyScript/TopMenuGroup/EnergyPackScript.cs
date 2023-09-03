@@ -1,3 +1,4 @@
+using DG.Tweening;
 using Script.AdsScript;
 using Script.UIManager;
 using TMPro;
@@ -17,10 +18,6 @@ namespace Script.RobbyScript.TopMenuGroup
         [SerializeField] private GameObject buyToGem;
         [SerializeField] private GameObject item1;
         [SerializeField] private TextMeshProUGUI item1Value;
-        [SerializeField] private GameObject item2;
-        [SerializeField] private TextMeshProUGUI item2Value;
-        [SerializeField] private TextMeshProUGUI item2Price;
-        [SerializeField] private Sprite item2Purchase;
         [SerializeField] public Sprite staminaSprite;
         [SerializeField] public Sprite gemSprite;
         [SerializeField] public Sprite coinSprite;
@@ -57,13 +54,12 @@ namespace Script.RobbyScript.TopMenuGroup
             packPanel.SetActive(true);
             _title.text = "Energy Pack";
             _rewardTypes = RewardTypes.Stamina;
-            
             item1.GetComponent<Image>().sprite = staminaSprite;
+            item1.transform.localScale = Vector3.one;
+            item1.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -94f);
             item1Value.text = "10";
-            
-            item2.GetComponent<Image>().sprite = staminaSprite;
-            item2Value.text = "10";
-            item2Price.text = "50";
+            packPanel.transform.localScale = Vector3.zero;
+            packPanel.transform.DOScale(1, 0.3f).SetEase(Ease.OutBack);
         }
 
         private void OpenGemPack()
@@ -71,14 +67,12 @@ namespace Script.RobbyScript.TopMenuGroup
             packPanel.SetActive(true);
             _title.text = "Gem Pack";
             _rewardTypes = RewardTypes.Gem;
-
             item1.GetComponent<Image>().sprite= gemSprite;
+            packPanel.transform.localScale = Vector3.zero;
+            item1.transform.localScale = Vector3.one;
+            item1.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -94f);
             item1Value.text = "200";
-            
-            item2.GetComponent<Image>().sprite = gemSprite;
-            item2Value.text = "1000";
-            item2Purchase = coinSprite;
-            item2Price.text = "50";
+            packPanel.transform.DOScale(1, 0.3f).SetEase(Ease.OutBack);
         }
 
         private void OpenCoinPack()
@@ -86,13 +80,12 @@ namespace Script.RobbyScript.TopMenuGroup
             packPanel.SetActive(true);
             _title.text = "Coin Pack";
             _rewardTypes = RewardTypes.Coin;
-
             item1.GetComponent<Image>().sprite = coinSprite;
+            item1.transform.localScale = new Vector3(1f, 0.7f, 1f);
+            item1.GetComponent<RectTransform>().anchoredPosition = new Vector2(0, -250f);
             item1Value.text = "1000";
-            
-            item1.GetComponent<Image>().sprite = coinSprite;
-            item2Value.text = "10";
-            item2Price.text = "50";
+            packPanel.transform.localScale = Vector3.zero;
+            packPanel.transform.DOScale(1, 0.3f).SetEase(Ease.OutBack);
         }
 
         private void CheckRewardType()
@@ -126,6 +119,11 @@ namespace Script.RobbyScript.TopMenuGroup
                     CoinsScript.Instance.Coin += 1000;
                     break;
             }
+        }
+
+        public void ClosePanel()
+        {
+            packPanel.transform.DOScale(0.1f, 0.3f).SetEase(Ease.InBack).OnComplete(() => packPanel.SetActive(false));
         }
     }
 }
