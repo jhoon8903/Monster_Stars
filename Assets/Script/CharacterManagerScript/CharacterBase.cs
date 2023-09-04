@@ -397,9 +397,9 @@ namespace Script.CharacterManagerScript
             var sequence = DOTween.Sequence();
             Tween scaleUp = sequence.Append(levelUpObject.transform.DOScale(_levelUpScale, 0.3f)); 
             scaleUp.WaitForCompletion();
-            LevelUp();
             Tween scaleDown = sequence.Append(levelUpObject.transform.DOScale(_initialScale, 0.3f)); 
             scaleDown.WaitForCompletion();
+            LevelUp();
         }
         protected virtual void LevelUp()
         {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
@@ -41,7 +42,6 @@ namespace Script
         [SerializeField] private GameObject bossArea;
         public List<GameObject> characterList = new List<GameObject>(); 
         public static GameManager Instance { get; private set; }
-        private readonly WaitForSecondsRealtime _waitTwoSecRealtime = new WaitForSecondsRealtime(2f);
         public bool speedUp;
         public Vector3Int bossSpawnArea;
         public bool IsBattle { get; private set; }
@@ -58,6 +58,12 @@ namespace Script
         {
             StartCoroutine(LoadGame());
         }
+
+        private void Update()
+        {
+            StartCoroutine(WaitForPanelToClose());
+        }
+
         private IEnumerator LoadGame()
         {
             swipeManager.isBusy = true;
@@ -74,6 +80,13 @@ namespace Script
             }
             else
             {
+                if (StageManager.Instance != null)
+                {                                                 
+                    var stage = StageManager.Instance.SelectedStages();
+                    StageManager.Instance.UpdateWaveText();
+                    BackGroundManager.Instance.ChangedBackGround(stage);
+                }
+
                 if (PlayerPrefs.HasKey("unitState"))
                 {
                     StartCoroutine(SpawnManager.LoadGameState());
@@ -83,9 +96,11 @@ namespace Script
                     castleManager.LoadCastleHp();
                     if (StageManager.Instance != null && StageManager.Instance.currentWave % 10 == 0)
                     {
+                       
                         bossSpawnArea = new Vector3Int(Random.Range(1, 5), 9, 0);
                         bossArea.SetActive(true);
                         bossArea.transform.position = new Vector3(bossSpawnArea.x, 3.5f, 0);
+                        yield return StartCoroutine(SoundManager.Instance.BossWave(SoundManager.Instance.bossWaveClip));
                     }
                 }
                 else
@@ -96,15 +111,7 @@ namespace Script
                 }
                 StartCoroutine(spawnManager.PositionUpCharacterObject());
             }
-   
             castleManager.castleCrushBoost = false;
-            if (StageManager.Instance != null)
-            {                                                 
-                var stage = StageManager.Instance.SelectedStages();
-                StageManager.Instance.UpdateWaveText();
-                BackGroundManager.Instance.ChangedBackGround(stage);
-            }
-
             speedUp = true;
             GameSpeedSelect();
             Firebase.Analytics.FirebaseAnalytics.LogEvent("stage_play", "play", PlayerPrefs.GetInt("LatestStage", 1));
@@ -117,12 +124,14 @@ namespace Script
             {
                 yield return StartCoroutine(tutorialManager.EndTutorial());
             }
-            yield return StartCoroutine(CoverUnit(true));
+            StartCoroutine(CoverUnit(true));
             yield return StartCoroutine(cameraManager.CameraBattleSizeChange());
             yield return StartCoroutine(backgroundManager.ChangeBattleSize());
+            yield return new WaitForSecondsRealtime(1f);
+            GameSpeed();
             StartCoroutine(AtkManager.Instance.CheckForAttack());
-            yield return _waitTwoSecRealtime;
-            if (StageManager.Instance != null) StartCoroutine(StageManager.Instance.WaveController());
+            if (StageManager.Instance == null) yield break;
+            yield return StartCoroutine(StageManager.Instance.WaveController());
             // var allUnits = FindObjectsOfType<CharacterBase>();
             // foreach (var unit in allUnits)
             // {
@@ -131,7 +140,6 @@ namespace Script
             //         unitE.ApplyAttackSpeedBuffToAllies();
             //     }
             // }
-            GameSpeed();
         }
         private IEnumerator CoverUnit(bool value)
         {
@@ -164,11 +172,13 @@ namespace Script
                         moveCount = 10 + EnforceManager.Instance.rewardMoveCount;
                         PlayerPrefs.SetInt("moveCount", moveCount);
                         countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
-                        yield return StartCoroutine(commonRewardManager.WaveRewardChance());
                         bossArea.SetActive(false);
+                        yield return StartCoroutine(commonRewardManager.WaveRewardChance());
+                        yield return StartCoroutine(WaitForPanelToClose());
                         yield return new WaitUntil(() => CommonRewardManager.Instance.isOpenBox == false);
                         if (!EnforceManager.Instance.addRow)
                         {
+                            
                             spawnManager.BossStageClearRule();
                         }
                         yield return StartCoroutine(InitializeWave());
@@ -190,28 +200,19 @@ namespace Script
         }
         private IEnumerator InitializeWave()
         {
+            Time.timeScale = 1;
             yield return StartCoroutine(KillMotion());
-            // yield return StartCoroutine(WaitForPanelToClose());
             SpawnManager.SaveUnitState();
             expManager.SaveExp();
             castleManager.SaveCastleHp();
             EnforceManager.Instance.SaveEnforceData();
-            Time.timeScale = 1;
             if (EnforceManager.Instance.recoveryCastle)
             {
                 castleManager.RecoverCastleHp();
             }
             castleManager.TookDamageLastWave = false;
-            if (StageManager.Instance != null && StageManager.Instance.currentWave % 10 == 0)
-            {
-                bossSpawnArea = new Vector3Int(Random.Range(1, 5), 9, 0);
-                bossArea.SetActive(true);
-                bossArea.transform.position = new Vector3(bossSpawnArea.x, 3.5f, 0);
-            }
-            
             yield return StartCoroutine(backgroundManager.ChangePuzzleSize());
             yield return StartCoroutine(cameraManager.CameraPuzzleSizeChange());
-            
             enemyPool.ClearList();
             if (StageManager.Instance != null) StageManager.Instance.isBossClear = false;
             castleManager.castleCrushBoost = false;
@@ -227,6 +228,21 @@ namespace Script
             foreach (var unit in CharacterPool.Instance.pooledCharacters)
             {
                 unit.GetComponent<CharacterBase>().cover.SetActive(false);
+            }
+
+            if (StageManager.Instance != null)
+            {                                                 
+                var stage = StageManager.Instance.SelectedStages();
+                StageManager.Instance.UpdateWaveText();
+                BackGroundManager.Instance.ChangedBackGround(stage);
+            }
+
+            if (StageManager.Instance != null && StageManager.Instance.currentWave % 10 == 0)
+            {
+                bossSpawnArea = new Vector3Int(Random.Range(1, 5), 9, 0);
+                bossArea.SetActive(true);
+                bossArea.transform.position = new Vector3(bossSpawnArea.x, 3.5f, 0);
+                yield return StartCoroutine(SoundManager.Instance.BossWave(SoundManager.Instance.bossWaveClip));
             }
             Quest.Instance.VictoryQuest();
         }

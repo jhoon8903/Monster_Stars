@@ -10,7 +10,6 @@ namespace Script.CharacterManagerScript
     {
         [SerializeField] private CharacterManager characterManager;
         [SerializeField] private int poolSize;
-        [SerializeField] private SpawnManager spawnManager;
         public List<GameObject> pooledCharacters;
         public bool theFirst;
         public static CharacterPool Instance;
@@ -51,14 +50,11 @@ namespace Script.CharacterManagerScript
         public static void ReturnToPool(GameObject obj)
         {
             if (obj == null) return;
-            var spriteRenderer = obj.GetComponent<SpriteRenderer>();
-            spriteRenderer.DOFade(0, 0.6f).OnComplete(() =>
+            // obj.GetComponent<CharacterBase>().CharacterReset();
+            // obj.SetActive(false);
+            obj.transform.DOScale(0.3f, 0.3f).OnComplete(() =>
             {
                 obj.GetComponent<CharacterBase>().CharacterReset();
-                obj.transform.localScale = Vector3.one;
-                var color = spriteRenderer.color;
-                color = new Color(color.r, color.g, color.b, 1);
-                spriteRenderer.color = color;
                 obj.SetActive(false);
             });
         }

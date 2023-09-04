@@ -60,7 +60,6 @@ namespace Script.EnemyManagerScript
             }
             yield return null;
         }
-
         private IEnumerator WalkingEffect(Transform childTransform)
         {
             var originalScale = childTransform.localScale;
@@ -86,7 +85,6 @@ namespace Script.EnemyManagerScript
                 yield return new WaitForSeconds(tweenDuration);
             }
         }
-
         private IEnumerator Rain(EnemyBase enemyBase)
         {
             _rb = enemyBase.GetComponent<Rigidbody2D>();

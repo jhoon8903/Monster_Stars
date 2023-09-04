@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 namespace Script.UIManager
@@ -22,6 +23,8 @@ namespace Script.UIManager
         [SerializeField] internal AudioClip match5Sound;
         [SerializeField] internal AudioClip stageFdsSound;
         [SerializeField] internal AudioClip stageVwSound;
+        [SerializeField] internal AudioClip bossWaveClip;
+        [SerializeField] internal AudioClip levelUpBtnSound;
         public static SoundManager Instance;
         private AudioSource Bgm { get; set; }
         public bool music = true;
@@ -86,23 +89,23 @@ namespace Script.UIManager
         }
         public void BGM(AudioClip clip)
         {
-            if (Bgm != null && Bgm.isPlaying && Bgm.clip == clip)
-            {
-                return;
-            }
-
             if (Bgm != null && Bgm.isPlaying)
             {
                 Bgm.Stop();
-                Destroy(Bgm);
             }
-            Bgm = gameObject.AddComponent<AudioSource>();
+
+            if (Bgm == null)
+            {
+                Bgm = gameObject.AddComponent<AudioSource>();
+            }
+
             Bgm.clip = clip;
             Bgm.loop = true;
             Bgm.volume = 0.5f;
             Bgm.mute = !IsMusicEnabled;
-            Bgm.Play(); 
+            Bgm.Play();
         }
+
         public void PlaySound(AudioClip clip)
         {        
             if (Effect != null && Effect.isPlaying)
@@ -112,6 +115,22 @@ namespace Script.UIManager
             Effect.clip = clip;
             Effect.Play();
         }
+
+        public IEnumerator BossWave(AudioClip audioClip)
+        {
+            var currentClip = Bgm.clip;
+            Debug.Log(currentClip.name);
+            Bgm.Stop();
+            Debug.Log(Bgm.isPlaying);
+            Bgm.clip = audioClip;
+            Bgm.Play();
+            yield return new WaitForSeconds(audioClip.length);
+            Bgm.Play();
+            yield return new WaitForSeconds(audioClip.length);
+            Bgm.clip = currentClip;
+            Bgm.Play();
+        }
+
         public void StageSound(int stage, bool forceChange = false)
         {
             if (!IsMusicEnabled && !forceChange) return;
@@ -125,6 +144,7 @@ namespace Script.UIManager
                     break;
             }
         }
+
         public void ClearSoundEffect(AudioClip clip)
         {
             if (Bgm != null && Bgm.isPlaying)
@@ -142,7 +162,6 @@ namespace Script.UIManager
         }
         public void MatchSound(int matchCount)
         {
-           
             if (!IsSoundEnabled || matchCount == 0) return;
             _match.clip = matchCount switch
             {

@@ -1,11 +1,9 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using Script.CharacterManagerScript;
-using Script.EnemyManagerScript;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.RewardScript
@@ -18,6 +16,7 @@ namespace Script.RewardScript
         [SerializeField] private  Sprite purpleBack;
         [SerializeField] private  Image unitSprite;
         [SerializeField] private  TextMeshProUGUI unitDps;
+
         private Dps _unitDpsInstance;
 
         public void UnitDps(TextMeshProUGUI totalDps, Transform dpsGrid)

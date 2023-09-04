@@ -2,13 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
 namespace Script.PuzzleManagerGroup
@@ -18,17 +15,14 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private GridManager gridManager;
         [SerializeField] private MatchManager matchManager;
         [SerializeField] private CommonRewardManager rewardManger;
-        [SerializeField] private GameManager gameManager;
         [SerializeField] private CountManager countManager;
         [SerializeField] private EnforceManager enforceManager;
         [SerializeField] private SwipeManager swipeManager;
-        public bool isWave10Spawning;
         private float _totalPos;
         private int _currentGroupIndex;
         public bool isTutorial;
         private static readonly object Lock = new object();
         public List<GameObject> movedObjects = new List<GameObject>();
-        private bool _gameStart;
         private int _count = 0;
         private readonly Queue<IEnumerator> _coroutineQueue = new Queue<IEnumerator>();
         private void Start()
@@ -37,10 +31,7 @@ namespace Script.PuzzleManagerGroup
             {
                 isTutorial = true;
             }
-
-            _gameStart = true;
         }
-
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.B))
@@ -48,13 +39,11 @@ namespace Script.PuzzleManagerGroup
                 BossStageClearRule();
             }
         }
-
         public event Action OnMatchFound;
         private void TriggerOnMatchFound()
         {
             OnMatchFound?.Invoke();
         }
-        
         public void AddToQueue(IEnumerator coroutine)
         {
             _coroutineQueue.Enqueue(coroutine);
@@ -63,7 +52,6 @@ namespace Script.PuzzleManagerGroup
                 StartCoroutine(ProcessQueue());
             }
         }
-
         private IEnumerator ProcessQueue()
         {
             while (_coroutineQueue.Count > 0)
@@ -82,6 +70,7 @@ namespace Script.PuzzleManagerGroup
         {
             lock (Lock)
             {
+                swipeManager.isBusy = true;
                 var moves = new List<(GameObject, Vector3Int)>();
                 for (var x = 0; x < gridManager.gridWidth; x++)
                 {
@@ -111,7 +100,6 @@ namespace Script.PuzzleManagerGroup
             swipeManager.isBusy = true;
             lock (Lock)
             {
-             
                 var moveCoroutines
                     = moves.Select(move => StartCoroutine(MoveCharacter(move.Item1, move.Item2))).ToList();
                 foreach (var moveCoroutine in moveCoroutines)
@@ -120,7 +108,7 @@ namespace Script.PuzzleManagerGroup
                 }
             }
         }
-        private static IEnumerator MoveCharacter(GameObject gameObject, Vector3 targetPosition, float duration = 0.3f)
+        private static IEnumerator MoveCharacter(GameObject gameObject, Vector3 targetPosition, float duration = 0.25f)
         {
             lock (Lock)
             {
@@ -146,6 +134,7 @@ namespace Script.PuzzleManagerGroup
             swipeManager.isBusy = true;
             lock (Lock)
             {
+                yield return new WaitForSecondsRealtime(0.14f);
                 var moveCoroutines = new List<Coroutine>();
                 for (var x = 0; x < gridManager.gridWidth; x++)
                 {
@@ -177,6 +166,7 @@ namespace Script.PuzzleManagerGroup
         }
         private IEnumerator CheckPosition()
         {
+            swipeManager.isBusy = true;
             var totalUnitCount = gridManager.gridHeight * gridManager.gridWidth;
             lock (Lock)
             {
@@ -209,6 +199,7 @@ namespace Script.PuzzleManagerGroup
             var notUsePoolCharacterList = CharacterPool.Instance.NotUsePoolCharacterList();
             var randomIndex = Random.Range(0, notUsePoolCharacterList.Count);
             var newCharacter = notUsePoolCharacterList[randomIndex];
+            newCharacter.transform.localScale = Vector3.one;
             newCharacter.transform.position = position;
             if (EnforceManager.Instance.index.Count > 0)
             {
@@ -233,22 +224,21 @@ namespace Script.PuzzleManagerGroup
             movedObjects.Clear();
             lock (Lock)
             {
-                yield return new WaitForSecondsRealtime(0.62f);
+                yield return new WaitForSecondsRealtime(0.52f);
                 var moves = CalculateMoves();
                 if (moves.Count > 0)
                 {
                     movedObjects.AddRange(moves.Select(move => move.Item1).ToList());
-                    yield return StartCoroutine(PerformMoves(moves));
                 }
+                yield return StartCoroutine(PerformMoves(moves));
                 yield return StartCoroutine(SpawnAndMoveNewCharacters());
                 yield return StartCoroutine(CheckPosition());
                 foreach (var movedObject in movedObjects.Where(movedObject => movedObject != null))
                 {
                     movedObject.transform.position = movedObject.transform.position;
                 }
+                var isMatched = movedObjects.Where(movedObject => movedObject != null).ToList().Any(movedObject => matchManager.IsMatched(movedObject.gameObject));
 
-                var isMatched = movedObjects.Where(movedObject => movedObject != null).Any(movedObject => matchManager.IsMatched(movedObject.gameObject));
-               
                 if (isMatched)
                 {
                     _count++;
@@ -256,6 +246,7 @@ namespace Script.PuzzleManagerGroup
                     {
                         countManager.IncrementComboCount();
                     }
+
                     yield return StartCoroutine(PositionUpCharacterObject());
                 }
                 else
@@ -269,6 +260,7 @@ namespace Script.PuzzleManagerGroup
                     {
                         TriggerOnMatchFound();
                     }
+                    swipeManager.isBusy = false;
                 }
 
                 if (countManager.TotalMoveCount <= 0 && !CommonRewardManager.Instance.isOpenBox)
@@ -287,11 +279,9 @@ namespace Script.PuzzleManagerGroup
                         yield return StartCoroutine(GameManager.Instance.Count0Call());
                     }
                 }
-                swipeManager.isBusy = false;
             }
             yield return null;
         }
-
         private GameObject SpawnTutorialCharacter(Vector3Int position)
         {
             GameObject newCharacter = null;
@@ -312,8 +302,10 @@ namespace Script.PuzzleManagerGroup
             }
             if (newCharacter == null) return newCharacter;
             newCharacter.transform.position = position;
+
             newCharacter.GetComponent<CharacterBase>().Initialize();
             newCharacter.SetActive(true);
+            newCharacter.transform.localScale = Vector3.one;
             movedObjects.Add(newCharacter);
             return newCharacter;
         }
@@ -391,7 +383,6 @@ namespace Script.PuzzleManagerGroup
             {
                 if (gridManager.addRowActivate) return;
                 gridManager.addRowActivate = true;
-                isWave10Spawning = true;
                 swipeManager.isBusy = true;
                 foreach (var unit in CharacterPool.Instance.pooledCharacters)
                 {
@@ -425,7 +416,6 @@ namespace Script.PuzzleManagerGroup
                 StartCoroutine(PerformMovesSequentially(moves));
                 moves.Clear();
                 StartCoroutine(PositionUpCharacterObject());
-                isWave10Spawning = false;
                 swipeManager.isBusy = false;
             }
         }

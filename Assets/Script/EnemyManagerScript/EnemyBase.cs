@@ -267,12 +267,13 @@ namespace Script.EnemyManagerScript
 
         public void ReceiveDamage(EnemyBase detectEnemy, float damage, CharacterBase atkUnit, KillReasons reason = KillReasons.ByPlayer)
         {
-            StartCoroutine(DamageTextPopup((int)damage));
+     
             lock (Lock)
             {
                 var receiveDamage = (int)damage;
                 if (gameObject.activeInHierarchy)
                 {
+                    StartCoroutine(DamageTextPopup((int)damage));
                     // Marketing Version
                     var currentDamage = PlayerPrefs.GetInt($"{atkUnit.unitGroup}DPS", 0);
                     var newCumulativeDamage = currentDamage + receiveDamage;

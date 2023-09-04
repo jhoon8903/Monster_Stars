@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,8 +16,9 @@ namespace Script.PuzzleManagerGroup
         [SerializeField] private EnforceManager enforceManager;
         [SerializeField] private SpawnManager spawnManager;
         [SerializeField] private MergeEffect mergePrefab;
-
+        [SerializeField] private SwipeManager swipeManager;
         public List<MergeEffect> mergeEffectList = new List<MergeEffect>();
+
         private void Awake()
         {
             for (var i = 0; i < 20; i++)
@@ -28,6 +30,7 @@ namespace Script.PuzzleManagerGroup
         }
         public bool IsMatched(GameObject swapCharacter)
         {
+            swipeManager.isBusy = true;
             var matched = false;
             var swapCharacterBase = swapCharacter.GetComponent<CharacterBase>();
             var swapCharacterGroup = swapCharacterBase.unitGroup;
@@ -150,7 +153,6 @@ namespace Script.PuzzleManagerGroup
             mergeEffect.MergeAction();
             mergeEffect.MergeActionClose();
         }
-
         private void ReturnEffect(GameObject target)
         {
             var returnEffect = mergeEffectList.FirstOrDefault(effect => !effect.gameObject.activeInHierarchy);
@@ -160,7 +162,6 @@ namespace Script.PuzzleManagerGroup
             returnEffect.ReturnAction();
             returnEffect.ReturnActionClose();
         }
-
         private bool Match3Case(IEnumerable<GameObject> rawMatchedCharacters, int horizontalCount, int verticalCount, Vector3 swapPosition)
         {
             SoundManager.Instance.MatchSound(3);
@@ -308,18 +309,19 @@ namespace Script.PuzzleManagerGroup
                    
                 }
             }
+            // case 1
+            // None
+            // case 2
+             // IsMatched(sortedList[2]);
+            // case 3
             StartCoroutine(Match3(sortedList[2]));
             return true;
         }
         private IEnumerator Match3(GameObject center)
         {
-            yield return new WaitForSecondsRealtime(0.59f);
-            var boolean = IsMatched(center);
-            yield return null;
-            if (boolean)
-            {
-                spawnManager.AddToQueue(spawnManager.PositionUpCharacterObject());
-            }
+            yield return new WaitForSecondsRealtime(1f); 
+            IsMatched(center);
+            StartCoroutine(spawnManager.PositionUpCharacterObject());
         }
         private bool Matches3X3Case(IEnumerable<GameObject> rawMatchedCharacters, Vector3 swapPosition)
         {

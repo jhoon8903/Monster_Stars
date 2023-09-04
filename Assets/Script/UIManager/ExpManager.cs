@@ -54,7 +54,7 @@ namespace Script.UIManager
                         levelUpPoint += 5;
                         expBar.maxValue = levelUpPoint;
                     }
-                    spawnManager.AddToQueue(levelUpRewardManager.LevelUpReward());
+                    StartCoroutine(levelUpRewardManager.LevelUpReward());
                 }
                 expBar.value = expPoint;
                 expBar.DOValue(expPoint, 0.5f);

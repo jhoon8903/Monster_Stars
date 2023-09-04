@@ -151,6 +151,7 @@ namespace Script.UIManager
 
         public IEnumerator WaveController()
         {
+            _spawnSetCount = 0;
             var (set1SpawnValue,set1EnemyClass, set1SpawnZone, 
                 set2SpawnValue,set2EnemyClass,set2SpawnZone,
                 set3SpawnValue, set3EnemyClass, set3SpawnZone
@@ -159,6 +160,7 @@ namespace Script.UIManager
             setCount = bossClass != null ? 1 : setCount;
             if (bossClass != null &&!_alreadyBoss)
             {
+                Debug.Log(bossClass);
                 _alreadyBoss = true;
                 yield return StartCoroutine(enemySpawnManager.SpawnBoss(bossClass, EnemyBase.SpawnZones.A));
                 _spawnSetCount = 1;
@@ -179,15 +181,7 @@ namespace Script.UIManager
         public void EnemyDestroyEvent(EnemyBase enemyBase)
         {
             enemyPool.enemyBases.Remove(enemyBase);
-
-            if (_spawnSetCount < setCount) return;
-            
-            StartCoroutine(DelayedEndWaveCheck());
-            
-            if (enemyPool.enemyBases.Count > 0) return;
-            
-            _spawnSetCount = 0;
-
+            if (_spawnSetCount < setCount || enemyPool.enemyBases.Count > 0) return;
             if (castleManager.HpPoint > 0)
             {
                 if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
@@ -206,12 +200,6 @@ namespace Script.UIManager
             {
                 StartCoroutine(DelayedContinueOrLose());
             }
-        }
-
-        private static IEnumerator DelayedEndWaveCheck()
-        {
-            yield return new WaitForSecondsRealtime(3f);
-            yield return null;
         }
         private IEnumerator DelayedContinueOrLose()
         {
