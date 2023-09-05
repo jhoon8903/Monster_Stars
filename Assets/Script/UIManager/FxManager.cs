@@ -23,27 +23,25 @@ namespace Script.UIManager
             }
         }
 
-        public IEnumerator DeadEffect(Vector3 position)
+        public void DeadEffect(Vector3 position)
         {
             foreach (var bornObject in bornPoolList.Where(bornObject => !bornObject.activeInHierarchy))
             {
                 bornObject.transform.position = position;
                 bornObject.SetActive(true);
-                yield return new WaitForSecondsRealtime(0.5f);
-                //bornObject.SetActive(false);
+                StartCoroutine(SetFalseEffect(bornObject));
+                break;
             }
         }
 
-        public IEnumerator SetFalseEffect()
+        private static IEnumerator SetFalseEffect(GameObject bornEffects)
         {
-            foreach (var effect in bornPoolList)
+            if (bornEffects != null)
             {
-                if (effect.activeInHierarchy)
-                {
-                    effect.SetActive(false);
-                    yield return null;
-                }
+                yield return new WaitForSecondsRealtime(0.5f);
+                bornEffects.SetActive(false);
             }
+            yield return null;
         }
     }
 }

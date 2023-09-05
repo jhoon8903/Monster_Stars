@@ -23781,6 +23781,7 @@ MonoBehaviour:
   stageVwSound: {fileID: 8300000, guid: 5fb3bb7cffc2b423d800f527275461a1, type: 3}
   bossWaveClip: {fileID: 8300000, guid: 4bdeb0fd120cb4795a3258604d42b0b9, type: 3}
   levelUpBtnSound: {fileID: 8300000, guid: 1dd96072af8df4556aae90e8308c24d3, type: 3}
+  strikeCastle: {fileID: 8300000, guid: 248b1a597b0714fb698d9e5f8100412a, type: 3}
   music: 1
   sound: 1
 --- !u!4 &2111977669

@@ -38,7 +38,7 @@ Stage,Wave,1Set,EnemyClass,SpawnZone,2Set,EnemyClass,SpawnZone,3Set,EnemyClass,S
 3,7,6,SwordMan,A,2,Militia,D,2,Engineer,E,
 3,8,6,SwordMan,D,3,Militia,B C,2,Engineer,A,
 3,9,7,SwordMan,A,3,Militia,D,2,Engineer,E,
-3,10,,,,,,,,,,Royalguard
+3,10,,,,,,,,,,RoyalGuard
 3,11,4,SwordMan,A,,,,,,,
 3,12,4,SwordMan,A,1,Militia,B C,,,,
 3,13,5,SwordMan,A,1,Militia,D,,,,
@@ -88,7 +88,7 @@ Stage,Wave,1Set,EnemyClass,SpawnZone,2Set,EnemyClass,SpawnZone,3Set,EnemyClass,S
 5,17,7,Miner,A,2,Quarreller,D,2,Marauder,E,
 5,18,7,Miner,D,3,Quarreller,B C,3,Marauder,F,
 5,19,8,Miner,A,3,Quarreller,D,3,Marauder,E,
-5,20,,,,,,,,,,Runesmith
+5,20,,,,,,,,,,RuneSmith
 6,1,3,Pilgrim,A,,,,,,,
 6,2,3,Pilgrim,A,1,WarDancer,A,,,,
 6,3,4,Pilgrim,A,1,WarDancer,A,,,,
@@ -138,7 +138,7 @@ Stage,Wave,1Set,EnemyClass,SpawnZone,2Set,EnemyClass,SpawnZone,3Set,EnemyClass,S
 8,7,6,Farmer,A,2,Scout,D,2,Magician,E,
 8,8,6,Farmer,D,3,Scout,B C,2,Magician,A,
 8,9,7,Farmer,A,3,Scout,D,2,Magician,E,
-8,10,,,,,,,,,,Royalguard
+8,10,,,,,,,,,,RoyalGuard
 8,11,4,Farmer,A,,,,,,,
 8,12,4,Farmer,A,1,Scout,B C,,,,
 8,13,5,Farmer,A,1,Scout,D,,,,
@@ -168,7 +168,7 @@ Stage,Wave,1Set,EnemyClass,SpawnZone,2Set,EnemyClass,SpawnZone,3Set,EnemyClass,S
 9,17,7,Miner,A,3,Quarreller,D,2,Marauder,E,
 9,18,7,Miner,D,4,Quarreller,B C,2,Marauder,F,
 9,19,8,Miner,A,4,Quarreller,D,2,Marauder,E,
-9,20,,,,,,,,,,Runesmith
+9,20,,,,,,,,,,RuneSmith
 10,1,3,SwordMan,A,,,,,,,
 10,2,3,SwordMan,A,1,Militia,A,,,,
 10,3,4,SwordMan,A,1,Militia,A,,,,
@@ -188,7 +188,7 @@ Stage,Wave,1Set,EnemyClass,SpawnZone,2Set,EnemyClass,SpawnZone,3Set,EnemyClass,S
 10,17,7,SwordMan,A,2,Militia,D,2,Engineer,F,
 10,18,7,SwordMan,D,3,Militia,B C,2,Engineer,A,
 10,19,8,SwordMan,A,3,Militia,D,2,Engineer,E,
-10,20,,,,,,,,,,Royalguard
+10,20,,,,,,,,,,RoyalGuard
 10,21,4,SwordMan,A,,,,,,,
 10,22,4,SwordMan,A,1,Militia,B C,,,,
 10,23,5,SwordMan,A,1,Militia,D,,,,
@@ -238,7 +238,7 @@ Stage,Wave,1Set,EnemyClass,SpawnZone,2Set,EnemyClass,SpawnZone,3Set,EnemyClass,S
 12,7,6,Pilgrim,A,3,WarDancer,E,2,Wizard,F,
 12,8,6,Pilgrim,D,4,WarDancer,B C,3,Wizard,E,
 12,9,7,Pilgrim,A,4,WarDancer,E,3,Wizard,A,
-12,10,,,,,,,,,,Royalguard
+12,10,,,,,,,,,,RoyalGuard
 12,11,4,Pilgrim,A,,,,,,,
 12,12,4,Pilgrim,A,2,WarDancer,B C,,,,
 12,13,5,Pilgrim,A,2,WarDancer,E,,,,
@@ -278,7 +278,7 @@ Stage,Wave,1Set,EnemyClass,SpawnZone,2Set,EnemyClass,SpawnZone,3Set,EnemyClass,S
 13,17,7,SwordMan,A,4,Militia,E,2,Engineer,F,
 13,18,7,SwordMan,D,5,Militia,B C,3,Engineer,E,
 13,19,8,SwordMan,A,5,Militia,E,3,Engineer,A,
-13,20,,,,,,,,,,Royalguard
+13,20,,,,,,,,,,RoyalGuard
 13,21,4,SwordMan,A,,,,,,,
 13,22,4,SwordMan,A,2,Militia,B C,,,,
 13,23,5,SwordMan,A,2,Militia,E,,,,
@@ -348,7 +348,7 @@ Stage,Wave,1Set,EnemyClass,SpawnZone,2Set,EnemyClass,SpawnZone,3Set,EnemyClass,S
 15,27,7,Miner,A,4,Quarreller,E,3,Marauder,F,
 15,28,7,Miner,D,5,Quarreller,B C,4,Marauder,E,
 15,29,8,Miner,A,5,Quarreller,E,4,Marauder,A,
-15,30,,,,,,,,,,Runesmith
+15,30,,,,,,,,,,RuneSmith
 16,1,3,SwordMan,A,,,,,,,
 16,2,3,SwordMan,A,1,Militia,A,,,,
 16,3,4,SwordMan,A,1,Militia,A,,,,
@@ -368,7 +368,7 @@ Stage,Wave,1Set,EnemyClass,SpawnZone,2Set,EnemyClass,SpawnZone,3Set,EnemyClass,S
 16,17,7,SwordMan,A,4,Militia,E,2,Engineer,F,
 16,18,7,SwordMan,D,5,Militia,B C,3,Engineer,E,
 16,19,8,SwordMan,A,5,Militia,E,3,Engineer,A,
-16,20,,,,,,,,,,Royalguard
+16,20,,,,,,,,,,RoyalGuard
 16,21,4,SwordMan,A,,,,,,,
 16,22,4,SwordMan,A,2,Militia,B C,,,,
 16,23,5,SwordMan,A,2,Militia,E,,,,
@@ -388,7 +388,7 @@ Stage,Wave,1Set,EnemyClass,SpawnZone,2Set,EnemyClass,SpawnZone,3Set,EnemyClass,S
 17,7,6,Pilgrim,A,3,WarDancer,E,2,Wizard,F,
 17,8,6,Pilgrim,D,4,WarDancer,B C,3,Wizard,E,
 17,9,7,Pilgrim,A,4,WarDancer,E,3,Wizard,A,
-17,10,,,,,,,,,,Runesmith
+17,10,,,,,,,,,,RuneSmith
 17,11,4,Pilgrim,A,,,,,,,
 17,12,4,Pilgrim,A,2,WarDancer,B C,,,,
 17,13,5,Pilgrim,A,2,WarDancer,E,,,,
@@ -498,4 +498,4 @@ Stage,Wave,1Set,EnemyClass,SpawnZone,2Set,EnemyClass,SpawnZone,3Set,EnemyClass,S
 20,27,7,Miner,A,4,Quarreller,F,3,Marauder,F,
 20,28,7,Miner,D,5,Quarreller,B C,4,Marauder,E,
 20,29,8,Miner,A,5,Quarreller,F,4,Marauder,A,
-20,30,,,,,,,,,,Runesmith
+20,30,,,,,,,,,,RuneSmith

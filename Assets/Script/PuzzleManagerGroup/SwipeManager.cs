@@ -114,7 +114,7 @@ namespace Script.PuzzleManagerGroup
         }
         private void HandleTouchDown(Vector2 point2D)
         {
-            if (isBusy || _isSoon) return;
+            if (isBusy || isUp || CommonRewardManager.Instance.isOpenBox) return;
             SoundManager.Instance.PlaySound(SoundManager.Instance.touchUnitSound);
             var coverLayerMask = LayerMask.GetMask("Cover");
             var hitCover = Physics2D.Raycast(point2D, Vector2.zero, Mathf.Infinity, coverLayerMask);
@@ -154,7 +154,8 @@ namespace Script.PuzzleManagerGroup
         }
         private void HandleDrag(Vector2 point2D)
         {
-            if (isBusy || isUp ) return;
+            if (isBusy || isUp || CommonRewardManager.Instance.isOpenBox) return;
+            spawnManager.count = 0;
             var swipe = point2D - _firstTouchPosition;
             if (!(swipe.sqrMagnitude > minSwipeLength * minSwipeLength)) return;
             if (!(Mathf.Abs(swipe.x) > 0.5f) && !(Mathf.Abs(swipe.y) > 0.5f)) return;
@@ -165,7 +166,7 @@ namespace Script.PuzzleManagerGroup
         }
         private void Swipe(Vector2 swipe)
         {
-            if (isBusy || isUp ) return;
+            if (isBusy || isUp || CommonRewardManager.Instance.isOpenBox) return;
             if (_startObject == null) return;
             var swipeAngle = Mathf.Atan2(swipe.y, swipe.x) * Mathf.Rad2Deg;
             swipeAngle = (swipeAngle < 0) ? swipeAngle + 360 : swipeAngle;
@@ -309,6 +310,7 @@ namespace Script.PuzzleManagerGroup
             yield return new WaitForSecondsRealtime(1f);
             if (_startObject == null || !_startObject.GetComponent<CharacterBase>().IsClicked)
                 yield break;
+            spawnManager.count = 0;
             var position = _startObject.transform.position;
             var pressObjectInstance = Instantiate(pressObject, new Vector3(position.x, position.y + 0.5f, position.z), Quaternion.identity);
             var frontObject = pressObjectInstance.transform.GetChild(0).GetChild(0); 
@@ -338,9 +340,10 @@ namespace Script.PuzzleManagerGroup
         }
         private IEnumerator NullSwap(GameObject startObject, int endX, int endY)
         {
-            if (isBusy || isUp ) yield break;
+            if (isBusy || isUp || CommonRewardManager.Instance.isOpenBox) yield break;
             if (endY < 0) yield break;
             isBusy = true;
+            spawnManager.count = 0;
             if (startObject == null) yield break;
             if (startObject.transform.position.y == 0) yield return null;
             var nullPosition = new Vector3Int(endX, endY, 0);
@@ -358,9 +361,9 @@ namespace Script.PuzzleManagerGroup
         }
         private IEnumerator SwitchAndMatches(GameObject startObject, GameObject endObject)
         {
-            if (isBusy || isUp) yield break;
+            if (isBusy || isUp || CommonRewardManager.Instance.isOpenBox) yield break;
             isBusy = true;
-           
+            spawnManager.count = 0;
             if (startObject == null || endObject == null) yield break;
             var startObjectPosition = startObject.transform.position;
             var endObjectPosition = endObject.transform.position;

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Script.CharacterGroupScript;
 using Script.EnemyManagerScript;
 using UnityEngine;
@@ -26,10 +27,10 @@ namespace Script.WeaponScriptGroup
             while (isInUse)
             {
                 _enemyTransforms = CharacterBase.GetComponent<Skeleton>().DetectEnemies();
-                if (_enemyTransforms.Count == 0)                             
+                if (!_enemyTransforms.Any() || !_enemyTransforms[0].activeInHierarchy) 
                 {
                     StopUseWeapon(gameObject);
-                    break;
+                    yield break;
                 }
                 var currentEnemy = _enemyTransforms[0].GetComponent<EnemyBase>();
                 var upwards = (currentEnemy.transform.position - transform.position).normalized;
@@ -38,6 +39,7 @@ namespace Script.WeaponScriptGroup
                 yield return null;
             }
         }
+
 
         private void OnTriggerEnter2D(Collider2D collision)
         {

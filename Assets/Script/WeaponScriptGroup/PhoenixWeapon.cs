@@ -21,7 +21,15 @@ namespace Script.WeaponScriptGroup
             _enemyTransforms = CharacterBase.GetComponent<Phoenix>().DetectEnemies();
             foreach (var enemy in _enemyTransforms)
             {
-                _enemyTransform = enemy.transform.position;
+                if (enemy.activeInHierarchy)
+                {
+                    _enemyTransform = enemy.transform.position;
+                }
+                else
+                {
+                    StopUseWeapon(gameObject);
+                    yield break;
+                }
             }
             while (Vector3.Distance(transform.position, _enemyTransform) > 0.1f)
             {

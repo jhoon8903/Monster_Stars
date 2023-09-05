@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
 using UnityEngine;
@@ -92,6 +91,7 @@ namespace Script.EnemyManagerScript
             var targetPosition = new Vector2(_enemyRigidbodies[enemyBase].transform.position.x, _endY);
             var childTransform = enemyBase.transform.Find("Sprite");
             StartCoroutine(WalkingEffect(childTransform));
+         
             while (gameManager.IsBattle)
             {
                 yield return StartCoroutine(gameManager.WaitForPanelToClose());
@@ -102,12 +102,12 @@ namespace Script.EnemyManagerScript
                 }
                 _slowCount = EnforceManager.Instance.slowCount;
                 _speedReductionFactor = 1f - _slowCount * 0.15f;
+          
                 if (_speedReductionFactor == 0)
                 {
                     _speedReductionFactor = 1f;
                 }
                 _moveSpeed = enemyBase.moveSpeed * _speedReductionFactor * moveSpeedOffset * Time.deltaTime;
-
                 if (_rb != null)
                 {
                     _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed);

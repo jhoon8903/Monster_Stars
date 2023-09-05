@@ -17,15 +17,26 @@ namespace Script.WeaponScriptGroup
         {
             yield return base.UseWeapon();
             _enemyTransforms = CharacterBase.GetComponent<Ogre>().DetectEnemies();
+    
             foreach (var enemy in _enemyTransforms)
             {
-                _enemyTransform = enemy.transform.position;
+                if (enemy.activeInHierarchy)
+                {
+                    _enemyTransform = enemy.transform.position;
+                }
+                else
+                {
+                    StopUseWeapon(gameObject);
+                    yield break;
+                }
             }
+    
             if (CharacterBase.GetComponent<Ogre>().atkCount == 3)
             {
                 Damage *= 2f;
                 CharacterBase.GetComponent<Ogre>().atkCount = 0;
             }
+
             while (Vector3.Distance(transform.position, _enemyTransform) > 0.1f)
             {
                 var position = transform.position;

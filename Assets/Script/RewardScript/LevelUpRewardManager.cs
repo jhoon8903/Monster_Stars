@@ -74,7 +74,7 @@ namespace Script.RewardScript
                     EnforceManager.Instance.IncreaseCastleMaxHp(selectedReward);
                     break;
                 case PowerTypeManager.Types.Slow:
-                    EnforceManager.Instance.NextCharacterUpgrade(selectedReward, selectedReward.Property[0]);
+                    EnforceManager.Instance.SlowCount(selectedReward);
                     break;
                 case PowerTypeManager.Types.NextStage:
                     EnforceManager.Instance.NextCharacterUpgrade(selectedReward,selectedReward.Property[0]);
@@ -86,7 +86,7 @@ namespace Script.RewardScript
                     EnforceManager.Instance.Match5Upgrade(selectedReward);
                     break;
                 case PowerTypeManager.Types.StepLimit:
-                    EnforceManager.Instance.PermanentIncreaseMoveCount(selectedReward, selectedReward.Property[0]);
+                    EnforceManager.Instance.PermanentIncreaseMoveCount(selectedReward, 1);
                     break;
                 // A
                 case PowerTypeManager.Types.OctopusThirdAttackBoost:
@@ -448,11 +448,11 @@ namespace Script.RewardScript
                             if (StageManager.Instance != null && !StageManager.Instance.isBossClear) return false;
                             if (StageManager.Instance != null && StageManager.Instance.currentWave % 10 != 0) return false;
                             break;
-                        case PowerTypeManager.Types.CastleMaxHp:
-                            if (EnforceManager.Instance.castleMaxHp >= 1000) return false;
-                            break; 
                         case PowerTypeManager.Types.Match5Upgrade:
                             if (EnforceManager.Instance.match5Upgrade) return false;
+                            break;
+                        case PowerTypeManager.Types.StepLimit:
+                            if (EnforceManager.Instance.permanentIncreaseMovementCount >= 1) return false;
                             break;
                         // Unit A
                         case PowerTypeManager.Types.OctopusThirdAttackBoost:

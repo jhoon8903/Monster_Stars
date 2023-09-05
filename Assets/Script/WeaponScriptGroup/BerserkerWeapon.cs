@@ -22,7 +22,7 @@ namespace Script.WeaponScriptGroup
         {
             yield return base.UseWeapon();
             _enemyTransforms = CharacterBase.GetComponent<Berserker>().DetectEnemies();
-
+    
             if (CharacterBase.GetComponent<Berserker>().atkCount % 3 == 0)
             {
                 CharacterBase.GetComponent<Berserker>().atkCount = 0;
@@ -32,11 +32,20 @@ namespace Script.WeaponScriptGroup
                 yield return new WaitForSeconds(useTime);
                 StopUseWeapon(gameObject);
             }
-            
+    
             foreach (var enemy in _enemyTransforms)
             {
-                _enemyTransform = enemy.transform.position;
+                if (enemy.activeInHierarchy)
+                {
+                    _enemyTransform = enemy.transform.position;
+                }
+                else
+                {
+                    StopUseWeapon(gameObject);
+                    yield break;
+                }
             }
+    
             while (Vector3.Distance(transform.position, _enemyTransform) > 0.1f)
             {
                 var position = transform.position;
@@ -48,6 +57,7 @@ namespace Script.WeaponScriptGroup
             }
             StopUseWeapon(gameObject);
         }
+
 
         private void OnTriggerEnter2D(Collider2D collision)
         {

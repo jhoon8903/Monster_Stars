@@ -23,9 +23,8 @@ namespace Script.QuestGroup
             StartCoroutine(questManager.SpecialQuestUpdate(QuestManager.QuestTypes.ViewAds, 1));
         }
         // All Clear Quest (Fix)
-        public void AllClearQuest(QuestManager.QuestTypes quest)
+        public void AllClearQuest()
         {
-            if (questList.Contains(quest)) return;
             StartCoroutine(questManager.SpecialQuestUpdate(QuestManager.QuestTypes.AllClear, 1));
         }
         // Use Coin Quest (Fix)

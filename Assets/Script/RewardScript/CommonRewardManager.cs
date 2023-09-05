@@ -135,11 +135,42 @@ namespace Script.RewardScript
             var selectedCodes = new HashSet<int>();
             if (StageManager.Instance != null && StageManager.Instance.isBossClear && !EnforceManager.Instance.addRow)
             {
-                const PowerTypeManager.Types type = PowerTypeManager.Types.AddRow;
-                var (desc, popupDesc) = GetSkillDesc(type);
-                var firstDesiredPowerUp = new PurpleData(CharacterBase.UnitGroups.None, 1, 16, PowerTypeManager.Types.AddRow,PowerTypeManager.Instance.purple, PowerTypeManager.Instance.purpleBack,   desc, popupDesc, new[] { 1 });
+                const PowerTypeManager.Types firstType = PowerTypeManager.Types.AddRow;
+                var (firstDesc, firstPopupDesc) = GetSkillDesc(firstType);
+                var firstDesiredPowerUp = new PurpleData(CharacterBase.UnitGroups.None, 1, 16, PowerTypeManager.Types.AddRow,PowerTypeManager.Instance.purple, PowerTypeManager.Instance.purpleBack, firstDesc, firstPopupDesc, new[] { 1 });
                 commonPowerUps.Add(firstDesiredPowerUp);
                 selectedCodes.Add(firstDesiredPowerUp.Code);
+
+                if (!EnforceManager.Instance.diagonalMovement && StageManager.Instance.currentWave >= 20)
+                {
+                    const PowerTypeManager.Types types = PowerTypeManager.Types.StepDirection;
+                    var (secondDesc, secondPopupDesc) = GetSkillDesc(types);
+                    var secondDesiredPowerUp = new PurpleData(CharacterBase.UnitGroups.None, 1, 16, PowerTypeManager.Types.StepDirection,PowerTypeManager.Instance.purple, PowerTypeManager.Instance.purpleBack, secondDesc, secondPopupDesc, new[] { 1 });
+                    commonPowerUps.Add(secondDesiredPowerUp);
+                    selectedCodes.Add(secondDesiredPowerUp.Code);
+                    var rotation = EnforceManager.Instance.addRow ? 2 : 1;
+                    for (var i = 0; i < rotation; i++)
+                    {
+                        Data selectedPowerUp;
+                        switch (forcedColor)
+                        {
+                            case "blue" when i == 0: selectedPowerUp = CommonUnique(PowerTypeManager.Instance.BlueList, selectedCodes); break;
+                            case "purple" when i == 0: selectedPowerUp = CommonUnique(PowerTypeManager.Instance.PurpleList, selectedCodes); break;
+                            default:
+                            {
+                                var total = greenChance + blueChance + purpleChance;
+                                var randomValue = Random.Range(0, total);
+                                if (randomValue < greenChance) { selectedPowerUp = CommonUnique(PowerTypeManager.Instance.GreenList, selectedCodes); }
+                                else if (randomValue < greenChance + blueChance) { selectedPowerUp = CommonUnique(PowerTypeManager.Instance.BlueList, selectedCodes); }
+                                else { selectedPowerUp = CommonUnique(PowerTypeManager.Instance.PurpleList, selectedCodes); }
+                                break;
+                            }
+                        }
+                        if (selectedPowerUp == null) continue;
+                        commonPowerUps.Add(selectedPowerUp);
+                        selectedCodes.Add(selectedPowerUp.Code);
+                    }
+                }
 
                 for (var i = 0; i < 2; i++)
                 {
@@ -206,9 +237,6 @@ namespace Script.RewardScript
                     case PowerTypeManager.Types.Gold:
                         if (EnforceManager.Instance.addGold) return false;
                         break;
-                    case PowerTypeManager.Types.CastleMaxHp:
-                        if (EnforceManager.Instance.castleMaxHp >= 1000) return false; // Make sure the max HP of the castle does not exceed 2000
-                        break;
                     case PowerTypeManager.Types.Exp:
                         if (EnforceManager.Instance.expPercentage >= 30) return false; // Make sure the EXP increment does not exceed 30%
                         break;
@@ -226,14 +254,13 @@ namespace Script.RewardScript
                     case PowerTypeManager.Types.StepDirection:
                         if (spawnManager.isTutorial) return false;
                         if (EnforceManager.Instance.diagonalMovement)return false;
-                        if (!StageManager.Instance.isBossClear) return false;
                         if (StageManager.Instance.currentWave % 10 != 0 ) return false;
                         break;
                     case PowerTypeManager.Types.Match5Upgrade:
                         if (EnforceManager.Instance.match5Upgrade) return false; // Don't show this option if 5 matching upgrade option is enabled
                         break;
                     case PowerTypeManager.Types.StepLimit:
-                        if (EnforceManager.Instance.permanentIncreaseMovementCount > 1) return false; // don't show this option if permanent move count increment is enabled
+                        if (EnforceManager.Instance.permanentIncreaseMovementCount >= 1) return false; // don't show this option if permanent move count increment is enabled
                         break;
                     case PowerTypeManager.Types.CastleRecovery:
                         if (EnforceManager.Instance.recoveryCastle) return false; // Castle recovery can only be used once
@@ -501,7 +528,7 @@ namespace Script.RewardScript
                     EnforceManager.Instance.RewardMoveCount(selectedReward.Property[0]);
                     break; // 카운트 증가
                 case PowerTypeManager.Types.StepLimit:
-                    EnforceManager.Instance.PermanentIncreaseMoveCount(selectedReward,selectedReward.Property[0]);
+                    EnforceManager.Instance.PermanentIncreaseMoveCount(selectedReward,1);
                     break; // 영구적 카운트 증가
                 case PowerTypeManager.Types.StepDirection:
                     EnforceManager.Instance.DiagonalMovement(selectedReward);

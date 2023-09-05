@@ -13,7 +13,6 @@ namespace Script.UIManager
         private int _comboCount;
         private int _baseMoveCount;
         private int _rewardMoveCount;
-        private int _stepRewardCount;
         protected internal int TotalMoveCount;
         public bool IsSwapOccurred { get; set; }
         public TextMeshProUGUI moveCountText;
@@ -24,7 +23,6 @@ namespace Script.UIManager
             _rewardMoveCount = EnforceManager.Instance.permanentIncreaseMovementCount;
             TotalMoveCount = _baseMoveCount + _rewardMoveCount;
             _comboCount = 0;
-            _stepRewardCount = 0;
             UpdateMoveCountText();
             EnforceManager.Instance.rewardMoveCount = 0;
         }
@@ -48,15 +46,14 @@ namespace Script.UIManager
 
         public void IncreaseMoveCount(int comboCount)
         {
-            _stepRewardCount += comboCount;
-            TotalMoveCount += _stepRewardCount;
+            TotalMoveCount += comboCount;
             UpdateMoveCountText();
-            _stepRewardCount = 0;
         }
 
         public void IncrementComboCount()
         {
-            if (PlayerPrefs.GetInt("TutorialKey") == 1) return;
+            var tutorial = bool.Parse(PlayerPrefs.GetString("TutorialKey", "true"));
+            if (tutorial) return;
             _comboCount++;
             IncreaseMoveCount(_comboCount);
             _comboCount = 0;

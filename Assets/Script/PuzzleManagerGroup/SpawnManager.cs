@@ -23,8 +23,9 @@ namespace Script.PuzzleManagerGroup
         public bool isTutorial;
         private static readonly object Lock = new object();
         public List<GameObject> movedObjects = new List<GameObject>();
-        private int _count = 0;
+        public int count;
         private readonly Queue<IEnumerator> _coroutineQueue = new Queue<IEnumerator>();
+        public bool bossClearRule;
         private void Start()
         {
             if (bool.Parse(PlayerPrefs.GetString("TutorialKey", "true")))
@@ -152,7 +153,7 @@ namespace Script.PuzzleManagerGroup
                         if (CharacterObject(spawnPosition) != null) continue;
                         var newCharacter = SpawnNewCharacter(spawnPosition);
                         if (newCharacter == null) continue;
-                        var coroutine = StartCoroutine(MoveCharacter(newCharacter, currentPosition));
+                        var coroutine = StartCoroutine(MoveCharacter(newCharacter, currentPosition, 0.35f));
                         moveCoroutines.Add(coroutine);
                         movedObjects.Add(newCharacter);
                     }
@@ -241,17 +242,11 @@ namespace Script.PuzzleManagerGroup
 
                 if (isMatched)
                 {
-                    _count++;
-                    if (_count > 1)
-                    {
-                        countManager.IncrementComboCount();
-                    }
-
                     yield return StartCoroutine(PositionUpCharacterObject());
                 }
                 else
                 {
-                    _count = 0;
+                    count = 0;
                     if (rewardManger.PendingTreasure.Count != 0)
                     {
                         yield return StartCoroutine(rewardManger.EnqueueTreasure());
@@ -265,14 +260,6 @@ namespace Script.PuzzleManagerGroup
 
                 if (countManager.TotalMoveCount <= 0 && !CommonRewardManager.Instance.isOpenBox)
                 {
-                    if (isMatched)
-                    {
-                        _count++;
-                        if (_count > 1)
-                        {
-                            countManager.IncrementComboCount();
-                        }
-                    }
                     yield return new WaitForSecondsRealtime(1f);
                     if (countManager.TotalMoveCount <= 0 && !CommonRewardManager.Instance.isOpenBox)
                     {
@@ -379,6 +366,10 @@ namespace Script.PuzzleManagerGroup
         }
         public void BossStageClearRule()
         {
+            Debug.Log("Call Boss Clear");
+            if (bossClearRule) return;
+            bossClearRule = true;
+            Debug.Log("Boss Clear Activate");
             lock (Lock)
             {
                 if (gridManager.addRowActivate) return;
@@ -415,8 +406,9 @@ namespace Script.PuzzleManagerGroup
                 }
                 StartCoroutine(PerformMovesSequentially(moves));
                 moves.Clear();
-                StartCoroutine(PositionUpCharacterObject());
+                // StartCoroutine(PositionUpCharacterObject());
                 swipeManager.isBusy = false;
+                bossClearRule = false;
             }
         }
     }

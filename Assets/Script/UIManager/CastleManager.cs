@@ -55,13 +55,14 @@ namespace Script.UIManager
             }
             var enemyBase = collision.gameObject.GetComponent<EnemyBase>();
             if (enemyBase == null) return;
+            SoundManager.Instance.PlaySound(SoundManager.Instance.strikeCastle);
             HpPoint -= enemyBase.CrushDamage;
             TookDamageLastWave = true;
             hpBar.DOValue(HpPoint, 1.0f);
             UpdateHpText();
             FindObjectOfType<EnemyBase>().EnemyKilledEvents(enemyBase);
             if (HpPoint > 0) return;
-            BackGroundManager.Instance.Lose();
+            BackGroundManager.Instance.Lose(BackGroundManager.Instance.index);
             HpPoint = 0;
             hpBar.value = HpPoint;
             UpdateHpText();

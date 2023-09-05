@@ -71,7 +71,7 @@ namespace Script.CharacterManagerScript
                 var increaseDamageAmount = EnforceManager.Instance.increaseAtkDamage;
                 return baseDamage * (1.0f + (increaseDamageAmount / 100f));
             }
-            set => baseDamage = (int)value;
+            protected set => baseDamage = (int)value;
         }
         public float defaultAtkRate;
         public float projectileSpeed; 
@@ -184,40 +184,36 @@ namespace Script.CharacterManagerScript
             switch (unitPieceLevel)
             {
                 case 1:
-                case 2:
-                    maxPiece = 5;
                     break;
-                case 3:
+                case 2:
                     maxPiece = UnitGrade switch
                     {
-                        UnitGrades.G => 10,
-                        UnitGrades.B => 5,
+                        UnitGrades.G => 10
                     };
                     break;
-                case 4:
+                case 3:
                     maxPiece = UnitGrade switch
                     {
                         UnitGrades.G => 25,
                         UnitGrades.B => 5,
                     };
                     break;
+                case 4:
+                    maxPiece = UnitGrade switch
+                    {
+                        UnitGrades.G => 50,
+                        UnitGrades.B => 10,
+                    };
+                    break;
                  case 5:
-                     maxPiece = UnitGrade switch
-                     {
-                       UnitGrades.G => 50,
-                       UnitGrades.B => 10,
-                       UnitGrades.P => 3
-                     };
-                     break;
-                 case 6:
                      maxPiece = UnitGrade switch
                      {
                          UnitGrades.G => 100,
                          UnitGrades.B => 25,
-                         UnitGrades.P => 5
+                         UnitGrades.P => 5,
                      };
                      break;
-                 case 7:
+                 case 6:
                      maxPiece = UnitGrade switch
                      {
                          UnitGrades.G => 200,
@@ -225,7 +221,7 @@ namespace Script.CharacterManagerScript
                          UnitGrades.P => 10
                      };
                      break;
-                 case 8:
+                 case 7:
                      maxPiece = UnitGrade switch
                      {
                          UnitGrades.G => 500,
@@ -233,7 +229,7 @@ namespace Script.CharacterManagerScript
                          UnitGrades.P => 20
                      };
                      break;
-                 case 9:
+                 case 8:
                      maxPiece = UnitGrade switch
                      {
                          UnitGrades.G => 1000,
@@ -241,7 +237,7 @@ namespace Script.CharacterManagerScript
                          UnitGrades.P => 40
                      };
                      break;
-                 case 10:
+                 case 9:
                      maxPiece = UnitGrade switch
                      {
                          UnitGrades.G => 2000,
@@ -249,7 +245,7 @@ namespace Script.CharacterManagerScript
                          UnitGrades.P => 80
                      };
                      break;
-                 case 11:
+                 case 10:
                      maxPiece = UnitGrade switch
                      {
                          UnitGrades.G => 4000,
@@ -257,7 +253,7 @@ namespace Script.CharacterManagerScript
                          UnitGrades.P => 160
                      };
                      break;
-                 case 12:
+                 case 11:
                      maxPiece = UnitGrade switch
                      {
                          UnitGrades.G => 6000,
@@ -265,7 +261,7 @@ namespace Script.CharacterManagerScript
                          UnitGrades.P => 320
                      };
                      break;
-                 case 13:
+                 case 12:
                      maxPiece = UnitGrade switch
                      {
                          UnitGrades.G => 8000,
@@ -273,7 +269,7 @@ namespace Script.CharacterManagerScript
                          UnitGrades.P => 480
                      };
                      break;
-                 case 14:
+                 case 13:
                      maxPiece = UnitGrade switch
                      {
                          UnitGrades.G => 8000,
@@ -290,34 +286,31 @@ namespace Script.CharacterManagerScript
             switch (unitPieceLevel)
             {
                 case 1:
-                    coin = 0;
-                    break;
-                case 2:
                     coin = 100;
                     break;
-                case 3:
+                case 2:
                     coin = UnitGrade switch
                     {
                         UnitGrades.G => 250,
                         UnitGrades.B => 0
                     };
                     break;
-                case 4:
+                case 3:
                     coin = UnitGrade switch
                     {
                         UnitGrades.G => 500,
                         UnitGrades.B => 500
                     };
                     break;
+                case 4:
+                    coin = UnitGrade switch
+                    {
+                        UnitGrades.G => 1000,
+                        UnitGrades.B => 1000,
+                        UnitGrades.P => 0
+                    };
+                    break;
                  case 5:
-                     coin = UnitGrade switch
-                     {
-                       UnitGrades.G => 1000,
-                       UnitGrades.B => 1000,
-                       UnitGrades.P => 0
-                     };
-                     break;
-                 case 6:
                      coin = UnitGrade switch
                      {
                          UnitGrades.G => 2500,
@@ -325,7 +318,7 @@ namespace Script.CharacterManagerScript
                          UnitGrades.P => 2500
                      };
                      break;
-                 case 7:
+                 case 6:
                      coin = UnitGrade switch
                      {
                          UnitGrades.G => 5000,
@@ -333,7 +326,7 @@ namespace Script.CharacterManagerScript
                          UnitGrades.P => 7500
                      };
                      break;
-                 case 8:
+                 case 7:
                      coin = UnitGrade switch
                      {
                          UnitGrades.G => 7500,
@@ -341,7 +334,7 @@ namespace Script.CharacterManagerScript
                          UnitGrades.P => 13000
                      };
                      break;
-                 case 9:
+                 case 8:
                      coin = UnitGrade switch
                      {
                          UnitGrades.G => 10000,
@@ -349,7 +342,7 @@ namespace Script.CharacterManagerScript
                          UnitGrades.P => 26000
                      };
                      break;
-                 case 10:
+                 case 9:
                      coin = UnitGrade switch
                      {
                          UnitGrades.G => 12500,
@@ -357,7 +350,7 @@ namespace Script.CharacterManagerScript
                          UnitGrades.P => 40000
                      };
                      break;
-                 case 11:
+                 case 10:
                      coin = UnitGrade switch
                      {
                          UnitGrades.G => 15000,
@@ -365,7 +358,7 @@ namespace Script.CharacterManagerScript
                          UnitGrades.P => 20000
                      };
                      break;
-                 case 12:
+                 case 11:
                      coin = UnitGrade switch
                      {
                          UnitGrades.G => 15000,
@@ -373,7 +366,7 @@ namespace Script.CharacterManagerScript
                          UnitGrades.P => 30000
                      };
                      break;
-                 case 13:
+                 case 12:
                      coin = UnitGrade switch
                      {
                          UnitGrades.G => 15000,
@@ -381,7 +374,7 @@ namespace Script.CharacterManagerScript
                          UnitGrades.P => 40000
                      };
                      break;
-                 case 14:
+                 case 13:
                      coin = UnitGrade switch
                      {
                          UnitGrades.G => 15000,

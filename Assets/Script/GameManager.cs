@@ -100,7 +100,7 @@ namespace Script
                         bossSpawnArea = new Vector3Int(Random.Range(1, 5), 9, 0);
                         bossArea.SetActive(true);
                         bossArea.transform.position = new Vector3(bossSpawnArea.x, 3.5f, 0);
-                        yield return StartCoroutine(SoundManager.Instance.BossWave(SoundManager.Instance.bossWaveClip));
+                        StartCoroutine(SoundManager.Instance.BossWave(SoundManager.Instance.bossWaveClip));
                     }
                 }
                 else
@@ -119,19 +119,21 @@ namespace Script
         }
         public IEnumerator Count0Call()
         {
+            Debug.Log("ddddd");
+            if (IsBattle) yield break;
             IsBattle = true;
             if (bool.Parse(PlayerPrefs.GetString("TutorialKey", "true")))
             {
                 yield return StartCoroutine(tutorialManager.EndTutorial());
             }
-            StartCoroutine(CoverUnit(true));
+            yield return StartCoroutine(CoverUnit(true));
             yield return StartCoroutine(cameraManager.CameraBattleSizeChange());
             yield return StartCoroutine(backgroundManager.ChangeBattleSize());
-            yield return new WaitForSecondsRealtime(1f);
-            GameSpeed();
-            StartCoroutine(AtkManager.Instance.CheckForAttack());
+            yield return new WaitForSecondsRealtime(0.5f);
             if (StageManager.Instance == null) yield break;
-            yield return StartCoroutine(StageManager.Instance.WaveController());
+            StartCoroutine(StageManager.Instance.WaveController());
+            StartCoroutine(AtkManager.Instance.CheckForAttack());
+            GameSpeed();
             // var allUnits = FindObjectsOfType<CharacterBase>();
             // foreach (var unit in allUnits)
             // {
@@ -152,8 +154,8 @@ namespace Script
         }
         public IEnumerator ContinueOrLose()
         {
+            if (!IsBattle) yield break;
             IsBattle = false;
-            StartCoroutine(FxManager.Instance.SetFalseEffect());
             AtkManager.Instance.ClearWeapons();
             // var allUnits = FindObjectsOfType<CharacterBase>();
             // foreach (var unit in allUnits)
@@ -169,6 +171,7 @@ namespace Script
                     StageManager.Instance.SaveClearWave();
                     if (StageManager.Instance.isBossClear)
                     {
+                        StageManager.Instance.alreadyBoss = false;
                         moveCount = 10 + EnforceManager.Instance.rewardMoveCount;
                         PlayerPrefs.SetInt("moveCount", moveCount);
                         countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
@@ -176,16 +179,15 @@ namespace Script
                         yield return StartCoroutine(commonRewardManager.WaveRewardChance());
                         yield return StartCoroutine(WaitForPanelToClose());
                         yield return new WaitUntil(() => CommonRewardManager.Instance.isOpenBox == false);
-                        if (!EnforceManager.Instance.addRow)
+                        if (!spawnManager.bossClearRule)
                         {
-                            
                             spawnManager.BossStageClearRule();
                         }
                         yield return StartCoroutine(InitializeWave());
                     }
                     else
                     {
-                        moveCount = 7 + EnforceManager.Instance.rewardMoveCount;
+                        moveCount = 6 + EnforceManager.Instance.rewardMoveCount;
                         PlayerPrefs.SetInt("moveCount", moveCount);
                         countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
                         yield return StartCoroutine(InitializeWave());
@@ -202,7 +204,6 @@ namespace Script
         {
             Time.timeScale = 1;
             yield return StartCoroutine(KillMotion());
-            SpawnManager.SaveUnitState();
             expManager.SaveExp();
             castleManager.SaveCastleHp();
             EnforceManager.Instance.SaveEnforceData();
@@ -242,9 +243,10 @@ namespace Script
                 bossSpawnArea = new Vector3Int(Random.Range(1, 5), 9, 0);
                 bossArea.SetActive(true);
                 bossArea.transform.position = new Vector3(bossSpawnArea.x, 3.5f, 0);
-                yield return StartCoroutine(SoundManager.Instance.BossWave(SoundManager.Instance.bossWaveClip));
+                StartCoroutine(SoundManager.Instance.BossWave(SoundManager.Instance.bossWaveClip));
             }
             Quest.Instance.VictoryQuest();
+            SpawnManager.SaveUnitState();
         }
         private void LoseGame()
         {

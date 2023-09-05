@@ -20,16 +20,24 @@ namespace Script.WeaponScriptGroup
             yield return base.UseWeapon();
             var useTime = Distance / Speed;
             var enemyTransforms = CharacterBase.GetComponent<Fishman>().DetectEnemies();
+            if (!enemyTransforms.Any() || !enemyTransforms[0].activeInHierarchy) 
+            {
+                StopUseWeapon(gameObject);
+                yield break;
+            }
+
             direction = Vector2.up;
-            foreach (var unused in enemyTransforms.Where(enemy => enemy.transform.position.y < CharacterBase.transform.position.y))
+            foreach (var enemy in enemyTransforms.Where(enemy => enemy.transform.position.y < CharacterBase.transform.position.y))
             {
                 transform.rotation = Quaternion.Euler(0, 0, 180);
                 direction = Vector2.down;
             }
+
             _rigidBody2D.velocity = direction == Vector2.down ? new Vector2(0, -Speed) : new Vector2(0, Speed);
             yield return new WaitForSeconds(useTime);
             StopUseWeapon(gameObject);
         }
+
 
         private void OnTriggerEnter2D(Collider2D collision)
         {

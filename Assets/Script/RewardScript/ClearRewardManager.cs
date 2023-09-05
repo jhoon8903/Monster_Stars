@@ -195,6 +195,8 @@ namespace Script.RewardScript
                 CumulativeUnitPieces.TryAdd(unit, 0);
                 CumulativeUnitPieces[unit] += unitPieceReward;
                 unit.UnitPieceCount += unitPieceReward;
+                PlayerPrefs.SetInt($"{unit.unitGroup}{CharacterBase.PieceKey}", unit.UnitPieceCount);
+                PlayerPrefs.Save();
             }
             var totalUnitPieces = pieceCountPerUnit.Values.Sum();
             Quest.Instance.GetPieceQuest(totalUnitPieces);

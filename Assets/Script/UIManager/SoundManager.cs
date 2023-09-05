@@ -25,6 +25,7 @@ namespace Script.UIManager
         [SerializeField] internal AudioClip stageVwSound;
         [SerializeField] internal AudioClip bossWaveClip;
         [SerializeField] internal AudioClip levelUpBtnSound;
+        [SerializeField] internal AudioClip strikeCastle;
         public static SoundManager Instance;
         private AudioSource Bgm { get; set; }
         public bool music = true;
@@ -123,8 +124,6 @@ namespace Script.UIManager
             Bgm.Stop();
             Debug.Log(Bgm.isPlaying);
             Bgm.clip = audioClip;
-            Bgm.Play();
-            yield return new WaitForSeconds(audioClip.length);
             Bgm.Play();
             yield return new WaitForSeconds(audioClip.length);
             Bgm.clip = currentClip;

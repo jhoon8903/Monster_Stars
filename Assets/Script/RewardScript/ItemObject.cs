@@ -21,7 +21,6 @@ namespace Script.RewardScript
 
         public void CoinObject(Transform rewardGrid)
         {
-            Debug.Log("Coin Call!");
             if (_itemInstantiate != null)
             {
                 Destroy(_itemInstantiate);
@@ -39,7 +38,6 @@ namespace Script.RewardScript
         
         public void InstantiateCumulativeUnitPieces(Transform rewardGrid)
         {
-            Debug.Log("Piece Call!");
             var unitPieces = GetCumulativeUnitPieces();
             foreach (var (unit, pieceCount) in unitPieces)
             {

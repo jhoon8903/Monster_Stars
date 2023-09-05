@@ -3,16 +3,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Script.CharacterManagerScript;
-using Script.EnemyScript;
 using Script.PuzzleManagerGroup;
 using Script.RewardScript;
 using Script.UIManager;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
-using Object = UnityEngine.Object;
 using Random = UnityEngine.Random;
 
 namespace Script.EnemyManagerScript
@@ -26,8 +22,6 @@ namespace Script.EnemyManagerScript
         [SerializeField] private Transform spawnZoneD;
         [SerializeField] private Transform spawnZoneE;
         [SerializeField] private Transform spawnZoneF;
-        [SerializeField] private EnemyManager enemyManager;
-        [SerializeField] private GameManager gameManager;
         [SerializeField] private CharacterPool characterPool;
         [SerializeField] private GridManager gridManager;
         [SerializeField] private EnemyPatternManager enemyPatternManager;
@@ -141,8 +135,7 @@ namespace Script.EnemyManagerScript
             _enemyClassList = serializedData.Split(',').Select(e => (EnemyBase.EnemyClasses)Enum.Parse(typeof(EnemyBase.EnemyClasses), e)).ToList();
         }
         public IEnumerator SpawnBoss(EnemyBase.EnemyClasses? bossClass, EnemyBase.SpawnZones spawnZone)
-        { 
-            Debug.Log(bossClass);
+        {
             foreach (var boss in enemyPool.bossList)
             {
                 if (bossClass == boss.enemyClass)

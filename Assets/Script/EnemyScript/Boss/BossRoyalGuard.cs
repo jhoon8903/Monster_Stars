@@ -1,17 +1,16 @@
 using Script.EnemyManagerScript;
 
-namespace Script.EnemyScript.Enemy
+namespace Script.EnemyScript.Boss
 {
     public class RoyalGuard : EnemyBase
-    { 
+    {
         public override void Initialize()
         {
-            CrushDamage = 130;
-            originSpeed = 1f;
+            CrushDamage = 10000;
+            originSpeed = 0.7f;
             EnemyType = EnemyTypes.Boss;
-            RegistryType = RegistryTypes.None;
             enemyClass = EnemyClasses.RoyalGuard;
-            enemyDesc = "The Royal Guard has the best skills and equipment.";
+            RegistryType = RegistryTypes.None;
             base.Initialize();
         }
     }

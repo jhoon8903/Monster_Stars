@@ -26,7 +26,7 @@ namespace Script.WeaponScriptGroup
             while (isInUse)
             {
                 _enemyTransforms = CharacterBase.GetComponent<Cobra>().DetectEnemies();
-                if (_enemyTransforms.Count == 0)                             
+                if (_enemyTransforms.Count == 0 || !_enemyTransforms[0].activeInHierarchy) 
                 {
                     StopUseWeapon(gameObject);
                     break;
@@ -38,6 +38,7 @@ namespace Script.WeaponScriptGroup
                 yield return null;
             }
         }
+
 
         private void OnTriggerEnter2D(Collider2D collision)
         {

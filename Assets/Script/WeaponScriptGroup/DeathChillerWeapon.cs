@@ -22,7 +22,13 @@ namespace Script.WeaponScriptGroup
             yield return base.UseWeapon();
             var useTime = Distance / Speed;
             var enemyTransforms = CharacterBase.GetComponent<DeathChiller>().DetectEnemies();
-            foreach (var unused in enemyTransforms.Where(enemy => enemy.transform.position.y < CharacterBase.transform.position.y))
+            if (!enemyTransforms.Any() || !enemyTransforms[0].activeInHierarchy) 
+            {
+                StopUseWeapon(gameObject);
+                yield break;
+            }
+
+            foreach (var enemy in enemyTransforms.Where(enemy => enemy.transform.position.y < CharacterBase.transform.position.y))
             {
                 Speed = -Speed;
                 Damage *= EnforceManager.Instance.deathChillerBackAttackBoost ? 1.2f : 1f;

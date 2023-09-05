@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using DG.Tweening;
 using Script.CharacterManagerScript;
 using Script.RewardScript;
 using Script.UIManager;
@@ -12,6 +10,7 @@ namespace Script.PuzzleManagerGroup
 {
     public sealed class MatchManager : MonoBehaviour
     {
+        [SerializeField] private CountManager countManager;
         [SerializeField] private CommonRewardManager commonRewardManager;
         [SerializeField] private EnforceManager enforceManager;
         [SerializeField] private SpawnManager spawnManager;
@@ -85,58 +84,52 @@ namespace Script.PuzzleManagerGroup
                 }
                 matchedCharacters.AddRange(matchedObjects);
 
-                if (horizontalMatchCount + verticalMatchCount == 8)
+                matched = (horizontalMatchCount + verticalMatchCount) switch
                 {
-                    matched = horizontalMatchCount switch
+                    8 => horizontalMatchCount switch
                     {
                         3 or 5 => Matches3X5Case(matchedCharacters, swapCharacterPosition),
                         _ => false
-                    };
-                }
-
-                if (horizontalMatchCount + verticalMatchCount == 7)
-                {
-                    matched = horizontalMatchCount switch
+                    },
+                    7 => horizontalMatchCount switch
                     {
-                        2 => Matches5Case(matchedCharacters,"y",swapCharacterPosition),
+                        2 => Matches5Case(matchedCharacters, "y", swapCharacterPosition),
                         3 or 4 => Matches3X4Case(matchedCharacters, swapCharacterPosition),
-                        5 => Matches5Case(matchedCharacters,"x",swapCharacterPosition),
+                        5 => Matches5Case(matchedCharacters, "x", swapCharacterPosition),
                         _ => false
-                    };
-                }
-
-                if (horizontalMatchCount + verticalMatchCount == 6)
-                {
-                    matched = horizontalMatchCount switch
+                    },
+                    6 => horizontalMatchCount switch
                     {
-                        1 => Matches5Case(matchedCharacters,"y",swapCharacterPosition),
-                        2 => Matches4Case(matchedCharacters,"y"),
-                        3 => Matches3X3Case(matchedCharacters,swapCharacterPosition),
-                        4 => Matches4Case(matchedCharacters,"x"),
-                        5 => Matches5Case(matchedCharacters,"x",swapCharacterPosition),
+                        1 => Matches5Case(matchedCharacters, "y", swapCharacterPosition),
+                        2 => Matches4Case(matchedCharacters, "y"),
+                        3 => Matches3X3Case(matchedCharacters, swapCharacterPosition),
+                        4 => Matches4Case(matchedCharacters, "x"),
+                        5 => Matches5Case(matchedCharacters, "x", swapCharacterPosition),
                         _ => false
-                    };
-                }
-
-                if (horizontalMatchCount + verticalMatchCount == 5)
-                {
-                    matched = horizontalMatchCount switch
+                    },
+                    5 => horizontalMatchCount switch
                     {
-                        1 => Matches4Case(matchedCharacters,"y"),
-                        2 or 3 => Match3Case(matchedCharacters,horizontalMatchCount,verticalMatchCount,swapCharacterPosition),
-                        4 => Matches4Case(matchedCharacters,"x"),
+                        1 => Matches4Case(matchedCharacters, "y"),
+                        2 or 3 => Match3Case(matchedCharacters, horizontalMatchCount, verticalMatchCount,
+                            swapCharacterPosition),
+                        4 => Matches4Case(matchedCharacters, "x"),
                         _ => false
-                    };
-                }
-
-                if (horizontalMatchCount + verticalMatchCount == 4)
-                {
-                    matched = horizontalMatchCount switch
+                    },
+                    4 => horizontalMatchCount switch
                     {
-                        1 or 3=> Match3Case(matchedCharacters,horizontalMatchCount,verticalMatchCount,swapCharacterPosition),
+                        1 or 3 => Match3Case(matchedCharacters, horizontalMatchCount, verticalMatchCount,
+                            swapCharacterPosition),
                         _ => false
-                    };
-                }
+                    },
+                    _ => false
+                };
+            }
+
+            if (!matched || GameManager.Instance.IsBattle) return matched;
+            spawnManager.count++;
+            if ( spawnManager.count > 1)
+            {
+                countManager.IncrementComboCount();
             }
             return matched;
         }

@@ -49,9 +49,9 @@ namespace Script.UIManager
                 {
                     level++;
                     expPoint = 0;
-                    if (level <= 14)
+                    if (level <= 20)
                     {
-                        levelUpPoint += 5;
+                        levelUpPoint += 6;
                         expBar.maxValue = levelUpPoint;
                     }
                     StartCoroutine(levelUpRewardManager.LevelUpReward());

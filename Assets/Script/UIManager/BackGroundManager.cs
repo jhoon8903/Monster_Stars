@@ -33,7 +33,7 @@ namespace Script.UIManager
         private Vector2 _originalCastleSize;
         private Vector3 _originalCastlePosition;
         public static BackGroundManager Instance;
-
+        public int index;
         private void Awake()
         {
             Instance = this;
@@ -45,7 +45,7 @@ namespace Script.UIManager
         public void ChangedBackGround(int stage)
         {
             // 0 : Forest  1 : Desert 2 : Snow 3 : Swam 4 : Volcanic
-            var index = 0;
+            index = 0;
             if (StageManager.Instance == null) return;
             index = stage switch
             {
@@ -59,13 +59,13 @@ namespace Script.UIManager
             BackSprite(index);
         }
 
-        private void BackSprite(int index)
+        private void BackSprite(int spriteIndex)
         {
-            backGround.GetComponent<Image>().sprite = spriteSet[index].back;
-            top.GetComponent<Image>().sprite = spriteSet[index].topSprite;
-            castle.GetComponent<Image>().sprite = spriteSet[index].castleSprite;
-            gridManager.grid1Sprite.GetComponent<SpriteRenderer>().sprite = spriteSet[index].grid1;
-            gridManager.grid2Sprite.GetComponent<SpriteRenderer>().sprite = spriteSet[index].grid2;
+            backGround.GetComponent<Image>().sprite = spriteSet[spriteIndex].back;
+            top.GetComponent<Image>().sprite = spriteSet[spriteIndex].topSprite;
+            castle.GetComponent<Image>().sprite = spriteSet[spriteIndex].castleSprite;
+            gridManager.grid1Sprite.GetComponent<SpriteRenderer>().sprite = spriteSet[spriteIndex].grid1;
+            gridManager.grid2Sprite.GetComponent<SpriteRenderer>().sprite = spriteSet[spriteIndex].grid2;
         }
 
         public IEnumerator ChangeBattleSize()
@@ -84,11 +84,11 @@ namespace Script.UIManager
             yield return null;
         }
 
-        public void Lose()
+        public void Lose(int index)
         {
             if (StageManager.Instance == null) return;
             var stage = StageManager.Instance.selectStage;
-            castle.GetComponent<Image>().sprite = spriteSet[stage - 1].destroySprite;
+            castle.GetComponent<Image>().sprite = spriteSet[index].destroySprite;
         }
     }
 }

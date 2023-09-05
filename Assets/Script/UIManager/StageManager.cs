@@ -31,12 +31,14 @@ namespace Script.UIManager
         public int currentWave;
         public bool isBossClear;
         public int selectStage;
-        private int _spawnSetCount;
-        private bool _alreadyBoss;
+        public bool alreadyBoss;
+        private int _spawnCount;
+        private Dictionary<int, Dictionary<int, (int? wave1SpawnValue, EnemyBase.EnemyClasses? wave1EnemyClass, List<EnemyBase.SpawnZones>? wave1SpawnZone, int? wave2SpawnValue, EnemyBase.EnemyClasses? wave2EnemyClass, List<EnemyBase.SpawnZones>? wave2SpawnZone, int? wave3SpawnValue, EnemyBase.EnemyClasses? wave3EnemyClass, List<EnemyBase.SpawnZones>? wave3SpawnZone, EnemyBase.EnemyClasses? bossClass)>>? _stageData;
         private void Awake()
         {
             Instance = this;
             SelectedStages();
+            _stageData = LoadCsvData("StageData");
             latestStage = selectStage;
             currentWave = PlayerPrefs.GetInt($"{latestStage}Stage_ProgressWave",1);
         }
@@ -55,8 +57,7 @@ namespace Script.UIManager
         {
             return selectStage = MainPanel.Instance.SelectStage;
         }
-
-        private static Dictionary<int, Dictionary<int, (int? wave1SpawnValue, EnemyBase.EnemyClasses? wave1EnemyClass, List<EnemyBase.SpawnZones>? wave1SpawnZone, int? wave2SpawnValue, EnemyBase.EnemyClasses? wave2EnemyClass, List<EnemyBase.SpawnZones>? wave2SpawnZone, int? wave3SpawnValue, EnemyBase.EnemyClasses? wave3EnemyClass, List<EnemyBase.SpawnZones>? wave3SpawnZone, EnemyBase.EnemyClasses? bossClass)>> LoadCsvData(string filename)
+        private static Dictionary<int, Dictionary<int, (int? wave1SpawnValue, EnemyBase.EnemyClasses? wave1EnemyClass, List<EnemyBase.SpawnZones>? wave1SpawnZone, int? wave2SpawnValue, EnemyBase.EnemyClasses? wave2EnemyClass, List<EnemyBase.SpawnZones>? wave2SpawnZone, int? wave3SpawnValue, EnemyBase.EnemyClasses? wave3EnemyClass, List<EnemyBase.SpawnZones>? wave3SpawnZone, EnemyBase.EnemyClasses? bossClass)>>? LoadCsvData(string filename)
         {
             var data = new Dictionary<int, Dictionary<int, (int? wave1SpawnValue, EnemyBase.EnemyClasses? wave1EnemyClass, List<EnemyBase.SpawnZones>? wave1SpawnZone, int? wave2SpawnValue, EnemyBase.EnemyClasses? wave2EnemyClass, List<EnemyBase.SpawnZones>? wave2SpawnZone, int? wave3SpawnValue, EnemyBase.EnemyClasses? wave3EnemyClass, List<EnemyBase.SpawnZones>? wave3SpawnZone, EnemyBase.EnemyClasses? bossClass)>>();
             var csvFile = Resources.Load<TextAsset>(filename);
@@ -121,7 +122,6 @@ namespace Script.UIManager
             }
             return data;
         }
-
         private static List<EnemyBase.SpawnZones> ParseSpawnZones(string zoneString)
         {
             var zones = new List<EnemyBase.SpawnZones>();
@@ -136,52 +136,49 @@ namespace Script.UIManager
             }
             return zones;
         }
-
         private static EnemyBase.EnemyClasses ParseEnemyClass(string enemyClassString)
         {
             return Enum.TryParse(enemyClassString, out EnemyBase.EnemyClasses enemyClass) ? enemyClass : EnemyBase.EnemyClasses.Farmer;
         }
-
-        private static (int? wave1SpawnValue, EnemyBase.EnemyClasses? wave1EnemyClass, List<EnemyBase.SpawnZones>? wave1SpawnZone, int? wave2SpawnValue, EnemyBase.EnemyClasses? wave2EnemyClass, List<EnemyBase.SpawnZones>? wave2SpawnZone, int? wave3SpawnValue, EnemyBase.EnemyClasses? wave3EnemyClass, List<EnemyBase.SpawnZones>? wave3SpawnZone, EnemyBase.EnemyClasses? bossClass) GetSpawnCountForWave(int stage, int wave)
+        private (int? wave1SpawnValue, EnemyBase.EnemyClasses? wave1EnemyClass, List<EnemyBase.SpawnZones>? wave1SpawnZone, int? wave2SpawnValue, EnemyBase.EnemyClasses? wave2EnemyClass, List<EnemyBase.SpawnZones>? wave2SpawnZone, int? wave3SpawnValue, EnemyBase.EnemyClasses? wave3EnemyClass, List<EnemyBase.SpawnZones>? wave3SpawnZone, EnemyBase.EnemyClasses? bossClass) GetSpawnCountForWave(int stage, int wave)
         {
-            var data = LoadCsvData("StageData");
-
-            return data[stage][wave];
+            return _stageData[stage][wave];
         }
-
         public IEnumerator WaveController()
         {
-            _spawnSetCount = 0;
             var (set1SpawnValue,set1EnemyClass, set1SpawnZone, 
                 set2SpawnValue,set2EnemyClass,set2SpawnZone,
                 set3SpawnValue, set3EnemyClass, set3SpawnZone
                 , bossClass) = GetSpawnCountForWave(selectStage, currentWave);
             setCount = set3SpawnValue != null ? 3 : 2;
             setCount = bossClass != null ? 1 : setCount;
-            if (bossClass != null &&!_alreadyBoss)
-            {
-                Debug.Log(bossClass);
-                _alreadyBoss = true;
+            _spawnCount = 0;
+            if (bossClass != null &&!alreadyBoss)
+            { 
+                Debug.Log($"Boss Class: {bossClass}");
+                alreadyBoss = true;
                 yield return StartCoroutine(enemySpawnManager.SpawnBoss(bossClass, EnemyBase.SpawnZones.A));
-                _spawnSetCount = 1;
             }
             else
             {
                 for (var i = 0; i < setCount; i++)
                 {
+                    _spawnCount = i;
+                    Debug.Log($"spawn1 Value: {set1SpawnValue} / class: {set1EnemyClass} / zone: {set1SpawnZone}");
+                    Debug.Log($"spawn2 Value: {set2SpawnValue} / class: {set2EnemyClass} / zone: {set2SpawnZone}");
+                    Debug.Log($"spawn3 Value: {set3SpawnValue} / class: {set3EnemyClass} / zone: {set3SpawnZone}");
                     StartCoroutine(enemySpawnManager.SpawnEnemies(set1SpawnValue, set1EnemyClass, set1SpawnZone));
                     StartCoroutine(enemySpawnManager.SpawnEnemies(set2SpawnValue, set2EnemyClass, set2SpawnZone));
                     StartCoroutine(enemySpawnManager.SpawnEnemies(set3SpawnValue, set3EnemyClass, set3SpawnZone));
-                    _spawnSetCount++;
                     yield return new WaitForSeconds(3f);
                 }
             }
+            yield return null;
         }
-
         public void EnemyDestroyEvent(EnemyBase enemyBase)
         {
             enemyPool.enemyBases.Remove(enemyBase);
-            if (_spawnSetCount < setCount || enemyPool.enemyBases.Count > 0) return;
+            if (enemyPool.enemyBases.Count > 0 || _spawnCount != setCount-1) return;
             if (castleManager.HpPoint > 0)
             {
                 if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)

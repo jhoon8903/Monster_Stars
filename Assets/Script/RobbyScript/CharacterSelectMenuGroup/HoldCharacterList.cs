@@ -521,7 +521,6 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
                         _informationPanel.transform.localScale = Vector3.zero;
                         _informationPanel.transform.DOScale(1, 0.3f).SetEase(Ease.OutBack);
                     }
-                
                     SyncWithSelected(newUnit, newUnitBase);
                 });
             }

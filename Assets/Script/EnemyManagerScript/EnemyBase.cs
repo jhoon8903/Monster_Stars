@@ -15,9 +15,9 @@ namespace Script.EnemyManagerScript
 {
     public class EnemyBase : MonoBehaviour
     {
-        [SerializeField] private GameObject damageText;
+        
         [SerializeField] private GameObject poisonAreaObject;
-        private readonly List<GameObject> _damagePopupList = new List<GameObject>();
+        
         public CharacterBase Character { get; private set; }
         private EnemyPool _enemyPool;
         private Slider _hpSlider;
@@ -45,10 +45,10 @@ namespace Script.EnemyManagerScript
            Engineer, Miner, Hammerer, Quarreller, RoyalGuard, Druid, Wizard, Shaman, RuneSmith, Berserker
         }
         public EnemyClasses enemyClass;
-        private GameObject _damagePopup;
+        
         public bool isDead;
         public List<CharacterBase.UnitGroups> statusList = new List<CharacterBase.UnitGroups>();
-        private bool _pooling;
+       
         private readonly List<GameObject> _poisonPool = new List<GameObject>();
         
         // 속박 (Bind)
@@ -180,16 +180,7 @@ namespace Script.EnemyManagerScript
         {
             SpawnZone = SpawnZones.A;
             _hpSlider = GetComponentInChildren<Slider>(true);
-            if (!_pooling)
-            {
-                for (var i = 0; i < 10; i++)
-                {
-                    _damagePopup = Instantiate(damageText, gameObject.transform, false);
-                    _damagePopupList.Add(_damagePopup);
-                    _damagePopup.SetActive(false);
-                    _pooling = true;
-                }
-            }
+  
             if (EnemyType != EnemyTypes.Boss)
             {
                 _hpSlider.gameObject.SetActive(false);
@@ -212,68 +203,17 @@ namespace Script.EnemyManagerScript
             var baseHealthPoint = int.Parse(healthPointData[StageManager.Instance.currentWave - 1]);
             healthPoint = baseHealthPoint;
         }
-        private IEnumerator DamageTextPopup(int damage)
-        {
-            foreach (var popup in _damagePopupList)
-            {
-                if (popup.activeInHierarchy) continue;
-                var pos = gameObject.transform.position;
-                popup.transform.position = new Vector3(pos.x,pos.y + 0.5f,0f);
-                if (EnemyType == EnemyTypes.Boss)
-                {
-                    popup.transform.position = new Vector3(pos.x,pos.y + 1.7f,0f);
-                    popup.transform.localScale = new Vector3(3,3,0);
-                }
-                Vector2 startPosition = popup.transform.position;
-                var endPosition = new Vector2(startPosition.x, startPosition.y + 0.2f);
-                if (damage == 0) continue;
-                popup.SetActive(true);
-                popup.GetComponent<TextMeshPro>().text = damage.ToString();
-                Color damageColor;
-                if (isBleed)
-                {
-                    damageColor = Color.red;
-                }
-                else if (isPoison)
-                {
-                    damageColor = Color.green;
-                }
-                else if (isBurn)
-                {
-                    damageColor = Color.red;
-                }
-                else if (isSlow)
-                {
-                    damageColor = Color.blue;
-                }
-                else
-                {
-                    damageColor = Color.white;
-                }
-                popup.GetComponent<TextMeshPro>().color = damageColor;
-                float t = 0;
-                const float speed = 1f;
-                while (t < 1)
-                {
-                    if (!gameObject.activeInHierarchy) break;
-                    t += Time.deltaTime * speed;
-                    popup.transform.position = Vector2.Lerp(startPosition, endPosition, t);
-                    yield return null;
-                }
-                yield return new WaitForSecondsRealtime(0.15f);
-                popup.SetActive(false);
-            }
-        }
+   
 
         public void ReceiveDamage(EnemyBase detectEnemy, float damage, CharacterBase atkUnit, KillReasons reason = KillReasons.ByPlayer)
         {
-     
+            DamagePopup.Instance.StartCoroutine(DamagePopup.Instance.DamageTextPopup(detectEnemy, (int)damage));
             lock (Lock)
             {
                 var receiveDamage = (int)damage;
                 if (gameObject.activeInHierarchy)
                 {
-                    StartCoroutine(DamageTextPopup((int)damage));
+                    
                     // Marketing Version
                     var currentDamage = PlayerPrefs.GetInt($"{atkUnit.unitGroup}DPS", 0);
                     var newCumulativeDamage = currentDamage + receiveDamage;
@@ -373,14 +313,15 @@ namespace Script.EnemyManagerScript
         // }
         public void EnemyKilledEvents(EnemyBase detectedEnemy, CharacterBase characterBase = null)
         {
+            
             detectedEnemy.StopAllCoroutines();
-            StartCoroutine(FxManager.Instance.DeadEffect( detectedEnemy.transform.position)); 
-            foreach (var popup in detectedEnemy._damagePopupList)
+            if (characterBase != null)
             {
-                popup.SetActive(false);
+                characterBase.DetectEnemies().Remove(detectedEnemy.gameObject);
+                characterBase.AttackCounts.Remove(detectedEnemy);
             }
+            FxManager.Instance.DeadEffect(detectedEnemy.transform.position);
             var enemyPool = FindObjectOfType<EnemyPool>();
-            if (StageManager.Instance != null) StageManager.Instance.EnemyDestroyEvent(detectedEnemy);
             detectedEnemy.isDead = false;
             detectedEnemy.statusList.Clear();
             detectedEnemy.IsBind.Clear();
@@ -408,12 +349,9 @@ namespace Script.EnemyManagerScript
             detectedEnemy.PoisonStatus(false, characterBase);
             detectedEnemy.BurnStatus(false, characterBase);
             detectedEnemy.BleedStatus(false, characterBase);
-            if (characterBase != null)
-            {
-                characterBase.DetectEnemies().Remove(detectedEnemy.gameObject);
-                characterBase.AttackCounts.Remove(detectedEnemy);
-            }
+
             Quest.Instance.KillEnemyQuest();
+            if (StageManager.Instance != null) StageManager.Instance.EnemyDestroyEvent(detectedEnemy);
             enemyPool.ReturnToPool(detectedEnemy);
            
         }

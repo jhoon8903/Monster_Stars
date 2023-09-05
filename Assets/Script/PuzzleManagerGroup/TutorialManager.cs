@@ -6,6 +6,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using JetBrains.Annotations;
 using Script.RewardScript;
+using Script.UIManager;
 using TMPro;
 using UnityEngine.UI;
 
@@ -13,6 +14,7 @@ namespace Script.PuzzleManagerGroup
 {
     public class TutorialManager : MonoBehaviour
     {
+        [SerializeField] private StageManager stageManager;
         [SerializeField] private CharacterPool characterPool;
         [SerializeField] private GameObject tutorialCoverPrefab;
         [SerializeField] private GameObject uiTransform;
@@ -73,7 +75,12 @@ namespace Script.PuzzleManagerGroup
             spawnManager.OnMatchFound += HandleMatchFound;
             _tutorialSteps = new Queue<TutorialStep>();
             commonRewardManager.OnRewardSelected += HandleMatchFound;
-                
+            stageManager.latestStage = 1;
+            var stage = stageManager.latestStage;
+            stageManager.currentWave = 1;
+            stageManager.UpdateWaveText();
+            BackGroundManager.Instance.ChangedBackGround(stage);
+            
             // 3Matched
             _tutorialSteps.Enqueue(new TutorialStep(
                 new Vector3(4, 3.3f, 0), 

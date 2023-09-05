@@ -27,6 +27,7 @@ namespace Script.WeaponScriptGroup
                 while (isInUse)
                 {
                     _enemyTransforms = CharacterBase.GetComponent<Beholder>().DetectEnemies();
+                    
                     if (_enemyTransforms.Count == 0)
                     {
                         StopUseWeapon(gameObject);

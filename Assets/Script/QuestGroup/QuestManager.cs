@@ -338,14 +338,17 @@ namespace Script.QuestGroup
             {
                 unitReward.Key.UnitPieceCount += unitReward.Value;
                 HoldCharacterList.Instance.UpdateRewardPiece(unitReward.Key);
-                Destroy(_unitPieceObject.gameObject);
+                Destroy(_unitPieceObject);
+                _unitPieceObject = null;
             }
             if (_coinObject != null)
             {
-                Destroy(_coinObject.gameObject);
+                Destroy(_coinObject);
+                _coinObject = null;
             }
             _unitPieceDict.Clear();
             questRewardPanel.SetActive(false);
+            Quest.Instance.AllClearQuest();
         }
         public IEnumerator UpdateQuest(QuestAssemble quest, int value)
         {
@@ -565,7 +568,6 @@ namespace Script.QuestGroup
         {
             quest.isReceived = true;
             PlayerPrefs.SetString(SetKey(quest,ReceiveKey), "true");
-            Quest.Instance.AllClearQuest(quest.QuestType);
             questRewardPanel.SetActive(true);
             CalculateCoinReward(quest);
             CalculateUnitPieceReward(quest);
@@ -575,6 +577,10 @@ namespace Script.QuestGroup
         }
         private void CalculateCoinReward(QuestAssemble quest)
         {
+            if (_coinObject != null)
+            {
+                Destroy(_coinObject);
+            }
             if (quest.coinValue == 0) return;
             _coinObject = Instantiate(rewardItem, questRewardContents.transform);
             _coinObject.goodsBack.GetComponent<Image>().sprite = _coinObject.coinSprite;
@@ -653,6 +659,10 @@ namespace Script.QuestGroup
                 unit.Initialize();
                 _unitPieceReward = pieceCountPerUnit[index];
                 if (_unitPieceReward == 0) continue;
+                if (_unitPieceObject != null)
+                {
+                    Destroy(_unitPieceObject.gameObject);
+                }
                 _unitPieceObject = Instantiate(rewardItem, questRewardContents.transform);
                 _unitPieceObject.goodsBack.GetComponent<Image>().color = Color.white;
                 _unitPieceObject.goodsBack.GetComponent<Image>().sprite = unit.UnitGrade switch
@@ -668,6 +678,7 @@ namespace Script.QuestGroup
             foreach (var unitPiece in _unitPieceDict)
             {
                 unitPiece.Key.UnitPieceCount += unitPiece.Value;
+                PlayerPrefs.SetInt($"{unitPiece.Key.unitGroup}{CharacterBase.PieceKey}",unitPiece.Key.UnitPieceCount);
                 HoldCharacterList.Instance.UpdateRewardPiece(unitPiece.Key);
             }
             _unitPieceDict.Clear();
