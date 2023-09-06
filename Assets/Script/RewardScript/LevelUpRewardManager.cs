@@ -335,12 +335,12 @@ namespace Script.RewardScript
                     break;
             }
             selectedReward.ChosenProperty = null;
+            GameManager.Instance.GameSpeed();
         }
         private void Selected(Data selectedReward)
         {
             levelUpRewardPanel.SetActive(false);
             expShuffle.gameObject.SetActive(true);
-            gameManager.GameSpeed();
             ProcessExpReward(selectedReward);
         }
         public IEnumerator LevelUpReward() // 레벨업 보상 처리
@@ -350,15 +350,7 @@ namespace Script.RewardScript
             levelUpRewardPanel.SetActive(true); // 보물 패널 활성화
             expShuffle.gameObject.SetActive(true);
             var playerLevel = expManager.level;
-            if (playerLevel <= 9)
-            {
-                yield return StartCoroutine(LevelUpChance(60, 35,5));
-            }
-            else
-            {
-                yield return StartCoroutine(LevelUpChance(50, 40, 10));
-            }
-            yield return new WaitUntil(() => levelUpRewardPanel.activeSelf == false); // 보물 패널이 비활성화될 때까지 대기
+            StartCoroutine(playerLevel <= 9 ? LevelUpChance(60, 35, 5) : LevelUpChance(50, 40, 10));
         }
         private IEnumerator LevelUpChance(int greenChance, int blueChance, int purpleChance)
         {
@@ -369,7 +361,6 @@ namespace Script.RewardScript
         private List<Data> LevelUpList(int greenChance, int blueChance, int purpleChance)
         {
             var levelUpPowerUps = new List<Data>();
-            var selectedCodes = new HashSet<int>();
             for (var i = 0; i < 3; i++)
             {
                 var total = greenChance + blueChance + purpleChance;
@@ -377,25 +368,28 @@ namespace Script.RewardScript
 
                 if (randomValue < greenChance)
                 {
-                    _selectedPowerUp = LevelUpUnique(PowerTypeManager.Instance.GreenList, selectedCodes);
+                    _selectedPowerUp = LevelUpUnique(PowerTypeManager.Instance.GreenList, levelUpPowerUps);
                 }
                 else if (randomValue < greenChance + blueChance)
                 {
-                    _selectedPowerUp = LevelUpUnique(PowerTypeManager.Instance.BlueList, selectedCodes);
+                    _selectedPowerUp = LevelUpUnique(PowerTypeManager.Instance.BlueList, levelUpPowerUps);
                 }
                 else
                 {
-                    _selectedPowerUp = LevelUpUnique(PowerTypeManager.Instance.PurpleList, selectedCodes);
+                    _selectedPowerUp = LevelUpUnique(PowerTypeManager.Instance.PurpleList, levelUpPowerUps);
                 }
-                if (_selectedPowerUp == null) continue;
+                if (_selectedPowerUp == null || levelUpPowerUps.Any(skill => skill.Code == _selectedPowerUp.Code)) continue;
                 levelUpPowerUps.Add(_selectedPowerUp);
-                selectedCodes.Add(_selectedPowerUp.Code);
+            }
+            if (levelUpPowerUps.Count < 3)
+            {
+                levelUpPowerUps.AddRange(LevelUpList(greenChance, blueChance, purpleChance).Take(3 - levelUpPowerUps.Count));
             }
             return levelUpPowerUps;
         }
-        private Data LevelUpUnique(IEnumerable<Data> powerUpsData, ICollection<int> selectedCodes)
+        private Data LevelUpUnique(IEnumerable<Data> powerUpsData, IEnumerable<Data> levelUpDataList)
         {
-            var validOptions = powerUpsData.Where(p => IsValidOption(p, selectedCodes));
+            var validOptions = powerUpsData.Where(dataItem => IsValidOption(dataItem, levelUpDataList));
             return SelectRandom(validOptions);
         }
         public bool HasUnitInGroup(CharacterBase.UnitGroups group)
@@ -411,9 +405,9 @@ namespace Script.RewardScript
             }
             return unitLevel;
         }
-        private bool IsValidOption(Data powerUp, ICollection<int> selectedCodes)
+        private bool IsValidOption(Data powerUp, IEnumerable<Data> levelUpDataList)
         {
-            if (selectedCodes.Contains(powerUp.Code)) return false;
+            if (levelUpDataList.Any(item => item.Code == powerUp.Code)) return false;
             switch (powerUp.Type)
             {
                 case PowerTypeManager.Types.AddRow:

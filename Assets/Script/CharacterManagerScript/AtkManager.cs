@@ -48,7 +48,7 @@ namespace Script.CharacterManagerScript
                 Destroy(gameObject);
             }
         }
-        public IEnumerator CheckForAttack()
+        public void CheckForAttack()
         {
             var characters = characterPool.UsePoolCharacterList();
             foreach (var atkUnit in characters
@@ -57,7 +57,6 @@ namespace Script.CharacterManagerScript
             {
                 StartCoroutine(AtkMotion(atkUnit));
             }
-            yield return null;
         }
         private IEnumerator AtkMotion(CharacterBase unit)
         {
@@ -117,20 +116,20 @@ namespace Script.CharacterManagerScript
                     switch (EnforceManager.Instance.darkElfDualAttack)
                     {
                         case true when EnforceManager.Instance.darkElfDoubleAttack:
-                            StartCoroutine(CombinedAttack(new AttackData(unit, WeaponsPool.WeaponType.Darkelf)));
+                            StartCoroutine(CombinedAttack(new AttackData(unit, WeaponsPool.WeaponType.DarkElf)));
                             break;
                         case true:
-                            StartCoroutine(DualAttack(new AttackData(unit, WeaponsPool.WeaponType.Darkelf)));
+                            StartCoroutine(DualAttack(new AttackData(unit, WeaponsPool.WeaponType.DarkElf)));
                             break;
                         default:
                         {
                             if (EnforceManager.Instance.darkElfDoubleAttack)
                             {
-                                StartCoroutine(DoubleFire(new AttackData(unit, WeaponsPool.WeaponType.Darkelf)));
+                                StartCoroutine(DoubleFire(new AttackData(unit, WeaponsPool.WeaponType.DarkElf)));
                             }
                             else
                             {
-                                Attack(new AttackData(unit, WeaponsPool.WeaponType.Darkelf));
+                                Attack(new AttackData(unit, WeaponsPool.WeaponType.DarkElf));
                             }
                             break;
                         }

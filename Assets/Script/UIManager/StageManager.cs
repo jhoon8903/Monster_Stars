@@ -157,16 +157,16 @@ namespace Script.UIManager
             { 
                 Debug.Log($"Boss Class: {bossClass}");
                 alreadyBoss = true;
-                yield return StartCoroutine(enemySpawnManager.SpawnBoss(bossClass, EnemyBase.SpawnZones.A));
+                StartCoroutine(enemySpawnManager.SpawnBoss(bossClass, EnemyBase.SpawnZones.A));
             }
             else
             {
                 for (var i = 0; i < setCount; i++)
                 {
                     _spawnCount = i;
-                    Debug.Log($"spawn1 Value: {set1SpawnValue} / class: {set1EnemyClass} / zone: {set1SpawnZone}");
-                    Debug.Log($"spawn2 Value: {set2SpawnValue} / class: {set2EnemyClass} / zone: {set2SpawnZone}");
-                    Debug.Log($"spawn3 Value: {set3SpawnValue} / class: {set3EnemyClass} / zone: {set3SpawnZone}");
+                    // Debug.Log($"spawn1 Value: {set1SpawnValue} / class: {set1EnemyClass} / zone: {set1SpawnZone}");
+                    // Debug.Log($"spawn2 Value: {set2SpawnValue} / class: {set2EnemyClass} / zone: {set2SpawnZone}");
+                    // Debug.Log($"spawn3 Value: {set3SpawnValue} / class: {set3EnemyClass} / zone: {set3SpawnZone}");
                     StartCoroutine(enemySpawnManager.SpawnEnemies(set1SpawnValue, set1EnemyClass, set1SpawnZone));
                     StartCoroutine(enemySpawnManager.SpawnEnemies(set2SpawnValue, set2EnemyClass, set2SpawnZone));
                     StartCoroutine(enemySpawnManager.SpawnEnemies(set3SpawnValue, set3EnemyClass, set3SpawnZone));
@@ -195,13 +195,8 @@ namespace Script.UIManager
             }
             else
             {
-                StartCoroutine(DelayedContinueOrLose());
+                GameManager.Instance.StartCoroutine(GameManager.Instance.ContinueOrLose());
             }
-        }
-        private IEnumerator DelayedContinueOrLose()
-        {
-            yield return new WaitForSecondsRealtime(1f);
-            StartCoroutine(GameManager.Instance.ContinueOrLose());
         }
         private void StageClear()
         {

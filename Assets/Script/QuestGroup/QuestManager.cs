@@ -338,17 +338,18 @@ namespace Script.QuestGroup
             {
                 unitReward.Key.UnitPieceCount += unitReward.Value;
                 HoldCharacterList.Instance.UpdateRewardPiece(unitReward.Key);
-                Destroy(_unitPieceObject);
+                Destroy(_unitPieceObject.gameObject);
                 _unitPieceObject = null;
             }
             if (_coinObject != null)
             {
-                Destroy(_coinObject);
+                Destroy(_coinObject.gameObject);
                 _coinObject = null;
             }
             _unitPieceDict.Clear();
-            questRewardPanel.SetActive(false);
             Quest.Instance.AllClearQuest();
+            questRewardPanel.SetActive(false);
+            
         }
         public IEnumerator UpdateQuest(QuestAssemble quest, int value)
         {
@@ -410,7 +411,7 @@ namespace Script.QuestGroup
                         questObject.allClearRewardBtn.onClick.AddListener(() => SpecialQuestReward(questType));
                         PlayerPrefs.SetString($"{questType}{CompleteKey}", "true");
                     }
-                    PlayerPrefs.SetInt($"{questType}{ValueKey}", questObject.adsValue);
+                    PlayerPrefs.SetInt($"{questType}{ValueKey}", questObject.allClearValue);
                     PlayerPrefs.Save();
                     yield return null;
                     break;
@@ -579,7 +580,7 @@ namespace Script.QuestGroup
         {
             if (_coinObject != null)
             {
-                Destroy(_coinObject);
+                Destroy(_coinObject.gameObject);
             }
             if (quest.coinValue == 0) return;
             _coinObject = Instantiate(rewardItem, questRewardContents.transform);

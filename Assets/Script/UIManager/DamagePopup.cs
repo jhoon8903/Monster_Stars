@@ -60,19 +60,15 @@ namespace Script.UIManager
             Color damageColor;
             if (enemyBase.isBleed)
             {
-                damageColor = Color.red;
+                damageColor = new Color(0.82f,0.089f, 0.089f);
             }
             else if (enemyBase.isPoison)
             {
-                damageColor = Color.green;
+                damageColor = new Color(0.0264f, 0.8018f, 0.1808f);
             }
             else if (enemyBase.isBurn)
             {
                 damageColor = Color.red;
-            }
-            else if (enemyBase.isSlow)
-            {
-                damageColor = Color.blue;
             }
             else
             {

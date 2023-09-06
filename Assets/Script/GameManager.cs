@@ -11,11 +11,13 @@ using Script.QuestGroup;
 using Script.RewardScript;
 using Script.UIManager;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
 using Random = UnityEngine.Random;
+// ReSharper disable All
 
 namespace Script
 {
@@ -45,8 +47,9 @@ namespace Script
         public bool speedUp;
         public Vector3Int bossSpawnArea;
         public bool IsBattle { get; private set; }
-       
-
+        private bool isPanelClosed = false;
+        public bool isInitWave;
+        
         private void Awake()
         {
             Instance = this;
@@ -58,12 +61,6 @@ namespace Script
         {
             StartCoroutine(LoadGame());
         }
-
-        private void Update()
-        {
-            StartCoroutine(WaitForPanelToClose());
-        }
-
         private IEnumerator LoadGame()
         {
             swipeManager.isBusy = true;
@@ -126,13 +123,13 @@ namespace Script
             {
                 yield return StartCoroutine(tutorialManager.EndTutorial());
             }
-            yield return StartCoroutine(CoverUnit(true));
-            yield return StartCoroutine(cameraManager.CameraBattleSizeChange());
-            yield return StartCoroutine(backgroundManager.ChangeBattleSize());
+            CoverUnit(true);
+            cameraManager.CameraBattleSizeChange();
+            backgroundManager.ChangeBattleSize();
             yield return new WaitForSecondsRealtime(0.5f);
             if (StageManager.Instance == null) yield break;
             StartCoroutine(StageManager.Instance.WaveController());
-            StartCoroutine(AtkManager.Instance.CheckForAttack());
+            AtkManager.Instance.CheckForAttack();
             GameSpeed();
             // var allUnits = FindObjectsOfType<CharacterBase>();
             // foreach (var unit in allUnits)
@@ -143,20 +140,54 @@ namespace Script
             //     }
             // }
         }
-        private IEnumerator CoverUnit(bool value)
+        private void CoverUnit(bool value)
         {
             characterList = CharacterPool.Instance.UsePoolCharacterList();
             foreach (var unit in characterList)
             {
                 unit.GetComponent<CharacterBase>().cover.SetActive(value);
+                unit.GetComponent<CharacterBase>().cover.GetComponent<SpriteRenderer>().sortingOrder = 2;
+                unit.GetComponent<SpriteRenderer>().sortingOrder = 1;
             }
-            yield return null;
         }
         public IEnumerator ContinueOrLose()
         {
             if (!IsBattle) yield break;
             IsBattle = false;
+            Time.timeScale = 1;
             AtkManager.Instance.ClearWeapons();
+            yield return StartCoroutine(WaitForPanelToClose());
+            if (isPanelClosed)
+            {
+                if (castleManager.HpPoint > 0)
+                {
+                    StageManager.Instance.SaveClearWave();
+                    if (StageManager.Instance.isBossClear)
+                    {
+                        StageManager.Instance.alreadyBoss = false;
+                        moveCount = 10;
+                        PlayerPrefs.SetInt("moveCount", moveCount);
+                        countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
+                        bossArea.SetActive(false);
+                        commonRewardManager.WaveRewardChance();
+                        yield return StartCoroutine(WaitForPanelToClose());
+                        spawnManager.BossStageClearRule();
+                    }
+                    else
+                    {
+                        moveCount = 6;
+                        PlayerPrefs.SetInt("moveCount", moveCount);
+                        countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
+                    }
+                  
+                    yield return StartCoroutine(InitializeWave());
+                }
+                else
+                {
+                    LoseGame();
+                }
+                AtkManager.Instance.weaponsList.Clear();
+            }
             // var allUnits = FindObjectsOfType<CharacterBase>();
             // foreach (var unit in allUnits)
             // {
@@ -164,46 +195,13 @@ namespace Script
             //     unit.defaultAtkRate /= 0.9f;
             //     unit.HasAttackSpeedBuff = false;
             // }
-            if (castleManager.HpPoint > 0)
-            {
-                if (StageManager.Instance != null)
-                {
-                    StageManager.Instance.SaveClearWave();
-                    if (StageManager.Instance.isBossClear)
-                    {
-                        StageManager.Instance.alreadyBoss = false;
-                        moveCount = 10 + EnforceManager.Instance.rewardMoveCount;
-                        PlayerPrefs.SetInt("moveCount", moveCount);
-                        countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
-                        bossArea.SetActive(false);
-                        yield return StartCoroutine(commonRewardManager.WaveRewardChance());
-                        yield return StartCoroutine(WaitForPanelToClose());
-                        yield return new WaitUntil(() => CommonRewardManager.Instance.isOpenBox == false);
-                        if (!spawnManager.bossClearRule)
-                        {
-                            spawnManager.BossStageClearRule();
-                        }
-                        yield return StartCoroutine(InitializeWave());
-                    }
-                    else
-                    {
-                        moveCount = 6 + EnforceManager.Instance.rewardMoveCount;
-                        PlayerPrefs.SetInt("moveCount", moveCount);
-                        countManager.Initialize(PlayerPrefs.GetInt("moveCount"));
-                        yield return StartCoroutine(InitializeWave());
-                    }
-                }
-            }
-            else
-            {
-                LoseGame();
-            }
-            AtkManager.Instance.weaponsList.Clear();
         }
         private IEnumerator InitializeWave()
         {
+            if (isInitWave) yield break;
+            isInitWave = true;
+            yield return StartCoroutine(WaitForPanelToClose());
             Time.timeScale = 1;
-            yield return StartCoroutine(KillMotion());
             expManager.SaveExp();
             castleManager.SaveCastleHp();
             EnforceManager.Instance.SaveEnforceData();
@@ -212,10 +210,10 @@ namespace Script
                 castleManager.RecoverCastleHp();
             }
             castleManager.TookDamageLastWave = false;
-            yield return StartCoroutine(backgroundManager.ChangePuzzleSize());
+            StartCoroutine(backgroundManager.ChangePuzzleSize());
             yield return StartCoroutine(cameraManager.CameraPuzzleSizeChange());
             enemyPool.ClearList();
-            if (StageManager.Instance != null) StageManager.Instance.isBossClear = false;
+           
             castleManager.castleCrushBoost = false;
             if (levelUpRewardManager.HasUnitInGroup(CharacterBase.UnitGroups.Orc))
             {
@@ -246,7 +244,11 @@ namespace Script
                 StartCoroutine(SoundManager.Instance.BossWave(SoundManager.Instance.bossWaveClip));
             }
             Quest.Instance.VictoryQuest();
-            SpawnManager.SaveUnitState();
+            if (!StageManager.Instance.isBossClear)
+            {
+                spawnManager.AddToQueue(spawnManager.PositionUpCharacterObject());
+            }
+            if (StageManager.Instance != null) StageManager.Instance.isBossClear = false;
         }
         private void LoseGame()
         {
@@ -266,6 +268,7 @@ namespace Script
         }
         public IEnumerator WaitForPanelToClose()
         {
+            isPanelClosed = false;
             if (commonRewardPanel.activeSelf)
             {
                 while (commonRewardPanel.activeSelf)
@@ -281,6 +284,7 @@ namespace Script
                     yield return null;
                 }
             }
+            isPanelClosed = true;
             yield return null;
         }
         public void GameSpeedSelect()

@@ -68,19 +68,18 @@ namespace Script.UIManager
             gridManager.grid2Sprite.GetComponent<SpriteRenderer>().sprite = spriteSet[spriteIndex].grid2;
         }
 
-        public IEnumerator ChangeBattleSize()
+        public void ChangeBattleSize()
         {
             top.GetComponent<RectTransform>().DOAnchorPos3D(Vector3.zero, 1f);
             castle.GetComponent<RectTransform>().DOSizeDelta(new Vector2(2950f, 1000f), 1f);
             castle.GetComponent<RectTransform>().DOAnchorPos3D(new Vector3(0f, 600f, 0f), 1f);
-            yield return null;
         }
 
         public IEnumerator ChangePuzzleSize()
         {
-            top.GetComponent<RectTransform>().DOAnchorPos3D(_originalBackGroundPosition, 1f);
-            castle.GetComponent<RectTransform>().DOSizeDelta(_originalCastleSize, 1f);
-            castle.GetComponent<RectTransform>().DOAnchorPos3D(_originalCastlePosition, 1f);
+            top.GetComponent<RectTransform>().DOAnchorPos3D(_originalBackGroundPosition, 1.5f);
+            castle.GetComponent<RectTransform>().DOSizeDelta(_originalCastleSize, 1.5f);
+            castle.GetComponent<RectTransform>().DOAnchorPos3D(_originalCastlePosition, 1.5f);
             yield return null;
         }
 

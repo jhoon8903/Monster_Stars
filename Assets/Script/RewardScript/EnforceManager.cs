@@ -686,14 +686,6 @@ namespace Script.RewardScript
                         .Replace("{unit_N}", item.Key));
                 }
 
-                _skill.skillIcon.sprite = data.Icon;
-                _skill.skillBackGround.sprite = characterList[(int)_property].UnitGrade switch
-                {
-                    CharacterBase.UnitGrades.G => PowerTypeManager.Instance.green,
-                    CharacterBase.UnitGrades.B => PowerTypeManager.Instance.blue,
-                    CharacterBase.UnitGrades.P => PowerTypeManager.Instance.purple,
-                };
-
                 if (_instantiatedSkills.TryGetValue((PowerTypeManager.Types.LevelUpPattern, (int)_property), out var instantiatedSkill))
                 {
                     _skill = instantiatedSkill;
@@ -704,6 +696,13 @@ namespace Script.RewardScript
                     _instantiatedSkills[(PowerTypeManager.Types.LevelUpPattern, (int)_property)] = _skill;
                     _skill.desc.text = finalTranslation;
                 }
+                _skill.skillIcon.sprite = data.Icon;
+                _skill.skillBackGround.sprite = characterList[(int)_property].UnitGrade switch
+                {
+                    CharacterBase.UnitGrades.G => PowerTypeManager.Instance.green,
+                    CharacterBase.UnitGrades.B => PowerTypeManager.Instance.blue,
+                    CharacterBase.UnitGrades.P => PowerTypeManager.Instance.purple,
+                };
             }
             else
             {

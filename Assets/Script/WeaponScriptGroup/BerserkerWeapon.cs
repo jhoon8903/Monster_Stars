@@ -27,12 +27,7 @@ namespace Script.WeaponScriptGroup
             {
                 CharacterBase.GetComponent<Berserker>().atkCount = 0;
                 Damage *= 2f;
-                var useTime = Distance / Speed;
-                _rigidBody2D.velocity = Vector2.up;
-                yield return new WaitForSeconds(useTime);
-                StopUseWeapon(gameObject);
             }
-    
             foreach (var enemy in _enemyTransforms)
             {
                 if (enemy.activeInHierarchy)
@@ -45,7 +40,6 @@ namespace Script.WeaponScriptGroup
                     yield break;
                 }
             }
-    
             while (Vector3.Distance(transform.position, _enemyTransform) > 0.1f)
             {
                 var position = transform.position;

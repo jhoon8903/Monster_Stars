@@ -77,7 +77,7 @@ namespace Script.PuzzleManagerGroup
             _gridCells = newGridCells;
             _bossGridCells = newBossGridCells; // Assign the new array to _bossGridCells
             gridHeight = newGridHeight;
-            spawnManager.BossStageClearRule();
+            // spawnManager.BossStageClearRule();
         }
     }
 }

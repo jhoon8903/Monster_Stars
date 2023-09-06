@@ -12,7 +12,6 @@ namespace Script.UIManager
         [SerializeField] private SwipeManager swipeManager;
         private int _comboCount;
         private int _baseMoveCount;
-        private int _rewardMoveCount;
         protected internal int TotalMoveCount;
         public bool IsSwapOccurred { get; set; }
         public TextMeshProUGUI moveCountText;
@@ -20,11 +19,10 @@ namespace Script.UIManager
         public void Initialize(int initialMoveCount)
         {
             _baseMoveCount = initialMoveCount;
-            _rewardMoveCount = EnforceManager.Instance.permanentIncreaseMovementCount;
-            TotalMoveCount = _baseMoveCount + _rewardMoveCount;
+            TotalMoveCount = _baseMoveCount + EnforceManager.Instance.permanentIncreaseMovementCount;
             _comboCount = 0;
-            UpdateMoveCountText();
             EnforceManager.Instance.rewardMoveCount = 0;
+            UpdateMoveCountText();
         }
 
         private void UpdateMoveCountText()

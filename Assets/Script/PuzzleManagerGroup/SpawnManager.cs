@@ -33,13 +33,6 @@ namespace Script.PuzzleManagerGroup
                 isTutorial = true;
             }
         }
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.B))
-            {
-                BossStageClearRule();
-            }
-        }
         public event Action OnMatchFound;
         private void TriggerOnMatchFound()
         {
@@ -267,6 +260,14 @@ namespace Script.PuzzleManagerGroup
                     }
                 }
             }
+
+            if (GameManager.Instance.isInitWave)
+            {
+                GameManager.Instance.isInitWave = false;
+                SaveUnitState();
+                PlayerPrefs.SetInt("moveCount", countManager.TotalMoveCount);
+                Debug.Log("Init Save");
+            }
             yield return null;
         }
         private GameObject SpawnTutorialCharacter(Vector3Int position)
@@ -296,21 +297,13 @@ namespace Script.PuzzleManagerGroup
             movedObjects.Add(newCharacter);
             return newCharacter;
         }
-        private IEnumerator PerformMovesSequentially(List<(GameObject, Vector3Int)> moves)
-        {
-            foreach (var (o, targetPosition) in moves)
-            {
-                StartCoroutine(MoveCharacter(o, targetPosition));
-            }
-            yield return null;
-        }
         public static void SaveUnitState()
         {
-            if (PlayerPrefs.HasKey("unitState")) 
+            if (PlayerPrefs.HasKey("unitState"))
             {
                 PlayerPrefs.DeleteKey("unitState");
             }
-          
+
             var poolCharacterList = CharacterPool.Instance.UsePoolCharacterList();
             var unitState = "";
             foreach (var character in poolCharacterList)
@@ -321,8 +314,10 @@ namespace Script.PuzzleManagerGroup
                 var position = Vector3Int.FloorToInt(character.transform.position);
                 unitState += group + "|" + level + "|" + position.x + "," + position.y + "," + position.z + ";";
             }
+
             PlayerPrefs.SetString("unitState", unitState);
             PlayerPrefs.Save();
+            Debug.Log($"{StageManager.Instance.latestStage}Stage / {StageManager.Instance.currentWave}Wave Save");
         }
         public static IEnumerator LoadGameState()
         {
@@ -389,7 +384,6 @@ namespace Script.PuzzleManagerGroup
                 {
                     CharacterPool.ReturnToPool(character);
                 }
-
                 var highestY = gridManager.gridHeight - 1;
                 var moves = new List<(GameObject, Vector3Int)>();
                 var currentColumn = 0;
@@ -398,15 +392,14 @@ namespace Script.PuzzleManagerGroup
                 {
                     var newGridPosition = new Vector3Int(currentColumn, currentRow, 0);
                     moves.Add((character, newGridPosition));
-
                     currentColumn++;
                     if (currentColumn < gridManager.gridWidth) continue;
                     currentColumn = 0;
                     currentRow--;
                 }
-                StartCoroutine(PerformMovesSequentially(moves));
+                StartCoroutine(PerformMoves(moves));
                 moves.Clear();
-                // StartCoroutine(PositionUpCharacterObject());
+                SaveUnitState();
                 swipeManager.isBusy = false;
                 bossClearRule = false;
             }

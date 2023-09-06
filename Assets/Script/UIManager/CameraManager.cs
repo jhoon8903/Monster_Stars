@@ -12,11 +12,10 @@ namespace Script.UIManager
         [SerializeField] private float targetSize = 10f;
         [SerializeField] private float duration = 1.0f;
 
-        public IEnumerator CameraBattleSizeChange()
+        public void CameraBattleSizeChange()
         {
             mainCamera.transform.DOMove(new Vector3(2.5f, 3.5f, -100f), duration);
             mainCamera.DOOrthoSize(targetSize, duration);
-            yield return null;
         }
 
         public IEnumerator CameraPuzzleSizeChange()

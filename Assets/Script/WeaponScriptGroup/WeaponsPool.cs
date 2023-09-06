@@ -10,7 +10,7 @@ namespace Script.WeaponScriptGroup
 {
     public class WeaponsPool : MonoBehaviour
     {
-        public enum WeaponType { None, Octopus, Ogre, DeathChiller, Orc, Fishman, Skeleton, Phoenix, Beholder, Cobra, Berserker, Darkelf }
+        public enum WeaponType { None, Octopus, Ogre, DeathChiller, Orc, Fishman, Skeleton, Phoenix, Beholder, Cobra, Berserker, DarkElf }
         [System.Serializable]
         public class Weapon
         {
@@ -35,6 +35,7 @@ namespace Script.WeaponScriptGroup
                 foreach (var weaponPrefab in weapon.weaponPrefabs)
                 {
                     var objectPool = new Queue<GameObject>();
+                    if (EnforceManager.Instance.characterList.All(unit => unit.unitGroup.ToString() != weapon.weaponType.ToString())) continue;
                     for (var i = 0; i < weaponPoolCapacity; i++)
                     {
                         var obj = Instantiate(weaponPrefab, transform);
@@ -43,15 +44,17 @@ namespace Script.WeaponScriptGroup
                     }
                     weaponPools.Add(objectPool);
                 }
-
                 _poolDictionary.Add(weapon.weaponType, weaponPools);
             }
 
-            for (var i = 0; i < weaponPoolCapacity; i++)
+            foreach (var unit in EnforceManager.Instance.characterList.Where(unit => unit.unitGroup == CharacterBase.UnitGroups.Berserker))
             {
-                _berserkerWeapon = Instantiate(berserkerWeapon, transform);
-                _berserkerWeapon.gameObject.SetActive(false);
-                _berserkerList.Add(_berserkerWeapon);
+                for (var i = 0; i < weaponPoolCapacity; i++)
+                {
+                    _berserkerWeapon = Instantiate(berserkerWeapon, transform);
+                    _berserkerWeapon.gameObject.SetActive(false);
+                    _berserkerList.Add(_berserkerWeapon);
+                }
             }
         }
 
@@ -63,8 +66,7 @@ namespace Script.WeaponScriptGroup
                 return null;
             }
             var objectToSpawn = _poolDictionary[weaponType][puzzleLevel-2].Dequeue();
-            objectToSpawn.transform.position = position;
-            objectToSpawn.transform.rotation = rotation;
+         
 
            
             if (EnforceManager.Instance.orcSwordScaleIncrease)
@@ -83,13 +85,13 @@ namespace Script.WeaponScriptGroup
                 {
                     if (_berserkerList.Any(weaponObject => !weaponObject.gameObject.activeInHierarchy))
                     {
-                        GameObject o;
-                        (o = _berserkerWeapon.gameObject).SetActive(true);
-                        return o;
+                       _berserkerWeapon.gameObject.SetActive(true);
                     }
                 }
             }
             _poolDictionary[weaponType][puzzleLevel-2].Enqueue(objectToSpawn);
+            objectToSpawn.transform.position = position;
+            objectToSpawn.transform.rotation = rotation;
             objectToSpawn.SetActive(true);
             return objectToSpawn;
         }

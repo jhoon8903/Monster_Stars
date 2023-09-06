@@ -94,7 +94,7 @@ namespace Script.RewardScript
         private IEnumerator WaitAndOpenBox(GameObject treasure, float delay)
         {
             yield return new WaitForSecondsRealtime(delay);
-            StartCoroutine(OpenBox(treasure));
+            yield return StartCoroutine(OpenBox(treasure));
         }
         // 1-1. 다시 섞기
         public void ReEnqueueTreasure()
@@ -133,14 +133,16 @@ namespace Script.RewardScript
         {
             var commonPowerUps = new List<Data>();
             var selectedCodes = new HashSet<int>();
-            if (StageManager.Instance != null && StageManager.Instance.isBossClear && !EnforceManager.Instance.addRow)
+            if (StageManager.Instance != null && StageManager.Instance.isBossClear)
             {
-                const PowerTypeManager.Types firstType = PowerTypeManager.Types.AddRow;
-                var (firstDesc, firstPopupDesc) = GetSkillDesc(firstType);
-                var firstDesiredPowerUp = new PurpleData(CharacterBase.UnitGroups.None, 1, 16, PowerTypeManager.Types.AddRow,PowerTypeManager.Instance.purple, PowerTypeManager.Instance.purpleBack, firstDesc, firstPopupDesc, new[] { 1 });
-                commonPowerUps.Add(firstDesiredPowerUp);
-                selectedCodes.Add(firstDesiredPowerUp.Code);
-
+                if (!EnforceManager.Instance.addRow)
+                {
+                    const PowerTypeManager.Types firstType = PowerTypeManager.Types.AddRow;
+                    var (firstDesc, firstPopupDesc) = GetSkillDesc(firstType);
+                    var firstDesiredPowerUp = new PurpleData(CharacterBase.UnitGroups.None, 1, 16, PowerTypeManager.Types.AddRow,PowerTypeManager.Instance.purple, PowerTypeManager.Instance.purpleBack, firstDesc, firstPopupDesc, new[] { 1 });
+                    commonPowerUps.Add(firstDesiredPowerUp);
+                    selectedCodes.Add(firstDesiredPowerUp.Code);
+                }
                 if (!EnforceManager.Instance.diagonalMovement && StageManager.Instance.currentWave >= 20)
                 {
                     const PowerTypeManager.Types types = PowerTypeManager.Types.StepDirection;
@@ -148,38 +150,17 @@ namespace Script.RewardScript
                     var secondDesiredPowerUp = new PurpleData(CharacterBase.UnitGroups.None, 1, 16, PowerTypeManager.Types.StepDirection,PowerTypeManager.Instance.purple, PowerTypeManager.Instance.purpleBack, secondDesc, secondPopupDesc, new[] { 1 });
                     commonPowerUps.Add(secondDesiredPowerUp);
                     selectedCodes.Add(secondDesiredPowerUp.Code);
-                    var rotation = EnforceManager.Instance.addRow ? 2 : 1;
-                    for (var i = 0; i < rotation; i++)
-                    {
-                        Data selectedPowerUp;
-                        switch (forcedColor)
-                        {
-                            case "blue" when i == 0: selectedPowerUp = CommonUnique(PowerTypeManager.Instance.BlueList, selectedCodes); break;
-                            case "purple" when i == 0: selectedPowerUp = CommonUnique(PowerTypeManager.Instance.PurpleList, selectedCodes); break;
-                            default:
-                            {
-                                var total = greenChance + blueChance + purpleChance;
-                                var randomValue = Random.Range(0, total);
-                                if (randomValue < greenChance) { selectedPowerUp = CommonUnique(PowerTypeManager.Instance.GreenList, selectedCodes); }
-                                else if (randomValue < greenChance + blueChance) { selectedPowerUp = CommonUnique(PowerTypeManager.Instance.BlueList, selectedCodes); }
-                                else { selectedPowerUp = CommonUnique(PowerTypeManager.Instance.PurpleList, selectedCodes); }
-                                break;
-                            }
-                        }
-                        if (selectedPowerUp == null) continue;
-                        commonPowerUps.Add(selectedPowerUp);
-                        selectedCodes.Add(selectedPowerUp.Code);
-                    }
                 }
-
-                for (var i = 0; i < 2; i++)
+            }
+            // 랜덤 선택지 추가
+            for (var i = 0; i < 3; i++)
+            {
+                Data selectedPowerUp;
+                switch (forcedColor)
                 {
-                    Data selectedPowerUp;
-                    switch (forcedColor)
-                    {
-                        case "blue" when i == 0: selectedPowerUp = CommonUnique(PowerTypeManager.Instance.BlueList, selectedCodes); break;
-                        case "purple" when i == 0: selectedPowerUp = CommonUnique(PowerTypeManager.Instance.PurpleList, selectedCodes); break;
-                        default:
+                    case "blue" when i == 0: selectedPowerUp = CommonUnique(PowerTypeManager.Instance.BlueList, selectedCodes); break;
+                    case "purple" when i == 0: selectedPowerUp = CommonUnique(PowerTypeManager.Instance.PurpleList, selectedCodes); break;
+                    default:
                         {
                             var total = greenChance + blueChance + purpleChance;
                             var randomValue = Random.Range(0, total);
@@ -188,35 +169,13 @@ namespace Script.RewardScript
                             else { selectedPowerUp = CommonUnique(PowerTypeManager.Instance.PurpleList, selectedCodes); }
                             break;
                         }
-                    }
-                    if (selectedPowerUp == null) continue;
-                    commonPowerUps.Add(selectedPowerUp);
-                    selectedCodes.Add(selectedPowerUp.Code);
                 }
-            }
-            else
-            {
-                // 랜덤 선택지 추가
-                for (var i = 0; i < 3; i++)
+                if (selectedPowerUp == null) continue;
+                commonPowerUps.Add(selectedPowerUp);
+                selectedCodes.Add(selectedPowerUp.Code);
+                if (commonPowerUps.Count >= 3)
                 {
-                    Data selectedPowerUp;
-                    switch (forcedColor)
-                    {
-                        case "blue" when i == 0: selectedPowerUp = CommonUnique(PowerTypeManager.Instance.BlueList, selectedCodes); break;
-                        case "purple" when i == 0: selectedPowerUp = CommonUnique(PowerTypeManager.Instance.PurpleList, selectedCodes); break;
-                        default:
-                            {
-                                var total = greenChance + blueChance + purpleChance;
-                                var randomValue = Random.Range(0, total);
-                                if (randomValue < greenChance) { selectedPowerUp = CommonUnique(PowerTypeManager.Instance.GreenList, selectedCodes); }
-                                else if (randomValue < greenChance + blueChance) { selectedPowerUp = CommonUnique(PowerTypeManager.Instance.BlueList, selectedCodes); }
-                                else { selectedPowerUp = CommonUnique(PowerTypeManager.Instance.PurpleList, selectedCodes); }
-                                break;
-                            }
-                    }
-                    if (selectedPowerUp == null) continue;
-                    commonPowerUps.Add(selectedPowerUp);
-                    selectedCodes.Add(selectedPowerUp.Code);
+                    break;
                 }
             }
             return commonPowerUps;
@@ -442,6 +401,7 @@ namespace Script.RewardScript
         // 9. 상자 오픈
         private IEnumerator OpenBox(GameObject treasure)
         {
+            Time.timeScale = 0;
             commonRewardPanel.SetActive(true); // 보물 패널 활성화
             Quest.Instance.MergeBoxQuest();
             var treasureChestLevel = treasure.GetComponent<CharacterBase>().unitPuzzleLevel; // 보물 상자 이름
@@ -573,14 +533,15 @@ namespace Script.RewardScript
                 spawnManager.AddToQueue(spawnManager.PositionUpCharacterObject());
             }
             isOpenBox = false;
+            GameManager.Instance.GameSpeed();
         }
         // # 보스 웨이브 클리어 별도 보상
-        public IEnumerator WaveRewardChance()
+        public void WaveRewardChance()
         {
-            if (StageManager.Instance != null && StageManager.Instance.latestStage == 1) yield break;
+            if (StageManager.Instance != null && StageManager.Instance.latestStage == 1) return;
             Time.timeScale = 0;
             commonRewardPanel.SetActive(true);
-            yield return StartCoroutine(CommonChance(30, 55, 15, null));
+            StartCoroutine(CommonChance(30, 55, 15, null));
         }
         private void ShuffleCommonReward()
         {
