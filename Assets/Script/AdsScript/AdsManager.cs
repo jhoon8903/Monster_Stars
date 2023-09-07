@@ -408,7 +408,7 @@ namespace Script.AdsScript
                     FreeCoinPack();
                     break;
                 case ButtonType.ShuffleQuest:
-                    StartCoroutine(questManager.ShuffleDestroy(shuffleQuest));
+                    questManager.StartCoroutine(questManager.ShuffleDestroy(shuffleQuest));
                     break;
                 case ButtonType.AdsStart:
                     adsMoveCount += 6;

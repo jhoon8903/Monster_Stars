@@ -266,7 +266,6 @@ namespace Script.PuzzleManagerGroup
                 GameManager.Instance.isInitWave = false;
                 SaveUnitState();
                 PlayerPrefs.SetInt("moveCount", countManager.TotalMoveCount);
-                Debug.Log("Init Save");
             }
             yield return null;
         }
@@ -317,7 +316,6 @@ namespace Script.PuzzleManagerGroup
 
             PlayerPrefs.SetString("unitState", unitState);
             PlayerPrefs.Save();
-            Debug.Log($"{StageManager.Instance.latestStage}Stage / {StageManager.Instance.currentWave}Wave Save");
         }
         public static IEnumerator LoadGameState()
         {

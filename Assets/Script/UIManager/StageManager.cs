@@ -154,8 +154,7 @@ namespace Script.UIManager
             setCount = bossClass != null ? 1 : setCount;
             _spawnCount = 0;
             if (bossClass != null &&!alreadyBoss)
-            { 
-                Debug.Log($"Boss Class: {bossClass}");
+            {
                 alreadyBoss = true;
                 StartCoroutine(enemySpawnManager.SpawnBoss(bossClass, EnemyBase.SpawnZones.A));
             }
@@ -164,9 +163,6 @@ namespace Script.UIManager
                 for (var i = 0; i < setCount; i++)
                 {
                     _spawnCount = i;
-                    // Debug.Log($"spawn1 Value: {set1SpawnValue} / class: {set1EnemyClass} / zone: {set1SpawnZone}");
-                    // Debug.Log($"spawn2 Value: {set2SpawnValue} / class: {set2EnemyClass} / zone: {set2SpawnZone}");
-                    // Debug.Log($"spawn3 Value: {set3SpawnValue} / class: {set3EnemyClass} / zone: {set3SpawnZone}");
                     StartCoroutine(enemySpawnManager.SpawnEnemies(set1SpawnValue, set1EnemyClass, set1SpawnZone));
                     StartCoroutine(enemySpawnManager.SpawnEnemies(set2SpawnValue, set2EnemyClass, set2SpawnZone));
                     StartCoroutine(enemySpawnManager.SpawnEnemies(set3SpawnValue, set3EnemyClass, set3SpawnZone));

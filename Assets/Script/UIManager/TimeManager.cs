@@ -54,7 +54,6 @@ namespace Script.UIManager
 
         private void Reset()
         {
-            Debug.Log("리셋?");
             StoreMenu.Instance.ResetButtonCounts();
             QuestManager.Instance.ResetQuest();
             LastDate= DateTime.Today;

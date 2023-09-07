@@ -53,9 +53,6 @@ namespace Script.EnemyManagerScript
                 case EnemyBase.SpawnZones.F:
                     StartCoroutine(InSide(enemyBase));
                     break;
-                default:
-                    Debug.Log("어디에도 속하지 않음");
-                    break;
             }
             yield return null;
         }

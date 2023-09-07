@@ -80,7 +80,6 @@ namespace Script.WeaponScriptGroup
 
             if (EnforceManager.Instance.berserkerThirdBoost && unit.unitGroup == CharacterBase.UnitGroups.Berserker)
             {
-                Debug.Log(atkUnit.GetComponent<Berserker>().atkCount);
                 if (atkUnit.GetComponent<Berserker>().atkCount == 3)
                 {
                     if (_berserkerList.Any(weaponObject => !weaponObject.gameObject.activeInHierarchy))

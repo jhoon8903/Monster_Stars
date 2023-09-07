@@ -184,6 +184,10 @@ namespace Script.CharacterManagerScript
             switch (unitPieceLevel)
             {
                 case 1:
+                    maxPiece = UnitGrade switch
+                    {
+                        UnitGrades.G => 5
+                    };
                     break;
                 case 2:
                     maxPiece = UnitGrade switch

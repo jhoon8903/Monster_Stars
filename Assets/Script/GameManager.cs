@@ -116,7 +116,6 @@ namespace Script
         }
         public IEnumerator Count0Call()
         {
-            Debug.Log("ddddd");
             if (IsBattle) yield break;
             IsBattle = true;
             if (bool.Parse(PlayerPrefs.GetString("TutorialKey", "true")))

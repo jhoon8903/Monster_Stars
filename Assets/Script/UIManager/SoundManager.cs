@@ -120,9 +120,7 @@ namespace Script.UIManager
         public IEnumerator BossWave(AudioClip audioClip)
         {
             var currentClip = Bgm.clip;
-            Debug.Log(currentClip.name);
             Bgm.Stop();
-            Debug.Log(Bgm.isPlaying);
             Bgm.clip = audioClip;
             Bgm.Play();
             yield return new WaitForSeconds(audioClip.length);

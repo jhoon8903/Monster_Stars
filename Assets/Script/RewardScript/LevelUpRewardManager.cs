@@ -858,11 +858,6 @@ namespace Script.RewardScript
         }
         private void LevelUpDisplay(IReadOnlyList<Data> powerUps)
         {
-            if (powerUps[2] == null)
-            {
-                Debug.Log("???");
-            }
-            
             LevelUpDisplayText(exp1Button, exp1Text, icon1, exp1BtnBadge, powerUps[0]);
             LevelUpDisplayText(exp2Button, exp2Text, icon2, exp2BtnBadge, powerUps[1]);
             LevelUpDisplayText(exp3Button, exp3Text, icon3, exp3BtnBadge, powerUps[2]);

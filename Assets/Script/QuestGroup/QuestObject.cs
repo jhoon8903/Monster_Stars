@@ -106,7 +106,7 @@ namespace Script.QuestGroup
             var questInstance = CreateQuestFromData(data);
             QuestManager.Instance.RotationQuestList.Add(questInstance);
             QuestManager.Instance.questInstances.Add(questInstance);
-            QuestManager.Instance._rotationQuestCandidates.Remove(data);
+            QuestManager.Instance.RotationQuestCandidates.Remove(data);
             QuestManager.SaveQuest(QuestManager.Instance.FixQuestList.Concat(QuestManager.Instance.RotationQuestList));
             return questInstance;
         }
