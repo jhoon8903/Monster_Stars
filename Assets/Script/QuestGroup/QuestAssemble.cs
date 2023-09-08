@@ -36,8 +36,8 @@ namespace Script.QuestGroup
             const string receiveKey = QuestManager.ReceiveKey;
             const string shuffleKey = QuestManager.ShuffleKey;
             const string valueKey = QuestManager.ValueKey;
-            questAssemble.QuestType = (QuestManager.QuestTypes)Enum.Parse(typeof(QuestManager.QuestTypes), data.questType);
-            questAssemble.QuestCondition = (QuestManager.QuestCondition)Enum.Parse(typeof(QuestManager.QuestCondition), data.questCondition);
+            questAssemble.QuestType = data.questType;
+            questAssemble.QuestCondition = data.questCondition;
             questAssemble.questDesc.text = data.questDesc;
             questAssemble.questKey = data.questKey;
             questAssemble.questGoal = data.questGoal;

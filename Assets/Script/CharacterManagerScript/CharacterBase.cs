@@ -184,10 +184,7 @@ namespace Script.CharacterManagerScript
             switch (unitPieceLevel)
             {
                 case 1:
-                    maxPiece = UnitGrade switch
-                    {
-                        UnitGrades.G => 5
-                    };
+                    maxPiece = 5;
                     break;
                 case 2:
                     maxPiece = UnitGrade switch
@@ -424,7 +421,8 @@ namespace Script.CharacterManagerScript
             PlayerPrefs.SetInt($"{unitGroups}{PieceKey}", UnitPieceCount);
             PlayerPrefs.Save();
             Initialize();
-            Quest.Instance.UseCoinQuest(CharacterLevelUpCoin);
+            var useCoin = PlayerPrefs.GetInt($"{QuestManager.QuestTypes.UseCoin}Value", 0);
+            PlayerPrefs.SetInt($"{QuestManager.QuestTypes.UseCoin}value", useCoin+CharacterLevelUpCoin);
             yield return null;
         }
         protected internal virtual Sprite GetSprite(int level)

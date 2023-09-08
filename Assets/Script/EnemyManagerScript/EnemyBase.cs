@@ -349,8 +349,9 @@ namespace Script.EnemyManagerScript
             detectedEnemy.PoisonStatus(false, characterBase);
             detectedEnemy.BurnStatus(false, characterBase);
             detectedEnemy.BleedStatus(false, characterBase);
-
-            Quest.Instance.KillEnemyQuest();
+            var killEnemyCount = PlayerPrefs.GetInt($"{QuestManager.QuestTypes.KillEnemy}Value", 0);
+            killEnemyCount++;
+            PlayerPrefs.SetInt($"{QuestManager.QuestTypes.KillEnemy}Value", killEnemyCount);
             if (StageManager.Instance != null) StageManager.Instance.EnemyDestroyEvent(detectedEnemy);
             enemyPool.ReturnToPool(detectedEnemy);
            

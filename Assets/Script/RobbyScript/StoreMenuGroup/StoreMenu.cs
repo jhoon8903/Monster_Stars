@@ -151,7 +151,9 @@ namespace Script.RobbyScript.StoreMenuGroup
 
             if (boxTypes is not (BoxGrade.Coin and BoxGrade.Stamina and BoxGrade.Gem ))
             {
-                Quest.Instance.OpenBoxQuest();
+                var boxOpenCount = PlayerPrefs.GetInt($"{QuestManager.QuestTypes.OpenBox}Value", 0);
+                boxOpenCount++;
+                PlayerPrefs.SetInt($"{QuestManager.QuestTypes.OpenBox}Value", boxOpenCount);
             }
             isReset = false;
             PlayerPrefs.Save();
@@ -215,7 +217,9 @@ namespace Script.RobbyScript.StoreMenuGroup
             };
             if (_coinReward == 0) return;
             _coinObject = chestItem.CoinInstance(rewardItem, boxRewardContents.transform, boxTypes, _coinReward);
-            Quest.Instance.GetCoinQuest(_coinReward);
+            var getCoin = PlayerPrefs.GetInt($"{QuestManager.QuestTypes.GetCoin}Value",0);
+            var questGetCoin = getCoin + _coinReward;
+            PlayerPrefs.SetInt($"{QuestManager.QuestTypes.GetCoin}Value", questGetCoin);
         }
         private void CalculateUnitPieceReward(BoxGrade boxTypes, int openCount)
         {
@@ -284,7 +288,8 @@ namespace Script.RobbyScript.StoreMenuGroup
                 _unitPieceDict[unit] = new Tuple<int, Goods>(_unitPieceReward, _unitPieceObject);
             }
             var totalUnitPieces = pieceCountPerUnit.Values.Sum();
-            Quest.Instance.GetPieceQuest(totalUnitPieces);
+            var questGetPiece = PlayerPrefs.GetInt($"{QuestManager.QuestTypes.GetPiece}Value",0);
+            PlayerPrefs.SetInt($"{QuestManager.QuestTypes.GetPiece}Value", totalUnitPieces + questGetPiece);
         }
         private static int GetUnitPieceReward(CharacterBase.UnitGrades unitGrade, BoxGrade boxGrade, int openCount)
          {

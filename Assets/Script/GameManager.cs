@@ -49,7 +49,7 @@ namespace Script
         public bool IsBattle { get; private set; }
         private bool isPanelClosed = false;
         public bool isInitWave;
-        
+
         private void Awake()
         {
             Instance = this;
@@ -160,6 +160,10 @@ namespace Script
             {
                 if (castleManager.HpPoint > 0)
                 {
+                    var victoryCount = PlayerPrefs.GetInt($"{QuestManager.QuestTypes.Victory}Value",0);
+                    
+                    victoryCount++;
+                    PlayerPrefs.SetInt($"{QuestManager.QuestTypes.Victory}Value", victoryCount);
                     StageManager.Instance.SaveClearWave();
                     if (StageManager.Instance.isBossClear)
                     {
@@ -242,12 +246,12 @@ namespace Script
                 bossArea.transform.position = new Vector3(bossSpawnArea.x, 3.5f, 0);
                 StartCoroutine(SoundManager.Instance.BossWave(SoundManager.Instance.bossWaveClip));
             }
-            Quest.Instance.VictoryQuest();
             if (!StageManager.Instance.isBossClear)
             {
                 spawnManager.AddToQueue(spawnManager.PositionUpCharacterObject());
             }
             if (StageManager.Instance != null) StageManager.Instance.isBossClear = false;
+          
         }
         private void LoseGame()
         {

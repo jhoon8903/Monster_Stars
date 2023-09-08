@@ -122,8 +122,9 @@ namespace Script.RewardScript
         public void GetCoin(int wave)
         {
             var rewardCoin = wave * 50;
-            var getCoin = rewardCoin + EnforceManager.Instance.addGoldCount;
-            Quest.Instance.GetCoinQuest(getCoin);
+            var recordCoin = PlayerPrefs.GetInt($"{QuestManager.QuestTypes.GetCoin}Value", 0);
+            var getCoin = recordCoin + rewardCoin + EnforceManager.Instance.addGoldCount;
+            PlayerPrefs.SetInt($"{QuestManager.QuestTypes.GetCoin}Value", getCoin);
             CoinsScript.Instance.Coin += getCoin;
             cumulativeCoin += getCoin;
             CoinsScript.Instance.UpdateCoin();
@@ -198,8 +199,10 @@ namespace Script.RewardScript
                 PlayerPrefs.SetInt($"{unit.unitGroup}{CharacterBase.PieceKey}", unit.UnitPieceCount);
                 PlayerPrefs.Save();
             }
-            var totalUnitPieces = pieceCountPerUnit.Values.Sum();
-            Quest.Instance.GetPieceQuest(totalUnitPieces);
+
+            var getPiece = PlayerPrefs.GetInt($"{QuestManager.QuestTypes.GetPiece}Value", 0);
+            var totalUnitPieces = getPiece + pieceCountPerUnit.Values.Sum();
+            PlayerPrefs.SetInt($"{QuestManager.QuestTypes.GetPiece}Value", totalUnitPieces);
             SaveCumulativeData();
         }
         private static int GetUnitPieceReward(int stage, int wave, CharacterBase.UnitGrades unitGrade)

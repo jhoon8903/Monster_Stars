@@ -180,7 +180,9 @@ namespace Script.UIManager
                 if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
                 {
                     isBossClear = true;
-                    Quest.Instance.KillBossQuest();
+                    var bossKillCount = PlayerPrefs.GetInt($"{QuestManager.QuestTypes.KillBoss}Value", 0);
+                    bossKillCount++;
+                    PlayerPrefs.SetInt($"{QuestManager.QuestTypes.KillBoss}Value",bossKillCount);
                 }
             }
 

@@ -1496,19 +1496,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 118422472}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 949931877}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &126467855
 GameObject:
   m_ObjectHideFlags: 0
@@ -7870,7 +7858,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &621566887
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7883,6 +7871,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf06a097312a14dcea5093b50ad06f4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainPanel: {fileID: 337770383}
   loadingSlider: {fileID: 892802176}
   isFirstContact: 0
   isLoading: 1
@@ -9570,7 +9559,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -14383,12 +14372,11 @@ MonoBehaviour:
   coinBtn: {fileID: 7196134908141924821, guid: b7e3560b6c46c4ac1bf72a53c6b2d026, type: 3}
   staminaBtn: {fileID: 7196134908141924821, guid: b7e3560b6c46c4ac1bf72a53c6b2d026, type: 3}
   gemBtn: {fileID: 7196134908141924821, guid: b7e3560b6c46c4ac1bf72a53c6b2d026, type: 3}
-  questManager: {fileID: 1284597633}
   warningPanel: {fileID: 0}
   message: {fileID: 0}
   rewardedRetryAttempt: 0
   adsMoveCount: 0
-  shuffleQuest: {fileID: 0}
+  shuffleQuestAssemble: {fileID: 0}
   boxGrade: 0
   isRetry: 0
 --- !u!1 &1166823215
@@ -16193,7 +16181,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   questManager: {fileID: 1284597633}
-  questList: 
 --- !u!114 &1284597633
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16216,6 +16203,9 @@ MonoBehaviour:
   timer: {fileID: 1485014414}
   rewardItem: {fileID: 3094762634428683866, guid: dccbcae767e944a48a11b819fcc0423d, type: 3}
   questRewardCloseBtn: {fileID: 690843594}
+  rotationQuestCandidates: []
+  fixQuestList: []
+  rotationQuestList: []
   questInstances: []
 --- !u!4 &1284597634
 Transform:

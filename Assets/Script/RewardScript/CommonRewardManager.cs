@@ -403,7 +403,9 @@ namespace Script.RewardScript
         {
             Time.timeScale = 0;
             commonRewardPanel.SetActive(true); // 보물 패널 활성화
-            Quest.Instance.MergeBoxQuest();
+            var openCount = PlayerPrefs.GetInt($"{QuestManager.QuestTypes.MergeBox}Value", 0);
+            openCount++;
+            PlayerPrefs.SetInt($"{QuestManager.QuestTypes.MergeBox}Value", openCount);
             var treasureChestLevel = treasure.GetComponent<CharacterBase>().unitPuzzleLevel; // 보물 상자 이름
             switch(treasureChestLevel)
             {

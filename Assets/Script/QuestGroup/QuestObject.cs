@@ -29,7 +29,7 @@ namespace Script.QuestGroup
 
         public void FixQuestCreate(QuestManager.QuestData data)
         {
-            var questType = QuestManager.ParseQuestType(data.questType);
+            var questType = data.questType;
             if (questType is QuestManager.QuestTypes.ViewAds or QuestManager.QuestTypes.AllClear)
             {
                 SpecialQuests(questType, data);
@@ -52,34 +52,17 @@ namespace Script.QuestGroup
                 case QuestManager.QuestTypes.ViewAds:
                     adsValue = questValue;
                     adsGoal = questGoal;
-                    adsRewardBtn.interactable = receive switch
-                    {
-                        true => false,
-                        false => complete switch
-                        {
-                            true => true,
-                            false => false
-                        }
-                    };
+                    adsRewardBtn.interactable = !receive;
                     SetSpecialQuest(adsDesc, adsProgress, adsProgressText, desc, adsGoal, adsValue);
                     break;
                 case QuestManager.QuestTypes.AllClear:
                     allClearValue = questValue;
                     allClearGoal = questGoal;
-                    allClearRewardBtn.interactable = receive switch
-                    {
-                        true => false,
-                        false => complete switch
-                        {
-                            true => true,
-                            false => false
-                        }
-                    };
+                    allClearRewardBtn.interactable = !receive;
                     SetSpecialQuest(allClearDesc, allClearProgress, allClearProgressText, desc, allClearGoal, allClearValue);
                     break;
             }
             PlayerPrefs.Save();
-            adsRewardBtn.onClick.AddListener(()=>QuestManager.Instance.SpecialQuestReward(questType));
         }
         public static void InitSpecialQuest(QuestManager.QuestTypes questType)
         {
@@ -97,19 +80,19 @@ namespace Script.QuestGroup
         private void CoinQuestsCreate(QuestManager.QuestData data)
         {
             var questInstance = CreateQuestFromData(data);
-            QuestManager.Instance.FixQuestList.Add(questInstance);
+            QuestManager.Instance.fixQuestList.Add(questInstance);
             QuestManager.Instance.questInstances.Add(questInstance);
-            QuestManager.SaveQuest(QuestManager.Instance.FixQuestList.Concat(QuestManager.Instance.RotationQuestList));
         }
         public QuestAssemble RotationQuestCreate(QuestManager.QuestData data)
         {
             var questInstance = CreateQuestFromData(data);
-            QuestManager.Instance.RotationQuestList.Add(questInstance);
+            QuestManager.Instance.rotationQuestList.Add(questInstance);
             QuestManager.Instance.questInstances.Add(questInstance);
-            QuestManager.Instance.RotationQuestCandidates.Remove(data);
-            QuestManager.SaveQuest(QuestManager.Instance.FixQuestList.Concat(QuestManager.Instance.RotationQuestList));
+            QuestManager.Instance.rotationQuestCandidates = QuestManager.Instance.rotationQuestCandidates.Where(quest => quest.questType != data.questType).ToList();
+            QuestManager.Instance.SaveQuest();
             return questInstance;
         }
+
         private QuestAssemble CreateQuestFromData(QuestManager.QuestData data)
         {
             _questInstance = Instantiate(assemble, QuestManager.Instance.questTransform);
@@ -137,6 +120,7 @@ namespace Script.QuestGroup
         {
             if (instanceObject == null) return;
             instanceObject.shuffleBtn.GetComponent<Button>().onClick.RemoveAllListeners();
+            instanceObject.receiveBtn.GetComponent<Button>().onClick.RemoveAllListeners();
             var receive = instanceObject.isReceived;
             var complete = instanceObject.isCompleted;
             var shuffle = instanceObject.isShuffled;
@@ -172,7 +156,6 @@ namespace Script.QuestGroup
                                 instanceObject.shuffleBtn.SetActive(true);
                                 instanceObject.shuffleBtn.GetComponent<Button>().interactable = true;
                                 instanceObject.shuffleBtn.GetComponent<Button>().onClick.AddListener(() => AdsManager.Instance.CallShuffleAds(instanceObject));
-                             
                             }
                             break;
                     }

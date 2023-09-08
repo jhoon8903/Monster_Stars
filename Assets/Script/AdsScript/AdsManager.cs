@@ -8,6 +8,7 @@ using Script.UIManager;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 // ReSharper disable All
 
@@ -18,7 +19,6 @@ namespace Script.AdsScript
         [SerializeField] private GameObject coinBtn;
         [SerializeField] private GameObject staminaBtn;
         [SerializeField] private GameObject gemBtn;
-        [SerializeField] private QuestManager questManager;
         [SerializeField] private GameObject warningPanel;
         [SerializeField] private TextMeshProUGUI message;
 
@@ -30,7 +30,7 @@ namespace Script.AdsScript
         private int _interstitialRetryAttempt;
         public int rewardedRetryAttempt;
         public int adsMoveCount;
-        public QuestAssemble shuffleQuest;
+        public QuestAssemble shuffleQuestAssemble;
         private void Awake()
         {
             if (Instance == null)
@@ -408,7 +408,7 @@ namespace Script.AdsScript
                     FreeCoinPack();
                     break;
                 case ButtonType.ShuffleQuest:
-                    questManager.StartCoroutine(questManager.ShuffleDestroy(shuffleQuest));
+                    QuestManager.Instance.ShuffleQuest(shuffleQuestAssemble);
                     break;
                 case ButtonType.AdsStart:
                     adsMoveCount += 6;
@@ -444,8 +444,7 @@ namespace Script.AdsScript
 
         public void CallShuffleAds(QuestAssemble questAssemble)
         {
-
-            shuffleQuest = questAssemble;
+            shuffleQuestAssemble = questAssemble;
             AdsManager.Instance.ButtonTypes = AdsManager.ButtonType.ShuffleQuest;
             AdsManager.Instance.ShowRewardedAd();
         }

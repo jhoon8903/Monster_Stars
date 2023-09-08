@@ -1,19 +1,20 @@
 using System.Collections;
+using Script.QuestGroup;
 using Script.RobbyScript.MainMenuGroup;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Script
 {
-    public class LoadingManager : MonoBehaviour 
+    public class LoadingManager : MonoBehaviour
     {
+        [SerializeField] private MainPanel mainPanel;
         [SerializeField] private Slider loadingSlider;
         public bool isFirstContact;
         public bool isLoading = true;
 
         public void Start()
         {
-
             isLoading = bool.Parse(PlayerPrefs.GetString("Loading", "true"));
             if (isLoading)
             {
@@ -33,6 +34,7 @@ namespace Script
             {
                 gameObject.SetActive(false);
             }
+            QuestManager.Instance.SetQuest();
         }
 
         private IEnumerator UpdateLoadingBar()
@@ -50,9 +52,10 @@ namespace Script
 
             loadingSlider.value = 1f;
 
+            
             if (isFirstContact)
             {
-                MainPanel.Instance.StartGame();
+                mainPanel.StartGame();
             }
             else
             {
