@@ -49,3 +49,35 @@
 ![](https://i.imgur.com/tGVWqkM.jpg)
 
 ![](https://i.imgur.com/M0cdKxz.gif)
+
+---
+
+
+Technical Features
+---
+
+### 데이터 조작 및 관리
+규칙 기반 무작위 매칭 : Linq의 ‘GroupBy’ 및 ‘OrderBy’ 를 활용하여 오브젝트 인덱스 정렬
+
+데이터 추적 : Enum, Dictionary, Tuple, List를 활용하여 데이터를 추적하며, 이를 통한  누적 데미지, 상태이상, 공격횟수에 따른 강화효과등을 
+           효과적으로 관리
+
+데이터 지속성 : JSON 형식을 이용한 저장 및 로드 방식을 채택하여, 게임 데이터의 안정성 보장
+
+
+### 그래픽 및 애니메이션 최적화
+특수효과 : 걷기 모션등 부족한 리소스에 대한 대안으로  DOTween을 이용한 애니메이션 및 적 파괴 파티클 효과 등 Unity  Engine을 활용한 시각효과 적용
+
+프레임 최적화 : Collider, Object Pooling 최적화를 통해 전투 병목지점에서  50fps 이상의 안정적인 게임환경 제공
+
+
+### 코드 및 리소스 최적화
+중복 리소스 최소화 : Class 상속을 활용하여 코드의 재사용성을 향상시키고, 중복 리소스를 최소화
+
+게임 밸런싱 : 밸런스 조정 및 데이터 수정을 위해 CSV 시트를 디자인, 유연한 게임 관리기능 제공
+
+
+### 로깅 및 디버깅
+SDK 이벤트 로깅 : AppLovin, FireBase, Flurry, Singular 등 이벤트 로깅을 통해 데이터 분석 최적화
+
+Reporter : 모바일 Reporter를 통해 빌드 상태의 버그 및 에러에 대한 디버깅
