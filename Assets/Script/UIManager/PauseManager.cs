@@ -6,6 +6,7 @@ using Script.CharacterManagerScript;
 using Script.PuzzleManagerGroup;
 using Script.RewardScript;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 using UnityEngine.UI;
@@ -14,7 +15,6 @@ namespace Script.UIManager
 {
     public class PauseManager : MonoBehaviour
     {
-        [SerializeField] private CharacterManager characterManager;
         [SerializeField] private SpawnManager spawnManager;
         //Pause Panel
         [SerializeField] private GameObject pausePanel;
@@ -48,8 +48,13 @@ namespace Script.UIManager
         // Bottom Button
         [SerializeField] private Button homeBtn;
         [SerializeField] private Button continueBtn;
+
+        public UnitSkillObject unitSkillObject;
+
+        public static PauseManager Instance;
         private void Awake()
         {
+            Instance = this;
             musicBtn.GetComponent<Button>().onClick.AddListener(MusicController);
             soundBtn.GetComponent<Button>().onClick.AddListener(SoundController);
             SoundManager.Instance.music = bool.Parse(PlayerPrefs.GetString(SoundManager.MusicKey, "true"));
@@ -58,7 +63,6 @@ namespace Script.UIManager
             UpdateSoundState();
             pausePanel.SetActive(false);
         }
-
         private void Start()
         {
             UnitSkillView();
@@ -105,29 +109,29 @@ namespace Script.UIManager
                 {
                     continue; // 해당 스킬이 조건을 만족하지 않으면 다음 스킬로 이동
                 }
-                var instance = Instantiate(unitSkillPrefabs, unitSkillGrid.transform);
+                unitSkillObject = Instantiate(unitSkillPrefabs, unitSkillGrid.transform);
                 var skillLevel = (int)skill["Level"];
-                instance.skillLevel = skillLevel;
+                unitSkillObject.skillLevel = skillLevel;
                 var isActive = activeSkills.TryGetValue(skillLevel, out var active) && active;
-                if (instance == null) continue;
-                instance.GetComponent<Image>().sprite = isActive
+                if (unitSkillObject == null) continue;
+                unitSkillObject.GetComponent<Image>().sprite = isActive
                     ? gradeBack[(int)Enum.Parse(typeof(CharacterBase.UnitGrades), (string)skill["Grade"], true)]
                     : gradeBack[3];
                 if (characterBase.UnitSkillDict.TryGetValue(skillLevel, out var skillSpriteDict))
                 {
-                    instance.skillIcon.sprite =
+                    unitSkillObject.skillIcon.sprite =
                         isActive ? skillSpriteDict.Keys.First() : skillSpriteDict.Values.First();
                 }
-                switch (instance.skillLevel)
+                switch (unitSkillObject.skillLevel)
                 {
                     case <= 3:
-                        instance.rightDesc.text =  (string)skill["PopupDesc"];
+                        unitSkillObject.rightDesc.text =  (string)skill["PopupDesc"];
                         break;
                     case 5:
-                        instance.centerDesc.text =  (string)skill["PopupDesc"];
+                        unitSkillObject.centerDesc.text =  (string)skill["PopupDesc"];
                         break;
                     default:
-                        instance.leftDesc.text = (string)skill["PopupDesc"];
+                        unitSkillObject.leftDesc.text = (string)skill["PopupDesc"];
                         break;
                 }
                 // instance.skillType.text = $"{skill["Type"]} / {skill["Level"]}";
@@ -213,6 +217,7 @@ namespace Script.UIManager
                 pausePanel.SetActive(false);
             });
             GameManager.Instance.GameSpeed();
+
         }
     }
 }

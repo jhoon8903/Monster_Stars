@@ -29,9 +29,6 @@ namespace Script.RewardScript
         [SerializeField] private Image icon1;
         [SerializeField] private Image icon2;
         [SerializeField] private Image icon3;
-        [SerializeField] private Image common1BtnBadge;
-        [SerializeField] private Image common2BtnBadge;
-        [SerializeField] private Image common3BtnBadge; // 공통 데이터
         [SerializeField] private SpawnManager spawnManager;
         [SerializeField] private CountManager countManager;
         [SerializeField] private CharacterManager characterManager;
@@ -139,7 +136,7 @@ namespace Script.RewardScript
                 {
                     const PowerTypeManager.Types firstType = PowerTypeManager.Types.AddRow;
                     var (firstDesc, firstPopupDesc) = GetSkillDesc(firstType);
-                    var firstDesiredPowerUp = new PurpleData(CharacterBase.UnitGroups.None, 1, 16, PowerTypeManager.Types.AddRow,PowerTypeManager.Instance.purple, PowerTypeManager.Instance.purpleBack, firstDesc, firstPopupDesc, new[] { 1 });
+                    var firstDesiredPowerUp = new PurpleData(CharacterBase.UnitGroups.None, 1, 16, PowerTypeManager.Types.AddRow, PowerTypeManager.Instance.purpleBack, firstDesc, firstPopupDesc, new[] { 1 });
                     commonPowerUps.Add(firstDesiredPowerUp);
                     selectedCodes.Add(firstDesiredPowerUp.Code);
                 }
@@ -147,7 +144,7 @@ namespace Script.RewardScript
                 {
                     const PowerTypeManager.Types types = PowerTypeManager.Types.StepDirection;
                     var (secondDesc, secondPopupDesc) = GetSkillDesc(types);
-                    var secondDesiredPowerUp = new PurpleData(CharacterBase.UnitGroups.None, 1, 16, PowerTypeManager.Types.StepDirection,PowerTypeManager.Instance.purple, PowerTypeManager.Instance.purpleBack, secondDesc, secondPopupDesc, new[] { 1 });
+                    var secondDesiredPowerUp = new PurpleData(CharacterBase.UnitGroups.None, 1, 16, PowerTypeManager.Types.StepDirection, PowerTypeManager.Instance.purpleBack, secondDesc, secondPopupDesc, new[] { 1 });
                     commonPowerUps.Add(secondDesiredPowerUp);
                     selectedCodes.Add(secondDesiredPowerUp.Code);
                 }
@@ -271,12 +268,12 @@ namespace Script.RewardScript
                 common2Button.interactable = true;
                 common3Button.interactable = true;
             }
-            CommonDisplayText(common1Button.GetComponent<Button>(), common1Text, icon1, common1BtnBadge ,powerUpsDisplayData[0]);
-            CommonDisplayText(common2Button, common2Text, icon2, common2BtnBadge, powerUpsDisplayData[1]);
-            CommonDisplayText(common3Button, common3Text, icon3, common3BtnBadge, powerUpsDisplayData[2]);
+            CommonDisplayText(common1Button.GetComponent<Button>(), common1Text, icon1,powerUpsDisplayData[0]);
+            CommonDisplayText(common2Button, common2Text, icon2, powerUpsDisplayData[1]);
+            CommonDisplayText(common3Button, common3Text, icon3, powerUpsDisplayData[2]);
         }
         // 8. 옵션 텍스트
-        private void CommonDisplayText(Button commonButton, TMP_Text powerText, Image icon, Image btnBadge, Data powerUp)
+        private void CommonDisplayText(Button commonButton, TMP_Text powerText, Image icon, Data powerUp)
         {
             var finalDesc = powerUp.Desc;
             var placeholderValues = new Dictionary<string, Func<double>> {{ "{p}", () => powerUp.Property[0]}};
@@ -286,13 +283,6 @@ namespace Script.RewardScript
             {
                icon.sprite = EnforceManager.Instance.characterList[powerUp.Property[0]]
                    .GetSpriteForLevel(EnforceManager.Instance.characterList[powerUp.Property[0]].unitPieceLevel);
-
-               btnBadge.sprite = EnforceManager.Instance.characterList[powerUp.Property[0]].UnitGrade switch
-               {
-                   CharacterBase.UnitGrades.G => PowerTypeManager.Instance.green,
-                   CharacterBase.UnitGrades.B => PowerTypeManager.Instance.blue,
-                   CharacterBase.UnitGrades.P => PowerTypeManager.Instance.purple,
-               };
                commonButton.GetComponent<Image>().sprite = EnforceManager.Instance.characterList[powerUp.Property[0]].UnitGrade switch
                {
                    CharacterBase.UnitGrades.G => PowerTypeManager.Instance.greenBack,
@@ -303,7 +293,6 @@ namespace Script.RewardScript
             else
             {
                 icon.sprite = powerUp.Icon;
-                btnBadge.sprite = powerUp.BtnColor;
                 commonButton.GetComponent<Image>().sprite = powerUp.BackGroundColor;
             }
             switch (powerUp.Type)

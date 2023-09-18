@@ -296,7 +296,7 @@ namespace Script.PuzzleManagerGroup
             movedObjects.Add(newCharacter);
             return newCharacter;
         }
-        public static void SaveUnitState()
+        private static void SaveUnitState()
         {
             if (PlayerPrefs.HasKey("unitState"))
             {

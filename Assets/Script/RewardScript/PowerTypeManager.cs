@@ -26,7 +26,6 @@ namespace Script.RewardScript
         public CharacterBase.UnitGroups SkillGroup { get; set; }
         public int SkillLevel { get; set; }
         public int Code { get; set; }
-        public Sprite BtnColor { get; private set; }
         public Sprite BackGroundColor { get; private set; }
         public Sprite Icon { get; set; }
         public string Desc { get; set; }
@@ -36,8 +35,7 @@ namespace Script.RewardScript
             CharacterBase.UnitGroups skillGroup, 
             int skillLevel, 
             int code, 
-            PowerTypeManager.Types type, 
-            Sprite btnColor,
+            PowerTypeManager.Types type,
             Sprite backGroundColor,
             string desc, 
             string popupDesc, 
@@ -49,7 +47,6 @@ namespace Script.RewardScript
             }
             SkillGroup = skillGroup;
             SkillLevel = skillLevel;
-            BtnColor = btnColor;
             BackGroundColor = backGroundColor;
             Code = code;
             Type = type;
@@ -70,13 +67,12 @@ namespace Script.RewardScript
         public GreenData(CharacterBase.UnitGroups skillGroup, 
             int skillLevel, 
             int code, 
-            PowerTypeManager.Types type, 
-            Sprite btnColor,
+            PowerTypeManager.Types type,
             Sprite backGroundColor,
             string desc, 
             string popupDesc, 
             int[] property)
-            : base(skillGroup, skillLevel, code, type, btnColor, backGroundColor, desc, popupDesc, property)
+            : base(skillGroup, skillLevel, code, type, backGroundColor, desc, popupDesc, property)
         {
         }
     }
@@ -86,13 +82,12 @@ namespace Script.RewardScript
         public BlueData(CharacterBase.UnitGroups skillGroup, 
             int skillLevel, 
             int code, 
-            PowerTypeManager.Types type, 
-            Sprite btnColor,
+            PowerTypeManager.Types type,
             Sprite backGroundColor,
             string desc, 
             string popupDesc, 
             int[] property)
-            : base(skillGroup, skillLevel, code, type, btnColor, backGroundColor, desc, popupDesc, property)
+            : base(skillGroup, skillLevel, code, type, backGroundColor, desc, popupDesc, property)
         {
         }
     }
@@ -102,13 +97,12 @@ namespace Script.RewardScript
         public PurpleData(CharacterBase.UnitGroups skillGroup, 
             int skillLevel, 
             int code, 
-            PowerTypeManager.Types type, 
-            Sprite btnColor,
+            PowerTypeManager.Types type,
             Sprite backGroundColor,
             string desc, 
             string popupDesc, 
             int[] property)
-            : base(skillGroup, skillLevel, code, type, btnColor, backGroundColor, desc, popupDesc, property)
+            : base(skillGroup, skillLevel, code, type, backGroundColor, desc, popupDesc, property)
         {
         }
     }
@@ -116,7 +110,7 @@ namespace Script.RewardScript
     public class PowerTypeManager : MonoBehaviour
     {
         public static PowerTypeManager Instance;
-        public string[] skillData;
+        private string[] _skillData;
         private void Awake()
         {
             Instance = this;
@@ -140,39 +134,35 @@ namespace Script.RewardScript
         var csvData = csvFile.text.Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
         for (var i = 1; i < csvData.Length; i++)
         {
-            skillData = csvData[i].Split(',');
+            _skillData = csvData[i].Split(',');
 
-            Sprite btnColor;
             Sprite backGroundColor;
-            var skillGroup = (CharacterBase.UnitGroups)Enum.Parse(typeof(CharacterBase.UnitGroups), skillData[0]);
-            var skillLevel = int.Parse(skillData[1]);
-            var code = int.Parse(skillData[2]);
-            var type = (Types)Enum.Parse(typeof(Types), skillData[3]);
-            var desc = skillData[6];
-            var popupDesc = skillData[7];
-            var property = skillData[8].Contains(";")
-                ? Array.ConvertAll(skillData[8].Split(';'), int.Parse)
-                : new[] { int.Parse(skillData[8]) };
+            var skillGroup = (CharacterBase.UnitGroups)Enum.Parse(typeof(CharacterBase.UnitGroups), _skillData[0]);
+            var skillLevel = int.Parse(_skillData[1]);
+            var code = int.Parse(_skillData[2]);
+            var type = (Types)Enum.Parse(typeof(Types), _skillData[3]);
+            var desc = _skillData[6];
+            var popupDesc = _skillData[7];
+            var property = _skillData[8].Contains(";")
+                ? Array.ConvertAll(_skillData[8].Split(';'), int.Parse)
+                : new[] { int.Parse(_skillData[8]) };
 
-            switch (skillData[4])
+            switch (_skillData[4])
             {
                 case "G":
-                    btnColor = g;
                     backGroundColor = gBack;
-                    GreenList.Add(new GreenData(skillGroup, skillLevel, code, type, btnColor, backGroundColor, desc, popupDesc, property));
+                    GreenList.Add(new GreenData(skillGroup, skillLevel, code, type,  backGroundColor, desc, popupDesc, property));
                     break;
                 case "B":
-                    btnColor = b;
                     backGroundColor = bBack;
-                    BlueList.Add(new BlueData(skillGroup, skillLevel, code, type, btnColor, backGroundColor, desc, popupDesc, property));
+                    BlueList.Add(new BlueData(skillGroup, skillLevel, code, type,  backGroundColor, desc, popupDesc, property));
                     break;
                 case "P":
-                    btnColor = p;
                     backGroundColor = pBack;
-                    PurpleList.Add(new PurpleData(skillGroup, skillLevel, code, type, btnColor, backGroundColor, desc, popupDesc, property));
+                    PurpleList.Add(new PurpleData(skillGroup, skillLevel, code, type,  backGroundColor, desc, popupDesc, property));
                     break;
                 default:
-                    Debug.LogWarning("Unknown color type: " + skillData[4]);
+                    Debug.LogWarning("Unknown color type: " + _skillData[4]);
                     break;
             }
         }

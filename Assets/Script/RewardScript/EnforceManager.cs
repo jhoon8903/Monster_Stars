@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -12,10 +13,10 @@ using UnityEngine.Serialization;
 namespace Script.RewardScript
 {
     [Serializable]
-    public class SkillInstanceData
+    public class SkillObject
     {
         public PowerTypeManager.Types type;
-        public float? Value;
+        public int value;
     }
 
     [Serializable]
@@ -139,9 +140,8 @@ namespace Script.RewardScript
         public bool addGold;
         public List<int> permanentGroupIndex;
 
-        public List<SkillInstanceData> skillInstances;
+        public List<SkillObject> skillObjects = new List<SkillObject>();
     }
-
     public class EnforceManager : MonoBehaviour
     {
         // Skill Grid
@@ -221,7 +221,7 @@ namespace Script.RewardScript
             darkAttackPowerBoost += 0.04f;
         }
         // 완료
-      [Header("P / 9Lv: 상태이상 적 공격시 50% 확률로 50% 추가데미지")] 
+        [Header("P / 9Lv: 상태이상 적 공격시 50% 확률로 50% 추가데미지")] 
         public bool ogreStatusAilmentDamageBoost;
         // 완료
         [Header("B / 11: 공격속도 9% 증가 (최대 4회)")]
@@ -253,10 +253,10 @@ namespace Script.RewardScript
             waterSlowDurationBoost += 0.2f;
         }
         // 완료
-[Header("P / 7Lv: DeathChiller 유닛에게 빙결된 적은 받는 피해 15% 증가")]
+        [Header("P / 7Lv: DeathChiller 유닛에게 빙결된 적은 받는 피해 15% 증가")]
         public bool deathChillerFreezeDamageBoost;
         // 완료
-[Header("B / 9Lv: 둔화강도 15% 증가")] 
+        [Header("B / 9Lv: 둔화강도 15% 증가")] 
         public bool deathChillerSlowCPowerBoost;
         // 완료
         [Header("G / 11Lv: 공격속도 4% 증가 (최대 6회)")]
@@ -288,10 +288,10 @@ namespace Script.RewardScript
             physicalAttackSpeedBoost += 0.09f;
         }
         // 완료
-[Header("B / 7Lv: 해당 웨이브에서 유닛 3회 공격당 공속 1% 증가 (최대 60%)")]
+        [Header("B / 7Lv: 해당 웨이브에서 유닛 3회 공격당 공속 1% 증가 (최대 60%)")]
         public bool orcRatePerAttack;
         // 완료
-[Header("B / 9Lv: 속박에 걸린적을 공격하면 초당 20% 데미지의 3초간 출혈 발생")]
+        [Header("B / 9Lv: 속박에 걸린적을 공격하면 초당 20% 데미지의 3초간 출혈 발생")]
         public bool orcBindBleed;
         // 완료
         [Header("G / 11Lv: 공격력 3% 증가 (최대 6회)")]
@@ -302,7 +302,7 @@ namespace Script.RewardScript
             physicalDamageBoost += 0.06f;
         }
         // 완료
-[Header("G / 13Lv: 출혈 지속시간 2초 증가")]
+        [Header("G / 13Lv: 출혈 지속시간 2초 증가")]
         public bool orcBleedDuration;
 
 
@@ -312,10 +312,10 @@ namespace Script.RewardScript
         [Header("B / 1Lv: 타격시 10% 확률로 적을 1초간 빙결 (이동불가)")]
         public bool fishmanFreeze;
         // 완료
-[Header("P / 3Lv: 둔화강도가 10% 증가합니다.")]
+        [Header("P / 3Lv: 둔화강도가 10% 증가합니다.")]
         public bool fishmanSlowPowerBoost;
         // 완료
-[Header("B / 5Lv: 빙결지속시간 0.5초 증가")] 
+        [Header("B / 5Lv: 빙결지속시간 0.5초 증가")] 
         public bool fishmanFreezeTimeBoost;
         // 완료
         [Header("G / 7Lv: 공격력 4% 증가 (최대 6회)")]
@@ -348,10 +348,10 @@ namespace Script.RewardScript
         [Header("G / 3Lv: 출혈중인 적 공격시 80% 데미지 증가")] 
         public bool skeletonBleedingEnemyDamageBoost;
         // 완료
-       [Header("B / 5Lv: 유닛 C가 5회 공격마다 공격력 1% 증가, 웨이브마다 초기화 (최대 60%)")]
+        [Header("B / 5Lv: 유닛 C가 5회 공격마다 공격력 1% 증가, 웨이브마다 초기화 (최대 60%)")]
         public bool skeletonDamagePerBoost;
         // 완료
-      [Header("P / 7Lv: 공격력 16% 증가")] 
+        [Header("P / 7Lv: 공격력 16% 증가")] 
         public bool skeletonDamageBoost;
         // 완료
         [Header("B / 9Lv: 중독 피해 10% 증가")] 
@@ -518,7 +518,6 @@ namespace Script.RewardScript
         [Header("B / 13Lv: 동일한 적을 타격할때마다 데미지가 5% 증가 (최대 10회)")]
         public bool darkElfSameEnemyBoost;
 
-
         public Dictionary<int, bool> GetActivatedSkills(CharacterBase.UnitGroups unitGroup)
         {
             var activatedSkills = new Dictionary<int, bool>();
@@ -631,20 +630,30 @@ namespace Script.RewardScript
         private float _property;
         private readonly Dictionary<(PowerTypeManager.Types Type, int Value), PauseSkillObjectScript> _instantiatedSkills = 
             new Dictionary<(PowerTypeManager.Types Type, int Value), PauseSkillObjectScript>();
-        private PauseSkillObjectScript _skill;
-       
-        // private string GetGroupNameFromValue(int value)
-        // {
-        //     var unitName = value switch
-        //     {
-        //         0 => characterList[0].name,
-        //         1 => characterList[1].name,
-        //         2 => characterList[2].name,
-        //         3 => characterList[3].name,
-        //     };
-        //     return unitName;
-        // }
-        
+
+        public PauseSkillObjectScript skill;
+
+        private static readonly HashSet<PowerTypeManager.Types> GroupDamageKeys = new HashSet<PowerTypeManager.Types>
+        {
+            PowerTypeManager.Types.GroupDamage1,
+            PowerTypeManager.Types.GroupDamage2,
+            PowerTypeManager.Types.GroupDamage3
+        };
+
+        private static readonly HashSet<PowerTypeManager.Types> GroupRateKeys = new HashSet<PowerTypeManager.Types>
+        {
+            PowerTypeManager.Types.GroupAtkSpeed1,
+            PowerTypeManager.Types.GroupAtkSpeed2,
+            PowerTypeManager.Types.GroupAtkSpeed3
+        };
+        [SerializeField] private Sprite groupDamageGreenIcon;
+        [SerializeField] private Sprite groupDamageBlueIcon;
+        [SerializeField] private Sprite groupDamagePurpleIcon;
+        [SerializeField] private Sprite groupRateGreenIcon;
+        [SerializeField] private Sprite groupRateBlueIcon;
+        [SerializeField] private Sprite groupRatePurpleIcon;
+      
+        private static int _skillInstanceCounter;
         private void SkillInstance(Data data, float? value = null)
         {
             _property = value.GetValueOrDefault();
@@ -676,9 +685,136 @@ namespace Script.RewardScript
                 finalDesc.Replace("{nextStage}", highLevelCharacterCount.ToString(CultureInfo.CurrentCulture));
             }
             var finalTranslation = finalDesc.Replace("||", "\n");
-         
-            
-            if (data.Type == PowerTypeManager.Types.LevelUpPattern)
+            var groupDamage = GroupDamageKeys.Contains(data.Type);
+            var groupRate = GroupRateKeys.Contains(data.Type);
+            if (groupDamage)
+            {
+                var representativeKey = GroupDamageKeys.First();
+                var existingKey = _instantiatedSkills.Keys.FirstOrDefault(k => k.Type == representativeKey);
+        
+                if (existingKey != default)
+                {
+                    skill = _instantiatedSkills[existingKey];
+                    if (value.HasValue)
+                    {
+                        _property = value.Value;
+                        _instantiatedSkills.Remove(existingKey);
+                        _instantiatedSkills.Add((representativeKey, (int)_property), skill);
+                    }
+                    skill.value.text = $"{_property}%";
+                    skill.skillIcon.sprite = _property switch
+                    {
+                        <= 10 => groupDamageGreenIcon,
+                        > 11 and <= 20 => groupDamageBlueIcon,
+                        _ => groupDamagePurpleIcon,
+                    };
+                    if (new[] { 1, 2, 7, 8, 13, 14, 19, 20 }.Contains(skill.instanceCount))
+                    {
+                        skill.leftDesc.text = finalTranslation;
+                    }
+                    else if (new[] { 3, 4, 9, 10, 15, 16, 21, 22 }.Contains(skill.instanceCount))
+                    {
+                        skill.centerDesc.text = finalTranslation;
+                    }
+                    else if (new[] { 5, 6, 11, 12, 17, 18, 23, 24 }.Contains(skill.instanceCount))
+                    {
+                        skill.rightDesc.text = finalTranslation;
+                    }
+                }
+                else
+                {
+                    skill = Instantiate(skillPrefabs, skillGrid.transform);
+                    _skillInstanceCounter++;
+                    skill.instanceCount = _skillInstanceCounter;
+                    _instantiatedSkills[(representativeKey, 0)] = skill;
+                    skill.skillIcon.sprite = _property switch
+                    {
+                        <= 10 => groupDamageGreenIcon,
+                        > 11 and <= 20 => groupDamageBlueIcon,
+                        _ => groupDamagePurpleIcon,
+                    };          
+                    if (new[] { 1, 2, 7, 8, 13, 14, 19, 20 }.Contains(skill.instanceCount))
+                    {
+                        skill.leftDesc.text = finalTranslation;
+                    }
+                    else if (new[] { 3, 4, 9, 10, 15, 16, 21, 22 }.Contains(skill.instanceCount))
+                    {
+                        skill.centerDesc.text = finalTranslation;
+                    }
+                    else if (new[] { 5, 6, 11, 12, 17, 18, 23, 24 }.Contains(skill.instanceCount))
+                    {
+                        skill.rightDesc.text = finalTranslation;
+                    }
+                    if (!value.HasValue) return;
+                    _instantiatedSkills.Remove((representativeKey, 0));
+                    _instantiatedSkills.Add((representativeKey, (int)_property), skill);
+                    skill.value.text = $"{_property}%";
+                }
+            }
+            else if (groupRate)
+            {
+                var representativeKey = GroupRateKeys.First();        
+                var existingKey = _instantiatedSkills.Keys.FirstOrDefault(k => k.Type == representativeKey);
+                if (existingKey != default)
+                {
+                    skill = _instantiatedSkills[existingKey];
+                    if (value.HasValue)
+                    {
+                        _property = value.Value;
+                        _instantiatedSkills.Remove(existingKey);
+                        _instantiatedSkills.Add((representativeKey, (int)_property), skill);
+                    }
+                    skill.value.text = $"{_property}%";
+                    skill.skillIcon.sprite = _property switch
+                    {
+                        <= 10 => groupRateGreenIcon,
+                        > 11 and <= 20 => groupRateBlueIcon,
+                        _ => groupRatePurpleIcon,
+                    };
+                    if (new[] { 1, 2, 7, 8, 13, 14, 19, 20 }.Contains(skill.instanceCount))
+                    {
+                        skill.leftDesc.text = finalTranslation;
+                    }
+                    else if (new[] { 3, 4, 9, 10, 15, 16, 21, 22 }.Contains(skill.instanceCount))
+                    {
+                        skill.centerDesc.text = finalTranslation;
+                    }
+                    else if (new[] { 5, 6, 11, 12, 17, 18, 23, 24 }.Contains(skill.instanceCount))
+                    {
+                        skill.rightDesc.text = finalTranslation;
+                    }
+                }
+                else
+                {
+                    skill = Instantiate(skillPrefabs, skillGrid.transform);
+                    _skillInstanceCounter++;
+                    skill.instanceCount = _skillInstanceCounter;
+                    _instantiatedSkills[(representativeKey, 0)] = skill;
+                    skill.skillIcon.sprite = _property switch
+                    {
+                        <= 10 => groupRateGreenIcon,
+                        > 11 and <= 20 => groupRateBlueIcon,
+                        _ => groupRatePurpleIcon,
+                    };
+                    if (new[] { 1, 2, 7, 8, 13, 14, 19, 20 }.Contains(skill.instanceCount))
+                    {
+                        skill.leftDesc.text = finalTranslation;
+                    }
+                    else if (new[] { 3, 4, 9, 10, 15, 16, 21, 22 }.Contains(skill.instanceCount))
+                    {
+                        skill.centerDesc.text = finalTranslation;
+                    }
+                    else if (new[] { 5, 6, 11, 12, 17, 18, 23, 24 }.Contains(skill.instanceCount))
+                    {
+                        skill.rightDesc.text = finalTranslation;
+                    }
+                    if (!value.HasValue) return;
+                    _instantiatedSkills.Remove((representativeKey, 0));
+                    _instantiatedSkills.Add((representativeKey, (int)_property), skill);
+                    skill.value.text = $"{_property}%";
+                }
+            }
+            else if (data.Type == PowerTypeManager.Types.LevelUpPattern)
             {
                 if (CommonRewardManager.Instance.LevelUpDict.TryGetValue(characterList[(int)_property].unitGroup, out var levelUpInfo))
                 {
@@ -688,39 +824,102 @@ namespace Script.RewardScript
 
                 if (_instantiatedSkills.TryGetValue((PowerTypeManager.Types.LevelUpPattern, (int)_property), out var instantiatedSkill))
                 {
-                    _skill = instantiatedSkill;
+                    skill = instantiatedSkill;
                 }
                 else
                 {
-                    _skill = Instantiate(skillPrefabs, skillGrid.transform);
-                    _instantiatedSkills[(PowerTypeManager.Types.LevelUpPattern, (int)_property)] = _skill;
-                    _skill.desc.text = finalTranslation;
+                    skill = Instantiate(skillPrefabs, skillGrid.transform);
+                    _skillInstanceCounter++;
+                    skill.instanceCount = _skillInstanceCounter;
+                    _instantiatedSkills[(PowerTypeManager.Types.LevelUpPattern, (int)_property)] = skill;
+                    if (new[] { 1, 2, 7, 8, 13, 14, 19, 20 }.Contains(skill.instanceCount))
+                    {
+                        skill.leftDesc.text = finalTranslation;
+                    }
+                    else if (new[] { 3, 4, 9, 10, 15, 16, 21, 22 }.Contains(skill.instanceCount))
+                    {
+                        skill.centerDesc.text = finalTranslation;
+                    }
+                    else if (new[] { 5, 6, 11, 12, 17, 18, 23, 24 }.Contains(skill.instanceCount))
+                    {
+                        skill.rightDesc.text = finalTranslation;
+                    }
                 }
-                _skill.skillIcon.sprite = data.Icon;
-                _skill.skillBackGround.sprite = characterList[(int)_property].UnitGrade switch
-                {
-                    CharacterBase.UnitGrades.G => PowerTypeManager.Instance.green,
-                    CharacterBase.UnitGrades.B => PowerTypeManager.Instance.blue,
-                    CharacterBase.UnitGrades.P => PowerTypeManager.Instance.purple,
-                };
+                skill.skillIcon.sprite = data.Icon;
             }
             else
             {
-                if (_instantiatedSkills.TryGetValue((data.Type,0), out var instantiatedSkill))
+                var existingKey = _instantiatedSkills.Keys.FirstOrDefault(k => k.Type == data.Type);
+                if (existingKey != default)
                 {
-                    _skill = instantiatedSkill;
+                    skill = _instantiatedSkills[existingKey];
+                    if (value.HasValue)
+                    {
+                        _property = value.Value;
+                        _instantiatedSkills.Remove(existingKey);
+                        _instantiatedSkills.Add((data.Type, (int)_property), skill);
+                    }
+
+                    if (data.Type is PowerTypeManager.Types.Exp or PowerTypeManager.Types.Slow)
+                    {
+                        skill.value.text = $"{_property}%";
+                    }
+                    else if  (_property != 0)
+                    {
+                        skill.value.text = _property.ToString(CultureInfo.CurrentCulture);
+                    }  
+                    else
+                    {
+                        skill.value.text = null;
+                    }
+                    if (new[] { 1, 2, 7, 8, 13, 14, 19, 20 }.Contains(skill.instanceCount))
+                    {
+                        skill.leftDesc.text = finalTranslation;
+                    }
+                    else if (new[] { 3, 4, 9, 10, 15, 16, 21, 22 }.Contains(skill.instanceCount))
+                    {
+                        skill.centerDesc.text = finalTranslation;
+                    }
+                    else if (new[] { 5, 6, 11, 12, 17, 18, 23, 24 }.Contains(skill.instanceCount))
+                    {
+                        skill.rightDesc.text = finalTranslation;
+                    }
                 }
                 else
                 {
-                    _skill = Instantiate(skillPrefabs, skillGrid.transform);
-                    _instantiatedSkills[(data.Type,0)] = _skill;
-                    _skill.skillBackGround.sprite = PowerTypeManager.Instance.purple;
-                    _skill.skillIcon.sprite = data.Icon;
-                    _skill.desc.text = finalTranslation;
-                }
-                if (value.HasValue)
-                {
-                    _skill.value.text = _property.ToString(CultureInfo.CurrentCulture);
+                    skill = Instantiate(skillPrefabs, skillGrid.transform);
+                    _skillInstanceCounter++;
+                    skill.instanceCount = _skillInstanceCounter;
+                    _instantiatedSkills[(data.Type,0)] = skill;
+                    skill.skillIcon.sprite = data.Icon;
+                    if (new[] { 1, 2, 7, 8, 13, 14, 19, 20 }.Contains(skill.instanceCount))
+                    {
+                        skill.leftDesc.text = finalTranslation;
+                    }
+                    else if (new[] { 3, 4, 9, 10, 15, 16, 21, 22 }.Contains(skill.instanceCount))
+                    {
+                        skill.centerDesc.text = finalTranslation;
+                    }
+                    else if (new[] { 5, 6, 11, 12, 17, 18, 23, 24 }.Contains(skill.instanceCount))
+                    {
+                        skill.rightDesc.text = finalTranslation;
+                    }
+
+                    if (!value.HasValue) return;
+                    _instantiatedSkills.Remove((data.Type, 0));
+                    _instantiatedSkills.Add((data.Type, (int)_property), skill);
+                    if (data.Type is PowerTypeManager.Types.Exp or PowerTypeManager.Types.Slow)
+                    {
+                        skill.value.text = $"{_property}%";
+                    }
+                    else if  (_property != 0)
+                    {
+                        skill.value.text = _property.ToString(CultureInfo.CurrentCulture);
+                    }  
+                    else
+                    {
+                        skill.value.text = null;
+                    }
                 }
             }
         }
@@ -893,7 +1092,6 @@ namespace Script.RewardScript
             addGold = true;
             SkillInstance(data, addGoldCount);
         }
-        
         public void SaveEnforceData()
         {
             var data = new EnforceData
@@ -1007,16 +1205,20 @@ namespace Script.RewardScript
                 rewardMoveCount = rewardMoveCount,
                 addGoldCount = addGoldCount,
                 addGold = addGold,
-                permanentGroupIndex = index, 
-
-                skillInstances = _instantiatedSkills.Keys
-                    .Select(key => new SkillInstanceData { type = key.Item1, Value = key.Item2 })
-                    .ToList()
+                permanentGroupIndex = index,
             };
+
+            foreach (var entry in _instantiatedSkills)
+            {
+                data.skillObjects.Add(new SkillObject
+                {
+                    type = entry.Key.Type,
+                    value = entry.Key.Value,
+                });
+            }
             var json = JsonUtility.ToJson(data);
             PlayerPrefs.SetString("EnforceData", json);
         }
-
         public void LoadEnforceData()
         {
             if (!PlayerPrefs.HasKey("EnforceData")) return;
@@ -1129,13 +1331,10 @@ namespace Script.RewardScript
             addGold = data.addGold;
             index = new List<int>(data.permanentGroupIndex);
 
-            foreach (var skillInfo in data.skillInstances)
+            foreach (var skill in data.skillObjects)
             {
-                var skillData = FindSkillDataByType(skillInfo.type);
-                if (skillData != null)
-                {
-                    SkillInstance(skillData, skillInfo.Value);
-                }
+                var type = FindSkillDataByType(skill.type);
+                SkillInstance(type, skill.value);
             }
         }          
         private static Data FindSkillDataByType(PowerTypeManager.Types type)

@@ -1,7 +1,9 @@
 using System.Collections.Generic;
+using Script.RewardScript;
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 namespace Script.UIManager
@@ -18,17 +20,18 @@ namespace Script.UIManager
         [SerializeField] public TextMeshProUGUI leftDesc;
         [SerializeField] public TextMeshProUGUI centerDesc;
         [SerializeField] public TextMeshProUGUI rightDesc;
-        private static GameObject _activeSkillInfoPanel;
+        public GameObject activeSkillInfoPanel;
         public int skillLevel;
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (_activeSkillInfoPanel != null &&
-                _activeSkillInfoPanel != descLeft && 
-                _activeSkillInfoPanel != descCenter && 
-                _activeSkillInfoPanel != descRight)
+            if (activeSkillInfoPanel != null &&
+                activeSkillInfoPanel != descLeft && 
+                activeSkillInfoPanel != descCenter && 
+                activeSkillInfoPanel != descRight)
             {
-                _activeSkillInfoPanel.SetActive(false);
+                activeSkillInfoPanel.SetActive(false);
             }
+
             var isChildOfThisObject = eventData.pointerCurrentRaycast.gameObject.transform.IsChildOf(transform);
             if (!isChildOfThisObject) return;
             switch (skillLevel)
@@ -46,10 +49,35 @@ namespace Script.UIManager
             }
         }
 
-        private static void TogglePanel(GameObject panel)
+        private void TogglePanel(GameObject panel)
         {
             panel.SetActive(!panel.activeSelf);
-            _activeSkillInfoPanel = panel.activeSelf ? panel : null;
+            activeSkillInfoPanel = panel.activeSelf ? panel : null;
+        }
+
+        private void Update()
+        {
+            if (!Input.GetMouseButtonDown(0) || activeSkillInfoPanel == null ||
+                !activeSkillInfoPanel.activeSelf) return;
+            var clickedObject = EventSystem.current.currentSelectedGameObject;
+
+            if (clickedObject == null || !IsDescendantOrSelf(activeSkillInfoPanel, clickedObject))
+            {
+                activeSkillInfoPanel.SetActive(false);
+            }
+        }
+
+        private static bool IsDescendantOrSelf(GameObject parent, GameObject toCheck)
+        {
+            if (parent == null || toCheck == null) return false;
+
+            var current = toCheck.transform;
+            while (current != null)
+            {
+                if (current == parent.transform) return true;
+                current = current.parent;
+            }
+            return false;
         }
     }
 }

@@ -27,11 +27,7 @@ namespace Script.RewardScript
         [SerializeField] private Image icon1;
         [SerializeField] private Image icon2;
         [SerializeField] private Image icon3;
-        [SerializeField] private Image exp1BtnBadge;
-        [SerializeField] private Image exp2BtnBadge;
-        [SerializeField] private Image exp3BtnBadge;
         [SerializeField] private ExpManager expManager;
-        [SerializeField] private GameManager gameManager;
         [SerializeField] private CharacterManager characterManager;
         private Data _selectedPowerUp;
         public static LevelUpRewardManager Instance;
@@ -858,18 +854,17 @@ namespace Script.RewardScript
         }
         private void LevelUpDisplay(IReadOnlyList<Data> powerUps)
         {
-            LevelUpDisplayText(exp1Button, exp1Text, icon1, exp1BtnBadge, powerUps[0]);
-            LevelUpDisplayText(exp2Button, exp2Text, icon2, exp2BtnBadge, powerUps[1]);
-            LevelUpDisplayText(exp3Button, exp3Text, icon3, exp3BtnBadge, powerUps[2]);
+            LevelUpDisplayText(exp1Button, exp1Text, icon1,  powerUps[0]);
+            LevelUpDisplayText(exp2Button, exp2Text, icon2,  powerUps[1]);
+            LevelUpDisplayText(exp3Button, exp3Text, icon3,  powerUps[2]);
         }
-        private void LevelUpDisplayText(Button expButton, TMP_Text powerText, Image icon, Image btnBadge, Data powerUp)
+        private void LevelUpDisplayText(Button expButton, TMP_Text powerText, Image icon, Data powerUp)
         {
             var finalDesc = powerUp.Desc;
             var placeholderValues = new Dictionary<string, Func<double>> {{ "{p}", () => powerUp.Property[0]}};
             finalDesc = placeholderValues.Aggregate(finalDesc, (current, placeholder) => current.Replace(placeholder.Key, placeholder.Value().ToString(CultureInfo.CurrentCulture)));
             var finalTranslation = finalDesc.Replace("||", "\n");
             icon.sprite = powerUp.Icon;
-            btnBadge.sprite = powerUp.BtnColor;
             expButton.GetComponent<Image>().sprite = powerUp.BackGroundColor;
             powerText.text = powerUp.Type switch
             {

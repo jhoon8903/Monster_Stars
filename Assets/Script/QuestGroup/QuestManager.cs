@@ -210,7 +210,6 @@ namespace Script.QuestGroup
         }
         public void ShuffleQuest(QuestAssemble shuffleQuestAssemble)
         {
-            Debug.Log(shuffleQuestAssemble);
             InitQuest(shuffleQuestAssemble);
             if (rotationQuestList == null)
             {
@@ -228,8 +227,8 @@ namespace Script.QuestGroup
             var newQuestData = filteredQuestData.OrderBy(_ => Random.value).First();
             rotationQuestCandidates = rotationQuestCandidates.Where(quest => (int)quest.questType != (int)shuffleQuestAssemble.QuestType).ToList();
             var newQuest = questObject.RotationQuestCreate(newQuestData);
-            newQuest.isShuffled = true;
             InitQuest(newQuest);
+            newQuest.isShuffled = true;
             PlayerPrefs.SetString(SetKey(newQuest, ShuffleKey), "true");
             QuestObject.UpdateQuestStates(newQuest);
         }
@@ -267,11 +266,13 @@ namespace Script.QuestGroup
         }
         private static void InitQuest(QuestAssemble quest)
         {
-            PlayerPrefs.DeleteKey($"{quest.QuestType}QuestValue");
+            quest.questValue = 0;
+            PlayerPrefs.DeleteKey($"{quest.QuestType}Value");
             PlayerPrefs.DeleteKey(SetKey(quest, ValueKey));
             PlayerPrefs.DeleteKey(SetKey(quest, CompleteKey));
             PlayerPrefs.DeleteKey(SetKey(quest, ReceiveKey));
             PlayerPrefs.DeleteKey(SetKey(quest, ShuffleKey));
+            PlayerPrefs.Save();
         }
         public void ResetQuest()
         {
@@ -309,30 +310,6 @@ namespace Script.QuestGroup
             Quest.Instance.AllClearQuest(questTypes);
             questRewardPanel.SetActive(false);
         }
-        public void UpdateQuest(QuestAssemble quest, int value)
-        {
-            if (fixQuestList.Contains(quest) || rotationQuestList.Contains(quest))
-            {
-                quest.questValue = PlayerPrefs.GetInt(SetKey(quest, ValueKey), 0);
-                quest.questValue += value;
-                quest.questProgress.maxValue = quest.questGoal;
-                quest.questProgress.value = quest.questValue;
-                quest.questProgressText.text = $"{quest.questValue} / {quest.questGoal}";
-                PlayerPrefs.SetInt(SetKey(quest, ValueKey), quest.questValue);
-                if (quest.questValue >= quest.questGoal)
-                {
-                    Debug.Log(quest.questValue);
-                    Debug.Log(quest.questGoal);
-                    quest.questProgress.maxValue = quest.questGoal;
-                    quest.questProgress.value = quest.questGoal; 
-                    quest.questProgressText.text = $"{quest.questGoal} / {quest.questGoal}";
-                    quest.isCompleted = true;
-                    PlayerPrefs.SetString(SetKey(quest, CompleteKey), "true");
-                }
-                PlayerPrefs.Save();
-                QuestObject.UpdateQuestStates(quest);
-            }
-        }
         private void BattleQuestUpdate()
         {
             foreach (var quest in questInstances)
@@ -358,7 +335,6 @@ namespace Script.QuestGroup
             if (questObject == null) yield break;
             var complete = bool.Parse(PlayerPrefs.GetString($"{questType}{CompleteKey}", "false"));
             var receive = bool.Parse(PlayerPrefs.GetString($"{questType}{ReceiveKey}", "false"));
-            Debug.Log($"{questType} / {receive}");
             if (complete && receive) yield break;
             switch (questType)
             {
@@ -551,7 +527,6 @@ namespace Script.QuestGroup
         public void ReceiveQuestReward(QuestAssemble quest)
         {
             questRewardCloseBtn.onClick.RemoveListener(()=> CloseReward(quest.QuestType));
-            Debug.Log("Receive Quest");
             quest.isReceived = true;
             PlayerPrefs.SetString(SetKey(quest,ReceiveKey), "true");
             questRewardPanel.SetActive(true);
