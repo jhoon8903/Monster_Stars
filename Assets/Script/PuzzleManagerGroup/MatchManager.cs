@@ -302,11 +302,6 @@ namespace Script.PuzzleManagerGroup
                    
                 }
             }
-            // case 1
-            // None
-            // case 2
-             // IsMatched(sortedList[2]);
-            // case 3
             StartCoroutine(Match3(sortedList[2]));
             return true;
         }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,21 +38,16 @@ namespace Script.UIManager
             {
                 _lastPopupByEnemy[enemyBase].SetActive(false);
             }
-
             _lastPopupByEnemy[enemyBase] = popupToUse;
-
             var pos = enemyBase.transform.position;
             popupToUse.transform.position = new Vector3(pos.x, pos.y + 0.5f, 0f);
-    
             if (enemyBase.EnemyType == EnemyBase.EnemyTypes.Boss)
             {
                 popupToUse.transform.position = new Vector3(pos.x, pos.y + 1.7f, 0f);
                 popupToUse.transform.localScale = new Vector3(1.5f, 1.5f, 0);
             }
-
             Vector2 startPosition = popupToUse.transform.position;
             var endPosition = new Vector2(startPosition.x, startPosition.y + 0.2f);
-
             if (damage == 0) yield break;
             popupToUse.SetActive(true);
             popupToUse.GetComponent<TextMeshPro>().text = damage.ToString();
@@ -74,9 +68,7 @@ namespace Script.UIManager
             {
                 damageColor = Color.white;
             }
-
             popupToUse.GetComponent<TextMeshPro>().color = damageColor;
-
             float t = 0;
             const float speed = 1f;
             while (t < 1)
@@ -89,7 +81,6 @@ namespace Script.UIManager
                 // value.SetActive(false);
                 // yield break;
             }
-
             yield return new WaitForSecondsRealtime(0.2f);
             popupToUse.SetActive(false);
         }

@@ -57,7 +57,11 @@ namespace Script.PuzzleManagerGroup
             public readonly int TutorialStepCount;
             public readonly string PopupText;
 
-            public TutorialStep(Vector3 pointerStartPosition, Vector3 pointerEndPosition, int tutorialStepCount, string popupText, params Vector2Int[] positionsToRemove)
+            public TutorialStep(Vector3 pointerStartPosition, 
+                Vector3 pointerEndPosition, 
+                int tutorialStepCount, 
+                string popupText, 
+                params Vector2Int[] positionsToRemove)
             {
                 PositionsToRemove = positionsToRemove ?? Array.Empty<Vector2Int>(); // null 처리
                 PointerStartPosition = pointerStartPosition;
