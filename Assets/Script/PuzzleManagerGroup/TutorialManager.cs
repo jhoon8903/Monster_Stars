@@ -227,7 +227,8 @@ namespace Script.PuzzleManagerGroup
                 {
                     var groupChar = row[x];
                     var unitGroups = ConvertToUnitGroup(groupChar);
-                    var setUnit = notUsePoolCharacterList.FirstOrDefault(t => t.GetComponent<CharacterBase>().unitGroup == unitGroups && t.activeSelf == false);
+                    var setUnit = notUsePoolCharacterList.FirstOrDefault(t 
+                        => t.GetComponent<CharacterBase>().unitGroup == unitGroups && t.activeSelf == false);
                     if (setUnit == null) continue;
                     var setUnitBase = setUnit.GetComponent<CharacterBase>();
                     setUnitBase.Initialize();

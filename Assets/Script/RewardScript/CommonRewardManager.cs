@@ -136,7 +136,9 @@ namespace Script.RewardScript
                 {
                     const PowerTypeManager.Types firstType = PowerTypeManager.Types.AddRow;
                     var (firstDesc, firstPopupDesc) = GetSkillDesc(firstType);
-                    var firstDesiredPowerUp = new PurpleData(CharacterBase.UnitGroups.None, 1, 16, PowerTypeManager.Types.AddRow, PowerTypeManager.Instance.purpleBack, firstDesc, firstPopupDesc, new[] { 1 });
+                    var firstDesiredPowerUp = 
+                        new PurpleData(CharacterBase.UnitGroups.None, 1, 16, PowerTypeManager.Types.AddRow, 
+                            PowerTypeManager.Instance.purpleBack, firstDesc, firstPopupDesc, new[] { 1 });
                     commonPowerUps.Add(firstDesiredPowerUp);
                     selectedCodes.Add(firstDesiredPowerUp.Code);
                 }
@@ -144,7 +146,9 @@ namespace Script.RewardScript
                 {
                     const PowerTypeManager.Types types = PowerTypeManager.Types.StepDirection;
                     var (secondDesc, secondPopupDesc) = GetSkillDesc(types);
-                    var secondDesiredPowerUp = new PurpleData(CharacterBase.UnitGroups.None, 1, 16, PowerTypeManager.Types.StepDirection, PowerTypeManager.Instance.purpleBack, secondDesc, secondPopupDesc, new[] { 1 });
+                    var secondDesiredPowerUp = 
+                        new PurpleData(CharacterBase.UnitGroups.None, 1, 16, PowerTypeManager.Types.StepDirection, 
+                            PowerTypeManager.Instance.purpleBack, secondDesc, secondPopupDesc, new[] { 1 });
                     commonPowerUps.Add(secondDesiredPowerUp);
                     selectedCodes.Add(secondDesiredPowerUp.Code);
                 }
@@ -277,7 +281,8 @@ namespace Script.RewardScript
         {
             var finalDesc = powerUp.Desc;
             var placeholderValues = new Dictionary<string, Func<double>> {{ "{p}", () => powerUp.Property[0]}};
-            finalDesc = placeholderValues.Aggregate(finalDesc, (current, placeholder) => current.Replace(placeholder.Key, placeholder.Value().ToString(CultureInfo.CurrentCulture)));
+            finalDesc = placeholderValues.Aggregate(finalDesc, (current, placeholder) 
+                => current.Replace(placeholder.Key, placeholder.Value().ToString(CultureInfo.CurrentCulture)));
             var finalTranslation = finalDesc.Replace("||", "\n");
             if (powerUp.Type is PowerTypeManager.Types.GroupLevelUp or PowerTypeManager.Types.LevelUpPattern)
             {
@@ -421,7 +426,6 @@ namespace Script.RewardScript
             {
                yield return StartCoroutine(EnqueueTreasure());
             }
-          
         }
         // 10. 상자 선택
         private void SelectCommonReward(Data selectedReward)

@@ -11,9 +11,7 @@ namespace Script.RewardScript
         private static readonly System.Random Random = new System.Random();
         public int? ChosenProperty;
         public PowerTypeManager.Types Type { get; internal set; }
-
         private readonly int[] _property;
-
         public int[] Property
         {
             get
@@ -22,7 +20,6 @@ namespace Script.RewardScript
                 return new[] { ChosenProperty.Value };
             }
         }
-
         public CharacterBase.UnitGroups SkillGroup { get; set; }
         public int SkillLevel { get; set; }
         public int Code { get; set; }
@@ -41,7 +38,8 @@ namespace Script.RewardScript
             string popupDesc, 
             int[] property)
         {
-            foreach (var skill in PowerTypeManager.Instance.skills.Where(skill => skill.skillTypes == type))
+            foreach (var skill in PowerTypeManager.Instance.skills
+                         .Where(skill => skill.skillTypes == type))
             {
                 Icon = skill.skillIcon;
             }
@@ -122,9 +120,6 @@ namespace Script.RewardScript
                 return;
             }
 
-            var g = green;
-            var b = blue;
-            var p = purple;
             var gBack = greenBack;
             var bBack = blueBack;
             var pBack = purpleBack;
@@ -233,9 +228,6 @@ namespace Script.RewardScript
         public List<Data> GreenList { get; private set; } = new List<Data>();
         public List<Data> BlueList { get; private set; } = new List<Data>();
         public List<Data> PurpleList { get; private set; } = new List<Data>();
-        [SerializeField] internal Sprite green;
-        [SerializeField] internal Sprite blue;
-        [SerializeField] internal Sprite purple;
         [SerializeField] internal Sprite greenBack;
         [SerializeField] internal Sprite blueBack;
         [SerializeField] internal Sprite purpleBack;

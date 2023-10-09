@@ -12617,11 +12617,7 @@ MonoBehaviour:
   icon1: {fileID: 206106469}
   icon2: {fileID: 302379084}
   icon3: {fileID: 1483685711}
-  exp1BtnBadge: {fileID: 327331411}
-  exp2BtnBadge: {fileID: 888502856}
-  exp3BtnBadge: {fileID: 2129730058}
   expManager: {fileID: 841622521}
-  gameManager: {fileID: 149521958}
   characterManager: {fileID: 149521963}
 --- !u!114 &2120144523
 MonoBehaviour:
@@ -12869,9 +12865,6 @@ MonoBehaviour:
     skillIcon: {fileID: 21300000, guid: 63cd51557a3624febb457c13107971bb, type: 3}
   - skillTypes: 98
     skillIcon: {fileID: 21300000, guid: fe18063c1c19b4b7aa324b3e7112082e, type: 3}
-  green: {fileID: 21300000, guid: 7d87dfd92a4e042d791cc7cc235c6995, type: 3}
-  blue: {fileID: 21300000, guid: b0b3746eb1032435e947f6b0e1c30b94, type: 3}
-  purple: {fileID: 21300000, guid: 5be17fa09edba411aa67aea5c1abdadf, type: 3}
   greenBack: {fileID: 21300000, guid: d64da02842e594ddc98c460b350a1dcf, type: 3}
   blueBack: {fileID: 21300000, guid: 98116c8e33c2c481ba6e26af054f8cd9, type: 3}
   purpleBack: {fileID: 21300000, guid: e05a9d92b2abc4d21b73ffa2b955da75, type: 3}
@@ -12898,9 +12891,6 @@ MonoBehaviour:
   icon1: {fileID: 1738352237}
   icon2: {fileID: 491956778}
   icon3: {fileID: 207660446}
-  common1BtnBadge: {fileID: 1760049447}
-  common2BtnBadge: {fileID: 38570677}
-  common3BtnBadge: {fileID: 1794350693}
   spawnManager: {fileID: 149521964}
   countManager: {fileID: 841622520}
   characterManager: {fileID: 149521963}

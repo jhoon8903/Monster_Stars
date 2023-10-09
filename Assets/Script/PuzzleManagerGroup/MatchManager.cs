@@ -20,6 +20,7 @@ namespace Script.PuzzleManagerGroup
 
         private void Awake()
         {
+            // 매치 이펙트 인스턴스화 후 Pooling
             for (var i = 0; i < 20; i++)
             {
                 var mergeEffect = Instantiate(mergePrefab, transform);
@@ -29,7 +30,7 @@ namespace Script.PuzzleManagerGroup
         }
         public bool IsMatched(GameObject swapCharacter)
         {
-            swipeManager.isBusy = true;
+            swipeManager.isBusy = true; // 매치 진행 중 스왑을 방지하기 위한 bool 값
             var matched = false;
             var swapCharacterBase = swapCharacter.GetComponent<CharacterBase>();
             var swapCharacterGroup = swapCharacterBase.unitGroup;
@@ -38,14 +39,14 @@ namespace Script.PuzzleManagerGroup
             var horizontalMatchCount = 0;
             var verticalMatchCount = 0;
             var matchedCharacters = new List<GameObject>();
-            switch (swapCharacterBase.UnitGrade)
+            switch (swapCharacterBase.UnitGrade)  // 각 유닛별 최대 매치 가능정도 예외처리        
             {
                 case CharacterBase.UnitGrades.G when swapCharPuzzleLevel == 5:
                 case CharacterBase.UnitGrades.B when swapCharPuzzleLevel == 6:
                 case CharacterBase.UnitGrades.P when swapCharPuzzleLevel == 7:
                     return false;
             }
-            var directions = new[]
+            var directions = new[] // 가로 세로 방향에 대한 검색 리스트
             {
                 (Vector3Int.left, Vector3Int.right, "Horizontal"),
                 (Vector3Int.up, Vector3Int.down, "Vertical")
@@ -299,7 +300,6 @@ namespace Script.PuzzleManagerGroup
                     ReturnObject(sortedList[4]);
                     ReturnEffect(sortedList[4]);
                     hasLeveledUpNonTreasure = true;
-                   
                 }
             }
             StartCoroutine(Match3(sortedList[2]));
@@ -354,12 +354,14 @@ namespace Script.PuzzleManagerGroup
             SoundManager.Instance.MatchSound(4);
             var grouped = rawMatchedCharacters.GroupBy(mc => mc.transform.position);
             var matchedCharacters = grouped.Select(g => g.First()).ToList();
-            var horizontalMatches = matchedCharacters.Where(mc => (int)mc.transform.position.y == (int)swapPosition.y)
+            var horizontalMatches = matchedCharacters
+                .Where(mc => (int)mc.transform.position.y == (int)swapPosition.y)
                 .OrderBy(mc => mc.transform.position.x).ToList();
-            var verticalMatches = matchedCharacters.Where(mc => (int)mc.transform.position.x == (int)swapPosition.x)
+            var verticalMatches = matchedCharacters
+                .Where(mc => (int)mc.transform.position.x == (int)swapPosition.x)
                 .OrderBy(mc => mc.transform.position.y).ToList();
             var longestMatch = horizontalMatches.Count > verticalMatches.Count ? horizontalMatches : verticalMatches;
-            if (longestMatch.Count < 3) return true; // Ensure we have at least 3 to consider it a match
+            if (longestMatch.Count < 3) return true;
             var levelUp1 = longestMatch[1];
             var levelUp2 = longestMatch[2];
 

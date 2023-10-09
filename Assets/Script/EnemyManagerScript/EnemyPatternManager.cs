@@ -161,7 +161,9 @@ namespace Script.EnemyManagerScript
             var waypoints = new Vector2[5];
             for (var i = 0; i < waypoints.Length; i++)
             {
-                waypoints[i] = new Vector2(_enemyRigidbodies[enemyBase].transform.position.x + direction, _enemyRigidbodies[enemyBase].transform.position.y - (2 * (i + 1)));
+                waypoints[i] = new Vector2(
+                    _enemyRigidbodies[enemyBase].transform.position.x + direction, 
+                    _enemyRigidbodies[enemyBase].transform.position.y - 2 * (i + 1));
                 direction *= -1;
             }
             var waypointIndex = 0;
@@ -184,7 +186,8 @@ namespace Script.EnemyManagerScript
                     _speedReductionFactor = 1f;
                 }
                 _moveSpeed = enemyBase.moveSpeed * _speedReductionFactor * moveSpeedOffset * Time.deltaTime;
-                _enemyRigidbodies[enemyBase].transform.position = Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed);
+                _enemyRigidbodies[enemyBase].transform.position = 
+                    Vector2.MoveTowards(_enemyRigidbodies[enemyBase].transform.position, targetPosition, _moveSpeed);
                 if (journeyLength <= 0.01f)
                 {
                     waypointIndex++;

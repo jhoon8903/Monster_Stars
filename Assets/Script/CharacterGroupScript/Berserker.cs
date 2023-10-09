@@ -61,7 +61,9 @@ namespace Script.CharacterGroupScript
         private void GetDetectionProperties(out Vector2 size, out Vector2 center)
         {
             var rangeBoost = EnforceManager.Instance.berserkerRangeBoost ? 1 : 0;
-            _detectionSize = EnforceManager.Instance.berserkerCastleCrushStatBoost ? new Vector2(5+rangeBoost,5+rangeBoost) : new Vector2(3+rangeBoost, 3+rangeBoost);
+            _detectionSize = EnforceManager.Instance.berserkerCastleCrushStatBoost 
+                ? new Vector2(5+rangeBoost,5+rangeBoost) 
+                : new Vector2(3+rangeBoost, 3+rangeBoost);
             center = transform.position;
             size = _detectionSize;
         }

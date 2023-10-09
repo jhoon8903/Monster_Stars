@@ -538,7 +538,5 @@ namespace Script.RobbyScript.CharacterSelectMenuGroup
             UpdateUnit(unitIcon, unitBase);
             UpdateUnit(correspondingUnit, unitBase);
         }
-
-
     }
 }

@@ -253,7 +253,8 @@ namespace Script.CharacterManagerScript
                    break;
             }
             var weaponType = attackData.WeaponType;
-            var weaponObject = weaponsPool.SpawnFromPool(weaponType, attackData.Unit,attackData.Unit.GetComponent<CharacterBase>(), unit.transform.position, unit.transform.rotation);
+            var weaponObject = weaponsPool.SpawnFromPool(weaponType, attackData.Unit,attackData.Unit.GetComponent<CharacterBase>(), 
+                unit.transform.position, unit.transform.rotation);
             if (weaponObject == null) return null;
             var weaponBase = weaponObject.GetComponentInChildren<WeaponBase>();
             if (weaponBase == null) return null;
